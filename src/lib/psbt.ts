@@ -3,7 +3,7 @@ import { Psbt, payments, networks } from 'bitcoinjs-lib';
 import type { SbtcConfig } from '$types/sbtc_config';
 
 export async function buildPegInTx(config:SbtcConfig) {
-  if (!config.sbtcWalletAddress || !config.stxAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
+  if (!config.fromBtcAddress || !config.sbtcWalletAddress || !config.stxAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
   console.log('utxos --> ', config);
   let network: any;
   if (config.network === 'testnet') {
