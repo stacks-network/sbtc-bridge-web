@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
+		<!-- <script src="%sveltekit.assets%/public/bitcoinjs.js"></script> -->
+		<script>
+			/**
+			 * this is a hack for error: global is not defined
+			 */
+			var global = global || window
+		</script>			
+	</head>
+	<body data-sveltekit-preload-data="hover">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>
