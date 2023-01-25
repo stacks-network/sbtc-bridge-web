@@ -2,7 +2,7 @@
 
 </script>
   
-<div class="" style="">
+<div>
   <p>Peg out coming soon !</p>
 </div>
 

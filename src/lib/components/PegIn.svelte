@@ -1,11 +1,11 @@
 <script lang="ts">
-import FetchUTXOs from '$lib/components/FetchUTXOs.svelte';
-
-</script>
+  import FetchUTXOs from '$lib/components/FetchUTXOs.svelte';
+  
+  </script>
+        
+  <div>
+    <FetchUTXOs />
+  </div>
       
-<div class="" style="">
-  <FetchUTXOs />
-</div>
-    
-<style>
-</style>
+  <style>
+  </style>

@@ -2,6 +2,7 @@
 @import './variables.scss';
 @import 'node_modules/bootstrap/scss/bootstrap.scss';
 
+
 @import '@fontsource/fira-mono';
 
 @font-face {
@@ -25,43 +26,24 @@
   src: url("/fonts/Gilroy-Light.otf") format("truetype");
 }
 
+:root{
+	--color-primary: #118ab2;
+	--color-danger: #dd216e;
+	--color-warning: #fdad37;
+	--color-success: #64c872;
+	--color-info: #4786cd;
+}
+
 body, html {
   height: 100%;
+  font-size: 1.2rem;
 }
 
-
-input, textarea {
-  border-radius: unset !important;
-  font-weight: 700!important;
-  font-size: 1.1rem!important;
-  color: #000!important;
-}
-.btn {
-  border-radius: unset!important;
-}
-.btn-rounded {
-  border-radius: 50px !important;
-  padding: 10px 15px;
-}
-
-.bg-grey {
-  background-color: #333333;
-}
-.bg-card {
-  background-color: #262626;
-}
-/*
-#svelte {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-*/
 h1,
 h2,
 p {
   font-weight: 400;
-  color: var(--heading-color);
+  color: $info;
 }
 
 p {
@@ -70,7 +52,7 @@ p {
 
 a {
   text-decoration: none;
-  color: #428bca;
+  color: $stxeco-indigo;
 }
 
 a:hover {
@@ -78,11 +60,15 @@ a:hover {
 }
 
 h1 {
-  font-size: 2rem;
+  font-family: Gilroy-ExtraBold;
+  line-height: 3.3rem;
+  font-size: 3.3rem;
 }
 h2 {
-  font-size: 1.6rem;
-  font-weight: 600;
+  font-family: Gilroy-Light;
+  text-transform: lowercase;
+  line-height: 2.4rem;
+  font-size: 2.0rem;
 }
 
 pre {
@@ -112,12 +98,52 @@ button:focus:not(:focus-visible) {
   }
 }
 
-h1 {
-  font-family: Gilroy-ExtraBold;
-  text-transform: uppercase;
-  line-height: 3.3rem;
-  font-size: 3.2rem;
+.custom-tooltip {
+  --bs-tooltip-bg: var(--color-primary);
+  text-align: left;
+  font-size: 1.1rem;
 }
+
+input, textarea {
+  border-radius: 10px !important;
+  font-weight: 500!important;
+  font-size: 1.1rem!important;
+  color: #363636!important;
+  margin: 15px 0 5px 0;
+  background-color: #e90;
+}
+.btn {
+  border-radius: unset!important;
+}
+.btn-rounded {
+  border-radius: 50px !important;
+  padding: 10px 15px;
+}
+
+.card {
+  background-color: $dark;
+  color: #fff;
+  min-width: 60vw;
+}
+.card-width {
+  width: 60vw;
+}
+@media (max-width: 900px) {
+  .card {
+    min-width: 90vw;
+  }
+  .card-width {
+    min-width: 90vw;
+  }
+}
+
+/*
+#svelte {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+*/
 .strokeme-white {
   color: #333333;
 	-webkit-text-stroke-width: 1px;

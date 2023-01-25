@@ -13,13 +13,16 @@ export async function buildPegInTx(config:SbtcConfig) {
   }
 
   const psbt = new Psbt({ network });
+  let change = 0;
   config.utxos.forEach((utxo) => {
     psbt.addInput({ hash: utxo.txid, index: utxo.vout });
+    change += utxo.value;
   })
   const data = Buffer.from(config.stxAddress, 'utf8');
   const embed = payments.embed({ data: [data] });
   psbt.addOutput({ script: embed.output, value: 0 });
   psbt.addOutput({ address: config.sbtcWalletAddress, value: config.pegInAmount });
+  psbt.addOutput({ address: config.fromBtcAddress, value: config.pegInChangeAmount });
   return psbt.toHex();
 }
 
