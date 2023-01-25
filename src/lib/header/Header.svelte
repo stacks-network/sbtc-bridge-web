@@ -1,21 +1,25 @@
 <script lang="ts">
-import { onDestroy } from 'svelte';
+//import { onDestroy } from 'svelte';
 //import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
 import { fetchSbtcWalletAddress } from "$lib/sbtc";
+import type { SbtcConfig } from '$types/sbtc_config';
+import { createEventDispatcher } from "svelte";
 
-const unsubscribe = sbtcConfig.subscribe(value => {
-  console.log('myConfig: ', value)
-});
-onDestroy(unsubscribe);
+const dispatch = createEventDispatcher();
+
+//const unsubscribe = sbtcConfig.subscribe(value => {
+//  console.log('myConfig: ', value)
+//});
+//onDestroy(unsubscribe);
 
 const updateNetwork = async (newNet:string) => {
+	if (newNet === $sbtcConfig.network) return;
 	const addr = await fetchSbtcWalletAddress(newNet);
-	const conf = $sbtcConfig;
-	conf.sbtcWalletAddress = addr;
-	conf.network = newNet;
+	let conf = { network: newNet, sbtcWalletAddress: addr } as SbtcConfig;
 	sbtcConfig.update(() => conf)
+	dispatch("network_change", {});
 }
 </script>
 <nav class="navbar navbar-expand-md transparent">
@@ -28,7 +32,6 @@ const updateNetwork = async (newNet:string) => {
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNav">
 			<ul class="navbar-nav">
-				<li class="nav-item"><a href="/">SBTC Wallet: { $sbtcConfig.sbtcWalletAddress }</a></li>
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 						Network: {$sbtcConfig.network}

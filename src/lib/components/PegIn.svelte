@@ -3,7 +3,7 @@ import FetchUTXOs from '$lib/components/FetchUTXOs.svelte';
 
 </script>
       
-<div class="" style="">
+<div>
   <FetchUTXOs />
 </div>
     

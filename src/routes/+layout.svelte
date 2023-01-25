@@ -3,16 +3,19 @@ import "../app.scss";
 import {tick, onMount, onDestroy} from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
-import { getNetwork } from '@micro-stacks/svelte';
 import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
 import { client } from "$stores/client";
 import { fetchSbtcWalletAddress } from "$lib/sbtc";
 import { sbtcConfig } from '$stores/stores'
 import { StacksTestnet, StacksMainnet } from "micro-stacks/network";
 
+let componentKey = 0;
 const unsubscribe = sbtcConfig.subscribe(value => {
 });
 onDestroy(unsubscribe);
+const networkChange = () => {
+  componentKey++;
+}
 
 let inited = false;
 let origin = import.meta.env.VITE_ORIGIN;
@@ -43,22 +46,25 @@ onMount(async () => {
   } catch (err) {
     console.log(err)
   }
+  inited = true;
   await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+
     const popoverTriggerList = window.document.querySelectorAll('[data-bs-toggle="dropdown"]');
     if (popoverTriggerList) [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Dropdown(popoverTriggerEl));
-    inited = true;
-  }, 1000)
+  }, 500)
 })
 </script>
 
 <!-- <LibLoader url="/public/bitcoinjs.js" on:loaded="{onLoaded}" />-->
 {#if inited}
 <div class="app">
-	<Header/>
+	<Header on:network_change={networkChange}/>
+  {#key componentKey}
 	<slot/>
+  {/key}
 	<Footer />
 </div>
 {/if}

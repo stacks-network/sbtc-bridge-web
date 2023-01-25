@@ -1,39 +1,76 @@
 <script lang="ts">
-import { fetchFeeEstimate, maxCommit, fetchUTXOs, fetchAddressDetails } from "$lib/utxos";
+import { maxCommit, fetchUTXOs, fetchAddressDetails } from "$lib/utxos";
 import { buildPegInTx } from "$lib/psbt";
+import { decodeStacksAddress } from "$lib/sbtc";
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
+import FeeEstimation from "$lib/components/FeeEstimation.svelte";
+import { PatchQuestion } from "svelte-bootstrap-icons";
 
 let bitcoinAddress:string|undefined = $sbtcConfig.fromBtcAddress;
 let stxAddress:string|undefined = $sbtcConfig.stxAddress;
 let pegInAmount:number = $sbtcConfig.pegInAmount;
 let errorReason:string|undefined;
-
-let bcInfo: {low_fee_per_kb:number, medium_fee_per_kb:number, high_fee_per_kb:number};
-const fetchEstimate = async () => {
-  bcInfo = await fetchFeeEstimate($sbtcConfig.network);
-}
+let changeErrorReason:string|undefined;
 
 let maxPegIn = 0;
 const fetchMaxCommit = () => {
   maxPegIn = maxCommit($sbtcConfig.utxos);
-  return maxPegIn;
 }
+fetchMaxCommit();
 
 const changeStxAddress = () => {
+  if (!stxAddress) {
+    errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+    return
+  }
+  try {
+    const decoded = decodeStacksAddress(stxAddress);
+    if ($sbtcConfig.network === 'testnet' && decoded[0] !== 26) {
+      errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+      return
+    }
+    if ($sbtcConfig.network === 'mainnet' && decoded[0] !== 22) {
+      errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+      return
+    }
+    const conf:SbtcConfig = $sbtcConfig;
+    conf.stxAddress = stxAddress;
+    sbtcConfig.update(() => conf);
+  } catch (err:any) {
+    errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+  }
+}
+
+let feeToUse = 0;
+let change = 0;
+const feeSelected = (event: { detail: any; }) => {
+  feeToUse = event.detail.fee;
+  change = maxPegIn - pegInAmount - feeToUse;
+  if (change < 0) {
+    changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPegIn - feeToUse);
+  }
   const conf:SbtcConfig = $sbtcConfig;
-  conf.stxAddress = stxAddress;
-  sbtcConfig.update(() => conf);
+  conf.pegInChangeAmount = Number(change);
+  sbtcConfig.set(conf);
 }
 
 const changePegIn = (maxValue:boolean) => {
-  if (pegInAmount > fetchMaxCommit()) {
+  errorReason = undefined;
+  changeErrorReason = undefined;
+  if (pegInAmount > maxPegIn) {
     errorReason = 'Cannot commit more BTC then is available at your address';
+    return
   }
   const conf:SbtcConfig = $sbtcConfig;
   if (maxValue) {
-    pegInAmount = fetchMaxCommit()
+    pegInAmount = maxPegIn;
   }
+  change = maxPegIn - pegInAmount - feeToUse;
+  if (change < 0) {
+    changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPegIn - feeToUse);
+  }
+  conf.pegInChangeAmount = Number(change);
   conf.pegInAmount = Number(pegInAmount);
   sbtcConfig.set(conf);
 }
@@ -61,67 +98,100 @@ const configureUTXOs = async (force:boolean) => {
   }
 }
 
-let hexTx:string;
+let hexTx:string|undefined;
 const buildTx = async () => {
   hexTx = await buildPegInTx($sbtcConfig);
 }
 
 $: showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
-$: showStxAddress = bitcoinAddress;
+$: showStxAddress = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
 $: showPegInAmount = bitcoinAddress && stxAddress;
-$: showButton = bitcoinAddress && stxAddress && pegInAmount > 0;
-$: showEstimates = false;
+$: showEstimates = bitcoinAddress && stxAddress;
+$: showFeeCalculation = feeToUse > 0;
+$: showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0;
 $: showHexTx = hexTx && hexTx.length > 0;
 
 </script>
       
-<div class="" style="">
+  <div class="card border p-4">
 
   {#if errorReason}<div class="text-warning">{errorReason}</div>{/if}
-  <div class="row form-group" style="width:400pt;">
-    <label for="transact-path">Bitcoin {$sbtcConfig.network} Address:</label>
-    <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
-    {#if showUtxos}
-    <div class="d-flex justify-content-between text-small text-info">
-      <div>{$sbtcConfig.utxos?.length || 0} UTXO(s) Found</div>
-      <div><a href="/" class="" on:click|preventDefault={() => configureUTXOs(true)}>reload</a></div>
+  <div class="row">
+    <div class="col">
+      <label for="transact-path" class="d-flex justify-content-between">
+        <span>Bitcoin {$sbtcConfig.network} Address:</span>
+        <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC"><PatchQuestion width={30} height={30}/></span>
+      </label>
+      <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
+      {#if showUtxos}
+      <div class="d-flex justify-content-between  text-info">
+        <div>{$sbtcConfig.utxos?.length || 0} UTXO(s) Found</div>
+        <div><a href="/" class="" on:click|preventDefault={() => configureUTXOs(true)}>reload</a></div>
+      </div>
+      {:else if bitcoinAddress}
+        <div class="text-danger">No bitcoin (transactions outputs) found at this address - please use an address with some bitcoin balance.</div>
+      {/if}
     </div>
-    {/if}
   </div>
   {#if showStxAddress}
-  <div class="row form-group" style="width:400pt;">
-    <label for="transact-path">Stacks {$sbtcConfig.network} Address:</label>
-    <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
-  </div>
+    <div class="row">
+      <div class="col">
+        <label for="transact-path" class="d-flex justify-content-between">
+          <span>Stacks {$sbtcConfig.network} Address:</span>
+          <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your Stacks address. The equivalent amount of sBTC will be sent to this wallet"><PatchQuestion width={30} height={30}/></span>
+        </label>
+        <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
+      </div>
+    </div>
   {/if}
   {#if showPegInAmount}
-  <div class="row form-group" style="width:400pt;">
-    <label for="transact-path">Peg In Amount / Sats:</label>
-    <input type="number" id="from-address" class="form-control" style="width:400pt;" autocomplete="off" bind:value={pegInAmount}  on:input={() => changePegIn(false)}/>
-    <div class="d-flex justify-content-between text-small text-info">
-      <div>Tx fees are additional.</div>
-      <div><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>max</a></div>
+  <div class="row">
+    <div class="col-12">
+      <label for="transact-path" class="d-flex justify-content-between">
+        <span>Peg In Amount / Sats:</span>
+        <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out."><PatchQuestion width={30} height={30}/></span>
+      </label>
+      <input type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegInAmount}  on:input={() => changePegIn(false)}/>
+      <div class="d-flex justify-content-between  text-info">
+        <div>Tx fees are additional.</div>
+        <div><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>max</a></div>
+      </div>
     </div>
   </div>
   {/if}
-  {#if showEstimates}
-  <div class="row form-group" style="width:400pt;">
-    <div>{#if bcInfo}Fee estimates (sats/kb) Low: {bcInfo.low_fee_per_kb}, Medium: {bcInfo.medium_fee_per_kb}, High: {bcInfo.high_fee_per_kb}{/if}</div>
-    <div class="form-group">
-      <button type="button" on:click={() => fetchEstimate()} class="btn btn-primary">Fetch Fee Estimate</button>
+  {#if pegInAmount > 0}
+  <div class="row">
+    <div class="col-12">
+      {#if showFeeCalculation}
+        <label for="transact-path" class="mb-3">Tx Fee Calculation</label>
+        <div class="d-flex justify-content-between">
+          <div>Using fee rate: {feeToUse}</div>
+          <div><a href="/" on:click|preventDefault={() => {feeToUse = 0; hexTx = undefined}}>reset</a></div>
+        </div>
+        <div>Peg In: {pegInAmount}</div>
+        <div>Change: {change}</div>
+      {:else if showEstimates}
+        <label for="transact-path" class="mb-3">Select Fee Rate for Fee Calculation</label>
+        <FeeEstimation on:fee_selected={feeSelected}/>
+      {/if}
     </div>
   </div>
   {/if}
+  {#if changeErrorReason}<div class="text-danger">{changeErrorReason}</div>{/if}
   {#if showButton}
-  <div class="row form-group" style="width:400pt;">
-    <button type="button" on:click={() => buildTx()} class="btn btn-primary">Build Peg In Tx</button>
+  <div class="row">
+    <div class="col">
+      <button type="button" on:click={() => buildTx()} class="btn btn-primary">Build Peg In Tx</button>
+    </div>
   </div>
   {/if}
   {#if showHexTx}
-  <div>
-    <h2>Transaction</h2>
-    <p>Paste this transaction into your wallet..</p>
-    <textarea style="width:400pt;" rows="10" readonly>{hexTx}</textarea>
+  <div class="row">
+    <div class="col">
+      <h2>Transaction</h2>
+      <p>Paste this transaction into your wallet..</p>
+      <textarea rows="10" style="width: 100%;" readonly>{hexTx}</textarea>
+    </div>
   </div>
   {/if}
 </div>

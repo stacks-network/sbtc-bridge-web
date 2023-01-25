@@ -6502,6 +6502,11 @@
   "resolved" "https://registry.npmjs.org/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz"
   "version" "1.0.0"
 
+"svelte-bootstrap-icons@^2.3.1":
+  "integrity" "sha512-Vqhgmcd55hEoB/MrPESvVYo4+m++2q9l00a5lzGkgbXTiO6go21PTU9DaeAJ446WBiEmg3Q8sv9QVOBmh5c1ww=="
+  "resolved" "https://registry.npmjs.org/svelte-bootstrap-icons/-/svelte-bootstrap-icons-2.3.1.tgz"
+  "version" "2.3.1"
+
 "svelte-check@^3.0.1":
   "integrity" "sha512-DkhKhV0Jt0gh7q9DBB26+J2Vfb9y4/4JWxnbkXBZha7542LOhwvj3edJFjyJ+xjdaXyInZ+YRRYc3V6wytP2ew=="
   "resolved" "https://registry.npmjs.org/svelte-check/-/svelte-check-3.0.2.tgz"
