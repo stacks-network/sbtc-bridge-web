@@ -38,7 +38,6 @@ export default defineConfig({
         util: 'rollup-plugin-node-polyfills/polyfills/util',
         sys: 'util',
         events: 'rollup-plugin-node-polyfills/polyfills/events',
-        stream: 'rollup-plugin-node-polyfills/polyfills/stream',
         path: 'rollup-plugin-node-polyfills/polyfills/path',
         querystring: 'rollup-plugin-node-polyfills/polyfills/qs',
         punycode: 'rollup-plugin-node-polyfills/polyfills/punycode',
@@ -49,16 +48,6 @@ export default defineConfig({
         os: 'rollup-plugin-node-polyfills/polyfills/os',
         assert: 'rollup-plugin-node-polyfills/polyfills/assert',
         constants: 'rollup-plugin-node-polyfills/polyfills/constants',
-        _stream_duplex:
-            'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex',
-        _stream_passthrough:
-            'rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough',
-        _stream_readable:
-            'rollup-plugin-node-polyfills/polyfills/readable-stream/readable',
-        _stream_writable:
-            'rollup-plugin-node-polyfills/polyfills/readable-stream/writable',
-        _stream_transform:
-            'rollup-plugin-node-polyfills/polyfills/readable-stream/transform',
         timers: 'rollup-plugin-node-polyfills/polyfills/timers',
         console: 'rollup-plugin-node-polyfills/polyfills/console',
         vm: 'rollup-plugin-node-polyfills/polyfills/vm',
@@ -66,6 +55,17 @@ export default defineConfig({
         tty: 'rollup-plugin-node-polyfills/polyfills/tty',
         domain: 'rollup-plugin-node-polyfills/polyfills/domain'
          */
+        stream: 'rollup-plugin-node-polyfills/polyfills/stream',
+        _stream_transform:
+            'rollup-plugin-node-polyfills/polyfills/readable-stream/transform',
+            _stream_duplex:
+            'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex',
+        _stream_passthrough:
+            'rollup-plugin-node-polyfills/polyfills/readable-stream/passthrough',
+        _stream_readable:
+            'rollup-plugin-node-polyfills/polyfills/readable-stream/readable',
+        _stream_writable:
+            'rollup-plugin-node-polyfills/polyfills/readable-stream/writable',
 		}
 	},
 
@@ -96,7 +96,11 @@ export default defineConfig({
   },
 
   build: {
+    minify: false,
     rollupOptions: {
+        //input: {
+        //  main: resolve(__dirname, 'index.html'),
+        //},
         plugins: [
             // Enable rollup polyfills plugin
             // used during production bundling

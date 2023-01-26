@@ -5,7 +5,7 @@
 	"author": "Mike Cohen",
 	"scripts": {
 		"dev": "vite dev --port=8080",
-		"build": "vite build --mode staging",
+		"build": "vite build",
 		"preview": "vite preview",
 		"test": "playwright test",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -60,6 +60,7 @@
 		"postcss": "^8.4.14",
 		"postcss-cli": "^10.0.0",
 		"process": "^0.11.10",
+		"readable-stream": "^4.3.0",
 		"svelte-bootstrap-icons": "^2.3.1",
 		"svelte-json-tree": "^1.0.0",
 		"svelte-local-storage-store": "^0.4.0",
