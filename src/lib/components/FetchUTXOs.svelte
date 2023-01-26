@@ -13,12 +13,6 @@
   let errorReason:string|undefined;
   let changeErrorReason:string|undefined;
   
-  let maxPegIn = 0;
-  const fetchMaxCommit = () => {
-    maxPegIn = maxCommit($sbtcConfig.utxos);
-  }
-  fetchMaxCommit();
-  
   const changeStxAddress = () => {
     if (!stxAddress) {
       errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
@@ -42,13 +36,14 @@
     }
   }
   
+  const maxPeg = maxCommit($sbtcConfig.utxos);
   let feeToUse = 0;
   let change = 0;
   const feeSelected = (event: { detail: any; }) => {
     feeToUse = event.detail.fee;
-    change = maxPegIn - pegInAmount - feeToUse;
+    change = maxPeg - pegInAmount - feeToUse;
     if (change < 0) {
-      changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPegIn - feeToUse);
+      changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse);
     }
     const conf:SbtcConfig = $sbtcConfig;
     conf.pegInChangeAmount = Number(change);
@@ -58,17 +53,18 @@
   const changePegIn = (maxValue:boolean) => {
     errorReason = undefined;
     changeErrorReason = undefined;
-    if (pegInAmount > maxPegIn) {
+    const maxPeg = maxCommit($sbtcConfig.utxos);
+    if (pegInAmount > maxPeg) {
       errorReason = 'Cannot commit more BTC then is available at your address';
       return
     }
     const conf:SbtcConfig = $sbtcConfig;
     if (maxValue) {
-      pegInAmount = maxPegIn;
+      pegInAmount = maxPeg;
     }
-    change = maxPegIn - pegInAmount - feeToUse;
+    change = maxPeg - pegInAmount - feeToUse;
     if (change < 0) {
-      changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPegIn - feeToUse);
+      changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse);
     }
     conf.pegInChangeAmount = Number(change);
     conf.pegInAmount = Number(pegInAmount);
