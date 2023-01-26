@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { maxCommit, fetchUTXOs, fetchAddressDetails } from "$lib/utxos";
   import { buildPegInTx } from "$lib/psbt";
   import { decodeStacksAddress } from "$lib/sbtc";
@@ -6,7 +7,8 @@
   import type { SbtcConfig } from '$types/sbtc_config';
   import FeeEstimation from "$lib/components/FeeEstimation.svelte";
   import { PatchQuestion } from "svelte-bootstrap-icons";
-  
+  import { Tooltip } from "bootstrap";
+
   let bitcoinAddress:string|undefined = $sbtcConfig.fromBtcAddress;
   let stxAddress:string|undefined = $sbtcConfig.stxAddress;
   let pegInAmount:number = $sbtcConfig.pegInAmount;
@@ -36,33 +38,37 @@
     }
   }
   
-  const maxPeg = maxCommit($sbtcConfig.utxos);
   let feeToUse = 0;
   let change = 0;
   const feeSelected = (event: { detail: any; }) => {
+    const maxPeg = maxCommit($sbtcConfig.utxos);
     feeToUse = event.detail.fee;
-    change = maxPeg - pegInAmount - feeToUse;
+    pegInAmount = maxPeg - feeToUse;
+    change = maxPeg - (pegInAmount + feeToUse);
     if (change < 0) {
       changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse);
     }
     const conf:SbtcConfig = $sbtcConfig;
+    conf.pegInAmount = pegInAmount;
     conf.pegInChangeAmount = Number(change);
     sbtcConfig.set(conf);
   }
   
   const changePegIn = (maxValue:boolean) => {
+    const maxPeg = maxCommit($sbtcConfig.utxos);
     errorReason = undefined;
     changeErrorReason = undefined;
-    const maxPeg = maxCommit($sbtcConfig.utxos);
     if (pegInAmount > maxPeg) {
+      //pegInAmount = maxPeg - feeToUse;
       errorReason = 'Cannot commit more BTC then is available at your address';
       return
     }
     const conf:SbtcConfig = $sbtcConfig;
     if (maxValue) {
-      pegInAmount = maxPeg;
+      //pegInAmount = maxPeg;
+      pegInAmount = maxPeg - feeToUse;
     }
-    change = maxPeg - pegInAmount - feeToUse;
+    change = maxPeg - (pegInAmount + feeToUse);
     if (change < 0) {
       changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse);
     }
@@ -107,6 +113,13 @@
   $: showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0;
   $: showHexTx = hexTx && hexTx.length > 0;
   
+  onMount(async () => {
+    setTimeout(function () {
+      const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
+      if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+    }, 500)
+  })
+
   </script>
         
     <div class="card border p-4">
@@ -116,7 +129,7 @@
       <div class="col">
         <label for="transact-path" class="d-flex justify-content-between">
           <span>Bitcoin {$sbtcConfig.network} Address:</span>
-          <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC"><PatchQuestion width={30} height={30}/></span>
+          <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC"><PatchQuestion width={30} height={30}/></span>
         </label>
         <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
         {#if showUtxos}
@@ -134,7 +147,7 @@
         <div class="col">
           <label for="transact-path" class="d-flex justify-content-between">
             <span>Stacks {$sbtcConfig.network} Address:</span>
-            <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your Stacks address. The equivalent amount of sBTC will be sent to this wallet"><PatchQuestion width={30} height={30}/></span>
+            <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your Stacks address. The equivalent amount of sBTC will be sent to this wallet"><PatchQuestion width={30} height={30}/></span>
           </label>
           <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
         </div>
@@ -145,7 +158,7 @@
       <div class="col-12">
         <label for="transact-path" class="d-flex justify-content-between">
           <span>Peg In Amount / Sats:</span>
-          <span class="pointer text-info" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out."><PatchQuestion width={30} height={30}/></span>
+          <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out."><PatchQuestion width={30} height={30}/></span>
         </label>
         <input type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegInAmount}  on:input={() => changePegIn(false)}/>
         <div class="d-flex justify-content-between  text-info">
@@ -177,7 +190,7 @@
     {#if showButton}
     <div class="row">
       <div class="col">
-        <button type="button" on:click={() => buildTx()} class="btn btn-primary">Build Peg In Tx</button>
+        <button class="btn btn-outline-warning w-100" type="button" on:click={() => buildTx()}>Build Peg In Tx</button>
       </div>
     </div>
     {/if}
@@ -186,7 +199,7 @@
       <div class="col">
         <h2>Transaction</h2>
         <p>Paste this transaction into your wallet..</p>
-        <textarea rows="10" style="width: 100%;" readonly>{hexTx}</textarea>
+        <textarea rows="4" style="width: 100%;" readonly>{hexTx}</textarea>
       </div>
     </div>
     {/if}
