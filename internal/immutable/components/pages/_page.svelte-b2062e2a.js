@@ -20923,34 +20923,34 @@ const FetchUTXOs_svelte_svelte_type_style_lang = '';
 const { console: console_1 } = globals$1;
 const file$3 = "src/lib/components/FetchUTXOs.svelte";
 
-// (119:4) {#if errorReason}
-function create_if_block_10(ctx) {
+// (128:4) {#if errorReason}
+function create_if_block_11(ctx) {
 	let div;
 	let t;
 
 	const block = {
 		c: function create() {
 			div = element("div");
-			t = text(/*errorReason*/ ctx[6]);
+			t = text(/*errorReason*/ ctx[7]);
 			this.h();
 		},
 		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
-			t = claim_text(div_nodes, /*errorReason*/ ctx[6]);
+			t = claim_text(div_nodes, /*errorReason*/ ctx[7]);
 			div_nodes.forEach(detach_dev);
 			this.h();
 		},
 		h: function hydrate() {
 			attr_dev(div, "class", "text-warning");
-			add_location(div, file$3, 118, 21, 4422);
+			add_location(div, file$3, 127, 21, 4744);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div, anchor);
 			append_hydration_dev(div, t);
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*errorReason*/ 64) set_data_dev(t, /*errorReason*/ ctx[6]);
+			if (dirty[0] & /*errorReason*/ 128) set_data_dev(t, /*errorReason*/ ctx[7]);
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(div);
@@ -20959,17 +20959,17 @@ function create_if_block_10(ctx) {
 
 	dispatch_dev("SvelteRegisterBlock", {
 		block,
-		id: create_if_block_10.name,
+		id: create_if_block_11.name,
 		type: "if",
-		source: "(119:4) {#if errorReason}",
+		source: "(128:4) {#if errorReason}",
 		ctx
 	});
 
 	return block;
 }
 
-// (132:33) 
-function create_if_block_9(ctx) {
+// (141:33) 
+function create_if_block_10(ctx) {
 	let div;
 	let t;
 
@@ -20988,7 +20988,7 @@ function create_if_block_9(ctx) {
 		},
 		h: function hydrate() {
 			attr_dev(div, "class", "text-danger");
-			add_location(div, file$3, 132, 10, 5419);
+			add_location(div, file$3, 141, 10, 5741);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div, anchor);
@@ -21002,20 +21002,20 @@ function create_if_block_9(ctx) {
 
 	dispatch_dev("SvelteRegisterBlock", {
 		block,
-		id: create_if_block_9.name,
+		id: create_if_block_10.name,
 		type: "if",
-		source: "(132:33) ",
+		source: "(141:33) ",
 		ctx
 	});
 
 	return block;
 }
 
-// (127:8) {#if showUtxos}
-function create_if_block_8(ctx) {
+// (136:8) {#if showUtxos}
+function create_if_block_9(ctx) {
 	let div2;
 	let div0;
-	let t0_value = (/*$sbtcConfig*/ ctx[5].utxos?.length || 0) + "";
+	let t0_value = (/*$sbtcConfig*/ ctx[6].utxos?.length || 0) + "";
 	let t0;
 	let t1;
 	let t2;
@@ -21057,13 +21057,13 @@ function create_if_block_8(ctx) {
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(div0, file$3, 128, 10, 5196);
+			add_location(div0, file$3, 137, 10, 5518);
 			attr_dev(a, "href", "/");
 			attr_dev(a, "class", "");
-			add_location(a, file$3, 129, 15, 5269);
-			add_location(div1, file$3, 129, 10, 5264);
+			add_location(a, file$3, 138, 15, 5591);
+			add_location(div1, file$3, 138, 10, 5586);
 			attr_dev(div2, "class", "d-flex justify-content-between text-info");
-			add_location(div2, file$3, 127, 8, 5130);
+			add_location(div2, file$3, 136, 8, 5452);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div2, anchor);
@@ -21076,12 +21076,12 @@ function create_if_block_8(ctx) {
 			append_hydration_dev(a, t3);
 
 			if (!mounted) {
-				dispose = listen_dev(a, "click", prevent_default(/*click_handler*/ ctx[23]), false, true, false);
+				dispose = listen_dev(a, "click", prevent_default(/*click_handler*/ ctx[24]), false, true, false);
 				mounted = true;
 			}
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*$sbtcConfig*/ 32 && t0_value !== (t0_value = (/*$sbtcConfig*/ ctx[5].utxos?.length || 0) + "")) set_data_dev(t0, t0_value);
+			if (dirty[0] & /*$sbtcConfig*/ 64 && t0_value !== (t0_value = (/*$sbtcConfig*/ ctx[6].utxos?.length || 0) + "")) set_data_dev(t0, t0_value);
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(div2);
@@ -21092,23 +21092,23 @@ function create_if_block_8(ctx) {
 
 	dispatch_dev("SvelteRegisterBlock", {
 		block,
-		id: create_if_block_8.name,
+		id: create_if_block_9.name,
 		type: "if",
-		source: "(127:8) {#if showUtxos}",
+		source: "(136:8) {#if showUtxos}",
 		ctx
 	});
 
 	return block;
 }
 
-// (137:4) {#if showStxAddress}
+// (146:4) {#if showStxAddress}
 function create_if_block_7(ctx) {
 	let div1;
 	let div0;
 	let label;
 	let span0;
 	let t0;
-	let t1_value = /*$sbtcConfig*/ ctx[5].network + "";
+	let t1_value = /*$sbtcConfig*/ ctx[6].network + "";
 	let t1;
 	let t2;
 	let t3;
@@ -21116,6 +21116,7 @@ function create_if_block_7(ctx) {
 	let patchquestion;
 	let t4;
 	let input;
+	let t5;
 	let current;
 	let mounted;
 	let dispose;
@@ -21124,6 +21125,8 @@ function create_if_block_7(ctx) {
 			props: { width: 30, height: 30 },
 			$$inline: true
 		});
+
+	let if_block = /*stxAdderErrorReason*/ ctx[3] && create_if_block_8(ctx);
 
 	const block = {
 		c: function create() {
@@ -21139,6 +21142,8 @@ function create_if_block_7(ctx) {
 			create_component(patchquestion.$$.fragment);
 			t4 = space();
 			input = element("input");
+			t5 = space();
+			if (if_block) if_block.c();
 			this.h();
 		},
 		l: function claim(nodes) {
@@ -21177,30 +21182,32 @@ function create_if_block_7(ctx) {
 				autocomplete: true
 			});
 
+			t5 = claim_space(div0_nodes);
+			if (if_block) if_block.l(div0_nodes);
 			div0_nodes.forEach(detach_dev);
 			div1_nodes.forEach(detach_dev);
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(span0, file$3, 140, 12, 5759);
+			add_location(span0, file$3, 149, 12, 6081);
 			attr_dev(span1, "class", "pointer text-info");
 			attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
 			attr_dev(span1, "data-bs-placement", "top");
 			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
 			attr_dev(span1, "title", "Your Stacks address. The equivalent amount of sBTC will be sent to this wallet");
-			add_location(span1, file$3, 141, 12, 5822);
+			add_location(span1, file$3, 150, 12, 6144);
 			attr_dev(label, "for", "transact-path");
 			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
-			add_location(label, file$3, 139, 10, 5680);
+			add_location(label, file$3, 148, 10, 6002);
 			attr_dev(input, "type", "text");
 			attr_dev(input, "id", "from-address");
 			attr_dev(input, "class", "form-control form-inline");
 			attr_dev(input, "autocomplete", "off");
-			add_location(input, file$3, 143, 10, 6109);
+			add_location(input, file$3, 152, 10, 6431);
 			attr_dev(div0, "class", "col");
-			add_location(div0, file$3, 138, 8, 5652);
+			add_location(div0, file$3, 147, 8, 5974);
 			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div1, file$3, 137, 6, 5626);
+			add_location(div1, file$3, 146, 6, 5948);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div1, anchor);
@@ -21216,22 +21223,37 @@ function create_if_block_7(ctx) {
 			append_hydration_dev(div0, t4);
 			append_hydration_dev(div0, input);
 			set_input_value(input, /*stxAddress*/ ctx[1]);
+			append_hydration_dev(div0, t5);
+			if (if_block) if_block.m(div0, null);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
-					listen_dev(input, "input", /*input_input_handler_1*/ ctx[24]),
-					listen_dev(input, "input", /*input_handler_1*/ ctx[25], false, false, false)
+					listen_dev(input, "input", /*input_input_handler_1*/ ctx[25]),
+					listen_dev(input, "input", /*input_handler_1*/ ctx[26], false, false, false)
 				];
 
 				mounted = true;
 			}
 		},
 		p: function update(ctx, dirty) {
-			if ((!current || dirty & /*$sbtcConfig*/ 32) && t1_value !== (t1_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data_dev(t1, t1_value);
+			if ((!current || dirty[0] & /*$sbtcConfig*/ 64) && t1_value !== (t1_value = /*$sbtcConfig*/ ctx[6].network + "")) set_data_dev(t1, t1_value);
 
-			if (dirty & /*stxAddress*/ 2 && input.value !== /*stxAddress*/ ctx[1]) {
+			if (dirty[0] & /*stxAddress*/ 2 && input.value !== /*stxAddress*/ ctx[1]) {
 				set_input_value(input, /*stxAddress*/ ctx[1]);
+			}
+
+			if (/*stxAdderErrorReason*/ ctx[3]) {
+				if (if_block) {
+					if_block.p(ctx, dirty);
+				} else {
+					if_block = create_if_block_8(ctx);
+					if_block.c();
+					if_block.m(div0, null);
+				}
+			} else if (if_block) {
+				if_block.d(1);
+				if_block = null;
 			}
 		},
 		i: function intro(local) {
@@ -21246,6 +21268,7 @@ function create_if_block_7(ctx) {
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(div1);
 			destroy_component(patchquestion);
+			if (if_block) if_block.d();
 			mounted = false;
 			run_all(dispose);
 		}
@@ -21255,14 +21278,59 @@ function create_if_block_7(ctx) {
 		block,
 		id: create_if_block_7.name,
 		type: "if",
-		source: "(137:4) {#if showStxAddress}",
+		source: "(146:4) {#if showStxAddress}",
 		ctx
 	});
 
 	return block;
 }
 
-// (148:4) {#if showPegInAmount}
+// (154:10) {#if stxAdderErrorReason}
+function create_if_block_8(ctx) {
+	let div;
+	let t;
+
+	const block = {
+		c: function create() {
+			div = element("div");
+			t = text(/*stxAdderErrorReason*/ ctx[3]);
+			this.h();
+		},
+		l: function claim(nodes) {
+			div = claim_element(nodes, "DIV", { class: true });
+			var div_nodes = children(div);
+			t = claim_text(div_nodes, /*stxAdderErrorReason*/ ctx[3]);
+			div_nodes.forEach(detach_dev);
+			this.h();
+		},
+		h: function hydrate() {
+			attr_dev(div, "class", "text-danger");
+			add_location(div, file$3, 153, 35, 6618);
+		},
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, t);
+		},
+		p: function update(ctx, dirty) {
+			if (dirty[0] & /*stxAdderErrorReason*/ 8) set_data_dev(t, /*stxAdderErrorReason*/ ctx[3]);
+		},
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
+		}
+	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_8.name,
+		type: "if",
+		source: "(154:10) {#if stxAdderErrorReason}",
+		ctx
+	});
+
+	return block;
+}
+
+// (158:4) {#if showPegInAmount}
 function create_if_block_6(ctx) {
 	let div4;
 	let div3;
@@ -21368,32 +21436,32 @@ function create_if_block_6(ctx) {
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(span0, file$3, 151, 10, 6459);
+			add_location(span0, file$3, 161, 10, 6874);
 			attr_dev(span1, "class", "pointer text-info");
 			attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
 			attr_dev(span1, "data-bs-placement", "top");
 			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
 			attr_dev(span1, "title", "The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out.");
-			add_location(span1, file$3, 152, 10, 6504);
+			add_location(span1, file$3, 162, 10, 6919);
 			attr_dev(label, "for", "transact-path");
 			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
-			add_location(label, file$3, 150, 8, 6382);
+			add_location(label, file$3, 160, 8, 6797);
 			attr_dev(input, "type", "number");
 			attr_dev(input, "id", "from-address");
 			attr_dev(input, "class", "form-control");
 			attr_dev(input, "autocomplete", "off");
-			add_location(input, file$3, 154, 8, 6855);
-			add_location(div0, file$3, 156, 10, 7072);
+			add_location(input, file$3, 164, 8, 7270);
+			add_location(div0, file$3, 166, 10, 7487);
 			attr_dev(a, "href", "/");
 			attr_dev(a, "class", "");
-			add_location(a, file$3, 157, 15, 7122);
-			add_location(div1, file$3, 157, 10, 7117);
+			add_location(a, file$3, 167, 15, 7537);
+			add_location(div1, file$3, 167, 10, 7532);
 			attr_dev(div2, "class", "d-flex justify-content-between text-info");
-			add_location(div2, file$3, 155, 8, 7006);
+			add_location(div2, file$3, 165, 8, 7421);
 			attr_dev(div3, "class", "col-12");
-			add_location(div3, file$3, 149, 6, 6353);
+			add_location(div3, file$3, 159, 6, 6768);
 			attr_dev(div4, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div4, file$3, 148, 4, 6329);
+			add_location(div4, file$3, 158, 4, 6744);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div4, anchor);
@@ -21419,16 +21487,16 @@ function create_if_block_6(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen_dev(input, "input", /*input_input_handler_2*/ ctx[26]),
-					listen_dev(input, "input", /*input_handler_2*/ ctx[27], false, false, false),
-					listen_dev(a, "click", prevent_default(/*click_handler_1*/ ctx[28]), false, true, false)
+					listen_dev(input, "input", /*input_input_handler_2*/ ctx[27]),
+					listen_dev(input, "input", /*input_handler_2*/ ctx[28], false, false, false),
+					listen_dev(a, "click", prevent_default(/*click_handler_1*/ ctx[29]), false, true, false)
 				];
 
 				mounted = true;
 			}
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*pegInAmount*/ 4 && to_number(input.value) !== /*pegInAmount*/ ctx[2]) {
+			if (dirty[0] & /*pegInAmount*/ 4 && to_number(input.value) !== /*pegInAmount*/ ctx[2]) {
 				set_input_value(input, /*pegInAmount*/ ctx[2]);
 			}
 		},
@@ -21453,14 +21521,14 @@ function create_if_block_6(ctx) {
 		block,
 		id: create_if_block_6.name,
 		type: "if",
-		source: "(148:4) {#if showPegInAmount}",
+		source: "(158:4) {#if showPegInAmount}",
 		ctx
 	});
 
 	return block;
 }
 
-// (163:4) {#if pegInAmount > 0}
+// (173:4) {#if pegInAmount > 0}
 function create_if_block_3(ctx) {
 	let div1;
 	let div0;
@@ -21471,8 +21539,8 @@ function create_if_block_3(ctx) {
 	const if_blocks = [];
 
 	function select_block_type_1(ctx, dirty) {
-		if (/*showFeeCalculation*/ ctx[11]) return 0;
-		if (/*showEstimates*/ ctx[12]) return 1;
+		if (/*showFeeCalculation*/ ctx[12]) return 0;
+		if (/*showEstimates*/ ctx[13]) return 1;
 		return -1;
 	}
 
@@ -21499,9 +21567,9 @@ function create_if_block_3(ctx) {
 		},
 		h: function hydrate() {
 			attr_dev(div0, "class", "col-12");
-			add_location(div0, file$3, 164, 6, 7310);
+			add_location(div0, file$3, 174, 6, 7725);
 			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div1, file$3, 163, 4, 7286);
+			add_location(div1, file$3, 173, 4, 7701);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div1, anchor);
@@ -21571,14 +21639,14 @@ function create_if_block_3(ctx) {
 		block,
 		id: create_if_block_3.name,
 		type: "if",
-		source: "(163:4) {#if pegInAmount > 0}",
+		source: "(173:4) {#if pegInAmount > 0}",
 		ctx
 	});
 
 	return block;
 }
 
-// (174:32) 
+// (184:32) 
 function create_if_block_5(ctx) {
 	let label;
 	let t0;
@@ -21586,7 +21654,7 @@ function create_if_block_5(ctx) {
 	let feeestimation;
 	let current;
 	feeestimation = new FeeEstimation({ $$inline: true });
-	feeestimation.$on("fee_selected", /*feeSelected*/ ctx[17]);
+	feeestimation.$on("fee_selected", /*feeSelected*/ ctx[18]);
 
 	const block = {
 		c: function create() {
@@ -21608,7 +21676,7 @@ function create_if_block_5(ctx) {
 		h: function hydrate() {
 			attr_dev(label, "for", "transact-path");
 			attr_dev(label, "class", "mb-3 s-H0dU1KLT9Z8x");
-			add_location(label, file$3, 174, 10, 7839);
+			add_location(label, file$3, 184, 10, 8254);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, label, anchor);
@@ -21638,14 +21706,14 @@ function create_if_block_5(ctx) {
 		block,
 		id: create_if_block_5.name,
 		type: "if",
-		source: "(174:32) ",
+		source: "(184:32) ",
 		ctx
 	});
 
 	return block;
 }
 
-// (166:8) {#if showFeeCalculation}
+// (176:8) {#if showFeeCalculation}
 function create_if_block_4(ctx) {
 	let label;
 	let t0;
@@ -21677,7 +21745,7 @@ function create_if_block_4(ctx) {
 			div2 = element("div");
 			div0 = element("div");
 			t2 = text("Using fee rate: ");
-			t3 = text(/*feeToUse*/ ctx[3]);
+			t3 = text(/*feeToUse*/ ctx[4]);
 			t4 = space();
 			div1 = element("div");
 			a = element("a");
@@ -21689,7 +21757,7 @@ function create_if_block_4(ctx) {
 			t9 = space();
 			div4 = element("div");
 			t10 = text("Change: ");
-			t11 = text(/*change*/ ctx[8]);
+			t11 = text(/*change*/ ctx[9]);
 			this.h();
 		},
 		l: function claim(nodes) {
@@ -21703,7 +21771,7 @@ function create_if_block_4(ctx) {
 			div0 = claim_element(div2_nodes, "DIV", {});
 			var div0_nodes = children(div0);
 			t2 = claim_text(div0_nodes, "Using fee rate: ");
-			t3 = claim_text(div0_nodes, /*feeToUse*/ ctx[3]);
+			t3 = claim_text(div0_nodes, /*feeToUse*/ ctx[4]);
 			div0_nodes.forEach(detach_dev);
 			t4 = claim_space(div2_nodes);
 			div1 = claim_element(div2_nodes, "DIV", {});
@@ -21724,22 +21792,22 @@ function create_if_block_4(ctx) {
 			div4 = claim_element(nodes, "DIV", {});
 			var div4_nodes = children(div4);
 			t10 = claim_text(div4_nodes, "Change: ");
-			t11 = claim_text(div4_nodes, /*change*/ ctx[8]);
+			t11 = claim_text(div4_nodes, /*change*/ ctx[9]);
 			div4_nodes.forEach(detach_dev);
 			this.h();
 		},
 		h: function hydrate() {
 			attr_dev(label, "for", "transact-path");
 			attr_dev(label, "class", "mb-3 s-H0dU1KLT9Z8x");
-			add_location(label, file$3, 166, 10, 7374);
-			add_location(div0, file$3, 168, 12, 7518);
+			add_location(label, file$3, 176, 10, 7789);
+			add_location(div0, file$3, 178, 12, 7933);
 			attr_dev(a, "href", "/");
-			add_location(a, file$3, 169, 17, 7573);
-			add_location(div1, file$3, 169, 12, 7568);
+			add_location(a, file$3, 179, 17, 7988);
+			add_location(div1, file$3, 179, 12, 7983);
 			attr_dev(div2, "class", "d-flex justify-content-between");
-			add_location(div2, file$3, 167, 10, 7461);
-			add_location(div3, file$3, 171, 10, 7725);
-			add_location(div4, file$3, 172, 10, 7768);
+			add_location(div2, file$3, 177, 10, 7876);
+			add_location(div3, file$3, 181, 10, 8140);
+			add_location(div4, file$3, 182, 10, 8183);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, label, anchor);
@@ -21763,14 +21831,14 @@ function create_if_block_4(ctx) {
 			append_hydration_dev(div4, t11);
 
 			if (!mounted) {
-				dispose = listen_dev(a, "click", prevent_default(/*click_handler_2*/ ctx[29]), false, true, false);
+				dispose = listen_dev(a, "click", prevent_default(/*click_handler_2*/ ctx[30]), false, true, false);
 				mounted = true;
 			}
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*feeToUse*/ 8) set_data_dev(t3, /*feeToUse*/ ctx[3]);
-			if (dirty & /*pegInAmount*/ 4) set_data_dev(t8, /*pegInAmount*/ ctx[2]);
-			if (dirty & /*change*/ 256) set_data_dev(t11, /*change*/ ctx[8]);
+			if (dirty[0] & /*feeToUse*/ 16) set_data_dev(t3, /*feeToUse*/ ctx[4]);
+			if (dirty[0] & /*pegInAmount*/ 4) set_data_dev(t8, /*pegInAmount*/ ctx[2]);
+			if (dirty[0] & /*change*/ 512) set_data_dev(t11, /*change*/ ctx[9]);
 		},
 		i: noop$3,
 		o: noop$3,
@@ -21791,14 +21859,14 @@ function create_if_block_4(ctx) {
 		block,
 		id: create_if_block_4.name,
 		type: "if",
-		source: "(166:8) {#if showFeeCalculation}",
+		source: "(176:8) {#if showFeeCalculation}",
 		ctx
 	});
 
 	return block;
 }
 
-// (181:4) {#if changeErrorReason}
+// (191:4) {#if changeErrorReason}
 function create_if_block_2$1(ctx) {
 	let div;
 	let t;
@@ -21806,26 +21874,26 @@ function create_if_block_2$1(ctx) {
 	const block = {
 		c: function create() {
 			div = element("div");
-			t = text(/*changeErrorReason*/ ctx[7]);
+			t = text(/*changeErrorReason*/ ctx[8]);
 			this.h();
 		},
 		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
-			t = claim_text(div_nodes, /*changeErrorReason*/ ctx[7]);
+			t = claim_text(div_nodes, /*changeErrorReason*/ ctx[8]);
 			div_nodes.forEach(detach_dev);
 			this.h();
 		},
 		h: function hydrate() {
 			attr_dev(div, "class", "text-danger");
-			add_location(div, file$3, 180, 27, 8055);
+			add_location(div, file$3, 190, 27, 8470);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div, anchor);
 			append_hydration_dev(div, t);
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*changeErrorReason*/ 128) set_data_dev(t, /*changeErrorReason*/ ctx[7]);
+			if (dirty[0] & /*changeErrorReason*/ 256) set_data_dev(t, /*changeErrorReason*/ ctx[8]);
 		},
 		d: function destroy(detaching) {
 			if (detaching) detach_dev(div);
@@ -21836,14 +21904,14 @@ function create_if_block_2$1(ctx) {
 		block,
 		id: create_if_block_2$1.name,
 		type: "if",
-		source: "(181:4) {#if changeErrorReason}",
+		source: "(191:4) {#if changeErrorReason}",
 		ctx
 	});
 
 	return block;
 }
 
-// (182:4) {#if showButton}
+// (192:4) {#if showButton}
 function create_if_block_1$1(ctx) {
 	let div1;
 	let div0;
@@ -21876,11 +21944,11 @@ function create_if_block_1$1(ctx) {
 		h: function hydrate() {
 			attr_dev(button, "class", "btn btn-outline-warning w-100");
 			attr_dev(button, "type", "button");
-			add_location(button, file$3, 184, 8, 8186);
+			add_location(button, file$3, 194, 8, 8601);
 			attr_dev(div0, "class", "col");
-			add_location(div0, file$3, 183, 6, 8160);
+			add_location(div0, file$3, 193, 6, 8575);
 			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div1, file$3, 182, 4, 8136);
+			add_location(div1, file$3, 192, 4, 8551);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div1, anchor);
@@ -21889,7 +21957,7 @@ function create_if_block_1$1(ctx) {
 			append_hydration_dev(button, t);
 
 			if (!mounted) {
-				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[30], false, false, false);
+				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[31], false, false, false);
 				mounted = true;
 			}
 		},
@@ -21905,14 +21973,14 @@ function create_if_block_1$1(ctx) {
 		block,
 		id: create_if_block_1$1.name,
 		type: "if",
-		source: "(182:4) {#if showButton}",
+		source: "(192:4) {#if showButton}",
 		ctx
 	});
 
 	return block;
 }
 
-// (189:4) {#if showHexTx}
+// (199:4) {#if showHexTx}
 function create_if_block$1(ctx) {
 	let div1;
 	let div0;
@@ -21959,17 +22027,17 @@ function create_if_block$1(ctx) {
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(h2, file$3, 191, 8, 8406);
-			add_location(p, file$3, 192, 8, 8435);
+			add_location(h2, file$3, 201, 8, 8821);
+			add_location(p, file$3, 202, 8, 8850);
 			attr_dev(textarea, "rows", "4");
 			set_style(textarea, "width", "100%");
 			textarea.readOnly = true;
-			textarea.value = /*hexTx*/ ctx[4];
-			add_location(textarea, file$3, 193, 8, 8492);
+			textarea.value = /*hexTx*/ ctx[5];
+			add_location(textarea, file$3, 203, 8, 8907);
 			attr_dev(div0, "class", "col");
-			add_location(div0, file$3, 190, 6, 8380);
+			add_location(div0, file$3, 200, 6, 8795);
 			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div1, file$3, 189, 4, 8356);
+			add_location(div1, file$3, 199, 4, 8771);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div1, anchor);
@@ -21983,8 +22051,8 @@ function create_if_block$1(ctx) {
 			append_hydration_dev(div0, textarea);
 		},
 		p: function update(ctx, dirty) {
-			if (dirty & /*hexTx*/ 16) {
-				prop_dev(textarea, "value", /*hexTx*/ ctx[4]);
+			if (dirty[0] & /*hexTx*/ 32) {
+				prop_dev(textarea, "value", /*hexTx*/ ctx[5]);
 			}
 		},
 		d: function destroy(detaching) {
@@ -21996,7 +22064,7 @@ function create_if_block$1(ctx) {
 		block,
 		id: create_if_block$1.name,
 		type: "if",
-		source: "(189:4) {#if showHexTx}",
+		source: "(199:4) {#if showHexTx}",
 		ctx
 	});
 
@@ -22011,7 +22079,7 @@ function create_fragment$3(ctx) {
 	let label;
 	let span0;
 	let t1;
-	let t2_value = /*$sbtcConfig*/ ctx[5].network + "";
+	let t2_value = /*$sbtcConfig*/ ctx[6].network + "";
 	let t2;
 	let t3;
 	let t4;
@@ -22029,7 +22097,7 @@ function create_fragment$3(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	let if_block0 = /*errorReason*/ ctx[6] && create_if_block_10(ctx);
+	let if_block0 = /*errorReason*/ ctx[7] && create_if_block_11(ctx);
 
 	patchquestion = new PatchQuestion({
 			props: { width: 30, height: 30 },
@@ -22037,18 +22105,18 @@ function create_fragment$3(ctx) {
 		});
 
 	function select_block_type(ctx, dirty) {
-		if (/*showUtxos*/ ctx[15]) return create_if_block_8;
-		if (/*bitcoinAddress*/ ctx[0]) return create_if_block_9;
+		if (/*showUtxos*/ ctx[16]) return create_if_block_9;
+		if (/*bitcoinAddress*/ ctx[0]) return create_if_block_10;
 	}
 
 	let current_block_type = select_block_type(ctx);
 	let if_block1 = current_block_type && current_block_type(ctx);
-	let if_block2 = /*showStxAddress*/ ctx[14] && create_if_block_7(ctx);
-	let if_block3 = /*showPegInAmount*/ ctx[13] && create_if_block_6(ctx);
+	let if_block2 = /*showStxAddress*/ ctx[15] && create_if_block_7(ctx);
+	let if_block3 = /*showPegInAmount*/ ctx[14] && create_if_block_6(ctx);
 	let if_block4 = /*pegInAmount*/ ctx[2] > 0 && create_if_block_3(ctx);
-	let if_block5 = /*changeErrorReason*/ ctx[7] && create_if_block_2$1(ctx);
-	let if_block6 = /*showButton*/ ctx[10] && create_if_block_1$1(ctx);
-	let if_block7 = /*showHexTx*/ ctx[9] && create_if_block$1(ctx);
+	let if_block5 = /*changeErrorReason*/ ctx[8] && create_if_block_2$1(ctx);
+	let if_block6 = /*showButton*/ ctx[11] && create_if_block_1$1(ctx);
+	let if_block7 = /*showHexTx*/ ctx[10] && create_if_block$1(ctx);
 
 	const block = {
 		c: function create() {
@@ -22143,27 +22211,27 @@ function create_fragment$3(ctx) {
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(span0, file$3, 122, 10, 4604);
+			add_location(span0, file$3, 131, 10, 4926);
 			attr_dev(span1, "class", "pointer text-info");
 			attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
 			attr_dev(span1, "data-bs-placement", "top");
 			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
 			attr_dev(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
-			add_location(span1, file$3, 123, 10, 4666);
+			add_location(span1, file$3, 132, 10, 4988);
 			attr_dev(label, "for", "transact-path");
 			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
-			add_location(label, file$3, 121, 8, 4527);
+			add_location(label, file$3, 130, 8, 4849);
 			attr_dev(input, "type", "text");
 			attr_dev(input, "id", "from-address");
 			attr_dev(input, "class", "form-control");
 			attr_dev(input, "autocomplete", "off");
-			add_location(input, file$3, 125, 8, 4951);
+			add_location(input, file$3, 134, 8, 5273);
 			attr_dev(div0, "class", "col");
-			add_location(div0, file$3, 120, 6, 4501);
+			add_location(div0, file$3, 129, 6, 4823);
 			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
-			add_location(div1, file$3, 119, 4, 4477);
+			add_location(div1, file$3, 128, 4, 4799);
 			attr_dev(div2, "class", "card border p-4");
-			add_location(div2, file$3, 116, 4, 4368);
+			add_location(div2, file$3, 125, 4, 4690);
 		},
 		m: function mount(target, anchor) {
 			insert_hydration_dev(target, div2, anchor);
@@ -22200,19 +22268,19 @@ function create_fragment$3(ctx) {
 
 			if (!mounted) {
 				dispose = [
-					listen_dev(input, "input", /*input_input_handler*/ ctx[21]),
-					listen_dev(input, "input", /*input_handler*/ ctx[22], false, false, false)
+					listen_dev(input, "input", /*input_input_handler*/ ctx[22]),
+					listen_dev(input, "input", /*input_handler*/ ctx[23], false, false, false)
 				];
 
 				mounted = true;
 			}
 		},
-		p: function update(ctx, [dirty]) {
-			if (/*errorReason*/ ctx[6]) {
+		p: function update(ctx, dirty) {
+			if (/*errorReason*/ ctx[7]) {
 				if (if_block0) {
 					if_block0.p(ctx, dirty);
 				} else {
-					if_block0 = create_if_block_10(ctx);
+					if_block0 = create_if_block_11(ctx);
 					if_block0.c();
 					if_block0.m(div2, t0);
 				}
@@ -22221,9 +22289,9 @@ function create_fragment$3(ctx) {
 				if_block0 = null;
 			}
 
-			if ((!current || dirty & /*$sbtcConfig*/ 32) && t2_value !== (t2_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data_dev(t2, t2_value);
+			if ((!current || dirty[0] & /*$sbtcConfig*/ 64) && t2_value !== (t2_value = /*$sbtcConfig*/ ctx[6].network + "")) set_data_dev(t2, t2_value);
 
-			if (dirty & /*bitcoinAddress*/ 1 && input.value !== /*bitcoinAddress*/ ctx[0]) {
+			if (dirty[0] & /*bitcoinAddress*/ 1 && input.value !== /*bitcoinAddress*/ ctx[0]) {
 				set_input_value(input, /*bitcoinAddress*/ ctx[0]);
 			}
 
@@ -22239,11 +22307,11 @@ function create_fragment$3(ctx) {
 				}
 			}
 
-			if (/*showStxAddress*/ ctx[14]) {
+			if (/*showStxAddress*/ ctx[15]) {
 				if (if_block2) {
 					if_block2.p(ctx, dirty);
 
-					if (dirty & /*showStxAddress*/ 16384) {
+					if (dirty[0] & /*showStxAddress*/ 32768) {
 						transition_in(if_block2, 1);
 					}
 				} else {
@@ -22262,11 +22330,11 @@ function create_fragment$3(ctx) {
 				check_outros();
 			}
 
-			if (/*showPegInAmount*/ ctx[13]) {
+			if (/*showPegInAmount*/ ctx[14]) {
 				if (if_block3) {
 					if_block3.p(ctx, dirty);
 
-					if (dirty & /*showPegInAmount*/ 8192) {
+					if (dirty[0] & /*showPegInAmount*/ 16384) {
 						transition_in(if_block3, 1);
 					}
 				} else {
@@ -22289,7 +22357,7 @@ function create_fragment$3(ctx) {
 				if (if_block4) {
 					if_block4.p(ctx, dirty);
 
-					if (dirty & /*pegInAmount*/ 4) {
+					if (dirty[0] & /*pegInAmount*/ 4) {
 						transition_in(if_block4, 1);
 					}
 				} else {
@@ -22308,7 +22376,7 @@ function create_fragment$3(ctx) {
 				check_outros();
 			}
 
-			if (/*changeErrorReason*/ ctx[7]) {
+			if (/*changeErrorReason*/ ctx[8]) {
 				if (if_block5) {
 					if_block5.p(ctx, dirty);
 				} else {
@@ -22321,7 +22389,7 @@ function create_fragment$3(ctx) {
 				if_block5 = null;
 			}
 
-			if (/*showButton*/ ctx[10]) {
+			if (/*showButton*/ ctx[11]) {
 				if (if_block6) {
 					if_block6.p(ctx, dirty);
 				} else {
@@ -22334,7 +22402,7 @@ function create_fragment$3(ctx) {
 				if_block6 = null;
 			}
 
-			if (/*showHexTx*/ ctx[9]) {
+			if (/*showHexTx*/ ctx[10]) {
 				if (if_block7) {
 					if_block7.p(ctx, dirty);
 				} else {
@@ -22403,7 +22471,7 @@ function instance$3($$self, $$props, $$invalidate) {
 	let showHexTx;
 	let $sbtcConfig;
 	validate_store(sbtcConfig, 'sbtcConfig');
-	component_subscribe($$self, sbtcConfig, $$value => $$invalidate(5, $sbtcConfig = $$value));
+	component_subscribe($$self, sbtcConfig, $$value => $$invalidate(6, $sbtcConfig = $$value));
 	let { $$slots: slots = {}, $$scope } = $$props;
 	validate_slots('FetchUTXOs', slots, []);
 	let bitcoinAddress = $sbtcConfig.fromBtcAddress;
@@ -22411,10 +22479,13 @@ function instance$3($$self, $$props, $$invalidate) {
 	let pegInAmount = $sbtcConfig.pegInAmount;
 	let errorReason;
 	let changeErrorReason;
+	let stxAdderErrorReason;
 
 	const changeStxAddress = () => {
+		$$invalidate(3, stxAdderErrorReason = undefined);
+
 		if (!stxAddress) {
-			$$invalidate(6, errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
+			$$invalidate(3, stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
 			return;
 		}
 
@@ -22422,20 +22493,21 @@ function instance$3($$self, $$props, $$invalidate) {
 			const decoded = decodeStacksAddress(stxAddress);
 
 			if ($sbtcConfig.network === 'testnet' && decoded[0] !== 26) {
-				$$invalidate(6, errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
+				$$invalidate(3, stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
 				return;
 			}
 
 			if ($sbtcConfig.network === 'mainnet' && decoded[0] !== 22) {
-				$$invalidate(6, errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
+				$$invalidate(3, stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
 				return;
 			}
 
 			const conf = $sbtcConfig;
 			conf.stxAddress = stxAddress;
 			sbtcConfig.update(() => conf);
+			registerTooltips();
 		} catch(err) {
-			$$invalidate(6, errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
+			$$invalidate(3, stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address');
 		}
 	};
 
@@ -22444,28 +22516,29 @@ function instance$3($$self, $$props, $$invalidate) {
 
 	const feeSelected = event => {
 		const maxPeg = maxCommit($sbtcConfig.utxos);
-		$$invalidate(3, feeToUse = event.detail.fee);
+		$$invalidate(4, feeToUse = event.detail.fee);
 		$$invalidate(2, pegInAmount = maxPeg - feeToUse);
-		$$invalidate(8, change = maxPeg - (pegInAmount + feeToUse));
+		$$invalidate(9, change = maxPeg - (pegInAmount + feeToUse));
 
 		if (change < 0) {
-			$$invalidate(7, changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse));
+			$$invalidate(8, changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse));
 		}
 
 		const conf = $sbtcConfig;
 		conf.pegInAmount = pegInAmount;
 		conf.pegInChangeAmount = Number(change);
 		sbtcConfig.set(conf);
+		registerTooltips();
 	};
 
 	const changePegIn = maxValue => {
 		const maxPeg = maxCommit($sbtcConfig.utxos);
-		$$invalidate(6, errorReason = undefined);
-		$$invalidate(7, changeErrorReason = undefined);
+		$$invalidate(7, errorReason = undefined);
+		$$invalidate(8, changeErrorReason = undefined);
 
 		if (pegInAmount > maxPeg) {
 			//pegInAmount = maxPeg - feeToUse;
-			$$invalidate(6, errorReason = 'Cannot commit more BTC then is available at your address');
+			$$invalidate(7, errorReason = 'Cannot commit more BTC then is available at your address');
 
 			return;
 		}
@@ -22477,22 +22550,23 @@ function instance$3($$self, $$props, $$invalidate) {
 			$$invalidate(2, pegInAmount = maxPeg - feeToUse);
 		}
 
-		$$invalidate(8, change = maxPeg - (pegInAmount + feeToUse));
+		$$invalidate(9, change = maxPeg - (pegInAmount + feeToUse));
 
 		if (change < 0) {
-			$$invalidate(7, changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse));
+			$$invalidate(8, changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToUse));
 		}
 
 		conf.pegInChangeAmount = Number(change);
 		conf.pegInAmount = Number(pegInAmount);
 		sbtcConfig.set(conf);
+		registerTooltips();
 	};
 
 	const configureUTXOs = async force => {
-		$$invalidate(6, errorReason = undefined);
+		$$invalidate(7, errorReason = undefined);
 
 		if (!bitcoinAddress || bitcoinAddress.length < 10) {
-			$$invalidate(6, errorReason = 'Invalid address');
+			$$invalidate(7, errorReason = 'Invalid address');
 			return;
 		}
 
@@ -22509,26 +22583,31 @@ function instance$3($$self, $$props, $$invalidate) {
 			console.log('utxos --> ', result.utxos);
 			conf.utxos = result;
 			sbtcConfig.update(() => conf);
+			registerTooltips();
 		} catch(err) {
-			$$invalidate(6, errorReason = err || 'Error - is the address a valid');
+			$$invalidate(7, errorReason = err || 'Error - is the address a valid');
 		}
 	};
 
 	let hexTx;
 
 	const buildTx = async () => {
-		$$invalidate(4, hexTx = await buildPegInTx($sbtcConfig));
+		$$invalidate(5, hexTx = await buildPegInTx($sbtcConfig));
 	};
 
 	onMount(async () => {
 		setTimeout(
 			function () {
-				const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
-				if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+				registerTooltips();
 			},
 			500
 		);
 	});
+
+	const registerTooltips = () => {
+		const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
+		if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+	};
 
 	const writable_props = [];
 
@@ -22560,9 +22639,9 @@ function instance$3($$self, $$props, $$invalidate) {
 	const click_handler_1 = () => changePegIn(true);
 
 	const click_handler_2 = () => {
-		$$invalidate(3, feeToUse = 0);
-		$$invalidate(4, hexTx = undefined);
-		$$invalidate(7, changeErrorReason = undefined);
+		$$invalidate(4, feeToUse = 0);
+		$$invalidate(5, hexTx = undefined);
+		$$invalidate(8, changeErrorReason = undefined);
 	};
 
 	const click_handler_3 = () => buildTx();
@@ -22583,6 +22662,7 @@ function instance$3($$self, $$props, $$invalidate) {
 		pegInAmount,
 		errorReason,
 		changeErrorReason,
+		stxAdderErrorReason,
 		changeStxAddress,
 		feeToUse,
 		change,
@@ -22591,6 +22671,7 @@ function instance$3($$self, $$props, $$invalidate) {
 		configureUTXOs,
 		hexTx,
 		buildTx,
+		registerTooltips,
 		showHexTx,
 		showButton,
 		showFeeCalculation,
@@ -22605,18 +22686,19 @@ function instance$3($$self, $$props, $$invalidate) {
 		if ('bitcoinAddress' in $$props) $$invalidate(0, bitcoinAddress = $$props.bitcoinAddress);
 		if ('stxAddress' in $$props) $$invalidate(1, stxAddress = $$props.stxAddress);
 		if ('pegInAmount' in $$props) $$invalidate(2, pegInAmount = $$props.pegInAmount);
-		if ('errorReason' in $$props) $$invalidate(6, errorReason = $$props.errorReason);
-		if ('changeErrorReason' in $$props) $$invalidate(7, changeErrorReason = $$props.changeErrorReason);
-		if ('feeToUse' in $$props) $$invalidate(3, feeToUse = $$props.feeToUse);
-		if ('change' in $$props) $$invalidate(8, change = $$props.change);
-		if ('hexTx' in $$props) $$invalidate(4, hexTx = $$props.hexTx);
-		if ('showHexTx' in $$props) $$invalidate(9, showHexTx = $$props.showHexTx);
-		if ('showButton' in $$props) $$invalidate(10, showButton = $$props.showButton);
-		if ('showFeeCalculation' in $$props) $$invalidate(11, showFeeCalculation = $$props.showFeeCalculation);
-		if ('showEstimates' in $$props) $$invalidate(12, showEstimates = $$props.showEstimates);
-		if ('showPegInAmount' in $$props) $$invalidate(13, showPegInAmount = $$props.showPegInAmount);
-		if ('showStxAddress' in $$props) $$invalidate(14, showStxAddress = $$props.showStxAddress);
-		if ('showUtxos' in $$props) $$invalidate(15, showUtxos = $$props.showUtxos);
+		if ('errorReason' in $$props) $$invalidate(7, errorReason = $$props.errorReason);
+		if ('changeErrorReason' in $$props) $$invalidate(8, changeErrorReason = $$props.changeErrorReason);
+		if ('stxAdderErrorReason' in $$props) $$invalidate(3, stxAdderErrorReason = $$props.stxAdderErrorReason);
+		if ('feeToUse' in $$props) $$invalidate(4, feeToUse = $$props.feeToUse);
+		if ('change' in $$props) $$invalidate(9, change = $$props.change);
+		if ('hexTx' in $$props) $$invalidate(5, hexTx = $$props.hexTx);
+		if ('showHexTx' in $$props) $$invalidate(10, showHexTx = $$props.showHexTx);
+		if ('showButton' in $$props) $$invalidate(11, showButton = $$props.showButton);
+		if ('showFeeCalculation' in $$props) $$invalidate(12, showFeeCalculation = $$props.showFeeCalculation);
+		if ('showEstimates' in $$props) $$invalidate(13, showEstimates = $$props.showEstimates);
+		if ('showPegInAmount' in $$props) $$invalidate(14, showPegInAmount = $$props.showPegInAmount);
+		if ('showStxAddress' in $$props) $$invalidate(15, showStxAddress = $$props.showStxAddress);
+		if ('showUtxos' in $$props) $$invalidate(16, showUtxos = $$props.showUtxos);
 	};
 
 	if ($$props && "$$inject" in $$props) {
@@ -22624,32 +22706,32 @@ function instance$3($$self, $$props, $$invalidate) {
 	}
 
 	$$self.$$.update = () => {
-		if ($$self.$$.dirty & /*bitcoinAddress, $sbtcConfig*/ 33) {
-			$$invalidate(15, showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0);
+		if ($$self.$$.dirty[0] & /*bitcoinAddress, $sbtcConfig*/ 65) {
+			$$invalidate(16, showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0);
 		}
 
-		if ($$self.$$.dirty & /*bitcoinAddress, $sbtcConfig*/ 33) {
-			$$invalidate(14, showStxAddress = bitcoinAddress && $sbtcConfig.utxos?.length > 0);
+		if ($$self.$$.dirty[0] & /*bitcoinAddress, $sbtcConfig*/ 65) {
+			$$invalidate(15, showStxAddress = bitcoinAddress && $sbtcConfig.utxos?.length > 0);
 		}
 
-		if ($$self.$$.dirty & /*bitcoinAddress, stxAddress*/ 3) {
-			$$invalidate(13, showPegInAmount = bitcoinAddress && stxAddress);
+		if ($$self.$$.dirty[0] & /*bitcoinAddress, stxAddress, stxAdderErrorReason*/ 11) {
+			$$invalidate(14, showPegInAmount = bitcoinAddress && stxAddress && !stxAdderErrorReason);
 		}
 
-		if ($$self.$$.dirty & /*bitcoinAddress, stxAddress*/ 3) {
-			$$invalidate(12, showEstimates = bitcoinAddress && stxAddress);
+		if ($$self.$$.dirty[0] & /*bitcoinAddress, stxAddress, stxAdderErrorReason*/ 11) {
+			$$invalidate(13, showEstimates = bitcoinAddress && stxAddress && !stxAdderErrorReason);
 		}
 
-		if ($$self.$$.dirty & /*feeToUse*/ 8) {
-			$$invalidate(11, showFeeCalculation = feeToUse > 0);
+		if ($$self.$$.dirty[0] & /*feeToUse*/ 16) {
+			$$invalidate(12, showFeeCalculation = feeToUse > 0);
 		}
 
-		if ($$self.$$.dirty & /*$sbtcConfig, feeToUse, bitcoinAddress, stxAddress, pegInAmount*/ 47) {
-			$$invalidate(10, showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0);
+		if ($$self.$$.dirty[0] & /*$sbtcConfig, feeToUse, bitcoinAddress, stxAddress, pegInAmount, stxAdderErrorReason*/ 95) {
+			$$invalidate(11, showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0 && !stxAdderErrorReason);
 		}
 
-		if ($$self.$$.dirty & /*hexTx*/ 16) {
-			$$invalidate(9, showHexTx = hexTx && hexTx.length > 0);
+		if ($$self.$$.dirty[0] & /*hexTx*/ 32) {
+			$$invalidate(10, showHexTx = hexTx && hexTx.length > 0);
 		}
 	};
 
@@ -22657,6 +22739,7 @@ function instance$3($$self, $$props, $$invalidate) {
 		bitcoinAddress,
 		stxAddress,
 		pegInAmount,
+		stxAdderErrorReason,
 		feeToUse,
 		hexTx,
 		$sbtcConfig,
@@ -22691,7 +22774,7 @@ function instance$3($$self, $$props, $$invalidate) {
 class FetchUTXOs extends SvelteComponentDev {
 	constructor(options) {
 		super(options);
-		init(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+		init(this, options, instance$3, create_fragment$3, safe_not_equal, {}, null, [-1, -1]);
 
 		dispatch_dev("SvelteRegisterComponent", {
 			component: this,
