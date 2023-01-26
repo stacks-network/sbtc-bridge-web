@@ -24,7 +24,7 @@ const config = {
     adapter: adapter({ fallback: "index.html" }),
     prerender: { entries: [] },
 		paths: {
-			base: dev ? '' : '/blocksim',
+			base: dev ? '' : '/sbtc-bridge',
 		},
 		// If you are not using a .nojekyll file, change your appDir to something not starting with an underscore.
 		// For example, instead of '_app', use 'app_', 'internal', etc.

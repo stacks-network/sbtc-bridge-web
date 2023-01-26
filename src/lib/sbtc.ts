@@ -32,7 +32,7 @@ export async function fetchSbtcWalletAddress(network:string) {
 	const result = await callContractReadOnly(data);
   console.log('pox: ', result)
   if (network === 'testnet') {
-    return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss';
+    return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss'; // alice
   }
   return 'bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6';
 }

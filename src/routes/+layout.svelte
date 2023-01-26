@@ -42,7 +42,7 @@
   onMount(async () => {
     bootstrap = (await import('bootstrap'));
     try {
-      fetchWalletAddress();
+      await fetchWalletAddress();
     } catch (err) {
       console.log(err)
     }

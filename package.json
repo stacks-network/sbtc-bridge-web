@@ -5,7 +5,7 @@
 	"author": "Mike Cohen",
 	"scripts": {
 		"dev": "vite dev --port=8080",
-		"build": "vite build --mode production",
+		"build": "vite build --mode staging",
 		"preview": "vite preview",
 		"test": "playwright test",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",

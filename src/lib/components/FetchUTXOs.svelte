@@ -159,10 +159,10 @@
     <div class="row">
       <div class="col-12">
         {#if showFeeCalculation}
-          <label for="transact-path" class="mb-3">Tx Fee Calculation</label>
+          <label for="transact-path" class="mb-3">Tx Fee Calculation (sats/kb)</label>
           <div class="d-flex justify-content-between">
             <div>Using fee rate: {feeToUse}</div>
-            <div><a href="/" on:click|preventDefault={() => {feeToUse = 0; hexTx = undefined}}>reset</a></div>
+            <div><a href="/" on:click|preventDefault={() => {feeToUse = 0; hexTx = undefined; changeErrorReason = undefined}}>reset</a></div>
           </div>
           <div>Peg In: {pegInAmount}</div>
           <div>Change: {change}</div>

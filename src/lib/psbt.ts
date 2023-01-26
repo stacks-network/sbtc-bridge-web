@@ -20,9 +20,9 @@ export async function buildPegInTx(config:SbtcConfig) {
   })
   const data = Buffer.from(config.stxAddress, 'utf8');
   const embed = payments.embed({ data: [data] });
-  psbt.addOutput({ script: embed.output, value: 0 });
   psbt.addOutput({ address: config.sbtcWalletAddress, value: config.pegInAmount });
-  psbt.addOutput({ address: config.fromBtcAddress, value: config.pegInChangeAmount });
+  if (config.pegInChangeAmount > 0) psbt.addOutput({ address: config.fromBtcAddress, value: config.pegInChangeAmount });
+  psbt.addOutput({ script: embed.output, value: 0 });
   return psbt.toHex();
 }
 
