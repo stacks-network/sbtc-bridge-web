@@ -14,27 +14,30 @@
   let pegInAmount:number = $sbtcConfig.pegInAmount;
   let errorReason:string|undefined;
   let changeErrorReason:string|undefined;
+  let stxAdderErrorReason:string|undefined;
   
   const changeStxAddress = () => {
+    stxAdderErrorReason = undefined;
     if (!stxAddress) {
-      errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+      stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
       return
     }
     try {
       const decoded = decodeStacksAddress(stxAddress);
       if ($sbtcConfig.network === 'testnet' && decoded[0] !== 26) {
-        errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+        stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
         return
       }
       if ($sbtcConfig.network === 'mainnet' && decoded[0] !== 22) {
-        errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+        stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
         return
       }
       const conf:SbtcConfig = $sbtcConfig;
       conf.stxAddress = stxAddress;
       sbtcConfig.update(() => conf);
+      registerTooltips();
     } catch (err:any) {
-      errorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+      stxAdderErrorReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
     }
   }
   
@@ -52,6 +55,7 @@
     conf.pegInAmount = pegInAmount;
     conf.pegInChangeAmount = Number(change);
     sbtcConfig.set(conf);
+    registerTooltips();
   }
   
   const changePegIn = (maxValue:boolean) => {
@@ -75,6 +79,7 @@
     conf.pegInChangeAmount = Number(change);
     conf.pegInAmount = Number(pegInAmount);
     sbtcConfig.set(conf);
+    registerTooltips();
   }
   
   const configureUTXOs = async (force:boolean) => {
@@ -95,6 +100,7 @@
       console.log('utxos --> ', result.utxos);
       conf.utxos = result;
       sbtcConfig.update(() => conf);
+      registerTooltips();
     } catch(err:any) {
       errorReason = err||'Error - is the address a valid';
     }
@@ -107,19 +113,21 @@
   
   $: showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
   $: showStxAddress = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
-  $: showPegInAmount = bitcoinAddress && stxAddress;
-  $: showEstimates = bitcoinAddress && stxAddress;
+  $: showPegInAmount = bitcoinAddress && stxAddress && !stxAdderErrorReason;
+  $: showEstimates = bitcoinAddress && stxAddress && !stxAdderErrorReason;
   $: showFeeCalculation = feeToUse > 0;
-  $: showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0;
+  $: showButton = $sbtcConfig.pegInChangeAmount >= 0 && feeToUse > 0 && bitcoinAddress && stxAddress && pegInAmount > 0 && !stxAdderErrorReason;
   $: showHexTx = hexTx && hexTx.length > 0;
   
   onMount(async () => {
     setTimeout(function () {
-      const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
-      if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+      registerTooltips();
     }, 500)
   })
-
+  const registerTooltips = () => {
+    const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
+    if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
+  }
   </script>
         
     <div class="card border p-4">
@@ -150,6 +158,7 @@
             <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your Stacks address. The equivalent amount of sBTC will be sent to this wallet"><PatchQuestion width={30} height={30}/></span>
           </label>
           <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
+          {#if stxAdderErrorReason}<div class="text-danger">{stxAdderErrorReason}</div>{/if}
         </div>
       </div>
     {/if}
