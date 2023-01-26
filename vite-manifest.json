@@ -51,14 +51,11 @@
     "file": "internal/immutable/assets/_layout-1c216903.css",
     "src": "src/routes/+layout.css"
   },
+  "_preload-helper-41c905a7.js": {
+    "file": "internal/immutable/chunks/preload-helper-41c905a7.js"
+  },
   "__page-4039aba4.js": {
     "file": "internal/immutable/chunks/_page-4039aba4.js"
-  },
-  "_singletons-48d936cb.js": {
-    "file": "internal/immutable/chunks/singletons-48d936cb.js",
-    "imports": [
-      "_index-936b3cba.js"
-    ]
   },
   "src/routes/+page.ts": {
     "file": "internal/immutable/modules/pages/_page.ts-eeb26cb8.js",
@@ -68,20 +65,20 @@
       "__page-4039aba4.js"
     ]
   },
-  ".svelte-kit/generated/nodes/1.js": {
-    "file": "internal/immutable/chunks/1-aa8150ad.js",
-    "src": ".svelte-kit/generated/nodes/1.js",
-    "isDynamicEntry": true,
-    "imports": [
-      "node_modules/@sveltejs/kit/src/runtime/components/error.svelte"
-    ]
-  },
   ".svelte-kit/generated/nodes/0.js": {
     "file": "internal/immutable/chunks/0-1a2441ec.js",
     "src": ".svelte-kit/generated/nodes/0.js",
     "isDynamicEntry": true,
     "imports": [
       "src/routes/+layout.svelte"
+    ]
+  },
+  ".svelte-kit/generated/nodes/1.js": {
+    "file": "internal/immutable/chunks/1-aa8150ad.js",
+    "src": ".svelte-kit/generated/nodes/1.js",
+    "isDynamicEntry": true,
+    "imports": [
+      "node_modules/@sveltejs/kit/src/runtime/components/error.svelte"
     ]
   },
   ".svelte-kit/generated/nodes/2.js": {
@@ -93,6 +90,12 @@
       "src/routes/+page.svelte"
     ]
   },
+  "_singletons-48d936cb.js": {
+    "file": "internal/immutable/chunks/singletons-48d936cb.js",
+    "imports": [
+      "_index-936b3cba.js"
+    ]
+  },
   "node_modules/@sveltejs/kit/src/runtime/components/error.svelte": {
     "file": "internal/immutable/components/error.svelte-d0126066.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/components/error.svelte",
@@ -101,9 +104,6 @@
       "_index-936b3cba.js",
       "_singletons-48d936cb.js"
     ]
-  },
-  "_preload-helper-41c905a7.js": {
-    "file": "internal/immutable/chunks/preload-helper-41c905a7.js"
   },
   "_index-936b3cba.js": {
     "file": "internal/immutable/chunks/index-936b3cba.js"
