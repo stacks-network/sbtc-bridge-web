@@ -1,5 +1,5 @@
-import { S as SvelteComponent, i as init, s as safe_not_equal, N as create_slot, T as assign, U as svg_element, V as claim_svg_element, m as children, h as detach, n as attr, W as set_svg_attributes, X as toggle_class, b as insert_hydration, D as append_hydration, O as update_slot_base, P as get_all_dirty_from_scope, Q as get_slot_changes, Y as get_spread_update, f as transition_in, t as transition_out, Z as compute_rest_props, _ as exclude_internal_props, k as element, q as text, a as space, l as claim_element, r as claim_text, c as claim_space, E as listen, F as prevent_default, u as set_data, G as noop$3, H as run_all, I as component_subscribe, J as createEventDispatcher, o as onMount, w as create_component, x as claim_component, y as mount_component, $ as set_input_value, g as group_outros, d as check_outros, z as destroy_component, a0 as to_number, p as set_style } from '../../chunks/index-3bacd89c.js';
-import { Y as getAugmentedNamespace, Z as __viteBrowserExternal, a0 as commonjsGlobal, s as sbtcConfig, a1 as decodeStacksAddress } from '../../chunks/sbtc-cae2e119.js';
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, Q as create_slot, Y as assign, Z as compute_rest_props, v as validate_slots, _ as exclude_internal_props, $ as svg_element, a0 as claim_svg_element, q as children, l as detach_dev, r as attr_dev, w as add_location, a1 as set_svg_attributes, a2 as toggle_class, g as insert_hydration_dev, K as append_hydration_dev, U as update_slot_base, V as get_all_dirty_from_scope, W as get_slot_changes, a3 as get_spread_update, k as transition_in, t as transition_out, G as validate_store, H as component_subscribe, I as createEventDispatcher, o as onMount, n as element, x as text, c as space, p as claim_element, y as claim_text, f as claim_space, L as listen_dev, M as prevent_default, z as set_data_dev, N as noop$3, O as run_all, T as globals$1, A as create_component, B as claim_component, C as mount_component, a4 as set_input_value, h as group_outros, j as check_outros, D as destroy_component, a5 as to_number, u as set_style, a6 as prop_dev } from '../../chunks/index-ccc0a31b.js';
+import { Y as getAugmentedNamespace, Z as __viteBrowserExternal, a0 as commonjsGlobal, s as sbtcConfig, a1 as decodeStacksAddress } from '../../chunks/sbtc-8197329b.js';
 
 async function fetchAddressDetails(network, address) {
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
@@ -2378,7 +2378,7 @@ ieee754.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 	}
 } (buffer));
 
-var src$1 = {};
+var src$2 = {};
 
 var address = {};
 
@@ -2792,9 +2792,9 @@ script_number.encode = encode$h;
 
 var script_signature = {};
 
-var types$5 = {};
+var types$6 = {};
 
-var types$4 = {
+var types$5 = {
   Array: function (value) { return value !== null && value !== undefined && value.constructor === Array },
   Boolean: function (value) { return typeof value === 'boolean' },
   Function: function (value) { return typeof value === 'function' },
@@ -2806,15 +2806,15 @@ var types$4 = {
 };
 
 // TODO: deprecate
-types$4.Null = types$4.Nil;
+types$5.Null = types$5.Nil;
 
-for (var typeName$1 in types$4) {
-  types$4[typeName$1].toJSON = function (t) {
+for (var typeName$1 in types$5) {
+  types$5[typeName$1].toJSON = function (t) {
     return t
   }.bind(null, typeName$1);
 }
 
-var native$1 = types$4;
+var native$1 = types$5;
 
 var native = native$1;
 
@@ -3418,13 +3418,13 @@ var typeforce_1 = typeforce$4;
 	exports.BufferN = exports.typeforce.BufferN;
 	exports.Null = exports.typeforce.Null;
 	exports.oneOf = exports.typeforce.oneOf;
-} (types$5));
+} (types$6));
 
 Object.defineProperty(script_signature, '__esModule', { value: true });
 script_signature.encode = script_signature.decode = void 0;
 const bip66 = bip66$1;
-const types$3 = types$5;
-const { typeforce: typeforce$3 } = types$3;
+const types$4 = types$6;
+const { typeforce: typeforce$3 } = types$4;
 const ZERO$1 = buffer.Buffer.alloc(1, 0);
 function toDER(x) {
   let i = 0;
@@ -3457,8 +3457,8 @@ script_signature.decode = decode$f;
 function encode$g(signature, hashType) {
   typeforce$3(
     {
-      signature: types$3.BufferN(64),
-      hashType: types$3.UInt8,
+      signature: types$4.BufferN(64),
+      hashType: types$4.UInt8,
     },
     { signature, hashType },
   );
@@ -3499,7 +3499,7 @@ script_signature.encode = encode$g;
 	const pushdata = push_data;
 	const scriptNumber = script_number;
 	const scriptSignature = script_signature;
-	const types = types$5;
+	const types = types$6;
 	const { typeforce } = types;
 	const OP_INT_BASE = ops_1.OPS.OP_RESERVED; // OP_1 - 1
 	function isOPInt(value) {
@@ -3706,7 +3706,7 @@ Object.defineProperty(embed, '__esModule', { value: true });
 embed.p2data = void 0;
 const networks_1$8 = networks$1;
 const bscript$b = script;
-const types_1$9 = types$5;
+const types_1$9 = types$6;
 const lazy$7 = lazy$8;
 const OPS$7 = bscript$b.OPS;
 function stacksEqual$4(a, b) {
@@ -3760,7 +3760,7 @@ Object.defineProperty(p2ms$1, '__esModule', { value: true });
 p2ms$1.p2ms = void 0;
 const networks_1$7 = networks$1;
 const bscript$a = script;
-const types_1$8 = types$5;
+const types_1$8 = types$6;
 const lazy$6 = lazy$8;
 const OPS$6 = bscript$a.OPS;
 const OP_INT_BASE = OPS$6.OP_RESERVED; // OP_1 - 1
@@ -3912,7 +3912,7 @@ Object.defineProperty(p2pk$1, '__esModule', { value: true });
 p2pk$1.p2pk = void 0;
 const networks_1$6 = networks$1;
 const bscript$9 = script;
-const types_1$7 = types$5;
+const types_1$7 = types$6;
 const lazy$5 = lazy$8;
 const OPS$5 = bscript$9.OPS;
 // input: {signature}
@@ -4675,12 +4675,12 @@ EventEmitter.listenerCount = function(emitter, type) {
   if (typeof emitter.listenerCount === 'function') {
     return emitter.listenerCount(type);
   } else {
-    return listenerCount.call(emitter, type);
+    return listenerCount$1.call(emitter, type);
   }
 };
 
-EventEmitter.prototype.listenerCount = listenerCount;
-function listenerCount(type) {
+EventEmitter.prototype.listenerCount = listenerCount$1;
+function listenerCount$1(type) {
   var events = this._events;
 
   if (events !== undefined) {
@@ -4772,7 +4772,7 @@ function eventTargetAgnosticAddListener(emitter, name, listener, flags) {
 
 var streamBrowser = eventsExports.EventEmitter;
 
-const require$$1 = /*@__PURE__*/getAugmentedNamespace(__viteBrowserExternal);
+const require$$3 = /*@__PURE__*/getAugmentedNamespace(__viteBrowserExternal);
 
 var buffer_list;
 var hasRequiredBuffer_list;
@@ -4796,7 +4796,7 @@ function requireBuffer_list () {
 	var _require = buffer,
 	    Buffer = _require.Buffer;
 
-	var _require2 = require$$1,
+	var _require2 = require$$3,
 	    inspect = _require2.inspect;
 
 	var custom = inspect && inspect.custom || 'inspect';
@@ -5250,71 +5250,79 @@ var state = {
   getHighWaterMark: getHighWaterMark
 };
 
-/**
- * Module exports.
- */
+var browser$1;
+var hasRequiredBrowser;
 
-var browser$1 = deprecate;
+function requireBrowser () {
+	if (hasRequiredBrowser) return browser$1;
+	hasRequiredBrowser = 1;
+	/**
+	 * Module exports.
+	 */
 
-/**
- * Mark that a method should not be used.
- * Returns a modified function which warns once by default.
- *
- * If `localStorage.noDeprecation = true` is set, then it is a no-op.
- *
- * If `localStorage.throwDeprecation = true` is set, then deprecated functions
- * will throw an Error when invoked.
- *
- * If `localStorage.traceDeprecation = true` is set, then deprecated functions
- * will invoke `console.trace()` instead of `console.error()`.
- *
- * @param {Function} fn - the function to deprecate
- * @param {String} msg - the string to print to the console when `fn` is invoked
- * @returns {Function} a new "deprecated" version of `fn`
- * @api public
- */
+	browser$1 = deprecate;
 
-function deprecate (fn, msg) {
-  if (config('noDeprecation')) {
-    return fn;
-  }
+	/**
+	 * Mark that a method should not be used.
+	 * Returns a modified function which warns once by default.
+	 *
+	 * If `localStorage.noDeprecation = true` is set, then it is a no-op.
+	 *
+	 * If `localStorage.throwDeprecation = true` is set, then deprecated functions
+	 * will throw an Error when invoked.
+	 *
+	 * If `localStorage.traceDeprecation = true` is set, then deprecated functions
+	 * will invoke `console.trace()` instead of `console.error()`.
+	 *
+	 * @param {Function} fn - the function to deprecate
+	 * @param {String} msg - the string to print to the console when `fn` is invoked
+	 * @returns {Function} a new "deprecated" version of `fn`
+	 * @api public
+	 */
 
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (config('throwDeprecation')) {
-        throw new Error(msg);
-      } else if (config('traceDeprecation')) {
-        console.trace(msg);
-      } else {
-        console.warn(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
+	function deprecate (fn, msg) {
+	  if (config('noDeprecation')) {
+	    return fn;
+	  }
 
-  return deprecated;
-}
+	  var warned = false;
+	  function deprecated() {
+	    if (!warned) {
+	      if (config('throwDeprecation')) {
+	        throw new Error(msg);
+	      } else if (config('traceDeprecation')) {
+	        console.trace(msg);
+	      } else {
+	        console.warn(msg);
+	      }
+	      warned = true;
+	    }
+	    return fn.apply(this, arguments);
+	  }
 
-/**
- * Checks `localStorage` for boolean values for the given `name`.
- *
- * @param {String} name
- * @returns {Boolean}
- * @api private
- */
+	  return deprecated;
+	}
 
-function config (name) {
-  // accessing global.localStorage can trigger a DOMException in sandboxed iframes
-  try {
-    if (!commonjsGlobal.localStorage) return false;
-  } catch (_) {
-    return false;
-  }
-  var val = commonjsGlobal.localStorage[name];
-  if (null == val) return false;
-  return String(val).toLowerCase() === 'true';
+	/**
+	 * Checks `localStorage` for boolean values for the given `name`.
+	 *
+	 * @param {String} name
+	 * @returns {Boolean}
+	 * @api private
+	 */
+
+	function config (name) {
+	  // accessing global.localStorage can trigger a DOMException in sandboxed iframes
+	  try {
+	    if (!commonjsGlobal.localStorage) return false;
+	  } catch (_) {
+	    return false;
+	  }
+	  var val = commonjsGlobal.localStorage[name];
+	  if (null == val) return false;
+	  return String(val).toLowerCase() === 'true';
+	}
+	return browser$1;
 }
 
 var _stream_writable;
@@ -5350,7 +5358,7 @@ function require_stream_writable () {
 	/*<replacement>*/
 
 	var internalUtil = {
-	  deprecate: browser$1
+	  deprecate: requireBrowser()
 	};
 	/*</replacement>*/
 
@@ -6169,7 +6177,7 @@ function normalizeEncoding(enc) {
 // StringDecoder provides an interface for efficiently splitting a series of
 // buffers into a series of JS strings without breaking apart multi-byte
 // characters.
-string_decoder.StringDecoder = StringDecoder$1;
+var StringDecoder_1 = string_decoder.StringDecoder = StringDecoder$1;
 function StringDecoder$1(encoding) {
   this.encoding = normalizeEncoding(encoding);
   var nb;
@@ -6761,7 +6769,7 @@ function require_stream_readable () {
 	/*<replacement>*/
 
 
-	var debugUtil = require$$1;
+	var debugUtil = require$$3;
 
 	var debug;
 
@@ -7828,7 +7836,7 @@ function require_stream_readable () {
 	return _stream_readable;
 }
 
-var _stream_transform = Transform$3;
+var _stream_transform = Transform$4;
 
 var _require$codes$1 = errorsBrowser.codes,
     ERR_METHOD_NOT_IMPLEMENTED = _require$codes$1.ERR_METHOD_NOT_IMPLEMENTED,
@@ -7836,11 +7844,11 @@ var _require$codes$1 = errorsBrowser.codes,
     ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes$1.ERR_TRANSFORM_ALREADY_TRANSFORMING,
     ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes$1.ERR_TRANSFORM_WITH_LENGTH_0;
 
-var Duplex = require_stream_duplex();
+var Duplex$1 = require_stream_duplex();
 
-inherits_browserExports(Transform$3, Duplex);
+inherits_browserExports(Transform$4, Duplex$1);
 
-function afterTransform(er, data) {
+function afterTransform$1(er, data) {
   var ts = this._transformState;
   ts.transforming = false;
   var cb = ts.writecb;
@@ -7862,11 +7870,11 @@ function afterTransform(er, data) {
   }
 }
 
-function Transform$3(options) {
-  if (!(this instanceof Transform$3)) return new Transform$3(options);
-  Duplex.call(this, options);
+function Transform$4(options) {
+  if (!(this instanceof Transform$4)) return new Transform$4(options);
+  Duplex$1.call(this, options);
   this._transformState = {
-    afterTransform: afterTransform.bind(this),
+    afterTransform: afterTransform$1.bind(this),
     needTransform: false,
     transforming: false,
     writecb: null,
@@ -7886,24 +7894,24 @@ function Transform$3(options) {
   } // When the writable side finishes, then flush out anything remaining.
 
 
-  this.on('prefinish', prefinish);
+  this.on('prefinish', prefinish$1);
 }
 
-function prefinish() {
+function prefinish$1() {
   var _this = this;
 
   if (typeof this._flush === 'function' && !this._readableState.destroyed) {
     this._flush(function (er, data) {
-      done(_this, er, data);
+      done$1(_this, er, data);
     });
   } else {
-    done(this, null, null);
+    done$1(this, null, null);
   }
 }
 
-Transform$3.prototype.push = function (chunk, encoding) {
+Transform$4.prototype.push = function (chunk, encoding) {
   this._transformState.needTransform = false;
-  return Duplex.prototype.push.call(this, chunk, encoding);
+  return Duplex$1.prototype.push.call(this, chunk, encoding);
 }; // This is the part where you do stuff!
 // override this function in implementation classes.
 // 'chunk' is an input chunk.
@@ -7916,11 +7924,11 @@ Transform$3.prototype.push = function (chunk, encoding) {
 // never call cb(), then you'll never get another chunk.
 
 
-Transform$3.prototype._transform = function (chunk, encoding, cb) {
+Transform$4.prototype._transform = function (chunk, encoding, cb) {
   cb(new ERR_METHOD_NOT_IMPLEMENTED('_transform()'));
 };
 
-Transform$3.prototype._write = function (chunk, encoding, cb) {
+Transform$4.prototype._write = function (chunk, encoding, cb) {
   var ts = this._transformState;
   ts.writecb = cb;
   ts.writechunk = chunk;
@@ -7935,7 +7943,7 @@ Transform$3.prototype._write = function (chunk, encoding, cb) {
 // That we got here means that the readable side wants more data.
 
 
-Transform$3.prototype._read = function (n) {
+Transform$4.prototype._read = function (n) {
   var ts = this._transformState;
 
   if (ts.writechunk !== null && !ts.transforming) {
@@ -7949,13 +7957,13 @@ Transform$3.prototype._read = function (n) {
   }
 };
 
-Transform$3.prototype._destroy = function (err, cb) {
-  Duplex.prototype._destroy.call(this, err, function (err2) {
+Transform$4.prototype._destroy = function (err, cb) {
+  Duplex$1.prototype._destroy.call(this, err, function (err2) {
     cb(err2);
   });
 };
 
-function done(stream, er, data) {
+function done$1(stream, er, data) {
   if (er) return stream.emit('error', er);
   if (data != null) // single equals check for both `null` and `undefined`
     stream.push(data); // TODO(BridgeAR): Write a test for these two error cases
@@ -7967,18 +7975,18 @@ function done(stream, er, data) {
   return stream.push(null);
 }
 
-var _stream_passthrough = PassThrough;
+var _stream_passthrough = PassThrough$1;
 
-var Transform$2 = _stream_transform;
+var Transform$3 = _stream_transform;
 
-inherits_browserExports(PassThrough, Transform$2);
+inherits_browserExports(PassThrough$1, Transform$3);
 
-function PassThrough(options) {
-  if (!(this instanceof PassThrough)) return new PassThrough(options);
-  Transform$2.call(this, options);
+function PassThrough$1(options) {
+  if (!(this instanceof PassThrough$1)) return new PassThrough$1(options);
+  Transform$3.call(this, options);
 }
 
-PassThrough.prototype._transform = function (chunk, encoding, cb) {
+PassThrough$1.prototype._transform = function (chunk, encoding, cb) {
   cb(null, chunk);
 };
 
@@ -8089,7 +8097,7 @@ var pipeline_1 = pipeline;
 } (readableBrowser, readableBrowserExports));
 
 var Buffer$c = safeBufferExports.Buffer;
-var Transform$1 = readableBrowserExports.Transform;
+var Transform$2 = readableBrowserExports.Transform;
 var inherits$a = inherits_browserExports;
 
 function throwIfNotStringOrBuffer (val, prefix) {
@@ -8099,7 +8107,7 @@ function throwIfNotStringOrBuffer (val, prefix) {
 }
 
 function HashBase$2 (blockSize) {
-  Transform$1.call(this);
+  Transform$2.call(this);
 
   this._block = Buffer$c.allocUnsafe(blockSize);
   this._blockSize = blockSize;
@@ -8109,7 +8117,7 @@ function HashBase$2 (blockSize) {
   this._finalized = false;
 }
 
-inherits$a(HashBase$2, Transform$1);
+inherits$a(HashBase$2, Transform$2);
 
 HashBase$2.prototype._transform = function (chunk, encoding, callback) {
   var error = null;
@@ -9300,6 +9308,3676 @@ exports.sha256 = sha256$1;
 exports.sha384 = sha384;
 exports.sha512 = sha512;
 
+var util = {};
+
+var types$3 = {};
+
+/* eslint complexity: [2, 18], max-statements: [2, 33] */
+var shams$1 = function hasSymbols() {
+	if (typeof Symbol !== 'function' || typeof Object.getOwnPropertySymbols !== 'function') { return false; }
+	if (typeof Symbol.iterator === 'symbol') { return true; }
+
+	var obj = {};
+	var sym = Symbol('test');
+	var symObj = Object(sym);
+	if (typeof sym === 'string') { return false; }
+
+	if (Object.prototype.toString.call(sym) !== '[object Symbol]') { return false; }
+	if (Object.prototype.toString.call(symObj) !== '[object Symbol]') { return false; }
+
+	// temp disabled per https://github.com/ljharb/object.assign/issues/17
+	// if (sym instanceof Symbol) { return false; }
+	// temp disabled per https://github.com/WebReflection/get-own-property-symbols/issues/4
+	// if (!(symObj instanceof Symbol)) { return false; }
+
+	// if (typeof Symbol.prototype.toString !== 'function') { return false; }
+	// if (String(sym) !== Symbol.prototype.toString.call(sym)) { return false; }
+
+	var symVal = 42;
+	obj[sym] = symVal;
+	for (sym in obj) { return false; } // eslint-disable-line no-restricted-syntax, no-unreachable-loop
+	if (typeof Object.keys === 'function' && Object.keys(obj).length !== 0) { return false; }
+
+	if (typeof Object.getOwnPropertyNames === 'function' && Object.getOwnPropertyNames(obj).length !== 0) { return false; }
+
+	var syms = Object.getOwnPropertySymbols(obj);
+	if (syms.length !== 1 || syms[0] !== sym) { return false; }
+
+	if (!Object.prototype.propertyIsEnumerable.call(obj, sym)) { return false; }
+
+	if (typeof Object.getOwnPropertyDescriptor === 'function') {
+		var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
+		if (descriptor.value !== symVal || descriptor.enumerable !== true) { return false; }
+	}
+
+	return true;
+};
+
+var hasSymbols$2 = shams$1;
+
+var shams = function hasToStringTagShams() {
+	return hasSymbols$2() && !!Symbol.toStringTag;
+};
+
+var origSymbol = typeof Symbol !== 'undefined' && Symbol;
+var hasSymbolSham = shams$1;
+
+var hasSymbols$1 = function hasNativeSymbols() {
+	if (typeof origSymbol !== 'function') { return false; }
+	if (typeof Symbol !== 'function') { return false; }
+	if (typeof origSymbol('foo') !== 'symbol') { return false; }
+	if (typeof Symbol('bar') !== 'symbol') { return false; }
+
+	return hasSymbolSham();
+};
+
+/* eslint no-invalid-this: 1 */
+
+var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
+var slice = Array.prototype.slice;
+var toStr$3 = Object.prototype.toString;
+var funcType = '[object Function]';
+
+var implementation$1 = function bind(that) {
+    var target = this;
+    if (typeof target !== 'function' || toStr$3.call(target) !== funcType) {
+        throw new TypeError(ERROR_MESSAGE + target);
+    }
+    var args = slice.call(arguments, 1);
+
+    var bound;
+    var binder = function () {
+        if (this instanceof bound) {
+            var result = target.apply(
+                this,
+                args.concat(slice.call(arguments))
+            );
+            if (Object(result) === result) {
+                return result;
+            }
+            return this;
+        } else {
+            return target.apply(
+                that,
+                args.concat(slice.call(arguments))
+            );
+        }
+    };
+
+    var boundLength = Math.max(0, target.length - args.length);
+    var boundArgs = [];
+    for (var i = 0; i < boundLength; i++) {
+        boundArgs.push('$' + i);
+    }
+
+    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
+
+    if (target.prototype) {
+        var Empty = function Empty() {};
+        Empty.prototype = target.prototype;
+        bound.prototype = new Empty();
+        Empty.prototype = null;
+    }
+
+    return bound;
+};
+
+var implementation = implementation$1;
+
+var functionBind = Function.prototype.bind || implementation;
+
+var bind$1 = functionBind;
+
+var src$1 = bind$1.call(Function.call, Object.prototype.hasOwnProperty);
+
+var undefined$1;
+
+var $SyntaxError = SyntaxError;
+var $Function = Function;
+var $TypeError = TypeError;
+
+// eslint-disable-next-line consistent-return
+var getEvalledConstructor = function (expressionSyntax) {
+	try {
+		return $Function('"use strict"; return (' + expressionSyntax + ').constructor;')();
+	} catch (e) {}
+};
+
+var $gOPD$1 = Object.getOwnPropertyDescriptor;
+if ($gOPD$1) {
+	try {
+		$gOPD$1({}, '');
+	} catch (e) {
+		$gOPD$1 = null; // this is IE 8, which has a broken gOPD
+	}
+}
+
+var throwTypeError = function () {
+	throw new $TypeError();
+};
+var ThrowTypeError = $gOPD$1
+	? (function () {
+		try {
+			// eslint-disable-next-line no-unused-expressions, no-caller, no-restricted-properties
+			arguments.callee; // IE 8 does not throw here
+			return throwTypeError;
+		} catch (calleeThrows) {
+			try {
+				// IE 8 throws on Object.getOwnPropertyDescriptor(arguments, '')
+				return $gOPD$1(arguments, 'callee').get;
+			} catch (gOPDthrows) {
+				return throwTypeError;
+			}
+		}
+	}())
+	: throwTypeError;
+
+var hasSymbols = hasSymbols$1();
+
+var getProto$1 = Object.getPrototypeOf || function (x) { return x.__proto__; }; // eslint-disable-line no-proto
+
+var needsEval = {};
+
+var TypedArray = typeof Uint8Array === 'undefined' ? undefined$1 : getProto$1(Uint8Array);
+
+var INTRINSICS = {
+	'%AggregateError%': typeof AggregateError === 'undefined' ? undefined$1 : AggregateError,
+	'%Array%': Array,
+	'%ArrayBuffer%': typeof ArrayBuffer === 'undefined' ? undefined$1 : ArrayBuffer,
+	'%ArrayIteratorPrototype%': hasSymbols ? getProto$1([][Symbol.iterator]()) : undefined$1,
+	'%AsyncFromSyncIteratorPrototype%': undefined$1,
+	'%AsyncFunction%': needsEval,
+	'%AsyncGenerator%': needsEval,
+	'%AsyncGeneratorFunction%': needsEval,
+	'%AsyncIteratorPrototype%': needsEval,
+	'%Atomics%': typeof Atomics === 'undefined' ? undefined$1 : Atomics,
+	'%BigInt%': typeof BigInt === 'undefined' ? undefined$1 : BigInt,
+	'%Boolean%': Boolean,
+	'%DataView%': typeof DataView === 'undefined' ? undefined$1 : DataView,
+	'%Date%': Date,
+	'%decodeURI%': decodeURI,
+	'%decodeURIComponent%': decodeURIComponent,
+	'%encodeURI%': encodeURI,
+	'%encodeURIComponent%': encodeURIComponent,
+	'%Error%': Error,
+	'%eval%': eval, // eslint-disable-line no-eval
+	'%EvalError%': EvalError,
+	'%Float32Array%': typeof Float32Array === 'undefined' ? undefined$1 : Float32Array,
+	'%Float64Array%': typeof Float64Array === 'undefined' ? undefined$1 : Float64Array,
+	'%FinalizationRegistry%': typeof FinalizationRegistry === 'undefined' ? undefined$1 : FinalizationRegistry,
+	'%Function%': $Function,
+	'%GeneratorFunction%': needsEval,
+	'%Int8Array%': typeof Int8Array === 'undefined' ? undefined$1 : Int8Array,
+	'%Int16Array%': typeof Int16Array === 'undefined' ? undefined$1 : Int16Array,
+	'%Int32Array%': typeof Int32Array === 'undefined' ? undefined$1 : Int32Array,
+	'%isFinite%': isFinite,
+	'%isNaN%': isNaN,
+	'%IteratorPrototype%': hasSymbols ? getProto$1(getProto$1([][Symbol.iterator]())) : undefined$1,
+	'%JSON%': typeof JSON === 'object' ? JSON : undefined$1,
+	'%Map%': typeof Map === 'undefined' ? undefined$1 : Map,
+	'%MapIteratorPrototype%': typeof Map === 'undefined' || !hasSymbols ? undefined$1 : getProto$1(new Map()[Symbol.iterator]()),
+	'%Math%': Math,
+	'%Number%': Number,
+	'%Object%': Object,
+	'%parseFloat%': parseFloat,
+	'%parseInt%': parseInt,
+	'%Promise%': typeof Promise === 'undefined' ? undefined$1 : Promise,
+	'%Proxy%': typeof Proxy === 'undefined' ? undefined$1 : Proxy,
+	'%RangeError%': RangeError,
+	'%ReferenceError%': ReferenceError,
+	'%Reflect%': typeof Reflect === 'undefined' ? undefined$1 : Reflect,
+	'%RegExp%': RegExp,
+	'%Set%': typeof Set === 'undefined' ? undefined$1 : Set,
+	'%SetIteratorPrototype%': typeof Set === 'undefined' || !hasSymbols ? undefined$1 : getProto$1(new Set()[Symbol.iterator]()),
+	'%SharedArrayBuffer%': typeof SharedArrayBuffer === 'undefined' ? undefined$1 : SharedArrayBuffer,
+	'%String%': String,
+	'%StringIteratorPrototype%': hasSymbols ? getProto$1(''[Symbol.iterator]()) : undefined$1,
+	'%Symbol%': hasSymbols ? Symbol : undefined$1,
+	'%SyntaxError%': $SyntaxError,
+	'%ThrowTypeError%': ThrowTypeError,
+	'%TypedArray%': TypedArray,
+	'%TypeError%': $TypeError,
+	'%Uint8Array%': typeof Uint8Array === 'undefined' ? undefined$1 : Uint8Array,
+	'%Uint8ClampedArray%': typeof Uint8ClampedArray === 'undefined' ? undefined$1 : Uint8ClampedArray,
+	'%Uint16Array%': typeof Uint16Array === 'undefined' ? undefined$1 : Uint16Array,
+	'%Uint32Array%': typeof Uint32Array === 'undefined' ? undefined$1 : Uint32Array,
+	'%URIError%': URIError,
+	'%WeakMap%': typeof WeakMap === 'undefined' ? undefined$1 : WeakMap,
+	'%WeakRef%': typeof WeakRef === 'undefined' ? undefined$1 : WeakRef,
+	'%WeakSet%': typeof WeakSet === 'undefined' ? undefined$1 : WeakSet
+};
+
+var doEval = function doEval(name) {
+	var value;
+	if (name === '%AsyncFunction%') {
+		value = getEvalledConstructor('async function () {}');
+	} else if (name === '%GeneratorFunction%') {
+		value = getEvalledConstructor('function* () {}');
+	} else if (name === '%AsyncGeneratorFunction%') {
+		value = getEvalledConstructor('async function* () {}');
+	} else if (name === '%AsyncGenerator%') {
+		var fn = doEval('%AsyncGeneratorFunction%');
+		if (fn) {
+			value = fn.prototype;
+		}
+	} else if (name === '%AsyncIteratorPrototype%') {
+		var gen = doEval('%AsyncGenerator%');
+		if (gen) {
+			value = getProto$1(gen.prototype);
+		}
+	}
+
+	INTRINSICS[name] = value;
+
+	return value;
+};
+
+var LEGACY_ALIASES = {
+	'%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
+	'%ArrayPrototype%': ['Array', 'prototype'],
+	'%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
+	'%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
+	'%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
+	'%ArrayProto_values%': ['Array', 'prototype', 'values'],
+	'%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
+	'%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
+	'%AsyncGeneratorPrototype%': ['AsyncGeneratorFunction', 'prototype', 'prototype'],
+	'%BooleanPrototype%': ['Boolean', 'prototype'],
+	'%DataViewPrototype%': ['DataView', 'prototype'],
+	'%DatePrototype%': ['Date', 'prototype'],
+	'%ErrorPrototype%': ['Error', 'prototype'],
+	'%EvalErrorPrototype%': ['EvalError', 'prototype'],
+	'%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
+	'%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
+	'%FunctionPrototype%': ['Function', 'prototype'],
+	'%Generator%': ['GeneratorFunction', 'prototype'],
+	'%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
+	'%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
+	'%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
+	'%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
+	'%JSONParse%': ['JSON', 'parse'],
+	'%JSONStringify%': ['JSON', 'stringify'],
+	'%MapPrototype%': ['Map', 'prototype'],
+	'%NumberPrototype%': ['Number', 'prototype'],
+	'%ObjectPrototype%': ['Object', 'prototype'],
+	'%ObjProto_toString%': ['Object', 'prototype', 'toString'],
+	'%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
+	'%PromisePrototype%': ['Promise', 'prototype'],
+	'%PromiseProto_then%': ['Promise', 'prototype', 'then'],
+	'%Promise_all%': ['Promise', 'all'],
+	'%Promise_reject%': ['Promise', 'reject'],
+	'%Promise_resolve%': ['Promise', 'resolve'],
+	'%RangeErrorPrototype%': ['RangeError', 'prototype'],
+	'%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
+	'%RegExpPrototype%': ['RegExp', 'prototype'],
+	'%SetPrototype%': ['Set', 'prototype'],
+	'%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
+	'%StringPrototype%': ['String', 'prototype'],
+	'%SymbolPrototype%': ['Symbol', 'prototype'],
+	'%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
+	'%TypedArrayPrototype%': ['TypedArray', 'prototype'],
+	'%TypeErrorPrototype%': ['TypeError', 'prototype'],
+	'%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
+	'%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
+	'%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
+	'%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
+	'%URIErrorPrototype%': ['URIError', 'prototype'],
+	'%WeakMapPrototype%': ['WeakMap', 'prototype'],
+	'%WeakSetPrototype%': ['WeakSet', 'prototype']
+};
+
+var bind = functionBind;
+var hasOwn = src$1;
+var $concat = bind.call(Function.call, Array.prototype.concat);
+var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+var $replace = bind.call(Function.call, String.prototype.replace);
+var $strSlice = bind.call(Function.call, String.prototype.slice);
+var $exec = bind.call(Function.call, RegExp.prototype.exec);
+
+/* adapted from https://github.com/lodash/lodash/blob/4.17.15/dist/lodash.js#L6735-L6744 */
+var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+var reEscapeChar = /\\(\\)?/g; /** Used to match backslashes in property paths. */
+var stringToPath = function stringToPath(string) {
+	var first = $strSlice(string, 0, 1);
+	var last = $strSlice(string, -1);
+	if (first === '%' && last !== '%') {
+		throw new $SyntaxError('invalid intrinsic syntax, expected closing `%`');
+	} else if (last === '%' && first !== '%') {
+		throw new $SyntaxError('invalid intrinsic syntax, expected opening `%`');
+	}
+	var result = [];
+	$replace(string, rePropName, function (match, number, quote, subString) {
+		result[result.length] = quote ? $replace(subString, reEscapeChar, '$1') : number || match;
+	});
+	return result;
+};
+/* end adaptation */
+
+var getBaseIntrinsic = function getBaseIntrinsic(name, allowMissing) {
+	var intrinsicName = name;
+	var alias;
+	if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+		alias = LEGACY_ALIASES[intrinsicName];
+		intrinsicName = '%' + alias[0] + '%';
+	}
+
+	if (hasOwn(INTRINSICS, intrinsicName)) {
+		var value = INTRINSICS[intrinsicName];
+		if (value === needsEval) {
+			value = doEval(intrinsicName);
+		}
+		if (typeof value === 'undefined' && !allowMissing) {
+			throw new $TypeError('intrinsic ' + name + ' exists, but is not available. Please file an issue!');
+		}
+
+		return {
+			alias: alias,
+			name: intrinsicName,
+			value: value
+		};
+	}
+
+	throw new $SyntaxError('intrinsic ' + name + ' does not exist!');
+};
+
+var getIntrinsic = function GetIntrinsic(name, allowMissing) {
+	if (typeof name !== 'string' || name.length === 0) {
+		throw new $TypeError('intrinsic name must be a non-empty string');
+	}
+	if (arguments.length > 1 && typeof allowMissing !== 'boolean') {
+		throw new $TypeError('"allowMissing" argument must be a boolean');
+	}
+
+	if ($exec(/^%?[^%]*%?$/, name) === null) {
+		throw new $SyntaxError('`%` may not be present anywhere but at the beginning and end of the intrinsic name');
+	}
+	var parts = stringToPath(name);
+	var intrinsicBaseName = parts.length > 0 ? parts[0] : '';
+
+	var intrinsic = getBaseIntrinsic('%' + intrinsicBaseName + '%', allowMissing);
+	var intrinsicRealName = intrinsic.name;
+	var value = intrinsic.value;
+	var skipFurtherCaching = false;
+
+	var alias = intrinsic.alias;
+	if (alias) {
+		intrinsicBaseName = alias[0];
+		$spliceApply(parts, $concat([0, 1], alias));
+	}
+
+	for (var i = 1, isOwn = true; i < parts.length; i += 1) {
+		var part = parts[i];
+		var first = $strSlice(part, 0, 1);
+		var last = $strSlice(part, -1);
+		if (
+			(
+				(first === '"' || first === "'" || first === '`')
+				|| (last === '"' || last === "'" || last === '`')
+			)
+			&& first !== last
+		) {
+			throw new $SyntaxError('property names with quotes must have matching quotes');
+		}
+		if (part === 'constructor' || !isOwn) {
+			skipFurtherCaching = true;
+		}
+
+		intrinsicBaseName += '.' + part;
+		intrinsicRealName = '%' + intrinsicBaseName + '%';
+
+		if (hasOwn(INTRINSICS, intrinsicRealName)) {
+			value = INTRINSICS[intrinsicRealName];
+		} else if (value != null) {
+			if (!(part in value)) {
+				if (!allowMissing) {
+					throw new $TypeError('base intrinsic for ' + name + ' exists, but the property is not available.');
+				}
+				return void undefined$1;
+			}
+			if ($gOPD$1 && (i + 1) >= parts.length) {
+				var desc = $gOPD$1(value, part);
+				isOwn = !!desc;
+
+				// By convention, when a data property is converted to an accessor
+				// property to emulate a data property that does not suffer from
+				// the override mistake, that accessor's getter is marked with
+				// an `originalValue` property. Here, when we detect this, we
+				// uphold the illusion by pretending to see that original data
+				// property, i.e., returning the value rather than the getter
+				// itself.
+				if (isOwn && 'get' in desc && !('originalValue' in desc.get)) {
+					value = desc.get;
+				} else {
+					value = value[part];
+				}
+			} else {
+				isOwn = hasOwn(value, part);
+				value = value[part];
+			}
+
+			if (isOwn && !skipFurtherCaching) {
+				INTRINSICS[intrinsicRealName] = value;
+			}
+		}
+	}
+	return value;
+};
+
+var callBindExports = {};
+var callBind$1 = {
+  get exports(){ return callBindExports; },
+  set exports(v){ callBindExports = v; },
+};
+
+(function (module) {
+
+	var bind = functionBind;
+	var GetIntrinsic = getIntrinsic;
+
+	var $apply = GetIntrinsic('%Function.prototype.apply%');
+	var $call = GetIntrinsic('%Function.prototype.call%');
+	var $reflectApply = GetIntrinsic('%Reflect.apply%', true) || bind.call($call, $apply);
+
+	var $gOPD = GetIntrinsic('%Object.getOwnPropertyDescriptor%', true);
+	var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
+	var $max = GetIntrinsic('%Math.max%');
+
+	if ($defineProperty) {
+		try {
+			$defineProperty({}, 'a', { value: 1 });
+		} catch (e) {
+			// IE 8 has a broken defineProperty
+			$defineProperty = null;
+		}
+	}
+
+	module.exports = function callBind(originalFunction) {
+		var func = $reflectApply(bind, $call, arguments);
+		if ($gOPD && $defineProperty) {
+			var desc = $gOPD(func, 'length');
+			if (desc.configurable) {
+				// original length, plus the receiver, minus any additional arguments (after the receiver)
+				$defineProperty(
+					func,
+					'length',
+					{ value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
+				);
+			}
+		}
+		return func;
+	};
+
+	var applyBind = function applyBind() {
+		return $reflectApply(bind, $apply, arguments);
+	};
+
+	if ($defineProperty) {
+		$defineProperty(module.exports, 'apply', { value: applyBind });
+	} else {
+		module.exports.apply = applyBind;
+	}
+} (callBind$1));
+
+var GetIntrinsic$1 = getIntrinsic;
+
+var callBind = callBindExports;
+
+var $indexOf$1 = callBind(GetIntrinsic$1('String.prototype.indexOf'));
+
+var callBound$3 = function callBoundIntrinsic(name, allowMissing) {
+	var intrinsic = GetIntrinsic$1(name, !!allowMissing);
+	if (typeof intrinsic === 'function' && $indexOf$1(name, '.prototype.') > -1) {
+		return callBind(intrinsic);
+	}
+	return intrinsic;
+};
+
+var hasToStringTag$4 = shams();
+var callBound$2 = callBound$3;
+
+var $toString$2 = callBound$2('Object.prototype.toString');
+
+var isStandardArguments = function isArguments(value) {
+	if (hasToStringTag$4 && value && typeof value === 'object' && Symbol.toStringTag in value) {
+		return false;
+	}
+	return $toString$2(value) === '[object Arguments]';
+};
+
+var isLegacyArguments = function isArguments(value) {
+	if (isStandardArguments(value)) {
+		return true;
+	}
+	return value !== null &&
+		typeof value === 'object' &&
+		typeof value.length === 'number' &&
+		value.length >= 0 &&
+		$toString$2(value) !== '[object Array]' &&
+		$toString$2(value.callee) === '[object Function]';
+};
+
+var supportsStandardArguments = (function () {
+	return isStandardArguments(arguments);
+}());
+
+isStandardArguments.isLegacyArguments = isLegacyArguments; // for tests
+
+var isArguments = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
+
+var toStr$2 = Object.prototype.toString;
+var fnToStr$1 = Function.prototype.toString;
+var isFnRegex = /^\s*(?:function)?\*/;
+var hasToStringTag$3 = shams();
+var getProto = Object.getPrototypeOf;
+var getGeneratorFunc = function () { // eslint-disable-line consistent-return
+	if (!hasToStringTag$3) {
+		return false;
+	}
+	try {
+		return Function('return function*() {}')();
+	} catch (e) {
+	}
+};
+var GeneratorFunction;
+
+var isGeneratorFunction = function isGeneratorFunction(fn) {
+	if (typeof fn !== 'function') {
+		return false;
+	}
+	if (isFnRegex.test(fnToStr$1.call(fn))) {
+		return true;
+	}
+	if (!hasToStringTag$3) {
+		var str = toStr$2.call(fn);
+		return str === '[object GeneratorFunction]';
+	}
+	if (!getProto) {
+		return false;
+	}
+	if (typeof GeneratorFunction === 'undefined') {
+		var generatorFunc = getGeneratorFunc();
+		GeneratorFunction = generatorFunc ? getProto(generatorFunc) : false;
+	}
+	return getProto(fn) === GeneratorFunction;
+};
+
+var fnToStr = Function.prototype.toString;
+var reflectApply = typeof Reflect === 'object' && Reflect !== null && Reflect.apply;
+var badArrayLike;
+var isCallableMarker;
+if (typeof reflectApply === 'function' && typeof Object.defineProperty === 'function') {
+	try {
+		badArrayLike = Object.defineProperty({}, 'length', {
+			get: function () {
+				throw isCallableMarker;
+			}
+		});
+		isCallableMarker = {};
+		// eslint-disable-next-line no-throw-literal
+		reflectApply(function () { throw 42; }, null, badArrayLike);
+	} catch (_) {
+		if (_ !== isCallableMarker) {
+			reflectApply = null;
+		}
+	}
+} else {
+	reflectApply = null;
+}
+
+var constructorRegex = /^\s*class\b/;
+var isES6ClassFn = function isES6ClassFunction(value) {
+	try {
+		var fnStr = fnToStr.call(value);
+		return constructorRegex.test(fnStr);
+	} catch (e) {
+		return false; // not a function
+	}
+};
+
+var tryFunctionObject = function tryFunctionToStr(value) {
+	try {
+		if (isES6ClassFn(value)) { return false; }
+		fnToStr.call(value);
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+var toStr$1 = Object.prototype.toString;
+var objectClass = '[object Object]';
+var fnClass = '[object Function]';
+var genClass = '[object GeneratorFunction]';
+var ddaClass = '[object HTMLAllCollection]'; // IE 11
+var ddaClass2 = '[object HTML document.all class]';
+var ddaClass3 = '[object HTMLCollection]'; // IE 9-10
+var hasToStringTag$2 = typeof Symbol === 'function' && !!Symbol.toStringTag; // better: use `has-tostringtag`
+
+var isIE68 = !(0 in [,]); // eslint-disable-line no-sparse-arrays, comma-spacing
+
+var isDDA = function isDocumentDotAll() { return false; };
+if (typeof document === 'object') {
+	// Firefox 3 canonicalizes DDA to undefined when it's not accessed directly
+	var all = document.all;
+	if (toStr$1.call(all) === toStr$1.call(document.all)) {
+		isDDA = function isDocumentDotAll(value) {
+			/* globals document: false */
+			// in IE 6-8, typeof document.all is "object" and it's truthy
+			if ((isIE68 || !value) && (typeof value === 'undefined' || typeof value === 'object')) {
+				try {
+					var str = toStr$1.call(value);
+					return (
+						str === ddaClass
+						|| str === ddaClass2
+						|| str === ddaClass3 // opera 12.16
+						|| str === objectClass // IE 6-8
+					) && value('') == null; // eslint-disable-line eqeqeq
+				} catch (e) { /**/ }
+			}
+			return false;
+		};
+	}
+}
+
+var isCallable$1 = reflectApply
+	? function isCallable(value) {
+		if (isDDA(value)) { return true; }
+		if (!value) { return false; }
+		if (typeof value !== 'function' && typeof value !== 'object') { return false; }
+		try {
+			reflectApply(value, null, badArrayLike);
+		} catch (e) {
+			if (e !== isCallableMarker) { return false; }
+		}
+		return !isES6ClassFn(value) && tryFunctionObject(value);
+	}
+	: function isCallable(value) {
+		if (isDDA(value)) { return true; }
+		if (!value) { return false; }
+		if (typeof value !== 'function' && typeof value !== 'object') { return false; }
+		if (hasToStringTag$2) { return tryFunctionObject(value); }
+		if (isES6ClassFn(value)) { return false; }
+		var strClass = toStr$1.call(value);
+		if (strClass !== fnClass && strClass !== genClass && !(/^\[object HTML/).test(strClass)) { return false; }
+		return tryFunctionObject(value);
+	};
+
+var isCallable = isCallable$1;
+
+var toStr = Object.prototype.toString;
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+var forEachArray = function forEachArray(array, iterator, receiver) {
+    for (var i = 0, len = array.length; i < len; i++) {
+        if (hasOwnProperty.call(array, i)) {
+            if (receiver == null) {
+                iterator(array[i], i, array);
+            } else {
+                iterator.call(receiver, array[i], i, array);
+            }
+        }
+    }
+};
+
+var forEachString = function forEachString(string, iterator, receiver) {
+    for (var i = 0, len = string.length; i < len; i++) {
+        // no such thing as a sparse string.
+        if (receiver == null) {
+            iterator(string.charAt(i), i, string);
+        } else {
+            iterator.call(receiver, string.charAt(i), i, string);
+        }
+    }
+};
+
+var forEachObject = function forEachObject(object, iterator, receiver) {
+    for (var k in object) {
+        if (hasOwnProperty.call(object, k)) {
+            if (receiver == null) {
+                iterator(object[k], k, object);
+            } else {
+                iterator.call(receiver, object[k], k, object);
+            }
+        }
+    }
+};
+
+var forEach$3 = function forEach(list, iterator, thisArg) {
+    if (!isCallable(iterator)) {
+        throw new TypeError('iterator must be a function');
+    }
+
+    var receiver;
+    if (arguments.length >= 3) {
+        receiver = thisArg;
+    }
+
+    if (toStr.call(list) === '[object Array]') {
+        forEachArray(list, iterator, receiver);
+    } else if (typeof list === 'string') {
+        forEachString(list, iterator, receiver);
+    } else {
+        forEachObject(list, iterator, receiver);
+    }
+};
+
+var forEach_1 = forEach$3;
+
+var possibleNames = [
+	'BigInt64Array',
+	'BigUint64Array',
+	'Float32Array',
+	'Float64Array',
+	'Int16Array',
+	'Int32Array',
+	'Int8Array',
+	'Uint16Array',
+	'Uint32Array',
+	'Uint8Array',
+	'Uint8ClampedArray'
+];
+
+var g$2 = typeof globalThis === 'undefined' ? commonjsGlobal : globalThis;
+
+var availableTypedArrays$2 = function availableTypedArrays() {
+	var out = [];
+	for (var i = 0; i < possibleNames.length; i++) {
+		if (typeof g$2[possibleNames[i]] === 'function') {
+			out[out.length] = possibleNames[i];
+		}
+	}
+	return out;
+};
+
+var GetIntrinsic = getIntrinsic;
+
+var $gOPD = GetIntrinsic('%Object.getOwnPropertyDescriptor%', true);
+
+if ($gOPD) {
+	try {
+		$gOPD([], 'length');
+	} catch (e) {
+		// IE 8 has a broken gOPD
+		$gOPD = null;
+	}
+}
+
+var gopd = $gOPD;
+
+var forEach$2 = forEach_1;
+var availableTypedArrays$1 = availableTypedArrays$2;
+var callBound$1 = callBound$3;
+
+var $toString$1 = callBound$1('Object.prototype.toString');
+var hasToStringTag$1 = shams();
+var gOPD$1 = gopd;
+
+var g$1 = typeof globalThis === 'undefined' ? commonjsGlobal : globalThis;
+var typedArrays$1 = availableTypedArrays$1();
+
+var $indexOf = callBound$1('Array.prototype.indexOf', true) || function indexOf(array, value) {
+	for (var i = 0; i < array.length; i += 1) {
+		if (array[i] === value) {
+			return i;
+		}
+	}
+	return -1;
+};
+var $slice$1 = callBound$1('String.prototype.slice');
+var toStrTags$1 = {};
+var getPrototypeOf$1 = Object.getPrototypeOf; // require('getprototypeof');
+if (hasToStringTag$1 && gOPD$1 && getPrototypeOf$1) {
+	forEach$2(typedArrays$1, function (typedArray) {
+		var arr = new g$1[typedArray]();
+		if (Symbol.toStringTag in arr) {
+			var proto = getPrototypeOf$1(arr);
+			var descriptor = gOPD$1(proto, Symbol.toStringTag);
+			if (!descriptor) {
+				var superProto = getPrototypeOf$1(proto);
+				descriptor = gOPD$1(superProto, Symbol.toStringTag);
+			}
+			toStrTags$1[typedArray] = descriptor.get;
+		}
+	});
+}
+
+var tryTypedArrays$1 = function tryAllTypedArrays(value) {
+	var anyTrue = false;
+	forEach$2(toStrTags$1, function (getter, typedArray) {
+		if (!anyTrue) {
+			try {
+				anyTrue = getter.call(value) === typedArray;
+			} catch (e) { /**/ }
+		}
+	});
+	return anyTrue;
+};
+
+var isTypedArray$1 = function isTypedArray(value) {
+	if (!value || typeof value !== 'object') { return false; }
+	if (!hasToStringTag$1 || !(Symbol.toStringTag in value)) {
+		var tag = $slice$1($toString$1(value), 8, -1);
+		return $indexOf(typedArrays$1, tag) > -1;
+	}
+	if (!gOPD$1) { return false; }
+	return tryTypedArrays$1(value);
+};
+
+var forEach$1 = forEach_1;
+var availableTypedArrays = availableTypedArrays$2;
+var callBound = callBound$3;
+var gOPD = gopd;
+
+var $toString = callBound('Object.prototype.toString');
+var hasToStringTag = shams();
+
+var g = typeof globalThis === 'undefined' ? commonjsGlobal : globalThis;
+var typedArrays = availableTypedArrays();
+
+var $slice = callBound('String.prototype.slice');
+var toStrTags = {};
+var getPrototypeOf = Object.getPrototypeOf; // require('getprototypeof');
+if (hasToStringTag && gOPD && getPrototypeOf) {
+	forEach$1(typedArrays, function (typedArray) {
+		if (typeof g[typedArray] === 'function') {
+			var arr = new g[typedArray]();
+			if (Symbol.toStringTag in arr) {
+				var proto = getPrototypeOf(arr);
+				var descriptor = gOPD(proto, Symbol.toStringTag);
+				if (!descriptor) {
+					var superProto = getPrototypeOf(proto);
+					descriptor = gOPD(superProto, Symbol.toStringTag);
+				}
+				toStrTags[typedArray] = descriptor.get;
+			}
+		}
+	});
+}
+
+var tryTypedArrays = function tryAllTypedArrays(value) {
+	var foundName = false;
+	forEach$1(toStrTags, function (getter, typedArray) {
+		if (!foundName) {
+			try {
+				var name = getter.call(value);
+				if (name === typedArray) {
+					foundName = name;
+				}
+			} catch (e) {}
+		}
+	});
+	return foundName;
+};
+
+var isTypedArray = isTypedArray$1;
+
+var whichTypedArray = function whichTypedArray(value) {
+	if (!isTypedArray(value)) { return false; }
+	if (!hasToStringTag || !(Symbol.toStringTag in value)) { return $slice($toString(value), 8, -1); }
+	return tryTypedArrays(value);
+};
+
+(function (exports) {
+
+	var isArgumentsObject = isArguments;
+	var isGeneratorFunction$1 = isGeneratorFunction;
+	var whichTypedArray$1 = whichTypedArray;
+	var isTypedArray = isTypedArray$1;
+
+	function uncurryThis(f) {
+	  return f.call.bind(f);
+	}
+
+	var BigIntSupported = typeof BigInt !== 'undefined';
+	var SymbolSupported = typeof Symbol !== 'undefined';
+
+	var ObjectToString = uncurryThis(Object.prototype.toString);
+
+	var numberValue = uncurryThis(Number.prototype.valueOf);
+	var stringValue = uncurryThis(String.prototype.valueOf);
+	var booleanValue = uncurryThis(Boolean.prototype.valueOf);
+
+	if (BigIntSupported) {
+	  var bigIntValue = uncurryThis(BigInt.prototype.valueOf);
+	}
+
+	if (SymbolSupported) {
+	  var symbolValue = uncurryThis(Symbol.prototype.valueOf);
+	}
+
+	function checkBoxedPrimitive(value, prototypeValueOf) {
+	  if (typeof value !== 'object') {
+	    return false;
+	  }
+	  try {
+	    prototypeValueOf(value);
+	    return true;
+	  } catch(e) {
+	    return false;
+	  }
+	}
+
+	exports.isArgumentsObject = isArgumentsObject;
+	exports.isGeneratorFunction = isGeneratorFunction$1;
+	exports.isTypedArray = isTypedArray;
+
+	// Taken from here and modified for better browser support
+	// https://github.com/sindresorhus/p-is-promise/blob/cda35a513bda03f977ad5cde3a079d237e82d7ef/index.js
+	function isPromise(input) {
+		return (
+			(
+				typeof Promise !== 'undefined' &&
+				input instanceof Promise
+			) ||
+			(
+				input !== null &&
+				typeof input === 'object' &&
+				typeof input.then === 'function' &&
+				typeof input.catch === 'function'
+			)
+		);
+	}
+	exports.isPromise = isPromise;
+
+	function isArrayBufferView(value) {
+	  if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView) {
+	    return ArrayBuffer.isView(value);
+	  }
+
+	  return (
+	    isTypedArray(value) ||
+	    isDataView(value)
+	  );
+	}
+	exports.isArrayBufferView = isArrayBufferView;
+
+
+	function isUint8Array(value) {
+	  return whichTypedArray$1(value) === 'Uint8Array';
+	}
+	exports.isUint8Array = isUint8Array;
+
+	function isUint8ClampedArray(value) {
+	  return whichTypedArray$1(value) === 'Uint8ClampedArray';
+	}
+	exports.isUint8ClampedArray = isUint8ClampedArray;
+
+	function isUint16Array(value) {
+	  return whichTypedArray$1(value) === 'Uint16Array';
+	}
+	exports.isUint16Array = isUint16Array;
+
+	function isUint32Array(value) {
+	  return whichTypedArray$1(value) === 'Uint32Array';
+	}
+	exports.isUint32Array = isUint32Array;
+
+	function isInt8Array(value) {
+	  return whichTypedArray$1(value) === 'Int8Array';
+	}
+	exports.isInt8Array = isInt8Array;
+
+	function isInt16Array(value) {
+	  return whichTypedArray$1(value) === 'Int16Array';
+	}
+	exports.isInt16Array = isInt16Array;
+
+	function isInt32Array(value) {
+	  return whichTypedArray$1(value) === 'Int32Array';
+	}
+	exports.isInt32Array = isInt32Array;
+
+	function isFloat32Array(value) {
+	  return whichTypedArray$1(value) === 'Float32Array';
+	}
+	exports.isFloat32Array = isFloat32Array;
+
+	function isFloat64Array(value) {
+	  return whichTypedArray$1(value) === 'Float64Array';
+	}
+	exports.isFloat64Array = isFloat64Array;
+
+	function isBigInt64Array(value) {
+	  return whichTypedArray$1(value) === 'BigInt64Array';
+	}
+	exports.isBigInt64Array = isBigInt64Array;
+
+	function isBigUint64Array(value) {
+	  return whichTypedArray$1(value) === 'BigUint64Array';
+	}
+	exports.isBigUint64Array = isBigUint64Array;
+
+	function isMapToString(value) {
+	  return ObjectToString(value) === '[object Map]';
+	}
+	isMapToString.working = (
+	  typeof Map !== 'undefined' &&
+	  isMapToString(new Map())
+	);
+
+	function isMap(value) {
+	  if (typeof Map === 'undefined') {
+	    return false;
+	  }
+
+	  return isMapToString.working
+	    ? isMapToString(value)
+	    : value instanceof Map;
+	}
+	exports.isMap = isMap;
+
+	function isSetToString(value) {
+	  return ObjectToString(value) === '[object Set]';
+	}
+	isSetToString.working = (
+	  typeof Set !== 'undefined' &&
+	  isSetToString(new Set())
+	);
+	function isSet(value) {
+	  if (typeof Set === 'undefined') {
+	    return false;
+	  }
+
+	  return isSetToString.working
+	    ? isSetToString(value)
+	    : value instanceof Set;
+	}
+	exports.isSet = isSet;
+
+	function isWeakMapToString(value) {
+	  return ObjectToString(value) === '[object WeakMap]';
+	}
+	isWeakMapToString.working = (
+	  typeof WeakMap !== 'undefined' &&
+	  isWeakMapToString(new WeakMap())
+	);
+	function isWeakMap(value) {
+	  if (typeof WeakMap === 'undefined') {
+	    return false;
+	  }
+
+	  return isWeakMapToString.working
+	    ? isWeakMapToString(value)
+	    : value instanceof WeakMap;
+	}
+	exports.isWeakMap = isWeakMap;
+
+	function isWeakSetToString(value) {
+	  return ObjectToString(value) === '[object WeakSet]';
+	}
+	isWeakSetToString.working = (
+	  typeof WeakSet !== 'undefined' &&
+	  isWeakSetToString(new WeakSet())
+	);
+	function isWeakSet(value) {
+	  return isWeakSetToString(value);
+	}
+	exports.isWeakSet = isWeakSet;
+
+	function isArrayBufferToString(value) {
+	  return ObjectToString(value) === '[object ArrayBuffer]';
+	}
+	isArrayBufferToString.working = (
+	  typeof ArrayBuffer !== 'undefined' &&
+	  isArrayBufferToString(new ArrayBuffer())
+	);
+	function isArrayBuffer(value) {
+	  if (typeof ArrayBuffer === 'undefined') {
+	    return false;
+	  }
+
+	  return isArrayBufferToString.working
+	    ? isArrayBufferToString(value)
+	    : value instanceof ArrayBuffer;
+	}
+	exports.isArrayBuffer = isArrayBuffer;
+
+	function isDataViewToString(value) {
+	  return ObjectToString(value) === '[object DataView]';
+	}
+	isDataViewToString.working = (
+	  typeof ArrayBuffer !== 'undefined' &&
+	  typeof DataView !== 'undefined' &&
+	  isDataViewToString(new DataView(new ArrayBuffer(1), 0, 1))
+	);
+	function isDataView(value) {
+	  if (typeof DataView === 'undefined') {
+	    return false;
+	  }
+
+	  return isDataViewToString.working
+	    ? isDataViewToString(value)
+	    : value instanceof DataView;
+	}
+	exports.isDataView = isDataView;
+
+	// Store a copy of SharedArrayBuffer in case it's deleted elsewhere
+	var SharedArrayBufferCopy = typeof SharedArrayBuffer !== 'undefined' ? SharedArrayBuffer : undefined;
+	function isSharedArrayBufferToString(value) {
+	  return ObjectToString(value) === '[object SharedArrayBuffer]';
+	}
+	function isSharedArrayBuffer(value) {
+	  if (typeof SharedArrayBufferCopy === 'undefined') {
+	    return false;
+	  }
+
+	  if (typeof isSharedArrayBufferToString.working === 'undefined') {
+	    isSharedArrayBufferToString.working = isSharedArrayBufferToString(new SharedArrayBufferCopy());
+	  }
+
+	  return isSharedArrayBufferToString.working
+	    ? isSharedArrayBufferToString(value)
+	    : value instanceof SharedArrayBufferCopy;
+	}
+	exports.isSharedArrayBuffer = isSharedArrayBuffer;
+
+	function isAsyncFunction(value) {
+	  return ObjectToString(value) === '[object AsyncFunction]';
+	}
+	exports.isAsyncFunction = isAsyncFunction;
+
+	function isMapIterator(value) {
+	  return ObjectToString(value) === '[object Map Iterator]';
+	}
+	exports.isMapIterator = isMapIterator;
+
+	function isSetIterator(value) {
+	  return ObjectToString(value) === '[object Set Iterator]';
+	}
+	exports.isSetIterator = isSetIterator;
+
+	function isGeneratorObject(value) {
+	  return ObjectToString(value) === '[object Generator]';
+	}
+	exports.isGeneratorObject = isGeneratorObject;
+
+	function isWebAssemblyCompiledModule(value) {
+	  return ObjectToString(value) === '[object WebAssembly.Module]';
+	}
+	exports.isWebAssemblyCompiledModule = isWebAssemblyCompiledModule;
+
+	function isNumberObject(value) {
+	  return checkBoxedPrimitive(value, numberValue);
+	}
+	exports.isNumberObject = isNumberObject;
+
+	function isStringObject(value) {
+	  return checkBoxedPrimitive(value, stringValue);
+	}
+	exports.isStringObject = isStringObject;
+
+	function isBooleanObject(value) {
+	  return checkBoxedPrimitive(value, booleanValue);
+	}
+	exports.isBooleanObject = isBooleanObject;
+
+	function isBigIntObject(value) {
+	  return BigIntSupported && checkBoxedPrimitive(value, bigIntValue);
+	}
+	exports.isBigIntObject = isBigIntObject;
+
+	function isSymbolObject(value) {
+	  return SymbolSupported && checkBoxedPrimitive(value, symbolValue);
+	}
+	exports.isSymbolObject = isSymbolObject;
+
+	function isBoxedPrimitive(value) {
+	  return (
+	    isNumberObject(value) ||
+	    isStringObject(value) ||
+	    isBooleanObject(value) ||
+	    isBigIntObject(value) ||
+	    isSymbolObject(value)
+	  );
+	}
+	exports.isBoxedPrimitive = isBoxedPrimitive;
+
+	function isAnyArrayBuffer(value) {
+	  return typeof Uint8Array !== 'undefined' && (
+	    isArrayBuffer(value) ||
+	    isSharedArrayBuffer(value)
+	  );
+	}
+	exports.isAnyArrayBuffer = isAnyArrayBuffer;
+
+	['isProxy', 'isExternal', 'isModuleNamespaceObject'].forEach(function(method) {
+	  Object.defineProperty(exports, method, {
+	    enumerable: false,
+	    value: function() {
+	      throw new Error(method + ' is not supported in userland');
+	    }
+	  });
+	});
+} (types$3));
+
+var isBufferBrowser = function isBuffer(arg) {
+  return arg && typeof arg === 'object'
+    && typeof arg.copy === 'function'
+    && typeof arg.fill === 'function'
+    && typeof arg.readUInt8 === 'function';
+};
+
+(function (exports) {
+	// Copyright Joyent, Inc. and other Node contributors.
+	//
+	// Permission is hereby granted, free of charge, to any person obtaining a
+	// copy of this software and associated documentation files (the
+	// "Software"), to deal in the Software without restriction, including
+	// without limitation the rights to use, copy, modify, merge, publish,
+	// distribute, sublicense, and/or sell copies of the Software, and to permit
+	// persons to whom the Software is furnished to do so, subject to the
+	// following conditions:
+	//
+	// The above copyright notice and this permission notice shall be included
+	// in all copies or substantial portions of the Software.
+	//
+	// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+	// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+	// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+	// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+	// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+	// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+	// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	var getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors ||
+	  function getOwnPropertyDescriptors(obj) {
+	    var keys = Object.keys(obj);
+	    var descriptors = {};
+	    for (var i = 0; i < keys.length; i++) {
+	      descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+	    }
+	    return descriptors;
+	  };
+
+	var formatRegExp = /%[sdj%]/g;
+	exports.format = function(f) {
+	  if (!isString(f)) {
+	    var objects = [];
+	    for (var i = 0; i < arguments.length; i++) {
+	      objects.push(inspect(arguments[i]));
+	    }
+	    return objects.join(' ');
+	  }
+
+	  var i = 1;
+	  var args = arguments;
+	  var len = args.length;
+	  var str = String(f).replace(formatRegExp, function(x) {
+	    if (x === '%%') return '%';
+	    if (i >= len) return x;
+	    switch (x) {
+	      case '%s': return String(args[i++]);
+	      case '%d': return Number(args[i++]);
+	      case '%j':
+	        try {
+	          return JSON.stringify(args[i++]);
+	        } catch (_) {
+	          return '[Circular]';
+	        }
+	      default:
+	        return x;
+	    }
+	  });
+	  for (var x = args[i]; i < len; x = args[++i]) {
+	    if (isNull(x) || !isObject(x)) {
+	      str += ' ' + x;
+	    } else {
+	      str += ' ' + inspect(x);
+	    }
+	  }
+	  return str;
+	};
+
+
+	// Mark that a method should not be used.
+	// Returns a modified function which warns once by default.
+	// If --no-deprecation is set, then it is a no-op.
+	exports.deprecate = function(fn, msg) {
+	  if (typeof browserExports !== 'undefined' && browserExports.noDeprecation === true) {
+	    return fn;
+	  }
+
+	  // Allow for deprecating things in the process of starting up.
+	  if (typeof browserExports === 'undefined') {
+	    return function() {
+	      return exports.deprecate(fn, msg).apply(this, arguments);
+	    };
+	  }
+
+	  var warned = false;
+	  function deprecated() {
+	    if (!warned) {
+	      if (browserExports.throwDeprecation) {
+	        throw new Error(msg);
+	      } else if (browserExports.traceDeprecation) {
+	        console.trace(msg);
+	      } else {
+	        console.error(msg);
+	      }
+	      warned = true;
+	    }
+	    return fn.apply(this, arguments);
+	  }
+
+	  return deprecated;
+	};
+
+
+	var debugs = {};
+	var debugEnvRegex = /^$/;
+
+	if (({}).NODE_DEBUG) {
+	  var debugEnv = ({}).NODE_DEBUG;
+	  debugEnv = debugEnv.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
+	    .replace(/\*/g, '.*')
+	    .replace(/,/g, '$|^')
+	    .toUpperCase();
+	  debugEnvRegex = new RegExp('^' + debugEnv + '$', 'i');
+	}
+	exports.debuglog = function(set) {
+	  set = set.toUpperCase();
+	  if (!debugs[set]) {
+	    if (debugEnvRegex.test(set)) {
+	      var pid = browserExports.pid;
+	      debugs[set] = function() {
+	        var msg = exports.format.apply(exports, arguments);
+	        console.error('%s %d: %s', set, pid, msg);
+	      };
+	    } else {
+	      debugs[set] = function() {};
+	    }
+	  }
+	  return debugs[set];
+	};
+
+
+	/**
+	 * Echos the value of a value. Trys to print the value out
+	 * in the best way possible given the different types.
+	 *
+	 * @param {Object} obj The object to print out.
+	 * @param {Object} opts Optional options object that alters the output.
+	 */
+	/* legacy: obj, showHidden, depth, colors*/
+	function inspect(obj, opts) {
+	  // default options
+	  var ctx = {
+	    seen: [],
+	    stylize: stylizeNoColor
+	  };
+	  // legacy...
+	  if (arguments.length >= 3) ctx.depth = arguments[2];
+	  if (arguments.length >= 4) ctx.colors = arguments[3];
+	  if (isBoolean(opts)) {
+	    // legacy...
+	    ctx.showHidden = opts;
+	  } else if (opts) {
+	    // got an "options" object
+	    exports._extend(ctx, opts);
+	  }
+	  // set default options
+	  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+	  if (isUndefined(ctx.depth)) ctx.depth = 2;
+	  if (isUndefined(ctx.colors)) ctx.colors = false;
+	  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+	  if (ctx.colors) ctx.stylize = stylizeWithColor;
+	  return formatValue(ctx, obj, ctx.depth);
+	}
+	exports.inspect = inspect;
+
+
+	// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+	inspect.colors = {
+	  'bold' : [1, 22],
+	  'italic' : [3, 23],
+	  'underline' : [4, 24],
+	  'inverse' : [7, 27],
+	  'white' : [37, 39],
+	  'grey' : [90, 39],
+	  'black' : [30, 39],
+	  'blue' : [34, 39],
+	  'cyan' : [36, 39],
+	  'green' : [32, 39],
+	  'magenta' : [35, 39],
+	  'red' : [31, 39],
+	  'yellow' : [33, 39]
+	};
+
+	// Don't use 'blue' not visible on cmd.exe
+	inspect.styles = {
+	  'special': 'cyan',
+	  'number': 'yellow',
+	  'boolean': 'yellow',
+	  'undefined': 'grey',
+	  'null': 'bold',
+	  'string': 'green',
+	  'date': 'magenta',
+	  // "name": intentionally not styling
+	  'regexp': 'red'
+	};
+
+
+	function stylizeWithColor(str, styleType) {
+	  var style = inspect.styles[styleType];
+
+	  if (style) {
+	    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
+	           '\u001b[' + inspect.colors[style][1] + 'm';
+	  } else {
+	    return str;
+	  }
+	}
+
+
+	function stylizeNoColor(str, styleType) {
+	  return str;
+	}
+
+
+	function arrayToHash(array) {
+	  var hash = {};
+
+	  array.forEach(function(val, idx) {
+	    hash[val] = true;
+	  });
+
+	  return hash;
+	}
+
+
+	function formatValue(ctx, value, recurseTimes) {
+	  // Provide a hook for user-specified inspect functions.
+	  // Check that value is an object with an inspect function on it
+	  if (ctx.customInspect &&
+	      value &&
+	      isFunction(value.inspect) &&
+	      // Filter out the util module, it's inspect function is special
+	      value.inspect !== exports.inspect &&
+	      // Also filter out any prototype objects using the circular check.
+	      !(value.constructor && value.constructor.prototype === value)) {
+	    var ret = value.inspect(recurseTimes, ctx);
+	    if (!isString(ret)) {
+	      ret = formatValue(ctx, ret, recurseTimes);
+	    }
+	    return ret;
+	  }
+
+	  // Primitive types cannot have properties
+	  var primitive = formatPrimitive(ctx, value);
+	  if (primitive) {
+	    return primitive;
+	  }
+
+	  // Look up the keys of the object.
+	  var keys = Object.keys(value);
+	  var visibleKeys = arrayToHash(keys);
+
+	  if (ctx.showHidden) {
+	    keys = Object.getOwnPropertyNames(value);
+	  }
+
+	  // IE doesn't make error fields non-enumerable
+	  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+	  if (isError(value)
+	      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+	    return formatError(value);
+	  }
+
+	  // Some type of object without properties can be shortcutted.
+	  if (keys.length === 0) {
+	    if (isFunction(value)) {
+	      var name = value.name ? ': ' + value.name : '';
+	      return ctx.stylize('[Function' + name + ']', 'special');
+	    }
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    }
+	    if (isDate(value)) {
+	      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+	    }
+	    if (isError(value)) {
+	      return formatError(value);
+	    }
+	  }
+
+	  var base = '', array = false, braces = ['{', '}'];
+
+	  // Make Array say that they are Array
+	  if (isArray(value)) {
+	    array = true;
+	    braces = ['[', ']'];
+	  }
+
+	  // Make functions say that they are functions
+	  if (isFunction(value)) {
+	    var n = value.name ? ': ' + value.name : '';
+	    base = ' [Function' + n + ']';
+	  }
+
+	  // Make RegExps say that they are RegExps
+	  if (isRegExp(value)) {
+	    base = ' ' + RegExp.prototype.toString.call(value);
+	  }
+
+	  // Make dates with properties first say the date
+	  if (isDate(value)) {
+	    base = ' ' + Date.prototype.toUTCString.call(value);
+	  }
+
+	  // Make error with message first say the error
+	  if (isError(value)) {
+	    base = ' ' + formatError(value);
+	  }
+
+	  if (keys.length === 0 && (!array || value.length == 0)) {
+	    return braces[0] + base + braces[1];
+	  }
+
+	  if (recurseTimes < 0) {
+	    if (isRegExp(value)) {
+	      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+	    } else {
+	      return ctx.stylize('[Object]', 'special');
+	    }
+	  }
+
+	  ctx.seen.push(value);
+
+	  var output;
+	  if (array) {
+	    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+	  } else {
+	    output = keys.map(function(key) {
+	      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+	    });
+	  }
+
+	  ctx.seen.pop();
+
+	  return reduceToSingleString(output, base, braces);
+	}
+
+
+	function formatPrimitive(ctx, value) {
+	  if (isUndefined(value))
+	    return ctx.stylize('undefined', 'undefined');
+	  if (isString(value)) {
+	    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
+	                                             .replace(/'/g, "\\'")
+	                                             .replace(/\\"/g, '"') + '\'';
+	    return ctx.stylize(simple, 'string');
+	  }
+	  if (isNumber(value))
+	    return ctx.stylize('' + value, 'number');
+	  if (isBoolean(value))
+	    return ctx.stylize('' + value, 'boolean');
+	  // For some reason typeof null is "object", so special case here.
+	  if (isNull(value))
+	    return ctx.stylize('null', 'null');
+	}
+
+
+	function formatError(value) {
+	  return '[' + Error.prototype.toString.call(value) + ']';
+	}
+
+
+	function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+	  var output = [];
+	  for (var i = 0, l = value.length; i < l; ++i) {
+	    if (hasOwnProperty(value, String(i))) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          String(i), true));
+	    } else {
+	      output.push('');
+	    }
+	  }
+	  keys.forEach(function(key) {
+	    if (!key.match(/^\d+$/)) {
+	      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
+	          key, true));
+	    }
+	  });
+	  return output;
+	}
+
+
+	function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+	  var name, str, desc;
+	  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
+	  if (desc.get) {
+	    if (desc.set) {
+	      str = ctx.stylize('[Getter/Setter]', 'special');
+	    } else {
+	      str = ctx.stylize('[Getter]', 'special');
+	    }
+	  } else {
+	    if (desc.set) {
+	      str = ctx.stylize('[Setter]', 'special');
+	    }
+	  }
+	  if (!hasOwnProperty(visibleKeys, key)) {
+	    name = '[' + key + ']';
+	  }
+	  if (!str) {
+	    if (ctx.seen.indexOf(desc.value) < 0) {
+	      if (isNull(recurseTimes)) {
+	        str = formatValue(ctx, desc.value, null);
+	      } else {
+	        str = formatValue(ctx, desc.value, recurseTimes - 1);
+	      }
+	      if (str.indexOf('\n') > -1) {
+	        if (array) {
+	          str = str.split('\n').map(function(line) {
+	            return '  ' + line;
+	          }).join('\n').slice(2);
+	        } else {
+	          str = '\n' + str.split('\n').map(function(line) {
+	            return '   ' + line;
+	          }).join('\n');
+	        }
+	      }
+	    } else {
+	      str = ctx.stylize('[Circular]', 'special');
+	    }
+	  }
+	  if (isUndefined(name)) {
+	    if (array && key.match(/^\d+$/)) {
+	      return str;
+	    }
+	    name = JSON.stringify('' + key);
+	    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+	      name = name.slice(1, -1);
+	      name = ctx.stylize(name, 'name');
+	    } else {
+	      name = name.replace(/'/g, "\\'")
+	                 .replace(/\\"/g, '"')
+	                 .replace(/(^"|"$)/g, "'");
+	      name = ctx.stylize(name, 'string');
+	    }
+	  }
+
+	  return name + ': ' + str;
+	}
+
+
+	function reduceToSingleString(output, base, braces) {
+	  var length = output.reduce(function(prev, cur) {
+	    if (cur.indexOf('\n') >= 0) ;
+	    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+	  }, 0);
+
+	  if (length > 60) {
+	    return braces[0] +
+	           (base === '' ? '' : base + '\n ') +
+	           ' ' +
+	           output.join(',\n  ') +
+	           ' ' +
+	           braces[1];
+	  }
+
+	  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+	}
+
+
+	// NOTE: These type checking functions intentionally don't use `instanceof`
+	// because it is fragile and can be easily faked with `Object.create()`.
+	exports.types = types$3;
+
+	function isArray(ar) {
+	  return Array.isArray(ar);
+	}
+	exports.isArray = isArray;
+
+	function isBoolean(arg) {
+	  return typeof arg === 'boolean';
+	}
+	exports.isBoolean = isBoolean;
+
+	function isNull(arg) {
+	  return arg === null;
+	}
+	exports.isNull = isNull;
+
+	function isNullOrUndefined(arg) {
+	  return arg == null;
+	}
+	exports.isNullOrUndefined = isNullOrUndefined;
+
+	function isNumber(arg) {
+	  return typeof arg === 'number';
+	}
+	exports.isNumber = isNumber;
+
+	function isString(arg) {
+	  return typeof arg === 'string';
+	}
+	exports.isString = isString;
+
+	function isSymbol(arg) {
+	  return typeof arg === 'symbol';
+	}
+	exports.isSymbol = isSymbol;
+
+	function isUndefined(arg) {
+	  return arg === void 0;
+	}
+	exports.isUndefined = isUndefined;
+
+	function isRegExp(re) {
+	  return isObject(re) && objectToString(re) === '[object RegExp]';
+	}
+	exports.isRegExp = isRegExp;
+	exports.types.isRegExp = isRegExp;
+
+	function isObject(arg) {
+	  return typeof arg === 'object' && arg !== null;
+	}
+	exports.isObject = isObject;
+
+	function isDate(d) {
+	  return isObject(d) && objectToString(d) === '[object Date]';
+	}
+	exports.isDate = isDate;
+	exports.types.isDate = isDate;
+
+	function isError(e) {
+	  return isObject(e) &&
+	      (objectToString(e) === '[object Error]' || e instanceof Error);
+	}
+	exports.isError = isError;
+	exports.types.isNativeError = isError;
+
+	function isFunction(arg) {
+	  return typeof arg === 'function';
+	}
+	exports.isFunction = isFunction;
+
+	function isPrimitive(arg) {
+	  return arg === null ||
+	         typeof arg === 'boolean' ||
+	         typeof arg === 'number' ||
+	         typeof arg === 'string' ||
+	         typeof arg === 'symbol' ||  // ES6 symbol
+	         typeof arg === 'undefined';
+	}
+	exports.isPrimitive = isPrimitive;
+
+	exports.isBuffer = isBufferBrowser;
+
+	function objectToString(o) {
+	  return Object.prototype.toString.call(o);
+	}
+
+
+	function pad(n) {
+	  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+	}
+
+
+	var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+	              'Oct', 'Nov', 'Dec'];
+
+	// 26 Feb 16:19:34
+	function timestamp() {
+	  var d = new Date();
+	  var time = [pad(d.getHours()),
+	              pad(d.getMinutes()),
+	              pad(d.getSeconds())].join(':');
+	  return [d.getDate(), months[d.getMonth()], time].join(' ');
+	}
+
+
+	// log is just a thin wrapper to console.log that prepends a timestamp
+	exports.log = function() {
+	  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+	};
+
+
+	/**
+	 * Inherit the prototype methods from one constructor into another.
+	 *
+	 * The Function.prototype.inherits from lang.js rewritten as a standalone
+	 * function (not on Function.prototype). NOTE: If this file is to be loaded
+	 * during bootstrapping this function needs to be rewritten using some native
+	 * functions as prototype setup using normal JavaScript does not work as
+	 * expected during bootstrapping (see mirror.js in r114903).
+	 *
+	 * @param {function} ctor Constructor function which needs to inherit the
+	 *     prototype.
+	 * @param {function} superCtor Constructor function to inherit prototype from.
+	 */
+	exports.inherits = inherits_browserExports;
+
+	exports._extend = function(origin, add) {
+	  // Don't do anything if add isn't an object
+	  if (!add || !isObject(add)) return origin;
+
+	  var keys = Object.keys(add);
+	  var i = keys.length;
+	  while (i--) {
+	    origin[keys[i]] = add[keys[i]];
+	  }
+	  return origin;
+	};
+
+	function hasOwnProperty(obj, prop) {
+	  return Object.prototype.hasOwnProperty.call(obj, prop);
+	}
+
+	var kCustomPromisifiedSymbol = typeof Symbol !== 'undefined' ? Symbol('util.promisify.custom') : undefined;
+
+	exports.promisify = function promisify(original) {
+	  if (typeof original !== 'function')
+	    throw new TypeError('The "original" argument must be of type Function');
+
+	  if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
+	    var fn = original[kCustomPromisifiedSymbol];
+	    if (typeof fn !== 'function') {
+	      throw new TypeError('The "util.promisify.custom" argument must be of type Function');
+	    }
+	    Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+	      value: fn, enumerable: false, writable: false, configurable: true
+	    });
+	    return fn;
+	  }
+
+	  function fn() {
+	    var promiseResolve, promiseReject;
+	    var promise = new Promise(function (resolve, reject) {
+	      promiseResolve = resolve;
+	      promiseReject = reject;
+	    });
+
+	    var args = [];
+	    for (var i = 0; i < arguments.length; i++) {
+	      args.push(arguments[i]);
+	    }
+	    args.push(function (err, value) {
+	      if (err) {
+	        promiseReject(err);
+	      } else {
+	        promiseResolve(value);
+	      }
+	    });
+
+	    try {
+	      original.apply(this, args);
+	    } catch (err) {
+	      promiseReject(err);
+	    }
+
+	    return promise;
+	  }
+
+	  Object.setPrototypeOf(fn, Object.getPrototypeOf(original));
+
+	  if (kCustomPromisifiedSymbol) Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+	    value: fn, enumerable: false, writable: false, configurable: true
+	  });
+	  return Object.defineProperties(
+	    fn,
+	    getOwnPropertyDescriptors(original)
+	  );
+	};
+
+	exports.promisify.custom = kCustomPromisifiedSymbol;
+
+	function callbackifyOnRejected(reason, cb) {
+	  // `!reason` guard inspired by bluebird (Ref: https://goo.gl/t5IS6M).
+	  // Because `null` is a special error value in callbacks which means "no error
+	  // occurred", we error-wrap so the callback consumer can distinguish between
+	  // "the promise rejected with null" or "the promise fulfilled with undefined".
+	  if (!reason) {
+	    var newReason = new Error('Promise was rejected with a falsy value');
+	    newReason.reason = reason;
+	    reason = newReason;
+	  }
+	  return cb(reason);
+	}
+
+	function callbackify(original) {
+	  if (typeof original !== 'function') {
+	    throw new TypeError('The "original" argument must be of type Function');
+	  }
+
+	  // We DO NOT return the promise as it gives the user a false sense that
+	  // the promise is actually somehow related to the callback's execution
+	  // and that the callback throwing will reject the promise.
+	  function callbackified() {
+	    var args = [];
+	    for (var i = 0; i < arguments.length; i++) {
+	      args.push(arguments[i]);
+	    }
+
+	    var maybeCb = args.pop();
+	    if (typeof maybeCb !== 'function') {
+	      throw new TypeError('The last argument must be of type Function');
+	    }
+	    var self = this;
+	    var cb = function() {
+	      return maybeCb.apply(self, arguments);
+	    };
+	    // In true node style we process the callback on `nextTick` with all the
+	    // implications (stack, `uncaughtException`, `async_hooks`)
+	    original.apply(this, args)
+	      .then(function(ret) { browserExports.nextTick(cb.bind(null, null, ret)); },
+	            function(rej) { browserExports.nextTick(callbackifyOnRejected.bind(null, rej, cb)); });
+	  }
+
+	  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
+	  Object.defineProperties(callbackified,
+	                          getOwnPropertyDescriptors(original));
+	  return callbackified;
+	}
+	exports.callbackify = callbackify;
+} (util));
+
+function BufferList() {
+  this.head = null;
+  this.tail = null;
+  this.length = 0;
+}
+
+BufferList.prototype.push = function (v) {
+  var entry = { data: v, next: null };
+  if (this.length > 0) this.tail.next = entry;else this.head = entry;
+  this.tail = entry;
+  ++this.length;
+};
+
+BufferList.prototype.unshift = function (v) {
+  var entry = { data: v, next: this.head };
+  if (this.length === 0) this.tail = entry;
+  this.head = entry;
+  ++this.length;
+};
+
+BufferList.prototype.shift = function () {
+  if (this.length === 0) return;
+  var ret = this.head.data;
+  if (this.length === 1) this.head = this.tail = null;else this.head = this.head.next;
+  --this.length;
+  return ret;
+};
+
+BufferList.prototype.clear = function () {
+  this.head = this.tail = null;
+  this.length = 0;
+};
+
+BufferList.prototype.join = function (s) {
+  if (this.length === 0) return '';
+  var p = this.head;
+  var ret = '' + p.data;
+  while (p = p.next) {
+    ret += s + p.data;
+  }return ret;
+};
+
+BufferList.prototype.concat = function (n) {
+  if (this.length === 0) return buffer.Buffer.alloc(0);
+  if (this.length === 1) return this.head.data;
+  var ret = buffer.Buffer.allocUnsafe(n >>> 0);
+  var p = this.head;
+  var i = 0;
+  while (p) {
+    p.data.copy(ret, i);
+    i += p.data.length;
+    p = p.next;
+  }
+  return ret;
+};
+
+Readable.ReadableState = ReadableState;
+
+var debug = util.debuglog('stream');
+util.inherits(Readable, eventsExports);
+
+function prependListener(emitter, event, fn) {
+  // Sadly this is not cacheable as some libraries bundle their own
+  // event emitter implementation with them.
+  if (typeof emitter.prependListener === 'function') {
+    return emitter.prependListener(event, fn);
+  } else {
+    // This is a hack to make sure that our error handler is attached before any
+    // userland ones.  NEVER DO THIS. This is here only because this code needs
+    // to continue to work with older versions of Node.js that do not include
+    // the prependListener() method. The goal is to eventually remove this hack.
+    if (!emitter._events || !emitter._events[event])
+      emitter.on(event, fn);
+    else if (Array.isArray(emitter._events[event]))
+      emitter._events[event].unshift(fn);
+    else
+      emitter._events[event] = [fn, emitter._events[event]];
+  }
+}
+function listenerCount (emitter, type) {
+  return emitter.listeners(type).length;
+}
+function ReadableState(options, stream) {
+
+  options = options || {};
+
+  // object stream flag. Used to make read(n) ignore n and to
+  // make all the buffer merging and length checks go away
+  this.objectMode = !!options.objectMode;
+
+  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.readableObjectMode;
+
+  // the point at which it stops calling _read() to fill the buffer
+  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+  var hwm = options.highWaterMark;
+  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+  // cast to ints.
+  this.highWaterMark = ~ ~this.highWaterMark;
+
+  // A linked list is used to store data chunks instead of an array because the
+  // linked list can remove elements from the beginning faster than
+  // array.shift()
+  this.buffer = new BufferList();
+  this.length = 0;
+  this.pipes = null;
+  this.pipesCount = 0;
+  this.flowing = null;
+  this.ended = false;
+  this.endEmitted = false;
+  this.reading = false;
+
+  // a flag to be able to tell if the onwrite cb is called immediately,
+  // or on a later tick.  We set this to true at first, because any
+  // actions that shouldn't happen until "later" should generally also
+  // not happen before the first write call.
+  this.sync = true;
+
+  // whenever we return null, then we set a flag to say
+  // that we're awaiting a 'readable' event emission.
+  this.needReadable = false;
+  this.emittedReadable = false;
+  this.readableListening = false;
+  this.resumeScheduled = false;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+  // when piping, we only care about 'readable' events that happen
+  // after read()ing all the bytes and not getting any pushback.
+  this.ranOut = false;
+
+  // the number of writers that are awaiting a drain event in .pipe()s
+  this.awaitDrain = 0;
+
+  // if true, a maybeReadMore has been scheduled
+  this.readingMore = false;
+
+  this.decoder = null;
+  this.encoding = null;
+  if (options.encoding) {
+    this.decoder = new StringDecoder_1(options.encoding);
+    this.encoding = options.encoding;
+  }
+}
+function Readable(options) {
+
+  if (!(this instanceof Readable)) return new Readable(options);
+
+  this._readableState = new ReadableState(options, this);
+
+  // legacy
+  this.readable = true;
+
+  if (options && typeof options.read === 'function') this._read = options.read;
+
+  eventsExports.call(this);
+}
+
+// Manually shove something into the read() buffer.
+// This returns true if the highWaterMark has not been hit yet,
+// similar to how Writable.write() returns true if you should
+// write() some more.
+Readable.prototype.push = function (chunk, encoding) {
+  var state = this._readableState;
+
+  if (!state.objectMode && typeof chunk === 'string') {
+    encoding = encoding || state.defaultEncoding;
+    if (encoding !== state.encoding) {
+      chunk = buffer.Buffer.from(chunk, encoding);
+      encoding = '';
+    }
+  }
+
+  return readableAddChunk(this, state, chunk, encoding, false);
+};
+
+// Unshift should *always* be something directly out of read()
+Readable.prototype.unshift = function (chunk) {
+  var state = this._readableState;
+  return readableAddChunk(this, state, chunk, '', true);
+};
+
+Readable.prototype.isPaused = function () {
+  return this._readableState.flowing === false;
+};
+
+function readableAddChunk(stream, state, chunk, encoding, addToFront) {
+  var er = chunkInvalid(state, chunk);
+  if (er) {
+    stream.emit('error', er);
+  } else if (chunk === null) {
+    state.reading = false;
+    onEofChunk(stream, state);
+  } else if (state.objectMode || chunk && chunk.length > 0) {
+    if (state.ended && !addToFront) {
+      var e = new Error('stream.push() after EOF');
+      stream.emit('error', e);
+    } else if (state.endEmitted && addToFront) {
+      var _e = new Error('stream.unshift() after end event');
+      stream.emit('error', _e);
+    } else {
+      var skipAdd;
+      if (state.decoder && !addToFront && !encoding) {
+        chunk = state.decoder.write(chunk);
+        skipAdd = !state.objectMode && chunk.length === 0;
+      }
+
+      if (!addToFront) state.reading = false;
+
+      // Don't add to the buffer if we've decoded to an empty string chunk and
+      // we're not in object mode
+      if (!skipAdd) {
+        // if we want the data now, just emit it.
+        if (state.flowing && state.length === 0 && !state.sync) {
+          stream.emit('data', chunk);
+          stream.read(0);
+        } else {
+          // update the buffer info.
+          state.length += state.objectMode ? 1 : chunk.length;
+          if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
+
+          if (state.needReadable) emitReadable(stream);
+        }
+      }
+
+      maybeReadMore(stream, state);
+    }
+  } else if (!addToFront) {
+    state.reading = false;
+  }
+
+  return needMoreData(state);
+}
+
+// if it's past the high water mark, we can push in some more.
+// Also, if we have no data yet, we can stand some
+// more bytes.  This is to work around cases where hwm=0,
+// such as the repl.  Also, if the push() triggered a
+// readable event, and the user called read(largeNumber) such that
+// needReadable was set, then we ought to push more, so that another
+// 'readable' event will be triggered.
+function needMoreData(state) {
+  return !state.ended && (state.needReadable || state.length < state.highWaterMark || state.length === 0);
+}
+
+// backwards compatibility.
+Readable.prototype.setEncoding = function (enc) {
+  this._readableState.decoder = new StringDecoder_1(enc);
+  this._readableState.encoding = enc;
+  return this;
+};
+
+// Don't raise the hwm > 8MB
+var MAX_HWM = 0x800000;
+function computeNewHighWaterMark(n) {
+  if (n >= MAX_HWM) {
+    n = MAX_HWM;
+  } else {
+    // Get the next highest power of 2 to prevent increasing hwm excessively in
+    // tiny amounts
+    n--;
+    n |= n >>> 1;
+    n |= n >>> 2;
+    n |= n >>> 4;
+    n |= n >>> 8;
+    n |= n >>> 16;
+    n++;
+  }
+  return n;
+}
+
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+function howMuchToRead(n, state) {
+  if (n <= 0 || state.length === 0 && state.ended) return 0;
+  if (state.objectMode) return 1;
+  if (n !== n) {
+    // Only flow one buffer at a time
+    if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
+  }
+  // If we're asking for more than the current hwm, then raise the hwm.
+  if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
+  if (n <= state.length) return n;
+  // Don't have enough
+  if (!state.ended) {
+    state.needReadable = true;
+    return 0;
+  }
+  return state.length;
+}
+
+// you can override either this method, or the async _read(n) below.
+Readable.prototype.read = function (n) {
+  debug('read', n);
+  n = parseInt(n, 10);
+  var state = this._readableState;
+  var nOrig = n;
+
+  if (n !== 0) state.emittedReadable = false;
+
+  // if we're doing read(0) to trigger a readable event, but we
+  // already have a bunch of data in the buffer, then just trigger
+  // the 'readable' event and move on.
+  if (n === 0 && state.needReadable && (state.length >= state.highWaterMark || state.ended)) {
+    debug('read: emitReadable', state.length, state.ended);
+    if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
+    return null;
+  }
+
+  n = howMuchToRead(n, state);
+
+  // if we've ended, and we're now clear, then finish it up.
+  if (n === 0 && state.ended) {
+    if (state.length === 0) endReadable(this);
+    return null;
+  }
+
+  // All the actual chunk generation logic needs to be
+  // *below* the call to _read.  The reason is that in certain
+  // synthetic stream cases, such as passthrough streams, _read
+  // may be a completely synchronous operation which may change
+  // the state of the read buffer, providing enough data when
+  // before there was *not* enough.
+  //
+  // So, the steps are:
+  // 1. Figure out what the state of things will be after we do
+  // a read from the buffer.
+  //
+  // 2. If that resulting state will trigger a _read, then call _read.
+  // Note that this may be asynchronous, or synchronous.  Yes, it is
+  // deeply ugly to write APIs this way, but that still doesn't mean
+  // that the Readable class should behave improperly, as streams are
+  // designed to be sync/async agnostic.
+  // Take note if the _read call is sync or async (ie, if the read call
+  // has returned yet), so that we know whether or not it's safe to emit
+  // 'readable' etc.
+  //
+  // 3. Actually pull the requested chunks out of the buffer and return.
+
+  // if we need a readable event, then we need to do some reading.
+  var doRead = state.needReadable;
+  debug('need readable', doRead);
+
+  // if we currently have less than the highWaterMark, then also read some
+  if (state.length === 0 || state.length - n < state.highWaterMark) {
+    doRead = true;
+    debug('length less than watermark', doRead);
+  }
+
+  // however, if we've ended, then there's no point, and if we're already
+  // reading, then it's unnecessary.
+  if (state.ended || state.reading) {
+    doRead = false;
+    debug('reading or ended', doRead);
+  } else if (doRead) {
+    debug('do read');
+    state.reading = true;
+    state.sync = true;
+    // if the length is currently zero, then we *need* a readable event.
+    if (state.length === 0) state.needReadable = true;
+    // call internal read method
+    this._read(state.highWaterMark);
+    state.sync = false;
+    // If _read pushed data synchronously, then `reading` will be false,
+    // and we need to re-evaluate how much data we can return to the user.
+    if (!state.reading) n = howMuchToRead(nOrig, state);
+  }
+
+  var ret;
+  if (n > 0) ret = fromList(n, state);else ret = null;
+
+  if (ret === null) {
+    state.needReadable = true;
+    n = 0;
+  } else {
+    state.length -= n;
+  }
+
+  if (state.length === 0) {
+    // If we have nothing in the buffer, then we want to know
+    // as soon as we *do* get something into the buffer.
+    if (!state.ended) state.needReadable = true;
+
+    // If we tried to read() past the EOF, then emit end on the next tick.
+    if (nOrig !== n && state.ended) endReadable(this);
+  }
+
+  if (ret !== null) this.emit('data', ret);
+
+  return ret;
+};
+
+function chunkInvalid(state, chunk) {
+  var er = null;
+  if (!buffer.Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== null && chunk !== undefined && !state.objectMode) {
+    er = new TypeError('Invalid non-string/buffer chunk');
+  }
+  return er;
+}
+
+function onEofChunk(stream, state) {
+  if (state.ended) return;
+  if (state.decoder) {
+    var chunk = state.decoder.end();
+    if (chunk && chunk.length) {
+      state.buffer.push(chunk);
+      state.length += state.objectMode ? 1 : chunk.length;
+    }
+  }
+  state.ended = true;
+
+  // emit 'readable' now to make sure it gets picked up.
+  emitReadable(stream);
+}
+
+// Don't emit readable right away in sync mode, because this can trigger
+// another read() call => stack overflow.  This way, it might trigger
+// a nextTick recursion warning, but that's not so bad.
+function emitReadable(stream) {
+  var state = stream._readableState;
+  state.needReadable = false;
+  if (!state.emittedReadable) {
+    debug('emitReadable', state.flowing);
+    state.emittedReadable = true;
+    if (state.sync) browserExports.nextTick(emitReadable_, stream);else emitReadable_(stream);
+  }
+}
+
+function emitReadable_(stream) {
+  debug('emit readable');
+  stream.emit('readable');
+  flow(stream);
+}
+
+// at this point, the user has presumably seen the 'readable' event,
+// and called read() to consume some data.  that may have triggered
+// in turn another _read(n) call, in which case reading = true if
+// it's in progress.
+// However, if we're not ended, or reading, and the length < hwm,
+// then go ahead and try to read some more preemptively.
+function maybeReadMore(stream, state) {
+  if (!state.readingMore) {
+    state.readingMore = true;
+    browserExports.nextTick(maybeReadMore_, stream, state);
+  }
+}
+
+function maybeReadMore_(stream, state) {
+  var len = state.length;
+  while (!state.reading && !state.flowing && !state.ended && state.length < state.highWaterMark) {
+    debug('maybeReadMore read 0');
+    stream.read(0);
+    if (len === state.length)
+      // didn't get any data, stop spinning.
+      break;else len = state.length;
+  }
+  state.readingMore = false;
+}
+
+// abstract method.  to be overridden in specific implementation classes.
+// call cb(er, data) where data is <= n in length.
+// for virtual (non-string, non-buffer) streams, "length" is somewhat
+// arbitrary, and perhaps not very meaningful.
+Readable.prototype._read = function (n) {
+  this.emit('error', new Error('not implemented'));
+};
+
+Readable.prototype.pipe = function (dest, pipeOpts) {
+  var src = this;
+  var state = this._readableState;
+
+  switch (state.pipesCount) {
+    case 0:
+      state.pipes = dest;
+      break;
+    case 1:
+      state.pipes = [state.pipes, dest];
+      break;
+    default:
+      state.pipes.push(dest);
+      break;
+  }
+  state.pipesCount += 1;
+  debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
+
+  var doEnd = (!pipeOpts || pipeOpts.end !== false);
+
+  var endFn = doEnd ? onend : cleanup;
+  if (state.endEmitted) browserExports.nextTick(endFn);else src.once('end', endFn);
+
+  dest.on('unpipe', onunpipe);
+  function onunpipe(readable) {
+    debug('onunpipe');
+    if (readable === src) {
+      cleanup();
+    }
+  }
+
+  function onend() {
+    debug('onend');
+    dest.end();
+  }
+
+  // when the dest drains, it reduces the awaitDrain counter
+  // on the source.  This would be more elegant with a .once()
+  // handler in flow(), but adding and removing repeatedly is
+  // too slow.
+  var ondrain = pipeOnDrain(src);
+  dest.on('drain', ondrain);
+
+  var cleanedUp = false;
+  function cleanup() {
+    debug('cleanup');
+    // cleanup event handlers once the pipe is broken
+    dest.removeListener('close', onclose);
+    dest.removeListener('finish', onfinish);
+    dest.removeListener('drain', ondrain);
+    dest.removeListener('error', onerror);
+    dest.removeListener('unpipe', onunpipe);
+    src.removeListener('end', onend);
+    src.removeListener('end', cleanup);
+    src.removeListener('data', ondata);
+
+    cleanedUp = true;
+
+    // if the reader is waiting for a drain event from this
+    // specific writer, then it would cause it to never start
+    // flowing again.
+    // So, if this is awaiting a drain, then we just call it now.
+    // If we don't know, then assume that we are waiting for one.
+    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
+  }
+
+  // If the user pushes more data while we're writing to dest then we'll end up
+  // in ondata again. However, we only want to increase awaitDrain once because
+  // dest will only emit one 'drain' event for the multiple writes.
+  // => Introduce a guard on increasing awaitDrain.
+  var increasedAwaitDrain = false;
+  src.on('data', ondata);
+  function ondata(chunk) {
+    debug('ondata');
+    increasedAwaitDrain = false;
+    var ret = dest.write(chunk);
+    if (false === ret && !increasedAwaitDrain) {
+      // If the user unpiped during `dest.write()`, it is possible
+      // to get stuck in a permanently paused state if that write
+      // also returned false.
+      // => Check whether `dest` is still a piping destination.
+      if ((state.pipesCount === 1 && state.pipes === dest || state.pipesCount > 1 && indexOf(state.pipes, dest) !== -1) && !cleanedUp) {
+        debug('false write response, pause', src._readableState.awaitDrain);
+        src._readableState.awaitDrain++;
+        increasedAwaitDrain = true;
+      }
+      src.pause();
+    }
+  }
+
+  // if the dest has an error, then stop piping into it.
+  // however, don't suppress the throwing behavior for this.
+  function onerror(er) {
+    debug('onerror', er);
+    unpipe();
+    dest.removeListener('error', onerror);
+    if (listenerCount(dest, 'error') === 0) dest.emit('error', er);
+  }
+
+  // Make sure our error handler is attached before userland ones.
+  prependListener(dest, 'error', onerror);
+
+  // Both close and finish should trigger unpipe, but only once.
+  function onclose() {
+    dest.removeListener('finish', onfinish);
+    unpipe();
+  }
+  dest.once('close', onclose);
+  function onfinish() {
+    debug('onfinish');
+    dest.removeListener('close', onclose);
+    unpipe();
+  }
+  dest.once('finish', onfinish);
+
+  function unpipe() {
+    debug('unpipe');
+    src.unpipe(dest);
+  }
+
+  // tell the dest that it's being piped to
+  dest.emit('pipe', src);
+
+  // start the flow if it hasn't been started already.
+  if (!state.flowing) {
+    debug('pipe resume');
+    src.resume();
+  }
+
+  return dest;
+};
+
+function pipeOnDrain(src) {
+  return function () {
+    var state = src._readableState;
+    debug('pipeOnDrain', state.awaitDrain);
+    if (state.awaitDrain) state.awaitDrain--;
+    if (state.awaitDrain === 0 && src.listeners('data').length) {
+      state.flowing = true;
+      flow(src);
+    }
+  };
+}
+
+Readable.prototype.unpipe = function (dest) {
+  var state = this._readableState;
+
+  // if we're not piping anywhere, then do nothing.
+  if (state.pipesCount === 0) return this;
+
+  // just one destination.  most common case.
+  if (state.pipesCount === 1) {
+    // passed in one, but it's not the right one.
+    if (dest && dest !== state.pipes) return this;
+
+    if (!dest) dest = state.pipes;
+
+    // got a match.
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+    if (dest) dest.emit('unpipe', this);
+    return this;
+  }
+
+  // slow case. multiple pipe destinations.
+
+  if (!dest) {
+    // remove all.
+    var dests = state.pipes;
+    var len = state.pipesCount;
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+
+    for (var _i = 0; _i < len; _i++) {
+      dests[_i].emit('unpipe', this);
+    }return this;
+  }
+
+  // try to find the right one.
+  var i = indexOf(state.pipes, dest);
+  if (i === -1) return this;
+
+  state.pipes.splice(i, 1);
+  state.pipesCount -= 1;
+  if (state.pipesCount === 1) state.pipes = state.pipes[0];
+
+  dest.emit('unpipe', this);
+
+  return this;
+};
+
+// set up data events if they are asked for
+// Ensure readable listeners eventually get something
+Readable.prototype.on = function (ev, fn) {
+  var res = eventsExports.prototype.on.call(this, ev, fn);
+
+  if (ev === 'data') {
+    // Start flowing on next tick if stream isn't explicitly paused
+    if (this._readableState.flowing !== false) this.resume();
+  } else if (ev === 'readable') {
+    var state = this._readableState;
+    if (!state.endEmitted && !state.readableListening) {
+      state.readableListening = state.needReadable = true;
+      state.emittedReadable = false;
+      if (!state.reading) {
+        browserExports.nextTick(nReadingNextTick, this);
+      } else if (state.length) {
+        emitReadable(this);
+      }
+    }
+  }
+
+  return res;
+};
+Readable.prototype.addListener = Readable.prototype.on;
+
+function nReadingNextTick(self) {
+  debug('readable nexttick read 0');
+  self.read(0);
+}
+
+// pause() and resume() are remnants of the legacy readable stream API
+// If the user uses them, then switch into old mode.
+Readable.prototype.resume = function () {
+  var state = this._readableState;
+  if (!state.flowing) {
+    debug('resume');
+    state.flowing = true;
+    resume(this, state);
+  }
+  return this;
+};
+
+function resume(stream, state) {
+  if (!state.resumeScheduled) {
+    state.resumeScheduled = true;
+    browserExports.nextTick(resume_, stream, state);
+  }
+}
+
+function resume_(stream, state) {
+  if (!state.reading) {
+    debug('resume read 0');
+    stream.read(0);
+  }
+
+  state.resumeScheduled = false;
+  state.awaitDrain = 0;
+  stream.emit('resume');
+  flow(stream);
+  if (state.flowing && !state.reading) stream.read(0);
+}
+
+Readable.prototype.pause = function () {
+  debug('call pause flowing=%j', this._readableState.flowing);
+  if (false !== this._readableState.flowing) {
+    debug('pause');
+    this._readableState.flowing = false;
+    this.emit('pause');
+  }
+  return this;
+};
+
+function flow(stream) {
+  var state = stream._readableState;
+  debug('flow', state.flowing);
+  while (state.flowing && stream.read() !== null) {}
+}
+
+// wrap an old-style stream as the async data source.
+// This is *not* part of the readable stream interface.
+// It is an ugly unfortunate mess of history.
+Readable.prototype.wrap = function (stream) {
+  var state = this._readableState;
+  var paused = false;
+
+  var self = this;
+  stream.on('end', function () {
+    debug('wrapped end');
+    if (state.decoder && !state.ended) {
+      var chunk = state.decoder.end();
+      if (chunk && chunk.length) self.push(chunk);
+    }
+
+    self.push(null);
+  });
+
+  stream.on('data', function (chunk) {
+    debug('wrapped data');
+    if (state.decoder) chunk = state.decoder.write(chunk);
+
+    // don't skip over falsy values in objectMode
+    if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
+
+    var ret = self.push(chunk);
+    if (!ret) {
+      paused = true;
+      stream.pause();
+    }
+  });
+
+  // proxy all the other methods.
+  // important when wrapping filters and duplexes.
+  for (var i in stream) {
+    if (this[i] === undefined && typeof stream[i] === 'function') {
+      this[i] = function (method) {
+        return function () {
+          return stream[method].apply(stream, arguments);
+        };
+      }(i);
+    }
+  }
+
+  // proxy certain important events.
+  var events = ['error', 'close', 'destroy', 'pause', 'resume'];
+  forEach(events, function (ev) {
+    stream.on(ev, self.emit.bind(self, ev));
+  });
+
+  // when we try to consume some more bytes, simply unpause the
+  // underlying stream.
+  self._read = function (n) {
+    debug('wrapped _read', n);
+    if (paused) {
+      paused = false;
+      stream.resume();
+    }
+  };
+
+  return self;
+};
+
+// exposed for testing purposes only.
+Readable._fromList = fromList;
+
+// Pluck off n bytes from an array of buffers.
+// Length is the combined lengths of all the buffers in the list.
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+function fromList(n, state) {
+  // nothing buffered
+  if (state.length === 0) return null;
+
+  var ret;
+  if (state.objectMode) ret = state.buffer.shift();else if (!n || n >= state.length) {
+    // read it all, truncate the list
+    if (state.decoder) ret = state.buffer.join('');else if (state.buffer.length === 1) ret = state.buffer.head.data;else ret = state.buffer.concat(state.length);
+    state.buffer.clear();
+  } else {
+    // read part of list
+    ret = fromListPartial(n, state.buffer, state.decoder);
+  }
+
+  return ret;
+}
+
+// Extracts only enough buffered data to satisfy the amount requested.
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+function fromListPartial(n, list, hasStrings) {
+  var ret;
+  if (n < list.head.data.length) {
+    // slice is the same for buffers and strings
+    ret = list.head.data.slice(0, n);
+    list.head.data = list.head.data.slice(n);
+  } else if (n === list.head.data.length) {
+    // first chunk is a perfect match
+    ret = list.shift();
+  } else {
+    // result spans more than one buffer
+    ret = hasStrings ? copyFromBufferString(n, list) : copyFromBuffer(n, list);
+  }
+  return ret;
+}
+
+// Copies a specified amount of characters from the list of buffered data
+// chunks.
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+function copyFromBufferString(n, list) {
+  var p = list.head;
+  var c = 1;
+  var ret = p.data;
+  n -= ret.length;
+  while (p = p.next) {
+    var str = p.data;
+    var nb = n > str.length ? str.length : n;
+    if (nb === str.length) ret += str;else ret += str.slice(0, n);
+    n -= nb;
+    if (n === 0) {
+      if (nb === str.length) {
+        ++c;
+        if (p.next) list.head = p.next;else list.head = list.tail = null;
+      } else {
+        list.head = p;
+        p.data = str.slice(nb);
+      }
+      break;
+    }
+    ++c;
+  }
+  list.length -= c;
+  return ret;
+}
+
+// Copies a specified amount of bytes from the list of buffered data chunks.
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+function copyFromBuffer(n, list) {
+  var ret = buffer.Buffer.allocUnsafe(n);
+  var p = list.head;
+  var c = 1;
+  p.data.copy(ret);
+  n -= p.data.length;
+  while (p = p.next) {
+    var buf = p.data;
+    var nb = n > buf.length ? buf.length : n;
+    buf.copy(ret, ret.length - n, 0, nb);
+    n -= nb;
+    if (n === 0) {
+      if (nb === buf.length) {
+        ++c;
+        if (p.next) list.head = p.next;else list.head = list.tail = null;
+      } else {
+        list.head = p;
+        p.data = buf.slice(nb);
+      }
+      break;
+    }
+    ++c;
+  }
+  list.length -= c;
+  return ret;
+}
+
+function endReadable(stream) {
+  var state = stream._readableState;
+
+  // If we get here before consuming all the bytes, then that is a
+  // bug in node.  Should never happen.
+  if (state.length > 0) throw new Error('"endReadable()" called on non-empty stream');
+
+  if (!state.endEmitted) {
+    state.ended = true;
+    browserExports.nextTick(endReadableNT, state, stream);
+  }
+}
+
+function endReadableNT(state, stream) {
+  // Check that we didn't get one last unshift.
+  if (!state.endEmitted && state.length === 0) {
+    state.endEmitted = true;
+    stream.readable = false;
+    stream.emit('end');
+  }
+}
+
+function forEach(xs, f) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    f(xs[i], i);
+  }
+}
+
+function indexOf(xs, x) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    if (xs[i] === x) return i;
+  }
+  return -1;
+}
+
+// A bit simpler than readable streams.
+Writable.WritableState = WritableState;
+util.inherits(Writable, eventsExports.EventEmitter);
+
+function nop() {}
+
+function WriteReq(chunk, encoding, cb) {
+  this.chunk = chunk;
+  this.encoding = encoding;
+  this.callback = cb;
+  this.next = null;
+}
+
+function WritableState(options, stream) {
+  Object.defineProperty(this, 'buffer', {
+    get: util.deprecate(function () {
+      return this.getBuffer();
+    }, '_writableState.buffer is deprecated. Use _writableState.getBuffer ' + 'instead.')
+  });
+  options = options || {};
+
+  // object stream flag to indicate whether or not this stream
+  // contains buffers or objects.
+  this.objectMode = !!options.objectMode;
+
+  if (stream instanceof Duplex) this.objectMode = this.objectMode || !!options.writableObjectMode;
+
+  // the point at which write() starts returning false
+  // Note: 0 is a valid value, means that we always return false if
+  // the entire buffer is not flushed immediately on write()
+  var hwm = options.highWaterMark;
+  var defaultHwm = this.objectMode ? 16 : 16 * 1024;
+  this.highWaterMark = hwm || hwm === 0 ? hwm : defaultHwm;
+
+  // cast to ints.
+  this.highWaterMark = ~ ~this.highWaterMark;
+
+  this.needDrain = false;
+  // at the start of calling end()
+  this.ending = false;
+  // when end() has been called, and returned
+  this.ended = false;
+  // when 'finish' is emitted
+  this.finished = false;
+
+  // should we decode strings into buffers before passing to _write?
+  // this is here so that some node-core streams can optimize string
+  // handling at a lower level.
+  var noDecode = options.decodeStrings === false;
+  this.decodeStrings = !noDecode;
+
+  // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+  this.defaultEncoding = options.defaultEncoding || 'utf8';
+
+  // not an actual buffer we keep track of, but a measurement
+  // of how much we're waiting to get pushed to some underlying
+  // socket or file.
+  this.length = 0;
+
+  // a flag to see when we're in the middle of a write.
+  this.writing = false;
+
+  // when true all writes will be buffered until .uncork() call
+  this.corked = 0;
+
+  // a flag to be able to tell if the onwrite cb is called immediately,
+  // or on a later tick.  We set this to true at first, because any
+  // actions that shouldn't happen until "later" should generally also
+  // not happen before the first write call.
+  this.sync = true;
+
+  // a flag to know if we're processing previously buffered items, which
+  // may call the _write() callback in the same tick, so that we don't
+  // end up in an overlapped onwrite situation.
+  this.bufferProcessing = false;
+
+  // the callback that's passed to _write(chunk,cb)
+  this.onwrite = function (er) {
+    onwrite(stream, er);
+  };
+
+  // the callback that the user supplies to write(chunk,encoding,cb)
+  this.writecb = null;
+
+  // the amount that is being written when _write is called.
+  this.writelen = 0;
+
+  this.bufferedRequest = null;
+  this.lastBufferedRequest = null;
+
+  // number of pending user-supplied write callbacks
+  // this must be 0 before 'finish' can be emitted
+  this.pendingcb = 0;
+
+  // emit prefinish if the only thing we're waiting for is _write cbs
+  // This is relevant for synchronous Transform streams
+  this.prefinished = false;
+
+  // True if the error was already emitted and should not be thrown again
+  this.errorEmitted = false;
+
+  // count buffered requests
+  this.bufferedRequestCount = 0;
+
+  // allocate the first CorkedRequest, there is always
+  // one allocated and free to use, and we maintain at most two
+  this.corkedRequestsFree = new CorkedRequest(this);
+}
+
+WritableState.prototype.getBuffer = function writableStateGetBuffer() {
+  var current = this.bufferedRequest;
+  var out = [];
+  while (current) {
+    out.push(current);
+    current = current.next;
+  }
+  return out;
+};
+function Writable(options) {
+
+  // Writable ctor is applied to Duplexes, though they're not
+  // instanceof Writable, they're instanceof Readable.
+  if (!(this instanceof Writable) && !(this instanceof Duplex)) return new Writable(options);
+
+  this._writableState = new WritableState(options, this);
+
+  // legacy.
+  this.writable = true;
+
+  if (options) {
+    if (typeof options.write === 'function') this._write = options.write;
+
+    if (typeof options.writev === 'function') this._writev = options.writev;
+  }
+
+  eventsExports.EventEmitter.call(this);
+}
+
+// Otherwise people can pipe Writable streams, which is just wrong.
+Writable.prototype.pipe = function () {
+  this.emit('error', new Error('Cannot pipe, not readable'));
+};
+
+function writeAfterEnd(stream, cb) {
+  var er = new Error('write after end');
+  // TODO: defer error events consistently everywhere, not just the cb
+  stream.emit('error', er);
+  browserExports.nextTick(cb, er);
+}
+
+// If we get something that is not a buffer, string, null, or undefined,
+// and we're not in objectMode, then that's an error.
+// Otherwise stream chunks are all considered to be of length=1, and the
+// watermarks determine how many objects to keep in the buffer, rather than
+// how many bytes or characters.
+function validChunk(stream, state, chunk, cb) {
+  var valid = true;
+  var er = false;
+  // Always throw error if a null is written
+  // if we are not in object mode then throw
+  // if it is not a buffer, string, or undefined.
+  if (chunk === null) {
+    er = new TypeError('May not write null values to stream');
+  } else if (!buffer.Buffer.isBuffer(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+    er = new TypeError('Invalid non-string/buffer chunk');
+  }
+  if (er) {
+    stream.emit('error', er);
+    browserExports.nextTick(cb, er);
+    valid = false;
+  }
+  return valid;
+}
+
+Writable.prototype.write = function (chunk, encoding, cb) {
+  var state = this._writableState;
+  var ret = false;
+
+  if (typeof encoding === 'function') {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (buffer.Buffer.isBuffer(chunk)) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+
+  if (typeof cb !== 'function') cb = nop;
+
+  if (state.ended) writeAfterEnd(this, cb);else if (validChunk(this, state, chunk, cb)) {
+    state.pendingcb++;
+    ret = writeOrBuffer(this, state, chunk, encoding, cb);
+  }
+
+  return ret;
+};
+
+Writable.prototype.cork = function () {
+  var state = this._writableState;
+
+  state.corked++;
+};
+
+Writable.prototype.uncork = function () {
+  var state = this._writableState;
+
+  if (state.corked) {
+    state.corked--;
+
+    if (!state.writing && !state.corked && !state.finished && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
+  }
+};
+
+Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
+  // node::ParseEncoding() requires lower case.
+  if (typeof encoding === 'string') encoding = encoding.toLowerCase();
+  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) throw new TypeError('Unknown encoding: ' + encoding);
+  this._writableState.defaultEncoding = encoding;
+  return this;
+};
+
+function decodeChunk(state, chunk, encoding) {
+  if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
+    chunk = buffer.Buffer.from(chunk, encoding);
+  }
+  return chunk;
+}
+
+// if we're already writing something, then just put this
+// in the queue, and wait our turn.  Otherwise, call _write
+// If we return false, then we need a drain event, so set that flag.
+function writeOrBuffer(stream, state, chunk, encoding, cb) {
+  chunk = decodeChunk(state, chunk, encoding);
+
+  if (buffer.Buffer.isBuffer(chunk)) encoding = 'buffer';
+  var len = state.objectMode ? 1 : chunk.length;
+
+  state.length += len;
+
+  var ret = state.length < state.highWaterMark;
+  // we must ensure that previous needDrain will not be reset to false.
+  if (!ret) state.needDrain = true;
+
+  if (state.writing || state.corked) {
+    var last = state.lastBufferedRequest;
+    state.lastBufferedRequest = new WriteReq(chunk, encoding, cb);
+    if (last) {
+      last.next = state.lastBufferedRequest;
+    } else {
+      state.bufferedRequest = state.lastBufferedRequest;
+    }
+    state.bufferedRequestCount += 1;
+  } else {
+    doWrite(stream, state, false, len, chunk, encoding, cb);
+  }
+
+  return ret;
+}
+
+function doWrite(stream, state, writev, len, chunk, encoding, cb) {
+  state.writelen = len;
+  state.writecb = cb;
+  state.writing = true;
+  state.sync = true;
+  if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
+  state.sync = false;
+}
+
+function onwriteError(stream, state, sync, er, cb) {
+  --state.pendingcb;
+  if (sync) browserExports.nextTick(cb, er);else cb(er);
+
+  stream._writableState.errorEmitted = true;
+  stream.emit('error', er);
+}
+
+function onwriteStateUpdate(state) {
+  state.writing = false;
+  state.writecb = null;
+  state.length -= state.writelen;
+  state.writelen = 0;
+}
+
+function onwrite(stream, er) {
+  var state = stream._writableState;
+  var sync = state.sync;
+  var cb = state.writecb;
+
+  onwriteStateUpdate(state);
+
+  if (er) onwriteError(stream, state, sync, er, cb);else {
+    // Check if we're actually ready to finish, but don't emit yet
+    var finished = needFinish(state);
+
+    if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
+      clearBuffer(stream, state);
+    }
+
+    if (sync) {
+      /*<replacement>*/
+        browserExports.nextTick(afterWrite, stream, state, finished, cb);
+      /*</replacement>*/
+    } else {
+        afterWrite(stream, state, finished, cb);
+      }
+  }
+}
+
+function afterWrite(stream, state, finished, cb) {
+  if (!finished) onwriteDrain(stream, state);
+  state.pendingcb--;
+  cb();
+  finishMaybe(stream, state);
+}
+
+// Must force callback to be called on nextTick, so that we don't
+// emit 'drain' before the write() consumer gets the 'false' return
+// value, and has a chance to attach a 'drain' listener.
+function onwriteDrain(stream, state) {
+  if (state.length === 0 && state.needDrain) {
+    state.needDrain = false;
+    stream.emit('drain');
+  }
+}
+
+// if there's something in the buffer waiting, then process it
+function clearBuffer(stream, state) {
+  state.bufferProcessing = true;
+  var entry = state.bufferedRequest;
+
+  if (stream._writev && entry && entry.next) {
+    // Fast case, write everything using _writev()
+    var l = state.bufferedRequestCount;
+    var buffer = new Array(l);
+    var holder = state.corkedRequestsFree;
+    holder.entry = entry;
+
+    var count = 0;
+    while (entry) {
+      buffer[count] = entry;
+      entry = entry.next;
+      count += 1;
+    }
+
+    doWrite(stream, state, true, state.length, buffer, '', holder.finish);
+
+    // doWrite is almost always async, defer these to save a bit of time
+    // as the hot path ends with doWrite
+    state.pendingcb++;
+    state.lastBufferedRequest = null;
+    if (holder.next) {
+      state.corkedRequestsFree = holder.next;
+      holder.next = null;
+    } else {
+      state.corkedRequestsFree = new CorkedRequest(state);
+    }
+  } else {
+    // Slow case, write chunks one-by-one
+    while (entry) {
+      var chunk = entry.chunk;
+      var encoding = entry.encoding;
+      var cb = entry.callback;
+      var len = state.objectMode ? 1 : chunk.length;
+
+      doWrite(stream, state, false, len, chunk, encoding, cb);
+      entry = entry.next;
+      // if we didn't call the onwrite immediately, then
+      // it means that we need to wait until it does.
+      // also, that means that the chunk and cb are currently
+      // being processed, so move the buffer counter past them.
+      if (state.writing) {
+        break;
+      }
+    }
+
+    if (entry === null) state.lastBufferedRequest = null;
+  }
+
+  state.bufferedRequestCount = 0;
+  state.bufferedRequest = entry;
+  state.bufferProcessing = false;
+}
+
+Writable.prototype._write = function (chunk, encoding, cb) {
+  cb(new Error('not implemented'));
+};
+
+Writable.prototype._writev = null;
+
+Writable.prototype.end = function (chunk, encoding, cb) {
+  var state = this._writableState;
+
+  if (typeof chunk === 'function') {
+    cb = chunk;
+    chunk = null;
+    encoding = null;
+  } else if (typeof encoding === 'function') {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding);
+
+  // .end() fully uncorks
+  if (state.corked) {
+    state.corked = 1;
+    this.uncork();
+  }
+
+  // ignore unnecessary end() calls.
+  if (!state.ending && !state.finished) endWritable(this, state, cb);
+};
+
+function needFinish(state) {
+  return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing;
+}
+
+function prefinish(stream, state) {
+  if (!state.prefinished) {
+    state.prefinished = true;
+    stream.emit('prefinish');
+  }
+}
+
+function finishMaybe(stream, state) {
+  var need = needFinish(state);
+  if (need) {
+    if (state.pendingcb === 0) {
+      prefinish(stream, state);
+      state.finished = true;
+      stream.emit('finish');
+    } else {
+      prefinish(stream, state);
+    }
+  }
+  return need;
+}
+
+function endWritable(stream, state, cb) {
+  state.ending = true;
+  finishMaybe(stream, state);
+  if (cb) {
+    if (state.finished) browserExports.nextTick(cb);else stream.once('finish', cb);
+  }
+  state.ended = true;
+  stream.writable = false;
+}
+
+// It seems a linked list but it is not
+// there will be only 2 of these for each stream
+function CorkedRequest(state) {
+  var _this = this;
+
+  this.next = null;
+  this.entry = null;
+
+  this.finish = function (err) {
+    var entry = _this.entry;
+    _this.entry = null;
+    while (entry) {
+      var cb = entry.callback;
+      state.pendingcb--;
+      cb(err);
+      entry = entry.next;
+    }
+    if (state.corkedRequestsFree) {
+      state.corkedRequestsFree.next = _this;
+    } else {
+      state.corkedRequestsFree = _this;
+    }
+  };
+}
+
+util.inherits(Duplex, Readable);
+
+var keys = Object.keys(Writable.prototype);
+for (var v = 0; v < keys.length; v++) {
+  var method = keys[v];
+  if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+}
+function Duplex(options) {
+  if (!(this instanceof Duplex)) return new Duplex(options);
+
+  Readable.call(this, options);
+  Writable.call(this, options);
+
+  if (options && options.readable === false) this.readable = false;
+
+  if (options && options.writable === false) this.writable = false;
+
+  this.allowHalfOpen = true;
+  if (options && options.allowHalfOpen === false) this.allowHalfOpen = false;
+
+  this.once('end', onend);
+}
+
+// the no-half-open enforcer
+function onend() {
+  // if we allow half-open state, or if the writable side ended,
+  // then we're ok.
+  if (this.allowHalfOpen || this._writableState.ended) return;
+
+  // no more data can be written.
+  // But allow more writes to happen in this tick.
+  browserExports.nextTick(onEndNT, this);
+}
+
+function onEndNT(self) {
+  self.end();
+}
+
+// a transform stream is a readable/writable stream where you do
+util.inherits(Transform$1, Duplex);
+
+function TransformState(stream) {
+  this.afterTransform = function (er, data) {
+    return afterTransform(stream, er, data);
+  };
+
+  this.needTransform = false;
+  this.transforming = false;
+  this.writecb = null;
+  this.writechunk = null;
+  this.writeencoding = null;
+}
+
+function afterTransform(stream, er, data) {
+  var ts = stream._transformState;
+  ts.transforming = false;
+
+  var cb = ts.writecb;
+
+  if (!cb) return stream.emit('error', new Error('no writecb in Transform class'));
+
+  ts.writechunk = null;
+  ts.writecb = null;
+
+  if (data !== null && data !== undefined) stream.push(data);
+
+  cb(er);
+
+  var rs = stream._readableState;
+  rs.reading = false;
+  if (rs.needReadable || rs.length < rs.highWaterMark) {
+    stream._read(rs.highWaterMark);
+  }
+}
+function Transform$1(options) {
+  if (!(this instanceof Transform$1)) return new Transform$1(options);
+
+  Duplex.call(this, options);
+
+  this._transformState = new TransformState(this);
+
+  // when the writable side finishes, then flush out anything remaining.
+  var stream = this;
+
+  // start out asking for a readable event once data is transformed.
+  this._readableState.needReadable = true;
+
+  // we have implemented the _read method, and done the other things
+  // that Readable wants before the first _read call, so unset the
+  // sync guard flag.
+  this._readableState.sync = false;
+
+  if (options) {
+    if (typeof options.transform === 'function') this._transform = options.transform;
+
+    if (typeof options.flush === 'function') this._flush = options.flush;
+  }
+
+  this.once('prefinish', function () {
+    if (typeof this._flush === 'function') this._flush(function (er) {
+      done(stream, er);
+    });else done(stream);
+  });
+}
+
+Transform$1.prototype.push = function (chunk, encoding) {
+  this._transformState.needTransform = false;
+  return Duplex.prototype.push.call(this, chunk, encoding);
+};
+
+// This is the part where you do stuff!
+// override this function in implementation classes.
+// 'chunk' is an input chunk.
+//
+// Call `push(newChunk)` to pass along transformed output
+// to the readable side.  You may call 'push' zero or more times.
+//
+// Call `cb(err)` when you are done with this chunk.  If you pass
+// an error, then that'll put the hurt on the whole operation.  If you
+// never call cb(), then you'll never get another chunk.
+Transform$1.prototype._transform = function (chunk, encoding, cb) {
+  throw new Error('Not implemented');
+};
+
+Transform$1.prototype._write = function (chunk, encoding, cb) {
+  var ts = this._transformState;
+  ts.writecb = cb;
+  ts.writechunk = chunk;
+  ts.writeencoding = encoding;
+  if (!ts.transforming) {
+    var rs = this._readableState;
+    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+  }
+};
+
+// Doesn't matter what the args are here.
+// _transform does all the work.
+// That we got here means that the readable side wants more data.
+Transform$1.prototype._read = function (n) {
+  var ts = this._transformState;
+
+  if (ts.writechunk !== null && ts.writecb && !ts.transforming) {
+    ts.transforming = true;
+    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+  } else {
+    // mark that we need a transform, so that any data that comes in
+    // will get processed, now that we've asked for it.
+    ts.needTransform = true;
+  }
+};
+
+function done(stream, er) {
+  if (er) return stream.emit('error', er);
+
+  // if there's nothing in the write buffer, then that means
+  // that nothing more will ever be provided
+  var ws = stream._writableState;
+  var ts = stream._transformState;
+
+  if (ws.length) throw new Error('Calling transform done when ws.length != 0');
+
+  if (ts.transforming) throw new Error('Calling transform done when still transforming');
+
+  return stream.push(null);
+}
+
+util.inherits(PassThrough, Transform$1);
+function PassThrough(options) {
+  if (!(this instanceof PassThrough)) return new PassThrough(options);
+
+  Transform$1.call(this, options);
+}
+
+PassThrough.prototype._transform = function (chunk, encoding, cb) {
+  cb(null, chunk);
+};
+
+util.inherits(Stream, eventsExports);
+Stream.Readable = Readable;
+Stream.Writable = Writable;
+Stream.Duplex = Duplex;
+Stream.Transform = Transform$1;
+Stream.PassThrough = PassThrough;
+
+// Backwards-compat with node 0.4.x
+Stream.Stream = Stream;
+
+// old-style streams.  Note that the pipe method (the only relevant
+// part of this class) is overridden in the Readable class.
+
+function Stream() {
+  eventsExports.call(this);
+}
+
+Stream.prototype.pipe = function(dest, options) {
+  var source = this;
+
+  function ondata(chunk) {
+    if (dest.writable) {
+      if (false === dest.write(chunk) && source.pause) {
+        source.pause();
+      }
+    }
+  }
+
+  source.on('data', ondata);
+
+  function ondrain() {
+    if (source.readable && source.resume) {
+      source.resume();
+    }
+  }
+
+  dest.on('drain', ondrain);
+
+  // If the 'end' option is not supplied, dest.end() will be called when
+  // source gets the 'end' or 'close' events.  Only dest.end() once.
+  if (!dest._isStdio && (!options || options.end !== false)) {
+    source.on('end', onend);
+    source.on('close', onclose);
+  }
+
+  var didOnEnd = false;
+  function onend() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    dest.end();
+  }
+
+
+  function onclose() {
+    if (didOnEnd) return;
+    didOnEnd = true;
+
+    if (typeof dest.destroy === 'function') dest.destroy();
+  }
+
+  // don't leave dangling pipes when there are errors.
+  function onerror(er) {
+    cleanup();
+    if (eventsExports.listenerCount(this, 'error') === 0) {
+      throw er; // Unhandled stream error in pipe.
+    }
+  }
+
+  source.on('error', onerror);
+  dest.on('error', onerror);
+
+  // remove all the event listeners that were added.
+  function cleanup() {
+    source.removeListener('data', ondata);
+    dest.removeListener('drain', ondrain);
+
+    source.removeListener('end', onend);
+    source.removeListener('close', onclose);
+
+    source.removeListener('error', onerror);
+    dest.removeListener('error', onerror);
+
+    source.removeListener('end', cleanup);
+    source.removeListener('close', cleanup);
+
+    dest.removeListener('close', cleanup);
+  }
+
+  source.on('end', cleanup);
+  source.on('close', cleanup);
+
+  dest.on('close', cleanup);
+
+  dest.emit('pipe', source);
+
+  // Allow for unix-like usage: A.pipe(B).pipe(C)
+  return dest;
+};
+
+const stream = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+  __proto__: null,
+  Duplex,
+  PassThrough,
+  Readable,
+  Stream,
+  Transform: Transform$1,
+  Writable,
+  default: Stream
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const require$$1 = /*@__PURE__*/getAugmentedNamespace(stream);
+
 var Buffer$2 = safeBufferExports.Buffer;
 var Transform = require$$1.Transform;
 var StringDecoder = string_decoder.StringDecoder;
@@ -9680,7 +13358,7 @@ p2pkh$1.p2pkh = void 0;
 const bcrypto$5 = crypto;
 const networks_1$5 = networks$1;
 const bscript$8 = script;
-const types_1$6 = types$5;
+const types_1$6 = types$6;
 const lazy$4 = lazy$8;
 const bs58check$2 = bs58check$3;
 const OPS$4 = bscript$8.OPS;
@@ -9814,7 +13492,7 @@ p2sh$1.p2sh = void 0;
 const bcrypto$4 = crypto;
 const networks_1$4 = networks$1;
 const bscript$7 = script;
-const types_1$5 = types$5;
+const types_1$5 = types$6;
 const lazy$3 = lazy$8;
 const bs58check$1 = bs58check$3;
 const OPS$3 = bscript$7.OPS;
@@ -10178,7 +13856,7 @@ p2wpkh$1.p2wpkh = void 0;
 const bcrypto$3 = crypto;
 const networks_1$3 = networks$1;
 const bscript$6 = script;
-const types_1$4 = types$5;
+const types_1$4 = types$6;
 const lazy$2 = lazy$8;
 const bech32_1$3 = dist;
 const OPS$2 = bscript$6.OPS;
@@ -10312,7 +13990,7 @@ p2wsh$1.p2wsh = void 0;
 const bcrypto$2 = crypto;
 const networks_1$2 = networks$1;
 const bscript$5 = script;
-const types_1$3 = types$5;
+const types_1$3 = types$6;
 const lazy$1 = lazy$8;
 const bech32_1$2 = dist;
 const OPS$1 = bscript$5.OPS;
@@ -10717,7 +14395,7 @@ bufferutils.BufferReader =
   bufferutils.readUInt64LE =
   bufferutils.varuint =
     void 0;
-const types$2 = types$5;
+const types$2 = types$6;
 const { typeforce: typeforce$2 } = types$2;
 const varuint$7 = varuintBitcoin;
 bufferutils.varuint = varuint$7;
@@ -10884,7 +14562,7 @@ bufferutils.BufferReader = BufferReader;
 	const ecc_lib_1 = ecc_lib;
 	const bcrypto = crypto;
 	const bufferutils_1 = bufferutils;
-	const types_1 = types$5;
+	const types_1 = types$6;
 	exports.LEAF_VERSION_TAPSCRIPT = 0xc0;
 	exports.MAX_TAPTREE_DEPTH = 128;
 	const isHashBranch = ht => 'left' in ht && 'right' in ht;
@@ -10990,7 +14668,7 @@ p2tr$1.p2tr = void 0;
 const buffer_1 = buffer;
 const networks_1$1 = networks$1;
 const bscript$4 = script;
-const types_1$2 = types$5;
+const types_1$2 = types$6;
 const ecc_lib_1 = ecc_lib;
 const bip341_1$2 = bip341;
 const lazy = lazy$8;
@@ -11359,7 +15037,7 @@ address.toOutputScript =
 const networks = networks$1;
 const payments$2 = payments$3;
 const bscript$3 = script;
-const types_1$1 = types$5;
+const types_1$1 = types$6;
 const bech32_1 = dist;
 const bs58check = bs58check$3;
 const FUTURE_SEGWIT_MAX_SIZE = 40;
@@ -11544,7 +15222,7 @@ const bufferutils_1$2 = bufferutils;
 const bcrypto$1 = crypto;
 const bscript$2 = script;
 const script_1 = script;
-const types$1 = types$5;
+const types$1 = types$6;
 const { typeforce: typeforce$1 } = types$1;
 function varSliceSize(someScript) {
   const length = someScript.length;
@@ -12086,7 +15764,7 @@ const bufferutils_1$1 = bufferutils;
 const bcrypto = crypto;
 const merkle_1 = merkle;
 const transaction_1$3 = transaction;
-const types = types$5;
+const types = types$6;
 const { typeforce } = types;
 const errorMerkleNoTxes = new TypeError(
   'Cannot compute merkle root for zero transactions',
@@ -14520,7 +18198,7 @@ bip371.checkTaprootInputForSigs =
   bip371.tapScriptFinalizer =
   bip371.toXOnly =
     void 0;
-const types_1 = types$5;
+const types_1 = types$6;
 const transaction_1$1 = transaction;
 const psbtutils_1$1 = psbtutils;
 const bip341_1$1 = bip341;
@@ -16646,7 +20324,7 @@ function range(n) {
 	    return ecc_lib_1.initEccLib;
 	  },
 	});
-} (src$1));
+} (src$2));
 
 async function buildPegInTx(config) {
   if (!config.fromBtcAddress || !config.sbtcWalletAddress || !config.stxAddress || !config.utxos)
@@ -16654,18 +20332,18 @@ async function buildPegInTx(config) {
   console.log("utxos --> ", config);
   let network;
   if (config.network === "testnet") {
-    network = src$1.networks.testnet;
+    network = src$2.networks.testnet;
   } else {
-    network = src$1.networks.bitcoin;
+    network = src$2.networks.bitcoin;
   }
-  const psbt = new src$1.Psbt({ network });
+  const psbt = new src$2.Psbt({ network });
   let change = 0;
   config.utxos.forEach((utxo) => {
     psbt.addInput({ hash: utxo.txid, index: utxo.vout });
     change += utxo.value;
   });
   const data = buffer.Buffer.from(config.stxAddress, "utf8");
-  const embed = src$1.payments.embed({ data: [data] });
+  const embed = src$2.payments.embed({ data: [data] });
   psbt.addOutput({ address: config.sbtcWalletAddress, value: config.pegInAmount });
   if (config.pegInChangeAmount > 0)
     psbt.addOutput({ address: config.fromBtcAddress, value: config.pegInChangeAmount });
@@ -16674,6 +20352,8 @@ async function buildPegInTx(config) {
 }
 
 /* node_modules/svelte-bootstrap-icons/lib/ArrowRepeat.svelte generated by Svelte v3.55.1 */
+
+const file$6 = "node_modules/svelte-bootstrap-icons/lib/ArrowRepeat.svelte";
 
 function create_fragment$6(ctx) {
 	let svg;
@@ -16698,15 +20378,15 @@ function create_fragment$6(ctx) {
 		svg_data = assign(svg_data, svg_levels[i]);
 	}
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			svg = svg_element("svg");
 			if (default_slot) default_slot.c();
 			path0 = svg_element("path");
 			path1 = svg_element("path");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			svg = claim_svg_element(nodes, "svg", {
 				xmlns: true,
 				width: true,
@@ -16718,32 +20398,35 @@ function create_fragment$6(ctx) {
 			var svg_nodes = children(svg);
 			if (default_slot) default_slot.l(svg_nodes);
 			path0 = claim_svg_element(svg_nodes, "path", { d: true });
-			children(path0).forEach(detach);
+			children(path0).forEach(detach_dev);
 			path1 = claim_svg_element(svg_nodes, "path", { "fill-rule": true, d: true });
-			children(path1).forEach(detach);
-			svg_nodes.forEach(detach);
+			children(path1).forEach(detach_dev);
+			svg_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(path0, "d", "M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z");
-			attr(path1, "fill-rule", "evenodd");
-			attr(path1, "d", "M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z");
+		h: function hydrate() {
+			attr_dev(path0, "d", "M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z");
+			add_location(path0, file$6, 0, 173, 173);
+			attr_dev(path1, "fill-rule", "evenodd");
+			attr_dev(path1, "d", "M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z");
+			add_location(path1, file$6, 1, 2, 387);
 			set_svg_attributes(svg, svg_data);
 			toggle_class(svg, "bi", true);
 			toggle_class(svg, "bi-arrow-repeat", true);
+			add_location(svg, file$6, 0, 0, 0);
 		},
-		m(target, anchor) {
-			insert_hydration(target, svg, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, svg, anchor);
 
 			if (default_slot) {
 				default_slot.m(svg, null);
 			}
 
-			append_hydration(svg, path0);
-			append_hydration(svg, path1);
+			append_hydration_dev(svg, path0);
+			append_hydration_dev(svg, path1);
 			current = true;
 		},
-		p(ctx, [dirty]) {
+		p: function update(ctx, [dirty]) {
 			if (default_slot) {
 				if (default_slot.p && (!current || dirty & /*$$scope*/ 2)) {
 					update_slot_base(
@@ -16771,26 +20454,37 @@ function create_fragment$6(ctx) {
 			toggle_class(svg, "bi", true);
 			toggle_class(svg, "bi-arrow-repeat", true);
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(default_slot, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(default_slot, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(svg);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(svg);
 			if (default_slot) default_slot.d(detaching);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$6.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-function instance$5($$self, $$props, $$invalidate) {
+function instance$6($$self, $$props, $$invalidate) {
 	const omit_props_names = [];
 	let $$restProps = compute_rest_props($$props, omit_props_names);
 	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('ArrowRepeat', slots, ['default']);
 
 	$$self.$$set = $$new_props => {
 		$$props = assign(assign({}, $$props), exclude_internal_props($$new_props));
@@ -16801,14 +20495,23 @@ function instance$5($$self, $$props, $$invalidate) {
 	return [$$restProps, $$scope, slots];
 }
 
-class ArrowRepeat extends SvelteComponent {
+class ArrowRepeat extends SvelteComponentDev {
 	constructor(options) {
-		super();
-		init(this, options, instance$5, create_fragment$6, safe_not_equal, {});
+		super(options);
+		init(this, options, instance$6, create_fragment$6, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "ArrowRepeat",
+			options,
+			id: create_fragment$6.name
+		});
 	}
 }
 
 /* node_modules/svelte-bootstrap-icons/lib/PatchQuestion.svelte generated by Svelte v3.55.1 */
+
+const file$5 = "node_modules/svelte-bootstrap-icons/lib/PatchQuestion.svelte";
 
 function create_fragment$5(ctx) {
 	let svg;
@@ -16834,8 +20537,8 @@ function create_fragment$5(ctx) {
 		svg_data = assign(svg_data, svg_levels[i]);
 	}
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			svg = svg_element("svg");
 			if (default_slot) default_slot.c();
 			path0 = svg_element("path");
@@ -16843,7 +20546,7 @@ function create_fragment$5(ctx) {
 			path2 = svg_element("path");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			svg = claim_svg_element(nodes, "svg", {
 				xmlns: true,
 				width: true,
@@ -16855,35 +20558,39 @@ function create_fragment$5(ctx) {
 			var svg_nodes = children(svg);
 			if (default_slot) default_slot.l(svg_nodes);
 			path0 = claim_svg_element(svg_nodes, "path", { d: true });
-			children(path0).forEach(detach);
+			children(path0).forEach(detach_dev);
 			path1 = claim_svg_element(svg_nodes, "path", { d: true });
-			children(path1).forEach(detach);
+			children(path1).forEach(detach_dev);
 			path2 = claim_svg_element(svg_nodes, "path", { d: true });
-			children(path2).forEach(detach);
-			svg_nodes.forEach(detach);
+			children(path2).forEach(detach_dev);
+			svg_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(path0, "d", "M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z");
-			attr(path1, "d", "m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z");
-			attr(path2, "d", "M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z");
+		h: function hydrate() {
+			attr_dev(path0, "d", "M8.05 9.6c.336 0 .504-.24.554-.627.04-.534.198-.815.847-1.26.673-.475 1.049-1.09 1.049-1.986 0-1.325-.92-2.227-2.262-2.227-1.02 0-1.792.492-2.1 1.29A1.71 1.71 0 0 0 6 5.48c0 .393.203.64.545.64.272 0 .455-.147.564-.51.158-.592.525-.915 1.074-.915.61 0 1.03.446 1.03 1.084 0 .563-.208.885-.822 1.325-.619.433-.926.914-.926 1.64v.111c0 .428.208.745.585.745z");
+			add_location(path0, file$5, 0, 175, 175);
+			attr_dev(path1, "d", "m10.273 2.513-.921-.944.715-.698.622.637.89-.011a2.89 2.89 0 0 1 2.924 2.924l-.01.89.636.622a2.89 2.89 0 0 1 0 4.134l-.637.622.011.89a2.89 2.89 0 0 1-2.924 2.924l-.89-.01-.622.636a2.89 2.89 0 0 1-4.134 0l-.622-.637-.89.011a2.89 2.89 0 0 1-2.924-2.924l.01-.89-.636-.622a2.89 2.89 0 0 1 0-4.134l.637-.622-.011-.89a2.89 2.89 0 0 1 2.924-2.924l.89.01.622-.636a2.89 2.89 0 0 1 4.134 0l-.715.698a1.89 1.89 0 0 0-2.704 0l-.92.944-1.32-.016a1.89 1.89 0 0 0-1.911 1.912l.016 1.318-.944.921a1.89 1.89 0 0 0 0 2.704l.944.92-.016 1.32a1.89 1.89 0 0 0 1.912 1.911l1.318-.016.921.944a1.89 1.89 0 0 0 2.704 0l.92-.944 1.32.016a1.89 1.89 0 0 0 1.911-1.912l-.016-1.318.944-.921a1.89 1.89 0 0 0 0-2.704l-.944-.92.016-1.32a1.89 1.89 0 0 0-1.912-1.911l-1.318.016z");
+			add_location(path1, file$5, 1, 2, 544);
+			attr_dev(path2, "d", "M7.001 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0z");
+			add_location(path2, file$5, 2, 2, 1302);
 			set_svg_attributes(svg, svg_data);
 			toggle_class(svg, "bi", true);
 			toggle_class(svg, "bi-patch-question", true);
+			add_location(svg, file$5, 0, 0, 0);
 		},
-		m(target, anchor) {
-			insert_hydration(target, svg, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, svg, anchor);
 
 			if (default_slot) {
 				default_slot.m(svg, null);
 			}
 
-			append_hydration(svg, path0);
-			append_hydration(svg, path1);
-			append_hydration(svg, path2);
+			append_hydration_dev(svg, path0);
+			append_hydration_dev(svg, path1);
+			append_hydration_dev(svg, path2);
 			current = true;
 		},
-		p(ctx, [dirty]) {
+		p: function update(ctx, [dirty]) {
 			if (default_slot) {
 				if (default_slot.p && (!current || dirty & /*$$scope*/ 2)) {
 					update_slot_base(
@@ -16911,26 +20618,37 @@ function create_fragment$5(ctx) {
 			toggle_class(svg, "bi", true);
 			toggle_class(svg, "bi-patch-question", true);
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(default_slot, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(default_slot, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(svg);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(svg);
 			if (default_slot) default_slot.d(detaching);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$5.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-function instance$4($$self, $$props, $$invalidate) {
+function instance$5($$self, $$props, $$invalidate) {
 	const omit_props_names = [];
 	let $$restProps = compute_rest_props($$props, omit_props_names);
 	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('PatchQuestion', slots, ['default']);
 
 	$$self.$$set = $$new_props => {
 		$$props = assign(assign({}, $$props), exclude_internal_props($$new_props));
@@ -16941,14 +20659,22 @@ function instance$4($$self, $$props, $$invalidate) {
 	return [$$restProps, $$scope, slots];
 }
 
-class PatchQuestion extends SvelteComponent {
+class PatchQuestion extends SvelteComponentDev {
 	constructor(options) {
-		super();
-		init(this, options, instance$4, create_fragment$5, safe_not_equal, {});
+		super(options);
+		init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "PatchQuestion",
+			options,
+			id: create_fragment$5.name
+		});
 	}
 }
 
 /* src/lib/components/FeeEstimation.svelte generated by Svelte v3.55.1 */
+const file$4 = "src/lib/components/FeeEstimation.svelte";
 
 function create_fragment$4(ctx) {
 	let div;
@@ -16976,8 +20702,8 @@ function create_fragment$4(ctx) {
 	let mounted;
 	let dispose;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			button = element("button");
 			t0 = text("Choose Fee Rate (sats/kb)");
@@ -16999,7 +20725,7 @@ function create_fragment$4(ctx) {
 			t9 = text(t9_value);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 
@@ -17013,7 +20739,7 @@ function create_fragment$4(ctx) {
 
 			var button_nodes = children(button);
 			t0 = claim_text(button_nodes, "Choose Fee Rate (sats/kb)");
-			button_nodes.forEach(detach);
+			button_nodes.forEach(detach_dev);
 			t1 = claim_space(div_nodes);
 			ul = claim_element(div_nodes, "UL", { class: true, "aria-labelledby": true });
 			var ul_nodes = children(ul);
@@ -17023,8 +20749,8 @@ function create_fragment$4(ctx) {
 			var a0_nodes = children(a0);
 			t2 = claim_text(a0_nodes, "Low: ");
 			t3 = claim_text(a0_nodes, t3_value);
-			a0_nodes.forEach(detach);
-			li0_nodes.forEach(detach);
+			a0_nodes.forEach(detach_dev);
+			li0_nodes.forEach(detach_dev);
 			t4 = claim_space(ul_nodes);
 			li1 = claim_element(ul_nodes, "LI", {});
 			var li1_nodes = children(li1);
@@ -17032,8 +20758,8 @@ function create_fragment$4(ctx) {
 			var a1_nodes = children(a1);
 			t5 = claim_text(a1_nodes, "Low: ");
 			t6 = claim_text(a1_nodes, t6_value);
-			a1_nodes.forEach(detach);
-			li1_nodes.forEach(detach);
+			a1_nodes.forEach(detach_dev);
+			li1_nodes.forEach(detach_dev);
 			t7 = claim_space(ul_nodes);
 			li2 = claim_element(ul_nodes, "LI", {});
 			var li2_nodes = children(li2);
@@ -17041,77 +20767,99 @@ function create_fragment$4(ctx) {
 			var a2_nodes = children(a2);
 			t8 = claim_text(a2_nodes, "Low: ");
 			t9 = claim_text(a2_nodes, t9_value);
-			a2_nodes.forEach(detach);
-			li2_nodes.forEach(detach);
-			ul_nodes.forEach(detach);
-			div_nodes.forEach(detach);
+			a2_nodes.forEach(detach_dev);
+			li2_nodes.forEach(detach_dev);
+			ul_nodes.forEach(detach_dev);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(button, "class", "btn btn-light dropdown-toggle");
-			attr(button, "type", "button");
-			attr(button, "id", "dropdownMenuButton1");
-			attr(button, "data-bs-toggle", "dropdown");
-			attr(button, "aria-expanded", "false");
-			attr(a0, "class", "dropdown-item");
-			attr(a0, "href", "/");
-			attr(a1, "class", "dropdown-item");
-			attr(a1, "href", "/");
-			attr(a2, "class", "dropdown-item");
-			attr(a2, "href", "/");
-			attr(ul, "class", "dropdown-menu");
-			attr(ul, "aria-labelledby", "dropdownMenuButton1");
-			attr(div, "class", "dropdown");
+		h: function hydrate() {
+			attr_dev(button, "class", "btn btn-light dropdown-toggle");
+			attr_dev(button, "type", "button");
+			attr_dev(button, "id", "dropdownMenuButton1");
+			attr_dev(button, "data-bs-toggle", "dropdown");
+			attr_dev(button, "aria-expanded", "false");
+			add_location(button, file$4, 20, 6, 582);
+			attr_dev(a0, "class", "dropdown-item");
+			attr_dev(a0, "href", "/");
+			add_location(a0, file$4, 24, 12, 849);
+			add_location(li0, file$4, 24, 8, 845);
+			attr_dev(a1, "class", "dropdown-item");
+			attr_dev(a1, "href", "/");
+			add_location(a1, file$4, 25, 12, 998);
+			add_location(li1, file$4, 25, 8, 994);
+			attr_dev(a2, "class", "dropdown-item");
+			attr_dev(a2, "href", "/");
+			add_location(a2, file$4, 26, 12, 1153);
+			add_location(li2, file$4, 26, 8, 1149);
+			attr_dev(ul, "class", "dropdown-menu");
+			attr_dev(ul, "aria-labelledby", "dropdownMenuButton1");
+			add_location(ul, file$4, 23, 6, 772);
+			attr_dev(div, "class", "dropdown");
+			add_location(div, file$4, 19, 4, 553);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
-			append_hydration(div, button);
-			append_hydration(button, t0);
-			append_hydration(div, t1);
-			append_hydration(div, ul);
-			append_hydration(ul, li0);
-			append_hydration(li0, a0);
-			append_hydration(a0, t2);
-			append_hydration(a0, t3);
-			append_hydration(ul, t4);
-			append_hydration(ul, li1);
-			append_hydration(li1, a1);
-			append_hydration(a1, t5);
-			append_hydration(a1, t6);
-			append_hydration(ul, t7);
-			append_hydration(ul, li2);
-			append_hydration(li2, a2);
-			append_hydration(a2, t8);
-			append_hydration(a2, t9);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, button);
+			append_hydration_dev(button, t0);
+			append_hydration_dev(div, t1);
+			append_hydration_dev(div, ul);
+			append_hydration_dev(ul, li0);
+			append_hydration_dev(li0, a0);
+			append_hydration_dev(a0, t2);
+			append_hydration_dev(a0, t3);
+			append_hydration_dev(ul, t4);
+			append_hydration_dev(ul, li1);
+			append_hydration_dev(li1, a1);
+			append_hydration_dev(a1, t5);
+			append_hydration_dev(a1, t6);
+			append_hydration_dev(ul, t7);
+			append_hydration_dev(ul, li2);
+			append_hydration_dev(li2, a2);
+			append_hydration_dev(a2, t8);
+			append_hydration_dev(a2, t9);
 
 			if (!mounted) {
 				dispose = [
-					listen(a0, "click", prevent_default(/*click_handler*/ ctx[2])),
-					listen(a1, "click", prevent_default(/*click_handler_1*/ ctx[3])),
-					listen(a2, "click", prevent_default(/*click_handler_2*/ ctx[4]))
+					listen_dev(a0, "click", prevent_default(/*click_handler*/ ctx[2]), false, true, false),
+					listen_dev(a1, "click", prevent_default(/*click_handler_1*/ ctx[3]), false, true, false),
+					listen_dev(a2, "click", prevent_default(/*click_handler_2*/ ctx[4]), false, true, false)
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
-			if (dirty & /*bcInfo*/ 1 && t3_value !== (t3_value = /*bcInfo*/ ctx[0].low_fee_per_kb + "")) set_data(t3, t3_value);
-			if (dirty & /*bcInfo*/ 1 && t6_value !== (t6_value = /*bcInfo*/ ctx[0].medium_fee_per_kb + "")) set_data(t6, t6_value);
-			if (dirty & /*bcInfo*/ 1 && t9_value !== (t9_value = /*bcInfo*/ ctx[0].high_fee_per_kb + "")) set_data(t9, t9_value);
+		p: function update(ctx, [dirty]) {
+			if (dirty & /*bcInfo*/ 1 && t3_value !== (t3_value = /*bcInfo*/ ctx[0].low_fee_per_kb + "")) set_data_dev(t3, t3_value);
+			if (dirty & /*bcInfo*/ 1 && t6_value !== (t6_value = /*bcInfo*/ ctx[0].medium_fee_per_kb + "")) set_data_dev(t6, t6_value);
+			if (dirty & /*bcInfo*/ 1 && t9_value !== (t9_value = /*bcInfo*/ ctx[0].high_fee_per_kb + "")) set_data_dev(t9, t9_value);
 		},
 		i: noop$3,
 		o: noop$3,
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 			mounted = false;
 			run_all(dispose);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$4.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-function instance$3($$self, $$props, $$invalidate) {
+function instance$4($$self, $$props, $$invalidate) {
 	let $sbtcConfig;
+	validate_store(sbtcConfig, 'sbtcConfig');
 	component_subscribe($$self, sbtcConfig, $$value => $$invalidate(5, $sbtcConfig = $$value));
+	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('FeeEstimation', slots, []);
 	const dispatch = createEventDispatcher();
 
 	let bcInfo = {
@@ -17128,16 +20876,50 @@ function instance$3($$self, $$props, $$invalidate) {
 		$$invalidate(0, bcInfo = await fetchFeeEstimate($sbtcConfig.network));
 	});
 
+	const writable_props = [];
+
+	Object.keys($$props).forEach(key => {
+		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<FeeEstimation> was created with unknown prop '${key}'`);
+	});
+
 	const click_handler = () => selectFee(bcInfo.low_fee_per_kb);
 	const click_handler_1 = () => selectFee(bcInfo.medium_fee_per_kb);
 	const click_handler_2 = () => selectFee(bcInfo.high_fee_per_kb);
+
+	$$self.$capture_state = () => ({
+		fetchFeeEstimate,
+		onMount,
+		ArrowRepeat,
+		sbtcConfig,
+		createEventDispatcher,
+		dispatch,
+		bcInfo,
+		selectFee,
+		$sbtcConfig
+	});
+
+	$$self.$inject_state = $$props => {
+		if ('bcInfo' in $$props) $$invalidate(0, bcInfo = $$props.bcInfo);
+	};
+
+	if ($$props && "$$inject" in $$props) {
+		$$self.$inject_state($$props.$$inject);
+	}
+
 	return [bcInfo, selectFee, click_handler, click_handler_1, click_handler_2];
 }
 
-class FeeEstimation extends SvelteComponent {
+class FeeEstimation extends SvelteComponentDev {
 	constructor(options) {
-		super();
-		init(this, options, instance$3, create_fragment$4, safe_not_equal, {});
+		super(options);
+		init(this, options, instance$4, create_fragment$4, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "FeeEstimation",
+			options,
+			id: create_fragment$4.name
+		});
 	}
 }
 
@@ -17145,37 +20927,52 @@ const FetchUTXOs_svelte_svelte_type_style_lang = '';
 
 /* src/lib/components/FetchUTXOs.svelte generated by Svelte v3.55.1 */
 
+const { console: console_1 } = globals$1;
+const file$3 = "src/lib/components/FetchUTXOs.svelte";
+
+// (106:4) {#if errorReason}
 function create_if_block_10(ctx) {
 	let div;
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			t = text(/*errorReason*/ ctx[6]);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 			t = claim_text(div_nodes, /*errorReason*/ ctx[6]);
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div, "class", "text-warning");
+		h: function hydrate() {
+			attr_dev(div, "class", "text-warning");
+			add_location(div, file$3, 105, 21, 3888);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
-			append_hydration(div, t);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, t);
 		},
-		p(ctx, dirty) {
-			if (dirty[0] & /*errorReason*/ 64) set_data(t, /*errorReason*/ ctx[6]);
+		p: function update(ctx, dirty) {
+			if (dirty[0] & /*errorReason*/ 64) set_data_dev(t, /*errorReason*/ ctx[6]);
 		},
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_10.name,
+		type: "if",
+		source: "(106:4) {#if errorReason}",
+		ctx
+	});
+
+	return block;
 }
 
 // (119:33) 
@@ -17183,31 +20980,42 @@ function create_if_block_9(ctx) {
 	let div;
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			t = text("No bitcoin (transactions outputs) found at this address - please use an address with some bitcoin balance.");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 			t = claim_text(div_nodes, "No bitcoin (transactions outputs) found at this address - please use an address with some bitcoin balance.");
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div, "class", "text-danger");
+		h: function hydrate() {
+			attr_dev(div, "class", "text-danger");
+			add_location(div, file$3, 119, 10, 4880);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
-			append_hydration(div, t);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, t);
 		},
 		p: noop$3,
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_9.name,
+		type: "if",
+		source: "(119:33) ",
+		ctx
+	});
+
+	return block;
 }
 
 // (114:8) {#if showUtxos}
@@ -17224,8 +21032,8 @@ function create_if_block_8(ctx) {
 	let mounted;
 	let dispose;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div2 = element("div");
 			div0 = element("div");
 			t0 = text(t0_value);
@@ -17236,54 +21044,68 @@ function create_if_block_8(ctx) {
 			t3 = text("reload");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div2 = claim_element(nodes, "DIV", { class: true });
 			var div2_nodes = children(div2);
 			div0 = claim_element(div2_nodes, "DIV", {});
 			var div0_nodes = children(div0);
 			t0 = claim_text(div0_nodes, t0_value);
 			t1 = claim_text(div0_nodes, " UTXO(s) Found");
-			div0_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
 			t2 = claim_space(div2_nodes);
 			div1 = claim_element(div2_nodes, "DIV", {});
 			var div1_nodes = children(div1);
 			a = claim_element(div1_nodes, "A", { href: true, class: true });
 			var a_nodes = children(a);
 			t3 = claim_text(a_nodes, "reload");
-			a_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
-			div2_nodes.forEach(detach);
+			a_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
+			div2_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(a, "href", "/");
-			attr(a, "class", "");
-			attr(div2, "class", "d-flex justify-content-between text-info");
+		h: function hydrate() {
+			add_location(div0, file$3, 115, 10, 4657);
+			attr_dev(a, "href", "/");
+			attr_dev(a, "class", "");
+			add_location(a, file$3, 116, 15, 4730);
+			add_location(div1, file$3, 116, 10, 4725);
+			attr_dev(div2, "class", "d-flex justify-content-between text-info");
+			add_location(div2, file$3, 114, 8, 4591);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div2, anchor);
-			append_hydration(div2, div0);
-			append_hydration(div0, t0);
-			append_hydration(div0, t1);
-			append_hydration(div2, t2);
-			append_hydration(div2, div1);
-			append_hydration(div1, a);
-			append_hydration(a, t3);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div2, anchor);
+			append_hydration_dev(div2, div0);
+			append_hydration_dev(div0, t0);
+			append_hydration_dev(div0, t1);
+			append_hydration_dev(div2, t2);
+			append_hydration_dev(div2, div1);
+			append_hydration_dev(div1, a);
+			append_hydration_dev(a, t3);
 
 			if (!mounted) {
-				dispose = listen(a, "click", prevent_default(/*click_handler*/ ctx[23]));
+				dispose = listen_dev(a, "click", prevent_default(/*click_handler*/ ctx[23]), false, true, false);
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
-			if (dirty[0] & /*$sbtcConfig*/ 32 && t0_value !== (t0_value = (/*$sbtcConfig*/ ctx[5].utxos?.length || 0) + "")) set_data(t0, t0_value);
+		p: function update(ctx, dirty) {
+			if (dirty[0] & /*$sbtcConfig*/ 32 && t0_value !== (t0_value = (/*$sbtcConfig*/ ctx[5].utxos?.length || 0) + "")) set_data_dev(t0, t0_value);
 		},
-		d(detaching) {
-			if (detaching) detach(div2);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div2);
 			mounted = false;
 			dispose();
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_8.name,
+		type: "if",
+		source: "(114:8) {#if showUtxos}",
+		ctx
+	});
+
+	return block;
 }
 
 // (124:4) {#if showStxAddress}
@@ -17304,10 +21126,14 @@ function create_if_block_7(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	patchquestion = new PatchQuestion({ props: { width: 30, height: 30 } });
 
-	return {
-		c() {
+	patchquestion = new PatchQuestion({
+			props: { width: 30, height: 30 },
+			$$inline: true
+		});
+
+	const block = {
+		c: function create() {
 			div1 = element("div");
 			div0 = element("div");
 			label = element("label");
@@ -17322,7 +21148,7 @@ function create_if_block_7(ctx) {
 			input = element("input");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div1 = claim_element(nodes, "DIV", { class: true });
 			var div1_nodes = children(div1);
 			div0 = claim_element(div1_nodes, "DIV", { class: true });
@@ -17334,7 +21160,7 @@ function create_if_block_7(ctx) {
 			t0 = claim_text(span0_nodes, "Stacks ");
 			t1 = claim_text(span0_nodes, t1_value);
 			t2 = claim_text(span0_nodes, " Address:");
-			span0_nodes.forEach(detach);
+			span0_nodes.forEach(detach_dev);
 			t3 = claim_space(label_nodes);
 
 			span1 = claim_element(label_nodes, "SPAN", {
@@ -17347,8 +21173,8 @@ function create_if_block_7(ctx) {
 
 			var span1_nodes = children(span1);
 			claim_component(patchquestion.$$.fragment, span1_nodes);
-			span1_nodes.forEach(detach);
-			label_nodes.forEach(detach);
+			span1_nodes.forEach(detach_dev);
+			label_nodes.forEach(detach_dev);
 			t4 = claim_space(div0_nodes);
 
 			input = claim_element(div0_nodes, "INPUT", {
@@ -17358,73 +21184,89 @@ function create_if_block_7(ctx) {
 				autocomplete: true
 			});
 
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(span1, "class", "pointer text-info");
-			attr(span1, "data-bs-toggle", "tooltip");
-			attr(span1, "data-bs-placement", "top");
-			attr(span1, "data-bs-custom-class", "custom-tooltip");
-			attr(span1, "title", "Your Stacks address. The equivalent amount of sBTC will be sent to this wallet");
-			attr(label, "for", "transact-path");
-			attr(label, "class", "d-flex justify-content-between svelte-3n75fs");
-			attr(input, "type", "text");
-			attr(input, "id", "from-address");
-			attr(input, "class", "form-control form-inline");
-			attr(input, "autocomplete", "off");
-			attr(div0, "class", "col");
-			attr(div1, "class", "row svelte-3n75fs");
+		h: function hydrate() {
+			add_location(span0, file$3, 127, 12, 5220);
+			attr_dev(span1, "class", "pointer text-info");
+			attr_dev(span1, "data-bs-toggle", "tooltip");
+			attr_dev(span1, "data-bs-placement", "top");
+			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
+			attr_dev(span1, "title", "Your Stacks address. The equivalent amount of sBTC will be sent to this wallet");
+			add_location(span1, file$3, 128, 12, 5283);
+			attr_dev(label, "for", "transact-path");
+			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
+			add_location(label, file$3, 126, 10, 5141);
+			attr_dev(input, "type", "text");
+			attr_dev(input, "id", "from-address");
+			attr_dev(input, "class", "form-control form-inline");
+			attr_dev(input, "autocomplete", "off");
+			add_location(input, file$3, 130, 10, 5565);
+			attr_dev(div0, "class", "col");
+			add_location(div0, file$3, 125, 8, 5113);
+			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div1, file$3, 124, 6, 5087);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div1, anchor);
-			append_hydration(div1, div0);
-			append_hydration(div0, label);
-			append_hydration(label, span0);
-			append_hydration(span0, t0);
-			append_hydration(span0, t1);
-			append_hydration(span0, t2);
-			append_hydration(label, t3);
-			append_hydration(label, span1);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div1, anchor);
+			append_hydration_dev(div1, div0);
+			append_hydration_dev(div0, label);
+			append_hydration_dev(label, span0);
+			append_hydration_dev(span0, t0);
+			append_hydration_dev(span0, t1);
+			append_hydration_dev(span0, t2);
+			append_hydration_dev(label, t3);
+			append_hydration_dev(label, span1);
 			mount_component(patchquestion, span1, null);
-			append_hydration(div0, t4);
-			append_hydration(div0, input);
+			append_hydration_dev(div0, t4);
+			append_hydration_dev(div0, input);
 			set_input_value(input, /*stxAddress*/ ctx[1]);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
-					listen(input, "input", /*input_input_handler_1*/ ctx[24]),
-					listen(input, "input", /*input_handler_1*/ ctx[25])
+					listen_dev(input, "input", /*input_input_handler_1*/ ctx[24]),
+					listen_dev(input, "input", /*input_handler_1*/ ctx[25], false, false, false)
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
-			if ((!current || dirty[0] & /*$sbtcConfig*/ 32) && t1_value !== (t1_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data(t1, t1_value);
+		p: function update(ctx, dirty) {
+			if ((!current || dirty[0] & /*$sbtcConfig*/ 32) && t1_value !== (t1_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data_dev(t1, t1_value);
 
 			if (dirty[0] & /*stxAddress*/ 2 && input.value !== /*stxAddress*/ ctx[1]) {
 				set_input_value(input, /*stxAddress*/ ctx[1]);
 			}
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(patchquestion.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(patchquestion.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div1);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div1);
 			destroy_component(patchquestion);
 			mounted = false;
 			run_all(dispose);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_7.name,
+		type: "if",
+		source: "(124:4) {#if showStxAddress}",
+		ctx
+	});
+
+	return block;
 }
 
 // (135:4) {#if showPegInAmount}
@@ -17450,10 +21292,14 @@ function create_if_block_6(ctx) {
 	let current;
 	let mounted;
 	let dispose;
-	patchquestion = new PatchQuestion({ props: { width: 30, height: 30 } });
 
-	return {
-		c() {
+	patchquestion = new PatchQuestion({
+			props: { width: 30, height: 30 },
+			$$inline: true
+		});
+
+	const block = {
+		c: function create() {
 			div4 = element("div");
 			div3 = element("div");
 			label = element("label");
@@ -17474,7 +21320,7 @@ function create_if_block_6(ctx) {
 			t6 = text("max");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div4 = claim_element(nodes, "DIV", { class: true });
 			var div4_nodes = children(div4);
 			div3 = claim_element(div4_nodes, "DIV", { class: true });
@@ -17484,7 +21330,7 @@ function create_if_block_6(ctx) {
 			span0 = claim_element(label_nodes, "SPAN", {});
 			var span0_nodes = children(span0);
 			t0 = claim_text(span0_nodes, "Peg In Amount / Sats:");
-			span0_nodes.forEach(detach);
+			span0_nodes.forEach(detach_dev);
 			t1 = claim_space(label_nodes);
 
 			span1 = claim_element(label_nodes, "SPAN", {
@@ -17497,8 +21343,8 @@ function create_if_block_6(ctx) {
 
 			var span1_nodes = children(span1);
 			claim_component(patchquestion.$$.fragment, span1_nodes);
-			span1_nodes.forEach(detach);
-			label_nodes.forEach(detach);
+			span1_nodes.forEach(detach_dev);
+			label_nodes.forEach(detach_dev);
 			t2 = claim_space(div3_nodes);
 
 			input = claim_element(div3_nodes, "INPUT", {
@@ -17514,91 +21360,111 @@ function create_if_block_6(ctx) {
 			div0 = claim_element(div2_nodes, "DIV", {});
 			var div0_nodes = children(div0);
 			t4 = claim_text(div0_nodes, "Tx fees are additional.");
-			div0_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
 			t5 = claim_space(div2_nodes);
 			div1 = claim_element(div2_nodes, "DIV", {});
 			var div1_nodes = children(div1);
 			a = claim_element(div1_nodes, "A", { href: true, class: true });
 			var a_nodes = children(a);
 			t6 = claim_text(a_nodes, "max");
-			a_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
-			div2_nodes.forEach(detach);
-			div3_nodes.forEach(detach);
-			div4_nodes.forEach(detach);
+			a_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
+			div2_nodes.forEach(detach_dev);
+			div3_nodes.forEach(detach_dev);
+			div4_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(span1, "class", "pointer text-info");
-			attr(span1, "data-bs-toggle", "tooltip");
-			attr(span1, "data-bs-placement", "top");
-			attr(span1, "data-bs-custom-class", "custom-tooltip");
-			attr(span1, "title", "The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out.");
-			attr(label, "for", "transact-path");
-			attr(label, "class", "d-flex justify-content-between svelte-3n75fs");
-			attr(input, "type", "number");
-			attr(input, "id", "from-address");
-			attr(input, "class", "form-control");
-			attr(input, "autocomplete", "off");
-			attr(a, "href", "/");
-			attr(a, "class", "");
-			attr(div2, "class", "d-flex justify-content-between text-info");
-			attr(div3, "class", "col-12");
-			attr(div4, "class", "row svelte-3n75fs");
+		h: function hydrate() {
+			add_location(span0, file$3, 138, 10, 5915);
+			attr_dev(span1, "class", "pointer text-info");
+			attr_dev(span1, "data-bs-toggle", "tooltip");
+			attr_dev(span1, "data-bs-placement", "top");
+			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
+			attr_dev(span1, "title", "The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out.");
+			add_location(span1, file$3, 139, 10, 5960);
+			attr_dev(label, "for", "transact-path");
+			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
+			add_location(label, file$3, 137, 8, 5838);
+			attr_dev(input, "type", "number");
+			attr_dev(input, "id", "from-address");
+			attr_dev(input, "class", "form-control");
+			attr_dev(input, "autocomplete", "off");
+			add_location(input, file$3, 141, 8, 6306);
+			add_location(div0, file$3, 143, 10, 6523);
+			attr_dev(a, "href", "/");
+			attr_dev(a, "class", "");
+			add_location(a, file$3, 144, 15, 6573);
+			add_location(div1, file$3, 144, 10, 6568);
+			attr_dev(div2, "class", "d-flex justify-content-between text-info");
+			add_location(div2, file$3, 142, 8, 6457);
+			attr_dev(div3, "class", "col-12");
+			add_location(div3, file$3, 136, 6, 5809);
+			attr_dev(div4, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div4, file$3, 135, 4, 5785);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div4, anchor);
-			append_hydration(div4, div3);
-			append_hydration(div3, label);
-			append_hydration(label, span0);
-			append_hydration(span0, t0);
-			append_hydration(label, t1);
-			append_hydration(label, span1);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div4, anchor);
+			append_hydration_dev(div4, div3);
+			append_hydration_dev(div3, label);
+			append_hydration_dev(label, span0);
+			append_hydration_dev(span0, t0);
+			append_hydration_dev(label, t1);
+			append_hydration_dev(label, span1);
 			mount_component(patchquestion, span1, null);
-			append_hydration(div3, t2);
-			append_hydration(div3, input);
+			append_hydration_dev(div3, t2);
+			append_hydration_dev(div3, input);
 			set_input_value(input, /*pegInAmount*/ ctx[2]);
-			append_hydration(div3, t3);
-			append_hydration(div3, div2);
-			append_hydration(div2, div0);
-			append_hydration(div0, t4);
-			append_hydration(div2, t5);
-			append_hydration(div2, div1);
-			append_hydration(div1, a);
-			append_hydration(a, t6);
+			append_hydration_dev(div3, t3);
+			append_hydration_dev(div3, div2);
+			append_hydration_dev(div2, div0);
+			append_hydration_dev(div0, t4);
+			append_hydration_dev(div2, t5);
+			append_hydration_dev(div2, div1);
+			append_hydration_dev(div1, a);
+			append_hydration_dev(a, t6);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
-					listen(input, "input", /*input_input_handler_2*/ ctx[26]),
-					listen(input, "input", /*input_handler_2*/ ctx[27]),
-					listen(a, "click", prevent_default(/*click_handler_1*/ ctx[28]))
+					listen_dev(input, "input", /*input_input_handler_2*/ ctx[26]),
+					listen_dev(input, "input", /*input_handler_2*/ ctx[27], false, false, false),
+					listen_dev(a, "click", prevent_default(/*click_handler_1*/ ctx[28]), false, true, false)
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
+		p: function update(ctx, dirty) {
 			if (dirty[0] & /*pegInAmount*/ 4 && to_number(input.value) !== /*pegInAmount*/ ctx[2]) {
 				set_input_value(input, /*pegInAmount*/ ctx[2]);
 			}
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(patchquestion.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(patchquestion.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div4);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div4);
 			destroy_component(patchquestion);
 			mounted = false;
 			run_all(dispose);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_6.name,
+		type: "if",
+		source: "(135:4) {#if showPegInAmount}",
+		ctx
+	});
+
+	return block;
 }
 
 // (150:4) {#if pegInAmount > 0}
@@ -17621,30 +21487,32 @@ function create_if_block_3(ctx) {
 		if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 	}
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div1 = element("div");
 			div0 = element("div");
 			if (if_block) if_block.c();
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div1 = claim_element(nodes, "DIV", { class: true });
 			var div1_nodes = children(div1);
 			div0 = claim_element(div1_nodes, "DIV", { class: true });
 			var div0_nodes = children(div0);
 			if (if_block) if_block.l(div0_nodes);
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div0, "class", "col-12");
-			attr(div1, "class", "row svelte-3n75fs");
+		h: function hydrate() {
+			attr_dev(div0, "class", "col-12");
+			add_location(div0, file$3, 151, 6, 6761);
+			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div1, file$3, 150, 4, 6737);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div1, anchor);
-			append_hydration(div1, div0);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div1, anchor);
+			append_hydration_dev(div1, div0);
 
 			if (~current_block_type_index) {
 				if_blocks[current_block_type_index].m(div0, null);
@@ -17652,7 +21520,7 @@ function create_if_block_3(ctx) {
 
 			current = true;
 		},
-		p(ctx, dirty) {
+		p: function update(ctx, dirty) {
 			let previous_block_index = current_block_type_index;
 			current_block_type_index = select_block_type_1(ctx);
 
@@ -17688,23 +21556,33 @@ function create_if_block_3(ctx) {
 				}
 			}
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(if_block);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(if_block);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div1);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div1);
 
 			if (~current_block_type_index) {
 				if_blocks[current_block_type_index].d();
 			}
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_3.name,
+		type: "if",
+		source: "(150:4) {#if pegInAmount > 0}",
+		ctx
+	});
+
+	return block;
 }
 
 // (161:32) 
@@ -17714,53 +21592,64 @@ function create_if_block_5(ctx) {
 	let t1;
 	let feeestimation;
 	let current;
-	feeestimation = new FeeEstimation({});
+	feeestimation = new FeeEstimation({ $$inline: true });
 	feeestimation.$on("fee_selected", /*feeSelected*/ ctx[17]);
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			label = element("label");
 			t0 = text("Select Fee Rate for Fee Calculation");
 			t1 = space();
 			create_component(feeestimation.$$.fragment);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			label = claim_element(nodes, "LABEL", { for: true, class: true });
 			var label_nodes = children(label);
 			t0 = claim_text(label_nodes, "Select Fee Rate for Fee Calculation");
-			label_nodes.forEach(detach);
+			label_nodes.forEach(detach_dev);
 			t1 = claim_space(nodes);
 			claim_component(feeestimation.$$.fragment, nodes);
 			this.h();
 		},
-		h() {
-			attr(label, "for", "transact-path");
-			attr(label, "class", "mb-3 svelte-3n75fs");
+		h: function hydrate() {
+			attr_dev(label, "for", "transact-path");
+			attr_dev(label, "class", "mb-3 s-H0dU1KLT9Z8x");
+			add_location(label, file$3, 161, 10, 7290);
 		},
-		m(target, anchor) {
-			insert_hydration(target, label, anchor);
-			append_hydration(label, t0);
-			insert_hydration(target, t1, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, label, anchor);
+			append_hydration_dev(label, t0);
+			insert_hydration_dev(target, t1, anchor);
 			mount_component(feeestimation, target, anchor);
 			current = true;
 		},
 		p: noop$3,
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(feeestimation.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(feeestimation.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(label);
-			if (detaching) detach(t1);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(label);
+			if (detaching) detach_dev(t1);
 			destroy_component(feeestimation, detaching);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_5.name,
+		type: "if",
+		source: "(161:32) ",
+		ctx
+	});
+
+	return block;
 }
 
 // (153:8) {#if showFeeCalculation}
@@ -17787,8 +21676,8 @@ function create_if_block_4(ctx) {
 	let mounted;
 	let dispose;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			label = element("label");
 			t0 = text("Tx Fee Calculation (sats/kb)");
 			t1 = space();
@@ -17810,11 +21699,11 @@ function create_if_block_4(ctx) {
 			t11 = text(/*change*/ ctx[8]);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			label = claim_element(nodes, "LABEL", { for: true, class: true });
 			var label_nodes = children(label);
 			t0 = claim_text(label_nodes, "Tx Fee Calculation (sats/kb)");
-			label_nodes.forEach(detach);
+			label_nodes.forEach(detach_dev);
 			t1 = claim_space(nodes);
 			div2 = claim_element(nodes, "DIV", { class: true });
 			var div2_nodes = children(div2);
@@ -17822,81 +21711,98 @@ function create_if_block_4(ctx) {
 			var div0_nodes = children(div0);
 			t2 = claim_text(div0_nodes, "Using fee rate: ");
 			t3 = claim_text(div0_nodes, /*feeToUse*/ ctx[3]);
-			div0_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
 			t4 = claim_space(div2_nodes);
 			div1 = claim_element(div2_nodes, "DIV", {});
 			var div1_nodes = children(div1);
 			a = claim_element(div1_nodes, "A", { href: true });
 			var a_nodes = children(a);
 			t5 = claim_text(a_nodes, "reset");
-			a_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
-			div2_nodes.forEach(detach);
+			a_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
+			div2_nodes.forEach(detach_dev);
 			t6 = claim_space(nodes);
 			div3 = claim_element(nodes, "DIV", {});
 			var div3_nodes = children(div3);
 			t7 = claim_text(div3_nodes, "Peg In: ");
 			t8 = claim_text(div3_nodes, /*pegInAmount*/ ctx[2]);
-			div3_nodes.forEach(detach);
+			div3_nodes.forEach(detach_dev);
 			t9 = claim_space(nodes);
 			div4 = claim_element(nodes, "DIV", {});
 			var div4_nodes = children(div4);
 			t10 = claim_text(div4_nodes, "Change: ");
 			t11 = claim_text(div4_nodes, /*change*/ ctx[8]);
-			div4_nodes.forEach(detach);
+			div4_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(label, "for", "transact-path");
-			attr(label, "class", "mb-3 svelte-3n75fs");
-			attr(a, "href", "/");
-			attr(div2, "class", "d-flex justify-content-between");
+		h: function hydrate() {
+			attr_dev(label, "for", "transact-path");
+			attr_dev(label, "class", "mb-3 s-H0dU1KLT9Z8x");
+			add_location(label, file$3, 153, 10, 6825);
+			add_location(div0, file$3, 155, 12, 6969);
+			attr_dev(a, "href", "/");
+			add_location(a, file$3, 156, 17, 7024);
+			add_location(div1, file$3, 156, 12, 7019);
+			attr_dev(div2, "class", "d-flex justify-content-between");
+			add_location(div2, file$3, 154, 10, 6912);
+			add_location(div3, file$3, 158, 10, 7176);
+			add_location(div4, file$3, 159, 10, 7219);
 		},
-		m(target, anchor) {
-			insert_hydration(target, label, anchor);
-			append_hydration(label, t0);
-			insert_hydration(target, t1, anchor);
-			insert_hydration(target, div2, anchor);
-			append_hydration(div2, div0);
-			append_hydration(div0, t2);
-			append_hydration(div0, t3);
-			append_hydration(div2, t4);
-			append_hydration(div2, div1);
-			append_hydration(div1, a);
-			append_hydration(a, t5);
-			insert_hydration(target, t6, anchor);
-			insert_hydration(target, div3, anchor);
-			append_hydration(div3, t7);
-			append_hydration(div3, t8);
-			insert_hydration(target, t9, anchor);
-			insert_hydration(target, div4, anchor);
-			append_hydration(div4, t10);
-			append_hydration(div4, t11);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, label, anchor);
+			append_hydration_dev(label, t0);
+			insert_hydration_dev(target, t1, anchor);
+			insert_hydration_dev(target, div2, anchor);
+			append_hydration_dev(div2, div0);
+			append_hydration_dev(div0, t2);
+			append_hydration_dev(div0, t3);
+			append_hydration_dev(div2, t4);
+			append_hydration_dev(div2, div1);
+			append_hydration_dev(div1, a);
+			append_hydration_dev(a, t5);
+			insert_hydration_dev(target, t6, anchor);
+			insert_hydration_dev(target, div3, anchor);
+			append_hydration_dev(div3, t7);
+			append_hydration_dev(div3, t8);
+			insert_hydration_dev(target, t9, anchor);
+			insert_hydration_dev(target, div4, anchor);
+			append_hydration_dev(div4, t10);
+			append_hydration_dev(div4, t11);
 
 			if (!mounted) {
-				dispose = listen(a, "click", prevent_default(/*click_handler_2*/ ctx[29]));
+				dispose = listen_dev(a, "click", prevent_default(/*click_handler_2*/ ctx[29]), false, true, false);
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
-			if (dirty[0] & /*feeToUse*/ 8) set_data(t3, /*feeToUse*/ ctx[3]);
-			if (dirty[0] & /*pegInAmount*/ 4) set_data(t8, /*pegInAmount*/ ctx[2]);
-			if (dirty[0] & /*change*/ 256) set_data(t11, /*change*/ ctx[8]);
+		p: function update(ctx, dirty) {
+			if (dirty[0] & /*feeToUse*/ 8) set_data_dev(t3, /*feeToUse*/ ctx[3]);
+			if (dirty[0] & /*pegInAmount*/ 4) set_data_dev(t8, /*pegInAmount*/ ctx[2]);
+			if (dirty[0] & /*change*/ 256) set_data_dev(t11, /*change*/ ctx[8]);
 		},
 		i: noop$3,
 		o: noop$3,
-		d(detaching) {
-			if (detaching) detach(label);
-			if (detaching) detach(t1);
-			if (detaching) detach(div2);
-			if (detaching) detach(t6);
-			if (detaching) detach(div3);
-			if (detaching) detach(t9);
-			if (detaching) detach(div4);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(label);
+			if (detaching) detach_dev(t1);
+			if (detaching) detach_dev(div2);
+			if (detaching) detach_dev(t6);
+			if (detaching) detach_dev(div3);
+			if (detaching) detach_dev(t9);
+			if (detaching) detach_dev(div4);
 			mounted = false;
 			dispose();
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_4.name,
+		type: "if",
+		source: "(153:8) {#if showFeeCalculation}",
+		ctx
+	});
+
+	return block;
 }
 
 // (168:4) {#if changeErrorReason}
@@ -17904,33 +21810,44 @@ function create_if_block_2$1(ctx) {
 	let div;
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			t = text(/*changeErrorReason*/ ctx[7]);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 			t = claim_text(div_nodes, /*changeErrorReason*/ ctx[7]);
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div, "class", "text-danger");
+		h: function hydrate() {
+			attr_dev(div, "class", "text-danger");
+			add_location(div, file$3, 167, 27, 7506);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
-			append_hydration(div, t);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, t);
 		},
-		p(ctx, dirty) {
-			if (dirty[0] & /*changeErrorReason*/ 128) set_data(t, /*changeErrorReason*/ ctx[7]);
+		p: function update(ctx, dirty) {
+			if (dirty[0] & /*changeErrorReason*/ 128) set_data_dev(t, /*changeErrorReason*/ ctx[7]);
 		},
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_2$1.name,
+		type: "if",
+		source: "(168:4) {#if changeErrorReason}",
+		ctx
+	});
+
+	return block;
 }
 
 // (169:4) {#if showButton}
@@ -17942,15 +21859,15 @@ function create_if_block_1$1(ctx) {
 	let mounted;
 	let dispose;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div1 = element("div");
 			div0 = element("div");
 			button = element("button");
 			t = text("Build Peg In Tx");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div1 = claim_element(nodes, "DIV", { class: true });
 			var div1_nodes = children(div1);
 			div0 = claim_element(div1_nodes, "DIV", { class: true });
@@ -17958,35 +21875,48 @@ function create_if_block_1$1(ctx) {
 			button = claim_element(div0_nodes, "BUTTON", { type: true, class: true });
 			var button_nodes = children(button);
 			t = claim_text(button_nodes, "Build Peg In Tx");
-			button_nodes.forEach(detach);
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			button_nodes.forEach(detach_dev);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(button, "type", "button");
-			attr(button, "class", "btn btn-primary");
-			attr(div0, "class", "col");
-			attr(div1, "class", "row svelte-3n75fs");
+		h: function hydrate() {
+			attr_dev(button, "type", "button");
+			attr_dev(button, "class", "btn btn-primary");
+			add_location(button, file$3, 171, 8, 7637);
+			attr_dev(div0, "class", "col");
+			add_location(div0, file$3, 170, 6, 7611);
+			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div1, file$3, 169, 4, 7587);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div1, anchor);
-			append_hydration(div1, div0);
-			append_hydration(div0, button);
-			append_hydration(button, t);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div1, anchor);
+			append_hydration_dev(div1, div0);
+			append_hydration_dev(div0, button);
+			append_hydration_dev(button, t);
 
 			if (!mounted) {
-				dispose = listen(button, "click", /*click_handler_3*/ ctx[30]);
+				dispose = listen_dev(button, "click", /*click_handler_3*/ ctx[30], false, false, false);
 				mounted = true;
 			}
 		},
 		p: noop$3,
-		d(detaching) {
-			if (detaching) detach(div1);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div1);
 			mounted = false;
 			dispose();
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_1$1.name,
+		type: "if",
+		source: "(169:4) {#if showButton}",
+		ctx
+	});
+
+	return block;
 }
 
 // (176:4) {#if showHexTx}
@@ -18001,8 +21931,8 @@ function create_if_block$1(ctx) {
 	let t3;
 	let textarea;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div1 = element("div");
 			div0 = element("div");
 			h2 = element("h2");
@@ -18014,7 +21944,7 @@ function create_if_block$1(ctx) {
 			textarea = element("textarea");
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div1 = claim_element(nodes, "DIV", { class: true });
 			var div1_nodes = children(div1);
 			div0 = claim_element(div1_nodes, "DIV", { class: true });
@@ -18022,47 +21952,62 @@ function create_if_block$1(ctx) {
 			h2 = claim_element(div0_nodes, "H2", {});
 			var h2_nodes = children(h2);
 			t0 = claim_text(h2_nodes, "Transaction");
-			h2_nodes.forEach(detach);
+			h2_nodes.forEach(detach_dev);
 			t1 = claim_space(div0_nodes);
 			p = claim_element(div0_nodes, "P", {});
 			var p_nodes = children(p);
 			t2 = claim_text(p_nodes, "Paste this transaction into your wallet..");
-			p_nodes.forEach(detach);
+			p_nodes.forEach(detach_dev);
 			t3 = claim_space(div0_nodes);
 			textarea = claim_element(div0_nodes, "TEXTAREA", { rows: true, style: true });
-			children(textarea).forEach(detach);
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			children(textarea).forEach(detach_dev);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(textarea, "rows", "10");
+		h: function hydrate() {
+			add_location(h2, file$3, 178, 8, 7843);
+			add_location(p, file$3, 179, 8, 7872);
+			attr_dev(textarea, "rows", "10");
 			set_style(textarea, "width", "100%");
 			textarea.readOnly = true;
 			textarea.value = /*hexTx*/ ctx[4];
-			attr(div0, "class", "col");
-			attr(div1, "class", "row svelte-3n75fs");
+			add_location(textarea, file$3, 180, 8, 7929);
+			attr_dev(div0, "class", "col");
+			add_location(div0, file$3, 177, 6, 7817);
+			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div1, file$3, 176, 4, 7793);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div1, anchor);
-			append_hydration(div1, div0);
-			append_hydration(div0, h2);
-			append_hydration(h2, t0);
-			append_hydration(div0, t1);
-			append_hydration(div0, p);
-			append_hydration(p, t2);
-			append_hydration(div0, t3);
-			append_hydration(div0, textarea);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div1, anchor);
+			append_hydration_dev(div1, div0);
+			append_hydration_dev(div0, h2);
+			append_hydration_dev(h2, t0);
+			append_hydration_dev(div0, t1);
+			append_hydration_dev(div0, p);
+			append_hydration_dev(p, t2);
+			append_hydration_dev(div0, t3);
+			append_hydration_dev(div0, textarea);
 		},
-		p(ctx, dirty) {
+		p: function update(ctx, dirty) {
 			if (dirty[0] & /*hexTx*/ 16) {
-				textarea.value = /*hexTx*/ ctx[4];
+				prop_dev(textarea, "value", /*hexTx*/ ctx[4]);
 			}
 		},
-		d(detaching) {
-			if (detaching) detach(div1);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div1);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block$1.name,
+		type: "if",
+		source: "(176:4) {#if showHexTx}",
+		ctx
+	});
+
+	return block;
 }
 
 function create_fragment$3(ctx) {
@@ -18092,7 +22037,11 @@ function create_fragment$3(ctx) {
 	let mounted;
 	let dispose;
 	let if_block0 = /*errorReason*/ ctx[6] && create_if_block_10(ctx);
-	patchquestion = new PatchQuestion({ props: { width: 30, height: 30 } });
+
+	patchquestion = new PatchQuestion({
+			props: { width: 30, height: 30 },
+			$$inline: true
+		});
 
 	function select_block_type(ctx, dirty) {
 		if (/*showUtxos*/ ctx[15]) return create_if_block_8;
@@ -18108,8 +22057,8 @@ function create_fragment$3(ctx) {
 	let if_block6 = /*showButton*/ ctx[10] && create_if_block_1$1(ctx);
 	let if_block7 = /*showHexTx*/ ctx[9] && create_if_block$1(ctx);
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div2 = element("div");
 			if (if_block0) if_block0.c();
 			t0 = space();
@@ -18141,7 +22090,7 @@ function create_fragment$3(ctx) {
 			if (if_block7) if_block7.c();
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div2 = claim_element(nodes, "DIV", { class: true });
 			var div2_nodes = children(div2);
 			if (if_block0) if_block0.l(div2_nodes);
@@ -18157,7 +22106,7 @@ function create_fragment$3(ctx) {
 			t1 = claim_text(span0_nodes, "Bitcoin ");
 			t2 = claim_text(span0_nodes, t2_value);
 			t3 = claim_text(span0_nodes, " Address:");
-			span0_nodes.forEach(detach);
+			span0_nodes.forEach(detach_dev);
 			t4 = claim_space(label_nodes);
 
 			span1 = claim_element(label_nodes, "SPAN", {
@@ -18170,8 +22119,8 @@ function create_fragment$3(ctx) {
 
 			var span1_nodes = children(span1);
 			claim_component(patchquestion.$$.fragment, span1_nodes);
-			span1_nodes.forEach(detach);
-			label_nodes.forEach(detach);
+			span1_nodes.forEach(detach_dev);
+			label_nodes.forEach(detach_dev);
 			t5 = claim_space(div0_nodes);
 
 			input = claim_element(div0_nodes, "INPUT", {
@@ -18183,8 +22132,8 @@ function create_fragment$3(ctx) {
 
 			t6 = claim_space(div0_nodes);
 			if (if_block1) if_block1.l(div0_nodes);
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			t7 = claim_space(div2_nodes);
 			if (if_block2) if_block2.l(div2_nodes);
 			t8 = claim_space(div2_nodes);
@@ -18197,68 +22146,75 @@ function create_fragment$3(ctx) {
 			if (if_block6) if_block6.l(div2_nodes);
 			t12 = claim_space(div2_nodes);
 			if (if_block7) if_block7.l(div2_nodes);
-			div2_nodes.forEach(detach);
+			div2_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(span1, "class", "pointer text-info");
-			attr(span1, "data-bs-toggle", "tooltip");
-			attr(span1, "data-bs-placement", "top");
-			attr(span1, "data-bs-custom-class", "custom-tooltip");
-			attr(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
-			attr(label, "for", "transact-path");
-			attr(label, "class", "d-flex justify-content-between svelte-3n75fs");
-			attr(input, "type", "text");
-			attr(input, "id", "from-address");
-			attr(input, "class", "form-control");
-			attr(input, "autocomplete", "off");
-			attr(div0, "class", "col");
-			attr(div1, "class", "row svelte-3n75fs");
-			attr(div2, "class", "card border p-4");
+		h: function hydrate() {
+			add_location(span0, file$3, 109, 10, 4070);
+			attr_dev(span1, "class", "pointer text-info");
+			attr_dev(span1, "data-bs-toggle", "tooltip");
+			attr_dev(span1, "data-bs-placement", "top");
+			attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
+			attr_dev(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
+			add_location(span1, file$3, 110, 10, 4132);
+			attr_dev(label, "for", "transact-path");
+			attr_dev(label, "class", "d-flex justify-content-between s-H0dU1KLT9Z8x");
+			add_location(label, file$3, 108, 8, 3993);
+			attr_dev(input, "type", "text");
+			attr_dev(input, "id", "from-address");
+			attr_dev(input, "class", "form-control");
+			attr_dev(input, "autocomplete", "off");
+			add_location(input, file$3, 112, 8, 4412);
+			attr_dev(div0, "class", "col");
+			add_location(div0, file$3, 107, 6, 3967);
+			attr_dev(div1, "class", "row s-H0dU1KLT9Z8x");
+			add_location(div1, file$3, 106, 4, 3943);
+			attr_dev(div2, "class", "card border p-4");
+			add_location(div2, file$3, 103, 4, 3834);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div2, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div2, anchor);
 			if (if_block0) if_block0.m(div2, null);
-			append_hydration(div2, t0);
-			append_hydration(div2, div1);
-			append_hydration(div1, div0);
-			append_hydration(div0, label);
-			append_hydration(label, span0);
-			append_hydration(span0, t1);
-			append_hydration(span0, t2);
-			append_hydration(span0, t3);
-			append_hydration(label, t4);
-			append_hydration(label, span1);
+			append_hydration_dev(div2, t0);
+			append_hydration_dev(div2, div1);
+			append_hydration_dev(div1, div0);
+			append_hydration_dev(div0, label);
+			append_hydration_dev(label, span0);
+			append_hydration_dev(span0, t1);
+			append_hydration_dev(span0, t2);
+			append_hydration_dev(span0, t3);
+			append_hydration_dev(label, t4);
+			append_hydration_dev(label, span1);
 			mount_component(patchquestion, span1, null);
-			append_hydration(div0, t5);
-			append_hydration(div0, input);
+			append_hydration_dev(div0, t5);
+			append_hydration_dev(div0, input);
 			set_input_value(input, /*bitcoinAddress*/ ctx[0]);
-			append_hydration(div0, t6);
+			append_hydration_dev(div0, t6);
 			if (if_block1) if_block1.m(div0, null);
-			append_hydration(div2, t7);
+			append_hydration_dev(div2, t7);
 			if (if_block2) if_block2.m(div2, null);
-			append_hydration(div2, t8);
+			append_hydration_dev(div2, t8);
 			if (if_block3) if_block3.m(div2, null);
-			append_hydration(div2, t9);
+			append_hydration_dev(div2, t9);
 			if (if_block4) if_block4.m(div2, null);
-			append_hydration(div2, t10);
+			append_hydration_dev(div2, t10);
 			if (if_block5) if_block5.m(div2, null);
-			append_hydration(div2, t11);
+			append_hydration_dev(div2, t11);
 			if (if_block6) if_block6.m(div2, null);
-			append_hydration(div2, t12);
+			append_hydration_dev(div2, t12);
 			if (if_block7) if_block7.m(div2, null);
 			current = true;
 
 			if (!mounted) {
 				dispose = [
-					listen(input, "input", /*input_input_handler*/ ctx[21]),
-					listen(input, "input", /*input_handler*/ ctx[22])
+					listen_dev(input, "input", /*input_input_handler*/ ctx[21]),
+					listen_dev(input, "input", /*input_handler*/ ctx[22], false, false, false)
 				];
 
 				mounted = true;
 			}
 		},
-		p(ctx, dirty) {
+		p: function update(ctx, dirty) {
 			if (/*errorReason*/ ctx[6]) {
 				if (if_block0) {
 					if_block0.p(ctx, dirty);
@@ -18272,7 +22228,7 @@ function create_fragment$3(ctx) {
 				if_block0 = null;
 			}
 
-			if ((!current || dirty[0] & /*$sbtcConfig*/ 32) && t2_value !== (t2_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data(t2, t2_value);
+			if ((!current || dirty[0] & /*$sbtcConfig*/ 32) && t2_value !== (t2_value = /*$sbtcConfig*/ ctx[5].network + "")) set_data_dev(t2, t2_value);
 
 			if (dirty[0] & /*bitcoinAddress*/ 1 && input.value !== /*bitcoinAddress*/ ctx[0]) {
 				set_input_value(input, /*bitcoinAddress*/ ctx[0]);
@@ -18398,7 +22354,7 @@ function create_fragment$3(ctx) {
 				if_block7 = null;
 			}
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(patchquestion.$$.fragment, local);
 			transition_in(if_block2);
@@ -18406,15 +22362,15 @@ function create_fragment$3(ctx) {
 			transition_in(if_block4);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(patchquestion.$$.fragment, local);
 			transition_out(if_block2);
 			transition_out(if_block3);
 			transition_out(if_block4);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div2);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div2);
 			if (if_block0) if_block0.d();
 			destroy_component(patchquestion);
 
@@ -18432,9 +22388,19 @@ function create_fragment$3(ctx) {
 			run_all(dispose);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$3.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-function instance$2($$self, $$props, $$invalidate) {
+function instance$3($$self, $$props, $$invalidate) {
 	let showUtxos;
 	let showStxAddress;
 	let showPegInAmount;
@@ -18443,7 +22409,10 @@ function instance$2($$self, $$props, $$invalidate) {
 	let showButton;
 	let showHexTx;
 	let $sbtcConfig;
+	validate_store(sbtcConfig, 'sbtcConfig');
 	component_subscribe($$self, sbtcConfig, $$value => $$invalidate(5, $sbtcConfig = $$value));
+	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('FetchUTXOs', slots, []);
 	let bitcoinAddress = $sbtcConfig.fromBtcAddress;
 	let stxAddress = $sbtcConfig.stxAddress;
 	let pegInAmount = $sbtcConfig.pegInAmount;
@@ -18553,6 +22522,12 @@ function instance$2($$self, $$props, $$invalidate) {
 		$$invalidate(4, hexTx = await buildPegInTx($sbtcConfig));
 	};
 
+	const writable_props = [];
+
+	Object.keys($$props).forEach(key => {
+		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<FetchUTXOs> was created with unknown prop '${key}'`);
+	});
+
 	function input_input_handler() {
 		bitcoinAddress = this.value;
 		$$invalidate(0, bitcoinAddress);
@@ -18583,6 +22558,61 @@ function instance$2($$self, $$props, $$invalidate) {
 	};
 
 	const click_handler_3 = () => buildTx();
+
+	$$self.$capture_state = () => ({
+		maxCommit,
+		fetchUTXOs,
+		fetchAddressDetails,
+		buildPegInTx,
+		decodeStacksAddress,
+		sbtcConfig,
+		FeeEstimation,
+		PatchQuestion,
+		bitcoinAddress,
+		stxAddress,
+		pegInAmount,
+		errorReason,
+		changeErrorReason,
+		changeStxAddress,
+		maxPeg,
+		feeToUse,
+		change,
+		feeSelected,
+		changePegIn,
+		configureUTXOs,
+		hexTx,
+		buildTx,
+		showHexTx,
+		showButton,
+		showFeeCalculation,
+		showEstimates,
+		showPegInAmount,
+		showStxAddress,
+		showUtxos,
+		$sbtcConfig
+	});
+
+	$$self.$inject_state = $$props => {
+		if ('bitcoinAddress' in $$props) $$invalidate(0, bitcoinAddress = $$props.bitcoinAddress);
+		if ('stxAddress' in $$props) $$invalidate(1, stxAddress = $$props.stxAddress);
+		if ('pegInAmount' in $$props) $$invalidate(2, pegInAmount = $$props.pegInAmount);
+		if ('errorReason' in $$props) $$invalidate(6, errorReason = $$props.errorReason);
+		if ('changeErrorReason' in $$props) $$invalidate(7, changeErrorReason = $$props.changeErrorReason);
+		if ('feeToUse' in $$props) $$invalidate(3, feeToUse = $$props.feeToUse);
+		if ('change' in $$props) $$invalidate(8, change = $$props.change);
+		if ('hexTx' in $$props) $$invalidate(4, hexTx = $$props.hexTx);
+		if ('showHexTx' in $$props) $$invalidate(9, showHexTx = $$props.showHexTx);
+		if ('showButton' in $$props) $$invalidate(10, showButton = $$props.showButton);
+		if ('showFeeCalculation' in $$props) $$invalidate(11, showFeeCalculation = $$props.showFeeCalculation);
+		if ('showEstimates' in $$props) $$invalidate(12, showEstimates = $$props.showEstimates);
+		if ('showPegInAmount' in $$props) $$invalidate(13, showPegInAmount = $$props.showPegInAmount);
+		if ('showStxAddress' in $$props) $$invalidate(14, showStxAddress = $$props.showStxAddress);
+		if ('showUtxos' in $$props) $$invalidate(15, showUtxos = $$props.showUtxos);
+	};
+
+	if ($$props && "$$inject" in $$props) {
+		$$self.$inject_state($$props.$$inject);
+	}
 
 	$$self.$$.update = () => {
 		if ($$self.$$.dirty[0] & /*bitcoinAddress, $sbtcConfig*/ 33) {
@@ -18649,189 +22679,307 @@ function instance$2($$self, $$props, $$invalidate) {
 	];
 }
 
-class FetchUTXOs extends SvelteComponent {
+class FetchUTXOs extends SvelteComponentDev {
 	constructor(options) {
-		super();
-		init(this, options, instance$2, create_fragment$3, safe_not_equal, {}, null, [-1, -1]);
+		super(options);
+		init(this, options, instance$3, create_fragment$3, safe_not_equal, {}, null, [-1, -1]);
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "FetchUTXOs",
+			options,
+			id: create_fragment$3.name
+		});
 	}
 }
 
 /* src/lib/components/PegIn.svelte generated by Svelte v3.55.1 */
+const file$2 = "src/lib/components/PegIn.svelte";
 
 function create_fragment$2(ctx) {
 	let div;
 	let fetchutxos;
 	let current;
-	fetchutxos = new FetchUTXOs({});
+	fetchutxos = new FetchUTXOs({ $$inline: true });
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			create_component(fetchutxos.$$.fragment);
+			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", {});
 			var div_nodes = children(div);
 			claim_component(fetchutxos.$$.fragment, div_nodes);
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
+			this.h();
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
+		h: function hydrate() {
+			add_location(div, file$2, 3, 2, 99);
+		},
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
 			mount_component(fetchutxos, div, null);
 			current = true;
 		},
 		p: noop$3,
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(fetchutxos.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(fetchutxos.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 			destroy_component(fetchutxos);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$2.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-class PegIn extends SvelteComponent {
+function instance$2($$self, $$props, $$invalidate) {
+	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('PegIn', slots, []);
+	const writable_props = [];
+
+	Object.keys($$props).forEach(key => {
+		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<PegIn> was created with unknown prop '${key}'`);
+	});
+
+	$$self.$capture_state = () => ({ FetchUTXOs });
+	return [];
+}
+
+class PegIn extends SvelteComponentDev {
 	constructor(options) {
-		super();
-		init(this, options, null, create_fragment$2, safe_not_equal, {});
+		super(options);
+		init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "PegIn",
+			options,
+			id: create_fragment$2.name
+		});
 	}
 }
 
 /* src/lib/components/PegOut.svelte generated by Svelte v3.55.1 */
+
+const file$1 = "src/lib/components/PegOut.svelte";
 
 function create_fragment$1(ctx) {
 	let div;
 	let p;
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			p = element("p");
 			t = text("Peg out coming soon !");
+			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", {});
 			var div_nodes = children(div);
 			p = claim_element(div_nodes, "P", {});
 			var p_nodes = children(p);
 			t = claim_text(p_nodes, "Peg out coming soon !");
-			p_nodes.forEach(detach);
-			div_nodes.forEach(detach);
+			p_nodes.forEach(detach_dev);
+			div_nodes.forEach(detach_dev);
+			this.h();
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
-			append_hydration(div, p);
-			append_hydration(p, t);
+		h: function hydrate() {
+			add_location(p, file$1, 4, 2, 53);
+			add_location(div, file$1, 3, 0, 45);
+		},
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
+			append_hydration_dev(div, p);
+			append_hydration_dev(p, t);
 		},
 		p: noop$3,
 		i: noop$3,
 		o: noop$3,
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment$1.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
-function instance$1($$self) {
+function instance$1($$self, $$props) {
+	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('PegOut', slots, []);
+	const writable_props = [];
+
+	Object.keys($$props).forEach(key => {
+		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<PegOut> was created with unknown prop '${key}'`);
+	});
+
 	return [];
 }
 
-class PegOut extends SvelteComponent {
+class PegOut extends SvelteComponentDev {
 	constructor(options) {
-		super();
+		super(options);
 		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "PegOut",
+			options,
+			id: create_fragment$1.name
+		});
 	}
 }
 
 const _page_svelte_svelte_type_style_lang = '';
 
 /* src/routes/+page.svelte generated by Svelte v3.55.1 */
+const file = "src/routes/+page.svelte";
 
+// (13:65) {:else}
 function create_else_block_2(ctx) {
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			t = text("Out");
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			t = claim_text(nodes, "Out");
 		},
-		m(target, anchor) {
-			insert_hydration(target, t, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, t, anchor);
 		},
-		d(detaching) {
-			if (detaching) detach(t);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(t);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_else_block_2.name,
+		type: "else",
+		source: "(13:65) {:else}",
+		ctx
+	});
+
+	return block;
 }
 
 // (13:52) {#if pegIn}
 function create_if_block_2(ctx) {
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			t = text("In");
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			t = claim_text(nodes, "In");
 		},
-		m(target, anchor) {
-			insert_hydration(target, t, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, t, anchor);
 		},
-		d(detaching) {
-			if (detaching) detach(t);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(t);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_2.name,
+		type: "if",
+		source: "(13:52) {#if pegIn}",
+		ctx
+	});
+
+	return block;
 }
 
 // (17:36) {:else}
 function create_else_block_1(ctx) {
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			t = text("sBTC for BTC");
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			t = claim_text(nodes, "sBTC for BTC");
 		},
-		m(target, anchor) {
-			insert_hydration(target, t, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, t, anchor);
 		},
-		d(detaching) {
-			if (detaching) detach(t);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(t);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_else_block_1.name,
+		type: "else",
+		source: "(17:36) {:else}",
+		ctx
+	});
+
+	return block;
 }
 
 // (17:13) {#if pegIn}
 function create_if_block_1(ctx) {
 	let t;
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			t = text("BTC for sBTC");
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			t = claim_text(nodes, "BTC for sBTC");
 		},
-		m(target, anchor) {
-			insert_hydration(target, t, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, t, anchor);
 		},
-		d(detaching) {
-			if (detaching) detach(t);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(t);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block_1.name,
+		type: "if",
+		source: "(17:13) {#if pegIn}",
+		ctx
+	});
+
+	return block;
 }
 
 // (23:4) {:else}
@@ -18839,43 +22987,54 @@ function create_else_block(ctx) {
 	let div;
 	let pegout;
 	let current;
-	pegout = new PegOut({});
+	pegout = new PegOut({ $$inline: true });
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			create_component(pegout.$$.fragment);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 			claim_component(pegout.$$.fragment, div_nodes);
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div, "class", "d-flex justify-content-center");
+		h: function hydrate() {
+			attr_dev(div, "class", "d-flex justify-content-center");
+			add_location(div, file, 23, 4, 1032);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
 			mount_component(pegout, div, null);
 			current = true;
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(pegout.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(pegout.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 			destroy_component(pegout);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_else_block.name,
+		type: "else",
+		source: "(23:4) {:else}",
+		ctx
+	});
+
+	return block;
 }
 
 // (19:4) {#if pegIn}
@@ -18883,43 +23042,54 @@ function create_if_block(ctx) {
 	let div;
 	let pegin;
 	let current;
-	pegin = new PegIn({});
+	pegin = new PegIn({ $$inline: true });
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			div = element("div");
 			create_component(pegin.$$.fragment);
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			div = claim_element(nodes, "DIV", { class: true });
 			var div_nodes = children(div);
 			claim_component(pegin.$$.fragment, div_nodes);
-			div_nodes.forEach(detach);
+			div_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(div, "class", "d-flex justify-content-center");
+		h: function hydrate() {
+			attr_dev(div, "class", "d-flex justify-content-center");
+			add_location(div, file, 19, 4, 947);
 		},
-		m(target, anchor) {
-			insert_hydration(target, div, anchor);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, div, anchor);
 			mount_component(pegin, div, null);
 			current = true;
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(pegin.$$.fragment, local);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(pegin.$$.fragment, local);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(div);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(div);
 			destroy_component(pegin);
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_if_block.name,
+		type: "if",
+		source: "(19:4) {#if pegIn}",
+		ctx
+	});
+
+	return block;
 }
 
 function create_fragment(ctx) {
@@ -18959,7 +23129,11 @@ function create_fragment(ctx) {
 
 	let current_block_type = select_block_type(ctx);
 	let if_block0 = current_block_type(ctx);
-	arrowrepeat = new ArrowRepeat({ props: { width: 40, height: 40 } });
+
+	arrowrepeat = new ArrowRepeat({
+			props: { width: 40, height: 40 },
+			$$inline: true
+		});
 
 	function select_block_type_1(ctx, dirty) {
 		if (/*pegIn*/ ctx[0]) return create_if_block_1;
@@ -18979,8 +23153,8 @@ function create_fragment(ctx) {
 	current_block_type_index = select_block_type_2(ctx);
 	if_block2 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
-	return {
-		c() {
+	const block = {
+		c: function create() {
 			section = element("section");
 			div3 = element("div");
 			div2 = element("div");
@@ -19008,7 +23182,7 @@ function create_fragment(ctx) {
 			if_block2.c();
 			this.h();
 		},
-		l(nodes) {
+		l: function claim(nodes) {
 			section = claim_element(nodes, "SECTION", { class: true });
 			var section_nodes = children(section);
 			div3 = claim_element(section_nodes, "DIV", { class: true });
@@ -19022,10 +23196,10 @@ function create_fragment(ctx) {
 			span0 = claim_element(h1_nodes, "SPAN", { class: true });
 			var span0_nodes = children(span0);
 			t0 = claim_text(span0_nodes, "sBTC");
-			span0_nodes.forEach(detach);
+			span0_nodes.forEach(detach_dev);
 			t1 = claim_text(h1_nodes, " Peg ");
 			if_block0.l(h1_nodes);
-			h1_nodes.forEach(detach);
+			h1_nodes.forEach(detach_dev);
 			t2 = claim_space(div1_nodes);
 
 			div0 = claim_element(div1_nodes, "DIV", {
@@ -19039,16 +23213,16 @@ function create_fragment(ctx) {
 			a = claim_element(div0_nodes, "A", { href: true });
 			var a_nodes = children(a);
 			claim_component(arrowrepeat.$$.fragment, a_nodes);
-			a_nodes.forEach(detach);
-			div0_nodes.forEach(detach);
-			div1_nodes.forEach(detach);
+			a_nodes.forEach(detach_dev);
+			div0_nodes.forEach(detach_dev);
+			div1_nodes.forEach(detach_dev);
 			t3 = claim_space(div2_nodes);
 			h2 = claim_element(div2_nodes, "H2", {});
 			var h2_nodes = children(h2);
 			t4 = claim_text(h2_nodes, "Swap ");
 			if_block1.l(h2_nodes);
 			t5 = claim_text(h2_nodes, " - no middle men!");
-			h2_nodes.forEach(detach);
+			h2_nodes.forEach(detach_dev);
 			t6 = claim_space(div2_nodes);
 			p = claim_element(div2_nodes, "P", {});
 			var p_nodes = children(p);
@@ -19056,63 +23230,74 @@ function create_fragment(ctx) {
 			var span1_nodes = children(span1);
 			t7 = claim_text(span1_nodes, "SBTC Wallet: ");
 			t8 = claim_text(span1_nodes, t8_value);
-			span1_nodes.forEach(detach);
-			p_nodes.forEach(detach);
+			span1_nodes.forEach(detach_dev);
+			p_nodes.forEach(detach_dev);
 			t9 = claim_space(div2_nodes);
 			if_block2.l(div2_nodes);
-			div2_nodes.forEach(detach);
-			div3_nodes.forEach(detach);
-			section_nodes.forEach(detach);
+			div2_nodes.forEach(detach_dev);
+			div3_nodes.forEach(detach_dev);
+			section_nodes.forEach(detach_dev);
 			this.h();
 		},
-		h() {
-			attr(span0, "class", "strokeme-white");
-			attr(h1, "class", "text-white svelte-1lxjbmv");
-			attr(a, "href", "/");
-			attr(div0, "data-bs-toggle", "tooltip");
-			attr(div0, "data-bs-placement", "top");
-			attr(div0, "data-bs-custom-class", "custom-tooltip");
-			attr(div0, "title", "Toggle pegging in / pegging out");
-			attr(div1, "class", "d-flex justify-content-between");
-			attr(span1, "class", "text-white");
-			attr(div2, "class", "card-width");
-			attr(div3, "class", "my-4 p-4");
-			attr(section, "class", "bg-dark svelte-1lxjbmv");
+		h: function hydrate() {
+			attr_dev(span0, "class", "strokeme-white");
+			add_location(span0, file, 12, 7, 414);
+			attr_dev(h1, "class", "text-white s-y_bCXRrkrYfP");
+			add_location(h1, file, 11, 5, 383);
+			attr_dev(a, "href", "/");
+			add_location(a, file, 14, 137, 636);
+			attr_dev(div0, "data-bs-toggle", "tooltip");
+			attr_dev(div0, "data-bs-placement", "top");
+			attr_dev(div0, "data-bs-custom-class", "custom-tooltip");
+			attr_dev(div0, "title", "Toggle pegging in / pegging out");
+			add_location(div0, file, 14, 5, 504);
+			attr_dev(div1, "class", "d-flex justify-content-between");
+			add_location(div1, file, 10, 4, 333);
+			add_location(h2, file, 16, 4, 758);
+			attr_dev(span1, "class", "text-white");
+			add_location(span1, file, 17, 7, 844);
+			add_location(p, file, 17, 4, 841);
+			attr_dev(div2, "class", "card-width");
+			add_location(div2, file, 9, 3, 304);
+			attr_dev(div3, "class", "my-4 p-4");
+			add_location(div3, file, 8, 2, 278);
+			attr_dev(section, "class", "bg-dark s-y_bCXRrkrYfP");
+			add_location(section, file, 7, 1, 250);
 		},
-		m(target, anchor) {
-			insert_hydration(target, section, anchor);
-			append_hydration(section, div3);
-			append_hydration(div3, div2);
-			append_hydration(div2, div1);
-			append_hydration(div1, h1);
-			append_hydration(h1, span0);
-			append_hydration(span0, t0);
-			append_hydration(h1, t1);
+		m: function mount(target, anchor) {
+			insert_hydration_dev(target, section, anchor);
+			append_hydration_dev(section, div3);
+			append_hydration_dev(div3, div2);
+			append_hydration_dev(div2, div1);
+			append_hydration_dev(div1, h1);
+			append_hydration_dev(h1, span0);
+			append_hydration_dev(span0, t0);
+			append_hydration_dev(h1, t1);
 			if_block0.m(h1, null);
-			append_hydration(div1, t2);
-			append_hydration(div1, div0);
-			append_hydration(div0, a);
+			append_hydration_dev(div1, t2);
+			append_hydration_dev(div1, div0);
+			append_hydration_dev(div0, a);
 			mount_component(arrowrepeat, a, null);
-			append_hydration(div2, t3);
-			append_hydration(div2, h2);
-			append_hydration(h2, t4);
+			append_hydration_dev(div2, t3);
+			append_hydration_dev(div2, h2);
+			append_hydration_dev(h2, t4);
 			if_block1.m(h2, null);
-			append_hydration(h2, t5);
-			append_hydration(div2, t6);
-			append_hydration(div2, p);
-			append_hydration(p, span1);
-			append_hydration(span1, t7);
-			append_hydration(span1, t8);
-			append_hydration(div2, t9);
+			append_hydration_dev(h2, t5);
+			append_hydration_dev(div2, t6);
+			append_hydration_dev(div2, p);
+			append_hydration_dev(p, span1);
+			append_hydration_dev(span1, t7);
+			append_hydration_dev(span1, t8);
+			append_hydration_dev(div2, t9);
 			if_blocks[current_block_type_index].m(div2, null);
 			current = true;
 
 			if (!mounted) {
-				dispose = listen(a, "click", prevent_default(/*click_handler*/ ctx[2]));
+				dispose = listen_dev(a, "click", prevent_default(/*click_handler*/ ctx[2]), false, true, false);
 				mounted = true;
 			}
 		},
-		p(ctx, [dirty]) {
+		p: function update(ctx, [dirty]) {
 			if (current_block_type !== (current_block_type = select_block_type(ctx))) {
 				if_block0.d(1);
 				if_block0 = current_block_type(ctx);
@@ -19133,7 +23318,7 @@ function create_fragment(ctx) {
 				}
 			}
 
-			if ((!current || dirty & /*$sbtcConfig*/ 2) && t8_value !== (t8_value = /*$sbtcConfig*/ ctx[1].sbtcWalletAddress + "")) set_data(t8, t8_value);
+			if ((!current || dirty & /*$sbtcConfig*/ 2) && t8_value !== (t8_value = /*$sbtcConfig*/ ctx[1].sbtcWalletAddress + "")) set_data_dev(t8, t8_value);
 			let previous_block_index = current_block_type_index;
 			current_block_type_index = select_block_type_2(ctx);
 
@@ -19156,19 +23341,19 @@ function create_fragment(ctx) {
 				if_block2.m(div2, null);
 			}
 		},
-		i(local) {
+		i: function intro(local) {
 			if (current) return;
 			transition_in(arrowrepeat.$$.fragment, local);
 			transition_in(if_block2);
 			current = true;
 		},
-		o(local) {
+		o: function outro(local) {
 			transition_out(arrowrepeat.$$.fragment, local);
 			transition_out(if_block2);
 			current = false;
 		},
-		d(detaching) {
-			if (detaching) detach(section);
+		d: function destroy(detaching) {
+			if (detaching) detach_dev(section);
 			if_block0.d();
 			destroy_component(arrowrepeat);
 			if_block1.d();
@@ -19177,20 +23362,64 @@ function create_fragment(ctx) {
 			dispose();
 		}
 	};
+
+	dispatch_dev("SvelteRegisterBlock", {
+		block,
+		id: create_fragment.name,
+		type: "component",
+		source: "",
+		ctx
+	});
+
+	return block;
 }
 
 function instance($$self, $$props, $$invalidate) {
 	let $sbtcConfig;
+	validate_store(sbtcConfig, 'sbtcConfig');
 	component_subscribe($$self, sbtcConfig, $$value => $$invalidate(1, $sbtcConfig = $$value));
+	let { $$slots: slots = {}, $$scope } = $$props;
+	validate_slots('Page', slots, []);
 	let pegIn = true;
+	const writable_props = [];
+
+	Object.keys($$props).forEach(key => {
+		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console.warn(`<Page> was created with unknown prop '${key}'`);
+	});
+
 	const click_handler = () => $$invalidate(0, pegIn = !pegIn);
+
+	$$self.$capture_state = () => ({
+		PegIn,
+		PegOut,
+		ArrowRepeat,
+		sbtcConfig,
+		pegIn,
+		$sbtcConfig
+	});
+
+	$$self.$inject_state = $$props => {
+		if ('pegIn' in $$props) $$invalidate(0, pegIn = $$props.pegIn);
+	};
+
+	if ($$props && "$$inject" in $$props) {
+		$$self.$inject_state($$props.$$inject);
+	}
+
 	return [pegIn, $sbtcConfig, click_handler];
 }
 
-class Page extends SvelteComponent {
+class Page extends SvelteComponentDev {
 	constructor(options) {
-		super();
+		super(options);
 		init(this, options, instance, create_fragment, safe_not_equal, {});
+
+		dispatch_dev("SvelteRegisterComponent", {
+			component: this,
+			tagName: "Page",
+			options,
+			id: create_fragment.name
+		});
 	}
 }
 

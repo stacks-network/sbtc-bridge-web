@@ -5,12 +5,13 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 import { _ as __vitePreload } from "../../chunks/preload-helper-6910039e.js";
-import { S as SvelteComponent, i as init, s as safe_not_equal, k as element, a as space, q as text, l as claim_element, m as children, h as detach, c as claim_space, r as claim_text, n as attr, C as src_url_equal, b as insert_hydration, D as append_hydration, E as listen, F as prevent_default, u as set_data, G as noop, H as run_all, I as component_subscribe, J as createEventDispatcher, p as set_style, w as create_component, x as claim_component, y as mount_component, f as transition_in, t as transition_out, z as destroy_component, K as setContext, L as getContext, B as writable, e as empty, d as check_outros, M as onDestroy, o as onMount, A as tick, g as group_outros, N as create_slot, O as update_slot_base, P as get_all_dirty_from_scope, Q as get_slot_changes } from "../../chunks/index-3bacd89c.js";
-import { s as sbtcConfig, f as fetchSbtcWalletAddress, c as cr, u as ur, H as Hr, m as m$2, R as Rr, _ as _$2, g as ge$2, $ as $$2, q as q$1, h as hr, U as Ur, V as Vt, p as p$2, a as $$3, b as utils, d as getPublicKey, w as wt, E as Er, e as pe, i as f$3, j as U$2, r as recoverPublicKey, S as Signature, k as d$2, l as Se, A as At, n as pe$1, o as S$1, K as K$1, t as lr, v as ut$1, x as ct$1, y as mt, z as ee$2, B as qe, C as verify, D as ar, F as Kt, G as ce$2, I as Rr$1, J as Ir, L as pr, M as pr$1, N as dr, O as xr, P as we$1, Q as V$1, T as l$3, X as X$1, W as Xt } from "../../chunks/sbtc-cae2e119.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, I as createEventDispatcher, n as element, c as space, x as text, p as claim_element, q as children, l as detach_dev, f as claim_space, y as claim_text, r as attr_dev, J as src_url_equal, w as add_location, g as insert_hydration_dev, K as append_hydration_dev, L as listen_dev, M as prevent_default, z as set_data_dev, N as noop, O as run_all, u as set_style, A as create_component, B as claim_component, C as mount_component, k as transition_in, t as transition_out, D as destroy_component, b as setContext, P as getContext, F as writable, Q as create_slot, e as empty, j as check_outros, R as onDestroy, o as onMount, E as tick, T as globals, h as group_outros, U as update_slot_base, V as get_all_dirty_from_scope, W as get_slot_changes } from "../../chunks/index-ccc0a31b.js";
+import { s as sbtcConfig, f as fetchSbtcWalletAddress, c as cr, u as ur, H as Hr, m as m$2, R as Rr, _ as _$2, g as ge$2, $ as $$2, q as q$1, h as hr, U as Ur, V as Vt, p as p$2, a as $$3, b as utils, d as getPublicKey, w as wt, E as Er, e as pe, i as f$3, j as U$2, r as recoverPublicKey, S as Signature, k as d$2, l as Se, A as At, n as pe$1, o as S$1, K as K$1, t as lr, v as ut$1, x as ct$1, y as mt, z as ee$2, B as qe, C as verify, D as ar, F as Kt, G as ce$2, I as Rr$1, J as Ir, L as pr, M as pr$1, N as dr, O as xr, P as we$1, Q as V$1, T as l$3, X as X$1, W as Xt } from "../../chunks/sbtc-8197329b.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
   const logoWhite = "" + new URL("../../assets/logo-white-68f65e57.jpeg", import.meta.url).href;
+  const file$3 = "src/lib/header/Header.svelte";
   function create_fragment$3(ctx) {
     let nav;
     let div1;
@@ -39,8 +40,8 @@ let __tla = (async () => {
     let t7;
     let mounted;
     let dispose;
-    return {
-      c() {
+    const block = {
+      c: function create() {
         nav = element("nav");
         div1 = element("div");
         a0 = element("a");
@@ -66,7 +67,7 @@ let __tla = (async () => {
         t7 = text("Mainnet");
         this.h();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         nav = claim_element(nodes, "NAV", {
           class: true
         });
@@ -85,7 +86,7 @@ let __tla = (async () => {
           src: true,
           alt: true
         });
-        a0_nodes.forEach(detach);
+        a0_nodes.forEach(detach_dev);
         t0 = claim_space(div1_nodes);
         button = claim_element(div1_nodes, "BUTTON", {
           class: true,
@@ -100,8 +101,8 @@ let __tla = (async () => {
         span0 = claim_element(button_nodes, "SPAN", {
           class: true
         });
-        children(span0).forEach(detach);
-        button_nodes.forEach(detach);
+        children(span0).forEach(detach_dev);
+        button_nodes.forEach(detach_dev);
         t1 = claim_space(div1_nodes);
         div0 = claim_element(div1_nodes, "DIV", {
           class: true,
@@ -126,7 +127,7 @@ let __tla = (async () => {
         var span1_nodes = children(span1);
         t2 = claim_text(span1_nodes, "Network: ");
         t3 = claim_text(span1_nodes, t3_value);
-        span1_nodes.forEach(detach);
+        span1_nodes.forEach(detach_dev);
         t4 = claim_space(li2_nodes);
         ul0 = claim_element(li2_nodes, "UL", {
           class: true,
@@ -141,8 +142,8 @@ let __tla = (async () => {
         });
         var a1_nodes = children(a1);
         t5 = claim_text(a1_nodes, "Testnet");
-        a1_nodes.forEach(detach);
-        li0_nodes.forEach(detach);
+        a1_nodes.forEach(detach_dev);
+        li0_nodes.forEach(detach_dev);
         t6 = claim_space(ul0_nodes);
         li1 = claim_element(ul0_nodes, "LI", {});
         var li1_nodes = children(li1);
@@ -152,98 +153,124 @@ let __tla = (async () => {
         });
         var a2_nodes = children(a2);
         t7 = claim_text(a2_nodes, "Mainnet");
-        a2_nodes.forEach(detach);
-        li1_nodes.forEach(detach);
-        ul0_nodes.forEach(detach);
-        li2_nodes.forEach(detach);
-        ul1_nodes.forEach(detach);
-        div0_nodes.forEach(detach);
-        div1_nodes.forEach(detach);
-        nav_nodes.forEach(detach);
+        a2_nodes.forEach(detach_dev);
+        li1_nodes.forEach(detach_dev);
+        ul0_nodes.forEach(detach_dev);
+        li2_nodes.forEach(detach_dev);
+        ul1_nodes.forEach(detach_dev);
+        div0_nodes.forEach(detach_dev);
+        div1_nodes.forEach(detach_dev);
+        nav_nodes.forEach(detach_dev);
         this.h();
       },
-      h() {
-        attr(img, "class", "nav-logo");
+      h: function hydrate() {
+        attr_dev(img, "class", "nav-logo");
         if (!src_url_equal(img.src, img_src_value = logoWhite))
-          attr(img, "src", img_src_value);
-        attr(img, "alt", "CityCoins Test");
-        attr(a0, "class", "navbar-brand");
-        attr(a0, "href", "/");
-        attr(span0, "class", "navbar-toggler-icon");
-        attr(button, "class", "navbar-toggler");
-        attr(button, "type", "button");
-        attr(button, "data-bs-toggle", "collapse");
-        attr(button, "data-bs-target", "#navbarNav");
-        attr(button, "aria-controls", "navbarNav");
-        attr(button, "aria-expanded", "false");
-        attr(button, "aria-label", "Toggle navigation");
-        attr(span1, "class", "nav-link dropdown-toggle text-white");
-        attr(span1, "id", "navbarDropdown");
-        attr(span1, "role", "button");
-        attr(span1, "data-bs-toggle", "dropdown");
-        attr(span1, "aria-expanded", "false");
-        attr(a1, "class", "dropdown-item");
-        attr(a1, "href", "/");
-        attr(a2, "class", "dropdown-item");
-        attr(a2, "href", "/");
-        attr(ul0, "class", "dropdown-menu dropdown-menu-start");
-        attr(ul0, "aria-labelledby", "navbarDropdown");
-        attr(li2, "class", "nav-item dropdown");
-        attr(ul1, "class", "navbar-nav");
-        attr(div0, "class", "collapse navbar-collapse");
-        attr(div0, "id", "navbarNav");
-        attr(div1, "class", "container-fluid mx-5");
-        attr(nav, "class", "navbar navbar-expand-md transparent");
+          attr_dev(img, "src", img_src_value);
+        attr_dev(img, "alt", "CityCoins Test");
+        add_location(img, file$3, 23, 4, 913);
+        attr_dev(a0, "class", "navbar-brand");
+        attr_dev(a0, "href", "/");
+        add_location(a0, file$3, 22, 5, 875);
+        attr_dev(span0, "class", "navbar-toggler-icon");
+        add_location(span0, file$3, 26, 4, 1169);
+        attr_dev(button, "class", "navbar-toggler");
+        attr_dev(button, "type", "button");
+        attr_dev(button, "data-bs-toggle", "collapse");
+        attr_dev(button, "data-bs-target", "#navbarNav");
+        attr_dev(button, "aria-controls", "navbarNav");
+        attr_dev(button, "aria-expanded", "false");
+        attr_dev(button, "aria-label", "Toggle navigation");
+        add_location(button, file$3, 25, 3, 986);
+        attr_dev(span1, "class", "nav-link dropdown-toggle text-white");
+        attr_dev(span1, "id", "navbarDropdown");
+        attr_dev(span1, "role", "button");
+        attr_dev(span1, "data-bs-toggle", "dropdown");
+        attr_dev(span1, "aria-expanded", "false");
+        add_location(span1, file$3, 31, 6, 1351);
+        attr_dev(a1, "class", "dropdown-item");
+        attr_dev(a1, "href", "/");
+        add_location(a1, file$3, 35, 12, 1634);
+        add_location(li0, file$3, 35, 8, 1630);
+        attr_dev(a2, "class", "dropdown-item");
+        attr_dev(a2, "href", "/");
+        add_location(a2, file$3, 36, 12, 1754);
+        add_location(li1, file$3, 36, 8, 1750);
+        attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
+        attr_dev(ul0, "aria-labelledby", "navbarDropdown");
+        add_location(ul0, file$3, 34, 6, 1542);
+        attr_dev(li2, "class", "nav-item dropdown");
+        add_location(li2, file$3, 30, 5, 1314);
+        attr_dev(ul1, "class", "navbar-nav");
+        add_location(ul1, file$3, 29, 4, 1285);
+        attr_dev(div0, "class", "collapse navbar-collapse");
+        attr_dev(div0, "id", "navbarNav");
+        add_location(div0, file$3, 28, 3, 1227);
+        attr_dev(div1, "class", "container-fluid mx-5");
+        add_location(div1, file$3, 21, 2, 835);
+        attr_dev(nav, "class", "navbar navbar-expand-md transparent");
+        add_location(nav, file$3, 20, 1, 783);
       },
-      m(target, anchor) {
-        insert_hydration(target, nav, anchor);
-        append_hydration(nav, div1);
-        append_hydration(div1, a0);
-        append_hydration(a0, img);
-        append_hydration(div1, t0);
-        append_hydration(div1, button);
-        append_hydration(button, span0);
-        append_hydration(div1, t1);
-        append_hydration(div1, div0);
-        append_hydration(div0, ul1);
-        append_hydration(ul1, li2);
-        append_hydration(li2, span1);
-        append_hydration(span1, t2);
-        append_hydration(span1, t3);
-        append_hydration(li2, t4);
-        append_hydration(li2, ul0);
-        append_hydration(ul0, li0);
-        append_hydration(li0, a1);
-        append_hydration(a1, t5);
-        append_hydration(ul0, t6);
-        append_hydration(ul0, li1);
-        append_hydration(li1, a2);
-        append_hydration(a2, t7);
+      m: function mount(target, anchor) {
+        insert_hydration_dev(target, nav, anchor);
+        append_hydration_dev(nav, div1);
+        append_hydration_dev(div1, a0);
+        append_hydration_dev(a0, img);
+        append_hydration_dev(div1, t0);
+        append_hydration_dev(div1, button);
+        append_hydration_dev(button, span0);
+        append_hydration_dev(div1, t1);
+        append_hydration_dev(div1, div0);
+        append_hydration_dev(div0, ul1);
+        append_hydration_dev(ul1, li2);
+        append_hydration_dev(li2, span1);
+        append_hydration_dev(span1, t2);
+        append_hydration_dev(span1, t3);
+        append_hydration_dev(li2, t4);
+        append_hydration_dev(li2, ul0);
+        append_hydration_dev(ul0, li0);
+        append_hydration_dev(li0, a1);
+        append_hydration_dev(a1, t5);
+        append_hydration_dev(ul0, t6);
+        append_hydration_dev(ul0, li1);
+        append_hydration_dev(li1, a2);
+        append_hydration_dev(a2, t7);
         if (!mounted) {
           dispose = [
-            listen(a1, "click", prevent_default(ctx[2])),
-            listen(a2, "click", prevent_default(ctx[3]))
+            listen_dev(a1, "click", prevent_default(ctx[2]), false, true, false),
+            listen_dev(a2, "click", prevent_default(ctx[3]), false, true, false)
           ];
           mounted = true;
         }
       },
-      p(ctx2, [dirty]) {
+      p: function update(ctx2, [dirty]) {
         if (dirty & 1 && t3_value !== (t3_value = ctx2[0].network + ""))
-          set_data(t3, t3_value);
+          set_data_dev(t3, t3_value);
       },
       i: noop,
       o: noop,
-      d(detaching) {
+      d: function destroy(detaching) {
         if (detaching)
-          detach(nav);
+          detach_dev(nav);
         mounted = false;
         run_all(dispose);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_fragment$3.name,
+      type: "component",
+      source: "",
+      ctx
+    });
+    return block;
   }
-  function instance$1($$self, $$props, $$invalidate) {
+  function instance$3($$self, $$props, $$invalidate) {
     let $sbtcConfig;
+    validate_store(sbtcConfig, "sbtcConfig");
     component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(0, $sbtcConfig = $$value));
+    let { $$slots: slots = {}, $$scope } = $$props;
+    validate_slots("Header", slots, []);
     const dispatch = createEventDispatcher();
     const updateNetwork = async (newNet) => {
       if (newNet === $sbtcConfig.network)
@@ -256,8 +283,22 @@ let __tla = (async () => {
       sbtcConfig.update(() => conf);
       dispatch("network_change", {});
     };
+    const writable_props = [];
+    Object.keys($$props).forEach((key) => {
+      if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
+        console.warn(`<Header> was created with unknown prop '${key}'`);
+    });
     const click_handler = () => updateNetwork("testnet");
     const click_handler_1 = () => updateNetwork("mainnet");
+    $$self.$capture_state = () => ({
+      logoWhite,
+      sbtcConfig,
+      fetchSbtcWalletAddress,
+      createEventDispatcher,
+      dispatch,
+      updateNetwork,
+      $sbtcConfig
+    });
     return [
       $sbtcConfig,
       updateNetwork,
@@ -265,16 +306,23 @@ let __tla = (async () => {
       click_handler_1
     ];
   }
-  class Header extends SvelteComponent {
+  class Header extends SvelteComponentDev {
     constructor(options) {
-      super();
-      init(this, options, instance$1, create_fragment$3, safe_not_equal, {});
+      super(options);
+      init(this, options, instance$3, create_fragment$3, safe_not_equal, {});
+      dispatch_dev("SvelteRegisterComponent", {
+        component: this,
+        tagName: "Header",
+        options,
+        id: create_fragment$3.name
+      });
     }
   }
   const stx_eco_discord = "" + new URL("../../assets/stx_eco_discord-5cc61295.png", import.meta.url).href;
   const stx_eco_twitter = "" + new URL("../../assets/stx_eco_twitter-b58c754c.png", import.meta.url).href;
   const stx_eco_github = "" + new URL("../../assets/stx_eco_github-0e15c254.png", import.meta.url).href;
   const FooterLinks_svelte_svelte_type_style_lang = "";
+  const file$2 = "src/lib/header/FooterLinks.svelte";
   function create_fragment$2(ctx) {
     let div24;
     let div3;
@@ -372,8 +420,8 @@ let __tla = (async () => {
     let a17;
     let img2;
     let img2_src_value;
-    return {
-      c() {
+    const block = {
+      c: function create() {
         div24 = element("div");
         div3 = element("div");
         p0 = element("p");
@@ -469,7 +517,7 @@ let __tla = (async () => {
         img2 = element("img");
         this.h();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         div24 = claim_element(nodes, "DIV", {
           class: true
         });
@@ -483,7 +531,7 @@ let __tla = (async () => {
         });
         var p0_nodes = children(p0);
         t0 = claim_text(p0_nodes, "Standards");
-        p0_nodes.forEach(detach);
+        p0_nodes.forEach(detach_dev);
         t1 = claim_space(div3_nodes);
         div0 = claim_element(div3_nodes, "DIV", {
           class: true
@@ -497,8 +545,8 @@ let __tla = (async () => {
         });
         var a0_nodes = children(a0);
         t2 = claim_text(a0_nodes, "SIP Process");
-        a0_nodes.forEach(detach);
-        div0_nodes.forEach(detach);
+        a0_nodes.forEach(detach_dev);
+        div0_nodes.forEach(detach_dev);
         t3 = claim_space(div3_nodes);
         div1 = claim_element(div3_nodes, "DIV", {
           class: true
@@ -512,8 +560,8 @@ let __tla = (async () => {
         });
         var a1_nodes = children(a1);
         t4 = claim_text(a1_nodes, "SIP Requests");
-        a1_nodes.forEach(detach);
-        div1_nodes.forEach(detach);
+        a1_nodes.forEach(detach_dev);
+        div1_nodes.forEach(detach_dev);
         t5 = claim_space(div3_nodes);
         div2 = claim_element(div3_nodes, "DIV", {
           class: true
@@ -527,9 +575,9 @@ let __tla = (async () => {
         });
         var a2_nodes = children(a2);
         t6 = claim_text(a2_nodes, "SIP News");
-        a2_nodes.forEach(detach);
-        div2_nodes.forEach(detach);
-        div3_nodes.forEach(detach);
+        a2_nodes.forEach(detach_dev);
+        div2_nodes.forEach(detach_dev);
+        div3_nodes.forEach(detach_dev);
         t7 = claim_space(div24_nodes);
         div7 = claim_element(div24_nodes, "DIV", {
           class: true
@@ -540,7 +588,7 @@ let __tla = (async () => {
         });
         var p1_nodes = children(p1);
         t8 = claim_text(p1_nodes, "Code");
-        p1_nodes.forEach(detach);
+        p1_nodes.forEach(detach_dev);
         t9 = claim_space(div7_nodes);
         div4 = claim_element(div7_nodes, "DIV", {
           class: true
@@ -554,8 +602,8 @@ let __tla = (async () => {
         });
         var a3_nodes = children(a3);
         t10 = claim_text(a3_nodes, "Clarity Lab");
-        a3_nodes.forEach(detach);
-        div4_nodes.forEach(detach);
+        a3_nodes.forEach(detach_dev);
+        div4_nodes.forEach(detach_dev);
         t11 = claim_space(div7_nodes);
         div5 = claim_element(div7_nodes, "DIV", {
           class: true
@@ -569,8 +617,8 @@ let __tla = (async () => {
         });
         var a4_nodes = children(a4);
         t12 = claim_text(a4_nodes, "Raise Issues");
-        a4_nodes.forEach(detach);
-        div5_nodes.forEach(detach);
+        a4_nodes.forEach(detach_dev);
+        div5_nodes.forEach(detach_dev);
         t13 = claim_space(div7_nodes);
         div6 = claim_element(div7_nodes, "DIV", {
           class: true
@@ -584,9 +632,9 @@ let __tla = (async () => {
         });
         var a5_nodes = children(a5);
         t14 = claim_text(a5_nodes, "Ecosystem DAO");
-        a5_nodes.forEach(detach);
-        div6_nodes.forEach(detach);
-        div7_nodes.forEach(detach);
+        a5_nodes.forEach(detach_dev);
+        div6_nodes.forEach(detach_dev);
+        div7_nodes.forEach(detach_dev);
         t15 = claim_space(div24_nodes);
         div11 = claim_element(div24_nodes, "DIV", {
           class: true
@@ -597,7 +645,7 @@ let __tla = (async () => {
         });
         var p2_nodes = children(p2);
         t16 = claim_text(p2_nodes, "Videos");
-        p2_nodes.forEach(detach);
+        p2_nodes.forEach(detach_dev);
         t17 = claim_space(div11_nodes);
         div8 = claim_element(div11_nodes, "DIV", {
           class: true
@@ -611,8 +659,8 @@ let __tla = (async () => {
         });
         var a6_nodes = children(a6);
         t18 = claim_text(a6_nodes, "Stacks");
-        a6_nodes.forEach(detach);
-        div8_nodes.forEach(detach);
+        a6_nodes.forEach(detach_dev);
+        div8_nodes.forEach(detach_dev);
         t19 = claim_space(div11_nodes);
         div9 = claim_element(div11_nodes, "DIV", {
           class: true
@@ -626,8 +674,8 @@ let __tla = (async () => {
         });
         var a7_nodes = children(a7);
         t20 = claim_text(a7_nodes, "Clarity");
-        a7_nodes.forEach(detach);
-        div9_nodes.forEach(detach);
+        a7_nodes.forEach(detach_dev);
+        div9_nodes.forEach(detach_dev);
         t21 = claim_space(div11_nodes);
         div10 = claim_element(div11_nodes, "DIV", {
           class: true
@@ -641,9 +689,9 @@ let __tla = (async () => {
         });
         var a8_nodes = children(a8);
         t22 = claim_text(a8_nodes, "PoX");
-        a8_nodes.forEach(detach);
-        div10_nodes.forEach(detach);
-        div11_nodes.forEach(detach);
+        a8_nodes.forEach(detach_dev);
+        div10_nodes.forEach(detach_dev);
+        div11_nodes.forEach(detach_dev);
         t23 = claim_space(div24_nodes);
         div15 = claim_element(div24_nodes, "DIV", {
           class: true
@@ -654,7 +702,7 @@ let __tla = (async () => {
         });
         var p3_nodes = children(p3);
         t24 = claim_text(p3_nodes, "Contact");
-        p3_nodes.forEach(detach);
+        p3_nodes.forEach(detach_dev);
         t25 = claim_space(div15_nodes);
         div12 = claim_element(div15_nodes, "DIV", {
           class: true
@@ -668,8 +716,8 @@ let __tla = (async () => {
         });
         var a9_nodes = children(a9);
         t26 = claim_text(a9_nodes, "Discord");
-        a9_nodes.forEach(detach);
-        div12_nodes.forEach(detach);
+        a9_nodes.forEach(detach_dev);
+        div12_nodes.forEach(detach_dev);
         t27 = claim_space(div15_nodes);
         div13 = claim_element(div15_nodes, "DIV", {
           class: true
@@ -683,8 +731,8 @@ let __tla = (async () => {
         });
         var a10_nodes = children(a10);
         t28 = claim_text(a10_nodes, "Enquiries");
-        a10_nodes.forEach(detach);
-        div13_nodes.forEach(detach);
+        a10_nodes.forEach(detach_dev);
+        div13_nodes.forEach(detach_dev);
         t29 = claim_space(div15_nodes);
         div14 = claim_element(div15_nodes, "DIV", {
           class: true
@@ -698,9 +746,9 @@ let __tla = (async () => {
         });
         var a11_nodes = children(a11);
         t30 = claim_text(a11_nodes, "Twitter");
-        a11_nodes.forEach(detach);
-        div14_nodes.forEach(detach);
-        div15_nodes.forEach(detach);
+        a11_nodes.forEach(detach_dev);
+        div14_nodes.forEach(detach_dev);
+        div15_nodes.forEach(detach_dev);
         t31 = claim_space(div24_nodes);
         div19 = claim_element(div24_nodes, "DIV", {
           class: true
@@ -711,7 +759,7 @@ let __tla = (async () => {
         });
         var p4_nodes = children(p4);
         t32 = claim_text(p4_nodes, "Partners");
-        p4_nodes.forEach(detach);
+        p4_nodes.forEach(detach_dev);
         t33 = claim_space(div19_nodes);
         div16 = claim_element(div19_nodes, "DIV", {
           class: true
@@ -725,8 +773,8 @@ let __tla = (async () => {
         });
         var a12_nodes = children(a12);
         t34 = claim_text(a12_nodes, "Foundation");
-        a12_nodes.forEach(detach);
-        div16_nodes.forEach(detach);
+        a12_nodes.forEach(detach_dev);
+        div16_nodes.forEach(detach_dev);
         t35 = claim_space(div19_nodes);
         div17 = claim_element(div19_nodes, "DIV", {
           class: true
@@ -740,8 +788,8 @@ let __tla = (async () => {
         });
         var a13_nodes = children(a13);
         t36 = claim_text(a13_nodes, "Hiro Wallet");
-        a13_nodes.forEach(detach);
-        div17_nodes.forEach(detach);
+        a13_nodes.forEach(detach_dev);
+        div17_nodes.forEach(detach_dev);
         t37 = claim_space(div19_nodes);
         div18 = claim_element(div19_nodes, "DIV", {
           class: true
@@ -755,9 +803,9 @@ let __tla = (async () => {
         });
         var a14_nodes = children(a14);
         t38 = claim_text(a14_nodes, "Trust Machines");
-        a14_nodes.forEach(detach);
-        div18_nodes.forEach(detach);
-        div19_nodes.forEach(detach);
+        a14_nodes.forEach(detach_dev);
+        div18_nodes.forEach(detach_dev);
+        div19_nodes.forEach(detach_dev);
         t39 = claim_space(div24_nodes);
         div23 = claim_element(div24_nodes, "DIV", {
           class: true
@@ -784,7 +832,7 @@ let __tla = (async () => {
           width: true,
           height: true
         });
-        a15_nodes.forEach(detach);
+        a15_nodes.forEach(detach_dev);
         t40 = claim_space(div20_nodes);
         a16 = claim_element(div20_nodes, "A", {
           class: true,
@@ -799,8 +847,8 @@ let __tla = (async () => {
           width: true,
           height: true
         });
-        a16_nodes.forEach(detach);
-        div20_nodes.forEach(detach);
+        a16_nodes.forEach(detach_dev);
+        div20_nodes.forEach(detach_dev);
         t41 = claim_space(div22_nodes);
         div21 = claim_element(div22_nodes, "DIV", {
           style: true
@@ -819,246 +867,341 @@ let __tla = (async () => {
           width: true,
           height: true
         });
-        a17_nodes.forEach(detach);
-        div21_nodes.forEach(detach);
-        div22_nodes.forEach(detach);
-        div23_nodes.forEach(detach);
-        div24_nodes.forEach(detach);
+        a17_nodes.forEach(detach_dev);
+        div21_nodes.forEach(detach_dev);
+        div22_nodes.forEach(detach_dev);
+        div23_nodes.forEach(detach_dev);
+        div24_nodes.forEach(detach_dev);
         this.h();
       },
-      h() {
-        attr(p0, "class", "svelte-mmff7o");
-        attr(a0, "href", "https://github.com/stacksgov/sips/blob/main/sips/sip-000/sip-000-stacks-improvement-proposal-process.md");
-        attr(a0, "target", "_blank");
-        attr(a0, "rel", "noreferrer");
-        attr(a0, "class", "svelte-mmff7o");
-        attr(div0, "class", "demo-div");
-        attr(a1, "href", "https://github.com/stacksgov/sips/pulls");
-        attr(a1, "target", "_blank");
-        attr(a1, "rel", "noreferrer");
-        attr(a1, "class", "svelte-mmff7o");
-        attr(div1, "class", "demo-div");
-        attr(a2, "href", "https://discord.com/channels/621759717756370964/1001471092302544936");
-        attr(a2, "target", "_blank");
-        attr(a2, "rel", "noreferrer");
-        attr(a2, "class", "svelte-mmff7o");
-        attr(div2, "class", "demo-div");
-        attr(div3, "class", "col-md-2 col-sm-6 hideme");
-        attr(p1, "class", "svelte-mmff7o");
-        attr(a3, "href", "https://github.com/Clarity-Innovation-Lab");
-        attr(a3, "target", "_blank");
-        attr(a3, "rel", "noreferrer");
-        attr(a3, "class", "svelte-mmff7o");
-        attr(div4, "class", "demo-div");
-        attr(a4, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao/issues");
-        attr(a4, "target", "_blank");
-        attr(a4, "rel", "noreferrer");
-        attr(a4, "class", "svelte-mmff7o");
-        attr(div5, "class", "demo-div");
-        attr(a5, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao");
-        attr(a5, "target", "_blank");
-        attr(a5, "rel", "noreferrer");
-        attr(a5, "class", "svelte-mmff7o");
-        attr(div6, "class", "demo-div");
-        attr(div7, "class", "col-md-2 col-sm-6 hideme");
-        attr(p2, "class", "svelte-mmff7o");
-        attr(a6, "target", "_blank");
-        attr(a6, "href", "https://www.youtube.com/watch?v=fbq6L3PrKWE");
-        attr(a6, "rel", "noreferrer");
-        attr(a6, "class", "svelte-mmff7o");
-        attr(div8, "class", "demo-div");
-        attr(a7, "target", "_blank");
-        attr(a7, "href", "https://www.youtube.com/watch?v=OAVwd6SNJVU&t=717s");
-        attr(a7, "rel", "noreferrer");
-        attr(a7, "class", "svelte-mmff7o");
-        attr(div9, "class", "demo-div");
-        attr(a8, "target", "_blank");
-        attr(a8, "href", "https://www.youtube.com/watch?v=NG081fD-PoI");
-        attr(a8, "rel", "noreferrer");
-        attr(a8, "class", "svelte-mmff7o");
-        attr(div10, "class", "demo-div");
-        attr(div11, "class", "col-md-2 col-sm-6 hideme");
-        attr(p3, "class", "svelte-mmff7o");
-        attr(a9, "href", "https://discord.com/channels/621759717756370964/971037457661444156");
-        attr(a9, "target", "_blank");
-        attr(a9, "rel", "noreferrer");
-        attr(a9, "class", "svelte-mmff7o");
-        attr(div12, "class", "demo-div");
-        attr(a10, "href", "mailto:mike@claritylab.dev");
-        attr(a10, "target", "_blank");
-        attr(a10, "rel", "noreferrer");
-        attr(a10, "class", "svelte-mmff7o");
-        attr(div13, "class", "demo-div");
-        attr(a11, "href", "https://mobile.twitter.com/radicleart");
-        attr(a11, "target", "_blank");
-        attr(a11, "rel", "noreferrer");
-        attr(a11, "class", "svelte-mmff7o");
-        attr(div14, "class", "demo-div");
-        attr(div15, "class", "col-md-2 col-sm-6 hideme");
-        attr(p4, "class", "svelte-mmff7o");
-        attr(a12, "class", " svelte-mmff7o");
-        attr(a12, "href", stacksOrg);
-        attr(a12, "target", "_blank");
-        attr(a12, "rel", "noreferrer");
-        attr(div16, "class", "demo-div");
-        attr(a13, "class", " svelte-mmff7o");
-        attr(a13, "href", webWalletLink);
-        attr(a13, "target", "_blank");
-        attr(a13, "rel", "noreferrer");
-        attr(div17, "class", "demo-div");
-        attr(a14, "class", " svelte-mmff7o");
-        attr(a14, "href", "https://www.trustmachines.co/");
-        attr(a14, "target", "_blank");
-        attr(a14, "rel", "noreferrer");
-        attr(div18, "class", "demo-div");
-        attr(div19, "class", "col-md-2 col-sm-6 hideme");
+      h: function hydrate() {
+        attr_dev(p0, "class", "s-OMmj-e4ZMm3Z");
+        add_location(p0, file$2, 9, 4, 414);
+        attr_dev(a0, "href", "https://github.com/stacksgov/sips/blob/main/sips/sip-000/sip-000-stacks-improvement-proposal-process.md");
+        attr_dev(a0, "target", "_blank");
+        attr_dev(a0, "rel", "noreferrer");
+        attr_dev(a0, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a0, file$2, 11, 6, 464);
+        attr_dev(div0, "class", "demo-div");
+        add_location(div0, file$2, 10, 4, 435);
+        attr_dev(a1, "href", "https://github.com/stacksgov/sips/pulls");
+        attr_dev(a1, "target", "_blank");
+        attr_dev(a1, "rel", "noreferrer");
+        attr_dev(a1, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a1, file$2, 14, 6, 671);
+        attr_dev(div1, "class", "demo-div");
+        add_location(div1, file$2, 13, 4, 642);
+        attr_dev(a2, "href", "https://discord.com/channels/621759717756370964/1001471092302544936");
+        attr_dev(a2, "target", "_blank");
+        attr_dev(a2, "rel", "noreferrer");
+        attr_dev(a2, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a2, file$2, 17, 6, 815);
+        attr_dev(div2, "class", "demo-div");
+        add_location(div2, file$2, 16, 4, 786);
+        attr_dev(div3, "class", "col-md-2 col-sm-6 hideme");
+        add_location(div3, file$2, 8, 2, 371);
+        attr_dev(p1, "class", "s-OMmj-e4ZMm3Z");
+        add_location(p1, file$2, 21, 4, 1004);
+        attr_dev(a3, "href", "https://github.com/Clarity-Innovation-Lab");
+        attr_dev(a3, "target", "_blank");
+        attr_dev(a3, "rel", "noreferrer");
+        attr_dev(a3, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a3, file$2, 23, 6, 1049);
+        attr_dev(div4, "class", "demo-div");
+        add_location(div4, file$2, 22, 4, 1020);
+        attr_dev(a4, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao/issues");
+        attr_dev(a4, "target", "_blank");
+        attr_dev(a4, "rel", "noreferrer");
+        attr_dev(a4, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a4, file$2, 26, 6, 1194);
+        attr_dev(div5, "class", "demo-div");
+        add_location(div5, file$2, 25, 4, 1165);
+        attr_dev(a5, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao");
+        attr_dev(a5, "target", "_blank");
+        attr_dev(a5, "rel", "noreferrer");
+        attr_dev(a5, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a5, file$2, 29, 6, 1361);
+        attr_dev(div6, "class", "demo-div");
+        add_location(div6, file$2, 28, 4, 1332);
+        attr_dev(div7, "class", "col-md-2 col-sm-6 hideme");
+        add_location(div7, file$2, 20, 2, 961);
+        attr_dev(p2, "class", "s-OMmj-e4ZMm3Z");
+        add_location(p2, file$2, 33, 4, 1543);
+        attr_dev(a6, "target", "_blank");
+        attr_dev(a6, "href", "https://www.youtube.com/watch?v=fbq6L3PrKWE");
+        attr_dev(a6, "rel", "noreferrer");
+        attr_dev(a6, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a6, file$2, 35, 6, 1590);
+        attr_dev(div8, "class", "demo-div");
+        add_location(div8, file$2, 34, 4, 1561);
+        attr_dev(a7, "target", "_blank");
+        attr_dev(a7, "href", "https://www.youtube.com/watch?v=OAVwd6SNJVU&t=717s");
+        attr_dev(a7, "rel", "noreferrer");
+        attr_dev(a7, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a7, file$2, 38, 6, 1732);
+        attr_dev(div9, "class", "demo-div");
+        add_location(div9, file$2, 37, 4, 1703);
+        attr_dev(a8, "target", "_blank");
+        attr_dev(a8, "href", "https://www.youtube.com/watch?v=NG081fD-PoI");
+        attr_dev(a8, "rel", "noreferrer");
+        attr_dev(a8, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a8, file$2, 41, 6, 1882);
+        attr_dev(div10, "class", "demo-div");
+        add_location(div10, file$2, 40, 4, 1853);
+        attr_dev(div11, "class", "col-md-2 col-sm-6 hideme");
+        add_location(div11, file$2, 32, 2, 1500);
+        attr_dev(p3, "class", "s-OMmj-e4ZMm3Z");
+        add_location(p3, file$2, 45, 4, 2042);
+        attr_dev(a9, "href", "https://discord.com/channels/621759717756370964/971037457661444156");
+        attr_dev(a9, "target", "_blank");
+        attr_dev(a9, "rel", "noreferrer");
+        attr_dev(a9, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a9, file$2, 47, 6, 2090);
+        attr_dev(div12, "class", "demo-div");
+        add_location(div12, file$2, 46, 4, 2061);
+        attr_dev(a10, "href", "mailto:mike@claritylab.dev");
+        attr_dev(a10, "target", "_blank");
+        attr_dev(a10, "rel", "noreferrer");
+        attr_dev(a10, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a10, file$2, 50, 6, 2256);
+        attr_dev(div13, "class", "demo-div");
+        add_location(div13, file$2, 49, 4, 2227);
+        attr_dev(a11, "href", "https://mobile.twitter.com/radicleart");
+        attr_dev(a11, "target", "_blank");
+        attr_dev(a11, "rel", "noreferrer");
+        attr_dev(a11, "class", "s-OMmj-e4ZMm3Z");
+        add_location(a11, file$2, 53, 6, 2384);
+        attr_dev(div14, "class", "demo-div");
+        add_location(div14, file$2, 52, 4, 2355);
+        attr_dev(div15, "class", "col-md-2 col-sm-6 hideme");
+        add_location(div15, file$2, 44, 2, 1999);
+        attr_dev(p4, "class", "s-OMmj-e4ZMm3Z");
+        add_location(p4, file$2, 57, 4, 2542);
+        attr_dev(a12, "class", " s-OMmj-e4ZMm3Z");
+        attr_dev(a12, "href", ctx[1]);
+        attr_dev(a12, "target", "_blank");
+        attr_dev(a12, "rel", "noreferrer");
+        add_location(a12, file$2, 59, 6, 2591);
+        attr_dev(div16, "class", "demo-div");
+        add_location(div16, file$2, 58, 4, 2562);
+        attr_dev(a13, "class", " s-OMmj-e4ZMm3Z");
+        attr_dev(a13, "href", ctx[0]);
+        attr_dev(a13, "target", "_blank");
+        attr_dev(a13, "rel", "noreferrer");
+        add_location(a13, file$2, 62, 6, 2712);
+        attr_dev(div17, "class", "demo-div");
+        add_location(div17, file$2, 61, 4, 2683);
+        attr_dev(a14, "class", " s-OMmj-e4ZMm3Z");
+        attr_dev(a14, "href", "https://www.trustmachines.co/");
+        attr_dev(a14, "target", "_blank");
+        attr_dev(a14, "rel", "noreferrer");
+        add_location(a14, file$2, 65, 6, 2838);
+        attr_dev(div18, "class", "demo-div");
+        add_location(div18, file$2, 64, 4, 2809);
+        attr_dev(div19, "class", "col-md-2 col-sm-6 hideme");
+        add_location(div19, file$2, 56, 2, 2499);
         if (!src_url_equal(img0.src, img0_src_value = stx_eco_discord))
-          attr(img0, "src", img0_src_value);
-        attr(img0, "alt", "discord ecosystem dao logo");
-        attr(img0, "width", "39");
-        attr(img0, "height", "auto");
-        attr(a15, "class", "mx-0 svelte-mmff7o");
-        attr(a15, "href", "https://discord.com/channels/621759717756370964/971037457661444156");
-        attr(a15, "target", "_blank");
-        attr(a15, "rel", "noreferrer");
+          attr_dev(img0, "src", img0_src_value);
+        attr_dev(img0, "alt", "discord ecosystem dao logo");
+        attr_dev(img0, "width", "39");
+        attr_dev(img0, "height", "auto");
+        add_location(img0, file$2, 71, 131, 3181);
+        attr_dev(a15, "class", "mx-0 s-OMmj-e4ZMm3Z");
+        attr_dev(a15, "href", "https://discord.com/channels/621759717756370964/971037457661444156");
+        attr_dev(a15, "target", "_blank");
+        attr_dev(a15, "rel", "noreferrer");
+        add_location(a15, file$2, 71, 8, 3058);
         if (!src_url_equal(img1.src, img1_src_value = stx_eco_twitter))
-          attr(img1, "src", img1_src_value);
-        attr(img1, "alt", "twitter ecosystem dao logo");
-        attr(img1, "width", "39");
-        attr(img1, "height", "auto");
-        attr(a16, "class", "mx-0 svelte-mmff7o");
-        attr(a16, "href", "https://mobile.twitter.com/radicleart");
-        attr(a16, "target", "_blank");
-        attr(a16, "rel", "noreferrer");
-        attr(div20, "class", "mb-0");
+          attr_dev(img1, "src", img1_src_value);
+        attr_dev(img1, "alt", "twitter ecosystem dao logo");
+        attr_dev(img1, "width", "39");
+        attr_dev(img1, "height", "auto");
+        add_location(img1, file$2, 72, 102, 3374);
+        attr_dev(a16, "class", "mx-0 s-OMmj-e4ZMm3Z");
+        attr_dev(a16, "href", "https://mobile.twitter.com/radicleart");
+        attr_dev(a16, "target", "_blank");
+        attr_dev(a16, "rel", "noreferrer");
+        add_location(a16, file$2, 72, 8, 3280);
+        attr_dev(div20, "class", "mb-0");
+        add_location(div20, file$2, 70, 6, 3031);
         if (!src_url_equal(img2.src, img2_src_value = stx_eco_github))
-          attr(img2, "src", img2_src_value);
-        attr(img2, "alt", "github ecosystem dao logo");
-        attr(img2, "width", "39");
-        attr(img2, "height", "auto");
-        attr(a17, "class", " svelte-mmff7o");
-        attr(a17, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao");
-        attr(a17, "target", "_blank");
-        attr(a17, "rel", "noreferrer");
+          attr_dev(img2, "src", img2_src_value);
+        attr_dev(img2, "alt", "github ecosystem dao logo");
+        attr_dev(img2, "width", "39");
+        attr_dev(img2, "height", "auto");
+        add_location(img2, file$2, 74, 158, 3636);
+        attr_dev(a17, "class", " s-OMmj-e4ZMm3Z");
+        attr_dev(a17, "href", "https://github.com/Clarity-Innovation-Lab/ecosystem-dao");
+        attr_dev(a17, "target", "_blank");
+        attr_dev(a17, "rel", "noreferrer");
+        add_location(a17, file$2, 74, 50, 3528);
         set_style(div21, "position", "relative");
         set_style(div21, "left", "2px");
-        attr(div22, "class", "text-center");
-        attr(div23, "class", "col-md-2 col-sm-12 ");
-        attr(div24, "class", "row");
+        add_location(div21, file$2, 74, 6, 3484);
+        attr_dev(div22, "class", "text-center");
+        add_location(div22, file$2, 69, 4, 2999);
+        attr_dev(div23, "class", "col-md-2 col-sm-12 ");
+        add_location(div23, file$2, 68, 2, 2961);
+        attr_dev(div24, "class", "row");
+        add_location(div24, file$2, 7, 0, 351);
       },
-      m(target, anchor) {
-        insert_hydration(target, div24, anchor);
-        append_hydration(div24, div3);
-        append_hydration(div3, p0);
-        append_hydration(p0, t0);
-        append_hydration(div3, t1);
-        append_hydration(div3, div0);
-        append_hydration(div0, a0);
-        append_hydration(a0, t2);
-        append_hydration(div3, t3);
-        append_hydration(div3, div1);
-        append_hydration(div1, a1);
-        append_hydration(a1, t4);
-        append_hydration(div3, t5);
-        append_hydration(div3, div2);
-        append_hydration(div2, a2);
-        append_hydration(a2, t6);
-        append_hydration(div24, t7);
-        append_hydration(div24, div7);
-        append_hydration(div7, p1);
-        append_hydration(p1, t8);
-        append_hydration(div7, t9);
-        append_hydration(div7, div4);
-        append_hydration(div4, a3);
-        append_hydration(a3, t10);
-        append_hydration(div7, t11);
-        append_hydration(div7, div5);
-        append_hydration(div5, a4);
-        append_hydration(a4, t12);
-        append_hydration(div7, t13);
-        append_hydration(div7, div6);
-        append_hydration(div6, a5);
-        append_hydration(a5, t14);
-        append_hydration(div24, t15);
-        append_hydration(div24, div11);
-        append_hydration(div11, p2);
-        append_hydration(p2, t16);
-        append_hydration(div11, t17);
-        append_hydration(div11, div8);
-        append_hydration(div8, a6);
-        append_hydration(a6, t18);
-        append_hydration(div11, t19);
-        append_hydration(div11, div9);
-        append_hydration(div9, a7);
-        append_hydration(a7, t20);
-        append_hydration(div11, t21);
-        append_hydration(div11, div10);
-        append_hydration(div10, a8);
-        append_hydration(a8, t22);
-        append_hydration(div24, t23);
-        append_hydration(div24, div15);
-        append_hydration(div15, p3);
-        append_hydration(p3, t24);
-        append_hydration(div15, t25);
-        append_hydration(div15, div12);
-        append_hydration(div12, a9);
-        append_hydration(a9, t26);
-        append_hydration(div15, t27);
-        append_hydration(div15, div13);
-        append_hydration(div13, a10);
-        append_hydration(a10, t28);
-        append_hydration(div15, t29);
-        append_hydration(div15, div14);
-        append_hydration(div14, a11);
-        append_hydration(a11, t30);
-        append_hydration(div24, t31);
-        append_hydration(div24, div19);
-        append_hydration(div19, p4);
-        append_hydration(p4, t32);
-        append_hydration(div19, t33);
-        append_hydration(div19, div16);
-        append_hydration(div16, a12);
-        append_hydration(a12, t34);
-        append_hydration(div19, t35);
-        append_hydration(div19, div17);
-        append_hydration(div17, a13);
-        append_hydration(a13, t36);
-        append_hydration(div19, t37);
-        append_hydration(div19, div18);
-        append_hydration(div18, a14);
-        append_hydration(a14, t38);
-        append_hydration(div24, t39);
-        append_hydration(div24, div23);
-        append_hydration(div23, div22);
-        append_hydration(div22, div20);
-        append_hydration(div20, a15);
-        append_hydration(a15, img0);
-        append_hydration(div20, t40);
-        append_hydration(div20, a16);
-        append_hydration(a16, img1);
-        append_hydration(div22, t41);
-        append_hydration(div22, div21);
-        append_hydration(div21, a17);
-        append_hydration(a17, img2);
+      m: function mount(target, anchor) {
+        insert_hydration_dev(target, div24, anchor);
+        append_hydration_dev(div24, div3);
+        append_hydration_dev(div3, p0);
+        append_hydration_dev(p0, t0);
+        append_hydration_dev(div3, t1);
+        append_hydration_dev(div3, div0);
+        append_hydration_dev(div0, a0);
+        append_hydration_dev(a0, t2);
+        append_hydration_dev(div3, t3);
+        append_hydration_dev(div3, div1);
+        append_hydration_dev(div1, a1);
+        append_hydration_dev(a1, t4);
+        append_hydration_dev(div3, t5);
+        append_hydration_dev(div3, div2);
+        append_hydration_dev(div2, a2);
+        append_hydration_dev(a2, t6);
+        append_hydration_dev(div24, t7);
+        append_hydration_dev(div24, div7);
+        append_hydration_dev(div7, p1);
+        append_hydration_dev(p1, t8);
+        append_hydration_dev(div7, t9);
+        append_hydration_dev(div7, div4);
+        append_hydration_dev(div4, a3);
+        append_hydration_dev(a3, t10);
+        append_hydration_dev(div7, t11);
+        append_hydration_dev(div7, div5);
+        append_hydration_dev(div5, a4);
+        append_hydration_dev(a4, t12);
+        append_hydration_dev(div7, t13);
+        append_hydration_dev(div7, div6);
+        append_hydration_dev(div6, a5);
+        append_hydration_dev(a5, t14);
+        append_hydration_dev(div24, t15);
+        append_hydration_dev(div24, div11);
+        append_hydration_dev(div11, p2);
+        append_hydration_dev(p2, t16);
+        append_hydration_dev(div11, t17);
+        append_hydration_dev(div11, div8);
+        append_hydration_dev(div8, a6);
+        append_hydration_dev(a6, t18);
+        append_hydration_dev(div11, t19);
+        append_hydration_dev(div11, div9);
+        append_hydration_dev(div9, a7);
+        append_hydration_dev(a7, t20);
+        append_hydration_dev(div11, t21);
+        append_hydration_dev(div11, div10);
+        append_hydration_dev(div10, a8);
+        append_hydration_dev(a8, t22);
+        append_hydration_dev(div24, t23);
+        append_hydration_dev(div24, div15);
+        append_hydration_dev(div15, p3);
+        append_hydration_dev(p3, t24);
+        append_hydration_dev(div15, t25);
+        append_hydration_dev(div15, div12);
+        append_hydration_dev(div12, a9);
+        append_hydration_dev(a9, t26);
+        append_hydration_dev(div15, t27);
+        append_hydration_dev(div15, div13);
+        append_hydration_dev(div13, a10);
+        append_hydration_dev(a10, t28);
+        append_hydration_dev(div15, t29);
+        append_hydration_dev(div15, div14);
+        append_hydration_dev(div14, a11);
+        append_hydration_dev(a11, t30);
+        append_hydration_dev(div24, t31);
+        append_hydration_dev(div24, div19);
+        append_hydration_dev(div19, p4);
+        append_hydration_dev(p4, t32);
+        append_hydration_dev(div19, t33);
+        append_hydration_dev(div19, div16);
+        append_hydration_dev(div16, a12);
+        append_hydration_dev(a12, t34);
+        append_hydration_dev(div19, t35);
+        append_hydration_dev(div19, div17);
+        append_hydration_dev(div17, a13);
+        append_hydration_dev(a13, t36);
+        append_hydration_dev(div19, t37);
+        append_hydration_dev(div19, div18);
+        append_hydration_dev(div18, a14);
+        append_hydration_dev(a14, t38);
+        append_hydration_dev(div24, t39);
+        append_hydration_dev(div24, div23);
+        append_hydration_dev(div23, div22);
+        append_hydration_dev(div22, div20);
+        append_hydration_dev(div20, a15);
+        append_hydration_dev(a15, img0);
+        append_hydration_dev(div20, t40);
+        append_hydration_dev(div20, a16);
+        append_hydration_dev(a16, img1);
+        append_hydration_dev(div22, t41);
+        append_hydration_dev(div22, div21);
+        append_hydration_dev(div21, a17);
+        append_hydration_dev(a17, img2);
       },
       p: noop,
       i: noop,
       o: noop,
-      d(detaching) {
+      d: function destroy(detaching) {
         if (detaching)
-          detach(div24);
+          detach_dev(div24);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_fragment$2.name,
+      type: "component",
+      source: "",
+      ctx
+    });
+    return block;
   }
-  let webWalletLink = "https://www.hiro.so/wallet/install-web";
-  let stacksOrg = "https://stacks.org";
-  class FooterLinks extends SvelteComponent {
+  function instance$2($$self, $$props, $$invalidate) {
+    let { $$slots: slots = {}, $$scope } = $$props;
+    validate_slots("FooterLinks", slots, []);
+    let webWalletLink = "https://www.hiro.so/wallet/install-web";
+    let stacksOrg = "https://stacks.org";
+    const writable_props = [];
+    Object.keys($$props).forEach((key) => {
+      if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
+        console.warn(`<FooterLinks> was created with unknown prop '${key}'`);
+    });
+    $$self.$capture_state = () => ({
+      stx_eco_discord,
+      stx_eco_twitter,
+      stx_eco_github,
+      webWalletLink,
+      stacksOrg
+    });
+    $$self.$inject_state = ($$props2) => {
+      if ("webWalletLink" in $$props2)
+        $$invalidate(0, webWalletLink = $$props2.webWalletLink);
+      if ("stacksOrg" in $$props2)
+        $$invalidate(1, stacksOrg = $$props2.stacksOrg);
+    };
+    if ($$props && "$$inject" in $$props) {
+      $$self.$inject_state($$props.$$inject);
+    }
+    return [
+      webWalletLink,
+      stacksOrg
+    ];
+  }
+  class FooterLinks extends SvelteComponentDev {
     constructor(options) {
-      super();
-      init(this, options, null, create_fragment$2, safe_not_equal, {});
+      super(options);
+      init(this, options, instance$2, create_fragment$2, safe_not_equal, {});
+      dispatch_dev("SvelteRegisterComponent", {
+        component: this,
+        tagName: "FooterLinks",
+        options,
+        id: create_fragment$2.name
+      });
     }
   }
   const Footer_svelte_svelte_type_style_lang = "";
+  const file$1 = "src/lib/header/Footer.svelte";
   function create_fragment$1(ctx) {
     let div12;
     let div11;
@@ -1083,9 +1226,11 @@ let __tla = (async () => {
     let div8;
     let t4;
     let current;
-    footerlinks = new FooterLinks({});
-    return {
-      c() {
+    footerlinks = new FooterLinks({
+      $$inline: true
+    });
+    const block = {
+      c: function create() {
         div12 = element("div");
         div11 = element("div");
         div5 = element("div");
@@ -1109,7 +1254,7 @@ let __tla = (async () => {
         t4 = text("For the \u2665 of crypto!");
         this.h();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         div12 = claim_element(nodes, "DIV", {
           class: true,
           id: true
@@ -1142,9 +1287,9 @@ let __tla = (async () => {
           width: true,
           height: true
         });
-        a_nodes.forEach(detach);
-        div0_nodes.forEach(detach);
-        div1_nodes.forEach(detach);
+        a_nodes.forEach(detach_dev);
+        div0_nodes.forEach(detach_dev);
+        div1_nodes.forEach(detach_dev);
         t0 = claim_space(div5_nodes);
         div4 = claim_element(div5_nodes, "DIV", {
           class: true
@@ -1159,10 +1304,10 @@ let __tla = (async () => {
         });
         var div2_nodes = children(div2);
         claim_component(footerlinks.$$.fragment, div2_nodes);
-        div2_nodes.forEach(detach);
-        div3_nodes.forEach(detach);
-        div4_nodes.forEach(detach);
-        div5_nodes.forEach(detach);
+        div2_nodes.forEach(detach_dev);
+        div3_nodes.forEach(detach_dev);
+        div4_nodes.forEach(detach_dev);
+        div5_nodes.forEach(detach_dev);
         t1 = claim_space(div11_nodes);
         div10 = claim_element(div11_nodes, "DIV", {
           class: true
@@ -1177,8 +1322,8 @@ let __tla = (async () => {
         });
         var div6_nodes = children(div6);
         t2 = claim_text(div6_nodes, "sBTC \xA9 2023");
-        div6_nodes.forEach(detach);
-        div7_nodes.forEach(detach);
+        div6_nodes.forEach(detach_dev);
+        div7_nodes.forEach(detach_dev);
         t3 = claim_space(div10_nodes);
         div9 = claim_element(div10_nodes, "DIV", {
           class: true
@@ -1189,82 +1334,125 @@ let __tla = (async () => {
         });
         var div8_nodes = children(div8);
         t4 = claim_text(div8_nodes, "For the \u2665 of crypto!");
-        div8_nodes.forEach(detach);
-        div9_nodes.forEach(detach);
-        div10_nodes.forEach(detach);
-        div11_nodes.forEach(detach);
-        div12_nodes.forEach(detach);
+        div8_nodes.forEach(detach_dev);
+        div9_nodes.forEach(detach_dev);
+        div10_nodes.forEach(detach_dev);
+        div11_nodes.forEach(detach_dev);
+        div12_nodes.forEach(detach_dev);
         this.h();
       },
-      h() {
+      h: function hydrate() {
         if (!src_url_equal(img.src, img_src_value = logoWhite))
-          attr(img, "src", img_src_value);
-        attr(img, "alt", "stacks ecosystem dao logo");
-        attr(img, "width", "198");
-        attr(img, "height", "auto");
-        attr(a2, "class", "navbar-brand");
-        attr(a2, "href", "/");
-        attr(div0, "class", "");
-        attr(div1, "class", "px-0 col-4");
-        attr(div2, "class", "col-12");
-        attr(div3, "class", "row");
-        attr(div4, "class", "col-8");
-        attr(div5, "class", "row mx-5");
-        attr(div6, "class", "copywright svelte-1rvwk6o");
-        attr(div7, "class", "mb-4");
-        attr(div8, "class", "copywright svelte-1rvwk6o");
-        attr(div9, "class", "mb-4");
-        attr(div10, "class", "mx-5 mt-5 d-flex justify-content-between copy svelte-1rvwk6o");
-        attr(div11, "class", "pt-5");
-        attr(div12, "class", "container-fluid footer svelte-1rvwk6o");
-        attr(div12, "id", "footer-section");
+          attr_dev(img, "src", img_src_value);
+        attr_dev(img, "alt", "stacks ecosystem dao logo");
+        attr_dev(img, "width", "198");
+        attr_dev(img, "height", "auto");
+        add_location(img, file$1, 10, 14, 361);
+        attr_dev(a2, "class", "navbar-brand");
+        attr_dev(a2, "href", "/");
+        add_location(a2, file$1, 9, 12, 313);
+        attr_dev(div0, "class", "");
+        add_location(div0, file$1, 8, 10, 286);
+        attr_dev(div1, "class", "px-0 col-4");
+        add_location(div1, file$1, 7, 8, 251);
+        attr_dev(div2, "class", "col-12");
+        add_location(div2, file$1, 16, 12, 559);
+        attr_dev(div3, "class", "row");
+        add_location(div3, file$1, 15, 10, 529);
+        attr_dev(div4, "class", "col-8");
+        add_location(div4, file$1, 14, 8, 499);
+        attr_dev(div5, "class", "row mx-5");
+        add_location(div5, file$1, 6, 6, 220);
+        attr_dev(div6, "class", "copywright s-llc3ExEW13Oc");
+        add_location(div6, file$1, 24, 12, 781);
+        attr_dev(div7, "class", "mb-4");
+        add_location(div7, file$1, 23, 8, 749);
+        attr_dev(div8, "class", "copywright s-llc3ExEW13Oc");
+        add_location(div8, file$1, 27, 10, 881);
+        attr_dev(div9, "class", "mb-4");
+        add_location(div9, file$1, 26, 8, 851);
+        attr_dev(div10, "class", "mx-5 mt-5 d-flex justify-content-between copy s-llc3ExEW13Oc");
+        add_location(div10, file$1, 22, 6, 680);
+        attr_dev(div11, "class", "pt-5");
+        add_location(div11, file$1, 5, 4, 194);
+        attr_dev(div12, "class", "container-fluid footer s-llc3ExEW13Oc");
+        attr_dev(div12, "id", "footer-section");
+        add_location(div12, file$1, 4, 0, 132);
       },
-      m(target, anchor) {
-        insert_hydration(target, div12, anchor);
-        append_hydration(div12, div11);
-        append_hydration(div11, div5);
-        append_hydration(div5, div1);
-        append_hydration(div1, div0);
-        append_hydration(div0, a2);
-        append_hydration(a2, img);
-        append_hydration(div5, t0);
-        append_hydration(div5, div4);
-        append_hydration(div4, div3);
-        append_hydration(div3, div2);
+      m: function mount(target, anchor) {
+        insert_hydration_dev(target, div12, anchor);
+        append_hydration_dev(div12, div11);
+        append_hydration_dev(div11, div5);
+        append_hydration_dev(div5, div1);
+        append_hydration_dev(div1, div0);
+        append_hydration_dev(div0, a2);
+        append_hydration_dev(a2, img);
+        append_hydration_dev(div5, t0);
+        append_hydration_dev(div5, div4);
+        append_hydration_dev(div4, div3);
+        append_hydration_dev(div3, div2);
         mount_component(footerlinks, div2, null);
-        append_hydration(div11, t1);
-        append_hydration(div11, div10);
-        append_hydration(div10, div7);
-        append_hydration(div7, div6);
-        append_hydration(div6, t2);
-        append_hydration(div10, t3);
-        append_hydration(div10, div9);
-        append_hydration(div9, div8);
-        append_hydration(div8, t4);
+        append_hydration_dev(div11, t1);
+        append_hydration_dev(div11, div10);
+        append_hydration_dev(div10, div7);
+        append_hydration_dev(div7, div6);
+        append_hydration_dev(div6, t2);
+        append_hydration_dev(div10, t3);
+        append_hydration_dev(div10, div9);
+        append_hydration_dev(div9, div8);
+        append_hydration_dev(div8, t4);
         current = true;
       },
       p: noop,
-      i(local) {
+      i: function intro(local) {
         if (current)
           return;
         transition_in(footerlinks.$$.fragment, local);
         current = true;
       },
-      o(local) {
+      o: function outro(local) {
         transition_out(footerlinks.$$.fragment, local);
         current = false;
       },
-      d(detaching) {
+      d: function destroy(detaching) {
         if (detaching)
-          detach(div12);
+          detach_dev(div12);
         destroy_component(footerlinks);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_fragment$1.name,
+      type: "component",
+      source: "",
+      ctx
+    });
+    return block;
   }
-  class Footer extends SvelteComponent {
+  function instance$1($$self, $$props, $$invalidate) {
+    let { $$slots: slots = {}, $$scope } = $$props;
+    validate_slots("Footer", slots, []);
+    const writable_props = [];
+    Object.keys($$props).forEach((key) => {
+      if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
+        console.warn(`<Footer> was created with unknown prop '${key}'`);
+    });
+    $$self.$capture_state = () => ({
+      FooterLinks,
+      logoWhite
+    });
+    return [];
+  }
+  class Footer extends SvelteComponentDev {
     constructor(options) {
-      super();
-      init(this, options, null, create_fragment$1, safe_not_equal, {});
+      super(options);
+      init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+      dispatch_dev("SvelteRegisterComponent", {
+        component: this,
+        tagName: "Footer",
+        options,
+        id: create_fragment$1.name
+      });
     }
   }
   var g$1 = "https://stacks-node-api.mainnet.stacks.co", p$1 = "https://stacks-node-api.testnet.stacks.co", i = class {
@@ -1861,7 +2049,7 @@ let __tla = (async () => {
     return stateFromStorage || configResult;
   };
   const persist = persistImpl;
-  var isProduction = true;
+  var isProduction = false;
   var prefix = "Invariant failed";
   function invariant(condition, message) {
     if (condition) {
@@ -3543,6 +3731,8 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
   };
   const client = writable({});
   const _layout_svelte_svelte_type_style_lang = "";
+  const { console: console_1 } = globals;
+  const file = "src/routes/+layout.svelte";
   function create_if_block(ctx) {
     let div;
     let header;
@@ -3551,12 +3741,16 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
     let t1;
     let footer;
     let current;
-    header = new Header({});
+    header = new Header({
+      $$inline: true
+    });
     header.$on("network_change", ctx[2]);
     let key_block = create_key_block(ctx);
-    footer = new Footer({});
-    return {
-      c() {
+    footer = new Footer({
+      $$inline: true
+    });
+    const block = {
+      c: function create() {
         div = element("div");
         create_component(header.$$.fragment);
         t0 = space();
@@ -3565,7 +3759,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
         create_component(footer.$$.fragment);
         this.h();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         div = claim_element(nodes, "DIV", {
           class: true
         });
@@ -3575,22 +3769,23 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
         key_block.l(div_nodes);
         t1 = claim_space(div_nodes);
         claim_component(footer.$$.fragment, div_nodes);
-        div_nodes.forEach(detach);
+        div_nodes.forEach(detach_dev);
         this.h();
       },
-      h() {
-        attr(div, "class", "app svelte-210wo4");
+      h: function hydrate() {
+        attr_dev(div, "class", "app s-7IPF32Wcq3s8");
+        add_location(div, file, 59, 2, 2079);
       },
-      m(target, anchor) {
-        insert_hydration(target, div, anchor);
+      m: function mount(target, anchor) {
+        insert_hydration_dev(target, div, anchor);
         mount_component(header, div, null);
-        append_hydration(div, t0);
+        append_hydration_dev(div, t0);
         key_block.m(div, null);
-        append_hydration(div, t1);
+        append_hydration_dev(div, t1);
         mount_component(footer, div, null);
         current = true;
       },
-      p(ctx2, dirty) {
+      p: function update(ctx2, dirty) {
         if (dirty & 1 && safe_not_equal(previous_key, previous_key = ctx2[0])) {
           group_outros();
           transition_out(key_block, 1, 1, noop);
@@ -3603,7 +3798,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
           key_block.p(ctx2, dirty);
         }
       },
-      i(local) {
+      i: function intro(local) {
         if (current)
           return;
         transition_in(header.$$.fragment, local);
@@ -3611,85 +3806,101 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
         transition_in(footer.$$.fragment, local);
         current = true;
       },
-      o(local) {
+      o: function outro(local) {
         transition_out(header.$$.fragment, local);
         transition_out(key_block);
         transition_out(footer.$$.fragment, local);
         current = false;
       },
-      d(detaching) {
+      d: function destroy(detaching) {
         if (detaching)
-          detach(div);
+          detach_dev(div);
         destroy_component(header);
         key_block.d(detaching);
         destroy_component(footer);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_if_block.name,
+      type: "if",
+      source: "(59:2) {#if inited}",
+      ctx
+    });
+    return block;
   }
   function create_key_block(ctx) {
     let current;
     const default_slot_template = ctx[4].default;
     const default_slot = create_slot(default_slot_template, ctx, ctx[3], null);
-    return {
-      c() {
+    const block = {
+      c: function create() {
         if (default_slot)
           default_slot.c();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         if (default_slot)
           default_slot.l(nodes);
       },
-      m(target, anchor) {
+      m: function mount(target, anchor) {
         if (default_slot) {
           default_slot.m(target, anchor);
         }
         current = true;
       },
-      p(ctx2, dirty) {
+      p: function update(ctx2, dirty) {
         if (default_slot) {
           if (default_slot.p && (!current || dirty & 8)) {
             update_slot_base(default_slot, default_slot_template, ctx2, ctx2[3], !current ? get_all_dirty_from_scope(ctx2[3]) : get_slot_changes(default_slot_template, ctx2[3], dirty, null), null);
           }
         }
       },
-      i(local) {
+      i: function intro(local) {
         if (current)
           return;
         transition_in(default_slot, local);
         current = true;
       },
-      o(local) {
+      o: function outro(local) {
         transition_out(default_slot, local);
         current = false;
       },
-      d(detaching) {
+      d: function destroy(detaching) {
         if (default_slot)
           default_slot.d(detaching);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_key_block.name,
+      type: "key",
+      source: "(62:4) {#key componentKey}",
+      ctx
+    });
+    return block;
   }
   function create_fragment(ctx) {
     let if_block_anchor;
     let current;
     let if_block = ctx[1] && create_if_block(ctx);
-    return {
-      c() {
+    const block = {
+      c: function create() {
         if (if_block)
           if_block.c();
         if_block_anchor = empty();
       },
-      l(nodes) {
+      l: function claim(nodes) {
         if (if_block)
           if_block.l(nodes);
         if_block_anchor = empty();
       },
-      m(target, anchor) {
+      m: function mount(target, anchor) {
         if (if_block)
           if_block.m(target, anchor);
-        insert_hydration(target, if_block_anchor, anchor);
+        insert_hydration_dev(target, if_block_anchor, anchor);
         current = true;
       },
-      p(ctx2, [dirty]) {
+      p: function update(ctx2, [dirty]) {
         if (ctx2[1]) {
           if (if_block) {
             if_block.p(ctx2, dirty);
@@ -3710,28 +3921,40 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
           check_outros();
         }
       },
-      i(local) {
+      i: function intro(local) {
         if (current)
           return;
         transition_in(if_block);
         current = true;
       },
-      o(local) {
+      o: function outro(local) {
         transition_out(if_block);
         current = false;
       },
-      d(detaching) {
+      d: function destroy(detaching) {
         if (if_block)
           if_block.d(detaching);
         if (detaching)
-          detach(if_block_anchor);
+          detach_dev(if_block_anchor);
       }
     };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_fragment.name,
+      type: "component",
+      source: "",
+      ctx
+    });
+    return block;
   }
   function instance($$self, $$props, $$invalidate) {
     let $sbtcConfig;
+    validate_store(sbtcConfig, "sbtcConfig");
     component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(7, $sbtcConfig = $$value));
     let { $$slots: slots = {}, $$scope } = $$props;
+    validate_slots("Layout", slots, [
+      "default"
+    ]);
     let componentKey = 0;
     const unsubscribe = sbtcConfig.subscribe(() => {
     });
@@ -3759,7 +3982,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
     };
     let bootstrap;
     onMount(async () => {
-      bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-1ba04bfb.js"), true ? [] : void 0, import.meta.url);
+      bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
         await fetchWalletAddress();
       } catch (err) {
@@ -3780,10 +4003,51 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
           ].map((popoverTriggerEl) => new bootstrap.Dropdown(popoverTriggerEl));
       }, 500);
     });
+    const writable_props = [];
+    Object.keys($$props).forEach((key) => {
+      if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
+        console_1.warn(`<Layout> was created with unknown prop '${key}'`);
+    });
     $$self.$$set = ($$props2) => {
       if ("$$scope" in $$props2)
         $$invalidate(3, $$scope = $$props2.$$scope);
     };
+    $$self.$capture_state = () => ({
+      tick,
+      onMount,
+      onDestroy,
+      Header,
+      Footer,
+      mountClient: se,
+      getMicroStacksClient: C,
+      client,
+      fetchSbtcWalletAddress,
+      sbtcConfig,
+      StacksTestnet: l$2,
+      StacksMainnet: i,
+      componentKey,
+      unsubscribe,
+      networkChange,
+      inited,
+      origin,
+      config,
+      fetchWalletAddress,
+      bootstrap,
+      $sbtcConfig
+    });
+    $$self.$inject_state = ($$props2) => {
+      if ("componentKey" in $$props2)
+        $$invalidate(0, componentKey = $$props2.componentKey);
+      if ("inited" in $$props2)
+        $$invalidate(1, inited = $$props2.inited);
+      if ("origin" in $$props2)
+        origin = $$props2.origin;
+      if ("bootstrap" in $$props2)
+        bootstrap = $$props2.bootstrap;
+    };
+    if ($$props && "$$inject" in $$props) {
+      $$self.$inject_state($$props.$$inject);
+    }
     return [
       componentKey,
       inited,
@@ -3792,10 +4056,16 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       slots
     ];
   }
-  Layout = class Layout extends SvelteComponent {
+  Layout = class Layout extends SvelteComponentDev {
     constructor(options) {
-      super();
+      super(options);
       init(this, options, instance, create_fragment, safe_not_equal, {});
+      dispatch_dev("SvelteRegisterComponent", {
+        component: this,
+        tagName: "Layout",
+        options,
+        id: create_fragment.name
+      });
     }
   };
 })();

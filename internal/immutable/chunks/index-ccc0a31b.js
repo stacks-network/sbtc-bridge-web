@@ -5,6 +5,11 @@ function assign(tar, src) {
         tar[k] = src[k];
     return tar;
 }
+function add_location(element, file, line, column, char) {
+    element.__svelte_meta = {
+        loc: { file, line, column, char }
+    };
+}
 function run(fn) {
     return fn();
 }
@@ -30,6 +35,11 @@ function src_url_equal(element_src, url) {
 }
 function is_empty(obj) {
     return Object.keys(obj).length === 0;
+}
+function validate_store(store, name) {
+    if (store != null && typeof store.subscribe !== 'function') {
+        throw new Error(`'${name}' is not a store with a 'subscribe' method`);
+    }
 }
 function subscribe(store, ...callbacks) {
     if (store == null) {
@@ -380,11 +390,6 @@ function claim_text(nodes, data) {
 function claim_space(nodes) {
     return claim_text(nodes, ' ');
 }
-function set_data(text, data) {
-    data = '' + data;
-    if (text.wholeText !== data)
-        text.data = data;
-}
 function set_input_value(input, value) {
     input.value = value == null ? '' : value;
 }
@@ -403,9 +408,6 @@ function custom_event(type, detail, { bubbles = false, cancelable = false } = {}
     const e = document.createEvent('CustomEvent');
     e.initCustomEvent(type, bubbles, cancelable, detail);
     return e;
-}
-function construct_svelte_component(component, props) {
-    return new component(props);
 }
 
 let current_component;
@@ -639,6 +641,12 @@ function transition_out(block, local, detach, callback) {
     }
 }
 
+const globals = (typeof window !== 'undefined'
+    ? window
+    : typeof globalThis !== 'undefined'
+        ? globalThis
+        : global);
+
 function get_spread_update(levels, updates) {
     const update = {};
     const to_null_out = {};
@@ -812,6 +820,98 @@ class SvelteComponent {
     }
 }
 
+function dispatch_dev(type, detail) {
+    document.dispatchEvent(custom_event(type, Object.assign({ version: '3.55.1' }, detail), { bubbles: true }));
+}
+function append_hydration_dev(target, node) {
+    dispatch_dev('SvelteDOMInsert', { target, node });
+    append_hydration(target, node);
+}
+function insert_hydration_dev(target, node, anchor) {
+    dispatch_dev('SvelteDOMInsert', { target, node, anchor });
+    insert_hydration(target, node, anchor);
+}
+function detach_dev(node) {
+    dispatch_dev('SvelteDOMRemove', { node });
+    detach(node);
+}
+function listen_dev(node, event, handler, options, has_prevent_default, has_stop_propagation) {
+    const modifiers = options === true ? ['capture'] : options ? Array.from(Object.keys(options)) : [];
+    if (has_prevent_default)
+        modifiers.push('preventDefault');
+    if (has_stop_propagation)
+        modifiers.push('stopPropagation');
+    dispatch_dev('SvelteDOMAddEventListener', { node, event, handler, modifiers });
+    const dispose = listen(node, event, handler, options);
+    return () => {
+        dispatch_dev('SvelteDOMRemoveEventListener', { node, event, handler, modifiers });
+        dispose();
+    };
+}
+function attr_dev(node, attribute, value) {
+    attr(node, attribute, value);
+    if (value == null)
+        dispatch_dev('SvelteDOMRemoveAttribute', { node, attribute });
+    else
+        dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
+}
+function prop_dev(node, property, value) {
+    node[property] = value;
+    dispatch_dev('SvelteDOMSetProperty', { node, property, value });
+}
+function set_data_dev(text, data) {
+    data = '' + data;
+    if (text.wholeText === data)
+        return;
+    dispatch_dev('SvelteDOMSetData', { node: text, data });
+    text.data = data;
+}
+function validate_slots(name, slot, keys) {
+    for (const slot_key of Object.keys(slot)) {
+        if (!~keys.indexOf(slot_key)) {
+            console.warn(`<${name}> received an unexpected slot "${slot_key}".`);
+        }
+    }
+}
+function construct_svelte_component_dev(component, props) {
+    const error_message = 'this={...} of <svelte:component> should specify a Svelte component.';
+    try {
+        const instance = new component(props);
+        if (!instance.$$ || !instance.$set || !instance.$on || !instance.$destroy) {
+            throw new Error(error_message);
+        }
+        return instance;
+    }
+    catch (err) {
+        const { message } = err;
+        if (typeof message === 'string' && message.indexOf('is not a constructor') !== -1) {
+            throw new Error(error_message);
+        }
+        else {
+            throw err;
+        }
+    }
+}
+/**
+ * Base class for Svelte components with some minor dev-enhancements. Used when dev=true.
+ */
+class SvelteComponentDev extends SvelteComponent {
+    constructor(options) {
+        if (!options || (!options.target && !options.$$inline)) {
+            throw new Error("'target' is a required option");
+        }
+        super();
+    }
+    $destroy() {
+        super.$destroy();
+        this.$destroy = () => {
+            console.warn('Component was already destroyed'); // eslint-disable-line no-console
+        };
+    }
+    $capture_state() { }
+    $inject_state() { }
+}
+
 const subscriber_queue = [];
 /**
  * Create a `Writable` store that allows both updating and reading by subscription.
@@ -860,4 +960,4 @@ function writable(value, start = noop) {
     return { set, update, subscribe };
 }
 
-export { set_input_value as $, tick as A, writable as B, src_url_equal as C, append_hydration as D, listen as E, prevent_default as F, noop as G, run_all as H, component_subscribe as I, createEventDispatcher as J, setContext as K, getContext as L, onDestroy as M, create_slot as N, update_slot_base as O, get_all_dirty_from_scope as P, get_slot_changes as Q, get_store_value as R, SvelteComponent as S, assign as T, svg_element as U, claim_svg_element as V, set_svg_attributes as W, toggle_class as X, get_spread_update as Y, compute_rest_props as Z, exclude_internal_props as _, space as a, to_number as a0, insert_hydration as b, claim_space as c, check_outros as d, empty as e, transition_in as f, group_outros as g, detach as h, init as i, afterUpdate as j, element as k, claim_element as l, children as m, attr as n, onMount as o, set_style as p, text as q, claim_text as r, safe_not_equal as s, transition_out as t, set_data as u, construct_svelte_component as v, create_component as w, claim_component as x, mount_component as y, destroy_component as z };
+export { svg_element as $, create_component as A, claim_component as B, mount_component as C, destroy_component as D, tick as E, writable as F, validate_store as G, component_subscribe as H, createEventDispatcher as I, src_url_equal as J, append_hydration_dev as K, listen_dev as L, prevent_default as M, noop as N, run_all as O, getContext as P, create_slot as Q, onDestroy as R, SvelteComponentDev as S, globals as T, update_slot_base as U, get_all_dirty_from_scope as V, get_slot_changes as W, get_store_value as X, assign as Y, compute_rest_props as Z, exclude_internal_props as _, afterUpdate as a, claim_svg_element as a0, set_svg_attributes as a1, toggle_class as a2, get_spread_update as a3, set_input_value as a4, to_number as a5, prop_dev as a6, setContext as b, space as c, dispatch_dev as d, empty as e, claim_space as f, insert_hydration_dev as g, group_outros as h, init as i, check_outros as j, transition_in as k, detach_dev as l, construct_svelte_component_dev as m, element as n, onMount as o, claim_element as p, children as q, attr_dev as r, safe_not_equal as s, transition_out as t, set_style as u, validate_slots as v, add_location as w, text as x, claim_text as y, set_data_dev as z };

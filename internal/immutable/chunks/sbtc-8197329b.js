@@ -1,4 +1,4 @@
-import { R as get_store_value, B as writable } from './index-3bacd89c.js';
+import { X as get_store_value, F as writable } from './index-ccc0a31b.js';
 
 // index.ts
 var stores = {};
@@ -720,7 +720,11 @@ wrapConstructor(() => new SHA384());
 
 function f$2(r){return sha256.create().update(lr(r)).digest()}function y$3(r){return sha512.create().update(lr(r)).digest()}
 
-const __viteBrowserExternal = {};
+const __viteBrowserExternal = new Proxy({}, {
+  get(_, key) {
+    throw new Error(`Module "" has been externalized for browser compatibility. Cannot access ".${key}" in client code.`)
+  }
+});
 
 const __viteBrowserExternal$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
   __proto__: null,
