@@ -1,4 +1,4 @@
-import { F as writable } from './index-ccc0a31b.js';
+import { F as writable } from './index-c6e171e6.js';
 
 const SCROLL_KEY = 'sveltekit:scroll';
 const INDEX_KEY = 'sveltekit:index';

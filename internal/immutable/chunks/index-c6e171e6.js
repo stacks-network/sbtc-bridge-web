@@ -256,6 +256,12 @@ function detach(node) {
         node.parentNode.removeChild(node);
     }
 }
+function destroy_each(iterations, detaching) {
+    for (let i = 0; i < iterations.length; i += 1) {
+        if (iterations[i])
+            iterations[i].d(detaching);
+    }
+}
 function element(name) {
     return document.createElement(name);
 }
@@ -866,6 +872,15 @@ function set_data_dev(text, data) {
     dispatch_dev('SvelteDOMSetData', { node: text, data });
     text.data = data;
 }
+function validate_each_argument(arg) {
+    if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
+        let msg = '{#each} only iterates over array-like objects.';
+        if (typeof Symbol === 'function' && arg && Symbol.iterator in arg) {
+            msg += ' You can use a spread to convert this iterable into an array.';
+        }
+        throw new Error(msg);
+    }
+}
 function validate_slots(name, slot, keys) {
     for (const slot_key of Object.keys(slot)) {
         if (!~keys.indexOf(slot_key)) {
@@ -960,4 +975,4 @@ function writable(value, start = noop) {
     return { set, update, subscribe };
 }
 
-export { svg_element as $, create_component as A, claim_component as B, mount_component as C, destroy_component as D, tick as E, writable as F, validate_store as G, component_subscribe as H, createEventDispatcher as I, src_url_equal as J, append_hydration_dev as K, listen_dev as L, prevent_default as M, noop as N, run_all as O, getContext as P, create_slot as Q, onDestroy as R, SvelteComponentDev as S, globals as T, update_slot_base as U, get_all_dirty_from_scope as V, get_slot_changes as W, get_store_value as X, assign as Y, compute_rest_props as Z, exclude_internal_props as _, afterUpdate as a, claim_svg_element as a0, set_svg_attributes as a1, toggle_class as a2, get_spread_update as a3, set_input_value as a4, to_number as a5, prop_dev as a6, setContext as b, space as c, dispatch_dev as d, empty as e, claim_space as f, insert_hydration_dev as g, group_outros as h, init as i, check_outros as j, transition_in as k, detach_dev as l, construct_svelte_component_dev as m, element as n, onMount as o, claim_element as p, children as q, attr_dev as r, safe_not_equal as s, transition_out as t, set_style as u, validate_slots as v, add_location as w, text as x, claim_text as y, set_data_dev as z };
+export { svg_element as $, create_component as A, claim_component as B, mount_component as C, destroy_component as D, tick as E, writable as F, validate_store as G, component_subscribe as H, createEventDispatcher as I, src_url_equal as J, append_hydration_dev as K, listen_dev as L, prevent_default as M, noop as N, run_all as O, getContext as P, create_slot as Q, onDestroy as R, SvelteComponentDev as S, globals as T, update_slot_base as U, get_all_dirty_from_scope as V, get_slot_changes as W, get_store_value as X, assign as Y, compute_rest_props as Z, exclude_internal_props as _, afterUpdate as a, claim_svg_element as a0, set_svg_attributes as a1, toggle_class as a2, get_spread_update as a3, set_input_value as a4, to_number as a5, validate_each_argument as a6, prop_dev as a7, destroy_each as a8, setContext as b, space as c, dispatch_dev as d, empty as e, claim_space as f, insert_hydration_dev as g, group_outros as h, init as i, check_outros as j, transition_in as k, detach_dev as l, construct_svelte_component_dev as m, element as n, onMount as o, claim_element as p, children as q, attr_dev as r, safe_not_equal as s, transition_out as t, set_style as u, validate_slots as v, add_location as w, text as x, claim_text as y, set_data_dev as z };

@@ -1,4 +1,4 @@
-import { X as get_store_value, F as writable } from './index-ccc0a31b.js';
+import { X as get_store_value, F as writable } from './index-c6e171e6.js';
 
 // index.ts
 var stores = {};
@@ -92,15 +92,44 @@ const assert = {
     output,
 };
 
-const crypto$2 = {
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function getAugmentedNamespace(n) {
+  if (n.__esModule) return n;
+  var f = n.default;
+	if (typeof f == "function") {
+		var a = function a () {
+			if (this instanceof a) {
+				var args = [null];
+				args.push.apply(args, arguments);
+				var Ctor = Function.bind.apply(f, args);
+				return new Ctor();
+			}
+			return f.apply(this, arguments);
+		};
+		a.prototype = f.prototype;
+  } else a = {};
+  Object.defineProperty(a, '__esModule', {value: true});
+	Object.keys(n).forEach(function (k) {
+		var d = Object.getOwnPropertyDescriptor(n, k);
+		Object.defineProperty(a, k, d.get ? d : {
+			enumerable: true,
+			get: function () {
+				return n[k];
+			}
+		});
+	});
+	return a;
+}
+
+var cryptoBrowser = {};
+
+Object.defineProperty(cryptoBrowser, "__esModule", { value: true });
+cryptoBrowser.crypto = void 0;
+cryptoBrowser.crypto = {
     node: undefined,
     web: typeof self === 'object' && 'crypto' in self ? self.crypto : undefined,
 };
-
-const cryptoBrowser = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-  __proto__: null,
-  crypto: crypto$2
-}, Symbol.toStringTag, { value: 'Module' }));
 
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // Cast array to view
@@ -1816,43 +1845,11 @@ function Ae(t){return (Math.floor(t/16)+1)*16}function Ke$1(t){return Math.ceil(
 
 var P=BigInt("0xffffffffffffffffffffffffffffffff"),M=BigInt(0);BigInt("0x7fffffffffffffffffffffffffffffff");BigInt("-170141183460469231731687303715884105728");var ge=(i=>(i[i.Origin=1]="Origin",i[i.Standard=2]="Standard",i[i.Contract=3]="Contract",i))(ge||{}),A=(n=>(n[n.Int=0]="Int",n[n.UInt=1]="UInt",n[n.Buffer=2]="Buffer",n[n.BoolTrue=3]="BoolTrue",n[n.BoolFalse=4]="BoolFalse",n[n.PrincipalStandard=5]="PrincipalStandard",n[n.PrincipalContract=6]="PrincipalContract",n[n.ResponseOk=7]="ResponseOk",n[n.ResponseErr=8]="ResponseErr",n[n.OptionalNone=9]="OptionalNone",n[n.OptionalSome=10]="OptionalSome",n[n.List=11]="List",n[n.Tuple=12]="Tuple",n[n.StringASCII=13]="StringASCII",n[n.StringUTF8=14]="StringUTF8",n))(A||{});var K=e=>{let r=y$4(e);if(r<M)throw new RangeError("Cannot construct unsigned clarity integer from negative value");if(r>P)throw new RangeError(`Cannot construct unsigned clarity integer greater than ${P.toString()}`);return {type:1,value:r}};function te(e){return /^[a-zA-Z]([a-zA-Z0-9]|[-_!?+<>=/*])*$|^[-+=/*]$|^[<>]=?$/.test(e)&&e.length<128}var Be=(a=>(a[a.Address=0]="Address",a[a.Principal=1]="Principal",a[a.LengthPrefixedString=2]="LengthPrefixedString",a[a.MemoString=3]="MemoString",a[a.AssetInfo=4]="AssetInfo",a[a.PostCondition=5]="PostCondition",a[a.PublicKey=6]="PublicKey",a[a.LengthPrefixedList=7]="LengthPrefixedList",a[a.Payload=8]="Payload",a[a.MessageSignature=9]="MessageSignature",a[a.TransactionAuthField=10]="TransactionAuthField",a))(Be||{});function k(e){return V(e.version,l$1(e.hash160))}var Pe=(e,r)=>e?dr(e).length>r:!1;function C(e,r,t){let i=r||1,s=t||128;if(Pe(e,s))throw new Error(`String length exceeds maximum bytes ${s.toString()}`);return {type:2,content:e,lengthPrefixBytes:i,maxLengthBytes:s}}function _(e){let r=new q;return r.appendHexString(x$1(e.version,1)),r.appendHexString(e.hash160),r.concatBuffer()}function $(e){let r=new q,t=dr(e.content),i=t.byteLength;return r.appendHexString(x$1(i,e.lengthPrefixBytes)),r.push(t),r.concatBuffer()}function d(e){if(e.type===5)return k(e.address);if(e.type===6)return `${k(e.address)}.${e.contractName.content}`;throw new Error(`Unexpected principal data: ${JSON.stringify(e)}`)}var S=e=>({type:13,data:e});function pe(e){for(let r in e)if(!te(r))throw new Error(`"${r}" is not a valid Clarity name`);return {type:12,data:e}}var Oe=(o=>(o[o.ClarityAbiTypeUInt128=1]="ClarityAbiTypeUInt128",o[o.ClarityAbiTypeInt128=2]="ClarityAbiTypeInt128",o[o.ClarityAbiTypeBool=3]="ClarityAbiTypeBool",o[o.ClarityAbiTypePrincipal=4]="ClarityAbiTypePrincipal",o[o.ClarityAbiTypeNone=5]="ClarityAbiTypeNone",o[o.ClarityAbiTypeBuffer=6]="ClarityAbiTypeBuffer",o[o.ClarityAbiTypeResponse=7]="ClarityAbiTypeResponse",o[o.ClarityAbiTypeOptional=8]="ClarityAbiTypeOptional",o[o.ClarityAbiTypeTuple=9]="ClarityAbiTypeTuple",o[o.ClarityAbiTypeList=10]="ClarityAbiTypeList",o[o.ClarityAbiTypeStringAscii=11]="ClarityAbiTypeStringAscii",o[o.ClarityAbiTypeStringUtf8=12]="ClarityAbiTypeStringUtf8",o[o.ClarityAbiTypeTraitReference=13]="ClarityAbiTypeTraitReference",o))(Oe||{});function l(e){switch(e.type){case 3:case 4:return "bool";case 0:return "int";case 1:return "uint";case 2:return `(buff ${e.buffer.length})`;case 9:return "(optional none)";case 10:return `(optional ${l(e.value)})`;case 8:return `(response UnknownType ${l(e.value)})`;case 7:return `(response ${l(e.value)} UnknownType)`;case 5:case 6:return "principal";case 11:return `(list ${e.list.length} ${e.list.length?l(e.list[0]):"UnknownType"})`;case 12:return `(tuple ${Object.keys(e.data).map(r=>`(${r} ${l(e.data[r])})`).join(" ")})`;case 13:return `(string-ascii ${Qr(e.data).length})`;case 14:return `(string-utf8 ${dr(e.data).length})`}}function T(e){let r=h(e,!0);switch(e.type){case 8:return {type:l(e),value:r,success:!1};case 7:return {type:l(e),value:r,success:!0};default:return {type:l(e),value:r}}}function h(e,r=!1){switch(e.type){case 3:return !0;case 4:return !1;case 0:case 1:return r?e.value.toString():e.value;case 2:return `0x${p(e.buffer)}`;case 9:return null;case 10:return T(e.value);case 8:return T(e.value);case 7:return T(e.value);case 5:case 6:return d(e);case 11:return e.list.map(s=>T(s));case 12:let t={};return Object.keys(e.data).map(s=>[s,T(e.data[s])]).forEach(([s,p])=>{t[s]=p;}),t;case 13:return e.data;case 14:return e.data}}function f(e,r){let t=new q,i=Uint8Array.from([e]);return t.push(i),t.push(r),t.concatBuffer()}function He(e){return Uint8Array.from([e.type])}function je(e){return e.type===9?new Uint8Array([e.type]):f(e.type,m(e.value))}function De(e){let r=new Uint8Array(4);return new DataView(r.buffer,r.byteOffset,r.byteLength).setUint32(r.byteOffset,e.buffer.length),f(e.type,U([r,Uint8Array.from(e.buffer)]))}function Je(e){let r=x$1(_r(e.value),16),t=l$1(r);return f(e.type,t)}function Ye(e){let r=x$1(e.value,16),t=l$1(r);return f(e.type,t)}function Ge(e){return f(e.type,_(e.address))}function ve(e){return f(e.type,U([_(e.address),$(e.contractName)]))}function Me(e){return f(e.type,m(e.value))}function Xe(e){let r=new q,t=new Uint8Array(4);yt$1(t,e.list.length,0),r.push(t);for(let i of e.list){let s=m(i);r.push(s);}return f(e.type,r.concatBuffer())}function Ze(e){let r=[],t=new Uint8Array(4);new DataView(t.buffer,t.byteOffset,t.byteLength).setUint32(t.byteOffset,Object.keys(e.data).length),r.push(t);let s=Object.keys(e.data).sort((p,y)=>{let g=dr(p),x=dr(y);return xt$1(g,x)});for(let p of s){let y=C(p);r.push($(y));let g=m(e.data[p]);r.push(g);}return f(e.type,U(r))}function ue(e,r){let t=new q,s=(r==="ascii"?Qr:dr)(e.data),p=new Uint8Array(4);return new DataView(p.buffer,p.byteOffset,p.byteLength).setUint32(p.byteOffset,s.length),t.push(p),t.push(s),f(e.type,t.concatBuffer())}function Ke(e){return ue(e,"ascii")}function We(e){return ue(e,"utf8")}function m(e){switch(e.type){case 3:case 4:return He(e);case 9:case 10:return je(e);case 2:return De(e);case 0:return Je(e);case 1:return Ye(e);case 5:return Ge(e);case 6:return ve(e);case 7:case 8:return Me(e);case 11:return Xe(e);case 12:return Ze(e);case 13:return Ke(e);case 14:return We(e);default:throw new Error("Unable to serialize. Invalid Clarity Value.")}}function Vt(e){return `0x${p(m(e))}`}
 
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function getAugmentedNamespace(n) {
-  if (n.__esModule) return n;
-  var f = n.default;
-	if (typeof f == "function") {
-		var a = function a () {
-			if (this instanceof a) {
-				var args = [null];
-				args.push.apply(args, arguments);
-				var Ctor = Function.bind.apply(f, args);
-				return new Ctor();
-			}
-			return f.apply(this, arguments);
-		};
-		a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, '__esModule', {value: true});
-	Object.keys(n).forEach(function (k) {
-		var d = Object.getOwnPropertyDescriptor(n, k);
-		Object.defineProperty(a, k, d.get ? d : {
-			enumerable: true,
-			get: function () {
-				return n[k];
-			}
-		});
-	});
-	return a;
-}
-
 var lib = {};
 
 var encoding = {};
 
 var utils = {};
-
-const require$$0$1 = /*@__PURE__*/getAugmentedNamespace(cryptoBrowser);
 
 (function (exports) {
 	/*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
@@ -1860,7 +1857,7 @@ const require$$0$1 = /*@__PURE__*/getAugmentedNamespace(cryptoBrowser);
 	exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
 	// The import here is via the package name. This is to ensure
 	// that exports mapping/resolution does fall into place.
-	const crypto_1 = require$$0$1;
+	const crypto_1 = cryptoBrowser;
 	// Cast array to different type
 	const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
 	exports.u8 = u8;
@@ -2568,4 +2565,32 @@ async function callContractReadOnly(data) {
   return T(val);
 }
 
-export { $, At as A, qe as B, verify as C, ar as D, Er as E, Kt as F, ce as G, Hr as H, Rr as I, Ir as J, K, pr$1 as L, pr as M, dr as N, xr as O, we as P, V as Q, Rr$1 as R, Signature as S, l$1 as T, Ur as U, Vt as V, Xt as W, X, getAugmentedNamespace as Y, __viteBrowserExternal$1 as Z, _, $$1 as a, commonjsGlobal as a0, decodeStacksAddress as a1, utils as b, cr as c, getPublicKey as d, pe$1 as e, fetchSbtcWalletAddress as f, ge as g, hr as h, f$2 as i, U as j, d$1 as k, Se as l, m, pe as n, S as o, p, q, recoverPublicKey as r, sbtcConfig as s, lr as t, ur as u, ut$1 as v, wt as w, ct as x, mt$1 as y, ee as z };
+async function fetchAddressDetails(network, address) {
+  const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
+  const response = await fetch(url + "/address/" + address);
+  if (response.status === 200) {
+    return await response.json();
+  }
+  throw new Error("Address not found - is the network correct?");
+}
+async function fetchUTXOs(network, address) {
+  const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
+  const response = await fetch(url + "/address/" + address + "/utxo");
+  if (response.status === 200) {
+    const utxos = await response.json();
+    return utxos;
+  }
+  throw new Error("Bitcoin address not know - is the network correct?");
+}
+function maxCommit(utxos) {
+  const summ = utxos?.map((item) => item.value).reduce((prev, curr) => prev + curr, 0);
+  return summ || 0;
+}
+async function fetchFeeEstimate(network) {
+  const url = network === "mainnet" ? "https://api.blockcypher.com/v1/btc/main" : "https://api.blockcypher.com/v1/btc/test3";
+  const response = await fetch(url);
+  const info = await response.json();
+  return info;
+}
+
+export { $, At as A, qe as B, verify as C, ar as D, Er as E, Kt as F, ce as G, Hr as H, Rr as I, Ir as J, K, pr$1 as L, pr as M, dr as N, xr as O, we as P, V as Q, Rr$1 as R, Signature as S, l$1 as T, Ur as U, Vt as V, Xt as W, X, fetchFeeEstimate as Y, maxCommit as Z, _, $$1 as a, decodeStacksAddress as a0, fetchUTXOs as a1, fetchAddressDetails as a2, getAugmentedNamespace as a3, __viteBrowserExternal$1 as a4, commonjsGlobal as a5, utils as b, cr as c, getPublicKey as d, pe$1 as e, fetchSbtcWalletAddress as f, ge as g, hr as h, f$2 as i, U as j, d$1 as k, Se as l, m, pe as n, S as o, p, q, recoverPublicKey as r, sbtcConfig as s, lr as t, ur as u, ut$1 as v, wt as w, ct as x, mt$1 as y, ee as z };

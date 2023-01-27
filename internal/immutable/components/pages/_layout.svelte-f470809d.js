@@ -5,8 +5,8 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 import { _ as __vitePreload } from "../../chunks/preload-helper-6910039e.js";
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, I as createEventDispatcher, n as element, c as space, x as text, p as claim_element, q as children, l as detach_dev, f as claim_space, y as claim_text, r as attr_dev, J as src_url_equal, w as add_location, g as insert_hydration_dev, K as append_hydration_dev, L as listen_dev, M as prevent_default, z as set_data_dev, N as noop, O as run_all, u as set_style, A as create_component, B as claim_component, C as mount_component, k as transition_in, t as transition_out, D as destroy_component, b as setContext, P as getContext, F as writable, Q as create_slot, e as empty, j as check_outros, R as onDestroy, o as onMount, E as tick, T as globals, h as group_outros, U as update_slot_base, V as get_all_dirty_from_scope, W as get_slot_changes } from "../../chunks/index-ccc0a31b.js";
-import { s as sbtcConfig, f as fetchSbtcWalletAddress, c as cr, u as ur, H as Hr, m as m$2, R as Rr, _ as _$2, g as ge$2, $ as $$2, q as q$1, h as hr, U as Ur, V as Vt, p as p$2, a as $$3, b as utils, d as getPublicKey, w as wt, E as Er, e as pe, i as f$3, j as U$2, r as recoverPublicKey, S as Signature, k as d$2, l as Se, A as At, n as pe$1, o as S$1, K as K$1, t as lr, v as ut$1, x as ct$1, y as mt, z as ee$2, B as qe, C as verify, D as ar, F as Kt, G as ce$2, I as Rr$1, J as Ir, L as pr, M as pr$1, N as dr, O as xr, P as we$1, Q as V$1, T as l$3, X as X$1, W as Xt } from "../../chunks/sbtc-8197329b.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, I as createEventDispatcher, n as element, c as space, x as text, p as claim_element, q as children, l as detach_dev, f as claim_space, y as claim_text, r as attr_dev, J as src_url_equal, w as add_location, g as insert_hydration_dev, K as append_hydration_dev, L as listen_dev, M as prevent_default, z as set_data_dev, N as noop, O as run_all, u as set_style, A as create_component, B as claim_component, C as mount_component, k as transition_in, t as transition_out, D as destroy_component, b as setContext, P as getContext, F as writable, Q as create_slot, e as empty, j as check_outros, R as onDestroy, o as onMount, E as tick, T as globals, h as group_outros, U as update_slot_base, V as get_all_dirty_from_scope, W as get_slot_changes } from "../../chunks/index-c6e171e6.js";
+import { s as sbtcConfig, f as fetchSbtcWalletAddress, c as cr, u as ur, H as Hr, m as m$2, R as Rr, _ as _$2, g as ge$2, $ as $$2, q as q$1, h as hr, U as Ur, V as Vt, p as p$2, a as $$3, b as utils, d as getPublicKey, w as wt, E as Er, e as pe, i as f$3, j as U$2, r as recoverPublicKey, S as Signature, k as d$2, l as Se, A as At, n as pe$1, o as S$1, K as K$1, t as lr, v as ut$1, x as ct$1, y as mt, z as ee$2, B as qe, C as verify, D as ar, F as Kt, G as ce$2, I as Rr$1, J as Ir, L as pr, M as pr$1, N as dr, O as xr, P as we$1, Q as V$1, T as l$3, X as X$1, W as Xt, Y as fetchFeeEstimate } from "../../chunks/utxos-a5c8c485.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -3774,7 +3774,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       },
       h: function hydrate() {
         attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-        add_location(div, file, 59, 2, 2079);
+        add_location(div, file, 64, 2, 2322);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -3824,7 +3824,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       block,
       id: create_if_block.name,
       type: "if",
-      source: "(59:2) {#if inited}",
+      source: "(64:2) {#if inited}",
       ctx
     });
     return block;
@@ -3874,7 +3874,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       block,
       id: create_key_block.name,
       type: "key",
-      source: "(62:4) {#key componentKey}",
+      source: "(67:4) {#key componentKey}",
       ctx
     });
     return block;
@@ -3985,6 +3985,10 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
         await fetchWalletAddress();
+        const conf = $sbtcConfig;
+        conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+        conf.feeToApply = conf.feeInfo.low_fee_per_kb;
+        sbtcConfig.update(() => conf);
       } catch (err) {
         console.log(err);
       }
@@ -4025,6 +4029,7 @@ ${o}`, this.message = t, this.code = e.code, this.parameter = e.parameter ? e.pa
       sbtcConfig,
       StacksTestnet: l$2,
       StacksMainnet: i,
+      fetchFeeEstimate,
       componentKey,
       unsubscribe,
       networkChange,

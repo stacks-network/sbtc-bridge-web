@@ -10124,7 +10124,6 @@ h2,
 .h2,
 p {
   font-weight: 400;
-  color: #4786cd;
 }
 p {
   line-height: 1.5;
@@ -10349,7 +10348,7 @@ input, textarea {
   opacity: 0.6;
 }
 .nav-logo {
-  width: 40px;
+  width: 80px;
   height: auto;
 }
 @media screen and (min-width: 0px) and (max-width: 756px) {
@@ -10397,7 +10396,7 @@ nav {
   background-color: #333;
   display: flex;
   z-index: 20;
-  height: 60px;
+  height: 100px;
   justify-content: center;
 }
 nav a {
@@ -10439,7 +10438,7 @@ nav a {
   color: #4786cd;
 }
 .dropdown-item {
-  font-size: 0.8rem !important;
+  font-size: 1rem !important;
   color: #ededed;
 }
 .dropdown-item:hover, .dropdown-item:focus {
