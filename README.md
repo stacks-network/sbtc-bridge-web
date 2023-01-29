@@ -90,27 +90,14 @@ npm publish
 
 ## Bundling bitcoinjs-lib
 
-This application ports the Bitcoinjs library by polyfilling nodejs dependencies. For
-Details see 1 below. Bitcoin js can also be bundled using browserify. This is an older and
-more clunky - details below.
+This application ports the Bitcoinjs library by polyfilling nodejs dependencies.
+Alternatively Bitcoinjs can be bundled using browserify (see Pre-Compiling Bitcoinjs Module
+below).
 
-### 1. Polyfill
+The polyfill is mainly for the Buffer library and some associated dedendencies such as Transform/stream.
+See `vite.config.js` for details on polyfilling for development and production build environments.
 
-The main issue is configuring vite to polyfill the required nodejs dependencies. This
-has to be done in both the development and production build environments. The various
-legacy modules and dependencies and the number of circular dependencies together with the
-fact tha the nodejs module mechanics differ from those of the client side code means
-its just not easy!
-The following came close to successfully polyfilling Buffer into bitcoinjs
-[Polyfill Node.js built-in modules with Vite](https://medium.com/@ftaioli/using-node-js-builtin-modules-with-vite-6194737c2cd2). But even with excellent guides
-like this there may be slight differences and a problem persisted in the development
-build environment.
-
-```bash
-npm install bitcoinjs-lib browserify uglify-es
-```
-
-### 2. Pre-Compiling Bitcoinjs Module
+### Pre-Compiling Bitcoinjs Module
 
 See [How to Browserify](https://github.com/bitcoinjs/bitcoinjs-lib/issues/965).
 
@@ -126,7 +113,7 @@ npm install -g uglify-es
 ln -s /Users/mikey/.nvm/versions/node/v16.14.2/bin/browserify /usr/local/bin/browserify
 ```
 
-Download the latest tag of bitcoinjs;
+Download bitcoinjs from the latest tag;
 
 ```bash
 git clone git@github.com:bitcoinjs/bitcoinjs-lib.git

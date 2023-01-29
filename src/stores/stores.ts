@@ -7,4 +7,4 @@ This assumes the data you're pulling back will be an array.
 If it's going to be an object, default this to an empty object.
 **/
 export const threads = writable([]);
-export const sbtcConfig = persisted('sbtcConfig', { network: 'testnet' } as SbtcConfig)
+export const sbtcConfig = persisted('sbtcConfig', { network: 'mainnet', pegIn: true } as SbtcConfig)

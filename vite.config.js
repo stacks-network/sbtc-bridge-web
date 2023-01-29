@@ -16,9 +16,14 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
 
 export default defineConfig({
-  //define: {
-  //  global: {},
-  //},
+  test: {
+    //environment: 'jsdom',
+    globals: true,
+    threads: false,
+    watch: false,
+    //include: ['**/__tests__/*.{js,tsx,ts}'],
+    setupFiles: './tests/setup.ts'
+  },
   plugins: [
     sveltekit(),
     wasm(),

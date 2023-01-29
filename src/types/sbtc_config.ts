@@ -10,4 +10,7 @@ export type SbtcConfig = {
   fromBtcAddress?:string;
   addressDetails:AddressDetails,
   utxos: Array<UTXO>;
+  feeInfo: {low_fee_per_kb:number, medium_fee_per_kb:number, high_fee_per_kb:number};
+  feeToApply:number;
+  pegIn:boolean;
 };
