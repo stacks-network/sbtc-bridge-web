@@ -16,7 +16,7 @@
 				<h2 class="text-info mb-3">{#if $sbtcConfig.pegIn}BTC to sBTC{:else}sBTC to BTC{/if} - no middle men!</h2>
 				<div class="my-3 d-flex justify-content-between text-white">
 					<span>SBTC Wallet: { $sbtcConfig.sbtcWalletAddress }</span>
-					{#if $sbtcConfig.pegInAmount}<span class="text-end">Amount: { $sbtcConfig.pegInAmount }</span>{/if}
+					{#if $sbtcConfig.pegIn && $sbtcConfig.pegInAmount}<span class="text-end">Amount: { $sbtcConfig.pegInAmount }</span>{/if}
 				</div>
 				{#if $sbtcConfig.pegIn}
 				<div class="d-flex justify-content-center">

@@ -1,9 +1,7 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { standardPrincipalCV, uintCV } from 'micro-stacks/clarity';
-import { serializeCV, cvToJSON, deserializeCV } from "micro-stacks/clarity";
-import { bytesToHex } from "micro-stacks/common";
+import { cvToJSON } from "micro-stacks/clarity";
 import { c32address, c32addressDecode } from 'c32check'
 
 export function decodeStacksAddress(stxAddress:string) {

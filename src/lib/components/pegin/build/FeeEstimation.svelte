@@ -46,7 +46,6 @@ $: showFeeCalculation = feeToApply > 0;
         <div><a href="/" on:click|preventDefault={() => {feeToApply = 0; changeErrorReason = undefined}}>reset</a></div>
       </div>
       <div>Peg In: {$sbtcConfig.pegInAmount}</div>
-      <div>Change: {change}</div>
       {:else}
       <label for="transact-path" class="mb-3">Select Fee Rate for Fee Calculation</label>
       <div class="dropdown">
