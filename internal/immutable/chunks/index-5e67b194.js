@@ -117,6 +117,10 @@ function compute_rest_props(props, keys) {
             rest[k] = props[k];
     return rest;
 }
+function set_store_value(store, ret, value) {
+    store.set(value);
+    return ret;
+}
 
 // Track which nodes are claimed during hydration. Unclaimed nodes can then be removed from the DOM
 // at the end of hydration without touching the remaining nodes.
@@ -1026,4 +1030,4 @@ function derived(stores, fn, initial_value) {
     });
 }
 
-export { compute_rest_props as $, create_component as A, claim_component as B, mount_component as C, destroy_component as D, tick as E, writable as F, getContext as G, derived as H, readable as I, validate_store as J, component_subscribe as K, noop as L, src_url_equal as M, append_hydration_dev as N, listen_dev as O, prevent_default as P, createEventDispatcher as Q, run_all as R, SvelteComponentDev as S, onDestroy as T, globals as U, create_slot as V, update_slot_base as W, get_all_dirty_from_scope as X, get_slot_changes as Y, get_store_value as Z, assign as _, afterUpdate as a, exclude_internal_props as a0, svg_element as a1, claim_svg_element as a2, set_svg_attributes as a3, toggle_class as a4, get_spread_update as a5, set_input_value as a6, to_number as a7, validate_each_argument as a8, prop_dev as a9, destroy_each as aa, setContext as b, space as c, dispatch_dev as d, empty as e, claim_space as f, insert_hydration_dev as g, group_outros as h, init as i, check_outros as j, transition_in as k, detach_dev as l, construct_svelte_component_dev as m, element as n, onMount as o, claim_element as p, children as q, attr_dev as r, safe_not_equal as s, transition_out as t, set_style as u, validate_slots as v, add_location as w, text as x, claim_text as y, set_data_dev as z };
+export { compute_rest_props as $, create_component as A, claim_component as B, mount_component as C, destroy_component as D, tick as E, writable as F, validate_store as G, component_subscribe as H, noop as I, src_url_equal as J, append_hydration_dev as K, listen_dev as L, prevent_default as M, createEventDispatcher as N, run_all as O, onDestroy as P, globals as Q, create_slot as R, SvelteComponentDev as S, update_slot_base as T, get_all_dirty_from_scope as U, get_slot_changes as V, getContext as W, derived as X, readable as Y, get_store_value as Z, assign as _, afterUpdate as a, exclude_internal_props as a0, svg_element as a1, claim_svg_element as a2, set_svg_attributes as a3, toggle_class as a4, get_spread_update as a5, set_store_value as a6, set_input_value as a7, to_number as a8, validate_each_argument as a9, prop_dev as aa, destroy_each as ab, setContext as b, space as c, dispatch_dev as d, empty as e, claim_space as f, insert_hydration_dev as g, group_outros as h, init as i, check_outros as j, transition_in as k, detach_dev as l, construct_svelte_component_dev as m, element as n, onMount as o, claim_element as p, children as q, attr_dev as r, safe_not_equal as s, transition_out as t, set_style as u, validate_slots as v, add_location as w, text as x, claim_text as y, set_data_dev as z };
