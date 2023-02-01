@@ -1,6 +1,15 @@
 /**
  * utxos - interact with Bitcoin Blockchain to read utxo info
  */
+//import TrezorConnect from '@trezor/connect-web';
+
+export async function getPubkey(TrezorConnect) {
+  try {
+    return TrezorConnect.getAccountInfo({coin: "test",descriptor: ""});
+  } catch (err) {
+    console.log(err);
+  }
+}
 
 export async function fetchAddressDetails(network:string, address:string) {
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
@@ -10,13 +19,27 @@ export async function fetchAddressDetails(network:string, address:string) {
   }
   throw new Error('Address not found - is the network correct?');
 }
-
 export async function fetchUTXOs(network:string, address:string) {
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address + '/utxo');
   if (response.status === 200) {
     const utxos = await response.json();
+    const txs = await fetchTxs(network, address);
+    utxos.forEach((utxo:any) => {
+      const tx = txs.find((tx: { txid: any; }) => tx.txid === utxo.txid)
+      utxo.fullout = tx.vout.find((o:any) => o.value === utxo.value); 
+    })
     return utxos;
+  }
+  throw new Error('Bitcoin address not know - is the network correct?');
+}
+
+export async function fetchTxs(network:string, address:string) {
+  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+  const response = await fetch(url + '/address/' + address + '/txs');
+  if (response.status === 200) {
+    const txs = await response.json();
+    return txs;
   }
   throw new Error('Bitcoin address not know - is the network correct?');
 }

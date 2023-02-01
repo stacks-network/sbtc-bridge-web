@@ -1,12 +1,14 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Buffer } from "buffer/";
+import { getPubkey } from "$lib/utxos";
 import { transactionHex, transactionData } from "$lib/psbt";
 import { sbtcConfig } from '$stores/stores'
 import { Tooltip } from "bootstrap";
 import { createEventDispatcher } from "svelte";
 import type { Psbt } from 'bitcoinjs-lib';
 import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
+import WalletHelp from '$lib/components/wallets/WalletHelp.svelte';
 
 const dispatch = createEventDispatcher();
 let showTx = false;
@@ -25,17 +27,17 @@ const convertHexToString = (bytes: Uint8Array) => {
 
 let psbt:Psbt|undefined;
 let hexTx:string|undefined;
+let tzPubKey:any;
 onMount(async () => {
   psbt = await transactionData($sbtcConfig);
   hexTx = await transactionHex(psbt);
-  setTimeout(function () {
-    registerTooltips();
-  }, 500)
+  console.log('TrezorConnect:', window.TrezorConnect)
+  tzPubKey = await getPubkey(window.TrezorConnect);
+  console.log('tzPubKey:', tzPubKey)
+  //setTimeout(function () {
+    //registerTooltips();
+  //}, 500)
 })
-const registerTooltips = () => {
-  const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip-ftux"]');
-  if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new Tooltip(tooltipTriggerEl));
-}
 </script>
         
 
@@ -48,6 +50,7 @@ const registerTooltips = () => {
         <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
       </div>
     </div>
+    {tzPubKey}
     
     {#if showTx && psbt}
     <h4>Transaction Inputs</h4>
@@ -63,9 +66,9 @@ const registerTooltips = () => {
     <div class="mx-1 row bg-light my-1 py-3 text-info">
       <div class="col-2">Output {i + 1}</div>
       <div class="col-8">
-          {#if i === 0} <span class="text-info">To:</span> {$sbtcConfig.sbtcWalletAddress}
-          {:else if i === 1 && psbt?.txOutputs.length > 2}<span class="text-info">Change:</span> {$sbtcConfig.fromBtcAddress}
-          {:else}<span class="text-info">OP_RETURN:</span> {convertUint8ToHex(output.script)}
+          {#if i === 0}<span class="text-info">OP_RETURN:</span> {convertUint8ToHex(output.script)}
+          {:else if i === 1 && psbt?.txOutputs.length > 2} <span class="text-info">To:</span> {$sbtcConfig.sbtcWalletAddress}
+          {:else}<span class="text-info">Change:</span> {$sbtcConfig.fromBtcAddress}
           {/if}
       </div>
       <div class="col-2"><span class="text-info"></span> {output.value}</div>
@@ -83,6 +86,7 @@ const registerTooltips = () => {
     <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hexTx}</textarea>
   </div>
 </div>
+<WalletHelp />
       
   <style>
   .row {

@@ -1,21 +1,7 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { cvToJSON } from "micro-stacks/clarity";
-import { c32address, c32addressDecode } from 'c32check'
-
-export function decodeStacksAddress(stxAddress:string) {
-  if (!stxAddress) throw new Error('Needs a stacks address');
-  const decoded = c32addressDecode(stxAddress)
-  return decoded
-}
-
-export function encodeStacksAddress (network:string, b160Address:string) {
-  let version = 26
-  if (network === 'mainnet') version = 22
-  const address = c32address(version, b160Address) // 22 for mainnet
-  return address
-}
+import { deserializeCV, cvToJSON } from "micro-stacks/clarity";
 
 export async function fetchSbtcWalletAddress(network:string) {
   const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
@@ -23,12 +9,12 @@ export async function fetchSbtcWalletAddress(network:string) {
 	const data = {
 		contractAddress: contractId.split('.')[0],
 		contractName: contractId.split('.')[1],
-		functionName: 'get-pox-info',
+		functionName: 'get-bitcoin-wallet-address',
 		functionArgs: [],
     network
 	}
 	const result = await callContractReadOnly(data);
-  console.log('pox: ', result)
+  if (result.type.indexOf('some') > -1) return result.value
   if (network === 'testnet') {
     return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss'; // alice
   }
@@ -47,7 +33,8 @@ async function callContractReadOnly(data:any) {
     })
   });
   const val = await response.json();
-  return cvToJSON(val);
+  const result = cvToJSON(deserializeCV(val.result));
+  return result;
 }
 
 

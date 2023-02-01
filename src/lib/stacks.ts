@@ -1,10 +1,26 @@
 
+import { c32address, c32addressDecode } from 'c32check'
+
 export let webWalletNeeded = false;
 const allowed = [
   'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F',
   'SP3RQ3BGRWVXSXDZZBYGW8XHMHC4MCA6EHNHCK8FE'
 ]
 
+export function decodeStacksAddress(stxAddress:string) {
+	if (!stxAddress) throw new Error('Needs a stacks address');
+	const decoded = c32addressDecode(stxAddress)
+	return decoded
+  }
+  
+  export function encodeStacksAddress (network:string, b160Address:string) {
+	let version = 26
+	if (network === 'mainnet') version = 22
+	const address = c32address(version, b160Address) // 22 for mainnet
+	return address
+  }
+  
+  
 export async function login($auth: any) {
 	try {
 		$auth.openAuthRequest({

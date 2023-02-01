@@ -4,7 +4,9 @@ import type { AddressDetails } from "$types/address_details";
 export type SbtcConfig = {
   network: string;
   pegInAmount: number;
+  pegOutAmount: number;
   pegInChangeAmount: number;
+  pegOutChangeAmount: number;
   stxAddress?: string;
   sbtcWalletAddress?: string;
   fromBtcAddress?:string;

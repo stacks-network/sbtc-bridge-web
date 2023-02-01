@@ -1,8 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores'
-import Principal from "$lib/components/pegin/build/Principal.svelte";
-import PegInAmount from "$lib/components/pegin/build/PegInAmount.svelte";
+import PegOutAmount from "$lib/components/pegout/PegOutAmount.svelte";
 import UTXOSelection from "$lib/components/pegin/build/UTXOSelection.svelte";
 import { Tooltip } from "bootstrap";
 import { createEventDispatcher } from "svelte";
@@ -16,29 +15,18 @@ const requestSignature = () => {
   dispatch('request_signature');
 }
 
-const principalUpdated = (event:any) => {
-  stxAddressOk = !event.detail.error;
-}
-
 const amountUpdated = () => {}
 
-$: showStxAddress = $sbtcConfig.fromBtcAddress && $sbtcConfig.utxos?.length > 0;
-$: showPegInAmount = $sbtcConfig.fromBtcAddress && $sbtcConfig.stxAddress && stxAddressOk;
-$: showButton = $sbtcConfig.pegInChangeAmount >= 0 && $sbtcConfig.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.pegInAmount > 0 && stxAddressOk;
+$: showPegOutAmount = $sbtcConfig.fromBtcAddress;
+$: showButton = $sbtcConfig.pegOutChangeAmount >= 0 && $sbtcConfig.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.pegOutAmount > 0;
 
 onMount(async () => {
-  //setTimeout(function () {
-    //registerTooltips();
-  //}, 500)
 })
 </script>  
 {#if errorReason}<div class="text-warning">{errorReason}</div>{/if}
 <div class="mb-4"><UTXOSelection /></div>
-{#if showStxAddress}
-<div class="mb-4"><Principal on:principal_updated={principalUpdated} /></div>
-{/if}
-{#if showPegInAmount}
-<div class="mb-4"><PegInAmount on:amount_updated={amountUpdated} /></div>
+{#if showPegOutAmount}
+<div class="mb-4"><PegOutAmount on:amount_updated={amountUpdated} /></div>
 {/if}
 {#if showButton}
 <div class="row">

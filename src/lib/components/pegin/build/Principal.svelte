@@ -1,5 +1,5 @@
 <script lang="ts">
-import { decodeStacksAddress } from "$lib/sbtc";
+import { decodeStacksAddress } from "$lib/stacks";
 import { sbtcConfig } from '$stores/stores'
 import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
@@ -52,7 +52,7 @@ const changeStxAddress = () => {
 }
 </script>
 
-<div class="row mb-4">
+<div class="row">
   <div class="col">
     <label for="transact-path" class="d-flex justify-content-between">
       <span>Stacks/Contract Principal ({$sbtcConfig.network}):</span>
