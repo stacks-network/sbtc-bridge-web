@@ -52,8 +52,6 @@
 		"big-integer": "^1.6.51",
 		"bip32": "^3.1.0",
 		"bitcoinjs-lib": "^6.1.0",
-		"blockstack": "^21.1.1",
-		"blockstack-trezor": "^0.9.8",
 		"bootstrap": "^5.2.3",
 		"c32check": "^2.0.0",
 		"ecpair": "^2.1.0",

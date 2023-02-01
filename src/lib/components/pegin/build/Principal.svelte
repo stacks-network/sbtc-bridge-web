@@ -1,12 +1,20 @@
 <script lang="ts">
-import { decodeStacksAddress } from "$lib/sbtc";
+import { decodeStacksAddress } from "$lib/stacks";
 import { sbtcConfig } from '$stores/stores'
 import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
+import { getAuth, getAccount } from "@micro-stacks/svelte";
 
+const account = getAccount();
 const format = /[ `!@#$%^&*()_+=\[\]{};':"\\|,<>\/?~]/;
 const dispatch = createEventDispatcher();
+const auth = getAuth();
+if (!$sbtcConfig.stxAddress) {
+  if ($auth.isSignedIn) {
+    $sbtcConfig.stxAddress = $account.stxAddress
+  }
+}
 let stxAddress:string|undefined = $sbtcConfig.stxAddress;
 const mainReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
 let reason = mainReason;
@@ -52,7 +60,7 @@ const changeStxAddress = () => {
 }
 </script>
 
-<div class="row mb-4">
+<div class="row">
   <div class="col">
     <label for="transact-path" class="d-flex justify-content-between">
       <span>Stacks/Contract Principal ({$sbtcConfig.network}):</span>

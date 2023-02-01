@@ -57,10 +57,10 @@ onMount(async () => {
     conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
     conf.feeToApply = conf.feeInfo.low_fee_per_kb;
     sbtcConfig.update(() => conf);
+    inited = true;
   } catch (err) {
     console.log(err)
   }
-  inited = true;
   await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
