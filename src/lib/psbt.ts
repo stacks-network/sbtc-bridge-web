@@ -29,13 +29,13 @@ function buildTransaction(config:SbtcConfig) {
   const psbt = new Psbt({ network });
   let change = 0;
   config.utxos.forEach((utxo) => {
-    psbt.addInput({ 
+    psbt.addInput({
       hash: utxo.txid, 
       index: utxo.vout, 
-      witnessUtxo: {
-        script: Buffer.from(utxo.fullout.scriptpubkey_asm, 'hex'),
-        value: utxo.value
-      }
+      ///witnessUtxo: {
+      //  script: Buffer.from(utxo.fullout.scriptpubkey_asm, 'hex'),
+      //  value: utxo.value
+      //}
     });
     change += utxo.value;
   })
