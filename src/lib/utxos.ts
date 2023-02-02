@@ -19,12 +19,12 @@ export async function fetchAddressDetails(network:string, address:string) {
   }
   throw new Error('Address not found - is the network correct?');
 }
-export async function fetchUTXOs(network:string, address:string) {
+
+export async function fetchUTXOs(network:string, address:string, txs:any) {
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address + '/utxo');
   if (response.status === 200) {
     const utxos = await response.json();
-    const txs = await fetchTxs(network, address);
     utxos.forEach((utxo:any) => {
       const tx = txs.find((tx: { txid: any; }) => tx.txid === utxo.txid)
       utxo.fullout = tx.vout.find((o:any) => o.value === utxo.value); 

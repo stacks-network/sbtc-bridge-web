@@ -1,7 +1,7 @@
 <script lang="ts">
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
-import { fetchUTXOs, fetchAddressDetails } from "$lib/utxos";
+import { fetchUTXOs, fetchTxs, fetchAddressDetails } from "$lib/utxos";
 import { PatchQuestion } from "svelte-bootstrap-icons";
 
 let bitcoinAddress:string|undefined = $sbtcConfig.fromBtcAddress;
@@ -21,7 +21,8 @@ const configureUTXOs = async (force:boolean) => {
     let result = await fetchAddressDetails($sbtcConfig.network, bitcoinAddress);
     conf.fromBtcAddress = bitcoinAddress;
     conf.addressDetails = result;
-    result = await fetchUTXOs($sbtcConfig.network, bitcoinAddress);
+    const txSet = await fetchTxs($sbtcConfig.network, bitcoinAddress);
+    result = await fetchUTXOs($sbtcConfig.network, bitcoinAddress, txSet);
     console.log('utxos --> ', result);
     conf.utxos = result;
     sbtcConfig.update(() => conf);

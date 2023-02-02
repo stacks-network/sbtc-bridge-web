@@ -1,10 +1,8 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Buffer } from "buffer/";
-import { getPubkey } from "$lib/utxos";
 import { transactionHex, transactionData } from "$lib/psbt";
 import { sbtcConfig } from '$stores/stores'
-import { Tooltip } from "bootstrap";
 import { createEventDispatcher } from "svelte";
 import type { Psbt } from 'bitcoinjs-lib';
 import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
@@ -27,13 +25,13 @@ const convertHexToString = (bytes: Uint8Array) => {
 
 let psbt:Psbt|undefined;
 let hexTx:string|undefined;
-let tzPubKey:any;
+//let tzPubKey:any;
 onMount(async () => {
   psbt = await transactionData($sbtcConfig);
   hexTx = await transactionHex(psbt);
-  console.log('TrezorConnect:', window.TrezorConnect)
-  tzPubKey = await getPubkey(window.TrezorConnect);
-  console.log('tzPubKey:', tzPubKey)
+  //console.log('TrezorConnect:', window.TrezorConnect)
+  //tzPubKey = await getPubkey(window.TrezorConnect);
+  //console.log('tzPubKey:', tzPubKey)
   //setTimeout(function () {
     //registerTooltips();
   //}, 500)
@@ -50,7 +48,6 @@ onMount(async () => {
         <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
       </div>
     </div>
-    {tzPubKey}
     
     {#if showTx && psbt}
     <h4>Transaction Inputs</h4>

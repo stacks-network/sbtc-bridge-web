@@ -1,6 +1,7 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
-import { maxCommit, fetchUTXOs, fetchAddressDetails } from "$lib/utxos";
-import { sbtcConfig1, sbtcConfig10 } from './test_data';
+import { fetchAddressDetails, fetchUTXOs, fetchTxs } from "$lib/utxos";
+import { addressList, addresses, txs, utxos } from './test_data';
+import util from 'util'
 
 // The two tests marked with concurrent will be run in parallel
 describe('suite', () => {
@@ -8,44 +9,39 @@ describe('suite', () => {
     // tell vitest we use mocked time
     //vi.useFakeTimers()
     //fetchMock.resetMocks();
-    console.log("beforeAll: ");
+    console.log("beforeAll: -----------------------------------------------");
   })
 
   beforeEach(async () => {
-    // tell vitest we use mocked time
-    //vi.useFakeTimers()
-    //fetchMock.resetMocks();
-    console.log("request 1: ");
-    fetchMock.mockIf(/^.*tb1qkgekp2xw5yw26n0whhcutnmezxj09elxnfw39x.*$/, (req) => {
-      console.log("request 3: " + req.url);
-      return JSON.stringify(sbtcConfig10);
-    });
-    fetchMock.mockIf(/^.*tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq.*$/, (req) => {
-      console.log("request 2: " + req.url);
-      return JSON.stringify(sbtcConfig1);
-    });
+    // cant fetch mock here as only first mock is recognised
+    console.log("request: ===================================================");
   })
 
   it.concurrent('can fetch 1 utxos', async () => {
     
-    //fetchMock.mockResponseOnce(JSON.stringify({ data: sbtcConfig1 }));
-    const res = await fetchAddressDetails('testnet', 'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
-    console.log("res1: " + res.utxos.length);
-    //expect(res).toEqual(sbtcConfig1);
-    //expect(sbtcConfig1.utxos.length).toEqual(1);
-    //console.log('res: ', res);
-    //expect(fetchAddressDetails(sbtcConfig.network, sbtcConfig.fromBtcAddress))
-  })
-
-  it.concurrent('can fetch 10 utxos', async () => {
+    fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb.*$/, () => { 
+      return JSON.stringify(addresses[0]); 
+    });
+    let res = await fetchAddressDetails('testnet', addressList[0]);
+    expect(res).toEqual(addresses[0]);
     
-    //fetchMock.mockResponseOnce(JSON.stringify({ data: sbtcConfig10 }));
-    const res = await fetchAddressDetails('testnet', 'tb1qkgekp2xw5yw26n0whhcutnmezxj09elxnfw39x');
-    console.log("res2: " + res.utxos.length);
-    //expect(res).toEqual(sbtcConfig10);
-    //expect(sbtcConfig10.utxos.length).toEqual(10);
-    //console.log('res: ', res);
-    //expect(fetchAddressDetails(sbtcConfig.network, sbtcConfig.fromBtcAddress))
+    fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb\/tx.*$/, () => {
+      console.log('Mock 2', util.inspect(utxos[0], false, null, true /* enable colors */))
+      return JSON.stringify(txs[0]);
+    });
+    const addressTxs = await fetchTxs('testnet', addressList[0]);
+    //expect(res.txid).toEqual('5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508');
+
+    fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb\/utxo.*$/, () => {
+      console.log('Mock 3', util.inspect(utxos[0], false, null, true /* enable colors */))
+      return JSON.stringify(utxos[0]);
+    });
+    res = await fetchUTXOs('testnet', addressList[0]), addressTxs;
+    console.log('Result 3', util.inspect(res, false, null, true /* enable colors */))
+    //console.log(res);
+    //expect(res).toEqual(txs[0]);
+
   })
 
 })
+
