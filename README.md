@@ -2,13 +2,9 @@
 
 ## Introduction
 
-Sbtc-bridge supports the trustless swap of BTC to/from sBTC.
+Sbtc-bridge supports a trustless two way peg between BTC and sBTC.
 sBTC is a SIP-010 fungible token on the Stacks Blockchain that can be used in
-defi protocols, nft marketplace, dao governance and many more applications.
-
-Non-custodial swaps between Bitcoin and Stacks Blockchains are possible because
-Clarity Smart Contracts have direct read and write access to the Bitcoin chain - Stacks is
-a Bitcoin Layer 2 technology.
+defi protocols, nft marketplaces, governance and many more applications.
 
 ## Testnet
 
