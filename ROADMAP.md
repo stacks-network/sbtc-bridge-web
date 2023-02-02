@@ -44,32 +44,54 @@ Delivery by 24th Feb
 
 ## Phase III: Trezor / Ledger Integration
 
+### Trezor
+
 1. Views
-    - updated peg in flow
-    - updated peg out flow
-    - wallet specific instructions / guides
-2. Integrations for transaction signing
-    - Trezor Suite / Trezor Connect
-    - Ledger Live
-3. Unit and e2e tests including creation of test data and stubs.
+    - Trezor peg in flow
+    - Trezor peg out flow
+    - Trezor instructions / guides
+2. Integrations
+    - Trezor Suite integration
+3. Transactions
+    - Trezor with SegWit (P2SH) and Native SegWit (bech32)
+4. Unit and e2e tests including creation of test data and stubs.
 
-Time: 40 days
+Time: 20 days
 
-Delivery by 30th April
+Delivery: 30th of March
 
-## Phase IV: SBTC Data Cache/Indexer
+### Ledger
 
-This components is a stateless, open API.
-Primary purpose of this component will be to make the sbtc-bridge application
-much faster by reading and aggregating SBTC related blockchain amd smart contract state.
-Its secondary purpose is to provide additional metrics and business intelligence data.
+1. Views
+    - Ledger peg in flow
+    - Ledger peg out flow
+    - Ledger instructions / guides
+2. Integrations
+    - Ledger Live integration
+3. Transactions
+    - Ledger with SegWit (P2SH) and Native SegWit (bech32)
+4. Unit and e2e tests including creation of test data and stubs.
+
+Time: 15 days
+
+Delivery by 20th April
+
+## Phase IV: SBTC Data Indexer Rest API
+
+This components is a stateless, open API whose primary purpose to make the sbtc-bridge
+application fast. It will acheive this by pre-reading and aggregating SBTC related blockchain
+and smart contract state into a Mongo database.
+
+Secondary purpose to provide additional metrics and business intelligence for SBTC.
+This component can be extended via Websocket API.
 
 1. API application deployed via docker, provides;
     - access to bitcoin rpc and stacks node rpc
     - reads/caches contract event data on schedule
 2. Mongodb deployed va docker
 3. Supporting infrastructure
-    - nginx, letsencrypt ssl
+    - nginx reverse proxy
+    - Lets Encrypt SSL
 
 Time: TBD days
 
