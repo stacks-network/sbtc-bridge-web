@@ -27,6 +27,10 @@
     "file": "internal/immutable/assets/electrum3-a984e762.png",
     "src": "src/lib/assets/wallets/electrum3.png"
   },
+  "src/lib/assets/wallets/electrum2.png": {
+    "file": "internal/immutable/assets/electrum2-8623e396.png",
+    "src": "src/lib/assets/wallets/electrum2.png"
+  },
   "src/lib/assets/wallets/trezor1.png": {
     "file": "internal/immutable/assets/trezor1-52a60956.png",
     "src": "src/lib/assets/wallets/trezor1.png"
@@ -34,10 +38,6 @@
   "src/lib/assets/wallets/electrum1.png": {
     "file": "internal/immutable/assets/electrum1-b86953ea.png",
     "src": "src/lib/assets/wallets/electrum1.png"
-  },
-  "src/lib/assets/wallets/electrum2.png": {
-    "file": "internal/immutable/assets/electrum2-8623e396.png",
-    "src": "src/lib/assets/wallets/electrum2.png"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-cyrillic-ext-400-normal-3df7909e.woff2",
@@ -47,10 +47,6 @@
     "file": "internal/immutable/assets/fira-mono-cyrillic-400-normal-c7d433fd.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2"
   },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2"
-  },
   "node_modules/@fontsource/fira-mono/files/fira-mono-latin-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-latin-400-normal-e43b3538.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-latin-400-normal.woff2"
@@ -58,6 +54,10 @@
   "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-greek-400-normal-a8be01ce.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2"
+  },
+  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-latin-ext-400-normal-6bfabd30.woff2",
@@ -76,7 +76,7 @@
     "src": "src/routes/+layout.css"
   },
   "node_modules/@sveltejs/kit/src/runtime/client/start.js": {
-    "file": "internal/immutable/start-8bb9eca5.js",
+    "file": "internal/immutable/start-2ddcf78b.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/start.js",
     "isEntry": true,
     "imports": [
@@ -142,7 +142,7 @@
     ]
   },
   ".svelte-kit/generated/nodes/2.js": {
-    "file": "internal/immutable/chunks/2-083d3e7c.js",
+    "file": "internal/immutable/chunks/2-945a0f1c.js",
     "src": ".svelte-kit/generated/nodes/2.js",
     "isDynamicEntry": true,
     "imports": [
@@ -159,7 +159,7 @@
     ]
   },
   "src/routes/+page.svelte": {
-    "file": "internal/immutable/components/pages/_page.svelte-69aee4d8.js",
+    "file": "internal/immutable/components/pages/_page.svelte-5ccf1461.js",
     "src": "src/routes/+page.svelte",
     "isEntry": true,
     "imports": [

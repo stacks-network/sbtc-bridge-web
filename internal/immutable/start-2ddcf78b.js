@@ -969,7 +969,7 @@ let __tla = (async () => {
   const nodes = [
     () => __vitePreload(() => import("./chunks/0-b22f7e7b.js"), true ? ["./chunks/0-b22f7e7b.js","./components/pages/_layout.svelte-5fd5d312.js","./chunks/preload-helper-6910039e.js","./chunks/index-5e67b194.js","./chunks/utxos-d0053d96.js","./assets/_layout-408de3d2.css"] : void 0, import.meta.url),
     () => __vitePreload(() => import("./chunks/1-a57855af.js"), true ? ["./chunks/1-a57855af.js","./components/error.svelte-58991c5f.js","./chunks/index-5e67b194.js","./chunks/singletons-8cca75f2.js"] : void 0, import.meta.url),
-    () => __vitePreload(() => import("./chunks/2-083d3e7c.js"), true ? ["./chunks/2-083d3e7c.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-69aee4d8.js","./chunks/index-5e67b194.js","./chunks/utxos-d0053d96.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/_page-1aa4e89a.css"] : void 0, import.meta.url)
+    () => __vitePreload(() => import("./chunks/2-945a0f1c.js"), true ? ["./chunks/2-945a0f1c.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-5ccf1461.js","./chunks/index-5e67b194.js","./chunks/utxos-d0053d96.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/_page-1aa4e89a.css"] : void 0, import.meta.url)
   ];
   const server_loads = [];
   const dictionary = {
