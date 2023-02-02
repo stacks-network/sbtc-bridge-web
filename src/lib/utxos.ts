@@ -3,9 +3,27 @@
  */
 //import TrezorConnect from '@trezor/connect-web';
 
-export async function getPubkey(TrezorConnect) {
+const path = "m/49'/1'/0'"
+const coin = "Testnet"
+export async function fetchPubkey(userPath:string) {
   try {
-    return TrezorConnect.getAccountInfo({coin: "test",descriptor: ""});
+    const accnt = await globalThis.TrezorConnect.getPubkey({
+      path: userPath,
+      coin,
+    });
+    return accnt;
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+export async function fetchAccount() {
+  try {
+    const accnt = await globalThis.TrezorConnect.getAccountInfo({
+      //path,
+      coin,
+    });
+    return accnt;
   } catch (err) {
     console.log(err);
   }

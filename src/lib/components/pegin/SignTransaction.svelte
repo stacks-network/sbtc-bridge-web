@@ -1,8 +1,8 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { Buffer } from "buffer/";
-import { getPubkey } from "$lib/utxos";
-import { transactionHex, transactionData } from "$lib/psbt";
+import { fetchPubkey, fetchAccount } from "$lib/utxos";
+import { transactionHex, transactionB64, transactionData } from "$lib/psbt";
 import { sbtcConfig } from '$stores/stores'
 import { Tooltip } from "bootstrap";
 import { createEventDispatcher } from "svelte";
@@ -20,19 +20,36 @@ const convertUint8ToHex = (bytes: Uint8Array) => {
   let hex = Buffer.from(bytes).toString('hex');
   return hex;
 }
-const convertHexToString = (bytes: Uint8Array) => {
-  let hex = Buffer.from(bytes).toString('hex');
-  return hex;
+
+let tzPubKey:any;
+let tzAccount:any;
+const fetchTzAccount = async () => {
+  tzAccount = await fetchAccount(tzAccount.payload.path);
+  console.log('tzAccount: ', tzAccount)
+}
+const fetchTzPubKey = async () => {
+  tzPubKey = await fetchPubkey();
+  console.log('tzPubKey: ', tzPubKey)
 }
 
 let psbt:Psbt|undefined;
 let hexTx:string|undefined;
-let tzPubKey:any;
+let b64Tx:string|undefined;
 onMount(async () => {
   psbt = await transactionData($sbtcConfig);
   hexTx = await transactionHex(psbt);
+  b64Tx = await transactionB64(psbt);
+  const tzId = window.TrezorConnect;
+  //if (!tzId) {
+    window.TrezorConnect.init({
+      lazyLoad: true, // this param will prevent iframe injection until TrezorConnect.method will be called
+      manifest: {
+          email: 'mike@claritylab.dev',
+          appUrl: 'http://localhost:8080',
+      },
+    });
+  //}
   console.log('TrezorConnect:', window.TrezorConnect)
-  tzPubKey = await getPubkey(window.TrezorConnect);
   console.log('tzPubKey:', tzPubKey)
   //setTimeout(function () {
     //registerTooltips();
@@ -50,8 +67,24 @@ onMount(async () => {
         <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
       </div>
     </div>
-    {tzPubKey}
+  </div>
+</div>
     
+    <div class="row">
+      <div class="col">
+        <div class="d-flex justify-content-between">
+          <span class="mx-3"><a href="/" on:click|preventDefault={() => fetchTzAccount()}>select account</a></span>
+          <span class="mx-3"><a href="/" on:click|preventDefault={() => fetchTzPubKey()}>fetch pubkey</a></span>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        {tzPubKey}
+      </div>
+    </div>
+    <div class="row">
+  <div class="col">
     {#if showTx && psbt}
     <h4>Transaction Inputs</h4>
     {#each $sbtcConfig.utxos as input}
@@ -84,6 +117,11 @@ onMount(async () => {
       and broadcast to the Bitcoin network.</p>
     <p class="text-center"><span class="text-warning">Always double check your wallet displays the correct recipient address and amount.</span></p>
     <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hexTx}</textarea>
+  </div>
+</div>
+<div class="row">
+  <div class="col">
+    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Tx}</textarea>
   </div>
 </div>
 <WalletHelp />

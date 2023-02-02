@@ -4,7 +4,8 @@ import { c32address, c32addressDecode } from 'c32check'
 export let webWalletNeeded = false;
 const allowed = [
   'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F',
-  'SP3RQ3BGRWVXSXDZZBYGW8XHMHC4MCA6EHNHCK8FE'
+  'SP3RQ3BGRWVXSXDZZBYGW8XHMHC4MCA6EHNHCK8FE',
+  'SPSZBCB3XMNCHJ2T1ECJDTBVJ02FKSQF4HMP7RGF'
 ]
 
 export function decodeStacksAddress(stxAddress:string) {
