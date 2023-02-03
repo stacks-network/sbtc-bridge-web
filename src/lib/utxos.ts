@@ -3,14 +3,6 @@
  */
 //import TrezorConnect from '@trezor/connect-web';
 
-export async function getPubkey(TrezorConnect) {
-  try {
-    return TrezorConnect.getAccountInfo({coin: "test",descriptor: ""});
-  } catch (err) {
-    console.log(err);
-  }
-}
-
 export async function fetchAddressDetails(network:string, address:string) {
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address);
@@ -25,10 +17,12 @@ export async function fetchUTXOs(network:string, address:string, txs:any) {
   const response = await fetch(url + '/address/' + address + '/utxo');
   if (response.status === 200) {
     const utxos = await response.json();
-    utxos.forEach((utxo:any) => {
-      const tx = txs.find((tx: { txid: any; }) => tx.txid === utxo.txid)
-      utxo.fullout = tx.vout.find((o:any) => o.value === utxo.value); 
-    })
+    if (txs && txs.length > 0) {
+      utxos.forEach((utxo:any) => {
+        const tx = txs.find((tx: { txid: any; }) => tx.txid === utxo.txid)
+        if (tx) utxo.fullout = tx.vout.find((o:any) => o.value === utxo.value); 
+      })
+    }
     return utxos;
   }
   throw new Error('Bitcoin address not know - is the network correct?');

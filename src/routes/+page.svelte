@@ -8,12 +8,13 @@
 	<section class="bg-dark">
 		<div class="my-4 p-4">
 			<div class="card-width">
-				<div class="d-flex justify-content-between">
-					<h1 class="text-info">
-							<span class="strokeme-info">sBTC</span> Peg {#if $sbtcConfig.pegIn}In{:else}Out{/if}
-					</h1>
-				</div>
-				<h2 class="text-info mb-3">{#if $sbtcConfig.pegIn}BTC to sBTC{:else}sBTC to BTC{/if} - no middle men!</h2>
+				{#if $sbtcConfig.pegIn}
+				<h1 class="text-info"><span class="strokeme-info">sBTC</span> Peg In</h1>
+				<h2 class="text-info mb-3">BTC to sBTC - no middle men!</h2>
+				{:else}
+				<h1 class="text-warning"><span class="strokeme-warning">sBTC</span> Peg Out</h1>
+				<h2 class="text-warning mb-3">sBTC to BTC  - no middle men!</h2>
+				{/if}
 				<div class="my-3 d-flex justify-content-between text-white">
 					<span>SBTC Wallet: { $sbtcConfig.sbtcWalletAddress }</span>
 					{#if $sbtcConfig.pegIn && $sbtcConfig.pegInAmount}<span class="text-end">Amount: { $sbtcConfig.pegInAmount }</span>{/if}
