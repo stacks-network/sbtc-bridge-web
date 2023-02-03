@@ -2,63 +2,60 @@ import { b as setContext, W as getContext, X as derived, Y as readable, Z as get
 
 function I$5(){if(typeof self<"u")return self;if(typeof window<"u")return window;if(typeof global<"u")return global;throw new Error("Unexpected runtime environment - no supported global scope (`window`, `self`, `global`) available")}function pr$1(r){if(ArrayBuffer.isView(r))return new Uint8Array(r.buffer,r.byteOffset,r.byteLength);throw new Error("Non array buffer passed to arrayBufferToUint8")}function Q$2(r,t,e){return e?`Use of '${e}' requires \`${t}\` which is unavailable on the '${r}' object within the currently executing environment.`:`\`${t}\` is unavailable on the '${r}' object within the currently executing environment.`}function hr(r,{throwIfUnavailable:t,usageDesc:e,returnEmptyObject:n}={}){let i;try{if(i=I$5(),i){let o=i[r];if(o)return o}}catch(o){console.error(`Error getting object '${r}' from global scope '${i}': ${o}`);}if(t){let o=Q$2(i,r.toString(),e);throw console.error(o),new Error(o)}if(n)return {}}function U$3(r){let t=r.reduce((i,o)=>i+o.length,0),e=new Uint8Array(t),n=0;for(let i=0;i<r.length;i++)e.set(r[i],n),n+=r[i].length;return e}function lr(r){return typeof r=="object"&&(r=Uint8Array.from(r)),r}function B$3(r){var t;return r!==null&&typeof r=="object"&&((t=r==null?void 0:r.constructor)==null?void 0:t.wordSize)===26&&Array.isArray(r==null?void 0:r.words)}function dr(r){return new TextEncoder().encode(r)}function _$4(r){return new TextDecoder().decode(r)}var O$3=new Array(255);for(let r=0;r<=255;++r)O$3[r]=r.toString(16).padStart(2,"0");function l$4(r){if(typeof r!="string")throw new TypeError("hexToBytes: expected string, got "+typeof r);if(r.length%2)throw new Error(`hexToBytes: received invalid unpadded hex, got: ${r.length}`);let t=new Uint8Array(r.length/2);for(let e=0;e<t.length;e++){let n=e*2;t[e]=Number.parseInt(r.slice(n,n+2),16);}return t}function p$4(r){let t=new Array(r.length);for(let e=0;e<r.length;++e)t[e]=O$3[r[e]];return t.join("")}function d$3(r){if(typeof r!="string")throw new TypeError("hexToNumber: expected string, got "+typeof r);return BigInt(`0x${r}`)}var x$3=(r,t=8)=>(typeof r=="bigint"?r:y$9(r,!1)).toString(16).padStart(t*2,"0"),Tr=r=>parseInt(r,16),Er=r=>JSON.parse(_$4(l$4(r))),Ir$1=r=>typeof r=="string"?l$4(r):r,Ur=r=>r.startsWith("0x")?r.replace("0x",""):r;var N$3=BigInt(0),f$7=BigInt(1);function _r(r,t=128){if(r<-(f$7<<BigInt(t)-f$7)||r>(f$7<<BigInt(t)-f$7)-f$7)throw `Integer out of range given ${t} bits to represent.`;return r>=N$3?r:~(-r-f$7|~((f$7<<BigInt(t))-f$7))}function L$4(r,t=128){return (r&f$7<<BigInt(t)-f$7)>N$3&&(r=r-(f$7<<BigInt(t))),r}function Rr$1(r,t=!1,e=8){return l$4(x$3(y$9(r,t),e))}function y$9(r,t=!1){if(typeof r=="number"){if(!Number.isInteger(r))throw new RangeError("Invalid value. Values of type 'number' must be an integer.");return BigInt(r)}if(typeof r=="string")if(r.toLowerCase().startsWith("0x")){let e=r.slice(2);e=e.padStart(e.length+e.length%2,"0"),r=l$4(e);}else try{return BigInt(r)}catch(e){if(e instanceof SyntaxError)throw new RangeError(`Invalid value. String integer '${r}' is not finite.`)}if(typeof r=="bigint")return r;if(r instanceof Uint8Array)return t?L$4(d$3(p$4(r))):d$3(p$4(r));if(B$3(r))return BigInt(r.toString());throw new TypeError(`Invalid value type. Must be a number, bigint, integer-string, hex-string, BN.js instance, or Buffer, got: ${typeof r}.`)}function h$7(r){return `[micro-stacks] ${r}`}var V$2=class V extends Error{constructor(t){super(t),this.message=h$7(t),this.name=this.constructor.name,Error.captureStackTrace&&Error.captureStackTrace(this,this.constructor);}},C$5=class C extends Error{constructor(t){super(t),this.message=h$7(t),this.name=this.constructor.name;}};var z$5=typeof window<"u",rr=z$5?{referrer:"no-referrer",referrerPolicy:"no-referrer"}:{};async function Hr(r,t={}){return fetch(r,{...rr,...t})}var H$5="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",M$5="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_";function $$4(r){let t=r.length;if(t%4>0)throw new Error("Invalid string. Length must be a multiple of 4");let e=r.indexOf("=");e===-1&&(e=t);let n=e===t?0:4-e%4;return [e,n]}function tr(r,t,e){return (t+e)*3/4-e}function G$1(r,t){let{revLookup:e}=w$6(t),n,i=$$4(r),o=i[0],s=i[1],a=new Uint8Array(tr(r,o,s)),u=0,m=s>0?o-4:o,c;for(c=0;c<m;c+=4)n=e[r.charCodeAt(c)]<<18|e[r.charCodeAt(c+1)]<<12|e[r.charCodeAt(c+2)]<<6|e[r.charCodeAt(c+3)],a[u++]=n>>16&255,a[u++]=n>>8&255,a[u++]=n&255;return s===2&&(n=e[r.charCodeAt(c)]<<2|e[r.charCodeAt(c+1)]>>4,a[u++]=n&255),s===1&&(n=e[r.charCodeAt(c)]<<10|e[r.charCodeAt(c+1)]<<4|e[r.charCodeAt(c+2)]>>2,a[u++]=n>>8&255,a[u++]=n&255),a}function W$2(r){let e=r.length,n=e%4;if(!n)return r;let i=4-n,o=e+i;return r.padEnd(o,"=")}function Gr(r){return G$1(W$2(r),H$5)}function er(r,t){let{lookup:e}=w$6(t);return e[r>>18&63]+e[r>>12&63]+e[r>>6&63]+e[r&63]}function nr(r,t,e,n){let i,o=[];for(let s=t;s<e;s+=3)i=(r[s]<<16&16711680)+(r[s+1]<<8&65280)+(r[s+2]&255),o.push(er(i,n));return o.join("")}var A$4=new Map;function w$6(r){if(A$4.has(r))return A$4.get(r);let t=[],e=[];for(let n=0,i=r.length;n<i;++n)t[n]=r[n],e[r.charCodeAt(n)]=n;return e["-".charCodeAt(0)]=62,e["_".charCodeAt(0)]=63,A$4.set(r,{lookup:t,revLookup:e}),{lookup:t,revLookup:e}}function P$5(r,t){let{lookup:e}=w$6(t),n,i=r.length,o=i%3,s=[],a=16383;for(let u=0,m=i-o;u<m;u+=a)s.push(nr(r,u,u+a>m?m:u+a,t));return o===1?(n=r[i-1],s.push(e[n>>2]+e[n<<4&63]+"==")):o===2&&(n=(r[i-2]<<8)+r[i-1],s.push(e[n>>10]+e[n>>4&63]+e[n<<2&63]+"=")),s.join("")}function Pr(r){return P$5(r,H$5)}function jr(r){return P$5(r,M$5)}var T$3="123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz",j$2=BigInt(58);function Yr(r){if(r.length===0)return "";typeof r=="string"&&(typeof TextEncoder<"u"?r=new TextEncoder().encode(r):r=new Uint8Array(r.split("").map(n=>n.charCodeAt(0))));let t=BigInt("0x"+p$4(r)),e=[];for(;t>0;){let n=Number(t%j$2);t=t/j$2,e.push(T$3[n]);}for(let n=0;r[n]===0;n++)e.push(T$3[0]);return e.reverse().join("")}function Qr(r){let t=[];for(let e=0;e<r.length;++e)t.push(r.charCodeAt(e)&255);return new Uint8Array(t)}function Xr(r){let t="",e=r.length;for(let n=0;n<e;++n)t+=String.fromCharCode(r[n]&127);return t}function rt(r,t,e,n,i){if(n||(n=0),!i&&i!==0&&(i=r.length),e>=t.length&&(e=t.length),e||(e=0),i>0&&i<n&&(i=n),i===n||t.length===0||r.length===0)return 0;if(e<0)throw new RangeError("targetStart out of bounds");if(n<0||n>=r.length)throw new RangeError("Index out of range");if(i<0)throw new RangeError("sourceEnd out of bounds");i>r.length&&(i=r.length),t.length-e<i-n&&(i=t.length-e+n);let o=i-n;return r===t&&typeof Uint8Array.prototype.copyWithin=="function"?r.copyWithin(e,n,i):Uint8Array.prototype.set.call(t,r.subarray(n,i),e),o}var q$1=class q{_value=[];get value(){return this._value}appendHexString(t){this.value.push(l$4(t));}push(t){return this._value.push(t)}appendByte(t){if(!Number.isInteger(t)||t<0||t>255)throw new Error(`Value ${t} is not a valid byte`);this.value.push(Uint8Array.from([t]));}concatBuffer(){return U$3(this.value)}};var g$4={INVALID_ENCODING:"Invalid encoding provided. Please specify a valid encoding the internal Node.js Buffer supports.",INVALID_SMARTBUFFER_SIZE:"Invalid size provided. Size must be a valid integer greater than zero.",INVALID_SMARTBUFFER_BUFFER:"Invalid Buffer provided in SmartBufferOptions.",INVALID_SMARTBUFFER_OBJECT:"Invalid SmartBufferOptions object supplied to SmartBuffer constructor or factory methods.",INVALID_OFFSET:"An invalid offset value was provided.",INVALID_OFFSET_NON_NUMBER:"An invalid offset value was provided. A numeric value is required.",INVALID_LENGTH:"An invalid length value was provided.",INVALID_LENGTH_NON_NUMBER:"An invalid length value was provived. A numeric value is required.",INVALID_TARGET_OFFSET:"Target offset is beyond the bounds of the internal SmartBuffer data.",INVALID_TARGET_LENGTH:"Specified length value moves cursor beyong the bounds of the internal SmartBuffer data.",INVALID_READ_BEYOND_BOUNDS:"Attempted to read beyond the bounds of the managed data.",INVALID_WRITE_BEYOND_BOUNDS:"Attempted to write beyond the bounds of the managed data."};function ut$2(r,t,e){return t=+t,e=e>>>0,r[e]=t&255,e+1}function ct$1(r,t,e){return t=+t,e=e>>>0,r[e]=t&255,r[e+1]=t>>>8,e+2}function mt$1(r,t,e){return t=+t,e>>>=0,r[e+3]=t>>>24,r[e+2]=t>>>16,r[e+1]=t>>>8,r[e]=t&255,e+4}function yt$2(r,t,e){return t=+t,e>>>=0,r[e]=t>>>24,r[e+1]=t>>>16,r[e+2]=t>>>8,r[e+3]=t&255,e+4}function K$2(r,t){return r instanceof t||r!=null&&r.constructor!=null&&r.constructor.name!=null&&r.constructor.name===t.name}function xt$1(r,t){if(!K$2(r,Uint8Array)||!K$2(t,Uint8Array))throw new TypeError('The "buf1", "buf2" arguments must be one of type Uint8Array');if(r===t)return 0;let e=r.length,n=t.length;for(let i=0,o=Math.min(e,n);i<o;++i)if(r[i]!==t[i]){e=r[i],n=t[i];break}return e<n?-1:n<e?1:0}function ir(r){let t=Object.values(r).filter(n=>typeof n=="number"),e=new Set(t);return n=>e.has(n)}var Y$2=new Map;function E$4(r,t){let e=Y$2.get(r);if(e!==void 0)return e(t);let n=ir(r);return Y$2.set(r,n),E$4(r,t)}function or(r){return typeof r=="number"&&isFinite(r)&&Math.floor(r)===r}function sr(r){return typeof r=="number"&&isFinite(r)&&or(r)}function Z$4(r,t){if(typeof r=="number"){if(!sr(r)||r<0)throw new Error(t?g$4.INVALID_OFFSET:g$4.INVALID_LENGTH)}else throw new Error(t?g$4.INVALID_OFFSET_NON_NUMBER:g$4.INVALID_LENGTH_NON_NUMBER)}var J$2=class J{buffer;view;_readOffset=0;constructor(t){if(t)this.buffer=t,this.view=new DataView(t.buffer,t.byteOffset,t.byteLength);else {let e=new Uint8Array;this.buffer=e,this.view=new DataView(e.buffer,e.byteOffset,e.byteLength);}}ensureReadable(t,e){let n=this._readOffset;if(typeof e<"u"&&(Z$4(e,!0),n=e),n<0||n+t>this.buffer.length)throw new Error(g$4.INVALID_READ_BEYOND_BOUNDS)}_readNumberValue(t,e,n){this.ensureReadable(e,n);let i=t.call(this.view,typeof n=="number"?n:this._readOffset);return typeof n>"u"&&(this._readOffset+=e),i}readBuffer(t){let e=typeof t=="number"?t:this.buffer.length,n=Math.min(this.buffer.length,this._readOffset+e),i=this.buffer.slice(this.buffer.byteOffset+this._readOffset,n);return this._readOffset=n,i}readUInt32BE(t){return this._readNumberValue(this.view.getUint32,4,t)}readUInt8(t){return this._readNumberValue(this.view.getUint8,1,t)}readUInt16BE(t){return this._readNumberValue(this.view.getUint16,2,t)}readBigUIntLE(t){let e=Uint8Array.from(this.readBuffer(t)).reverse(),n=p$4(e);return BigInt(`0x${n}`)}readBigUIntBE(t){let e=this.readBuffer(t),n=p$4(e);return BigInt(`0x${n}`)}readBigUInt64BE(t){if(typeof BigInt>"u")throw new Error("Platform does not support JS BigInt type.");return this._readNumberValue(this.view.getBigUint64,8,t)}get readOffset(){return this._readOffset}set readOffset(t){this._readOffset=t;}get internalBuffer(){return this.buffer.buffer}readUInt8Enum(t,e){let n=this.readUInt8();if(E$4(t,n))return n;throw e(n)}};var ur=(e=>(e[e.Testnet=2147483648]="Testnet",e[e.Mainnet=1]="Mainnet",e))(ur||{}),cr=(e=>(e[e.Mainnet=0]="Mainnet",e[e.Testnet=128]="Testnet",e))(cr||{});/*! micro-base58 - MIT License (c) 2021, Paul Miller (https://paulmillr.com) */
 
-function number(n) {
+function number$1(n) {
     if (!Number.isSafeInteger(n) || n < 0)
         throw new Error(`Wrong positive integer: ${n}`);
 }
-function bool(b) {
+function bool$1(b) {
     if (typeof b !== 'boolean')
         throw new Error(`Expected boolean, not ${b}`);
 }
-function bytes(b, ...lengths) {
+function bytes$1(b, ...lengths) {
     if (!(b instanceof Uint8Array))
         throw new TypeError('Expected Uint8Array');
     if (lengths.length > 0 && !lengths.includes(b.length))
         throw new TypeError(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
 }
-function hash(hash) {
+function hash$1(hash) {
     if (typeof hash !== 'function' || typeof hash.create !== 'function')
         throw new Error('Hash should be wrapped by utils.wrapConstructor');
-    number(hash.outputLen);
-    number(hash.blockLen);
+    number$1(hash.outputLen);
+    number$1(hash.blockLen);
 }
-function exists(instance, checkFinished = true) {
+function exists$1(instance, checkFinished = true) {
     if (instance.destroyed)
         throw new Error('Hash instance has been destroyed');
     if (checkFinished && instance.finished)
         throw new Error('Hash#digest() has already been called');
 }
-function output(out, instance) {
-    bytes(out);
+function output$1(out, instance) {
+    bytes$1(out);
     const min = instance.outputLen;
     if (out.length < min) {
         throw new Error(`digestInto() expects output buffer of length at least ${min}`);
     }
 }
-const assert = {
-    number,
-    bool,
-    bytes,
-    hash,
-    exists,
-    output,
+const assert$1 = {
+    number: number$1,
+    bool: bool$1,
+    bytes: bytes$1,
+    hash: hash$1,
+    exists: exists$1,
+    output: output$1,
 };
 
-const crypto$2 = {
+var cryptoBrowser = {};
+
+Object.defineProperty(cryptoBrowser, "__esModule", { value: true });
+cryptoBrowser.crypto = void 0;
+cryptoBrowser.crypto = {
     node: undefined,
     web: typeof self === 'object' && 'crypto' in self ? self.crypto : undefined,
 };
 
-const cryptoBrowser = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-    __proto__: null,
-    crypto: crypto$2
-}, Symbol.toStringTag, { value: 'Module' }));
-
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // Cast array to view
 const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
-// The rotate right (circular right shift) operation for uint32
-const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
 const isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
 // There is almost no big endian hardware, but js typed arrays uses platform specific endianness.
 // So, just to be sure not to corrupt anything.
@@ -95,7 +92,7 @@ function wrapConstructor(hashConstructor) {
 }
 
 // Polyfill for Safari 14
-function setBigUint64(view, byteOffset, value, isLE) {
+function setBigUint64$1(view, byteOffset, value, isLE) {
     if (typeof view.setBigUint64 === 'function')
         return view.setBigUint64(byteOffset, value, isLE);
     const _32n = BigInt(32);
@@ -108,7 +105,7 @@ function setBigUint64(view, byteOffset, value, isLE) {
     view.setUint32(byteOffset + l, wl, isLE);
 }
 // Base SHA2 class (RFC 6234)
-class SHA2 extends Hash {
+let SHA2$1 = class SHA2 extends Hash {
     constructor(blockLen, outputLen, padOffset, isLE) {
         super();
         this.blockLen = blockLen;
@@ -123,7 +120,7 @@ class SHA2 extends Hash {
         this.view = createView(this.buffer);
     }
     update(data) {
-        assert.exists(this);
+        assert$1.exists(this);
         const { view, buffer, blockLen } = this;
         data = toBytes(data);
         const len = data.length;
@@ -149,8 +146,8 @@ class SHA2 extends Hash {
         return this;
     }
     digestInto(out) {
-        assert.exists(this);
-        assert.output(out, this);
+        assert$1.exists(this);
+        assert$1.output(out, this);
         this.finished = true;
         // Padding
         // We can avoid allocation of buffer for padding completely if it
@@ -171,7 +168,7 @@ class SHA2 extends Hash {
         // Note: sha512 requires length to be 128bit integer, but length in JS will overflow before that
         // You need to write around 2 exabytes (u64_max / 8 / (1024**6)) for this to happen.
         // So we just write lowest 64 bits of that value.
-        setBigUint64(view, blockLen - 8, BigInt(this.length * 8), isLE);
+        setBigUint64$1(view, blockLen - 8, BigInt(this.length * 8), isLE);
         this.process(view, 0);
         const oview = createView(out);
         this.get().forEach((v, i) => oview.setUint32(4 * i, v, isLE));
@@ -195,7 +192,7 @@ class SHA2 extends Hash {
             to.buffer.set(buffer);
         return to;
     }
-}
+};
 
 // https://homes.esat.kuleuven.be/~bosselae/ripemd160.html
 // https://homes.esat.kuleuven.be/~bosselae/ripemd160/pdf/AB-9601/AB-9601.pdf
@@ -235,7 +232,7 @@ function f$6(group, x, y, z) {
 }
 // Temporary buffer, not used to store anything between runs
 const BUF = new Uint32Array(16);
-class RIPEMD160 extends SHA2 {
+class RIPEMD160 extends SHA2$1 {
     constructor() {
         super(64, 20, 8, true);
         this.h0 = 0x67452301 | 0;
@@ -295,6 +292,340 @@ class RIPEMD160 extends SHA2 {
  */
 const ripemd160 = wrapConstructor(() => new RIPEMD160());
 
+var sha256 = {};
+
+var _sha2 = {};
+
+var _assert = {};
+
+Object.defineProperty(_assert, "__esModule", { value: true });
+_assert.output = _assert.exists = _assert.hash = _assert.bytes = _assert.bool = _assert.number = void 0;
+function number(n) {
+    if (!Number.isSafeInteger(n) || n < 0)
+        throw new Error(`Wrong positive integer: ${n}`);
+}
+_assert.number = number;
+function bool(b) {
+    if (typeof b !== 'boolean')
+        throw new Error(`Expected boolean, not ${b}`);
+}
+_assert.bool = bool;
+function bytes(b, ...lengths) {
+    if (!(b instanceof Uint8Array))
+        throw new TypeError('Expected Uint8Array');
+    if (lengths.length > 0 && !lengths.includes(b.length))
+        throw new TypeError(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
+}
+_assert.bytes = bytes;
+function hash(hash) {
+    if (typeof hash !== 'function' || typeof hash.create !== 'function')
+        throw new Error('Hash should be wrapped by utils.wrapConstructor');
+    number(hash.outputLen);
+    number(hash.blockLen);
+}
+_assert.hash = hash;
+function exists(instance, checkFinished = true) {
+    if (instance.destroyed)
+        throw new Error('Hash instance has been destroyed');
+    if (checkFinished && instance.finished)
+        throw new Error('Hash#digest() has already been called');
+}
+_assert.exists = exists;
+function output(out, instance) {
+    bytes(out);
+    const min = instance.outputLen;
+    if (out.length < min) {
+        throw new Error(`digestInto() expects output buffer of length at least ${min}`);
+    }
+}
+_assert.output = output;
+const assert = {
+    number,
+    bool,
+    bytes,
+    hash,
+    exists,
+    output,
+};
+_assert.default = assert;
+
+var utils$1 = {};
+
+(function (exports) {
+	/*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
+	// The import here is via the package name. This is to ensure
+	// that exports mapping/resolution does fall into place.
+	const crypto_1 = cryptoBrowser;
+	// Cast array to different type
+	const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
+	exports.u8 = u8;
+	const u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
+	exports.u32 = u32;
+	// Cast array to view
+	const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
+	exports.createView = createView;
+	// The rotate right (circular right shift) operation for uint32
+	const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
+	exports.rotr = rotr;
+	exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
+	// There is almost no big endian hardware, but js typed arrays uses platform specific endianness.
+	// So, just to be sure not to corrupt anything.
+	if (!exports.isLE)
+	    throw new Error('Non little-endian hardware is not supported');
+	const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
+	/**
+	 * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef]))
+	 */
+	function bytesToHex(uint8a) {
+	    // pre-caching improves the speed 6x
+	    if (!(uint8a instanceof Uint8Array))
+	        throw new Error('Uint8Array expected');
+	    let hex = '';
+	    for (let i = 0; i < uint8a.length; i++) {
+	        hex += hexes[uint8a[i]];
+	    }
+	    return hex;
+	}
+	exports.bytesToHex = bytesToHex;
+	/**
+	 * @example hexToBytes('deadbeef')
+	 */
+	function hexToBytes(hex) {
+	    if (typeof hex !== 'string') {
+	        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
+	    }
+	    if (hex.length % 2)
+	        throw new Error('hexToBytes: received invalid unpadded hex');
+	    const array = new Uint8Array(hex.length / 2);
+	    for (let i = 0; i < array.length; i++) {
+	        const j = i * 2;
+	        const hexByte = hex.slice(j, j + 2);
+	        const byte = Number.parseInt(hexByte, 16);
+	        if (Number.isNaN(byte) || byte < 0)
+	            throw new Error('Invalid byte sequence');
+	        array[i] = byte;
+	    }
+	    return array;
+	}
+	exports.hexToBytes = hexToBytes;
+	// There is no setImmediate in browser and setTimeout is slow. However, call to async function will return Promise
+	// which will be fullfiled only on next scheduler queue processing step and this is exactly what we need.
+	const nextTick = async () => { };
+	exports.nextTick = nextTick;
+	// Returns control to thread each 'tick' ms to avoid blocking
+	async function asyncLoop(iters, tick, cb) {
+	    let ts = Date.now();
+	    for (let i = 0; i < iters; i++) {
+	        cb(i);
+	        // Date.now() is not monotonic, so in case if clock goes backwards we return return control too
+	        const diff = Date.now() - ts;
+	        if (diff >= 0 && diff < tick)
+	            continue;
+	        await (0, exports.nextTick)();
+	        ts += diff;
+	    }
+	}
+	exports.asyncLoop = asyncLoop;
+	function utf8ToBytes(str) {
+	    if (typeof str !== 'string') {
+	        throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
+	    }
+	    return new TextEncoder().encode(str);
+	}
+	exports.utf8ToBytes = utf8ToBytes;
+	function toBytes(data) {
+	    if (typeof data === 'string')
+	        data = utf8ToBytes(data);
+	    if (!(data instanceof Uint8Array))
+	        throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
+	    return data;
+	}
+	exports.toBytes = toBytes;
+	/**
+	 * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
+	 * @example concatBytes(buf1, buf2)
+	 */
+	function concatBytes(...arrays) {
+	    if (!arrays.every((a) => a instanceof Uint8Array))
+	        throw new Error('Uint8Array list expected');
+	    if (arrays.length === 1)
+	        return arrays[0];
+	    const length = arrays.reduce((a, arr) => a + arr.length, 0);
+	    const result = new Uint8Array(length);
+	    for (let i = 0, pad = 0; i < arrays.length; i++) {
+	        const arr = arrays[i];
+	        result.set(arr, pad);
+	        pad += arr.length;
+	    }
+	    return result;
+	}
+	exports.concatBytes = concatBytes;
+	// For runtime check if class implements interface
+	class Hash {
+	    // Safe version that clones internal state
+	    clone() {
+	        return this._cloneInto();
+	    }
+	}
+	exports.Hash = Hash;
+	// Check if object doens't have custom constructor (like Uint8Array/Array)
+	const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
+	function checkOpts(defaults, opts) {
+	    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
+	        throw new TypeError('Options should be object or undefined');
+	    const merged = Object.assign(defaults, opts);
+	    return merged;
+	}
+	exports.checkOpts = checkOpts;
+	function wrapConstructor(hashConstructor) {
+	    const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
+	    const tmp = hashConstructor();
+	    hashC.outputLen = tmp.outputLen;
+	    hashC.blockLen = tmp.blockLen;
+	    hashC.create = () => hashConstructor();
+	    return hashC;
+	}
+	exports.wrapConstructor = wrapConstructor;
+	function wrapConstructorWithOpts(hashCons) {
+	    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
+	    const tmp = hashCons({});
+	    hashC.outputLen = tmp.outputLen;
+	    hashC.blockLen = tmp.blockLen;
+	    hashC.create = (opts) => hashCons(opts);
+	    return hashC;
+	}
+	exports.wrapConstructorWithOpts = wrapConstructorWithOpts;
+	/**
+	 * Secure PRNG
+	 */
+	function randomBytes(bytesLength = 32) {
+	    if (crypto_1.crypto.web) {
+	        return crypto_1.crypto.web.getRandomValues(new Uint8Array(bytesLength));
+	    }
+	    else if (crypto_1.crypto.node) {
+	        return new Uint8Array(crypto_1.crypto.node.randomBytes(bytesLength).buffer);
+	    }
+	    else {
+	        throw new Error("The environment doesn't have randomBytes function");
+	    }
+	}
+	exports.randomBytes = randomBytes;
+} (utils$1));
+
+Object.defineProperty(_sha2, "__esModule", { value: true });
+_sha2.SHA2 = void 0;
+const _assert_js_1 = _assert;
+const utils_js_1$1 = utils$1;
+// Polyfill for Safari 14
+function setBigUint64(view, byteOffset, value, isLE) {
+    if (typeof view.setBigUint64 === 'function')
+        return view.setBigUint64(byteOffset, value, isLE);
+    const _32n = BigInt(32);
+    const _u32_max = BigInt(0xffffffff);
+    const wh = Number((value >> _32n) & _u32_max);
+    const wl = Number(value & _u32_max);
+    const h = isLE ? 4 : 0;
+    const l = isLE ? 0 : 4;
+    view.setUint32(byteOffset + h, wh, isLE);
+    view.setUint32(byteOffset + l, wl, isLE);
+}
+// Base SHA2 class (RFC 6234)
+class SHA2 extends utils_js_1$1.Hash {
+    constructor(blockLen, outputLen, padOffset, isLE) {
+        super();
+        this.blockLen = blockLen;
+        this.outputLen = outputLen;
+        this.padOffset = padOffset;
+        this.isLE = isLE;
+        this.finished = false;
+        this.length = 0;
+        this.pos = 0;
+        this.destroyed = false;
+        this.buffer = new Uint8Array(blockLen);
+        this.view = (0, utils_js_1$1.createView)(this.buffer);
+    }
+    update(data) {
+        _assert_js_1.default.exists(this);
+        const { view, buffer, blockLen } = this;
+        data = (0, utils_js_1$1.toBytes)(data);
+        const len = data.length;
+        for (let pos = 0; pos < len;) {
+            const take = Math.min(blockLen - this.pos, len - pos);
+            // Fast path: we have at least one block in input, cast it to view and process
+            if (take === blockLen) {
+                const dataView = (0, utils_js_1$1.createView)(data);
+                for (; blockLen <= len - pos; pos += blockLen)
+                    this.process(dataView, pos);
+                continue;
+            }
+            buffer.set(data.subarray(pos, pos + take), this.pos);
+            this.pos += take;
+            pos += take;
+            if (this.pos === blockLen) {
+                this.process(view, 0);
+                this.pos = 0;
+            }
+        }
+        this.length += data.length;
+        this.roundClean();
+        return this;
+    }
+    digestInto(out) {
+        _assert_js_1.default.exists(this);
+        _assert_js_1.default.output(out, this);
+        this.finished = true;
+        // Padding
+        // We can avoid allocation of buffer for padding completely if it
+        // was previously not allocated here. But it won't change performance.
+        const { buffer, view, blockLen, isLE } = this;
+        let { pos } = this;
+        // append the bit '1' to the message
+        buffer[pos++] = 0b10000000;
+        this.buffer.subarray(pos).fill(0);
+        // we have less than padOffset left in buffer, so we cannot put length in current block, need process it and pad again
+        if (this.padOffset > blockLen - pos) {
+            this.process(view, 0);
+            pos = 0;
+        }
+        // Pad until full block byte with zeros
+        for (let i = pos; i < blockLen; i++)
+            buffer[i] = 0;
+        // Note: sha512 requires length to be 128bit integer, but length in JS will overflow before that
+        // You need to write around 2 exabytes (u64_max / 8 / (1024**6)) for this to happen.
+        // So we just write lowest 64 bits of that value.
+        setBigUint64(view, blockLen - 8, BigInt(this.length * 8), isLE);
+        this.process(view, 0);
+        const oview = (0, utils_js_1$1.createView)(out);
+        this.get().forEach((v, i) => oview.setUint32(4 * i, v, isLE));
+    }
+    digest() {
+        const { buffer, outputLen } = this;
+        this.digestInto(buffer);
+        const res = buffer.slice(0, outputLen);
+        this.destroy();
+        return res;
+    }
+    _cloneInto(to) {
+        to || (to = new this.constructor());
+        to.set(...this.get());
+        const { blockLen, buffer, length, finished, destroyed, pos } = this;
+        to.length = length;
+        to.pos = pos;
+        to.finished = finished;
+        to.destroyed = destroyed;
+        if (length % blockLen)
+            to.buffer.set(buffer);
+        return to;
+    }
+}
+_sha2.SHA2 = SHA2;
+
+Object.defineProperty(sha256, "__esModule", { value: true });
+var sha256_1$2 = sha256.sha256 = void 0;
+const _sha2_js_1 = _sha2;
+const utils_js_1 = utils$1;
 // Choice: a ? b : c
 const Chi = (a, b, c) => (a & b) ^ (~a & c);
 // Majority function, true if any two inpust is true
@@ -320,7 +651,7 @@ const IV = new Uint32Array([
 // Temporary buffer, not used to store anything between runs
 // Named this way because it matches specification.
 const SHA256_W = new Uint32Array(64);
-class SHA256 extends SHA2 {
+class SHA256 extends _sha2_js_1.SHA2 {
     constructor() {
         super(64, 32, 8, false);
         // We cannot use array here since array allows indexing by variable
@@ -356,16 +687,16 @@ class SHA256 extends SHA2 {
         for (let i = 16; i < 64; i++) {
             const W15 = SHA256_W[i - 15];
             const W2 = SHA256_W[i - 2];
-            const s0 = rotr(W15, 7) ^ rotr(W15, 18) ^ (W15 >>> 3);
-            const s1 = rotr(W2, 17) ^ rotr(W2, 19) ^ (W2 >>> 10);
+            const s0 = (0, utils_js_1.rotr)(W15, 7) ^ (0, utils_js_1.rotr)(W15, 18) ^ (W15 >>> 3);
+            const s1 = (0, utils_js_1.rotr)(W2, 17) ^ (0, utils_js_1.rotr)(W2, 19) ^ (W2 >>> 10);
             SHA256_W[i] = (s1 + SHA256_W[i - 7] + s0 + SHA256_W[i - 16]) | 0;
         }
         // Compression function main loop, 64 rounds
         let { A, B, C, D, E, F, G, H } = this;
         for (let i = 0; i < 64; i++) {
-            const sigma1 = rotr(E, 6) ^ rotr(E, 11) ^ rotr(E, 25);
+            const sigma1 = (0, utils_js_1.rotr)(E, 6) ^ (0, utils_js_1.rotr)(E, 11) ^ (0, utils_js_1.rotr)(E, 25);
             const T1 = (H + sigma1 + Chi(E, F, G) + SHA256_K[i] + SHA256_W[i]) | 0;
-            const sigma0 = rotr(A, 2) ^ rotr(A, 13) ^ rotr(A, 22);
+            const sigma0 = (0, utils_js_1.rotr)(A, 2) ^ (0, utils_js_1.rotr)(A, 13) ^ (0, utils_js_1.rotr)(A, 22);
             const T2 = (sigma0 + Maj(A, B, C)) | 0;
             H = G;
             G = F;
@@ -399,12 +730,7 @@ class SHA256 extends SHA2 {
  * SHA2-256 hash function
  * @param message - data that would be hashed
  */
-const sha256 = wrapConstructor(() => new SHA256());
-
-const sha256$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-    __proto__: null,
-    sha256
-}, Symbol.toStringTag, { value: 'Module' }));
+sha256_1$2 = sha256.sha256 = (0, utils_js_1.wrapConstructor)(() => new SHA256());
 
 const U32_MASK64 = BigInt(2 ** 32 - 1);
 const _32n = BigInt(32);
@@ -493,7 +819,7 @@ const [SHA512_Kh, SHA512_Kl] = u64.split([
 // Temporary buffer, not used to store anything between runs
 const SHA512_W_H = new Uint32Array(80);
 const SHA512_W_L = new Uint32Array(80);
-class SHA512 extends SHA2 {
+class SHA512 extends SHA2$1 {
     constructor() {
         super(128, 64, 16, false);
         // We cannot use array here since array allows indexing by variable which means optimizer/compiler cannot use registers.
@@ -670,7 +996,7 @@ const sha512 = wrapConstructor(() => new SHA512());
 wrapConstructor(() => new SHA512_256());
 wrapConstructor(() => new SHA384());
 
-function f$5(r){return sha256.create().update(lr(r)).digest()}function y$8(r){return sha512.create().update(lr(r)).digest()}
+function f$5(r){return sha256_1$2.create().update(lr(r)).digest()}function y$8(r){return sha512.create().update(lr(r)).digest()}
 
 const __viteBrowserExternal = new Proxy({}, {
   get(_, key) {
@@ -1340,7 +1666,7 @@ class HmacDrbg {
         this.counter = 0;
     }
     hmac(...values) {
-        return utils$1.hmacSha256(this.k, ...values);
+        return utils.hmacSha256(this.k, ...values);
     }
     hmacSync(...values) {
         throw new Error('utils.hmacSha256Sync is undefined, you need to set it');
@@ -1496,7 +1822,7 @@ function initSigArgs(msgHash, privateKey, extraEntropy) {
     const seedArgs = [int2octets(d), bits2octets(h1)];
     if (extraEntropy != null) {
         if (extraEntropy === true)
-            extraEntropy = utils$1.randomBytes(32);
+            extraEntropy = utils.randomBytes(32);
         const e = ensureBytes(extraEntropy);
         if (e.length !== 32)
             throw new Error('sign: Expected 32 bytes of extra data');
@@ -1571,7 +1897,7 @@ const crypto$1 = {
     web: typeof self === 'object' && 'crypto' in self ? self.crypto : undefined,
 };
 const TAGGED_HASH_PREFIXES = {};
-const utils$1 = {
+const utils = {
     isValidPrivateKey(privateKey) {
         try {
             normalizePrivateKey(privateKey);
@@ -1623,7 +1949,7 @@ const utils$1 = {
         }
     },
     randomPrivateKey: () => {
-        return utils$1.hashToPrivateKey(utils$1.randomBytes(40));
+        return utils.hashToPrivateKey(utils.randomBytes(40));
     },
     bytesToHex,
     hexToBytes,
@@ -1667,11 +1993,11 @@ const utils$1 = {
     taggedHash: async (tag, ...messages) => {
         let tagP = TAGGED_HASH_PREFIXES[tag];
         if (tagP === undefined) {
-            const tagH = await utils$1.sha256(Uint8Array.from(tag, (c) => c.charCodeAt(0)));
+            const tagH = await utils.sha256(Uint8Array.from(tag, (c) => c.charCodeAt(0)));
             tagP = concatBytes(tagH, tagH);
             TAGGED_HASH_PREFIXES[tag] = tagP;
         }
-        return utils$1.sha256(tagP, ...messages);
+        return utils.sha256(tagP, ...messages);
     },
     taggedHashSync: (tag, ...messages) => {
         throw new Error('utils.sha256Sync is undefined, you need to set it');
@@ -1692,7 +2018,7 @@ class HMAC extends Hash {
         super();
         this.finished = false;
         this.destroyed = false;
-        assert.hash(hash);
+        assert$1.hash(hash);
         const key = toBytes(_key);
         this.iHash = hash.create();
         if (!(this.iHash instanceof Hash))
@@ -1714,13 +2040,13 @@ class HMAC extends Hash {
         pad.fill(0);
     }
     update(buf) {
-        assert.exists(this);
+        assert$1.exists(this);
         this.iHash.update(buf);
         return this;
     }
     digestInto(out) {
-        assert.exists(this);
-        assert.bytes(out, this.outputLen);
+        assert$1.exists(this);
+        assert$1.bytes(out, this.outputLen);
         this.finished = true;
         this.iHash.digestInto(out);
         this.oHash.update(out);
@@ -1760,11 +2086,11 @@ class HMAC extends Hash {
 const hmac = (hash, key, message) => new HMAC(hash, key).update(message).digest();
 hmac.create = (hash, key) => new HMAC(hash, key);
 
-function y$6(t,...o){let r=hmac.create(sha256,lr(t));for(let a of o)r.update(lr(a));return Uint8Array.from(r.digest())}
+function y$6(t,...o){let r=hmac.create(sha256_1$2,lr(t));for(let a of o)r.update(lr(a));return Uint8Array.from(r.digest())}
 
-function Ae(t){return (Math.floor(t/16)+1)*16}function Ke$2(t){return Math.ceil(t/3)*4}function He$1(t){let e={iv:"",ephemeralPK:"",mac:"",cipherText:"",wasString:!!t.wasString};t.cipherTextEncoding==="base64"&&(e.cipherTextEncoding="base64");let r=32,n=66,o=64;return {payloadValuesLength:r+n+o,payloadShell:JSON.stringify(e)}}function ke(t){let e={signature:"",publicKey:"",cipherText:t};return {signedPayloadValuesLength:144+66,signedPayloadShell:JSON.stringify(e)}}function Kt(t){let{payloadShell:e,payloadValuesLength:r}=He$1(t),n=Ae(t.contentLength),o;if(!t.cipherTextEncoding||t.cipherTextEncoding==="hex")o=n*2;else if(t.cipherTextEncoding==="base64")o=Ke$2(n);else throw new Error(`Unexpected cipherTextEncoding "${t.cipherTextEncoding}"`);if(t.sign){let{signedPayloadShell:i,signedPayloadValuesLength:c}=ke(e);return i.length+c+r+o}else return e.length+r+o}function E$3(t){return typeof t=="string"?ripemd160(t):ripemd160.create().update(lr(t)).digest()}var L$3=class L{digest(e){return E$3(e)}};function Ce$1(){return new L$3}function P$4(t){return Ce$1().digest(t)}function w$5(t){let e=y$8(t);return {encryptionKey:e.slice(0,32),hmacKey:e.slice(32)}}function $$3(t=32){return utils$1.randomBytes(t)}function b$2(t,e){let r=new Uint8Array([e]),n=new Uint8Array(25),o=new Uint8Array(21);o[0]=e,o.set(t,1);let i=f$5(o),s=f$5(i).slice(0,4);return n.set(r,0),n.set(t,1),n.set(s,t.length+1),Yr(n)}var je$2={messagePrefix:`Bitcoin Signed Message:
+function Ae(t){return (Math.floor(t/16)+1)*16}function Ke$2(t){return Math.ceil(t/3)*4}function He$1(t){let e={iv:"",ephemeralPK:"",mac:"",cipherText:"",wasString:!!t.wasString};t.cipherTextEncoding==="base64"&&(e.cipherTextEncoding="base64");let r=32,n=66,o=64;return {payloadValuesLength:r+n+o,payloadShell:JSON.stringify(e)}}function ke(t){let e={signature:"",publicKey:"",cipherText:t};return {signedPayloadValuesLength:144+66,signedPayloadShell:JSON.stringify(e)}}function Kt(t){let{payloadShell:e,payloadValuesLength:r}=He$1(t),n=Ae(t.contentLength),o;if(!t.cipherTextEncoding||t.cipherTextEncoding==="hex")o=n*2;else if(t.cipherTextEncoding==="base64")o=Ke$2(n);else throw new Error(`Unexpected cipherTextEncoding "${t.cipherTextEncoding}"`);if(t.sign){let{signedPayloadShell:i,signedPayloadValuesLength:c}=ke(e);return i.length+c+r+o}else return e.length+r+o}function E$3(t){return typeof t=="string"?ripemd160(t):ripemd160.create().update(lr(t)).digest()}var L$3=class L{digest(e){return E$3(e)}};function Ce$1(){return new L$3}function P$4(t){return Ce$1().digest(t)}function w$5(t){let e=y$8(t);return {encryptionKey:e.slice(0,32),hmacKey:e.slice(32)}}function $$3(t=32){return utils.randomBytes(t)}function b$2(t,e){let r=new Uint8Array([e]),n=new Uint8Array(25),o=new Uint8Array(21);o[0]=e,o.set(t,1);let i=f$5(o),s=f$5(i).slice(0,4);return n.set(r,0),n.set(t,1),n.set(s,t.length+1),Yr(n)}var je$2={messagePrefix:`Bitcoin Signed Message:
 `,bech32:"bc",bip32:{public:76067358,private:76066276},pubKeyHash:0,scriptHash:5,wif:128},Re={messagePrefix:`Bitcoin Signed Message:
-`,bech32:"tb",bip32:{public:70617039,private:70615956},pubKeyHash:111,scriptHash:196,wif:239},D$2={bitcoin:je$2,testnet:Re};var X$1=(o=>(o[o.mainnetP2PKH=22]="mainnetP2PKH",o[o.mainnetP2SH=20]="mainnetP2SH",o[o.testnetP2PKH=26]="testnetP2PKH",o[o.testnetP2SH=21]="testnetP2SH",o))(X$1||{}),y$5="0123456789ABCDEFGHJKMNPQRSTVWXYZ",R$4=new Map;[...y$5].forEach((t,e)=>R$4.set(t,e));var H$4="0123456789abcdef",j$1=new Map;[...H$4].forEach((t,e)=>j$1.set(t,e));function V$1(t,e){let r=Y$1(t,e),n=Me$1(U$3([e,r]));return `S${y$5[t]}${n}`}function Me$1(t){let e=p$4(t),r=[],n=0;for(let s=e.length-1;s>=0;s--)if(n<4){let p=j$1.get(e[s])>>n,a=0;s!==0&&(a=j$1.get(e[s-1]));let f=1+n,d=a%(1<<f)<<5-f,u=y$5[p+d];n=f,r.unshift(u);}else n=0;let o=0;for(let s=0;s<r.length&&r[s]==="0";s++)o++;r=r.slice(o);let i=/^\u0000*/.exec(new TextDecoder().decode(t)),c=i?i[0].length:0;for(let s=0;s<c;s++)r.unshift(y$5[0]);return r.join("")}function Y$1(t,e){let r=f$5(U$3([Uint8Array.of(t),e]));return f$5(r).slice(0,4)}function ee$2(t){if(t.length<=5)throw new Error("Invalid c32 address: invalid length");if(t[0]!=="S")throw new Error('Invalid c32 address: must start with "S"');return We$3(t.slice(1))}function We$3(t){t=te$2(t);let e=$e$2(t.slice(1)),r=t[0],n=R$4.get(r),o=e.slice(-4),i=Y$1(n,e.slice(0,-4));for(let c=0;c<o.length;c++)if(o[c]!==i[c])throw new Error("Invalid c32check string: checksum mismatch");return [n,e.slice(0,-4)]}function te$2(t){return t.toUpperCase().replace(/O/g,"0").replace(/L|I/g,"1")}function $e$2(t){if(t=te$2(t),!RegExp(`^[${y$5}]*$`).exec(t))throw new Error("Not a c32-encoded string");let e=RegExp(`^${y$5[0]}*`).exec(t),r=e?e[0].length:0,n=[],o=0,i=0;for(let p=t.length-1;p>=0;p--){i===4&&(n.unshift(H$4[o]),i=0,o=0);let f=(R$4.get(t[p])<<i)+o,d=H$4[f%16];if(i+=1,o=f>>4,o>1<<i)throw new Error("Panic error in decoding.");n.unshift(d);}n.unshift(H$4[o]),n.length%2===1&&n.unshift("0");let c=0;for(let p=0;p<n.length&&n[p]==="0";p++)c++;n=n.slice(c-c%2);let s=n.join("");for(let p=0;p<r;p++)s=`00${s}`;return l$4(s)}function Xt(t){try{return ee$2(t),!0}catch{return !1}}function qe$1(t,e=22){return V$1(e,m$3(Ir$1(t)))}function ar(t){let e=getPublicKey(t,!0),r=f$5(e),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function pr(t){let e=typeof t=="string"?t:p$4(t),r=f$5(l$4(e)),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function m$3(t){let e=f$5(t);return P$4(e)}async function ce$2(t){let{contents:e,privateKey:r}=t,n=e instanceof ArrayBuffer?pr$1(e):typeof e=="string"?dr(e):e,o=p$4(getPublicKey(r,!0)),i=f$5(n),c=await sign(i,r,{canonical:!1});return {signature:p$4(c),publicKey:o}}function xr(t,e=!1){let{contents:r,publicKey:n,signature:o}=t,i=r instanceof ArrayBuffer?pr$1(r):typeof r=="string"?dr(r):r,c=f$5(i);return verify(o,c,n,{strict:e})}async function ae$2(t){let{publicKey:e,content:r,cipherTextEncoding:n="hex",wasString:o}=t,i=utils$1.randomPrivateKey(),c=getPublicKey(i,!0),s=getSharedSecret(i,e,!0);s=s.slice(1);let p=w$5(s),a=$$3(16),f=await g$3(a,p.encryptionKey,r),d=U$3([a,c,f]),u=y$6(p.hmacKey,d),h;if(!n||n==="hex")h=p$4(f);else if(n==="base64")h=Pr(f);else throw new Error(`Unexpected cipherTextEncoding "${n}"`);let T={iv:p$4(a),ephemeralPK:p$4(c),cipherText:h,mac:p$4(u),wasString:o};return n&&n!=="hex"&&(T.cipherTextEncoding=n),T}function pt$1(t,e){if(t.length!==e.length)return !1;let r=0;for(let n=0;n<t.length;n++)r|=t[n]^e[n];return r===0}async function pe$1(t){let{privateKey:e,cipherObject:r}=t;if(!r.ephemeralPK)throw Error("No ephemeralPK found in cipher object");let n=r.ephemeralPK,o=getSharedSecret(e,n,!0);o=o.slice(1);let i=w$5(o),c=l$4(r.iv),s;if(!r.cipherTextEncoding||r.cipherTextEncoding==="hex")s=l$4(r.cipherText);else if(r.cipherTextEncoding==="base64")s=Gr(r.cipherText);else throw new Error(`Unexpected cipherTextEncoding "${r.cipherText}"`);let p=U$3([c,l$4(n),s]),a=y$6(i.hmacKey,p),f=l$4(r.mac);if(!pt$1(f,a))throw new Error("Decryption failed: failure in MAC check");let d=await B$2(c,i.encryptionKey,s);return r.wasString?new TextDecoder().decode(d):d}function Ir(t,e){if(!e.privateKey)throw new Error("Private key is required for decryption.");try{let r=JSON.parse(t);return pe$1({privateKey:e.privateKey,cipherObject:r})}catch(r){throw r instanceof SyntaxError?new Error("Failed to parse encrypted content JSON. The content may not be encrypted. If using getFile, try passing { decrypt: false }."):r}}async function Rr(t,e){let{publicKey:r,privateKey:n,wasString:o}=e,{cipherTextEncoding:i,sign:c}=e;if(!n&&!r)throw new Error("Either public key or private key must be supplied for encryption.");if(!r&&n&&(r=p$4(getPublicKey(n,!0))),typeof o!="boolean"&&(o=typeof t=="string"),!r)throw new Error("micro-stacks/crypto - no public key found to encrypt content");let s=typeof t=="string"?dr(t):t,p=await ae$2({publicKey:r,content:s,wasString:o,cipherTextEncoding:i});if(!c)return JSON.stringify(p);if(typeof c=="string"&&(n=c),!n)throw new Error("micro-stacks/crypto - need private key to sign contents");let a=await ce$2({contents:JSON.stringify(p),privateKey:n});return JSON.stringify({...a,cipherText:JSON.stringify(p)})}function ht$1(t){let r=t.length,n=r%4;if(!n)return t;let o=4-n,i=r+o;return t.padEnd(i,"=")}function ut$1(t){return t instanceof Uint8Array?ge$3(Pr(t)):ge$3(Pr(new TextEncoder().encode(t)))}function yt$1(t){let e=Gr(mt(t));return new TextDecoder().decode(e)}function mt(t){let e;return t instanceof Uint8Array?e=new TextDecoder().decode(t):e=t,ht$1(e).replace(/\-/g,"+").replace(/_/g,"/")}function ge$3(t){return t.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}var g$2={encode:ut$1,decode:yt$1};var v$1=128,ue$1=0,xt=32,St$1=16,bt=2,ye$2=St$1|xt|ue$1<<6,I$4=bt|ue$1<<6;function me$1(t){return typeof t=="string"?Gr(t):t}function _$3(t){let e=me$1(t),r=32,n=r+1,o=e.length,i=0;if(e[i++]!==ye$2)throw new Error('Could not find expected "seq"');let c=e[i++];if(c===(v$1|1)&&(c=e[i++]),o-i<c)throw new Error('"seq" specified length of "'+c+'", only "'+(o-i)+'" remaining');if(e[i++]!==I$4)throw new Error('Could not find expected "int" for "r"');let s=e[i++];if(o-i-2<s)throw new Error('"r" specified length of "'+s+'", only "'+(o-i-2)+'" available');if(n<s)throw new Error('"r" specified length of "'+s+'", max of "'+n+'" is acceptable');let p=i;if(i+=s,e[i++]!==I$4)throw new Error('Could not find expected "int" for "s"');let a=e[i++];if(o-i!==a)throw new Error('"s" specified length of "'+a+'", expected "'+(o-i)+'"');if(n<a)throw new Error('"s" specified length of "'+a+'", max of "'+n+'" is acceptable');let f=i;if(i+=a,i!==o)throw new Error('Expected to consume entire buffer, but "'+(o-i)+'" bytes remain');let d=r-s,u=r-a,h=new Uint8Array(d+s+u+a);for(i=0;i<d;++i)h[i]=0;h.set(e.slice(p+Math.max(-d,0),p+s),i),i=r;for(let T=i;i<T+u;++i)h[i]=0;return h.set(e.slice(f+Math.max(-u,0),f+a),i),jr(h).replace(/=/g,"")}function de$1(t,e,r){let n=0;for(;e+n<r&&t[e+n]===0;)++n;return t[e+n]>=v$1&&--n,n}function M$4(t){let e=me$1(t),r=32,n=de$1(e,0,r),o=de$1(e,r,e.length),i=r-n,c=r-o,s=1+1+i+1+1+c,p=s<v$1,a=new Uint8Array((p?2:3)+s),f=0;return a[f++]=ye$2,p?a[f++]=s:(a[f++]=v$1|1,a[f++]=s&255),a[f++]=I$4,a[f++]=i,n<0?(a[f++]=0,f+=rt(e,a,f,0,r)):f+=rt(e,a,f,n,r),a[f++]=I$4,a[f++]=c,o<0?(a[f++]=0,rt(e,a,f,r)):rt(e,a,f,r+o),jr(a).replace(/=/g,"")}function x$2(t,e){let r=[],n=g$2.encode(JSON.stringify(e));r.push(n);let o=g$2.encode(JSON.stringify(t));return r.push(o),r.join(".")}var Se=class{tokenType;rawPrivateKey;constructor(e="ES256K",r){if(!r)throw new C$5("TokenSigner: rawPrivateKey is required to sign a token");this.tokenType="JWT",this.rawPrivateKey=r;}header(e={}){return {...{typ:this.tokenType,alg:"ES256K"},...e}}async sign(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHash(e,r,o,i,c)}signSync(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHashSync(e,r,o,i,c)}async createWithSignedHash(e,r,n,o,i){let c=await sign(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}createWithSignedHashSync(e,r,n,o,i){let c=signSync(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}};var we$1=class we{tokenType;rawPublicKey;constructor(e,r){this.tokenType="JWT",this.rawPublicKey=r;}verify(e,r=!1){return typeof e=="string"?this.verifyCompact(e,r):typeof e=="object"?this.verifyExpanded(e,r):!1}verifyCompact(e,r){let n=e.split("."),o=n[0]+"."+n[1],i=s=>{let p=n[2],a=M$4(p);return verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})},c=f$5(dr(o));return i(c)}verifyExpanded(e,r){let n=[e.header.join("."),g$2.encode(e.payload)].join("."),o=!0,i=s=>(e.signature.map(p=>{let a=M$4(p);verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})||(o=!1);}),o),c=f$5(dr(n));return i(c)}};function wt(t){if(typeof t=="string"){let e=t.split("."),r=JSON.parse(g$2.decode(e[0])),n=JSON.parse(g$2.decode(e[1])),o=e[2];return {header:r,payload:n,signature:o}}else if(typeof t=="object"){if(typeof t.payload!="string")throw new Error("Expected token payload to be a base64 or json string");let e=t.payload;t.payload[0]!=="{"&&(e=g$2.decode(e));let r=[];return t.header.map(n=>{let o=JSON.parse(g$2.decode(n));r.push(o);}),{header:r,payload:JSON.parse(e),signature:t.signature}}}function At(t){return x$2(t,{typ:"JWT",alg:"none"})+"."}
+`,bech32:"tb",bip32:{public:70617039,private:70615956},pubKeyHash:111,scriptHash:196,wif:239},D$2={bitcoin:je$2,testnet:Re};var X$1=(o=>(o[o.mainnetP2PKH=22]="mainnetP2PKH",o[o.mainnetP2SH=20]="mainnetP2SH",o[o.testnetP2PKH=26]="testnetP2PKH",o[o.testnetP2SH=21]="testnetP2SH",o))(X$1||{}),y$5="0123456789ABCDEFGHJKMNPQRSTVWXYZ",R$4=new Map;[...y$5].forEach((t,e)=>R$4.set(t,e));var H$4="0123456789abcdef",j$1=new Map;[...H$4].forEach((t,e)=>j$1.set(t,e));function V$1(t,e){let r=Y$1(t,e),n=Me$1(U$3([e,r]));return `S${y$5[t]}${n}`}function Me$1(t){let e=p$4(t),r=[],n=0;for(let s=e.length-1;s>=0;s--)if(n<4){let p=j$1.get(e[s])>>n,a=0;s!==0&&(a=j$1.get(e[s-1]));let f=1+n,d=a%(1<<f)<<5-f,u=y$5[p+d];n=f,r.unshift(u);}else n=0;let o=0;for(let s=0;s<r.length&&r[s]==="0";s++)o++;r=r.slice(o);let i=/^\u0000*/.exec(new TextDecoder().decode(t)),c=i?i[0].length:0;for(let s=0;s<c;s++)r.unshift(y$5[0]);return r.join("")}function Y$1(t,e){let r=f$5(U$3([Uint8Array.of(t),e]));return f$5(r).slice(0,4)}function ee$2(t){if(t.length<=5)throw new Error("Invalid c32 address: invalid length");if(t[0]!=="S")throw new Error('Invalid c32 address: must start with "S"');return We$3(t.slice(1))}function We$3(t){t=te$2(t);let e=$e$2(t.slice(1)),r=t[0],n=R$4.get(r),o=e.slice(-4),i=Y$1(n,e.slice(0,-4));for(let c=0;c<o.length;c++)if(o[c]!==i[c])throw new Error("Invalid c32check string: checksum mismatch");return [n,e.slice(0,-4)]}function te$2(t){return t.toUpperCase().replace(/O/g,"0").replace(/L|I/g,"1")}function $e$2(t){if(t=te$2(t),!RegExp(`^[${y$5}]*$`).exec(t))throw new Error("Not a c32-encoded string");let e=RegExp(`^${y$5[0]}*`).exec(t),r=e?e[0].length:0,n=[],o=0,i=0;for(let p=t.length-1;p>=0;p--){i===4&&(n.unshift(H$4[o]),i=0,o=0);let f=(R$4.get(t[p])<<i)+o,d=H$4[f%16];if(i+=1,o=f>>4,o>1<<i)throw new Error("Panic error in decoding.");n.unshift(d);}n.unshift(H$4[o]),n.length%2===1&&n.unshift("0");let c=0;for(let p=0;p<n.length&&n[p]==="0";p++)c++;n=n.slice(c-c%2);let s=n.join("");for(let p=0;p<r;p++)s=`00${s}`;return l$4(s)}function Xt(t){try{return ee$2(t),!0}catch{return !1}}function qe$1(t,e=22){return V$1(e,m$3(Ir$1(t)))}function ar(t){let e=getPublicKey(t,!0),r=f$5(e),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function pr(t){let e=typeof t=="string"?t:p$4(t),r=f$5(l$4(e)),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function m$3(t){let e=f$5(t);return P$4(e)}async function ce$2(t){let{contents:e,privateKey:r}=t,n=e instanceof ArrayBuffer?pr$1(e):typeof e=="string"?dr(e):e,o=p$4(getPublicKey(r,!0)),i=f$5(n),c=await sign(i,r,{canonical:!1});return {signature:p$4(c),publicKey:o}}function xr(t,e=!1){let{contents:r,publicKey:n,signature:o}=t,i=r instanceof ArrayBuffer?pr$1(r):typeof r=="string"?dr(r):r,c=f$5(i);return verify(o,c,n,{strict:e})}async function ae$2(t){let{publicKey:e,content:r,cipherTextEncoding:n="hex",wasString:o}=t,i=utils.randomPrivateKey(),c=getPublicKey(i,!0),s=getSharedSecret(i,e,!0);s=s.slice(1);let p=w$5(s),a=$$3(16),f=await g$3(a,p.encryptionKey,r),d=U$3([a,c,f]),u=y$6(p.hmacKey,d),h;if(!n||n==="hex")h=p$4(f);else if(n==="base64")h=Pr(f);else throw new Error(`Unexpected cipherTextEncoding "${n}"`);let T={iv:p$4(a),ephemeralPK:p$4(c),cipherText:h,mac:p$4(u),wasString:o};return n&&n!=="hex"&&(T.cipherTextEncoding=n),T}function pt$1(t,e){if(t.length!==e.length)return !1;let r=0;for(let n=0;n<t.length;n++)r|=t[n]^e[n];return r===0}async function pe$1(t){let{privateKey:e,cipherObject:r}=t;if(!r.ephemeralPK)throw Error("No ephemeralPK found in cipher object");let n=r.ephemeralPK,o=getSharedSecret(e,n,!0);o=o.slice(1);let i=w$5(o),c=l$4(r.iv),s;if(!r.cipherTextEncoding||r.cipherTextEncoding==="hex")s=l$4(r.cipherText);else if(r.cipherTextEncoding==="base64")s=Gr(r.cipherText);else throw new Error(`Unexpected cipherTextEncoding "${r.cipherText}"`);let p=U$3([c,l$4(n),s]),a=y$6(i.hmacKey,p),f=l$4(r.mac);if(!pt$1(f,a))throw new Error("Decryption failed: failure in MAC check");let d=await B$2(c,i.encryptionKey,s);return r.wasString?new TextDecoder().decode(d):d}function Ir(t,e){if(!e.privateKey)throw new Error("Private key is required for decryption.");try{let r=JSON.parse(t);return pe$1({privateKey:e.privateKey,cipherObject:r})}catch(r){throw r instanceof SyntaxError?new Error("Failed to parse encrypted content JSON. The content may not be encrypted. If using getFile, try passing { decrypt: false }."):r}}async function Rr(t,e){let{publicKey:r,privateKey:n,wasString:o}=e,{cipherTextEncoding:i,sign:c}=e;if(!n&&!r)throw new Error("Either public key or private key must be supplied for encryption.");if(!r&&n&&(r=p$4(getPublicKey(n,!0))),typeof o!="boolean"&&(o=typeof t=="string"),!r)throw new Error("micro-stacks/crypto - no public key found to encrypt content");let s=typeof t=="string"?dr(t):t,p=await ae$2({publicKey:r,content:s,wasString:o,cipherTextEncoding:i});if(!c)return JSON.stringify(p);if(typeof c=="string"&&(n=c),!n)throw new Error("micro-stacks/crypto - need private key to sign contents");let a=await ce$2({contents:JSON.stringify(p),privateKey:n});return JSON.stringify({...a,cipherText:JSON.stringify(p)})}function ht$1(t){let r=t.length,n=r%4;if(!n)return t;let o=4-n,i=r+o;return t.padEnd(i,"=")}function ut$1(t){return t instanceof Uint8Array?ge$3(Pr(t)):ge$3(Pr(new TextEncoder().encode(t)))}function yt$1(t){let e=Gr(mt(t));return new TextDecoder().decode(e)}function mt(t){let e;return t instanceof Uint8Array?e=new TextDecoder().decode(t):e=t,ht$1(e).replace(/\-/g,"+").replace(/_/g,"/")}function ge$3(t){return t.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}var g$2={encode:ut$1,decode:yt$1};var v$1=128,ue$1=0,xt=32,St$1=16,bt=2,ye$2=St$1|xt|ue$1<<6,I$4=bt|ue$1<<6;function me$1(t){return typeof t=="string"?Gr(t):t}function _$3(t){let e=me$1(t),r=32,n=r+1,o=e.length,i=0;if(e[i++]!==ye$2)throw new Error('Could not find expected "seq"');let c=e[i++];if(c===(v$1|1)&&(c=e[i++]),o-i<c)throw new Error('"seq" specified length of "'+c+'", only "'+(o-i)+'" remaining');if(e[i++]!==I$4)throw new Error('Could not find expected "int" for "r"');let s=e[i++];if(o-i-2<s)throw new Error('"r" specified length of "'+s+'", only "'+(o-i-2)+'" available');if(n<s)throw new Error('"r" specified length of "'+s+'", max of "'+n+'" is acceptable');let p=i;if(i+=s,e[i++]!==I$4)throw new Error('Could not find expected "int" for "s"');let a=e[i++];if(o-i!==a)throw new Error('"s" specified length of "'+a+'", expected "'+(o-i)+'"');if(n<a)throw new Error('"s" specified length of "'+a+'", max of "'+n+'" is acceptable');let f=i;if(i+=a,i!==o)throw new Error('Expected to consume entire buffer, but "'+(o-i)+'" bytes remain');let d=r-s,u=r-a,h=new Uint8Array(d+s+u+a);for(i=0;i<d;++i)h[i]=0;h.set(e.slice(p+Math.max(-d,0),p+s),i),i=r;for(let T=i;i<T+u;++i)h[i]=0;return h.set(e.slice(f+Math.max(-u,0),f+a),i),jr(h).replace(/=/g,"")}function de$1(t,e,r){let n=0;for(;e+n<r&&t[e+n]===0;)++n;return t[e+n]>=v$1&&--n,n}function M$4(t){let e=me$1(t),r=32,n=de$1(e,0,r),o=de$1(e,r,e.length),i=r-n,c=r-o,s=1+1+i+1+1+c,p=s<v$1,a=new Uint8Array((p?2:3)+s),f=0;return a[f++]=ye$2,p?a[f++]=s:(a[f++]=v$1|1,a[f++]=s&255),a[f++]=I$4,a[f++]=i,n<0?(a[f++]=0,f+=rt(e,a,f,0,r)):f+=rt(e,a,f,n,r),a[f++]=I$4,a[f++]=c,o<0?(a[f++]=0,rt(e,a,f,r)):rt(e,a,f,r+o),jr(a).replace(/=/g,"")}function x$2(t,e){let r=[],n=g$2.encode(JSON.stringify(e));r.push(n);let o=g$2.encode(JSON.stringify(t));return r.push(o),r.join(".")}var Se=class{tokenType;rawPrivateKey;constructor(e="ES256K",r){if(!r)throw new C$5("TokenSigner: rawPrivateKey is required to sign a token");this.tokenType="JWT",this.rawPrivateKey=r;}header(e={}){return {...{typ:this.tokenType,alg:"ES256K"},...e}}async sign(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHash(e,r,o,i,c)}signSync(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHashSync(e,r,o,i,c)}async createWithSignedHash(e,r,n,o,i){let c=await sign(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}createWithSignedHashSync(e,r,n,o,i){let c=signSync(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}};var we$1=class we{tokenType;rawPublicKey;constructor(e,r){this.tokenType="JWT",this.rawPublicKey=r;}verify(e,r=!1){return typeof e=="string"?this.verifyCompact(e,r):typeof e=="object"?this.verifyExpanded(e,r):!1}verifyCompact(e,r){let n=e.split("."),o=n[0]+"."+n[1],i=s=>{let p=n[2],a=M$4(p);return verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})},c=f$5(dr(o));return i(c)}verifyExpanded(e,r){let n=[e.header.join("."),g$2.encode(e.payload)].join("."),o=!0,i=s=>(e.signature.map(p=>{let a=M$4(p);verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})||(o=!1);}),o),c=f$5(dr(n));return i(c)}};function wt(t){if(typeof t=="string"){let e=t.split("."),r=JSON.parse(g$2.decode(e[0])),n=JSON.parse(g$2.decode(e[1])),o=e[2];return {header:r,payload:n,signature:o}}else if(typeof t=="object"){if(typeof t.payload!="string")throw new Error("Expected token payload to be a base64 or json string");let e=t.payload;t.payload[0]!=="{"&&(e=g$2.decode(e));let r=[];return t.header.map(n=>{let o=JSON.parse(g$2.decode(n));r.push(o);}),{header:r,payload:JSON.parse(e),signature:t.signature}}}function At(t){return x$2(t,{typ:"JWT",alg:"none"})+"."}
 
 var P$3=BigInt("0xffffffffffffffffffffffffffffffff"),M$3=BigInt(0),U$2=BigInt("0x7fffffffffffffffffffffffffffffff"),w$4=BigInt("-170141183460469231731687303715884105728"),ge$2=(i=>(i[i.Origin=1]="Origin",i[i.Standard=2]="Standard",i[i.Contract=3]="Contract",i))(ge$2||{}),A$3=(n=>(n[n.Int=0]="Int",n[n.UInt=1]="UInt",n[n.Buffer=2]="Buffer",n[n.BoolTrue=3]="BoolTrue",n[n.BoolFalse=4]="BoolFalse",n[n.PrincipalStandard=5]="PrincipalStandard",n[n.PrincipalContract=6]="PrincipalContract",n[n.ResponseOk=7]="ResponseOk",n[n.ResponseErr=8]="ResponseErr",n[n.OptionalNone=9]="OptionalNone",n[n.OptionalSome=10]="OptionalSome",n[n.List=11]="List",n[n.Tuple=12]="Tuple",n[n.StringASCII=13]="StringASCII",n[n.StringUTF8=14]="StringUTF8",n))(A$3||{});var I$3=()=>({type:3}),O$2=()=>({type:4});var L$2=e=>{if(e.length>1e6)throw new Error("Cannot construct clarity buffer that is greater than 1MB");return {type:2,buffer:Uint8Array.from(e)}};var Z$3=e=>{let r=y$9(e,!0);if(r>U$2)throw new RangeError(`Cannot construct clarity integer from value greater than ${U$2.toString()}`);if(r<w$4)throw new RangeError(`Cannot construct clarity integer form value less than ${w$4.toString()}`);if(Rr$1(r).byteLength>128)throw new RangeError(`Cannot construct clarity integer from value greater than ${128} bits`);return {type:0,value:r}},K$1=e=>{let r=y$9(e);if(r<M$3)throw new RangeError("Cannot construct unsigned clarity integer from negative value");if(r>P$3)throw new RangeError(`Cannot construct unsigned clarity integer greater than ${P$3.toString()}`);return {type:1,value:r}};function W$1(e){return {type:11,list:e}}function R$3(){return {type:9}}function E$2(e){return {type:10,value:e}}function te$1(e){return /^[a-zA-Z]([a-zA-Z0-9]|[-_!?+<>=/*])*$|^[-+=/*]$|^[<>]=?$/.test(e)&&e.length<128}var Be$1=(a=>(a[a.Address=0]="Address",a[a.Principal=1]="Principal",a[a.LengthPrefixedString=2]="LengthPrefixedString",a[a.MemoString=3]="MemoString",a[a.AssetInfo=4]="AssetInfo",a[a.PostCondition=5]="PostCondition",a[a.PublicKey=6]="PublicKey",a[a.LengthPrefixedList=7]="LengthPrefixedList",a[a.Payload=8]="Payload",a[a.MessageSignature=9]="MessageSignature",a[a.TransactionAuthField=10]="TransactionAuthField",a))(Be$1||{});function k$2(e){return V$1(e.version,l$4(e.hash160))}var Pe=(e,r)=>e?dr(e).length>r:!1;function C$4(e,r,t){let i=r||1,s=t||128;if(Pe(e,s))throw new Error(`String length exceeds maximum bytes ${s.toString()}`);return {type:2,content:e,lengthPrefixBytes:i,maxLengthBytes:s}}function _$2(e){let r=new q$1;return r.appendHexString(x$3(e.version,1)),r.appendHexString(e.hash160),r.concatBuffer()}function $$2(e){let r=new q$1,t=dr(e.content),i=t.byteLength;return r.appendHexString(x$3(i,e.lengthPrefixBytes)),r.push(t),r.concatBuffer()}function F$3(e,r,t){r=r||1;let i=Tr(p$4(e.readBuffer(r))),s=_$4(e.readBuffer(i));return C$4(s,r,t??128)}function z$4(e){let r=Tr(p$4(e.readBuffer(1))),t=p$4(e.readBuffer(20));return {type:0,version:r,hash160:t}}function d$2(e){if(e.type===5)return k$2(e.address);if(e.type===6)return `${k$2(e.address)}.${e.contractName.content}`;throw new Error(`Unexpected principal data: ${JSON.stringify(e)}`)}function ie$1(e){return {type:5,address:e}}function H$3(e,r){if(dr(r.content).byteLength>=128)throw new Error("Contract name must be less than 128 bytes");return {type:6,address:e,contractName:r}}function oe$1(e){return {type:8,value:e}}function ae$1(e){return {type:7,value:e}}var S$1=e=>({type:13,data:e}),se$1=e=>({type:14,data:e});function pe(e){for(let r in e)if(!te$1(r))throw new Error(`"${r}" is not a valid Clarity name`);return {type:12,data:e}}var Oe=(o=>(o[o.ClarityAbiTypeUInt128=1]="ClarityAbiTypeUInt128",o[o.ClarityAbiTypeInt128=2]="ClarityAbiTypeInt128",o[o.ClarityAbiTypeBool=3]="ClarityAbiTypeBool",o[o.ClarityAbiTypePrincipal=4]="ClarityAbiTypePrincipal",o[o.ClarityAbiTypeNone=5]="ClarityAbiTypeNone",o[o.ClarityAbiTypeBuffer=6]="ClarityAbiTypeBuffer",o[o.ClarityAbiTypeResponse=7]="ClarityAbiTypeResponse",o[o.ClarityAbiTypeOptional=8]="ClarityAbiTypeOptional",o[o.ClarityAbiTypeTuple=9]="ClarityAbiTypeTuple",o[o.ClarityAbiTypeList=10]="ClarityAbiTypeList",o[o.ClarityAbiTypeStringAscii=11]="ClarityAbiTypeStringAscii",o[o.ClarityAbiTypeStringUtf8=12]="ClarityAbiTypeStringUtf8",o[o.ClarityAbiTypeTraitReference=13]="ClarityAbiTypeTraitReference",o))(Oe||{});function l$3(e){switch(e.type){case 3:case 4:return "bool";case 0:return "int";case 1:return "uint";case 2:return `(buff ${e.buffer.length})`;case 9:return "(optional none)";case 10:return `(optional ${l$3(e.value)})`;case 8:return `(response UnknownType ${l$3(e.value)})`;case 7:return `(response ${l$3(e.value)} UnknownType)`;case 5:case 6:return "principal";case 11:return `(list ${e.list.length} ${e.list.length?l$3(e.list[0]):"UnknownType"})`;case 12:return `(tuple ${Object.keys(e.data).map(r=>`(${r} ${l$3(e.data[r])})`).join(" ")})`;case 13:return `(string-ascii ${Qr(e.data).length})`;case 14:return `(string-utf8 ${dr(e.data).length})`}}function T$2(e){let r=h$6(e,!0);switch(e.type){case 8:return {type:l$3(e),value:r,success:!1};case 7:return {type:l$3(e),value:r,success:!0};default:return {type:l$3(e),value:r}}}function h$6(e,r=!1){switch(e.type){case 3:return !0;case 4:return !1;case 0:case 1:return r?e.value.toString():e.value;case 2:return `0x${p$4(e.buffer)}`;case 9:return null;case 10:return T$2(e.value);case 8:return T$2(e.value);case 7:return T$2(e.value);case 5:case 6:return d$2(e);case 11:return e.list.map(s=>T$2(s));case 12:let t={};return Object.keys(e.data).map(s=>[s,T$2(e.data[s])]).forEach(([s,p])=>{t[s]=p;}),t;case 13:return e.data;case 14:return e.data}}function f$3(e,r){let t=new q$1,i=Uint8Array.from([e]);return t.push(i),t.push(r),t.concatBuffer()}function He(e){return Uint8Array.from([e.type])}function je$1(e){return e.type===9?new Uint8Array([e.type]):f$3(e.type,m$2(e.value))}function De$2(e){let r=new Uint8Array(4);return new DataView(r.buffer,r.byteOffset,r.byteLength).setUint32(r.byteOffset,e.buffer.length),f$3(e.type,U$3([r,Uint8Array.from(e.buffer)]))}function Je$1(e){let r=x$3(_r(e.value),16),t=l$4(r);return f$3(e.type,t)}function Ye$1(e){let r=x$3(e.value,16),t=l$4(r);return f$3(e.type,t)}function Ge(e){return f$3(e.type,_$2(e.address))}function ve$3(e){return f$3(e.type,U$3([_$2(e.address),$$2(e.contractName)]))}function Me(e){return f$3(e.type,m$2(e.value))}function Xe$1(e){let r=new q$1,t=new Uint8Array(4);yt$2(t,e.list.length,0),r.push(t);for(let i of e.list){let s=m$2(i);r.push(s);}return f$3(e.type,r.concatBuffer())}function Ze$2(e){let r=[],t=new Uint8Array(4);new DataView(t.buffer,t.byteOffset,t.byteLength).setUint32(t.byteOffset,Object.keys(e.data).length),r.push(t);let s=Object.keys(e.data).sort((p,y)=>{let g=dr(p),x=dr(y);return xt$1(g,x)});for(let p of s){let y=C$4(p);r.push($$2(y));let g=m$2(e.data[p]);r.push(g);}return f$3(e.type,U$3(r))}function ue(e,r){let t=new q$1,s=(r==="ascii"?Qr:dr)(e.data),p=new Uint8Array(4);return new DataView(p.buffer,p.byteOffset,p.byteLength).setUint32(p.byteOffset,s.length),t.push(p),t.push(s),f$3(e.type,t.concatBuffer())}function Ke$1(e){return ue(e,"ascii")}function We$2(e){return ue(e,"utf8")}function m$2(e){switch(e.type){case 3:case 4:return He(e);case 9:case 10:return je$1(e);case 2:return De$2(e);case 0:return Je$1(e);case 1:return Ye$1(e);case 5:return Ge(e);case 6:return ve$3(e);case 7:case 8:return Me(e);case 11:return Xe$1(e);case 12:return Ze$2(e);case 13:return Ke$1(e);case 14:return We$2(e);default:throw new Error("Unable to serialize. Invalid Clarity Value.")}}function c$1(e){let r;if(typeof e=="string"){let i=e.slice(0,2).toLowerCase()==="0x";r=new J$2(l$4(i?e.slice(2):e));}else e instanceof Uint8Array?r=new J$2(e):r=e;switch(r.readUInt8Enum(A$3,i=>{throw new V$2(`Cannot recognize Clarity Type: ${i}`)})){case 0:return Z$3(r.readBuffer(16));case 1:return K$1(r.readBuffer(16));case 2:let i=r.readUInt32BE();return L$2(r.readBuffer(i));case 3:return I$3();case 4:return O$2();case 5:let s=z$4(r);return ie$1(s);case 6:let p=z$4(r),y=F$3(r);return H$3(p,y);case 7:return ae$1(c$1(r));case 8:return oe$1(c$1(r));case 9:return R$3();case 10:return E$2(c$1(r));case 11:let g=r.readUInt32BE(),x=[];for(let n=0;n<g;n++)x.push(c$1(r));return W$1(x);case 12:let Ce=r.readUInt32BE(),G={};for(let n=0;n<Ce;n++){let v=F$3(r).content;if(v===void 0)throw new V$2('"content" is undefined');G[v]=c$1(r);}return pe(G);case 13:let a=r.readUInt32BE(),de=Xr(r.readBuffer(a));return S$1(de);case 14:let o=r.readUInt32BE(),Te=_$4(r.readBuffer(o));return se$1(Te);default:throw new V$2("Unable to deserialize Clarity Value from buffer. Could not find valid Clarity Type.")}}function Vt(e){return `0x${p$4(m$2(e))}`}
 
@@ -1773,206 +2099,9 @@ var g$1="https://stacks-node-api.mainnet.stacks.co",p$3="https://stacks-node-api
 
 var $e$1=(r=>(r[r.OnChainOnly=1]="OnChainOnly",r[r.OffChainOnly=2]="OffChainOnly",r[r.Any=3]="Any",r))($e$1||{});cr.Mainnet;var ve$2=(n=>(n[n.Allow=1]="Allow",n[n.Deny=2]="Deny",n))(ve$2||{}),Ve$1=(r=>(r[r.STX=0]="STX",r[r.Fungible=1]="Fungible",r[r.NonFungible=2]="NonFungible",r))(Ve$1||{}),le=(n=>(n[n.Standard=4]="Standard",n[n.Sponsored=5]="Sponsored",n))(le||{}),De$1=(i=>(i[i.SerializeP2PKH=0]="SerializeP2PKH",i[i.SerializeP2SH=1]="SerializeP2SH",i[i.SerializeP2WPKH=2]="SerializeP2WPKH",i[i.SerializeP2WSH=3]="SerializeP2WSH",i))(De$1||{}),Nn=(i=>(i[i.MainnetSingleSig=22]="MainnetSingleSig",i[i.MainnetMultiSig=20]="MainnetMultiSig",i[i.TestnetSingleSig=26]="TestnetSingleSig",i[i.TestnetMultiSig=21]="TestnetMultiSig",i))(Nn||{}),ye$1=(n=>(n[n.Compressed=0]="Compressed",n[n.Uncompressed=1]="Uncompressed",n))(ye$1||{}),ge$1=(o=>(o[o.Equal=1]="Equal",o[o.Greater=2]="Greater",o[o.GreaterEqual=3]="GreaterEqual",o[o.Less=4]="Less",o[o.LessEqual=5]="LessEqual",o))(ge$1||{}),_e$2=(n=>(n[n.DoesNotOwn=16]="DoesNotOwn",n[n.Owns=17]="Owns",n))(_e$2||{}),Hn=(r=>(r[r.STX=0]="STX",r[r.Fungible=1]="Fungible",r[r.NonFungible=2]="NonFungible",r))(Hn||{}),On=(y=>(y.Serialization="Serialization",y.Deserialization="Deserialization",y.SignatureValidation="SignatureValidation",y.FeeTooLow="FeeTooLow",y.BadNonce="BadNonce",y.NotEnoughFunds="NotEnoughFunds",y.NoSuchContract="NoSuchContract",y.NoSuchPublicFunction="NoSuchPublicFunction",y.BadFunctionArgument="BadFunctionArgument",y.ContractAlreadyExists="ContractAlreadyExists",y.PoisonMicroblocksDoNotConflict="PoisonMicroblocksDoNotConflict",y.PoisonMicroblockHasUnknownPubKeyHash="PoisonMicroblockHasUnknownPubKeyHash",y.PoisonMicroblockIsInvalid="PoisonMicroblockIsInvalid",y.BadAddressVersionByte="BadAddressVersionByte",y.NoCoinbaseViaMempool="NoCoinbaseViaMempool",y.ServerFailureNoSuchChainTip="ServerFailureNoSuchChainTip",y.ServerFailureDatabase="ServerFailureDatabase",y.ServerFailureOther="ServerFailureOther",y))(On||{});var h$5=(o=>(o[o.TokenTransfer=0]="TokenTransfer",o[o.SmartContract=1]="SmartContract",o[o.ContractCall=2]="ContractCall",o[o.PoisonMicroblock=3]="PoisonMicroblock",o[o.Coinbase=4]="Coinbase",o))(h$5||{});function et$1(e){let t=new q$1;return t.appendByte(e.conditionType),t.push(tt$1(e.principal)),(e.conditionType===1||e.conditionType===2)&&t.push(it$1(e.assetInfo)),e.conditionType===2&&t.push(m$2(e.assetName)),t.appendByte(e.conditionCode),(e.conditionType===0||e.conditionType===1)&&t.push(Rr$1(e.amount,!1,8)),t.concatBuffer()}function tt$1(e){let t=new q$1;return t.push(Uint8Array.from([e.prefix])),t.push(_$2(e.address)),e.prefix===ge$2.Contract&&t.push($$2(e.contractName)),t.concatBuffer()}function it$1(e){let t=new q$1;return t.push(_$2(e.address)),t.push($$2(e.contractName)),t.push($$2(e.assetName)),t.concatBuffer()}var Yt=(i=>(i[i.PublicKeyCompressed=0]="PublicKeyCompressed",i[i.PublicKeyUncompressed=1]="PublicKeyUncompressed",i[i.SignatureCompressed=2]="SignatureCompressed",i[i.SignatureUncompressed=3]="SignatureUncompressed",i))(Yt||{});
 
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function getAugmentedNamespace(n) {
-  if (n.__esModule) return n;
-  var f = n.default;
-	if (typeof f == "function") {
-		var a = function a () {
-			if (this instanceof a) {
-				var args = [null];
-				args.push.apply(args, arguments);
-				var Ctor = Function.bind.apply(f, args);
-				return new Ctor();
-			}
-			return f.apply(this, arguments);
-		};
-		a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, '__esModule', {value: true});
-	Object.keys(n).forEach(function (k) {
-		var d = Object.getOwnPropertyDescriptor(n, k);
-		Object.defineProperty(a, k, d.get ? d : {
-			enumerable: true,
-			get: function () {
-				return n[k];
-			}
-		});
-	});
-	return a;
-}
-
-var utils = {};
-
-const require$$0$1 = /*@__PURE__*/getAugmentedNamespace(cryptoBrowser);
-
-(function (exports) {
-	/*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
-	Object.defineProperty(exports, "__esModule", { value: true });
-	exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
-	// The import here is via the package name. This is to ensure
-	// that exports mapping/resolution does fall into place.
-	const crypto_1 = require$$0$1;
-	// Cast array to different type
-	const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
-	exports.u8 = u8;
-	const u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
-	exports.u32 = u32;
-	// Cast array to view
-	const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
-	exports.createView = createView;
-	// The rotate right (circular right shift) operation for uint32
-	const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
-	exports.rotr = rotr;
-	exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
-	// There is almost no big endian hardware, but js typed arrays uses platform specific endianness.
-	// So, just to be sure not to corrupt anything.
-	if (!exports.isLE)
-	    throw new Error('Non little-endian hardware is not supported');
-	const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
-	/**
-	 * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef]))
-	 */
-	function bytesToHex(uint8a) {
-	    // pre-caching improves the speed 6x
-	    if (!(uint8a instanceof Uint8Array))
-	        throw new Error('Uint8Array expected');
-	    let hex = '';
-	    for (let i = 0; i < uint8a.length; i++) {
-	        hex += hexes[uint8a[i]];
-	    }
-	    return hex;
-	}
-	exports.bytesToHex = bytesToHex;
-	/**
-	 * @example hexToBytes('deadbeef')
-	 */
-	function hexToBytes(hex) {
-	    if (typeof hex !== 'string') {
-	        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
-	    }
-	    if (hex.length % 2)
-	        throw new Error('hexToBytes: received invalid unpadded hex');
-	    const array = new Uint8Array(hex.length / 2);
-	    for (let i = 0; i < array.length; i++) {
-	        const j = i * 2;
-	        const hexByte = hex.slice(j, j + 2);
-	        const byte = Number.parseInt(hexByte, 16);
-	        if (Number.isNaN(byte) || byte < 0)
-	            throw new Error('Invalid byte sequence');
-	        array[i] = byte;
-	    }
-	    return array;
-	}
-	exports.hexToBytes = hexToBytes;
-	// There is no setImmediate in browser and setTimeout is slow. However, call to async function will return Promise
-	// which will be fullfiled only on next scheduler queue processing step and this is exactly what we need.
-	const nextTick = async () => { };
-	exports.nextTick = nextTick;
-	// Returns control to thread each 'tick' ms to avoid blocking
-	async function asyncLoop(iters, tick, cb) {
-	    let ts = Date.now();
-	    for (let i = 0; i < iters; i++) {
-	        cb(i);
-	        // Date.now() is not monotonic, so in case if clock goes backwards we return return control too
-	        const diff = Date.now() - ts;
-	        if (diff >= 0 && diff < tick)
-	            continue;
-	        await (0, exports.nextTick)();
-	        ts += diff;
-	    }
-	}
-	exports.asyncLoop = asyncLoop;
-	function utf8ToBytes(str) {
-	    if (typeof str !== 'string') {
-	        throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
-	    }
-	    return new TextEncoder().encode(str);
-	}
-	exports.utf8ToBytes = utf8ToBytes;
-	function toBytes(data) {
-	    if (typeof data === 'string')
-	        data = utf8ToBytes(data);
-	    if (!(data instanceof Uint8Array))
-	        throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
-	    return data;
-	}
-	exports.toBytes = toBytes;
-	/**
-	 * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
-	 * @example concatBytes(buf1, buf2)
-	 */
-	function concatBytes(...arrays) {
-	    if (!arrays.every((a) => a instanceof Uint8Array))
-	        throw new Error('Uint8Array list expected');
-	    if (arrays.length === 1)
-	        return arrays[0];
-	    const length = arrays.reduce((a, arr) => a + arr.length, 0);
-	    const result = new Uint8Array(length);
-	    for (let i = 0, pad = 0; i < arrays.length; i++) {
-	        const arr = arrays[i];
-	        result.set(arr, pad);
-	        pad += arr.length;
-	    }
-	    return result;
-	}
-	exports.concatBytes = concatBytes;
-	// For runtime check if class implements interface
-	class Hash {
-	    // Safe version that clones internal state
-	    clone() {
-	        return this._cloneInto();
-	    }
-	}
-	exports.Hash = Hash;
-	// Check if object doens't have custom constructor (like Uint8Array/Array)
-	const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
-	function checkOpts(defaults, opts) {
-	    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
-	        throw new TypeError('Options should be object or undefined');
-	    const merged = Object.assign(defaults, opts);
-	    return merged;
-	}
-	exports.checkOpts = checkOpts;
-	function wrapConstructor(hashConstructor) {
-	    const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
-	    const tmp = hashConstructor();
-	    hashC.outputLen = tmp.outputLen;
-	    hashC.blockLen = tmp.blockLen;
-	    hashC.create = () => hashConstructor();
-	    return hashC;
-	}
-	exports.wrapConstructor = wrapConstructor;
-	function wrapConstructorWithOpts(hashCons) {
-	    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
-	    const tmp = hashCons({});
-	    hashC.outputLen = tmp.outputLen;
-	    hashC.blockLen = tmp.blockLen;
-	    hashC.create = (opts) => hashCons(opts);
-	    return hashC;
-	}
-	exports.wrapConstructorWithOpts = wrapConstructorWithOpts;
-	/**
-	 * Secure PRNG
-	 */
-	function randomBytes(bytesLength = 32) {
-	    if (crypto_1.crypto.web) {
-	        return crypto_1.crypto.web.getRandomValues(new Uint8Array(bytesLength));
-	    }
-	    else if (crypto_1.crypto.node) {
-	        return new Uint8Array(crypto_1.crypto.node.randomBytes(bytesLength).buffer);
-	    }
-	    else {
-	        throw new Error("The environment doesn't have randomBytes function");
-	    }
-	}
-	exports.randomBytes = randomBytes;
-} (utils));
-
 var f$2=typeof document<"u",ee$1=(r=>(r.SessionStorageKey="stacks-session",r.NetworkStorageKey="stacks-network",r))(ee$1||{});var u$1=hr("localStorage",{returnEmptyObject:!0}),U$1={setItem:(e,t)=>{if(f$2)return u$1==null?void 0:u$1.setItem(e,t)},getItem:e=>{if(f$2){let t=u$1==null?void 0:u$1.getItem(e);if(t===null)throw new Error("defaultStorageAdapter: no value stored");return t}},removeItem:e=>{if(f$2)return u$1==null?void 0:u$1.removeItem(e)}},c=e=>e?p$4(getPublicKey(e,!0)):null;function K(e){return e==null?void 0:e.map(t=>typeof t!="string"?p$4(et$1(t)):t)}var d$1=(e,t)=>t?new Se("ES256k",t).sign(e):At(e);var l$1=async(e,t)=>{let r={...e,postConditions:K(e.postConditions)};return d$1(r,t)};var ce$1=(n=>(n.ContractCall="contract_call",n.ContractDeploy="smart_contract",n.STXTransfer="token_transfer",n))(ce$1||{});async function Tt({functionArgs:e,privateKey:t,...r}){let n=c(t),s={...r,functionArgs:e.map(o=>Ur(typeof o=="string"?o:Vt(o))),txType:"contract_call",publicKey:n};return l$1(s,t)}async function Pt({privateKey:e,...t}){let r={...t,publicKey:c(e),txType:"smart_contract"};return l$1(r,e)}async function It$1({privateKey:e,...t}){let r={...t,amount:typeof t.amount=="bigint"?Number(t.amount).toString(10):t.amount,publicKey:c(e),txType:"token_transfer"};return l$1(r,e)}function ge(e){let t=e.split(":");if(t.length!==3)throw new TypeError("Decentralized IDs must have 3 parts");if(t[0].toLowerCase()!=="did")throw new TypeError('Decentralized IDs must start with "did"');return t[1].toLowerCase()}function fe(e){return e&&ge(e)==="btc-addr"?e.split(":")[2]:void 0}async function B$1(e,t){let r=wt(e),s=r==null?void 0:r.payload,o;if(s.private_key)try{let i=Er(s.private_key);o=await pe$1({privateKey:t,cipherObject:i});}catch{console.error("[micro-stacks] failed to decrypt appPrivateKey");}return {addresses:s.profile.stxAddress,appPrivateKey:o,associationToken:s.associationToken,hubUrl:s.hubUrl,public_keys:s.public_keys,profile:s.profile,profile_url:s.profile_url,username:s.username,version:s.version,decentralizedID:s.iss,identityAddress:fe(s.iss)}}function y$4(){return hr("StacksProvider",{returnEmptyObject:!1,usageDesc:"authenticate",throwIfUnavailable:!0})}async function Nt(e,t=U$1,r=JSON.stringify){var n,s;if(!e.appDetails)throw Error("[micro-stacks] authenticate error: `authOptions.appDetails` are required for authentication");try{let o=p$4($$3()),a=await we(e,o),i=await B$1(a,o);return (n=e==null?void 0:e.onFinish)==null||n.call(e,i),t.setItem("stacks-session",r(i)),i}catch(o){(s=e==null?void 0:e.onCancel)==null||s.call(e,o.message);}}function Te(e,t){if(!e.appDetails)throw Error("[micro-stacks] authenticate error: `authOptions.appDetails` are required for authentication");let r=e.scopes||[],n=hr("location",{returnEmptyObject:!0}).origin;return {scopes:[...new Set(["store_write",...r])],redirect_uri:n,public_keys:[t],domain_name:n,appDetails:e.appDetails}}async function ve$1(e,t){return new Se("ES256k",t).sign(e)}async function be(e,t){let r=p$4(getPublicKey(t)),n=Te(e,r);return ve$1(n,t)}async function we(e,t){let r=y$4();if(!r)throw Error("This function can only be called on the client, and with the presence of StacksProvider");let n=await be(e,t);return r.authenticationRequest(n)}function p$2(e){return async function(r){let{token:n,onFinish:s,onCancel:o}=r;try{let a=y$4();if(!a)throw new Error("[micro-stacks/connect] No Stacks provider");let i=a[e];if(typeof i!="function")throw new Error(`[micro-stacks/connect] StacksProvider method ${e} not found`);let g=await i(n);s==null||s(g);}catch(a){o==null||o(a==null?void 0:a.message);}}}var Gt=p$2("transactionRequest"),F$2=p$2("signatureRequest"),_$1=p$2("structuredDataSignatureRequest");var H$2=(s=>(s.Chrome="https://chrome.google.com/webstore/detail/hiro-wallet/ldinpeekobnhjjdofggfgjlcehhmanlj",s.Firefox="https://addons.mozilla.org/en-US/firefox/addon/hiro-wallet/",s.Mobile="https://www.xverse.app",s.Browser="https://www.hiro.so/wallet/install-web",s))(H$2||{});var V=async e=>{let t={stxAddress:e.stxAddress,message:e.message,appDetails:e.appDetails??null,publicKey:c(e.privateKey),network:e.network};return d$1(t,e.privateKey)},De=async e=>{try{let t=await V({message:e.message,network:e.network,privateKey:e.privateKey,stxAddress:e.stxAddress,authOrigin:e.authOrigin,appDetails:e.appDetails});return F$2({token:t,onFinish:e.onFinish,onCancel:e.onCancel})}catch(t){console.error("[micro-stacks] handleSignMessageRequest failed"),console.error(t);}};var h$4=(e,t,r)=>pe({name:S$1(e),version:S$1(t),"chain-id":K$1(r)}),X=e=>{var o;let t=typeof e.message!="string"?Vt(e.message):e.message,r=h$4(e.domain.name,e.domain.version,e.domain.chainId??((o=e.network)==null?void 0:o.chainId)??ur.Mainnet),n=Vt(r),s={stxAddress:e.stxAddress,message:Ur(t),domain:Ur(n),appDetails:e.appDetails,publicKey:c(e.privateKey),network:e.network};return d$1(s,e==null?void 0:e.privateKey)},Ke=async e=>{try{let t=await X({message:e.message,domain:e.domain,privateKey:e.privateKey,stxAddress:e.stxAddress,authOrigin:e.authOrigin,appDetails:e.appDetails,network:e.network});return _$1({token:t,onFinish:e.onFinish,onCancel:e.onCancel})}catch(t){console.error("[micro-stacks] handleSignStructuredDataRequest failed"),console.error(t);}};var _e$1=9007199254740991;function w$3(e){if(e<0||e>_e$1||e%1!==0)throw new RangeError("value out of range")}var P$2=(e,t,r)=>{w$3(e);let n;if(t||(t=new Uint8Array(C$3(e))),!lr(t))throw new TypeError("uint8Array must be of Uint8Array type");return r||(r=0),e<253?(ut$2(t,e,r),n=1):e<=65535?(ut$2(t,253,r),ct$1(t,e,r+1),n=3):e<=4294967295?(ut$2(t,254,r),mt$1(t,e,r+1),n=5):(ut$2(t,255,r),mt$1(t,e>>>0,r+1),mt$1(t,e/4294967296|0,r+5),n=9),P$2.bytes=n,t};function C$3(e){return w$3(e),e<253?1:e<=65535?3:e<=4294967295?5:9}var Ve=`Stacks Signed Message:
-`,D$1=utils.utf8ToBytes(Ve),We$1=`Stacks Message Signing:
-`,I$2=utils.utf8ToBytes(We$1);function R$2(e,t=D$1){return f$5(z$3(e,t))}function z$3(e,t=D$1){let r=typeof e=="string"?utils.utf8ToBytes(e):e,n=P$2(r.length);return U$3([t,n,r])}var O$1=32;function $e(e){if(e.length<O$1*2*2+1)throw new Error("Invalid signature");let t=e.slice(0,2),r=e.slice(2,2+O$1*2),n=e.slice(2+O$1*2);return {recoveryBytes:d$3(t),r,s:n}}function Qe(e){return e.slice(-2)+e.slice(0,-2)}var Q$1=({hash:e,signature:t,recoveryBytes:r})=>recoverPublicKey(e,t,Number(r),!0),Z$2=e=>{let{signature:t,mode:r="rsv"}=e,{r:n,s,recoveryBytes:o}=$e(r==="rsv"?Qe(t):t);return {signature:new Signature(d$3(n),d$3(s)),recoveryBytes:o}},M$2=e=>{if(!e.publicKey&&!e.stxAddress)throw Error("[micro-stacks/connect[ verifyMessageSignature -- You must pass `stxAddress` if you are recovering the public key from the signature");let{message:t,mode:r="rsv"}=e,n=e.publicKey;try{let s=typeof t=="string"?R$2(t,e.prefix):t,{signature:o,recoveryBytes:a}=Z$2({signature:e.signature,mode:r});if(!n){let[i]=ee$2(e.stxAddress);n=p$4(Q$1({hash:s,signature:o,recoveryBytes:a}));let g=qe$1(n,i);if(g!==e.stxAddress)return console.error(`[micro-stacks/connect] verifyMessageSignature Stacks address is not correct. expected: ${e.stxAddress}, received: ${g}`),!1}return verify(o,s,n,{strict:!1})}catch(s){return console.error("[micro-stacks/connect] verifyMessageSignature failed",s),!1}},Ze$1=e=>M$2(e)||M$2({...e,prefix:I$2});
+`,D$1=utils$1.utf8ToBytes(Ve),We$1=`Stacks Message Signing:
+`,I$2=utils$1.utf8ToBytes(We$1);function R$2(e,t=D$1){return f$5(z$3(e,t))}function z$3(e,t=D$1){let r=typeof e=="string"?utils$1.utf8ToBytes(e):e,n=P$2(r.length);return U$3([t,n,r])}var O$1=32;function $e(e){if(e.length<O$1*2*2+1)throw new Error("Invalid signature");let t=e.slice(0,2),r=e.slice(2,2+O$1*2),n=e.slice(2+O$1*2);return {recoveryBytes:d$3(t),r,s:n}}function Qe(e){return e.slice(-2)+e.slice(0,-2)}var Q$1=({hash:e,signature:t,recoveryBytes:r})=>recoverPublicKey(e,t,Number(r),!0),Z$2=e=>{let{signature:t,mode:r="rsv"}=e,{r:n,s,recoveryBytes:o}=$e(r==="rsv"?Qe(t):t);return {signature:new Signature(d$3(n),d$3(s)),recoveryBytes:o}},M$2=e=>{if(!e.publicKey&&!e.stxAddress)throw Error("[micro-stacks/connect[ verifyMessageSignature -- You must pass `stxAddress` if you are recovering the public key from the signature");let{message:t,mode:r="rsv"}=e,n=e.publicKey;try{let s=typeof t=="string"?R$2(t,e.prefix):t,{signature:o,recoveryBytes:a}=Z$2({signature:e.signature,mode:r});if(!n){let[i]=ee$2(e.stxAddress);n=p$4(Q$1({hash:s,signature:o,recoveryBytes:a}));let g=qe$1(n,i);if(g!==e.stxAddress)return console.error(`[micro-stacks/connect] verifyMessageSignature Stacks address is not correct. expected: ${e.stxAddress}, received: ${g}`),!1}return verify(o,s,n,{strict:!1})}catch(s){return console.error("[micro-stacks/connect] verifyMessageSignature failed",s),!1}},Ze$1=e=>M$2(e)||M$2({...e,prefix:I$2});
 
 const createStoreImpl = (createState) => {
   let state;
@@ -2298,7 +2427,7 @@ var encoding = {};
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.c32decode = exports.c32normalize = exports.c32encode = exports.c32 = void 0;
-	const utils_1 = utils;
+	const utils_1 = utils$1;
 	exports.c32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 	const hex = '0123456789abcdef';
 	/**
@@ -2440,12 +2569,10 @@ var encoding = {};
 
 var checksum = {};
 
-const require$$0 = /*@__PURE__*/getAugmentedNamespace(sha256$1);
-
 Object.defineProperty(checksum, "__esModule", { value: true });
 checksum.c32checkDecode = checksum.c32checkEncode = void 0;
-const sha256_1$1 = require$$0;
-const utils_1$1 = utils;
+const sha256_1$1 = sha256;
+const utils_1$1 = utils$1;
 const encoding_1 = encoding;
 /**
  * Get the c32check checksum of a hex-encoded string
@@ -2648,8 +2775,8 @@ var src = base;
  */
 Object.defineProperty(base58check, "__esModule", { value: true });
 base58check.decode = base58check.encode = void 0;
-const sha256_1 = require$$0;
-const utils_1 = utils;
+const sha256_1 = sha256;
+const utils_1 = utils$1;
 const basex = src;
 const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 function encode(data, prefix = '00') {
@@ -2682,7 +2809,7 @@ base58check.decode = decode;
 	exports.c32ToB58 = exports.b58ToC32 = exports.c32addressDecode = exports.c32address = exports.versions = void 0;
 	const checksum_1 = checksum;
 	const base58check$1 = base58check;
-	const utils_1 = utils;
+	const utils_1 = utils$1;
 	exports.versions = {
 	    mainnet: {
 	        p2pkh: 22,
@@ -2812,7 +2939,9 @@ base58check.decode = decode;
 let webWalletNeeded = false;
 const allowed = [
   "SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F",
-  "SP3RQ3BGRWVXSXDZZBYGW8XHMHC4MCA6EHNHCK8FE"
+  "SP3RQ3BGRWVXSXDZZBYGW8XHMHC4MCA6EHNHCK8FE",
+  "SP1ACWJC0TMD9F3Q3FJQFDWV9GSSTXN8RY31HR10B",
+  "SP2E57N3DDG0CSF6XYWABZ1E7QBF8CTKJ4J1PHP0V"
 ];
 function decodeStacksAddress(stxAddress) {
   if (!stxAddress)
@@ -3192,13 +3321,6 @@ class ArrowUp extends SvelteComponentDev {
 	}
 }
 
-async function getPubkey(TrezorConnect) {
-  try {
-    return TrezorConnect.getAccountInfo({ coin: "test", descriptor: "" });
-  } catch (err) {
-    console.log(err);
-  }
-}
 async function fetchAddressDetails(network, address) {
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
   const response = await fetch(url + "/address/" + address);
@@ -3207,16 +3329,18 @@ async function fetchAddressDetails(network, address) {
   }
   throw new Error("Address not found - is the network correct?");
 }
-async function fetchUTXOs(network, address) {
+async function fetchUTXOs(network, address, txs) {
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
   const response = await fetch(url + "/address/" + address + "/utxo");
   if (response.status === 200) {
     const utxos = await response.json();
-    const txs = await fetchTxs(network, address);
-    utxos.forEach((utxo) => {
-      const tx = txs.find((tx2) => tx2.txid === utxo.txid);
-      utxo.fullout = tx.vout.find((o) => o.value === utxo.value);
-    });
+    if (txs && txs.length > 0) {
+      utxos.forEach((utxo) => {
+        const tx = txs.find((tx2) => tx2.txid === utxo.txid);
+        if (tx)
+          utxo.fullout = tx.vout.find((o) => o.value === utxo.value);
+      });
+    }
     return utxos;
   }
   throw new Error("Bitcoin address not know - is the network correct?");
@@ -3241,4 +3365,4 @@ async function fetchFeeEstimate(network) {
   return info;
 }
 
-export { ArrowUp as A, Ce as C, T$2 as T, __viteBrowserExternal$1 as _, ArrowDown as a, l$2 as b, c$1 as c, se as d, C as e, fetchFeeEstimate as f, a as g, decodeStacksAddress as h, i, fetchUTXOs as j, fetchAddressDetails as k, login as l, maxCommit as m, getAugmentedNamespace as n, commonjsGlobal as o, getPubkey as p, sbtcConfig as s };
+export { ArrowUp as A, Ce as C, T$2 as T, __viteBrowserExternal$1 as _, ArrowDown as a, l$2 as b, c$1 as c, se as d, C as e, fetchFeeEstimate as f, a as g, decodeStacksAddress as h, i, fetchUTXOs as j, fetchTxs as k, login as l, maxCommit as m, fetchAddressDetails as n, sbtcConfig as s };
