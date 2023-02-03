@@ -9,6 +9,10 @@ const allowed = [
   'SP2E57N3DDG0CSF6XYWABZ1E7QBF8CTKJ4J1PHP0V'
 ]
 
+export function isAllowed(address:string) {
+	return allowed.indexOf(address) > -1
+}
+
 export function decodeStacksAddress(stxAddress:string) {
 	if (!stxAddress) throw new Error('Needs a stacks address');
 	const decoded = c32addressDecode(stxAddress)
@@ -21,17 +25,15 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	const address = c32address(version, b160Address) // 22 for mainnet
 	return address
 }
-  
 
 export async function login($auth: any) {
 	try {
 		$auth.openAuthRequest({
 			onFinish: (payload: any) => {
 				console.log('payload:', payload);
-        if (allowed.indexOf(payload.addresses.mainnet) === -1) {
-          $auth.signOut();
-        }
-				//if (window) window.location.reload();
+				if (isAllowed(payload.addresses.mainnet)) {
+					$auth.signOut();
+				}
 			},
 			onCancel: () => {
 				console.log('canceled');

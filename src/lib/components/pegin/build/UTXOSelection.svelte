@@ -3,6 +3,7 @@ import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { fetchUTXOs, fetchTxs, fetchAddressDetails } from "$lib/utxos";
 import { PatchQuestion } from "svelte-bootstrap-icons";
+import { maxCommit } from "$lib/utxos";
 
 let bitcoinAddress:string|undefined = $sbtcConfig.fromBtcAddress;
 let errorReason:string|undefined;
@@ -45,7 +46,7 @@ $: showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
     <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
     {#if showUtxos}
     <div class="d-flex justify-content-between  text-info">
-      <div>{$sbtcConfig.utxos?.length || 0} UTXO(s) Found</div>
+      <div>{$sbtcConfig.utxos?.length || 0} UTXO(s) Found (Value: {maxCommit($sbtcConfig.utxos)})</div>
       <div><a href="/" class="" on:click|preventDefault={() => configureUTXOs(true)}>reload</a></div>
     </div>
     {:else if bitcoinAddress}

@@ -10,7 +10,7 @@ let pegInAmount:number = $sbtcConfig.pegInAmount;
 let errorReason:string|undefined;
 let changeErrorReason:string|undefined;
 
-let change = 0;
+let change = $sbtcConfig.pegInChangeAmount || 0;
 const changePegIn = (maxValue:boolean) => {
   const maxPeg = maxCommit($sbtcConfig.utxos);
   errorReason = undefined;
@@ -26,10 +26,10 @@ const changePegIn = (maxValue:boolean) => {
     //pegInAmount = maxPeg;
     pegInAmount = maxPeg - fee;
   }
-  change = maxPeg - (pegInAmount + fee);
   if (change < 0) {
-    changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - fee);
+    pegInAmount -= change;
   }
+  change = maxPeg - (pegInAmount + fee);
   conf.pegInChangeAmount = Number(change);
   conf.pegInAmount = Number(pegInAmount);
   sbtcConfig.set(conf);
@@ -42,6 +42,9 @@ const changeRate = (rate:string) => {
   else if (rate === 'medium') conf.feeToApply = $sbtcConfig.feeInfo.medium_fee_per_kb;
   else if (rate === 'high') conf.feeToApply = $sbtcConfig.feeInfo.high_fee_per_kb;
   sbtcConfig.set(conf);
+  if ($sbtcConfig.pegInAmount > 0) {
+    changePegIn(true)
+  }
   componentKey++;
 }
 $: low = $sbtcConfig.feeInfo.low_fee_per_kb === $sbtcConfig.feeToApply

@@ -1,8 +1,17 @@
 export const sbtcWallet = 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss';
+
+export const allowed = [
+	{ stx: 'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F', btc: '7010183fd1a76976e7b2bb67acdf57cdfe704882' },
+	{ stx: 'ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW', btc: 'e594280c8eebb93598b5641b66d29e99f26f38f5' }
+]
+  
 export const addressList = [
 	'2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb', // bitcoin core testnet
 	'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5' // electrum alice testnet
 ];
+
+//https://api.blockcypher.com/v1/btc/test3
+export const feeData = JSON.parse('{"name":"BTC.test3","height":2418577,"hash":"000000000036d33670c2bcf3231b8d2e3979fc72ddc9d5862c2d9df4a23a656c","time":"2023-02-02T21:31:45.191472924Z","latest_url":"https://api.blockcypher.com/v1/btc/test3/blocks/000000000036d33670c2bcf3231b8d2e3979fc72ddc9d5862c2d9df4a23a656c","previous_hash":"0000000000000012ece64a47c6bfaea36d3c8e4026bbe9087c1d0b0d20ba475a","previous_url":"https://api.blockcypher.com/v1/btc/test3/blocks/0000000000000012ece64a47c6bfaea36d3c8e4026bbe9087c1d0b0d20ba475a","peer_count":225,"unconfirmed_count":22,"high_fee_per_kb":48783,"medium_fee_per_kb":30998,"low_fee_per_kb":18955,"last_fork_height":2418464,"last_fork_hash":"00000000001a8f9342f1557cca0237914a6f7d7f02fc4de8ca38bdba5eae8db2"}');
 
 //https://mempool.space/testnet/api/address/2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb/address
 export const addresses = JSON.parse('[{"address":"2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb","chain_stats":{"funded_txo_count":1,"funded_txo_sum":297900,"spent_txo_count":0,"spent_txo_sum":0,"tx_count":1},"mempool_stats":{"funded_txo_count":0,"funded_txo_sum":0,"spent_txo_count":0,"spent_txo_sum":0,"tx_count":0}},{"address":"tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5","chain_stats":{"funded_txo_count":1,"funded_txo_sum":13307200,"spent_txo_count":0,"spent_txo_sum":0,"tx_count":1},"mempool_stats":{"funded_txo_count":0,"funded_txo_sum":0,"spent_txo_count":0,"spent_txo_sum":0,"tx_count":0}}]');

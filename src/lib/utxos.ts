@@ -4,6 +4,7 @@
 //import TrezorConnect from '@trezor/connect-web';
 
 export async function fetchAddressDetails(network:string, address:string) {
+  checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address);
   if (response.status === 200) {
@@ -13,6 +14,7 @@ export async function fetchAddressDetails(network:string, address:string) {
 }
 
 export async function fetchUTXOs(network:string, address:string, txs:any) {
+  checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address + '/utxo');
   if (response.status === 200) {
@@ -29,6 +31,7 @@ export async function fetchUTXOs(network:string, address:string, txs:any) {
 }
 
 export async function fetchTxs(network:string, address:string) {
+  checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   const response = await fetch(url + '/address/' + address + '/txs');
   if (response.status === 200) {
@@ -44,10 +47,16 @@ export function maxCommit(utxos:any) {
 }
 
 export async function fetchFeeEstimate(network:string) {
+  checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_BLOCKCYPHER_EXPLORER_MAINNET : import.meta.env.VITE_BLOCKCYPHER_EXPLORER_TESTNET;
   const response = await fetch(url);
   const info = await response.json();
   return info
 }
 
+function checkNetwork(network:string) {
+  if (network !== 'testnet' && network !== 'mainnet') {
+    throw new Error('Unknown Network')
+  }
+}
 
