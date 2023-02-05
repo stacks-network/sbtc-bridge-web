@@ -1,5 +1,7 @@
 # sbtc-bridge
 
+![ci](https://github.com/Trust-Machines/sbtc-bridge/actions/workflows/ci.yml/badge.svg)
+
 ## Introduction
 
 Sbtc-bridge supports a trustless two way peg between BTC and sBTC.
