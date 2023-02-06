@@ -1,6 +1,6 @@
 import { b as base, _ as __vitePreload } from "../../chunks/preload-helper-bd152303.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, x as text, p as claim_element, q as children, y as claim_text, J as src_url_equal, r as attr_dev, w as add_location, K as append_hydration_dev, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, c as space, A as create_component, f as claim_space, B as claim_component, C as mount_component, h as group_outros, t as transition_out, j as check_outros, k as transition_in, z as set_data_dev, D as destroy_component, O as run_all, F as writable, P as onDestroy, E as tick, Q as globals, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-5e67b194.js";
-import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-3a754f14.js";
+import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-077a78a4.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -490,7 +490,7 @@ let __tla = (async () => {
       block,
       id: create_else_block$1.name,
       type: "else",
-      source: "(48:285) {:else}",
+      source: "(48:198) {:else}",
       ctx
     });
     return block;
@@ -541,7 +541,7 @@ let __tla = (async () => {
       block,
       id: create_if_block$1.name,
       type: "if",
-      source: "(48:205) {#if $sbtcConfig.pegIn}",
+      source: "(48:118) {#if $sbtcConfig.pegIn}",
       ctx
     });
     return block;
@@ -703,9 +703,6 @@ let __tla = (async () => {
         });
         var span2_nodes = children(span2);
         span1 = claim_element(span2_nodes, "SPAN", {
-          "data-bs-toggle": true,
-          "data-bs-placement": true,
-          "data-bs-custom-class": true,
           title: true
         });
         var span1_nodes = children(span1);
@@ -729,9 +726,6 @@ let __tla = (async () => {
         });
         var span4_nodes = children(span4);
         span3 = claim_element(span4_nodes, "SPAN", {
-          "data-bs-toggle": true,
-          "data-bs-placement": true,
-          "data-bs-custom-class": true,
           title: true
         });
         var span3_nodes = children(span3);
@@ -824,10 +818,7 @@ let __tla = (async () => {
         add_location(button, file$3, 35, 3, 1362);
         attr_dev(a1, "class", "text-white");
         attr_dev(a1, "href", base + "/history");
-        add_location(a1, file$3, 42, 138, 1899);
-        attr_dev(span1, "data-bs-toggle", "tooltip");
-        attr_dev(span1, "data-bs-placement", "top");
-        attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
+        add_location(a1, file$3, 42, 51, 1812);
         attr_dev(span1, "title", "Your SBTC Transaction History");
         add_location(span1, file$3, 42, 7, 1768);
         attr_dev(span2, "class", "pointer nav-link");
@@ -836,37 +827,34 @@ let __tla = (async () => {
         add_location(li0, file$3, 40, 5, 1701);
         attr_dev(a2, "class", "text-white");
         attr_dev(a2, "href", base);
-        add_location(a2, file$3, 47, 140, 2197);
-        attr_dev(span3, "data-bs-toggle", "tooltip");
-        attr_dev(span3, "data-bs-placement", "top");
-        attr_dev(span3, "data-bs-custom-class", "custom-tooltip");
+        add_location(a2, file$3, 47, 53, 2023);
         attr_dev(span3, "title", "Toggle pegging in / pegging out");
-        add_location(span3, file$3, 47, 7, 2064);
+        add_location(span3, file$3, 47, 7, 1977);
         attr_dev(span4, "class", "pointer nav-link");
-        add_location(span4, file$3, 46, 6, 2025);
+        add_location(span4, file$3, 46, 6, 1938);
         attr_dev(li1, "class", "nav-item");
-        add_location(li1, file$3, 45, 5, 1997);
+        add_location(li1, file$3, 45, 5, 1910);
         attr_dev(span5, "class", "nav-link dropdown-toggle ");
         attr_dev(span5, "id", "navbarDropdown");
         attr_dev(span5, "role", "button");
         attr_dev(span5, "data-bs-toggle", "dropdown");
         attr_dev(span5, "aria-expanded", "false");
-        add_location(span5, file$3, 51, 6, 2494);
+        add_location(span5, file$3, 51, 6, 2320);
         attr_dev(a3, "class", "dropdown-item");
         attr_dev(a3, "href", "/");
-        add_location(a3, file$3, 55, 12, 2767);
-        add_location(li2, file$3, 55, 8, 2763);
+        add_location(a3, file$3, 55, 12, 2593);
+        add_location(li2, file$3, 55, 8, 2589);
         attr_dev(a4, "class", "dropdown-item");
         attr_dev(a4, "href", "/");
-        add_location(a4, file$3, 56, 12, 2887);
-        add_location(li3, file$3, 56, 8, 2883);
+        add_location(a4, file$3, 56, 12, 2713);
+        add_location(li3, file$3, 56, 8, 2709);
         attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
         attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-        add_location(ul0, file$3, 54, 6, 2675);
+        add_location(ul0, file$3, 54, 6, 2501);
         attr_dev(li4, "class", "nav-item dropdown");
-        add_location(li4, file$3, 50, 5, 2457);
+        add_location(li4, file$3, 50, 5, 2283);
         attr_dev(li5, "class", "nav-item mb-1");
-        add_location(li5, file$3, 59, 5, 3023);
+        add_location(li5, file$3, 59, 5, 2849);
         attr_dev(ul1, "class", "navbar-nav text-white");
         add_location(ul1, file$3, 39, 4, 1661);
         attr_dev(div0, "class", "collapse navbar-collapse");
@@ -2262,7 +2250,7 @@ let __tla = (async () => {
       block,
       id: create_if_block.name,
       type: "if",
-      source: "(76:0) {#if inited}",
+      source: "(75:0) {#if inited}",
       ctx
     });
     return block;
@@ -2335,23 +2323,23 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(p0, file, 86, 2, 2947);
+        add_location(p0, file, 85, 2, 2919);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 87, 116, 3100);
+        add_location(img, file, 86, 116, 3072);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 87, 96, 3080);
+        add_location(span0, file, 86, 96, 3052);
         attr_dev(a, "href", "/");
         attr_dev(a, "class", "pointer px-2");
-        add_location(a, file, 87, 28, 3012);
+        add_location(a, file, 86, 28, 2984);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 87, 5, 2989);
-        add_location(p1, file, 87, 2, 2986);
+        add_location(span1, file, 86, 5, 2961);
+        add_location(p1, file, 86, 2, 2958);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-        add_location(div, file, 85, 0, 2917);
+        add_location(div, file, 84, 0, 2889);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2383,7 +2371,7 @@ let __tla = (async () => {
       block,
       id: create_else_block.name,
       type: "else",
-      source: "(85:0) {:else}",
+      source: "(84:0) {:else}",
       ctx
     });
     return block;
@@ -2429,7 +2417,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-        add_location(div, file, 77, 0, 2784);
+        add_location(div, file, 76, 0, 2756);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2479,7 +2467,7 @@ let __tla = (async () => {
       block,
       id: create_if_block_1.name,
       type: "if",
-      source: "(77:0) {#if $auth.isSignedIn}",
+      source: "(76:0) {#if $auth.isSignedIn}",
       ctx
     });
     return block;
@@ -2529,7 +2517,7 @@ let __tla = (async () => {
       block,
       id: create_key_block.name,
       type: "key",
-      source: "(80:2) {#key componentKey}",
+      source: "(79:2) {#key componentKey}",
       ctx
     });
     return block;
@@ -2645,9 +2633,9 @@ let __tla = (async () => {
     let bootstrap;
     onMount(async () => {
       globalThis.Buffer = buffer.Buffer;
-      window.Buffer = buffer.Buffer;
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
+        $$invalidate(1, inited = true);
         await fetchWalletAddress();
         let conf = $sbtcConfig;
         if (!conf || !conf.feeCalc)
@@ -2655,7 +2643,6 @@ let __tla = (async () => {
         conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
         conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
         sbtcConfig.update(() => conf);
-        $$invalidate(1, inited = true);
       } catch (err) {
         console.log(err);
       }

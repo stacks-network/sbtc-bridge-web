@@ -2855,15 +2855,58 @@ const defaultSbtcConfig = {
   feeCalc: {
     pegInFeeCalc: {
       feeToApply: 2e4,
-      pegInAmount: 0
+      pegInAmount: 0,
+      high: {
+        change: 0,
+        fee: 5e5
+      },
+      medium: {
+        change: 0,
+        fee: 5e5
+      },
+      low: {
+        change: 0,
+        fee: 5e5
+      }
     },
     pegOutFeeCalc: {
       feeToApply: 2e4,
       pegOutAmount: 0,
-      dustAmount: 500
+      dustAmount: 500,
+      high: {
+        change: 0,
+        fee: 5e5
+      },
+      medium: {
+        change: 0,
+        fee: 5e5
+      },
+      low: {
+        change: 0,
+        fee: 5e5
+      }
     }
   },
-  pegIn: true
+  pegIn: true,
+  balance: 0,
+  addressDetails: {
+    address: "",
+    chain_stats: {
+      funded_txo_count: 0,
+      funded_txo_sum: 0,
+      spent_txo_count: 0,
+      spent_txo_sum: 0,
+      tx_count: 0
+    },
+    mempool_stats: {
+      funded_txo_count: 0,
+      funded_txo_sum: 0,
+      spent_txo_count: 0,
+      spent_txo_sum: 0,
+      tx_count: 0
+    }
+  },
+  utxos: []
 };
 async function fetchSbtcWalletAddress(network) {
   const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha";

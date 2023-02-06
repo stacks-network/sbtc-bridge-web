@@ -5,7 +5,7 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, R as create_slot, _ as assign, $ as compute_rest_props, v as validate_slots, a0 as exclude_internal_props, a1 as svg_element, a2 as claim_svg_element, q as children, l as detach_dev, r as attr_dev, w as add_location, a3 as set_svg_attributes, a4 as toggle_class, g as insert_hydration_dev, K as append_hydration_dev, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes, a5 as get_spread_update, k as transition_in, t as transition_out, G as validate_store, H as component_subscribe, N as createEventDispatcher, a6 as set_store_value, n as element, x as text, c as space, A as create_component, p as claim_element, y as claim_text, f as claim_space, B as claim_component, C as mount_component, a7 as set_input_value, L as listen_dev, z as set_data_dev, D as destroy_component, O as run_all, M as prevent_default, a8 as to_number, Q as globals$1, I as noop$3, o as onMount, e as empty, h as group_outros, j as check_outros, J as src_url_equal, a9 as validate_each_argument, u as set_style, aa as prop_dev, ab as destroy_each } from "./index-5e67b194.js";
-import { s as sbtcConfig, j as a, C as Ce, k as decodeStacksAddress, m as maxCommit, e as buffer, n as getAugmentedNamespace, _ as __viteBrowserExternal, o as commonjsGlobal, p as getDefaultExportFromCjs, q as fetchUTXOs, r as attachAllInputTransactions, t as fetchAddressDetails, A as ArrowUp, a as ArrowDown } from "./index-3a754f14.js";
+import { s as sbtcConfig, j as a, C as Ce, k as decodeStacksAddress, m as maxCommit, e as buffer, n as getAugmentedNamespace, _ as __viteBrowserExternal, o as commonjsGlobal, p as getDefaultExportFromCjs, q as fetchUTXOs, r as attachAllInputTransactions, t as fetchAddressDetails, A as ArrowUp, a as ArrowDown } from "./index-077a78a4.js";
 import { Tooltip } from "./bootstrap.esm-e88d1e6f.js";
 let PegIn, PegOut;
 let __tla = (async () => {
@@ -3907,46 +3907,38 @@ let __tla = (async () => {
   var state = {
     getHighWaterMark
   };
-  var browser$2;
-  var hasRequiredBrowser;
-  function requireBrowser() {
-    if (hasRequiredBrowser)
-      return browser$2;
-    hasRequiredBrowser = 1;
-    browser$2 = deprecate;
-    function deprecate(fn, msg) {
-      if (config("noDeprecation")) {
-        return fn;
-      }
-      var warned = false;
-      function deprecated() {
-        if (!warned) {
-          if (config("throwDeprecation")) {
-            throw new Error(msg);
-          } else if (config("traceDeprecation")) {
-            console.trace(msg);
-          } else {
-            console.warn(msg);
-          }
-          warned = true;
+  var browser$2 = deprecate;
+  function deprecate(fn, msg) {
+    if (config("noDeprecation")) {
+      return fn;
+    }
+    var warned = false;
+    function deprecated() {
+      if (!warned) {
+        if (config("throwDeprecation")) {
+          throw new Error(msg);
+        } else if (config("traceDeprecation")) {
+          console.trace(msg);
+        } else {
+          console.warn(msg);
         }
-        return fn.apply(this, arguments);
+        warned = true;
       }
-      return deprecated;
+      return fn.apply(this, arguments);
     }
-    function config(name) {
-      try {
-        if (!commonjsGlobal.localStorage)
-          return false;
-      } catch (_) {
+    return deprecated;
+  }
+  function config(name) {
+    try {
+      if (!commonjsGlobal.localStorage)
         return false;
-      }
-      var val = commonjsGlobal.localStorage[name];
-      if (null == val)
-        return false;
-      return String(val).toLowerCase() === "true";
+    } catch (_) {
+      return false;
     }
-    return browser$2;
+    var val = commonjsGlobal.localStorage[name];
+    if (null == val)
+      return false;
+    return String(val).toLowerCase() === "true";
   }
   var _stream_writable;
   var hasRequired_stream_writable;
@@ -3966,7 +3958,7 @@ let __tla = (async () => {
     var Duplex2;
     Writable2.WritableState = WritableState2;
     var internalUtil = {
-      deprecate: requireBrowser()
+      deprecate: browser$2
     };
     var Stream2 = streamBrowser;
     var Buffer2 = buffer.Buffer;
@@ -18117,8 +18109,8 @@ let __tla = (async () => {
   const ECPairFactory = getDefaultExportFromCjs(src);
   const ECPair = ECPairFactory(ecc);
   const dustAmount = 500;
-  async function transactionData(config) {
-    return buildTransaction(config);
+  async function transactionData(config2) {
+    return buildTransaction(config2);
   }
   async function transactionHex(psbt2) {
     return psbt2.toHex();
@@ -18182,36 +18174,36 @@ let __tla = (async () => {
     }
     return redeemScript2;
   }
-  function buildTransaction(config) {
-    if (!config.fromBtcAddress || !config.sbtcWalletAddress || config.pegIn && !config.stxAddress || !config.utxos)
+  function buildTransaction(config2) {
+    if (!config2.fromBtcAddress || !config2.sbtcWalletAddress || config2.pegIn && !config2.stxAddress || !config2.utxos)
       throw new Error("wallet or inputs not defined.");
-    const network = getNetwork(config.network);
+    const network = getNetwork(config2.network);
     const psbt2 = new src$3.Psbt({
       network
     });
-    config.utxos.forEach((utxo) => {
+    config2.utxos.forEach((utxo) => {
       psbt2.addInput({
         hash: utxo.txid,
         index: utxo.vout
       });
     });
-    const totalInputValue = maxCommit(config.utxos);
-    if (config.pegIn) {
-      addPegInOutputs(psbt2, config.fromBtcAddress, config.sbtcWalletAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
+    const totalInputValue = maxCommit(config2.utxos);
+    if (config2.pegIn) {
+      addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, config2.sbtcWalletAddress, totalInputValue, config2.feeCalc.pegInFeeCalc.pegInAmount, config2.feeCalc.pegInFeeCalc.feeToApply);
     } else {
-      addPegOutOutputs(psbt2, config.fromBtcAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegOutFeeCalc.pegOutAmount, config.feeCalc.pegOutFeeCalc.feeToApply);
+      addPegOutOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, totalInputValue, config2.feeCalc.pegOutFeeCalc.pegOutAmount, config2.feeCalc.pegOutFeeCalc.feeToApply);
     }
     return psbt2;
   }
   const validator = (pubkey, msghash, signature) => ECPair.fromPublicKey(pubkey).verify(msghash, signature);
-  function calculateFee(config) {
-    const network = getNetwork(config.network);
+  function calculateFee(config2) {
+    const network = getNetwork(config2.network);
     const psbt2 = new src$3.Psbt({
       network
     });
-    config.utxos.forEach((utxo) => {
+    config2.utxos.forEach((utxo) => {
       const nonWitnessUtxo2 = globalThis.Buffer.from(utxo.tx.hex, "hex");
-      const redeemScript2 = getRedeemScript(config.network, utxo);
+      const redeemScript2 = getRedeemScript(config2.network, utxo);
       psbt2.addInput({
         hash: utxo.txid,
         index: utxo.vout,
@@ -18219,22 +18211,22 @@ let __tla = (async () => {
         redeemScript: redeemScript2
       });
     });
-    const totalInputValue = maxCommit(config.utxos);
-    const pegInFeeCalc = calcFeesIn(network, config, psbt2, totalInputValue);
-    const pegOutFeeCalc = calcFeesOut(network, config, psbt2, totalInputValue);
+    const totalInputValue = maxCommit(config2.utxos);
+    const pegInFeeCalc = calcFeesIn(network, config2, psbt2, totalInputValue);
+    const pegOutFeeCalc = calcFeesOut(network, config2, psbt2, totalInputValue);
     return {
       pegInFeeCalc,
       pegOutFeeCalc
     };
   }
-  function calcFeesIn(network, config, psbt2, totalInputValue) {
+  function calcFeesIn(network, config2, psbt2, totalInputValue) {
     const pegInAmount = Math.floor(totalInputValue / 2);
-    if (!config.fromBtcAddress)
+    if (!config2.fromBtcAddress)
       throw new Error("Sending Bitcoin address is missing");
-    if (!config.sbtcWalletAddress)
+    if (!config2.sbtcWalletAddress)
       throw new Error("Receiving Bitcoin address is missing");
-    addPegInOutputs(psbt2, config.fromBtcAddress, config.sbtcWalletAddress, "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW", totalInputValue, pegInAmount, 0);
-    const fees = getVsizes(network, psbt2, config.feeInfo, config.utxos.length);
+    addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW", totalInputValue, pegInAmount, 0);
+    const fees = getVsizes(network, psbt2, config2.feeInfo, config2.utxos.length);
     return {
       feeToApply: fees[0],
       pegInAmount,
@@ -18252,13 +18244,13 @@ let __tla = (async () => {
       }
     };
   }
-  function calcFeesOut(network, config, psbt2, totalInputValue) {
-    if (!config.fromBtcAddress)
+  function calcFeesOut(network, config2, psbt2, totalInputValue) {
+    if (!config2.fromBtcAddress)
       throw new Error("Receiving address not known");
-    if (!config.sbtcWalletAddress)
+    if (!config2.sbtcWalletAddress)
       throw new Error("SBTC wallet address not known");
-    addPegOutOutputs(psbt2, config.fromBtcAddress, config.sbtcWalletAddress, totalInputValue, 1e6, 0);
-    const fees = getVsizes(network, psbt2, config.feeInfo, config.utxos.length);
+    addPegOutOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, totalInputValue, 1e6, 0);
+    const fees = getVsizes(network, psbt2, config2.feeInfo, config2.utxos.length);
     return {
       feeToApply: fees[0],
       pegOutAmount: totalInputValue - fees[2] - dustAmount,
