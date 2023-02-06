@@ -5,7 +5,6 @@ import * as ecc from 'tiny-secp256k1';
 import ECPairFactory from 'ecpair';
 import { maxCommit } from "$lib/utxos";
 import type { UTXO } from '$types/utxo';
-
 const ECPair = ECPairFactory(ecc);
 
 export const dustAmount = 500;
@@ -24,6 +23,7 @@ function getNetwork (network:string) {
 }
 
 const signer = 'cN5Ciwee1NA32zD7WNG78TmXBrnAb4jfQZohmh2Zj53mQjNAZV3R';
+//const pubkey = globalThis.Buffer.from('0275bda2b8b7b2bd65037e9fd2b8fda2d9e9a6ba3e26ea51b2313876e8c304b14b', 'hex');
 const keyPairs = [
   ECPair.makeRandom({ network: networks.testnet }),
   ECPair.makeRandom({ network: networks.testnet }),
@@ -42,6 +42,10 @@ export function getP2SHToP2WPKH(network:string) {
 
 export function getRedeemScript(network:string, utxo:UTXO) {
   // Note: Using Mempool API Tx format.
+  console.log('-------------keyPairs[0].publicKey', keyPairs[0].publicKey)
+  const pk = Buffer.from(keyPairs[0].publicKey).toString('hex');
+  console.log('-------------keyPairs[0].publicKey', pk);
+  console.log('-------------keyPairs[0].publicKey', Buffer.from(pk, 'hex'));
   if (!utxo.tx || !utxo.tx.vout) throw new Error('No outputs');
   let redeemScript;
   //let witnessScript;

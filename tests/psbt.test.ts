@@ -11,7 +11,7 @@ import type { UTXO } from '$types/utxo';
 const network = 'testnet';
 
 async function attachTxs(utxos:[UTXO]) {
-  for (let utxo of utxos) {
+  for (const utxo of utxos) {
     if (utxo.txid === '894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04') {
       fetchMock.mockIf(/^.*894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04\/hex/, () => {
         return JSON.stringify(tx1Hex);
@@ -19,6 +19,8 @@ async function attachTxs(utxos:[UTXO]) {
       fetchMock.mockIf(/^.*894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04$/, () => {
         return JSON.stringify(tx1);
       });
+      utxo.tx = tx1;
+      utxo.tx.hex = tx1Hex;
     } else if (utxo.txid === '5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508') {
       fetchMock.mockIf(/^.*5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508\/hex/, () => {
         return JSON.stringify(tx0Hex);
@@ -26,8 +28,10 @@ async function attachTxs(utxos:[UTXO]) {
       fetchMock.mockIf(/^.*5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508$/, () => {
         return JSON.stringify(tx0);
       });
+      utxo.tx = tx0;
+      utxo.tx.hex = tx0Hex;
     }
-    utxo = await attachTransaction(network, utxo);
+    //utxo = await attachTransaction(network, utxo);
   }  
   return utxos;
 }
@@ -69,7 +73,7 @@ describe('suite', () => {
   })
 
   it.concurrent('stacks: calculateFee() tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss on peg in returns correct fee and change for high rate', async () => {
-    const res = await prepareFee('high', utxo1, false)
+    const res = await prepareFee('high', utxo1, false);
     expect(res.pegInFeeCalc.pegInAmount).equals(6653600);
     expect(res.pegInFeeCalc.feeToApply).equals(4340);
   })

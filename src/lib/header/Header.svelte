@@ -7,6 +7,7 @@
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { createEventDispatcher } from "svelte";
 	import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
+	import {base} from '$app/paths'
 
 	const dispatch = createEventDispatcher();
 	
@@ -20,7 +21,8 @@
 		const addr = await fetchSbtcWalletAddress(newNet);
 		const currentPeg =  $sbtcConfig.pegIn;
 		const feeInfo = $sbtcConfig.feeInfo;
-		let conf = { network: newNet, sbtcWalletAddress: addr, pegIn: currentPeg, feeInfo } as SbtcConfig;
+		const feeCalc = $sbtcConfig.feeCalc;
+		let conf = { network: newNet, sbtcWalletAddress: addr, pegIn: currentPeg, feeInfo, feeCalc } as SbtcConfig;
 		sbtcConfig.update(() => conf)
 		dispatch("network_change", {});
 	}
@@ -32,7 +34,7 @@
 	</script>
 	<nav class="navbar navbar-expand-md transparent">
 		<div class="container-fluid mx-5">
-			  <a class="navbar-brand" href="/">
+			  <a class="navbar-brand" href="{base}">
 				<img class="nav-logo" src={logoWhite} alt="CityCoins Test" />
 			</a>
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -42,12 +44,12 @@
 				<ul class="navbar-nav text-white">
 					<li class="nav-item">
 						<span class="pointer nav-link">
-							<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your SBTC Transaction History"><a class="text-white" href="/history">Transactions</a></span>
+							<span title="Your SBTC Transaction History"><a class="text-white" href="{base}/history">Transactions</a></span>
 						</span>
 					</li>
 					<li class="nav-item">
 						<span class="pointer nav-link">
-							<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Toggle pegging in / pegging out"><a class="text-white" href="/" on:click|preventDefault={() => togglePeg()}>{#if $sbtcConfig.pegIn}<ArrowUp width={30} height={30} class="mx-1"/> Pegging In{:else}<ArrowDown width={30} height={30} class="mx-1"/> Pegging Out{/if} </a></span>
+							<span title="Toggle pegging in / pegging out"><a class="text-white" href="{base}" on:click={() => togglePeg()}>{#if $sbtcConfig.pegIn}<ArrowUp width={30} height={30} class="mx-1"/> Pegging In{:else}<ArrowDown width={30} height={30} class="mx-1"/> Pegging Out{/if} </a></span>
 						</span>
 					</li>
 					<li class="nav-item dropdown">

@@ -31,7 +31,7 @@ export async function login($auth: any) {
 		$auth.openAuthRequest({
 			onFinish: (payload: any) => {
 				console.log('payload:', payload);
-				if (isAllowed(payload.addresses.mainnet)) {
+				if (!isAllowed(payload.addresses.mainnet)) {
 					$auth.signOut();
 				}
 			},

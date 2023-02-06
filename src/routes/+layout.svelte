@@ -14,6 +14,7 @@ import { fetchFeeEstimate } from "$lib/utxos";
 import { login } from "$lib/stacks";
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
+import { defaultSbtcConfig } from '$lib/sbtc'
 
 let componentKey = 0;
 const unsubscribe = sbtcConfig.subscribe(() => {
@@ -51,15 +52,15 @@ const fetchWalletAddress = async () => {
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
   globalThis.Buffer = Buffer;
-  window.Buffer = Buffer;
   bootstrap = (await import('bootstrap'));
   try {
+    inited = true;
     await fetchWalletAddress();
-    const conf:SbtcConfig = $sbtcConfig;
+    let conf:SbtcConfig = $sbtcConfig;
+    if (!conf || !conf.feeCalc) conf = defaultSbtcConfig;
     conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
     conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
     sbtcConfig.update(() => conf);
-    inited = true;
   } catch (err) {
     console.log(err)
   }
