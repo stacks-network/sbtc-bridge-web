@@ -7,13 +7,13 @@
     "file": "internal/immutable/assets/logo-white-68f65e57.jpeg",
     "src": "src/lib/assets/logo-white.jpeg"
   },
-  "src/lib/assets/png-assets/stx_eco_wallet_on.png": {
-    "file": "internal/immutable/assets/stx_eco_wallet_on-090e5a93.png",
-    "src": "src/lib/assets/png-assets/stx_eco_wallet_on.png"
-  },
   "src/lib/assets/png-assets/stx_eco_discord.png": {
     "file": "internal/immutable/assets/stx_eco_discord-5cc61295.png",
     "src": "src/lib/assets/png-assets/stx_eco_discord.png"
+  },
+  "src/lib/assets/png-assets/stx_eco_wallet_on.png": {
+    "file": "internal/immutable/assets/stx_eco_wallet_on-090e5a93.png",
+    "src": "src/lib/assets/png-assets/stx_eco_wallet_on.png"
   },
   "src/lib/assets/png-assets/stx_eco_github.png": {
     "file": "internal/immutable/assets/stx_eco_github-0e15c254.png",
@@ -23,10 +23,6 @@
     "file": "internal/immutable/assets/stx_eco_twitter-b58c754c.png",
     "src": "src/lib/assets/png-assets/stx_eco_twitter.png"
   },
-  "src/lib/assets/wallets/electrum1.png": {
-    "file": "internal/immutable/assets/electrum1-b86953ea.png",
-    "src": "src/lib/assets/wallets/electrum1.png"
-  },
   "src/lib/assets/wallets/electrum3.png": {
     "file": "internal/immutable/assets/electrum3-a984e762.png",
     "src": "src/lib/assets/wallets/electrum3.png"
@@ -35,33 +31,37 @@
     "file": "internal/immutable/assets/trezor1-52a60956.png",
     "src": "src/lib/assets/wallets/trezor1.png"
   },
+  "src/lib/assets/wallets/electrum1.png": {
+    "file": "internal/immutable/assets/electrum1-b86953ea.png",
+    "src": "src/lib/assets/wallets/electrum1.png"
+  },
   "src/lib/assets/wallets/electrum2.png": {
     "file": "internal/immutable/assets/electrum2-8623e396.png",
     "src": "src/lib/assets/wallets/electrum2.png"
-  },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-cyrillic-ext-400-normal-3df7909e.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2"
   },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-cyrillic-400-normal-c7d433fd.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2"
-  },
   "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-latin-ext-400-normal-6bfabd30.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2"
   },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-greek-400-normal-a8be01ce.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2"
+  "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-cyrillic-400-normal-c7d433fd.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2"
+  },
+  "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-cyrillic-ext-400-normal-3df7909e.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-latin-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-latin-400-normal-e43b3538.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-latin-400-normal.woff2"
+  },
+  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-greek-400-normal-a8be01ce.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-all-400-normal.woff": {
     "file": "internal/immutable/assets/fira-mono-all-400-normal-1e3b098c.woff",
@@ -88,13 +88,13 @@
     "src": "src/routes/+layout.css"
   },
   "node_modules/@sveltejs/kit/src/runtime/client/start.js": {
-    "file": "internal/immutable/start-d283f373.js",
+    "file": "internal/immutable/start-a63a1af2.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/start.js",
     "isEntry": true,
     "imports": [
       "_index-5e67b194.js",
       "_singletons-8cca75f2.js",
-      "_preload-helper-6910039e.js"
+      "_preload-helper-bd152303.js"
     ],
     "dynamicImports": [
       ".svelte-kit/generated/nodes/0.js",
@@ -109,14 +109,14 @@
       "_index-5e67b194.js"
     ]
   },
+  "_preload-helper-bd152303.js": {
+    "file": "internal/immutable/chunks/preload-helper-bd152303.js"
+  },
   "_index-5e67b194.js": {
     "file": "internal/immutable/chunks/index-5e67b194.js"
   },
-  "_preload-helper-6910039e.js": {
-    "file": "internal/immutable/chunks/preload-helper-6910039e.js"
-  },
-  "_index-ffd4e61e.js": {
-    "file": "internal/immutable/chunks/index-ffd4e61e.js",
+  "_index-3a754f14.js": {
+    "file": "internal/immutable/chunks/index-3a754f14.js",
     "imports": [
       "_index-5e67b194.js"
     ]
@@ -139,7 +139,7 @@
     "file": "internal/immutable/chunks/_page-ff02d51a.js"
   },
   ".svelte-kit/generated/nodes/0.js": {
-    "file": "internal/immutable/chunks/0-c28f96d9.js",
+    "file": "internal/immutable/chunks/0-d4addeca.js",
     "src": ".svelte-kit/generated/nodes/0.js",
     "isDynamicEntry": true,
     "imports": [
@@ -155,7 +155,7 @@
     ]
   },
   ".svelte-kit/generated/nodes/2.js": {
-    "file": "internal/immutable/chunks/2-2505c8c8.js",
+    "file": "internal/immutable/chunks/2-2c2a2fc4.js",
     "src": ".svelte-kit/generated/nodes/2.js",
     "isDynamicEntry": true,
     "imports": [
@@ -164,7 +164,7 @@
     ]
   },
   ".svelte-kit/generated/nodes/3.js": {
-    "file": "internal/immutable/chunks/3-dbcbdc53.js",
+    "file": "internal/immutable/chunks/3-a2c057b8.js",
     "src": ".svelte-kit/generated/nodes/3.js",
     "isDynamicEntry": true,
     "imports": [
@@ -180,23 +180,23 @@
     ]
   },
   "src/routes/+page.svelte": {
-    "file": "internal/immutable/components/pages/_page.svelte-110a00a5.js",
+    "file": "internal/immutable/components/pages/_page.svelte-ae98d862.js",
     "src": "src/routes/+page.svelte",
     "isEntry": true,
     "imports": [
       "_index-5e67b194.js",
-      "_PegOut-4e116650.js",
-      "_index-ffd4e61e.js"
+      "_PegOut-a5be49ca.js",
+      "_index-3a754f14.js"
     ],
     "css": [
       "internal/immutable/assets/_page-e3d58e84.css"
     ]
   },
-  "_PegOut-4e116650.js": {
-    "file": "internal/immutable/chunks/PegOut-4e116650.js",
+  "_PegOut-a5be49ca.js": {
+    "file": "internal/immutable/chunks/PegOut-a5be49ca.js",
     "imports": [
       "_index-5e67b194.js",
-      "_index-ffd4e61e.js",
+      "_index-3a754f14.js",
       "node_modules/bootstrap/dist/js/bootstrap.esm.js"
     ],
     "css": [
@@ -211,26 +211,26 @@
     ]
   },
   "src/routes/history/+page.svelte": {
-    "file": "internal/immutable/components/pages/history/_page.svelte-b515c44a.js",
+    "file": "internal/immutable/components/pages/history/_page.svelte-afa98d4f.js",
     "src": "src/routes/history/+page.svelte",
     "isEntry": true,
     "imports": [
       "_index-5e67b194.js",
-      "_PegOut-4e116650.js",
-      "_index-ffd4e61e.js"
+      "_PegOut-a5be49ca.js",
+      "_index-3a754f14.js"
     ],
     "css": [
       "internal/immutable/assets/_page-731f6875.css"
     ]
   },
   "src/routes/+layout.svelte": {
-    "file": "internal/immutable/components/pages/_layout.svelte-de42d899.js",
+    "file": "internal/immutable/components/pages/_layout.svelte-16340c5a.js",
     "src": "src/routes/+layout.svelte",
     "isEntry": true,
     "imports": [
-      "_preload-helper-6910039e.js",
+      "_preload-helper-bd152303.js",
       "_index-5e67b194.js",
-      "_index-ffd4e61e.js"
+      "_index-3a754f14.js"
     ],
     "dynamicImports": [
       "node_modules/bootstrap/dist/js/bootstrap.esm.js"

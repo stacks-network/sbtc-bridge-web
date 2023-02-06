@@ -1,6 +1,6 @@
-import { _ as __vitePreload } from "../../chunks/preload-helper-6910039e.js";
+import { b as base, _ as __vitePreload } from "../../chunks/preload-helper-bd152303.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, x as text, p as claim_element, q as children, y as claim_text, J as src_url_equal, r as attr_dev, w as add_location, K as append_hydration_dev, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, c as space, A as create_component, f as claim_space, B as claim_component, C as mount_component, h as group_outros, t as transition_out, j as check_outros, k as transition_in, z as set_data_dev, D as destroy_component, O as run_all, F as writable, P as onDestroy, E as tick, Q as globals, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-5e67b194.js";
-import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-ffd4e61e.js";
+import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-3a754f14.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -490,7 +490,7 @@ let __tla = (async () => {
       block,
       id: create_else_block$1.name,
       type: "else",
-      source: "(47:280) {:else}",
+      source: "(48:285) {:else}",
       ctx
     });
     return block;
@@ -541,7 +541,7 @@ let __tla = (async () => {
       block,
       id: create_if_block$1.name,
       type: "if",
-      source: "(47:200) {#if $sbtcConfig.pegIn}",
+      source: "(48:205) {#if $sbtcConfig.pegIn}",
       ctx
     });
     return block;
@@ -808,12 +808,12 @@ let __tla = (async () => {
         if (!src_url_equal(img.src, img_src_value = logoWhite))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "CityCoins Test");
-        add_location(img, file$3, 32, 4, 1249);
+        add_location(img, file$3, 33, 4, 1289);
         attr_dev(a0, "class", "navbar-brand");
-        attr_dev(a0, "href", "/");
-        add_location(a0, file$3, 31, 5, 1211);
+        attr_dev(a0, "href", base);
+        add_location(a0, file$3, 32, 5, 1246);
         attr_dev(span0, "class", "navbar-toggler-icon");
-        add_location(span0, file$3, 35, 4, 1505);
+        add_location(span0, file$3, 36, 4, 1545);
         attr_dev(button, "class", "navbar-toggler");
         attr_dev(button, "type", "button");
         attr_dev(button, "data-bs-toggle", "collapse");
@@ -821,61 +821,61 @@ let __tla = (async () => {
         attr_dev(button, "aria-controls", "navbarNav");
         attr_dev(button, "aria-expanded", "false");
         attr_dev(button, "aria-label", "Toggle navigation");
-        add_location(button, file$3, 34, 3, 1322);
+        add_location(button, file$3, 35, 3, 1362);
         attr_dev(a1, "class", "text-white");
-        attr_dev(a1, "href", "/history");
-        add_location(a1, file$3, 41, 138, 1859);
+        attr_dev(a1, "href", base + "/history");
+        add_location(a1, file$3, 42, 138, 1899);
         attr_dev(span1, "data-bs-toggle", "tooltip");
         attr_dev(span1, "data-bs-placement", "top");
         attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span1, "title", "Your SBTC Transaction History");
-        add_location(span1, file$3, 41, 7, 1728);
+        add_location(span1, file$3, 42, 7, 1768);
         attr_dev(span2, "class", "pointer nav-link");
-        add_location(span2, file$3, 40, 6, 1689);
+        add_location(span2, file$3, 41, 6, 1729);
         attr_dev(li0, "class", "nav-item");
-        add_location(li0, file$3, 39, 5, 1661);
+        add_location(li0, file$3, 40, 5, 1701);
         attr_dev(a2, "class", "text-white");
-        attr_dev(a2, "href", "/");
-        add_location(a2, file$3, 46, 140, 2151);
+        attr_dev(a2, "href", base);
+        add_location(a2, file$3, 47, 140, 2197);
         attr_dev(span3, "data-bs-toggle", "tooltip");
         attr_dev(span3, "data-bs-placement", "top");
         attr_dev(span3, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span3, "title", "Toggle pegging in / pegging out");
-        add_location(span3, file$3, 46, 7, 2018);
+        add_location(span3, file$3, 47, 7, 2064);
         attr_dev(span4, "class", "pointer nav-link");
-        add_location(span4, file$3, 45, 6, 1979);
+        add_location(span4, file$3, 46, 6, 2025);
         attr_dev(li1, "class", "nav-item");
-        add_location(li1, file$3, 44, 5, 1951);
+        add_location(li1, file$3, 45, 5, 1997);
         attr_dev(span5, "class", "nav-link dropdown-toggle ");
         attr_dev(span5, "id", "navbarDropdown");
         attr_dev(span5, "role", "button");
         attr_dev(span5, "data-bs-toggle", "dropdown");
         attr_dev(span5, "aria-expanded", "false");
-        add_location(span5, file$3, 50, 6, 2443);
+        add_location(span5, file$3, 51, 6, 2494);
         attr_dev(a3, "class", "dropdown-item");
         attr_dev(a3, "href", "/");
-        add_location(a3, file$3, 54, 12, 2716);
-        add_location(li2, file$3, 54, 8, 2712);
+        add_location(a3, file$3, 55, 12, 2767);
+        add_location(li2, file$3, 55, 8, 2763);
         attr_dev(a4, "class", "dropdown-item");
         attr_dev(a4, "href", "/");
-        add_location(a4, file$3, 55, 12, 2836);
-        add_location(li3, file$3, 55, 8, 2832);
+        add_location(a4, file$3, 56, 12, 2887);
+        add_location(li3, file$3, 56, 8, 2883);
         attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
         attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-        add_location(ul0, file$3, 53, 6, 2624);
+        add_location(ul0, file$3, 54, 6, 2675);
         attr_dev(li4, "class", "nav-item dropdown");
-        add_location(li4, file$3, 49, 5, 2406);
+        add_location(li4, file$3, 50, 5, 2457);
         attr_dev(li5, "class", "nav-item mb-1");
-        add_location(li5, file$3, 58, 5, 2972);
+        add_location(li5, file$3, 59, 5, 3023);
         attr_dev(ul1, "class", "navbar-nav text-white");
-        add_location(ul1, file$3, 38, 4, 1621);
+        add_location(ul1, file$3, 39, 4, 1661);
         attr_dev(div0, "class", "collapse navbar-collapse");
         attr_dev(div0, "id", "navbarNav");
-        add_location(div0, file$3, 37, 3, 1563);
+        add_location(div0, file$3, 38, 3, 1603);
         attr_dev(div1, "class", "container-fluid mx-5");
-        add_location(div1, file$3, 30, 2, 1171);
+        add_location(div1, file$3, 31, 2, 1206);
         attr_dev(nav, "class", "navbar navbar-expand-md transparent");
-        add_location(nav, file$3, 29, 1, 1119);
+        add_location(nav, file$3, 30, 1, 1154);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, nav, anchor);
@@ -1021,6 +1021,7 @@ let __tla = (async () => {
       createEventDispatcher,
       ArrowUp,
       ArrowDown,
+      base,
       dispatch,
       updateNetwork,
       togglePeg,

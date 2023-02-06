@@ -1,6 +1,6 @@
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a as afterUpdate, o as onMount, b as setContext, c as space, e as empty, f as claim_space, g as insert_hydration_dev, h as group_outros, t as transition_out, j as check_outros, k as transition_in, l as detach_dev, m as construct_svelte_component_dev, n as element, p as claim_element, q as children, r as attr_dev, u as set_style, w as add_location, x as text, y as claim_text, z as set_data_dev, A as create_component, B as claim_component, C as mount_component, D as destroy_component, E as tick } from "./chunks/index-5e67b194.js";
 import { S as SCROLL_KEY, I as INDEX_KEY, g as get_base_uri, f as find_anchor, a as get_link_info, b as get_router_options, s as stores, i as is_external_url, c as scroll_state, P as PRELOAD_PRIORITIES, d as init$1 } from "./chunks/singletons-8cca75f2.js";
-import { _ as __vitePreload } from "./chunks/preload-helper-6910039e.js";
+import { _ as __vitePreload, s as set_paths } from "./chunks/preload-helper-bd152303.js";
 let start;
 let __tla = (async () => {
   const BROWSER = true;
@@ -57,11 +57,6 @@ let __tla = (async () => {
   const DATA_SUFFIX = "/__data.json";
   function add_data_suffix(pathname) {
     return pathname.replace(/\/$/, "") + DATA_SUFFIX;
-  }
-  let base = "";
-  function set_paths(paths) {
-    base = paths.base;
-    paths.assets || base;
   }
   function hash(value) {
     let hash2 = 5381;
@@ -967,10 +962,10 @@ let __tla = (async () => {
   }
   const matchers = {};
   const nodes = [
-    () => __vitePreload(() => import("./chunks/0-c28f96d9.js"), true ? ["./chunks/0-c28f96d9.js","./components/pages/_layout.svelte-de42d899.js","./chunks/preload-helper-6910039e.js","./chunks/index-5e67b194.js","./chunks/index-ffd4e61e.js","./assets/_layout-408de3d2.css"] : void 0, import.meta.url),
+    () => __vitePreload(() => import("./chunks/0-d4addeca.js"), true ? ["./chunks/0-d4addeca.js","./components/pages/_layout.svelte-16340c5a.js","./chunks/preload-helper-bd152303.js","./chunks/index-5e67b194.js","./chunks/index-3a754f14.js","./assets/_layout-408de3d2.css"] : void 0, import.meta.url),
     () => __vitePreload(() => import("./chunks/1-a57855af.js"), true ? ["./chunks/1-a57855af.js","./components/error.svelte-58991c5f.js","./chunks/index-5e67b194.js","./chunks/singletons-8cca75f2.js"] : void 0, import.meta.url),
-    () => __vitePreload(() => import("./chunks/2-2505c8c8.js"), true ? ["./chunks/2-2505c8c8.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-110a00a5.js","./chunks/index-5e67b194.js","./chunks/PegOut-4e116650.js","./chunks/index-ffd4e61e.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-e3d58e84.css"] : void 0, import.meta.url),
-    () => __vitePreload(() => import("./chunks/3-dbcbdc53.js"), true ? ["./chunks/3-dbcbdc53.js","./components/pages/history/_page.svelte-b515c44a.js","./chunks/index-5e67b194.js","./chunks/PegOut-4e116650.js","./chunks/index-ffd4e61e.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-731f6875.css"] : void 0, import.meta.url)
+    () => __vitePreload(() => import("./chunks/2-2c2a2fc4.js"), true ? ["./chunks/2-2c2a2fc4.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-ae98d862.js","./chunks/index-5e67b194.js","./chunks/PegOut-a5be49ca.js","./chunks/index-3a754f14.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-e3d58e84.css"] : void 0, import.meta.url),
+    () => __vitePreload(() => import("./chunks/3-a2c057b8.js"), true ? ["./chunks/3-a2c057b8.js","./components/pages/history/_page.svelte-afa98d4f.js","./chunks/index-5e67b194.js","./chunks/PegOut-a5be49ca.js","./chunks/index-3a754f14.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-731f6875.css"] : void 0, import.meta.url)
   ];
   const server_loads = [];
   const dictionary = {
@@ -1150,7 +1145,7 @@ let __tla = (async () => {
   function update_scroll_positions(index) {
     scroll_positions[index] = scroll_state();
   }
-  function create_client({ target, base: base2 }) {
+  function create_client({ target, base }) {
     var _a;
     const container = document.documentElement;
     const invalidated = [];
@@ -1779,9 +1774,9 @@ let __tla = (async () => {
       });
     }
     function get_navigation_intent(url, invalidating) {
-      if (is_external_url(url, base2))
+      if (is_external_url(url, base))
         return;
-      const path = decode_pathname(url.pathname.slice(base2.length) || "/");
+      const path = decode_pathname(url.pathname.slice(base.length) || "/");
       for (const route of routes) {
         const params = route.exec(path);
         if (params) {
@@ -1906,7 +1901,7 @@ let __tla = (async () => {
         const a = find_anchor(element2, container);
         if (!a)
           return;
-        const { url, external } = get_link_info(a, base2);
+        const { url, external } = get_link_info(a, base);
         if (external)
           return;
         const options = get_router_options(a);
@@ -1921,7 +1916,7 @@ let __tla = (async () => {
       function after_navigate() {
         observer.disconnect();
         for (const a of container.querySelectorAll("a")) {
-          const { url, external } = get_link_info(a, base2);
+          const { url, external } = get_link_info(a, base);
           if (external)
             continue;
           const options = get_router_options(a);
@@ -2076,7 +2071,7 @@ let __tla = (async () => {
           const a = find_anchor(event.composedPath()[0], container);
           if (!a)
             return;
-          const { url, external, has } = get_link_info(a, base2);
+          const { url, external, has } = get_link_info(a, base);
           const options = get_router_options(a);
           if (!url)
             return;
@@ -2131,7 +2126,7 @@ let __tla = (async () => {
           if (method !== "get")
             return;
           const url = new URL((submitter == null ? void 0 : submitter.hasAttribute("formaction")) && (submitter == null ? void 0 : submitter.formAction) || form.action);
-          if (is_external_url(url, base2))
+          if (is_external_url(url, base))
             return;
           const event_form = event.target;
           const { noscroll, reload } = get_router_options(event_form);
