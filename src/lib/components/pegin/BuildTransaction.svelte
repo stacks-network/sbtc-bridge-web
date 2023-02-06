@@ -24,7 +24,7 @@ const amountUpdated = () => {}
 
 $: showStxAddress = $sbtcConfig.fromBtcAddress && $sbtcConfig.utxos?.length > 0;
 $: showPegInAmount = $sbtcConfig.fromBtcAddress && $sbtcConfig.stxAddress && stxAddressOk;
-$: showButton = $sbtcConfig.pegInChangeAmount >= 0 && $sbtcConfig.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.pegInAmount > 0 && stxAddressOk;
+$: showButton = $sbtcConfig.feeCalc.pegInFeeCalc.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount > 0 && stxAddressOk;
 
 onMount(async () => {
   //setTimeout(function () {

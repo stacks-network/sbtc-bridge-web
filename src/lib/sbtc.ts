@@ -36,5 +36,3 @@ async function callContractReadOnly(data:any) {
   const result = cvToJSON(deserializeCV(val.result));
   return result;
 }
-
-

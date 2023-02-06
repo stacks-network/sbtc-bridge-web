@@ -24,9 +24,8 @@ const selectFee = (fee:number) => {
     changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToApply);
   }
   const conf:SbtcConfig = $sbtcConfig;
-  conf.pegInAmount = pegInAmount;
-  conf.pegInChangeAmount = Number(change);
-  conf.feeToApply = Number(feeToApply);
+  conf.feeCalc.pegInFeeCalc.pegInAmount = pegInAmount;
+  conf.feeCalc.pegInFeeCalc.feeToApply = Number(feeToApply);
   sbtcConfig.set(conf);
   dispatch("fee_selected");
 }
@@ -45,7 +44,7 @@ $: showFeeCalculation = feeToApply > 0;
         <div>Using fee rate: {feeToApply}</div>
         <div><a href="/" on:click|preventDefault={() => {feeToApply = 0; changeErrorReason = undefined}}>reset</a></div>
       </div>
-      <div>Peg In: {$sbtcConfig.pegInAmount}</div>
+      <div>Peg In: {$sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount}</div>
       {:else}
       <label for="transact-path" class="mb-3">Select Fee Rate for Fee Calculation</label>
       <div class="dropdown">

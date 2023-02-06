@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
-import { fetchAddressDetails, fetchUTXOs, fetchTxs, maxCommit, fetchFeeEstimate } from "$lib/utxos";
+import { attachAllInputTransactions, fetchAddressDetails, fetchUTXOs, fetchTxsForAddress, maxCommit, fetchFeeEstimate } from "$lib/utxos";
 import { addressList, addresses, txs0, txs1, utxo0, utxo1, feeData } from './test_data';
 import util from 'util'
 import { fail } from 'assert';
@@ -20,25 +20,25 @@ describe('suite', () => {
     try {
       await fetchAddressDetails('unknown', addressList[0]);
       fail();
-    } catch(err) {
+    } catch(err:any) {
       expect(err.message);
     }
     try {
-      await fetchUTXOs('network', addressList[0], null);
+      await fetchUTXOs('network', addressList[0]);
       fail();
-    } catch(err) {
+    } catch(err:any) {
       expect(err.message);
     }
     try {
       await fetchFeeEstimate('network');
       fail();
-    } catch(err) {
+    } catch(err:any) {
       expect(err.message);
     }
     try {
-      await fetchTxs('network', addressList[0], null);
+      await fetchTxsForAddress('network', addressList[0]);
       fail();
-    } catch(err) {
+    } catch(err:any) {
       expect(err.message);
     }
   })
@@ -63,7 +63,7 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb.*$/, () => {
       return JSON.stringify(utxo0);
     });
-    const res = await fetchUTXOs(network, addressList[0], null);
+    const res = await fetchUTXOs(network, addressList[0]);
     expect(res).toEqual(utxo0);
   })
 
@@ -71,8 +71,7 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5.*$/, () => {
       return JSON.stringify(utxo1);
     });
-    const res = await fetchUTXOs(network, addressList[1], null);
-    //console.log('fetchUTXOs 3', util.inspect(res, false, null, true /* enable colors */))
+    const res = await fetchUTXOs(network, addressList[1]);
     expect(res).toEqual(utxo1);
   })
 
@@ -80,10 +79,9 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb.*$/, () => {
       return JSON.stringify(utxo0);
     });
-    const total = 13307200 + 297900;
-    const outputs = await fetchUTXOs(network, addressList[0], null);
+    const total = 297900;
+    const outputs = await fetchUTXOs(network, addressList[0]);
     const res = await maxCommit(outputs);
-    //console.log('fetchUTXOs 3', util.inspect(res, false, null, true /* enable colors */))
     expect(res).toEqual(total);
   })
 
@@ -92,9 +90,9 @@ describe('suite', () => {
       return JSON.stringify(utxo1);
     });
     const total = 13307200;
-    const outputs = await fetchUTXOs(network, addressList[1], null);
-    const res = await maxCommit(outputs);
-    //console.log('fetchUTXOs 3', util.inspect(res, false, null, true /* enable colors */))
+    let res = await fetchUTXOs(network, addressList[1]);
+    res = await attachAllInputTransactions(network, res);
+    res = await maxCommit(res);
     expect(res).toEqual(total);
   })
 
@@ -103,23 +101,22 @@ describe('suite', () => {
       return JSON.stringify(feeData);
     });
     const res = await fetchFeeEstimate('testnet');
-    //console.log('fetchUTXOs 3', util.inspect(res, false, null, true /* enable colors */))
     expect(res).toEqual(feeData);
   })
 
-  it.concurrent('uxto: fetchTxs() returns correct tx set for address 0', async () => {
+  it.concurrent('uxto: fetchTxsForAddress() returns correct tx set for address 0', async () => {
     fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb.*$/, () => {
       return JSON.stringify(txs0);
     });
-    const res = await fetchTxs(network, addressList[0], null);
+    const res = await fetchTxsForAddress(network, addressList[0]);
     expect(res).toEqual(txs0);
   })
 
-  it.concurrent('uxto: fetchTxs() returns correct utxo set for address 1', async () => {
+  it.concurrent('uxto: fetchTxsForAddress() returns correct utxo set for address 1', async () => {
     fetchMock.mockIf(/^.*tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5.*$/, () => {
       return JSON.stringify(txs1);
     });
-    const res = await fetchTxs(network, addressList[1], null);
+    const res = await fetchTxsForAddress(network, addressList[1]);
     expect(res).toEqual(txs1);
   })
 
@@ -134,13 +131,14 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb\/txs.*$/, () => {
       return JSON.stringify(txs0);
     });
-    const addressTxs = await fetchTxs(network, addressList[0]);
+    const addressTxs = await fetchTxsForAddress(network, addressList[0]);
     expect(addressTxs[0].txid).toEqual('5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508');
 
     fetchMock.mockIf(/^.*2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb\/utxo.*$/, () => {
       return JSON.stringify(utxo0);
     });
-    res = await fetchUTXOs(network, addressList[0], addressTxs), addressTxs;
+    res = await fetchUTXOs(network, addressList[0]), addressTxs;
+    res = await attachAllInputTransactions(network, res);
     expect(res[0].fullout).toEqual(addressTxs[0].vout[1]);
 
   })
@@ -156,14 +154,15 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5\/txs.*$/, () => {
       return JSON.stringify(txs1);
     });
-    const addressTxs = await fetchTxs(network, addressList[1]);
+    const addressTxs = await fetchTxsForAddress(network, addressList[1]);
     //console.log('addressTxs: ', util.inspect(addressTxs, false, null, true /* enable colors */))
     expect(addressTxs[0].txid).toEqual('894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04');
 
     fetchMock.mockIf(/^.*tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5\/utxo.*$/, () => {
       return JSON.stringify(utxo1);
     });
-    res = await fetchUTXOs(network, addressList[1], addressTxs), addressTxs;
+    res = await fetchUTXOs(network, addressList[1]), addressTxs;
+    res = await attachAllInputTransactions(network, res);
     //console.log('res: ', util.inspect(res, false, null, true /* enable colors */))
     expect(res[0].fullout).toEqual(addressTxs[0].vout[1]);
 
