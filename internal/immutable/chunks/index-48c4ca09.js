@@ -49,10 +49,12 @@ const crypto$2 = {
     web: typeof self === 'object' && 'crypto' in self ? self.crypto : undefined,
 };
 
+const cryptoBrowser = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+    __proto__: null,
+    crypto: crypto$2
+}, Symbol.toStringTag, { value: 'Module' }));
+
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
-// Cast array to different type
-const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
-const u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
 // Cast array to view
 const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
 // The rotate right (circular right shift) operation for uint32
@@ -62,56 +64,7 @@ const isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
 // So, just to be sure not to corrupt anything.
 if (!isLE)
     throw new Error('Non little-endian hardware is not supported');
-const hexes$1 = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
-/**
- * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef]))
- */
-function bytesToHex$1(uint8a) {
-    // pre-caching improves the speed 6x
-    if (!(uint8a instanceof Uint8Array))
-        throw new Error('Uint8Array expected');
-    let hex = '';
-    for (let i = 0; i < uint8a.length; i++) {
-        hex += hexes$1[uint8a[i]];
-    }
-    return hex;
-}
-/**
- * @example hexToBytes('deadbeef')
- */
-function hexToBytes$1(hex) {
-    if (typeof hex !== 'string') {
-        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
-    }
-    if (hex.length % 2)
-        throw new Error('hexToBytes: received invalid unpadded hex');
-    const array = new Uint8Array(hex.length / 2);
-    for (let i = 0; i < array.length; i++) {
-        const j = i * 2;
-        const hexByte = hex.slice(j, j + 2);
-        const byte = Number.parseInt(hexByte, 16);
-        if (Number.isNaN(byte) || byte < 0)
-            throw new Error('Invalid byte sequence');
-        array[i] = byte;
-    }
-    return array;
-}
-// There is no setImmediate in browser and setTimeout is slow. However, call to async function will return Promise
-// which will be fullfiled only on next scheduler queue processing step and this is exactly what we need.
-const nextTick = async () => { };
-// Returns control to thread each 'tick' ms to avoid blocking
-async function asyncLoop(iters, tick, cb) {
-    let ts = Date.now();
-    for (let i = 0; i < iters; i++) {
-        cb(i);
-        // Date.now() is not monotonic, so in case if clock goes backwards we return return control too
-        const diff = Date.now() - ts;
-        if (diff >= 0 && diff < tick)
-            continue;
-        await nextTick();
-        ts += diff;
-    }
-}
+Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
 function utf8ToBytes(str) {
     if (typeof str !== 'string') {
         throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
@@ -125,38 +78,12 @@ function toBytes(data) {
         throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
     return data;
 }
-/**
- * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
- * @example concatBytes(buf1, buf2)
- */
-function concatBytes$1(...arrays) {
-    if (!arrays.every((a) => a instanceof Uint8Array))
-        throw new Error('Uint8Array list expected');
-    if (arrays.length === 1)
-        return arrays[0];
-    const length = arrays.reduce((a, arr) => a + arr.length, 0);
-    const result = new Uint8Array(length);
-    for (let i = 0, pad = 0; i < arrays.length; i++) {
-        const arr = arrays[i];
-        result.set(arr, pad);
-        pad += arr.length;
-    }
-    return result;
-}
 // For runtime check if class implements interface
 class Hash {
     // Safe version that clones internal state
     clone() {
         return this._cloneInto();
     }
-}
-// Check if object doens't have custom constructor (like Uint8Array/Array)
-const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
-function checkOpts(defaults, opts) {
-    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
-        throw new TypeError('Options should be object or undefined');
-    const merged = Object.assign(defaults, opts);
-    return merged;
 }
 function wrapConstructor(hashConstructor) {
     const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
@@ -166,46 +93,6 @@ function wrapConstructor(hashConstructor) {
     hashC.create = () => hashConstructor();
     return hashC;
 }
-function wrapConstructorWithOpts(hashCons) {
-    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
-    const tmp = hashCons({});
-    hashC.outputLen = tmp.outputLen;
-    hashC.blockLen = tmp.blockLen;
-    hashC.create = (opts) => hashCons(opts);
-    return hashC;
-}
-/**
- * Secure PRNG
- */
-function randomBytes(bytesLength = 32) {
-    if (crypto$2.web) {
-        return crypto$2.web.getRandomValues(new Uint8Array(bytesLength));
-    }
-    else {
-        throw new Error("The environment doesn't have randomBytes function");
-    }
-}
-
-const utils$1 = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
-    __proto__: null,
-    Hash,
-    asyncLoop,
-    bytesToHex: bytesToHex$1,
-    checkOpts,
-    concatBytes: concatBytes$1,
-    createView,
-    hexToBytes: hexToBytes$1,
-    isLE,
-    nextTick,
-    randomBytes,
-    rotr,
-    toBytes,
-    u32,
-    u8,
-    utf8ToBytes,
-    wrapConstructor,
-    wrapConstructorWithOpts
-}, Symbol.toStringTag, { value: 'Module' }));
 
 // Polyfill for Safari 14
 function setBigUint64(view, byteOffset, value, isLE) {
@@ -1453,7 +1340,7 @@ class HmacDrbg {
         this.counter = 0;
     }
     hmac(...values) {
-        return utils.hmacSha256(this.k, ...values);
+        return utils$1.hmacSha256(this.k, ...values);
     }
     hmacSync(...values) {
         throw new Error('utils.hmacSha256Sync is undefined, you need to set it');
@@ -1609,7 +1496,7 @@ function initSigArgs(msgHash, privateKey, extraEntropy) {
     const seedArgs = [int2octets(d), bits2octets(h1)];
     if (extraEntropy != null) {
         if (extraEntropy === true)
-            extraEntropy = utils.randomBytes(32);
+            extraEntropy = utils$1.randomBytes(32);
         const e = ensureBytes(extraEntropy);
         if (e.length !== 32)
             throw new Error('sign: Expected 32 bytes of extra data');
@@ -1684,7 +1571,7 @@ const crypto$1 = {
     web: typeof self === 'object' && 'crypto' in self ? self.crypto : undefined,
 };
 const TAGGED_HASH_PREFIXES = {};
-const utils = {
+const utils$1 = {
     isValidPrivateKey(privateKey) {
         try {
             normalizePrivateKey(privateKey);
@@ -1736,7 +1623,7 @@ const utils = {
         }
     },
     randomPrivateKey: () => {
-        return utils.hashToPrivateKey(utils.randomBytes(40));
+        return utils$1.hashToPrivateKey(utils$1.randomBytes(40));
     },
     bytesToHex,
     hexToBytes,
@@ -1780,11 +1667,11 @@ const utils = {
     taggedHash: async (tag, ...messages) => {
         let tagP = TAGGED_HASH_PREFIXES[tag];
         if (tagP === undefined) {
-            const tagH = await utils.sha256(Uint8Array.from(tag, (c) => c.charCodeAt(0)));
+            const tagH = await utils$1.sha256(Uint8Array.from(tag, (c) => c.charCodeAt(0)));
             tagP = concatBytes(tagH, tagH);
             TAGGED_HASH_PREFIXES[tag] = tagP;
         }
-        return utils.sha256(tagP, ...messages);
+        return utils$1.sha256(tagP, ...messages);
     },
     taggedHashSync: (tag, ...messages) => {
         throw new Error('utils.sha256Sync is undefined, you need to set it');
@@ -1875,20 +1762,221 @@ hmac.create = (hash, key) => new HMAC(hash, key);
 
 function y$6(t,...o){let r=hmac.create(sha256,lr(t));for(let a of o)r.update(lr(a));return Uint8Array.from(r.digest())}
 
-function Ae(t){return (Math.floor(t/16)+1)*16}function Ke$2(t){return Math.ceil(t/3)*4}function He$1(t){let e={iv:"",ephemeralPK:"",mac:"",cipherText:"",wasString:!!t.wasString};t.cipherTextEncoding==="base64"&&(e.cipherTextEncoding="base64");let r=32,n=66,o=64;return {payloadValuesLength:r+n+o,payloadShell:JSON.stringify(e)}}function ke(t){let e={signature:"",publicKey:"",cipherText:t};return {signedPayloadValuesLength:144+66,signedPayloadShell:JSON.stringify(e)}}function Kt(t){let{payloadShell:e,payloadValuesLength:r}=He$1(t),n=Ae(t.contentLength),o;if(!t.cipherTextEncoding||t.cipherTextEncoding==="hex")o=n*2;else if(t.cipherTextEncoding==="base64")o=Ke$2(n);else throw new Error(`Unexpected cipherTextEncoding "${t.cipherTextEncoding}"`);if(t.sign){let{signedPayloadShell:i,signedPayloadValuesLength:c}=ke(e);return i.length+c+r+o}else return e.length+r+o}function E$3(t){return typeof t=="string"?ripemd160(t):ripemd160.create().update(lr(t)).digest()}var L$3=class L{digest(e){return E$3(e)}};function Ce$1(){return new L$3}function P$4(t){return Ce$1().digest(t)}function w$5(t){let e=y$8(t);return {encryptionKey:e.slice(0,32),hmacKey:e.slice(32)}}function $$3(t=32){return utils.randomBytes(t)}function b$2(t,e){let r=new Uint8Array([e]),n=new Uint8Array(25),o=new Uint8Array(21);o[0]=e,o.set(t,1);let i=f$5(o),s=f$5(i).slice(0,4);return n.set(r,0),n.set(t,1),n.set(s,t.length+1),Yr(n)}var je$2={messagePrefix:`Bitcoin Signed Message:
+function Ae(t){return (Math.floor(t/16)+1)*16}function Ke$2(t){return Math.ceil(t/3)*4}function He$1(t){let e={iv:"",ephemeralPK:"",mac:"",cipherText:"",wasString:!!t.wasString};t.cipherTextEncoding==="base64"&&(e.cipherTextEncoding="base64");let r=32,n=66,o=64;return {payloadValuesLength:r+n+o,payloadShell:JSON.stringify(e)}}function ke(t){let e={signature:"",publicKey:"",cipherText:t};return {signedPayloadValuesLength:144+66,signedPayloadShell:JSON.stringify(e)}}function Kt(t){let{payloadShell:e,payloadValuesLength:r}=He$1(t),n=Ae(t.contentLength),o;if(!t.cipherTextEncoding||t.cipherTextEncoding==="hex")o=n*2;else if(t.cipherTextEncoding==="base64")o=Ke$2(n);else throw new Error(`Unexpected cipherTextEncoding "${t.cipherTextEncoding}"`);if(t.sign){let{signedPayloadShell:i,signedPayloadValuesLength:c}=ke(e);return i.length+c+r+o}else return e.length+r+o}function E$3(t){return typeof t=="string"?ripemd160(t):ripemd160.create().update(lr(t)).digest()}var L$3=class L{digest(e){return E$3(e)}};function Ce$1(){return new L$3}function P$4(t){return Ce$1().digest(t)}function w$5(t){let e=y$8(t);return {encryptionKey:e.slice(0,32),hmacKey:e.slice(32)}}function $$3(t=32){return utils$1.randomBytes(t)}function b$2(t,e){let r=new Uint8Array([e]),n=new Uint8Array(25),o=new Uint8Array(21);o[0]=e,o.set(t,1);let i=f$5(o),s=f$5(i).slice(0,4);return n.set(r,0),n.set(t,1),n.set(s,t.length+1),Yr(n)}var je$2={messagePrefix:`Bitcoin Signed Message:
 `,bech32:"bc",bip32:{public:76067358,private:76066276},pubKeyHash:0,scriptHash:5,wif:128},Re={messagePrefix:`Bitcoin Signed Message:
-`,bech32:"tb",bip32:{public:70617039,private:70615956},pubKeyHash:111,scriptHash:196,wif:239},D$2={bitcoin:je$2,testnet:Re};var X$1=(o=>(o[o.mainnetP2PKH=22]="mainnetP2PKH",o[o.mainnetP2SH=20]="mainnetP2SH",o[o.testnetP2PKH=26]="testnetP2PKH",o[o.testnetP2SH=21]="testnetP2SH",o))(X$1||{}),y$5="0123456789ABCDEFGHJKMNPQRSTVWXYZ",R$4=new Map;[...y$5].forEach((t,e)=>R$4.set(t,e));var H$4="0123456789abcdef",j$1=new Map;[...H$4].forEach((t,e)=>j$1.set(t,e));function V$1(t,e){let r=Y$1(t,e),n=Me$1(U$3([e,r]));return `S${y$5[t]}${n}`}function Me$1(t){let e=p$4(t),r=[],n=0;for(let s=e.length-1;s>=0;s--)if(n<4){let p=j$1.get(e[s])>>n,a=0;s!==0&&(a=j$1.get(e[s-1]));let f=1+n,d=a%(1<<f)<<5-f,u=y$5[p+d];n=f,r.unshift(u);}else n=0;let o=0;for(let s=0;s<r.length&&r[s]==="0";s++)o++;r=r.slice(o);let i=/^\u0000*/.exec(new TextDecoder().decode(t)),c=i?i[0].length:0;for(let s=0;s<c;s++)r.unshift(y$5[0]);return r.join("")}function Y$1(t,e){let r=f$5(U$3([Uint8Array.of(t),e]));return f$5(r).slice(0,4)}function ee$2(t){if(t.length<=5)throw new Error("Invalid c32 address: invalid length");if(t[0]!=="S")throw new Error('Invalid c32 address: must start with "S"');return We$3(t.slice(1))}function We$3(t){t=te$2(t);let e=$e$2(t.slice(1)),r=t[0],n=R$4.get(r),o=e.slice(-4),i=Y$1(n,e.slice(0,-4));for(let c=0;c<o.length;c++)if(o[c]!==i[c])throw new Error("Invalid c32check string: checksum mismatch");return [n,e.slice(0,-4)]}function te$2(t){return t.toUpperCase().replace(/O/g,"0").replace(/L|I/g,"1")}function $e$2(t){if(t=te$2(t),!RegExp(`^[${y$5}]*$`).exec(t))throw new Error("Not a c32-encoded string");let e=RegExp(`^${y$5[0]}*`).exec(t),r=e?e[0].length:0,n=[],o=0,i=0;for(let p=t.length-1;p>=0;p--){i===4&&(n.unshift(H$4[o]),i=0,o=0);let f=(R$4.get(t[p])<<i)+o,d=H$4[f%16];if(i+=1,o=f>>4,o>1<<i)throw new Error("Panic error in decoding.");n.unshift(d);}n.unshift(H$4[o]),n.length%2===1&&n.unshift("0");let c=0;for(let p=0;p<n.length&&n[p]==="0";p++)c++;n=n.slice(c-c%2);let s=n.join("");for(let p=0;p<r;p++)s=`00${s}`;return l$4(s)}function Xt(t){try{return ee$2(t),!0}catch{return !1}}function qe$1(t,e=22){return V$1(e,m$3(Ir$1(t)))}function ar(t){let e=getPublicKey(t,!0),r=f$5(e),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function pr(t){let e=typeof t=="string"?t:p$4(t),r=f$5(l$4(e)),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function m$3(t){let e=f$5(t);return P$4(e)}async function ce$2(t){let{contents:e,privateKey:r}=t,n=e instanceof ArrayBuffer?pr$1(e):typeof e=="string"?dr(e):e,o=p$4(getPublicKey(r,!0)),i=f$5(n),c=await sign(i,r,{canonical:!1});return {signature:p$4(c),publicKey:o}}function xr(t,e=!1){let{contents:r,publicKey:n,signature:o}=t,i=r instanceof ArrayBuffer?pr$1(r):typeof r=="string"?dr(r):r,c=f$5(i);return verify(o,c,n,{strict:e})}async function ae$2(t){let{publicKey:e,content:r,cipherTextEncoding:n="hex",wasString:o}=t,i=utils.randomPrivateKey(),c=getPublicKey(i,!0),s=getSharedSecret(i,e,!0);s=s.slice(1);let p=w$5(s),a=$$3(16),f=await g$3(a,p.encryptionKey,r),d=U$3([a,c,f]),u=y$6(p.hmacKey,d),h;if(!n||n==="hex")h=p$4(f);else if(n==="base64")h=Pr(f);else throw new Error(`Unexpected cipherTextEncoding "${n}"`);let T={iv:p$4(a),ephemeralPK:p$4(c),cipherText:h,mac:p$4(u),wasString:o};return n&&n!=="hex"&&(T.cipherTextEncoding=n),T}function pt$1(t,e){if(t.length!==e.length)return !1;let r=0;for(let n=0;n<t.length;n++)r|=t[n]^e[n];return r===0}async function pe$1(t){let{privateKey:e,cipherObject:r}=t;if(!r.ephemeralPK)throw Error("No ephemeralPK found in cipher object");let n=r.ephemeralPK,o=getSharedSecret(e,n,!0);o=o.slice(1);let i=w$5(o),c=l$4(r.iv),s;if(!r.cipherTextEncoding||r.cipherTextEncoding==="hex")s=l$4(r.cipherText);else if(r.cipherTextEncoding==="base64")s=Gr(r.cipherText);else throw new Error(`Unexpected cipherTextEncoding "${r.cipherText}"`);let p=U$3([c,l$4(n),s]),a=y$6(i.hmacKey,p),f=l$4(r.mac);if(!pt$1(f,a))throw new Error("Decryption failed: failure in MAC check");let d=await B$2(c,i.encryptionKey,s);return r.wasString?new TextDecoder().decode(d):d}function Ir(t,e){if(!e.privateKey)throw new Error("Private key is required for decryption.");try{let r=JSON.parse(t);return pe$1({privateKey:e.privateKey,cipherObject:r})}catch(r){throw r instanceof SyntaxError?new Error("Failed to parse encrypted content JSON. The content may not be encrypted. If using getFile, try passing { decrypt: false }."):r}}async function Rr(t,e){let{publicKey:r,privateKey:n,wasString:o}=e,{cipherTextEncoding:i,sign:c}=e;if(!n&&!r)throw new Error("Either public key or private key must be supplied for encryption.");if(!r&&n&&(r=p$4(getPublicKey(n,!0))),typeof o!="boolean"&&(o=typeof t=="string"),!r)throw new Error("micro-stacks/crypto - no public key found to encrypt content");let s=typeof t=="string"?dr(t):t,p=await ae$2({publicKey:r,content:s,wasString:o,cipherTextEncoding:i});if(!c)return JSON.stringify(p);if(typeof c=="string"&&(n=c),!n)throw new Error("micro-stacks/crypto - need private key to sign contents");let a=await ce$2({contents:JSON.stringify(p),privateKey:n});return JSON.stringify({...a,cipherText:JSON.stringify(p)})}function ht$1(t){let r=t.length,n=r%4;if(!n)return t;let o=4-n,i=r+o;return t.padEnd(i,"=")}function ut$1(t){return t instanceof Uint8Array?ge$3(Pr(t)):ge$3(Pr(new TextEncoder().encode(t)))}function yt$1(t){let e=Gr(mt(t));return new TextDecoder().decode(e)}function mt(t){let e;return t instanceof Uint8Array?e=new TextDecoder().decode(t):e=t,ht$1(e).replace(/\-/g,"+").replace(/_/g,"/")}function ge$3(t){return t.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}var g$2={encode:ut$1,decode:yt$1};var v$1=128,ue$1=0,xt=32,St$1=16,bt=2,ye$2=St$1|xt|ue$1<<6,I$4=bt|ue$1<<6;function me$1(t){return typeof t=="string"?Gr(t):t}function _$3(t){let e=me$1(t),r=32,n=r+1,o=e.length,i=0;if(e[i++]!==ye$2)throw new Error('Could not find expected "seq"');let c=e[i++];if(c===(v$1|1)&&(c=e[i++]),o-i<c)throw new Error('"seq" specified length of "'+c+'", only "'+(o-i)+'" remaining');if(e[i++]!==I$4)throw new Error('Could not find expected "int" for "r"');let s=e[i++];if(o-i-2<s)throw new Error('"r" specified length of "'+s+'", only "'+(o-i-2)+'" available');if(n<s)throw new Error('"r" specified length of "'+s+'", max of "'+n+'" is acceptable');let p=i;if(i+=s,e[i++]!==I$4)throw new Error('Could not find expected "int" for "s"');let a=e[i++];if(o-i!==a)throw new Error('"s" specified length of "'+a+'", expected "'+(o-i)+'"');if(n<a)throw new Error('"s" specified length of "'+a+'", max of "'+n+'" is acceptable');let f=i;if(i+=a,i!==o)throw new Error('Expected to consume entire buffer, but "'+(o-i)+'" bytes remain');let d=r-s,u=r-a,h=new Uint8Array(d+s+u+a);for(i=0;i<d;++i)h[i]=0;h.set(e.slice(p+Math.max(-d,0),p+s),i),i=r;for(let T=i;i<T+u;++i)h[i]=0;return h.set(e.slice(f+Math.max(-u,0),f+a),i),jr(h).replace(/=/g,"")}function de$1(t,e,r){let n=0;for(;e+n<r&&t[e+n]===0;)++n;return t[e+n]>=v$1&&--n,n}function M$4(t){let e=me$1(t),r=32,n=de$1(e,0,r),o=de$1(e,r,e.length),i=r-n,c=r-o,s=1+1+i+1+1+c,p=s<v$1,a=new Uint8Array((p?2:3)+s),f=0;return a[f++]=ye$2,p?a[f++]=s:(a[f++]=v$1|1,a[f++]=s&255),a[f++]=I$4,a[f++]=i,n<0?(a[f++]=0,f+=rt(e,a,f,0,r)):f+=rt(e,a,f,n,r),a[f++]=I$4,a[f++]=c,o<0?(a[f++]=0,rt(e,a,f,r)):rt(e,a,f,r+o),jr(a).replace(/=/g,"")}function x$2(t,e){let r=[],n=g$2.encode(JSON.stringify(e));r.push(n);let o=g$2.encode(JSON.stringify(t));return r.push(o),r.join(".")}var Se=class{tokenType;rawPrivateKey;constructor(e="ES256K",r){if(!r)throw new C$5("TokenSigner: rawPrivateKey is required to sign a token");this.tokenType="JWT",this.rawPrivateKey=r;}header(e={}){return {...{typ:this.tokenType,alg:"ES256K"},...e}}async sign(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHash(e,r,o,i,c)}signSync(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHashSync(e,r,o,i,c)}async createWithSignedHash(e,r,n,o,i){let c=await sign(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}createWithSignedHashSync(e,r,n,o,i){let c=signSync(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}};var we$1=class we{tokenType;rawPublicKey;constructor(e,r){this.tokenType="JWT",this.rawPublicKey=r;}verify(e,r=!1){return typeof e=="string"?this.verifyCompact(e,r):typeof e=="object"?this.verifyExpanded(e,r):!1}verifyCompact(e,r){let n=e.split("."),o=n[0]+"."+n[1],i=s=>{let p=n[2],a=M$4(p);return verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})},c=f$5(dr(o));return i(c)}verifyExpanded(e,r){let n=[e.header.join("."),g$2.encode(e.payload)].join("."),o=!0,i=s=>(e.signature.map(p=>{let a=M$4(p);verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})||(o=!1);}),o),c=f$5(dr(n));return i(c)}};function wt(t){if(typeof t=="string"){let e=t.split("."),r=JSON.parse(g$2.decode(e[0])),n=JSON.parse(g$2.decode(e[1])),o=e[2];return {header:r,payload:n,signature:o}}else if(typeof t=="object"){if(typeof t.payload!="string")throw new Error("Expected token payload to be a base64 or json string");let e=t.payload;t.payload[0]!=="{"&&(e=g$2.decode(e));let r=[];return t.header.map(n=>{let o=JSON.parse(g$2.decode(n));r.push(o);}),{header:r,payload:JSON.parse(e),signature:t.signature}}}function At(t){return x$2(t,{typ:"JWT",alg:"none"})+"."}
+`,bech32:"tb",bip32:{public:70617039,private:70615956},pubKeyHash:111,scriptHash:196,wif:239},D$2={bitcoin:je$2,testnet:Re};var X$1=(o=>(o[o.mainnetP2PKH=22]="mainnetP2PKH",o[o.mainnetP2SH=20]="mainnetP2SH",o[o.testnetP2PKH=26]="testnetP2PKH",o[o.testnetP2SH=21]="testnetP2SH",o))(X$1||{}),y$5="0123456789ABCDEFGHJKMNPQRSTVWXYZ",R$4=new Map;[...y$5].forEach((t,e)=>R$4.set(t,e));var H$4="0123456789abcdef",j$1=new Map;[...H$4].forEach((t,e)=>j$1.set(t,e));function V$1(t,e){let r=Y$1(t,e),n=Me$1(U$3([e,r]));return `S${y$5[t]}${n}`}function Me$1(t){let e=p$4(t),r=[],n=0;for(let s=e.length-1;s>=0;s--)if(n<4){let p=j$1.get(e[s])>>n,a=0;s!==0&&(a=j$1.get(e[s-1]));let f=1+n,d=a%(1<<f)<<5-f,u=y$5[p+d];n=f,r.unshift(u);}else n=0;let o=0;for(let s=0;s<r.length&&r[s]==="0";s++)o++;r=r.slice(o);let i=/^\u0000*/.exec(new TextDecoder().decode(t)),c=i?i[0].length:0;for(let s=0;s<c;s++)r.unshift(y$5[0]);return r.join("")}function Y$1(t,e){let r=f$5(U$3([Uint8Array.of(t),e]));return f$5(r).slice(0,4)}function ee$2(t){if(t.length<=5)throw new Error("Invalid c32 address: invalid length");if(t[0]!=="S")throw new Error('Invalid c32 address: must start with "S"');return We$3(t.slice(1))}function We$3(t){t=te$2(t);let e=$e$2(t.slice(1)),r=t[0],n=R$4.get(r),o=e.slice(-4),i=Y$1(n,e.slice(0,-4));for(let c=0;c<o.length;c++)if(o[c]!==i[c])throw new Error("Invalid c32check string: checksum mismatch");return [n,e.slice(0,-4)]}function te$2(t){return t.toUpperCase().replace(/O/g,"0").replace(/L|I/g,"1")}function $e$2(t){if(t=te$2(t),!RegExp(`^[${y$5}]*$`).exec(t))throw new Error("Not a c32-encoded string");let e=RegExp(`^${y$5[0]}*`).exec(t),r=e?e[0].length:0,n=[],o=0,i=0;for(let p=t.length-1;p>=0;p--){i===4&&(n.unshift(H$4[o]),i=0,o=0);let f=(R$4.get(t[p])<<i)+o,d=H$4[f%16];if(i+=1,o=f>>4,o>1<<i)throw new Error("Panic error in decoding.");n.unshift(d);}n.unshift(H$4[o]),n.length%2===1&&n.unshift("0");let c=0;for(let p=0;p<n.length&&n[p]==="0";p++)c++;n=n.slice(c-c%2);let s=n.join("");for(let p=0;p<r;p++)s=`00${s}`;return l$4(s)}function Xt(t){try{return ee$2(t),!0}catch{return !1}}function qe$1(t,e=22){return V$1(e,m$3(Ir$1(t)))}function ar(t){let e=getPublicKey(t,!0),r=f$5(e),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function pr(t){let e=typeof t=="string"?t:p$4(t),r=f$5(l$4(e)),n=P$4(r);return b$2(n,D$2.bitcoin.pubKeyHash)}function m$3(t){let e=f$5(t);return P$4(e)}async function ce$2(t){let{contents:e,privateKey:r}=t,n=e instanceof ArrayBuffer?pr$1(e):typeof e=="string"?dr(e):e,o=p$4(getPublicKey(r,!0)),i=f$5(n),c=await sign(i,r,{canonical:!1});return {signature:p$4(c),publicKey:o}}function xr(t,e=!1){let{contents:r,publicKey:n,signature:o}=t,i=r instanceof ArrayBuffer?pr$1(r):typeof r=="string"?dr(r):r,c=f$5(i);return verify(o,c,n,{strict:e})}async function ae$2(t){let{publicKey:e,content:r,cipherTextEncoding:n="hex",wasString:o}=t,i=utils$1.randomPrivateKey(),c=getPublicKey(i,!0),s=getSharedSecret(i,e,!0);s=s.slice(1);let p=w$5(s),a=$$3(16),f=await g$3(a,p.encryptionKey,r),d=U$3([a,c,f]),u=y$6(p.hmacKey,d),h;if(!n||n==="hex")h=p$4(f);else if(n==="base64")h=Pr(f);else throw new Error(`Unexpected cipherTextEncoding "${n}"`);let T={iv:p$4(a),ephemeralPK:p$4(c),cipherText:h,mac:p$4(u),wasString:o};return n&&n!=="hex"&&(T.cipherTextEncoding=n),T}function pt$1(t,e){if(t.length!==e.length)return !1;let r=0;for(let n=0;n<t.length;n++)r|=t[n]^e[n];return r===0}async function pe$1(t){let{privateKey:e,cipherObject:r}=t;if(!r.ephemeralPK)throw Error("No ephemeralPK found in cipher object");let n=r.ephemeralPK,o=getSharedSecret(e,n,!0);o=o.slice(1);let i=w$5(o),c=l$4(r.iv),s;if(!r.cipherTextEncoding||r.cipherTextEncoding==="hex")s=l$4(r.cipherText);else if(r.cipherTextEncoding==="base64")s=Gr(r.cipherText);else throw new Error(`Unexpected cipherTextEncoding "${r.cipherText}"`);let p=U$3([c,l$4(n),s]),a=y$6(i.hmacKey,p),f=l$4(r.mac);if(!pt$1(f,a))throw new Error("Decryption failed: failure in MAC check");let d=await B$2(c,i.encryptionKey,s);return r.wasString?new TextDecoder().decode(d):d}function Ir(t,e){if(!e.privateKey)throw new Error("Private key is required for decryption.");try{let r=JSON.parse(t);return pe$1({privateKey:e.privateKey,cipherObject:r})}catch(r){throw r instanceof SyntaxError?new Error("Failed to parse encrypted content JSON. The content may not be encrypted. If using getFile, try passing { decrypt: false }."):r}}async function Rr(t,e){let{publicKey:r,privateKey:n,wasString:o}=e,{cipherTextEncoding:i,sign:c}=e;if(!n&&!r)throw new Error("Either public key or private key must be supplied for encryption.");if(!r&&n&&(r=p$4(getPublicKey(n,!0))),typeof o!="boolean"&&(o=typeof t=="string"),!r)throw new Error("micro-stacks/crypto - no public key found to encrypt content");let s=typeof t=="string"?dr(t):t,p=await ae$2({publicKey:r,content:s,wasString:o,cipherTextEncoding:i});if(!c)return JSON.stringify(p);if(typeof c=="string"&&(n=c),!n)throw new Error("micro-stacks/crypto - need private key to sign contents");let a=await ce$2({contents:JSON.stringify(p),privateKey:n});return JSON.stringify({...a,cipherText:JSON.stringify(p)})}function ht$1(t){let r=t.length,n=r%4;if(!n)return t;let o=4-n,i=r+o;return t.padEnd(i,"=")}function ut$1(t){return t instanceof Uint8Array?ge$3(Pr(t)):ge$3(Pr(new TextEncoder().encode(t)))}function yt$1(t){let e=Gr(mt(t));return new TextDecoder().decode(e)}function mt(t){let e;return t instanceof Uint8Array?e=new TextDecoder().decode(t):e=t,ht$1(e).replace(/\-/g,"+").replace(/_/g,"/")}function ge$3(t){return t.replace(/=/g,"").replace(/\+/g,"-").replace(/\//g,"_")}var g$2={encode:ut$1,decode:yt$1};var v$1=128,ue$1=0,xt=32,St$1=16,bt=2,ye$2=St$1|xt|ue$1<<6,I$4=bt|ue$1<<6;function me$1(t){return typeof t=="string"?Gr(t):t}function _$3(t){let e=me$1(t),r=32,n=r+1,o=e.length,i=0;if(e[i++]!==ye$2)throw new Error('Could not find expected "seq"');let c=e[i++];if(c===(v$1|1)&&(c=e[i++]),o-i<c)throw new Error('"seq" specified length of "'+c+'", only "'+(o-i)+'" remaining');if(e[i++]!==I$4)throw new Error('Could not find expected "int" for "r"');let s=e[i++];if(o-i-2<s)throw new Error('"r" specified length of "'+s+'", only "'+(o-i-2)+'" available');if(n<s)throw new Error('"r" specified length of "'+s+'", max of "'+n+'" is acceptable');let p=i;if(i+=s,e[i++]!==I$4)throw new Error('Could not find expected "int" for "s"');let a=e[i++];if(o-i!==a)throw new Error('"s" specified length of "'+a+'", expected "'+(o-i)+'"');if(n<a)throw new Error('"s" specified length of "'+a+'", max of "'+n+'" is acceptable');let f=i;if(i+=a,i!==o)throw new Error('Expected to consume entire buffer, but "'+(o-i)+'" bytes remain');let d=r-s,u=r-a,h=new Uint8Array(d+s+u+a);for(i=0;i<d;++i)h[i]=0;h.set(e.slice(p+Math.max(-d,0),p+s),i),i=r;for(let T=i;i<T+u;++i)h[i]=0;return h.set(e.slice(f+Math.max(-u,0),f+a),i),jr(h).replace(/=/g,"")}function de$1(t,e,r){let n=0;for(;e+n<r&&t[e+n]===0;)++n;return t[e+n]>=v$1&&--n,n}function M$4(t){let e=me$1(t),r=32,n=de$1(e,0,r),o=de$1(e,r,e.length),i=r-n,c=r-o,s=1+1+i+1+1+c,p=s<v$1,a=new Uint8Array((p?2:3)+s),f=0;return a[f++]=ye$2,p?a[f++]=s:(a[f++]=v$1|1,a[f++]=s&255),a[f++]=I$4,a[f++]=i,n<0?(a[f++]=0,f+=rt(e,a,f,0,r)):f+=rt(e,a,f,n,r),a[f++]=I$4,a[f++]=c,o<0?(a[f++]=0,rt(e,a,f,r)):rt(e,a,f,r+o),jr(a).replace(/=/g,"")}function x$2(t,e){let r=[],n=g$2.encode(JSON.stringify(e));r.push(n);let o=g$2.encode(JSON.stringify(t));return r.push(o),r.join(".")}var Se=class{tokenType;rawPrivateKey;constructor(e="ES256K",r){if(!r)throw new C$5("TokenSigner: rawPrivateKey is required to sign a token");this.tokenType="JWT",this.rawPrivateKey=r;}header(e={}){return {...{typ:this.tokenType,alg:"ES256K"},...e}}async sign(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHash(e,r,o,i,c)}signSync(e,r=!1,n={}){let o=this.header(n),i=x$2(e,o),c=f$5(dr(i));return this.createWithSignedHashSync(e,r,o,i,c)}async createWithSignedHash(e,r,n,o,i){let c=await sign(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}createWithSignedHashSync(e,r,n,o,i){let c=signSync(i,this.rawPrivateKey,{canonical:!1}),s=_$3(c);return r?{header:[g$2.encode(JSON.stringify(n))],payload:JSON.stringify(e),signature:[s]}:[o,s].join(".")}};var we$1=class we{tokenType;rawPublicKey;constructor(e,r){this.tokenType="JWT",this.rawPublicKey=r;}verify(e,r=!1){return typeof e=="string"?this.verifyCompact(e,r):typeof e=="object"?this.verifyExpanded(e,r):!1}verifyCompact(e,r){let n=e.split("."),o=n[0]+"."+n[1],i=s=>{let p=n[2],a=M$4(p);return verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})},c=f$5(dr(o));return i(c)}verifyExpanded(e,r){let n=[e.header.join("."),g$2.encode(e.payload)].join("."),o=!0,i=s=>(e.signature.map(p=>{let a=M$4(p);verify(p$4(Gr(a)),p$4(s),this.rawPublicKey,{strict:r})||(o=!1);}),o),c=f$5(dr(n));return i(c)}};function wt(t){if(typeof t=="string"){let e=t.split("."),r=JSON.parse(g$2.decode(e[0])),n=JSON.parse(g$2.decode(e[1])),o=e[2];return {header:r,payload:n,signature:o}}else if(typeof t=="object"){if(typeof t.payload!="string")throw new Error("Expected token payload to be a base64 or json string");let e=t.payload;t.payload[0]!=="{"&&(e=g$2.decode(e));let r=[];return t.header.map(n=>{let o=JSON.parse(g$2.decode(n));r.push(o);}),{header:r,payload:JSON.parse(e),signature:t.signature}}}function At(t){return x$2(t,{typ:"JWT",alg:"none"})+"."}
 
 var P$3=BigInt("0xffffffffffffffffffffffffffffffff"),M$3=BigInt(0),U$2=BigInt("0x7fffffffffffffffffffffffffffffff"),w$4=BigInt("-170141183460469231731687303715884105728"),ge$2=(i=>(i[i.Origin=1]="Origin",i[i.Standard=2]="Standard",i[i.Contract=3]="Contract",i))(ge$2||{}),A$3=(n=>(n[n.Int=0]="Int",n[n.UInt=1]="UInt",n[n.Buffer=2]="Buffer",n[n.BoolTrue=3]="BoolTrue",n[n.BoolFalse=4]="BoolFalse",n[n.PrincipalStandard=5]="PrincipalStandard",n[n.PrincipalContract=6]="PrincipalContract",n[n.ResponseOk=7]="ResponseOk",n[n.ResponseErr=8]="ResponseErr",n[n.OptionalNone=9]="OptionalNone",n[n.OptionalSome=10]="OptionalSome",n[n.List=11]="List",n[n.Tuple=12]="Tuple",n[n.StringASCII=13]="StringASCII",n[n.StringUTF8=14]="StringUTF8",n))(A$3||{});var I$3=()=>({type:3}),O$2=()=>({type:4});var L$2=e=>{if(e.length>1e6)throw new Error("Cannot construct clarity buffer that is greater than 1MB");return {type:2,buffer:Uint8Array.from(e)}};var Z$3=e=>{let r=y$9(e,!0);if(r>U$2)throw new RangeError(`Cannot construct clarity integer from value greater than ${U$2.toString()}`);if(r<w$4)throw new RangeError(`Cannot construct clarity integer form value less than ${w$4.toString()}`);if(Rr$1(r).byteLength>128)throw new RangeError(`Cannot construct clarity integer from value greater than ${128} bits`);return {type:0,value:r}},K$1=e=>{let r=y$9(e);if(r<M$3)throw new RangeError("Cannot construct unsigned clarity integer from negative value");if(r>P$3)throw new RangeError(`Cannot construct unsigned clarity integer greater than ${P$3.toString()}`);return {type:1,value:r}};function W$1(e){return {type:11,list:e}}function R$3(){return {type:9}}function E$2(e){return {type:10,value:e}}function te$1(e){return /^[a-zA-Z]([a-zA-Z0-9]|[-_!?+<>=/*])*$|^[-+=/*]$|^[<>]=?$/.test(e)&&e.length<128}var Be$1=(a=>(a[a.Address=0]="Address",a[a.Principal=1]="Principal",a[a.LengthPrefixedString=2]="LengthPrefixedString",a[a.MemoString=3]="MemoString",a[a.AssetInfo=4]="AssetInfo",a[a.PostCondition=5]="PostCondition",a[a.PublicKey=6]="PublicKey",a[a.LengthPrefixedList=7]="LengthPrefixedList",a[a.Payload=8]="Payload",a[a.MessageSignature=9]="MessageSignature",a[a.TransactionAuthField=10]="TransactionAuthField",a))(Be$1||{});function k$2(e){return V$1(e.version,l$4(e.hash160))}var Pe=(e,r)=>e?dr(e).length>r:!1;function C$4(e,r,t){let i=r||1,s=t||128;if(Pe(e,s))throw new Error(`String length exceeds maximum bytes ${s.toString()}`);return {type:2,content:e,lengthPrefixBytes:i,maxLengthBytes:s}}function _$2(e){let r=new q$1;return r.appendHexString(x$3(e.version,1)),r.appendHexString(e.hash160),r.concatBuffer()}function $$2(e){let r=new q$1,t=dr(e.content),i=t.byteLength;return r.appendHexString(x$3(i,e.lengthPrefixBytes)),r.push(t),r.concatBuffer()}function F$3(e,r,t){r=r||1;let i=Tr(p$4(e.readBuffer(r))),s=_$4(e.readBuffer(i));return C$4(s,r,t??128)}function z$4(e){let r=Tr(p$4(e.readBuffer(1))),t=p$4(e.readBuffer(20));return {type:0,version:r,hash160:t}}function d$2(e){if(e.type===5)return k$2(e.address);if(e.type===6)return `${k$2(e.address)}.${e.contractName.content}`;throw new Error(`Unexpected principal data: ${JSON.stringify(e)}`)}function ie$1(e){return {type:5,address:e}}function H$3(e,r){if(dr(r.content).byteLength>=128)throw new Error("Contract name must be less than 128 bytes");return {type:6,address:e,contractName:r}}function oe$1(e){return {type:8,value:e}}function ae$1(e){return {type:7,value:e}}var S$1=e=>({type:13,data:e}),se$1=e=>({type:14,data:e});function pe(e){for(let r in e)if(!te$1(r))throw new Error(`"${r}" is not a valid Clarity name`);return {type:12,data:e}}var Oe=(o=>(o[o.ClarityAbiTypeUInt128=1]="ClarityAbiTypeUInt128",o[o.ClarityAbiTypeInt128=2]="ClarityAbiTypeInt128",o[o.ClarityAbiTypeBool=3]="ClarityAbiTypeBool",o[o.ClarityAbiTypePrincipal=4]="ClarityAbiTypePrincipal",o[o.ClarityAbiTypeNone=5]="ClarityAbiTypeNone",o[o.ClarityAbiTypeBuffer=6]="ClarityAbiTypeBuffer",o[o.ClarityAbiTypeResponse=7]="ClarityAbiTypeResponse",o[o.ClarityAbiTypeOptional=8]="ClarityAbiTypeOptional",o[o.ClarityAbiTypeTuple=9]="ClarityAbiTypeTuple",o[o.ClarityAbiTypeList=10]="ClarityAbiTypeList",o[o.ClarityAbiTypeStringAscii=11]="ClarityAbiTypeStringAscii",o[o.ClarityAbiTypeStringUtf8=12]="ClarityAbiTypeStringUtf8",o[o.ClarityAbiTypeTraitReference=13]="ClarityAbiTypeTraitReference",o))(Oe||{});function l$3(e){switch(e.type){case 3:case 4:return "bool";case 0:return "int";case 1:return "uint";case 2:return `(buff ${e.buffer.length})`;case 9:return "(optional none)";case 10:return `(optional ${l$3(e.value)})`;case 8:return `(response UnknownType ${l$3(e.value)})`;case 7:return `(response ${l$3(e.value)} UnknownType)`;case 5:case 6:return "principal";case 11:return `(list ${e.list.length} ${e.list.length?l$3(e.list[0]):"UnknownType"})`;case 12:return `(tuple ${Object.keys(e.data).map(r=>`(${r} ${l$3(e.data[r])})`).join(" ")})`;case 13:return `(string-ascii ${Qr(e.data).length})`;case 14:return `(string-utf8 ${dr(e.data).length})`}}function T$2(e){let r=h$6(e,!0);switch(e.type){case 8:return {type:l$3(e),value:r,success:!1};case 7:return {type:l$3(e),value:r,success:!0};default:return {type:l$3(e),value:r}}}function h$6(e,r=!1){switch(e.type){case 3:return !0;case 4:return !1;case 0:case 1:return r?e.value.toString():e.value;case 2:return `0x${p$4(e.buffer)}`;case 9:return null;case 10:return T$2(e.value);case 8:return T$2(e.value);case 7:return T$2(e.value);case 5:case 6:return d$2(e);case 11:return e.list.map(s=>T$2(s));case 12:let t={};return Object.keys(e.data).map(s=>[s,T$2(e.data[s])]).forEach(([s,p])=>{t[s]=p;}),t;case 13:return e.data;case 14:return e.data}}function f$3(e,r){let t=new q$1,i=Uint8Array.from([e]);return t.push(i),t.push(r),t.concatBuffer()}function He(e){return Uint8Array.from([e.type])}function je$1(e){return e.type===9?new Uint8Array([e.type]):f$3(e.type,m$2(e.value))}function De$2(e){let r=new Uint8Array(4);return new DataView(r.buffer,r.byteOffset,r.byteLength).setUint32(r.byteOffset,e.buffer.length),f$3(e.type,U$3([r,Uint8Array.from(e.buffer)]))}function Je$1(e){let r=x$3(_r(e.value),16),t=l$4(r);return f$3(e.type,t)}function Ye$1(e){let r=x$3(e.value,16),t=l$4(r);return f$3(e.type,t)}function Ge(e){return f$3(e.type,_$2(e.address))}function ve$3(e){return f$3(e.type,U$3([_$2(e.address),$$2(e.contractName)]))}function Me(e){return f$3(e.type,m$2(e.value))}function Xe$1(e){let r=new q$1,t=new Uint8Array(4);yt$2(t,e.list.length,0),r.push(t);for(let i of e.list){let s=m$2(i);r.push(s);}return f$3(e.type,r.concatBuffer())}function Ze$2(e){let r=[],t=new Uint8Array(4);new DataView(t.buffer,t.byteOffset,t.byteLength).setUint32(t.byteOffset,Object.keys(e.data).length),r.push(t);let s=Object.keys(e.data).sort((p,y)=>{let g=dr(p),x=dr(y);return xt$1(g,x)});for(let p of s){let y=C$4(p);r.push($$2(y));let g=m$2(e.data[p]);r.push(g);}return f$3(e.type,U$3(r))}function ue(e,r){let t=new q$1,s=(r==="ascii"?Qr:dr)(e.data),p=new Uint8Array(4);return new DataView(p.buffer,p.byteOffset,p.byteLength).setUint32(p.byteOffset,s.length),t.push(p),t.push(s),f$3(e.type,t.concatBuffer())}function Ke$1(e){return ue(e,"ascii")}function We$2(e){return ue(e,"utf8")}function m$2(e){switch(e.type){case 3:case 4:return He(e);case 9:case 10:return je$1(e);case 2:return De$2(e);case 0:return Je$1(e);case 1:return Ye$1(e);case 5:return Ge(e);case 6:return ve$3(e);case 7:case 8:return Me(e);case 11:return Xe$1(e);case 12:return Ze$2(e);case 13:return Ke$1(e);case 14:return We$2(e);default:throw new Error("Unable to serialize. Invalid Clarity Value.")}}function c$1(e){let r;if(typeof e=="string"){let i=e.slice(0,2).toLowerCase()==="0x";r=new J$2(l$4(i?e.slice(2):e));}else e instanceof Uint8Array?r=new J$2(e):r=e;switch(r.readUInt8Enum(A$3,i=>{throw new V$2(`Cannot recognize Clarity Type: ${i}`)})){case 0:return Z$3(r.readBuffer(16));case 1:return K$1(r.readBuffer(16));case 2:let i=r.readUInt32BE();return L$2(r.readBuffer(i));case 3:return I$3();case 4:return O$2();case 5:let s=z$4(r);return ie$1(s);case 6:let p=z$4(r),y=F$3(r);return H$3(p,y);case 7:return ae$1(c$1(r));case 8:return oe$1(c$1(r));case 9:return R$3();case 10:return E$2(c$1(r));case 11:let g=r.readUInt32BE(),x=[];for(let n=0;n<g;n++)x.push(c$1(r));return W$1(x);case 12:let Ce=r.readUInt32BE(),G={};for(let n=0;n<Ce;n++){let v=F$3(r).content;if(v===void 0)throw new V$2('"content" is undefined');G[v]=c$1(r);}return pe(G);case 13:let a=r.readUInt32BE(),de=Xr(r.readBuffer(a));return S$1(de);case 14:let o=r.readUInt32BE(),Te=_$4(r.readBuffer(o));return se$1(Te);default:throw new V$2("Unable to deserialize Clarity Value from buffer. Could not find valid Clarity Type.")}}function Vt(e){return `0x${p$4(m$2(e))}`}
 
-var g$1="https://stacks-node-api.mainnet.stacks.co",p$3="https://stacks-node-api.testnet.stacks.co",i=class{version=cr.Mainnet;chainId=ur.Mainnet;broadcastEndpoint="/v2/transactions";transferFeeEstimateEndpoint="/v2/fees/transfer";accountEndpoint="/v2/accounts";contractAbiEndpoint="/v2/contracts/interface";readOnlyFunctionCallEndpoint="/v2/contracts/call-read";bnsLookupUrl;_coreApiUrl;fetcher;get coreApiUrl(){return this._coreApiUrl}set coreApiUrl(t){throw new Error("Cannot modify property `coreApiUrl` after object initialization")}constructor(t={url:g$1}){if(!t.url&&!t.coreApiUrl)throw Error("[miro-stacks] Network initialized with no api url");this._coreApiUrl=t.url||t.coreApiUrl,this.bnsLookupUrl=t.bnsLookupUrl||t.url||t.coreApiUrl,this.fetcher=t.fetcher||Hr;}getCoreApiUrl=()=>this._coreApiUrl;isMainnet=()=>this.version===cr.Mainnet;getBroadcastApiUrl=()=>`${this.getCoreApiUrl()}${this.broadcastEndpoint}`;getTransferFeeEstimateApiUrl=()=>`${this.getCoreApiUrl()}${this.transferFeeEstimateEndpoint}`;getAccountApiUrl=t=>`${this.getCoreApiUrl()}${this.accountEndpoint}/${t}?proof=0`;getAbiApiUrl=(t,e)=>`${this.getCoreApiUrl()}${this.contractAbiEndpoint}/${t}/${e}`;getReadOnlyFunctionCallApiUrl=(t,e,r)=>`${this.getCoreApiUrl()}${this.readOnlyFunctionCallEndpoint}/${t}/${e}/${encodeURIComponent(r)}`;getInfoUrl=()=>`${this.getCoreApiUrl()}/v2/info`;getBlockTimeInfoUrl=()=>`${this.getCoreApiUrl()}/extended/v1/info/network_block_times`;getPoxInfoUrl=()=>`${this.getCoreApiUrl()}/v2/pox`;getRewardsUrl=(t,e)=>{let r=`${this.getCoreApiUrl()}/extended/v1/burnchain/rewards/${t}`;return e&&(r=`${r}?limit=${e.limit}&offset=${e.offset}`),r};getRewardsTotalUrl=t=>`${this.getCoreApiUrl()}/extended/v1/burnchain/rewards/${t}/total`;getRewardHoldersUrl=(t,e)=>{let r=`${this.getCoreApiUrl()}/extended/v1/burnchain/reward_slot_holders/${t}`;return e&&(r=`${r}?limit=${e.limit}&offset=${e.offset}`),r};getStackerInfoUrl=(t,e)=>`${this.getCoreApiUrl()}${this.readOnlyFunctionCallEndpoint}
-    ${t}/${e}/get-stacker-info`;getNameInfo(t){let e=`${this.bnsLookupUrl}/v1/names/${t}`;return this.fetcher(e).then(r=>{if(r.status===404)throw new Error("Name not found");if(r.status!==200)throw new Error(`Bad response status: ${r.status}`);return r.json()}).then(r=>r.address?Object.assign({},r,{address:r.address}):r)}},l$2=class l extends i{version=cr.Testnet;chainId=ur.Testnet;constructor(t={url:p$3,fetcher:Hr}){super(t);}};
+var g$1="https://stacks-node-api.mainnet.stacks.co",p$3="https://stacks-node-api.testnet.stacks.co",i$1=class i{version=cr.Mainnet;chainId=ur.Mainnet;broadcastEndpoint="/v2/transactions";transferFeeEstimateEndpoint="/v2/fees/transfer";accountEndpoint="/v2/accounts";contractAbiEndpoint="/v2/contracts/interface";readOnlyFunctionCallEndpoint="/v2/contracts/call-read";bnsLookupUrl;_coreApiUrl;fetcher;get coreApiUrl(){return this._coreApiUrl}set coreApiUrl(t){throw new Error("Cannot modify property `coreApiUrl` after object initialization")}constructor(t={url:g$1}){if(!t.url&&!t.coreApiUrl)throw Error("[miro-stacks] Network initialized with no api url");this._coreApiUrl=t.url||t.coreApiUrl,this.bnsLookupUrl=t.bnsLookupUrl||t.url||t.coreApiUrl,this.fetcher=t.fetcher||Hr;}getCoreApiUrl=()=>this._coreApiUrl;isMainnet=()=>this.version===cr.Mainnet;getBroadcastApiUrl=()=>`${this.getCoreApiUrl()}${this.broadcastEndpoint}`;getTransferFeeEstimateApiUrl=()=>`${this.getCoreApiUrl()}${this.transferFeeEstimateEndpoint}`;getAccountApiUrl=t=>`${this.getCoreApiUrl()}${this.accountEndpoint}/${t}?proof=0`;getAbiApiUrl=(t,e)=>`${this.getCoreApiUrl()}${this.contractAbiEndpoint}/${t}/${e}`;getReadOnlyFunctionCallApiUrl=(t,e,r)=>`${this.getCoreApiUrl()}${this.readOnlyFunctionCallEndpoint}/${t}/${e}/${encodeURIComponent(r)}`;getInfoUrl=()=>`${this.getCoreApiUrl()}/v2/info`;getBlockTimeInfoUrl=()=>`${this.getCoreApiUrl()}/extended/v1/info/network_block_times`;getPoxInfoUrl=()=>`${this.getCoreApiUrl()}/v2/pox`;getRewardsUrl=(t,e)=>{let r=`${this.getCoreApiUrl()}/extended/v1/burnchain/rewards/${t}`;return e&&(r=`${r}?limit=${e.limit}&offset=${e.offset}`),r};getRewardsTotalUrl=t=>`${this.getCoreApiUrl()}/extended/v1/burnchain/rewards/${t}/total`;getRewardHoldersUrl=(t,e)=>{let r=`${this.getCoreApiUrl()}/extended/v1/burnchain/reward_slot_holders/${t}`;return e&&(r=`${r}?limit=${e.limit}&offset=${e.offset}`),r};getStackerInfoUrl=(t,e)=>`${this.getCoreApiUrl()}${this.readOnlyFunctionCallEndpoint}
+    ${t}/${e}/get-stacker-info`;getNameInfo(t){let e=`${this.bnsLookupUrl}/v1/names/${t}`;return this.fetcher(e).then(r=>{if(r.status===404)throw new Error("Name not found");if(r.status!==200)throw new Error(`Bad response status: ${r.status}`);return r.json()}).then(r=>r.address?Object.assign({},r,{address:r.address}):r)}},l$2=class l extends i$1{version=cr.Testnet;chainId=ur.Testnet;constructor(t={url:p$3,fetcher:Hr}){super(t);}};
 
 var $e$1=(r=>(r[r.OnChainOnly=1]="OnChainOnly",r[r.OffChainOnly=2]="OffChainOnly",r[r.Any=3]="Any",r))($e$1||{});cr.Mainnet;var ve$2=(n=>(n[n.Allow=1]="Allow",n[n.Deny=2]="Deny",n))(ve$2||{}),Ve$1=(r=>(r[r.STX=0]="STX",r[r.Fungible=1]="Fungible",r[r.NonFungible=2]="NonFungible",r))(Ve$1||{}),le=(n=>(n[n.Standard=4]="Standard",n[n.Sponsored=5]="Sponsored",n))(le||{}),De$1=(i=>(i[i.SerializeP2PKH=0]="SerializeP2PKH",i[i.SerializeP2SH=1]="SerializeP2SH",i[i.SerializeP2WPKH=2]="SerializeP2WPKH",i[i.SerializeP2WSH=3]="SerializeP2WSH",i))(De$1||{}),Nn=(i=>(i[i.MainnetSingleSig=22]="MainnetSingleSig",i[i.MainnetMultiSig=20]="MainnetMultiSig",i[i.TestnetSingleSig=26]="TestnetSingleSig",i[i.TestnetMultiSig=21]="TestnetMultiSig",i))(Nn||{}),ye$1=(n=>(n[n.Compressed=0]="Compressed",n[n.Uncompressed=1]="Uncompressed",n))(ye$1||{}),ge$1=(o=>(o[o.Equal=1]="Equal",o[o.Greater=2]="Greater",o[o.GreaterEqual=3]="GreaterEqual",o[o.Less=4]="Less",o[o.LessEqual=5]="LessEqual",o))(ge$1||{}),_e$2=(n=>(n[n.DoesNotOwn=16]="DoesNotOwn",n[n.Owns=17]="Owns",n))(_e$2||{}),Hn=(r=>(r[r.STX=0]="STX",r[r.Fungible=1]="Fungible",r[r.NonFungible=2]="NonFungible",r))(Hn||{}),On=(y=>(y.Serialization="Serialization",y.Deserialization="Deserialization",y.SignatureValidation="SignatureValidation",y.FeeTooLow="FeeTooLow",y.BadNonce="BadNonce",y.NotEnoughFunds="NotEnoughFunds",y.NoSuchContract="NoSuchContract",y.NoSuchPublicFunction="NoSuchPublicFunction",y.BadFunctionArgument="BadFunctionArgument",y.ContractAlreadyExists="ContractAlreadyExists",y.PoisonMicroblocksDoNotConflict="PoisonMicroblocksDoNotConflict",y.PoisonMicroblockHasUnknownPubKeyHash="PoisonMicroblockHasUnknownPubKeyHash",y.PoisonMicroblockIsInvalid="PoisonMicroblockIsInvalid",y.BadAddressVersionByte="BadAddressVersionByte",y.NoCoinbaseViaMempool="NoCoinbaseViaMempool",y.ServerFailureNoSuchChainTip="ServerFailureNoSuchChainTip",y.ServerFailureDatabase="ServerFailureDatabase",y.ServerFailureOther="ServerFailureOther",y))(On||{});var h$5=(o=>(o[o.TokenTransfer=0]="TokenTransfer",o[o.SmartContract=1]="SmartContract",o[o.ContractCall=2]="ContractCall",o[o.PoisonMicroblock=3]="PoisonMicroblock",o[o.Coinbase=4]="Coinbase",o))(h$5||{});function et$1(e){let t=new q$1;return t.appendByte(e.conditionType),t.push(tt$1(e.principal)),(e.conditionType===1||e.conditionType===2)&&t.push(it$1(e.assetInfo)),e.conditionType===2&&t.push(m$2(e.assetName)),t.appendByte(e.conditionCode),(e.conditionType===0||e.conditionType===1)&&t.push(Rr$1(e.amount,!1,8)),t.concatBuffer()}function tt$1(e){let t=new q$1;return t.push(Uint8Array.from([e.prefix])),t.push(_$2(e.address)),e.prefix===ge$2.Contract&&t.push($$2(e.contractName)),t.concatBuffer()}function it$1(e){let t=new q$1;return t.push(_$2(e.address)),t.push($$2(e.contractName)),t.push($$2(e.assetName)),t.concatBuffer()}var Yt=(i=>(i[i.PublicKeyCompressed=0]="PublicKeyCompressed",i[i.PublicKeyUncompressed=1]="PublicKeyUncompressed",i[i.SignatureCompressed=2]="SignatureCompressed",i[i.SignatureUncompressed=3]="SignatureUncompressed",i))(Yt||{});
 
+var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
+
+function getDefaultExportFromCjs (x) {
+	return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, 'default') ? x['default'] : x;
+}
+
+function getAugmentedNamespace(n) {
+  if (n.__esModule) return n;
+  var f = n.default;
+	if (typeof f == "function") {
+		var a = function a () {
+			if (this instanceof a) {
+				var args = [null];
+				args.push.apply(args, arguments);
+				var Ctor = Function.bind.apply(f, args);
+				return new Ctor();
+			}
+			return f.apply(this, arguments);
+		};
+		a.prototype = f.prototype;
+  } else a = {};
+  Object.defineProperty(a, '__esModule', {value: true});
+	Object.keys(n).forEach(function (k) {
+		var d = Object.getOwnPropertyDescriptor(n, k);
+		Object.defineProperty(a, k, d.get ? d : {
+			enumerable: true,
+			get: function () {
+				return n[k];
+			}
+		});
+	});
+	return a;
+}
+
+var utils = {};
+
+const require$$0$1 = /*@__PURE__*/getAugmentedNamespace(cryptoBrowser);
+
+(function (exports) {
+	/*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.randomBytes = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
+	// The import here is via the package name. This is to ensure
+	// that exports mapping/resolution does fall into place.
+	const crypto_1 = require$$0$1;
+	// Cast array to different type
+	const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
+	exports.u8 = u8;
+	const u32 = (arr) => new Uint32Array(arr.buffer, arr.byteOffset, Math.floor(arr.byteLength / 4));
+	exports.u32 = u32;
+	// Cast array to view
+	const createView = (arr) => new DataView(arr.buffer, arr.byteOffset, arr.byteLength);
+	exports.createView = createView;
+	// The rotate right (circular right shift) operation for uint32
+	const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
+	exports.rotr = rotr;
+	exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
+	// There is almost no big endian hardware, but js typed arrays uses platform specific endianness.
+	// So, just to be sure not to corrupt anything.
+	if (!exports.isLE)
+	    throw new Error('Non little-endian hardware is not supported');
+	const hexes = Array.from({ length: 256 }, (v, i) => i.toString(16).padStart(2, '0'));
+	/**
+	 * @example bytesToHex(Uint8Array.from([0xde, 0xad, 0xbe, 0xef]))
+	 */
+	function bytesToHex(uint8a) {
+	    // pre-caching improves the speed 6x
+	    if (!(uint8a instanceof Uint8Array))
+	        throw new Error('Uint8Array expected');
+	    let hex = '';
+	    for (let i = 0; i < uint8a.length; i++) {
+	        hex += hexes[uint8a[i]];
+	    }
+	    return hex;
+	}
+	exports.bytesToHex = bytesToHex;
+	/**
+	 * @example hexToBytes('deadbeef')
+	 */
+	function hexToBytes(hex) {
+	    if (typeof hex !== 'string') {
+	        throw new TypeError('hexToBytes: expected string, got ' + typeof hex);
+	    }
+	    if (hex.length % 2)
+	        throw new Error('hexToBytes: received invalid unpadded hex');
+	    const array = new Uint8Array(hex.length / 2);
+	    for (let i = 0; i < array.length; i++) {
+	        const j = i * 2;
+	        const hexByte = hex.slice(j, j + 2);
+	        const byte = Number.parseInt(hexByte, 16);
+	        if (Number.isNaN(byte) || byte < 0)
+	            throw new Error('Invalid byte sequence');
+	        array[i] = byte;
+	    }
+	    return array;
+	}
+	exports.hexToBytes = hexToBytes;
+	// There is no setImmediate in browser and setTimeout is slow. However, call to async function will return Promise
+	// which will be fullfiled only on next scheduler queue processing step and this is exactly what we need.
+	const nextTick = async () => { };
+	exports.nextTick = nextTick;
+	// Returns control to thread each 'tick' ms to avoid blocking
+	async function asyncLoop(iters, tick, cb) {
+	    let ts = Date.now();
+	    for (let i = 0; i < iters; i++) {
+	        cb(i);
+	        // Date.now() is not monotonic, so in case if clock goes backwards we return return control too
+	        const diff = Date.now() - ts;
+	        if (diff >= 0 && diff < tick)
+	            continue;
+	        await (0, exports.nextTick)();
+	        ts += diff;
+	    }
+	}
+	exports.asyncLoop = asyncLoop;
+	function utf8ToBytes(str) {
+	    if (typeof str !== 'string') {
+	        throw new TypeError(`utf8ToBytes expected string, got ${typeof str}`);
+	    }
+	    return new TextEncoder().encode(str);
+	}
+	exports.utf8ToBytes = utf8ToBytes;
+	function toBytes(data) {
+	    if (typeof data === 'string')
+	        data = utf8ToBytes(data);
+	    if (!(data instanceof Uint8Array))
+	        throw new TypeError(`Expected input type is Uint8Array (got ${typeof data})`);
+	    return data;
+	}
+	exports.toBytes = toBytes;
+	/**
+	 * Concats Uint8Array-s into one; like `Buffer.concat([buf1, buf2])`
+	 * @example concatBytes(buf1, buf2)
+	 */
+	function concatBytes(...arrays) {
+	    if (!arrays.every((a) => a instanceof Uint8Array))
+	        throw new Error('Uint8Array list expected');
+	    if (arrays.length === 1)
+	        return arrays[0];
+	    const length = arrays.reduce((a, arr) => a + arr.length, 0);
+	    const result = new Uint8Array(length);
+	    for (let i = 0, pad = 0; i < arrays.length; i++) {
+	        const arr = arrays[i];
+	        result.set(arr, pad);
+	        pad += arr.length;
+	    }
+	    return result;
+	}
+	exports.concatBytes = concatBytes;
+	// For runtime check if class implements interface
+	class Hash {
+	    // Safe version that clones internal state
+	    clone() {
+	        return this._cloneInto();
+	    }
+	}
+	exports.Hash = Hash;
+	// Check if object doens't have custom constructor (like Uint8Array/Array)
+	const isPlainObject = (obj) => Object.prototype.toString.call(obj) === '[object Object]' && obj.constructor === Object;
+	function checkOpts(defaults, opts) {
+	    if (opts !== undefined && (typeof opts !== 'object' || !isPlainObject(opts)))
+	        throw new TypeError('Options should be object or undefined');
+	    const merged = Object.assign(defaults, opts);
+	    return merged;
+	}
+	exports.checkOpts = checkOpts;
+	function wrapConstructor(hashConstructor) {
+	    const hashC = (message) => hashConstructor().update(toBytes(message)).digest();
+	    const tmp = hashConstructor();
+	    hashC.outputLen = tmp.outputLen;
+	    hashC.blockLen = tmp.blockLen;
+	    hashC.create = () => hashConstructor();
+	    return hashC;
+	}
+	exports.wrapConstructor = wrapConstructor;
+	function wrapConstructorWithOpts(hashCons) {
+	    const hashC = (msg, opts) => hashCons(opts).update(toBytes(msg)).digest();
+	    const tmp = hashCons({});
+	    hashC.outputLen = tmp.outputLen;
+	    hashC.blockLen = tmp.blockLen;
+	    hashC.create = (opts) => hashCons(opts);
+	    return hashC;
+	}
+	exports.wrapConstructorWithOpts = wrapConstructorWithOpts;
+	/**
+	 * Secure PRNG
+	 */
+	function randomBytes(bytesLength = 32) {
+	    if (crypto_1.crypto.web) {
+	        return crypto_1.crypto.web.getRandomValues(new Uint8Array(bytesLength));
+	    }
+	    else if (crypto_1.crypto.node) {
+	        return new Uint8Array(crypto_1.crypto.node.randomBytes(bytesLength).buffer);
+	    }
+	    else {
+	        throw new Error("The environment doesn't have randomBytes function");
+	    }
+	}
+	exports.randomBytes = randomBytes;
+} (utils));
+
 var f$2=typeof document<"u",ee$1=(r=>(r.SessionStorageKey="stacks-session",r.NetworkStorageKey="stacks-network",r))(ee$1||{});var u$1=hr("localStorage",{returnEmptyObject:!0}),U$1={setItem:(e,t)=>{if(f$2)return u$1==null?void 0:u$1.setItem(e,t)},getItem:e=>{if(f$2){let t=u$1==null?void 0:u$1.getItem(e);if(t===null)throw new Error("defaultStorageAdapter: no value stored");return t}},removeItem:e=>{if(f$2)return u$1==null?void 0:u$1.removeItem(e)}},c=e=>e?p$4(getPublicKey(e,!0)):null;function K(e){return e==null?void 0:e.map(t=>typeof t!="string"?p$4(et$1(t)):t)}var d$1=(e,t)=>t?new Se("ES256k",t).sign(e):At(e);var l$1=async(e,t)=>{let r={...e,postConditions:K(e.postConditions)};return d$1(r,t)};var ce$1=(n=>(n.ContractCall="contract_call",n.ContractDeploy="smart_contract",n.STXTransfer="token_transfer",n))(ce$1||{});async function Tt({functionArgs:e,privateKey:t,...r}){let n=c(t),s={...r,functionArgs:e.map(o=>Ur(typeof o=="string"?o:Vt(o))),txType:"contract_call",publicKey:n};return l$1(s,t)}async function Pt({privateKey:e,...t}){let r={...t,publicKey:c(e),txType:"smart_contract"};return l$1(r,e)}async function It$1({privateKey:e,...t}){let r={...t,amount:typeof t.amount=="bigint"?Number(t.amount).toString(10):t.amount,publicKey:c(e),txType:"token_transfer"};return l$1(r,e)}function ge(e){let t=e.split(":");if(t.length!==3)throw new TypeError("Decentralized IDs must have 3 parts");if(t[0].toLowerCase()!=="did")throw new TypeError('Decentralized IDs must start with "did"');return t[1].toLowerCase()}function fe(e){return e&&ge(e)==="btc-addr"?e.split(":")[2]:void 0}async function B$1(e,t){let r=wt(e),s=r==null?void 0:r.payload,o;if(s.private_key)try{let i=Er(s.private_key);o=await pe$1({privateKey:t,cipherObject:i});}catch{console.error("[micro-stacks] failed to decrypt appPrivateKey");}return {addresses:s.profile.stxAddress,appPrivateKey:o,associationToken:s.associationToken,hubUrl:s.hubUrl,public_keys:s.public_keys,profile:s.profile,profile_url:s.profile_url,username:s.username,version:s.version,decentralizedID:s.iss,identityAddress:fe(s.iss)}}function y$4(){return hr("StacksProvider",{returnEmptyObject:!1,usageDesc:"authenticate",throwIfUnavailable:!0})}async function Nt(e,t=U$1,r=JSON.stringify){var n,s;if(!e.appDetails)throw Error("[micro-stacks] authenticate error: `authOptions.appDetails` are required for authentication");try{let o=p$4($$3()),a=await we(e,o),i=await B$1(a,o);return (n=e==null?void 0:e.onFinish)==null||n.call(e,i),t.setItem("stacks-session",r(i)),i}catch(o){(s=e==null?void 0:e.onCancel)==null||s.call(e,o.message);}}function Te(e,t){if(!e.appDetails)throw Error("[micro-stacks] authenticate error: `authOptions.appDetails` are required for authentication");let r=e.scopes||[],n=hr("location",{returnEmptyObject:!0}).origin;return {scopes:[...new Set(["store_write",...r])],redirect_uri:n,public_keys:[t],domain_name:n,appDetails:e.appDetails}}async function ve$1(e,t){return new Se("ES256k",t).sign(e)}async function be(e,t){let r=p$4(getPublicKey(t)),n=Te(e,r);return ve$1(n,t)}async function we(e,t){let r=y$4();if(!r)throw Error("This function can only be called on the client, and with the presence of StacksProvider");let n=await be(e,t);return r.authenticationRequest(n)}function p$2(e){return async function(r){let{token:n,onFinish:s,onCancel:o}=r;try{let a=y$4();if(!a)throw new Error("[micro-stacks/connect] No Stacks provider");let i=a[e];if(typeof i!="function")throw new Error(`[micro-stacks/connect] StacksProvider method ${e} not found`);let g=await i(n);s==null||s(g);}catch(a){o==null||o(a==null?void 0:a.message);}}}var Gt=p$2("transactionRequest"),F$2=p$2("signatureRequest"),_$1=p$2("structuredDataSignatureRequest");var H$2=(s=>(s.Chrome="https://chrome.google.com/webstore/detail/hiro-wallet/ldinpeekobnhjjdofggfgjlcehhmanlj",s.Firefox="https://addons.mozilla.org/en-US/firefox/addon/hiro-wallet/",s.Mobile="https://www.xverse.app",s.Browser="https://www.hiro.so/wallet/install-web",s))(H$2||{});var V=async e=>{let t={stxAddress:e.stxAddress,message:e.message,appDetails:e.appDetails??null,publicKey:c(e.privateKey),network:e.network};return d$1(t,e.privateKey)},De=async e=>{try{let t=await V({message:e.message,network:e.network,privateKey:e.privateKey,stxAddress:e.stxAddress,authOrigin:e.authOrigin,appDetails:e.appDetails});return F$2({token:t,onFinish:e.onFinish,onCancel:e.onCancel})}catch(t){console.error("[micro-stacks] handleSignMessageRequest failed"),console.error(t);}};var h$4=(e,t,r)=>pe({name:S$1(e),version:S$1(t),"chain-id":K$1(r)}),X=e=>{var o;let t=typeof e.message!="string"?Vt(e.message):e.message,r=h$4(e.domain.name,e.domain.version,e.domain.chainId??((o=e.network)==null?void 0:o.chainId)??ur.Mainnet),n=Vt(r),s={stxAddress:e.stxAddress,message:Ur(t),domain:Ur(n),appDetails:e.appDetails,publicKey:c(e.privateKey),network:e.network};return d$1(s,e==null?void 0:e.privateKey)},Ke=async e=>{try{let t=await X({message:e.message,domain:e.domain,privateKey:e.privateKey,stxAddress:e.stxAddress,authOrigin:e.authOrigin,appDetails:e.appDetails,network:e.network});return _$1({token:t,onFinish:e.onFinish,onCancel:e.onCancel})}catch(t){console.error("[micro-stacks] handleSignStructuredDataRequest failed"),console.error(t);}};var _e$1=9007199254740991;function w$3(e){if(e<0||e>_e$1||e%1!==0)throw new RangeError("value out of range")}var P$2=(e,t,r)=>{w$3(e);let n;if(t||(t=new Uint8Array(C$3(e))),!lr(t))throw new TypeError("uint8Array must be of Uint8Array type");return r||(r=0),e<253?(ut$2(t,e,r),n=1):e<=65535?(ut$2(t,253,r),ct$1(t,e,r+1),n=3):e<=4294967295?(ut$2(t,254,r),mt$1(t,e,r+1),n=5):(ut$2(t,255,r),mt$1(t,e>>>0,r+1),mt$1(t,e/4294967296|0,r+5),n=9),P$2.bytes=n,t};function C$3(e){return w$3(e),e<253?1:e<=65535?3:e<=4294967295?5:9}var Ve=`Stacks Signed Message:
-`,D$1=utf8ToBytes(Ve),We$1=`Stacks Message Signing:
-`,I$2=utf8ToBytes(We$1);function R$2(e,t=D$1){return f$5(z$3(e,t))}function z$3(e,t=D$1){let r=typeof e=="string"?utf8ToBytes(e):e,n=P$2(r.length);return U$3([t,n,r])}var O$1=32;function $e(e){if(e.length<O$1*2*2+1)throw new Error("Invalid signature");let t=e.slice(0,2),r=e.slice(2,2+O$1*2),n=e.slice(2+O$1*2);return {recoveryBytes:d$3(t),r,s:n}}function Qe(e){return e.slice(-2)+e.slice(0,-2)}var Q$1=({hash:e,signature:t,recoveryBytes:r})=>recoverPublicKey(e,t,Number(r),!0),Z$2=e=>{let{signature:t,mode:r="rsv"}=e,{r:n,s,recoveryBytes:o}=$e(r==="rsv"?Qe(t):t);return {signature:new Signature(d$3(n),d$3(s)),recoveryBytes:o}},M$2=e=>{if(!e.publicKey&&!e.stxAddress)throw Error("[micro-stacks/connect[ verifyMessageSignature -- You must pass `stxAddress` if you are recovering the public key from the signature");let{message:t,mode:r="rsv"}=e,n=e.publicKey;try{let s=typeof t=="string"?R$2(t,e.prefix):t,{signature:o,recoveryBytes:a}=Z$2({signature:e.signature,mode:r});if(!n){let[i]=ee$2(e.stxAddress);n=p$4(Q$1({hash:s,signature:o,recoveryBytes:a}));let g=qe$1(n,i);if(g!==e.stxAddress)return console.error(`[micro-stacks/connect] verifyMessageSignature Stacks address is not correct. expected: ${e.stxAddress}, received: ${g}`),!1}return verify(o,s,n,{strict:!1})}catch(s){return console.error("[micro-stacks/connect] verifyMessageSignature failed",s),!1}},Ze$1=e=>M$2(e)||M$2({...e,prefix:I$2});
+`,D$1=utils.utf8ToBytes(Ve),We$1=`Stacks Message Signing:
+`,I$2=utils.utf8ToBytes(We$1);function R$2(e,t=D$1){return f$5(z$3(e,t))}function z$3(e,t=D$1){let r=typeof e=="string"?utils.utf8ToBytes(e):e,n=P$2(r.length);return U$3([t,n,r])}var O$1=32;function $e(e){if(e.length<O$1*2*2+1)throw new Error("Invalid signature");let t=e.slice(0,2),r=e.slice(2,2+O$1*2),n=e.slice(2+O$1*2);return {recoveryBytes:d$3(t),r,s:n}}function Qe(e){return e.slice(-2)+e.slice(0,-2)}var Q$1=({hash:e,signature:t,recoveryBytes:r})=>recoverPublicKey(e,t,Number(r),!0),Z$2=e=>{let{signature:t,mode:r="rsv"}=e,{r:n,s,recoveryBytes:o}=$e(r==="rsv"?Qe(t):t);return {signature:new Signature(d$3(n),d$3(s)),recoveryBytes:o}},M$2=e=>{if(!e.publicKey&&!e.stxAddress)throw Error("[micro-stacks/connect[ verifyMessageSignature -- You must pass `stxAddress` if you are recovering the public key from the signature");let{message:t,mode:r="rsv"}=e,n=e.publicKey;try{let s=typeof t=="string"?R$2(t,e.prefix):t,{signature:o,recoveryBytes:a}=Z$2({signature:e.signature,mode:r});if(!n){let[i]=ee$2(e.stxAddress);n=p$4(Q$1({hash:s,signature:o,recoveryBytes:a}));let g=qe$1(n,i);if(g!==e.stxAddress)return console.error(`[micro-stacks/connect] verifyMessageSignature Stacks address is not correct. expected: ${e.stxAddress}, received: ${g}`),!1}return verify(o,s,n,{strict:!1})}catch(s){return console.error("[micro-stacks/connect] verifyMessageSignature failed",s),!1}},Ze$1=e=>M$2(e)||M$2({...e,prefix:I$2});
 
 const createStoreImpl = (createState) => {
   let state;
@@ -2130,36 +2218,6 @@ If you believe this exception is caused by a bug in blockstack.js,
 ${o}`,this.message=t,this.code=e.code,this.parameter=e.parameter?e.parameter:void 0;}toString(){return `${super.toString()}
     code: ${this.code} param: ${this.parameter?this.parameter:"n/a"}`}};var y$2=class y extends k$1{constructor(e){let t=`Failed to verify signature: ${e}`;super({code:w$2.SIGNATURE_VERIFICATION_ERROR,message:t}),this.message=t,this.name="SignatureVerificationError";}};var b$1=class b extends k$1{hubError;constructor(e,t){super(e),t&&(this.hubError={statusCode:t.status,statusText:t.statusText},typeof t.body=="string"?this.hubError.message=t.body:typeof t.body=="object"&&Object.assign(this.hubError,t.body));}},x$1=class x extends b$1{constructor(e,t){super({message:e,code:w$2.DOES_NOT_EXIST},t),this.name="DoesNotExist";}},P$1=class P extends b$1{constructor(e,t){super({message:e,code:w$2.CONFLICT_ERROR},t),this.name="ConflictError";}},v=class extends b$1{constructor(e,t){super({message:e,code:w$2.NOT_ENOUGH_PROOF_ERROR},t),this.name="NotEnoughProofError";}},S=class extends b$1{constructor(e,t){super({message:e,code:w$2.BAD_PATH_ERROR},t),this.name="BadPathError";}},C$2=class C extends b$1{constructor(e,t){super({message:e,code:w$2.VALIDATION_ERROR},t),this.name="ValidationError";}},E$1=class E extends b$1{hubError;maxUploadByteSize;constructor(e,t,o){super({message:e,code:w$2.PAYLOAD_TOO_LARGE_ERROR},t),this.name="PayloadTooLargeError",this.maxUploadByteSize=o;}},L$1=class L extends b$1{constructor(e,t){super({message:e,code:w$2.PRECONDITION_FAILED_ERROR},t),this.name="PreconditionFailedError";}};async function me(r){let e="",t;try{e=await r.text();try{t=JSON.parse(e);}catch{}}catch(i){console.debug(`Error getting bad http response text: ${i}`);}let o=r.status,n=r.statusText;return {status:o,statusText:n,body:t||e}}function G(r){return Number.isFinite(r)?Math.floor(r*1024*1024):0}async function R(r,e,t){if(r.ok)throw new Error("Cannot get a Stacks from a valid response.");let o=await me(r);if(o.status===401)throw new C$2(e,o);if(o.status===402)throw new v(e,o);if(o.status===403)throw new S(e,o);if(o.status===404)throw new x$1(e,o);if(o.status===409)throw new P$1(e,o);if(o.status===412)throw new L$1(e,o);if(o.status===413){let n=t&&t.max_file_upload_size_megabytes?G(t.max_file_upload_size_megabytes):0;throw new E$1(e,o,n)}else throw new Error(e)}function Z$1(r){if(!r||!r.hubError||!r.hubError.statusCode)return !1;let e=r.hubError.statusCode;return e===401||e===409||e>=500&&e<=599}async function A$1(r){let{filename:e,contents:t,hubConfig:o,contentType:n="application/octet-stream"}=r,s={"Content-Type":n,Authorization:`bearer ${o.token}`},i=await Hr(`${o.server}/store/${o.address}/${e}`,{method:"POST",headers:s,body:t});if(!i.ok)throw await R(i,"Error when uploading to Gaia hub.",o);let a=await i.text();return JSON.parse(a)}function I(r,e){return Promise.resolve(`${e.url_prefix}${e.address}/${r}`)}var h$2=".sig",U="https://stacks-node-api.stacks.co/v1/names";var $$1=class ${content;wasString;contentType;contentByteLength;loadedData;constructor(e,t){this.wasString=typeof e=="string",this.content=$$1.normalizeContentDataType(e,t),this.contentType=t||this.detectContentType(),this.contentByteLength=this.detectContentLength();}static normalizeContentDataType(e,t){try{if(typeof e=="string"){let o=(t||"").toLowerCase().replace("-","");if(o.includes("charset")&&!o.includes("charset=utf8")&&!o.includes("charset=ascii"))throw new Error(`Unable to determine byte length with charset: ${t}`);return new TextEncoder().encode(e)}else {if(e instanceof Uint8Array)return e;if(ArrayBuffer.isView(e))return new Uint8Array(e.buffer,e.byteOffset,e.byteLength);if(typeof Blob<"u"&&e instanceof Blob)return e;if(e instanceof ArrayBuffer)return new Uint8Array(e);if(Array.isArray(e)){if(e.length>0&&(!Number.isInteger(e[0])||e[0]<0||e[0]>255))throw new Error(`Unexpected array values provided as file data: value "${e[0]}" at index 0 is not an octet number. ${this.supportedTypesMsg}`);return new Uint8Array(e)}else {let o=Object.prototype.toString.call(e);throw new Error(`Unexpected type provided as file data: ${o}. ${this.supportedTypesMsg}`)}}}catch(o){throw console.error(o),new Error(`Error processing data: ${o}`)}}detectContentType(){return this.wasString?"text/plain; charset=utf-8":typeof Blob<"u"&&this.content instanceof Blob&&this.content.type?this.content.type:"application/octet-stream"}detectContentLength(){if(ArrayBuffer.isView(this.content)||this.content instanceof Uint8Array)return this.content.byteLength;if(typeof Blob<"u"&&this.content instanceof Blob)return this.content.size;let e=Object.prototype.toString.call(this.content),t=new Error(`Unexpected type "${e}" while detecting content length`);throw console.error(t),t}async loadContent(){try{if(this.content instanceof Uint8Array)return this.content;if(ArrayBuffer.isView(this.content))return new Uint8Array(this.content.buffer,this.content.byteOffset,this.content.byteLength);if(typeof Blob<"u"&&this.content instanceof Blob){let e=new FileReader;return await new Promise((n,s)=>{e.onerror=i=>{s(i);},e.onload=()=>{let i=e.result;n(new Uint8Array(i));},e.readAsArrayBuffer(this.content);})}else {let e=Object.prototype.toString.call(this.content);throw new Error(`Unexpected type ${e}`)}}catch(e){console.error(e);let t=new Error(`Error loading content: ${e}`);throw console.error(t),t}}load(){return this.loadedData===void 0&&(this.loadedData=this.loadContent()),this.loadedData}},O=$$1;z$1(O,"supportedTypesMsg","Supported types are: `string` (to be UTF8 encoded), `Uint8Array`, `Blob`, `File`, `ArrayBuffer`, `UInt8Array` or any other typed array buffer. ");async function nt(r,e,t){let{privateKey:o}=t,{encrypt:n,sign:s,gaiaHubConfig:i,cipherTextEncoding:a}=t,{contentType:u=""}=t,c=G(i.max_file_upload_size_megabytes),g=c>0,l=new O(e,u);if(u=l.contentType,!n&&g&&l.contentByteLength>c){let p=`The max file upload size for this hub is ${c} bytes, the given content is ${l.contentByteLength} bytes`,f=new E$1(p,null,c);throw console.error(f),f}if(n&&g&&a){let p=Kt({contentLength:l.contentByteLength,wasString:l.wasString,sign:!!s,cipherTextEncoding:a});if(p>c){let f=`The max file upload size for this hub is ${c} bytes, the given content is ${p} bytes after encryption`,d=new E$1(f,null,c);throw console.error(d),d}}let m;if(!n&&s){let p=await l.load();if(typeof s=="string")o=s;else if(!o)throw Error("Need to pass private key");let f=await ce$2({contents:p,privateKey:o});m=async d=>(await Promise.all([A$1({filename:r,contents:p,hubConfig:d,contentType:u}),A$1({filename:`${r}${h$2}`,contents:JSON.stringify(f),hubConfig:d,contentType:"application/json"})]))[0].publicURL;}else {let p;if(!n&&!s)p=l.content;else {let f;if(typeof n=="string")f=n;else if(typeof s=="string")f=p$4(getPublicKey(s,!0));else if(o)f=p$4(getPublicKey(o,!0));else throw new Error("No private key passed");let d=await l.load(),_=await Rr(d,{publicKey:f,wasString:l.wasString,cipherTextEncoding:a,privateKey:o});if(p=JSON.stringify(_),o){let{signature:K,publicKey:T}=await ce$2({contents:_,privateKey:o});p=JSON.stringify({signature:K,publicKey:T,cipherText:_});}u="application/json";}m=async f=>(await A$1({filename:r,contents:p,hubConfig:f,contentType:u})).publicURL;}try{return await m(i)}catch(p){if(Z$1(p))return console.error(p),console.error("Possible recoverable error during Gaia upload, retrying..."),await m(i);throw p}}function q(r){if(!r.hasOwnProperty("uri")||!Array.isArray(r.uri)||r.uri.length<1)return null;let e=r.uri[0];if(!e.hasOwnProperty("target"))return null;let t=e.target;return t.startsWith("https")||t.startsWith("http")||(t=`https://${t}`),t}function N$1(r,e){let t;return e.proof&&e.proof.url&&(t=e.proof.url),{"@type":"Account",service:r,identifier:e.username,proofType:"http",proofUrl:t}}function H$1(r){let e={"@type":"Person"};if(r){r.name&&r.name.formatted&&(e.name=r.name.formatted),r.bio&&(e.description=r.bio),r.location&&r.location.formatted&&(e.address={"@type":"PostalAddress",addressLocality:r.location.formatted});let t=[];r.avatar&&r.avatar.url&&t.push({"@type":"ImageObject",name:"avatar",contentUrl:r.avatar.url}),r.cover&&r.cover.url&&t.push({"@type":"ImageObject",name:"cover",contentUrl:r.cover.url}),t.length&&(e.image=t),r.website&&(e.website=[{"@type":"WebSite",url:r.website}]);let o=[];r.bitcoin&&r.bitcoin.address&&o.push({"@type":"Account",role:"payment",service:"bitcoin",identifier:r.bitcoin.address}),r.twitter&&r.twitter.username&&o.push(N$1("twitter",r.twitter)),r.facebook&&r.facebook.username&&o.push(N$1("facebook",r.facebook)),r.github&&r.github.username&&o.push(N$1("github",r.github)),r.auth&&r.auth.length>0&&r.auth[0]&&r.auth[0].publicKeychain&&o.push({"@type":"Account",role:"key",service:"bip32",identifier:r.auth[0].publicKeychain}),r.pgp&&r.pgp.url&&o.push({"@type":"Account",role:"key",service:"pgp",identifier:r.pgp.fingerprint,contentUrl:r.pgp.url}),e.account=o;}return e}function _e(r,e){let t=wt(r);if(!t)throw Error("no decoded token");let o=t.payload;if(typeof o=="string")throw new Error("Unexpected token payload type of string");if(o.hasOwnProperty("subject")&&o.subject){if(!o.subject.hasOwnProperty("publicKey"))throw new Error("Token doesn't have a subject public key")}else throw new Error("Token doesn't have a subject");if(o.hasOwnProperty("issuer")&&o.issuer){if(!o.issuer.hasOwnProperty("publicKey"))throw new Error("Token doesn't have an issuer public key")}else throw new Error("Token doesn't have an issuer");if(!o.hasOwnProperty("claim"))throw new Error("Token doesn't have a claim");let n=o.issuer.publicKey,s=qe$1(n);if(e!==n){if(e!==s)throw new Error("Token issuer public key does not match the verifying value")}let i=new we$1(t.header.alg,n);if(!i)throw new Error("Invalid token verifier");if(!i.verify(r))throw new Error("Token verification failed");return t}function ee(r,e){let t=e?_e(r,e):wt(r);if(t&&t.hasOwnProperty("payload")){let o=t.payload;if(typeof o=="string")throw new Error("[micro-stacks] extractProfile: Unexpected token payload type of string");if(o.hasOwnProperty("claim"))return o.claim}return {}}async function te(r,e){let t=z$2(r);if(t.hasOwnProperty("$origin")||(t=null),!(t&&Object.keys(t).length>0))return H$1(JSON.parse(r));let n=q(t);if(n)try{let i=await(await Hr(n)).json();return ee(i[0].token,e)}catch(s){throw console.error(`[micro-stacks] resolveZoneFileToProfile: error fetching token file ${n}: ${s}`),s}return console.debug("[micro-stacks] Token file url not found. Resolving to blank profile."),{}}async function re(r){let{username:e,zoneFileLookupURL:t=U}=r;if(!e)return Promise.reject();let o=`${t.replace(/\/$/,"")}/${r.username}`,s=await(await Hr(o)).json();if(s.hasOwnProperty("zonefile")&&s.hasOwnProperty("address"))return await te(s.zonefile,r.verify?s.address:void 0);throw new Error("Invalid zonefile lookup response: did not contain `address` or `zonefile` field")}async function oe(r,e,t,o){let n=await re({username:e,zoneFileLookupURL:o}),s;if(!!n)return n.hasOwnProperty("apps")?n.apps.hasOwnProperty(t)&&(s=`${n.apps[t].replace(/\/?(\?|#|$)/,"/$1")}${r}`):n.hasOwnProperty("appsMeta")&&n.appsMeta.hasOwnProperty(t)&&(s=`${n.appsMeta[t].replace(/\/?(\?|#|$)/,"/$1")}${r}`),s}async function ve(r,e){let t;if(e.username?t=await oe(r,e.username,e.app,e.zoneFileLookupURL):t=await I(r,e.gaiaHubConfig),t)return t;throw new Error("Missing readURL")}async function D(r){let{app:e,username:t,zoneFileLookupURL:o,gaiaHubConfig:n}=r,s;t?s=await oe("/",t,e,o):n&&(s=await I("/",n));let i=/([13][a-km-zA-HJ-NP-Z0-9]{26,35})/.exec(s);if(!i)throw new Error("Failed to parse gaia address");return i[i.length-1]}async function F$1(r){let{path:e,forceText:t,app:o,username:n,zoneFileLookupURL:s,gaiaHubConfig:i}=r,a=await ve(e,{app:o,username:n,zoneFileLookupURL:s,gaiaHubConfig:i}),u=await Hr(a);if(!u.ok)throw await R(u,`getFile ${e} failed.`,null);let c=u.headers.get("Content-Type");if(typeof c=="string"&&(c=c.toLowerCase()),t||c===null||c.startsWith("text")||c.startsWith("application/json"))return u.text();{let g=await u.arrayBuffer();return pr$1(g)}}async function ne(r,e){let{app:t,username:o,zoneFileLookupURL:n,gaiaHubConfig:s}=e,i=`${r}${h$2}`;try{let[a,u,c]=await Promise.all([F$1({path:r,app:t,username:o,zoneFileLookupURL:n,forceText:!1,gaiaHubConfig:s}),F$1({path:i,app:t,username:o,zoneFileLookupURL:n,forceText:!0,gaiaHubConfig:s}),D({app:t,username:o,zoneFileLookupURL:n,gaiaHubConfig:s})]);if(!a)return a;if(!c)throw new y$2(`Failed to get gaia address for verification of: ${r}`);if(!u||typeof u!="string")throw new y$2(`Failed to obtain signature for file: ${r} -- looked in ${r}${h$2}`);let g,l;try{let d=JSON.parse(u);g=d.signature,l=d.publicKey;}catch(d){throw d instanceof SyntaxError?new Error(`Failed to parse signature content JSON (path: ${r}${h$2}) The content may be corrupted.`):d}let m=pr(l),p=typeof a=="string"?dr(a):a,f=xr({signature:g,contents:p,publicKey:l});if(c!==m)throw new y$2(`Signer pubkey address (${m}) doesn't match gaia address (${c})`);if(f)return a;throw new y$2(`Contents do not match ECDSA signature: path: ${r}, signature: ${r}${h$2}`)}catch(a){throw a instanceof x$1&&a.message.indexOf(i)>=0?new y$2(`Failed to obtain signature for file: ${r} -- looked in ${r}${h$2}`):a}}async function ie(r){let{path:e,storedContents:t,app:o,privateKey:n,username:s,zoneFileLookupURL:i,gaiaHubConfig:a}=r,u=n,c=u?getPublicKey(u,!0):null,g=null;if(s||a?g=await D({app:o,username:s,zoneFileLookupURL:i,gaiaHubConfig:a}):c&&(g=pr(c)),!g)throw new y$2(`Failed to get gaia address for verification of: ${e}`);let l;try{l=JSON.parse(t);}catch(T){throw T instanceof SyntaxError?new Error("Failed to parse encrypted, signed content JSON. The content may not be encrypted. If using getFile, try passing { verify: false, decrypt: false }."):T}let m=l.signature,p=l.publicKey,f=l.cipherText,d=pr(p);if(!p||!f||!m)throw new y$2(`Failed to get signature verification data from file: ${e}`);if(d!==g)throw new y$2(`Signer pubkey address (${d}) doesn't match gaia address (${g})`);if(!xr({signature:m,contents:f,publicKey:p}))throw new y$2(`Contents do not match ECDSA signature in file: ${e}`);if(!n)throw Error("Private key needs to be passed in order to decrypt content");return Ir(f,{privateKey:n})}async function Bt(r,e){let t={decrypt:!0,verify:!1,app:hr("location",{returnEmptyObject:!0}).origin,zoneFileLookupURL:U,...e};if(t.verify&&!t.decrypt)return ne(r,t);let o=await F$1({path:r,app:t.app,username:t.username,zoneFileLookupURL:t.zoneFileLookupURL,forceText:!!t.decrypt,gaiaHubConfig:t.gaiaHubConfig});if(o===null)return o;if(typeof o!="string")throw new Error("[micro-stacks/storage] Expected to get back a string for the cipherText");let n=!!t.verify,s=!!t.decrypt,i=typeof t.decrypt=="string"?t.decrypt:t.privateKey;if(o.includes("signature")&&o.includes("publicKey")&&(n=!0),o.includes("cipherText")&&o.includes("ephemeralPK")&&(s=!0),!n&&!s)return o;let a=!o.includes("cipherText");if(s&&a)throw new Error(`[micro-stacks/storage] Expected to get back a string that includes cipherText, is it encrypted? got back: ${JSON.stringify(o)}`);if(!i)throw new Error("[micro-stacks/storage] No private key was passed to getFile, a private key needs to be passed if decrypt is set to true");if(!n)return Ir(o,{privateKey:i});if(s&&n)return ie({path:r,storedContents:o,app:t.app,privateKey:i,username:t.username,zoneFileLookupURL:t.zoneFileLookupURL,gaiaHubConfig:t.gaiaHubConfig});throw new Error("[micro-stacks/storage] Should be unreachable.")}
 
-var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
-
-function getAugmentedNamespace(n) {
-  if (n.__esModule) return n;
-  var f = n.default;
-	if (typeof f == "function") {
-		var a = function a () {
-			if (this instanceof a) {
-				var args = [null];
-				args.push.apply(args, arguments);
-				var Ctor = Function.bind.apply(f, args);
-				return new Ctor();
-			}
-			return f.apply(this, arguments);
-		};
-		a.prototype = f.prototype;
-  } else a = {};
-  Object.defineProperty(a, '__esModule', {value: true});
-	Object.keys(n).forEach(function (k) {
-		var d = Object.getOwnPropertyDescriptor(n, k);
-		Object.defineProperty(a, k, d.get ? d : {
-			enumerable: true,
-			get: function () {
-				return n[k];
-			}
-		});
-	});
-	return a;
-}
-
 var es6 = function equal(a, b) {
   if (a === b) return true;
 
@@ -2233,7 +2291,7 @@ var et="micro-stacks",M={getItem:n=>null,setItem:(n,t)=>{},removeItem:n=>{}},F=s
 
 `),this.statement&&(s+=`
 `),[s,d].join(`
-`)}prepareMessage(){let t;switch(this.version){case"1":{t=this.toMessage();break}default:{t=this.toMessage();break}}return t}async verify(t){return new Promise(async(e,s)=>{Object.keys(t).forEach(c=>{W.includes(c)||s({success:!1,data:this,error:new Error(`${c} is not a valid key for VerifyParams.`)});});let i=c=>{s(c);},{signature:r,domain:o,nonce:a,time:d}=t;o&&o!==this.domain&&i({success:!1,data:this,error:new f("Domain do not match provided domain for verification.",o,this.domain)}),a&&a!==this.nonce&&i({success:!1,data:this,error:new f("Nonce do not match provided nonce for verification.",a,this.nonce)});let u=new Date(d||new Date);if(this.expirationTime){let c=new Date(this.expirationTime);u.getTime()>=c.getTime()&&i({success:!1,data:this,error:new f("Expired message.",`${u.toISOString()} < ${c.toISOString()}`,`${u.toISOString()} >= ${c.toISOString()}`)});}if(this.notBefore){let c=new Date(this.notBefore);u.getTime()<c.getTime()&&i({success:!1,data:this,error:new f("Message is not valid yet.",`${u.toISOString()} >= ${c.toISOString()}`,`${u.toISOString()} < ${c.toISOString()}`)});}let S;try{S=this.prepareMessage();}catch(c){i({success:!1,data:this,error:c});return}let l;try{let c=R$2(S),g=Z$2({signature:r}),v=Q$1({hash:c,signature:g.signature,recoveryBytes:g.recoveryBytes});Ze$1({signature:r,message:c})&&(l=qe$1(v,ee$2(this.address)[0]));}catch{}finally{l!==this.address&&i({success:!1,data:this,error:new f("Signature do not match address of the message.",l,`Resolved address to be ${this.address}`)});}e({success:!0,data:this});})}validateMessage(...t){var i;if(t.length>0)throw new f("Unable to parse the message.","Unexpected argument in the validateMessage function.");if(!this.domain||this.domain.length===0||!/[^#?]*/.test(this.domain))throw new f("Invalid domain.",`${this.domain} to be a valid domain.`);if(!Xt(this.address))throw new f("Invalid address.",`${this.address} to be a valid address.`);if(!A(this.uri))throw new f("URI does not conform to RFC 3986.",`${this.uri} to be a valid uri.`);if(this.version!=="1")throw new f("Invalid message version.","1",this.version);let e=(i=this==null?void 0:this.nonce)==null?void 0:i.match(/[a-zA-Z0-9]{8,}/);if(!e||this.nonce.length<8||e[0]!==this.nonce)throw new f("Nonce size smaller then 8 characters or is not alphanumeric.",`Length > 8 (${e==null?void 0:e.length}). Alphanumeric.`,this.nonce);let s=/([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(([Zz])|([+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))/;if(this.issuedAt&&!s.test(this.issuedAt))throw new Error("Invalid time format.");if(this.expirationTime&&!s.test(this.expirationTime))throw new Error("Invalid time format.");if(this.notBefore&&!s.test(this.notBefore))throw new Error("Invalid time format.")}};var y$1=1;function T({state:n,version:t}){var e,s,i;return JSON.stringify([[(e=n.network)==null?void 0:e.chainId,(i=(s=n.network)==null?void 0:s.getCoreApiUrl)==null?void 0:i.call(s)],[n.currentAccountIndex,n.accounts.map(r=>({appPrivateKey:r.appPrivateKey,address:V$1(r.address[0],l$4(r.address[1])),profile_url:r.profile_url}))],t])}function Ot(n){let t=JSON.parse(n),[e,s]=t[0],[i$1,r]=t[1],o=t[2]??y$1;return {network:e===ur.Mainnet?new i({url:s}):new l$2({url:s}),currentAccountIndex:i$1,accounts:r.map(d=>{let[u,S]=ee$2(d.address);return {appPrivateKey:d.appPrivateKey,address:[u,p$4(S)],profile_url:d.profile_url}}),version:o}}var _=n=>{if(n){if(typeof n!="string")return n;if(n==="testnet")return new l$2}return new i},k=({network:n=new i,...t})=>({statuses:{["status/Authentication"]:"status/IsIdle",["status/TransactionSigning"]:"status/IsIdle",["status/MessageSigning"]:"status/IsIdle",["status/StructuredMessageSigning"]:"status/IsIdle"},network:_(n),appName:t.appName,appIconUrl:t.appIconUrl,accounts:[],currentAccountIndex:0,onPersistState:t.onPersistState,onAuthentication:t.onAuthentication,onNoWalletFound:t.onNoWalletFound,onSignOut:t.onSignOut}),N=(n,t)=>{try{let{version:e,...s}=Ot(n);return {state:{...k(t),...s},version:e}}catch{return {state:k(t),version:y$1}}},j=()=>{if(!hr("localStorage",{throwIfUnavailable:!1}))return;let t=localStorage.getItem("MICRO_STACKS_DEBUG");if(t)return JSON.parse(t)};var x=class{config;storage;store;debug;fetcher;constructor(t={}){let e={storage:(t==null?void 0:t.storage)??F,network:(t==null?void 0:t.network)??new i,...t},s=typeof e.dehydratedState=="function"?e.dehydratedState(this.storeKey):e.dehydratedState,i$1=s?N(s,e):{state:k(e),version:y$1};this.store=createStore(subscribeWithSelector(persist(()=>i$1.state,{name:b,getStorage:()=>e.storage,version:i$1.version,serialize:({state:r,version:o})=>T({state:r,version:o??y$1}),deserialize:r=>N(r,e)}))),this.debug=j(),this.config=e,this.storage=e.storage,this.fetcher=e.fetcher||Hr;}getState=()=>this.store.getState();setState(t){let e=typeof t=="function"?t(this.store.getState()):t;this.store.setState(e,!0);}resetState(){this.setState(t=>({...t,accounts:[],currentAccountIndex:0}));}get subscribe(){return this.store.subscribe}onStorageUpdate=t=>{if(typeof document<"u"){let e=window.location.host,s=new URL(t.url).host,i=e===s,r=t.key==="micro-stacks.store";if(i&&r){let o=t.newValue;this.hydrate(JSON.parse(o));}}};tabSyncSubscription=t=>{let e=typeof document<"u";return e&&t&&window.addEventListener("storage",this.onStorageUpdate),()=>{e&&t&&window.removeEventListener("storage",this.onStorageUpdate);}};getStacksProvider(){return hr("StacksProvider",{throwIfUnavailable:!1})}subscribeToStacksProvider(t,e=100){if(this.getStacksProvider())return t(),()=>{};{let s=setInterval(()=>{!!this.getStacksProvider()&&(t(),clearInterval(s));},e);return ()=>{typeof s<"u"&&clearInterval(s);}}}get storeKey(){return b}onPersistState=t=>{var e,s;return (s=(e=this.store.getState())==null?void 0:e.onPersistState)==null?void 0:s.call(e,t)};get onAuthentication(){var t;return (t=this.store.getState())==null?void 0:t.onAuthentication}get onNoWalletFound(){var t;return (t=this.store.getState())==null?void 0:t.onNoWalletFound}get onSignOut(){var t;return (t=this.store.getState())==null?void 0:t.onSignOut}setOnPersistState=t=>{this.setState(e=>({...e,onPersistState:t})),this.config.onPersistState=t;};setOnNoWalletFound=t=>{this.setState(e=>({...e,onNoWalletFound:t})),this.config.onPersistState=t;};setOnSignOut=t=>{this.setState(e=>({...e,onSignOut:t})),this.config.onSignOut=t;};setOnAuthentication=t=>{this.setState(e=>({...e,onAuthentication:t})),this.config.onAuthentication=t;};persist=async()=>{if(this.onPersistState){let t=this.dehydrate(this.store.getState());await this.onPersistState(t);}};dehydrate(t){return T({state:t??this.store.getState(),version:y$1})}hydrate(t){let e=N(t,this.config);this.setState(e.state);}selectHasSession=t=>Boolean(t.accounts.length);selectAccounts=t=>t.accounts;selectAccount=t=>this.selectHasSession(t)?t.accounts[t.currentAccountIndex]:void 0;selectNetwork=t=>this.config.enableNetworkSwitching?t.network:_(this.config.network);selectNetworkChain=t=>this.selectNetwork(t).chainId===ur.Mainnet?"mainnet":"testnet";selectTestnetStxAddress=t=>{let e=this.selectAccount(t);return e?V$1(e.address[0]===X$1.mainnetP2SH?X$1.testnetP2SH:X$1.testnetP2PKH,l$4(e.address[1])):void 0};selectMainnetStxAddress=t=>{let e=this.selectAccount(t);return e?V$1(e.address[0],l$4(e.address[1])):void 0};selectStxAddress=t=>this.selectNetworkChain(t)==="mainnet"?this.selectMainnetStxAddress(t):this.selectTestnetStxAddress(t);selectAppDetails=t=>t.appName&&t.appIconUrl?{name:t.appName,icon:t.appIconUrl}:void 0;selectIdentityAddress=t=>{let e=this.selectAccount(t);return e!=null&&e.appPrivateKey?ar(e.appPrivateKey):void 0};selectDecentralizedID=t=>{let e=this.selectIdentityAddress(t);return e?`did:btc-addr:${e}`:void 0};selectStatuses=t=>t.statuses;setStatus(t,e){this.setState(s=>({...s,statuses:{...s.statuses,[t]:e}}));}setIsRequestPending(t){this.setStatus(t,"status/IsLoading");}setIsIdle(t){this.setStatus(t,"status/IsIdle");}statuses=()=>this.selectStatuses(this.getState());isSignMessageRequestPending=()=>this.statuses()["status/MessageSigning"];isSignStructuredMessageRequestPending=()=>this.statuses()["status/StructuredMessageSigning"];handleNoStacksProviderFound(){return typeof this.getStacksProvider()>"u"?typeof this.onNoWalletFound<"u"?(this.onNoWalletFound(),!1):(h$1(this.getStacksProvider(),"The injected `StacksProvider` cannot be found. This is typically because there is no Stacks wallet available, such as the Hiro web wallet extension or the iOS/Android wallet Xverse."),!1):!0}authenticate=async t=>{if(!this.handleNoStacksProviderFound())return;let e=this.selectAppDetails(this.getState());h$1(e,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config.");let s=this.selectAccounts(this.getState());this.setIsRequestPending("status/Authentication"),await Nt({appDetails:e,onFinish:async({profile:i,...r})=>{var S,l;let[o,a]=ee$2(r.addresses.mainnet),d=[o,p$4(a)];s.find(c=>c.address===d)?this.setState(c=>({...c,currentAccountIndex:s.findIndex(g=>g.address===d)})):this.setState(c=>{var g;return {...c,accounts:c.accounts.concat({address:d,appPrivateKey:(g=this.debug)!=null&&g.disableAppPrivateKey?void 0:r.appPrivateKey,decentralizedID:r.decentralizedID,profile_url:r.profile_url}),currentAccountIndex:c.accounts.length}}),(S=t==null?void 0:t.onFinish)==null||S.call(t,r),(l=this.onAuthentication)==null||l.call(this,{profile:i,...r}),await this.persist(),this.setIsIdle("status/Authentication");},onCancel:i=>{var r;this.setIsIdle("status/Authentication"),(r=t==null?void 0:t.onCancel)==null||r.call(t,i);}},M);};signOut=async t=>{var e,s,i,r;return (i=(s=(e=this.store)==null?void 0:e.persist)==null?void 0:s.clearStorage)==null||i.call(s),(r=this.onSignOut)==null||r.call(this),this.resetState(),t==null?void 0:t()};getSignInMessage=({domain:t,nonce:e,version:s="1.0.0"})=>{if(!this.handleNoStacksProviderFound())return;let i=this.getState(),r=this.selectAppDetails(i),o=this.selectStxAddress(i);h$1(r,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(o,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in.");let a=hr("document",{throwIfUnavailable:!1})?window.location.origin:"";return new w$1({domain:r.name,address:o,statement:"Sign in with Stacks",uri:t??a,version:s,chainId:ur.Mainnet,nonce:e})};signTransaction=async(t,e)=>{if(!this.handleNoStacksProviderFound())return;let s=this.getState(),i=this.selectAppDetails(s),r=this.selectStxAddress(s),o=this.selectAccount(s),a=this.selectNetwork(s);h$1(i,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(r,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(o,"There is not current user session available. Please make sure the user has signed in before attempting this action."),this.setIsRequestPending("status/TransactionSigning");let d,u={privateKey:o.appPrivateKey,appDetails:i,stxAddress:r,network:a,postConditionMode:e.postConditionMode,postConditions:e.postConditions,attachment:e.attachment,sponsored:e.sponsored},l=await(t==="token_transfer"?It$1:t==="contract_call"?Tt:Pt)({...u,...e});return h$1(l,"Transaction JWT could not be created"),await Gt({token:l,onFinish:c=>{var g;d=c,(g=e==null?void 0:e.onFinish)==null||g.call(e,c),this.setIsIdle("status/TransactionSigning");},onCancel:c=>{var g;(g=e==null?void 0:e.onCancel)==null||g.call(e,c),this.setIsIdle("status/TransactionSigning");}}),d};signMessage=async t=>{if(!this.handleNoStacksProviderFound())return;let e=this.getState(),s=this.selectAppDetails(e),i=this.selectStxAddress(e),r=this.selectAccount(e),o=this.selectNetwork(e);h$1(s,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(i,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(r,"There is not current user session available. Please make sure the user has signed in before attempting this action."),h$1(t.message,"No message found -- a message is required when requesting a message signature."),this.setIsRequestPending("status/MessageSigning");let a;return await De({appDetails:s,privateKey:r.appPrivateKey,stxAddress:i,network:o,message:t.message,onFinish:d=>{var u;a=d,(u=t==null?void 0:t.onFinish)==null||u.call(t,d),this.setIsIdle("status/MessageSigning");},onCancel:d=>{var u;(u=t==null?void 0:t.onCancel)==null||u.call(t,d),this.setIsIdle("status/MessageSigning");}}),a};signStructuredMessage=async t=>{var d,u,S;if(!this.handleNoStacksProviderFound())return;let e=this.getState(),s=this.selectAppDetails(e),i=this.selectStxAddress(e),r=this.selectAccount(e),o=this.selectNetwork(e);h$1(s,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(i,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(r,"There is not current user session available. Please make sure the user has signed in before attempting this action."),h$1(t.message,"No message found -- a message is required when requesting a message signature."),this.setIsRequestPending("status/StructuredMessageSigning");let a;return await Ke({appDetails:s,privateKey:r.appPrivateKey,stxAddress:i,network:o,domain:{name:((d=t.domain)==null?void 0:d.name)??s.name,version:((u=t.domain)==null?void 0:u.version)??"1.0.0",chainId:((S=t.domain)==null?void 0:S.chainId)??o.chainId},message:t.message,onFinish:l=>{var c;a=l,(c=t==null?void 0:t.onFinish)==null||c.call(t,l),this.setIsIdle("status/StructuredMessageSigning");},onCancel:l=>{var c;(c=t==null?void 0:t.onCancel)==null||c.call(t,l),this.setIsIdle("status/StructuredMessageSigning");}}),a};setNetwork=t=>{if(!this.config.enableNetworkSwitching)throw new Error(P("Network switching is currently disabled. Set `enableNetworkSwitching` to `true` to enable."));typeof t=="string"?this.setState(s=>({...s,network:t==="mainnet"?new i:new l$2})):this.setState(s=>({...s,network:t})),this.persist();};selectGaiaHubConfig(t){let e=this.selectHasSession(t),s=this.selectAccount(t);if(!(!e||!(s!=null&&s.appPrivateKey)))return je({gaiaHubUrl:"https://hub.blockstack.org",privateKey:s.appPrivateKey})}putFile=(t,e,{encrypt:s=!0,sign:i})=>{let r=this.selectHasSession(this.getState()),o=this.selectGaiaHubConfig(this.getState()),a=this.selectAccount(this.getState());if(!r){console.warn("There is not current user session available. Please make sure the user has signed in before attempting this action.");return}if(!(a!=null&&a.appPrivateKey)||!o){console.warn("The current user session has no `appPrivateKey` defined. Certain actions require an `appPrivateKey`, such as using gaia or encryption.");return}return nt(t,e,{privateKey:a.appPrivateKey,gaiaHubConfig:o,encrypt:s,sign:i,wasString:typeof e=="string"})};getFile=(t,{decrypt:e=!0,verify:s})=>{let i=this.selectHasSession(this.getState()),r=this.selectGaiaHubConfig(this.getState()),o=this.selectAccount(this.getState());if(!i){console.warn("There is not current user session available. Please make sure the user has signed in before attempting this action.");return}if(!(o!=null&&o.appPrivateKey)||!r){console.warn("The current user session has no `appPrivateKey` defined. Certain actions require an `appPrivateKey`, such as using gaia or encryption.");return}return Bt(t,{privateKey:o.appPrivateKey,gaiaHubConfig:r,decrypt:e,verify:s})};async fetchBNSName(){var i;let t=this.selectStxAddress(this.getState()),e=this.selectNetwork(this.getState());if(!t){console.warn("No Stacks address found while trying to fetch BNS name");return}let s=e.getCoreApiUrl()+`/v1/addresses/stacks/${t}`;try{let o=await(await this.fetcher(s)).json();return (i=o==null?void 0:o.names)==null?void 0:i[0]}catch(r){console.log("[@micro-stacks/client] fetchBNSName failed",r);}}async fetchZoneFile(){try{let t=this.selectStxAddress(this.getState()),e=this.selectNetwork(this.getState());if(!t){console.warn("No Stacks address found while trying to fetch zonefile name");return}let s=e.getCoreApiUrl()+`/v1/names/${t}/zonefile`;return await(await this.fetcher(s)).json()}catch(t){console.log("[@micro-stacks/client] fetchZoneFile failed",t);}}async fetchProfile(){let t=this.selectAccount(this.getState());if(!!(t!=null&&t.profile_url))try{return await(await this.fetcher(t.profile_url)).json()}catch(e){console.log("[@micro-stacks/client] fetchProfile failed",e);}}encrypt(t,e={}){var s;if((e==null?void 0:e.publicKey)&&(e==null?void 0:e.privateKey))throw Error("Error: do not pass both `publicKey` and `privateKey` to client.encrypt");return Rr(t,{...e,privateKey:e.privateKey??((s=this.selectAccount(this.getState()))==null?void 0:s.appPrivateKey)})}decrypt(t,e){var i;let s=e.privateKey??((i=this.selectAccount(this.getState()))==null?void 0:i.appPrivateKey);if(!s)throw Error("You must pass a `privateKey` value to client.decrypt");return Ir(t,{privateKey:s})}};var $;function tt(n){let t=(n==null?void 0:n.client)??new x(n==null?void 0:n.config);return C$1?t:($=t,$)}function p$1(n){return C$1?tt(n):$??tt(n)}var Be=({client:n,state:t})=>n.selectAccount(t||n.getState()),Le=({client:n,state:t})=>n.selectStxAddress(t||n.getState()),ze=({client:n,state:t})=>n.selectIdentityAddress(t||n.getState()),qe=({client:n,state:t})=>n.selectDecentralizedID(t||n.getState()),We=({client:n,state:t})=>n.selectStatuses(t||n.getState()),Je=(n,t=p$1())=>t.subscribe(t.selectAccount,n,{equalityFn:es6}),Ze=(n,t=p$1())=>t.subscribe(t.selectStxAddress,n,{equalityFn:es6}),Xe=(n,t=p$1())=>t.subscribe(t.selectIdentityAddress,n,{equalityFn:es6}),Ye=(n,t=p$1())=>t.subscribe(t.selectDecentralizedID,n,{equalityFn:es6}),ts=(n,t=p$1())=>t.subscribe(t.selectStatuses,n,{equalityFn:es6});
+`)}prepareMessage(){let t;switch(this.version){case"1":{t=this.toMessage();break}default:{t=this.toMessage();break}}return t}async verify(t){return new Promise(async(e,s)=>{Object.keys(t).forEach(c=>{W.includes(c)||s({success:!1,data:this,error:new Error(`${c} is not a valid key for VerifyParams.`)});});let i=c=>{s(c);},{signature:r,domain:o,nonce:a,time:d}=t;o&&o!==this.domain&&i({success:!1,data:this,error:new f("Domain do not match provided domain for verification.",o,this.domain)}),a&&a!==this.nonce&&i({success:!1,data:this,error:new f("Nonce do not match provided nonce for verification.",a,this.nonce)});let u=new Date(d||new Date);if(this.expirationTime){let c=new Date(this.expirationTime);u.getTime()>=c.getTime()&&i({success:!1,data:this,error:new f("Expired message.",`${u.toISOString()} < ${c.toISOString()}`,`${u.toISOString()} >= ${c.toISOString()}`)});}if(this.notBefore){let c=new Date(this.notBefore);u.getTime()<c.getTime()&&i({success:!1,data:this,error:new f("Message is not valid yet.",`${u.toISOString()} >= ${c.toISOString()}`,`${u.toISOString()} < ${c.toISOString()}`)});}let S;try{S=this.prepareMessage();}catch(c){i({success:!1,data:this,error:c});return}let l;try{let c=R$2(S),g=Z$2({signature:r}),v=Q$1({hash:c,signature:g.signature,recoveryBytes:g.recoveryBytes});Ze$1({signature:r,message:c})&&(l=qe$1(v,ee$2(this.address)[0]));}catch{}finally{l!==this.address&&i({success:!1,data:this,error:new f("Signature do not match address of the message.",l,`Resolved address to be ${this.address}`)});}e({success:!0,data:this});})}validateMessage(...t){var i;if(t.length>0)throw new f("Unable to parse the message.","Unexpected argument in the validateMessage function.");if(!this.domain||this.domain.length===0||!/[^#?]*/.test(this.domain))throw new f("Invalid domain.",`${this.domain} to be a valid domain.`);if(!Xt(this.address))throw new f("Invalid address.",`${this.address} to be a valid address.`);if(!A(this.uri))throw new f("URI does not conform to RFC 3986.",`${this.uri} to be a valid uri.`);if(this.version!=="1")throw new f("Invalid message version.","1",this.version);let e=(i=this==null?void 0:this.nonce)==null?void 0:i.match(/[a-zA-Z0-9]{8,}/);if(!e||this.nonce.length<8||e[0]!==this.nonce)throw new f("Nonce size smaller then 8 characters or is not alphanumeric.",`Length > 8 (${e==null?void 0:e.length}). Alphanumeric.`,this.nonce);let s=/([0-9]+)-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])[Tt]([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9]|60)(\.[0-9]+)?(([Zz])|([+|\-]([01][0-9]|2[0-3]):[0-5][0-9]))/;if(this.issuedAt&&!s.test(this.issuedAt))throw new Error("Invalid time format.");if(this.expirationTime&&!s.test(this.expirationTime))throw new Error("Invalid time format.");if(this.notBefore&&!s.test(this.notBefore))throw new Error("Invalid time format.")}};var y$1=1;function T({state:n,version:t}){var e,s,i;return JSON.stringify([[(e=n.network)==null?void 0:e.chainId,(i=(s=n.network)==null?void 0:s.getCoreApiUrl)==null?void 0:i.call(s)],[n.currentAccountIndex,n.accounts.map(r=>({appPrivateKey:r.appPrivateKey,address:V$1(r.address[0],l$4(r.address[1])),profile_url:r.profile_url}))],t])}function Ot(n){let t=JSON.parse(n),[e,s]=t[0],[i,r]=t[1],o=t[2]??y$1;return {network:e===ur.Mainnet?new i$1({url:s}):new l$2({url:s}),currentAccountIndex:i,accounts:r.map(d=>{let[u,S]=ee$2(d.address);return {appPrivateKey:d.appPrivateKey,address:[u,p$4(S)],profile_url:d.profile_url}}),version:o}}var _=n=>{if(n){if(typeof n!="string")return n;if(n==="testnet")return new l$2}return new i$1},k=({network:n=new i$1,...t})=>({statuses:{["status/Authentication"]:"status/IsIdle",["status/TransactionSigning"]:"status/IsIdle",["status/MessageSigning"]:"status/IsIdle",["status/StructuredMessageSigning"]:"status/IsIdle"},network:_(n),appName:t.appName,appIconUrl:t.appIconUrl,accounts:[],currentAccountIndex:0,onPersistState:t.onPersistState,onAuthentication:t.onAuthentication,onNoWalletFound:t.onNoWalletFound,onSignOut:t.onSignOut}),N=(n,t)=>{try{let{version:e,...s}=Ot(n);return {state:{...k(t),...s},version:e}}catch{return {state:k(t),version:y$1}}},j=()=>{if(!hr("localStorage",{throwIfUnavailable:!1}))return;let t=localStorage.getItem("MICRO_STACKS_DEBUG");if(t)return JSON.parse(t)};var x=class{config;storage;store;debug;fetcher;constructor(t={}){let e={storage:(t==null?void 0:t.storage)??F,network:(t==null?void 0:t.network)??new i$1,...t},s=typeof e.dehydratedState=="function"?e.dehydratedState(this.storeKey):e.dehydratedState,i=s?N(s,e):{state:k(e),version:y$1};this.store=createStore(subscribeWithSelector(persist(()=>i.state,{name:b,getStorage:()=>e.storage,version:i.version,serialize:({state:r,version:o})=>T({state:r,version:o??y$1}),deserialize:r=>N(r,e)}))),this.debug=j(),this.config=e,this.storage=e.storage,this.fetcher=e.fetcher||Hr;}getState=()=>this.store.getState();setState(t){let e=typeof t=="function"?t(this.store.getState()):t;this.store.setState(e,!0);}resetState(){this.setState(t=>({...t,accounts:[],currentAccountIndex:0}));}get subscribe(){return this.store.subscribe}onStorageUpdate=t=>{if(typeof document<"u"){let e=window.location.host,s=new URL(t.url).host,i=e===s,r=t.key==="micro-stacks.store";if(i&&r){let o=t.newValue;this.hydrate(JSON.parse(o));}}};tabSyncSubscription=t=>{let e=typeof document<"u";return e&&t&&window.addEventListener("storage",this.onStorageUpdate),()=>{e&&t&&window.removeEventListener("storage",this.onStorageUpdate);}};getStacksProvider(){return hr("StacksProvider",{throwIfUnavailable:!1})}subscribeToStacksProvider(t,e=100){if(this.getStacksProvider())return t(),()=>{};{let s=setInterval(()=>{!!this.getStacksProvider()&&(t(),clearInterval(s));},e);return ()=>{typeof s<"u"&&clearInterval(s);}}}get storeKey(){return b}onPersistState=t=>{var e,s;return (s=(e=this.store.getState())==null?void 0:e.onPersistState)==null?void 0:s.call(e,t)};get onAuthentication(){var t;return (t=this.store.getState())==null?void 0:t.onAuthentication}get onNoWalletFound(){var t;return (t=this.store.getState())==null?void 0:t.onNoWalletFound}get onSignOut(){var t;return (t=this.store.getState())==null?void 0:t.onSignOut}setOnPersistState=t=>{this.setState(e=>({...e,onPersistState:t})),this.config.onPersistState=t;};setOnNoWalletFound=t=>{this.setState(e=>({...e,onNoWalletFound:t})),this.config.onPersistState=t;};setOnSignOut=t=>{this.setState(e=>({...e,onSignOut:t})),this.config.onSignOut=t;};setOnAuthentication=t=>{this.setState(e=>({...e,onAuthentication:t})),this.config.onAuthentication=t;};persist=async()=>{if(this.onPersistState){let t=this.dehydrate(this.store.getState());await this.onPersistState(t);}};dehydrate(t){return T({state:t??this.store.getState(),version:y$1})}hydrate(t){let e=N(t,this.config);this.setState(e.state);}selectHasSession=t=>Boolean(t.accounts.length);selectAccounts=t=>t.accounts;selectAccount=t=>this.selectHasSession(t)?t.accounts[t.currentAccountIndex]:void 0;selectNetwork=t=>this.config.enableNetworkSwitching?t.network:_(this.config.network);selectNetworkChain=t=>this.selectNetwork(t).chainId===ur.Mainnet?"mainnet":"testnet";selectTestnetStxAddress=t=>{let e=this.selectAccount(t);return e?V$1(e.address[0]===X$1.mainnetP2SH?X$1.testnetP2SH:X$1.testnetP2PKH,l$4(e.address[1])):void 0};selectMainnetStxAddress=t=>{let e=this.selectAccount(t);return e?V$1(e.address[0],l$4(e.address[1])):void 0};selectStxAddress=t=>this.selectNetworkChain(t)==="mainnet"?this.selectMainnetStxAddress(t):this.selectTestnetStxAddress(t);selectAppDetails=t=>t.appName&&t.appIconUrl?{name:t.appName,icon:t.appIconUrl}:void 0;selectIdentityAddress=t=>{let e=this.selectAccount(t);return e!=null&&e.appPrivateKey?ar(e.appPrivateKey):void 0};selectDecentralizedID=t=>{let e=this.selectIdentityAddress(t);return e?`did:btc-addr:${e}`:void 0};selectStatuses=t=>t.statuses;setStatus(t,e){this.setState(s=>({...s,statuses:{...s.statuses,[t]:e}}));}setIsRequestPending(t){this.setStatus(t,"status/IsLoading");}setIsIdle(t){this.setStatus(t,"status/IsIdle");}statuses=()=>this.selectStatuses(this.getState());isSignMessageRequestPending=()=>this.statuses()["status/MessageSigning"];isSignStructuredMessageRequestPending=()=>this.statuses()["status/StructuredMessageSigning"];handleNoStacksProviderFound(){return typeof this.getStacksProvider()>"u"?typeof this.onNoWalletFound<"u"?(this.onNoWalletFound(),!1):(h$1(this.getStacksProvider(),"The injected `StacksProvider` cannot be found. This is typically because there is no Stacks wallet available, such as the Hiro web wallet extension or the iOS/Android wallet Xverse."),!1):!0}authenticate=async t=>{if(!this.handleNoStacksProviderFound())return;let e=this.selectAppDetails(this.getState());h$1(e,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config.");let s=this.selectAccounts(this.getState());this.setIsRequestPending("status/Authentication"),await Nt({appDetails:e,onFinish:async({profile:i,...r})=>{var S,l;let[o,a]=ee$2(r.addresses.mainnet),d=[o,p$4(a)];s.find(c=>c.address===d)?this.setState(c=>({...c,currentAccountIndex:s.findIndex(g=>g.address===d)})):this.setState(c=>{var g;return {...c,accounts:c.accounts.concat({address:d,appPrivateKey:(g=this.debug)!=null&&g.disableAppPrivateKey?void 0:r.appPrivateKey,decentralizedID:r.decentralizedID,profile_url:r.profile_url}),currentAccountIndex:c.accounts.length}}),(S=t==null?void 0:t.onFinish)==null||S.call(t,r),(l=this.onAuthentication)==null||l.call(this,{profile:i,...r}),await this.persist(),this.setIsIdle("status/Authentication");},onCancel:i=>{var r;this.setIsIdle("status/Authentication"),(r=t==null?void 0:t.onCancel)==null||r.call(t,i);}},M);};signOut=async t=>{var e,s,i,r;return (i=(s=(e=this.store)==null?void 0:e.persist)==null?void 0:s.clearStorage)==null||i.call(s),(r=this.onSignOut)==null||r.call(this),this.resetState(),t==null?void 0:t()};getSignInMessage=({domain:t,nonce:e,version:s="1.0.0"})=>{if(!this.handleNoStacksProviderFound())return;let i=this.getState(),r=this.selectAppDetails(i),o=this.selectStxAddress(i);h$1(r,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(o,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in.");let a=hr("document",{throwIfUnavailable:!1})?window.location.origin:"";return new w$1({domain:r.name,address:o,statement:"Sign in with Stacks",uri:t??a,version:s,chainId:ur.Mainnet,nonce:e})};signTransaction=async(t,e)=>{if(!this.handleNoStacksProviderFound())return;let s=this.getState(),i=this.selectAppDetails(s),r=this.selectStxAddress(s),o=this.selectAccount(s),a=this.selectNetwork(s);h$1(i,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(r,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(o,"There is not current user session available. Please make sure the user has signed in before attempting this action."),this.setIsRequestPending("status/TransactionSigning");let d,u={privateKey:o.appPrivateKey,appDetails:i,stxAddress:r,network:a,postConditionMode:e.postConditionMode,postConditions:e.postConditions,attachment:e.attachment,sponsored:e.sponsored},l=await(t==="token_transfer"?It$1:t==="contract_call"?Tt:Pt)({...u,...e});return h$1(l,"Transaction JWT could not be created"),await Gt({token:l,onFinish:c=>{var g;d=c,(g=e==null?void 0:e.onFinish)==null||g.call(e,c),this.setIsIdle("status/TransactionSigning");},onCancel:c=>{var g;(g=e==null?void 0:e.onCancel)==null||g.call(e,c),this.setIsIdle("status/TransactionSigning");}}),d};signMessage=async t=>{if(!this.handleNoStacksProviderFound())return;let e=this.getState(),s=this.selectAppDetails(e),i=this.selectStxAddress(e),r=this.selectAccount(e),o=this.selectNetwork(e);h$1(s,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(i,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(r,"There is not current user session available. Please make sure the user has signed in before attempting this action."),h$1(t.message,"No message found -- a message is required when requesting a message signature."),this.setIsRequestPending("status/MessageSigning");let a;return await De({appDetails:s,privateKey:r.appPrivateKey,stxAddress:i,network:o,message:t.message,onFinish:d=>{var u;a=d,(u=t==null?void 0:t.onFinish)==null||u.call(t,d),this.setIsIdle("status/MessageSigning");},onCancel:d=>{var u;(u=t==null?void 0:t.onCancel)==null||u.call(t,d),this.setIsIdle("status/MessageSigning");}}),a};signStructuredMessage=async t=>{var d,u,S;if(!this.handleNoStacksProviderFound())return;let e=this.getState(),s=this.selectAppDetails(e),i=this.selectStxAddress(e),r=this.selectAccount(e),o=this.selectNetwork(e);h$1(s,"App details are not defined for you app. Most functionality (authentication, signing requests) require details be passed to the wallet. Add them to your MicroStacksClient config."),h$1(i,"No current Stacks address can be found. This could be because a session has been invalidated, or the user is not signed in."),h$1(r,"There is not current user session available. Please make sure the user has signed in before attempting this action."),h$1(t.message,"No message found -- a message is required when requesting a message signature."),this.setIsRequestPending("status/StructuredMessageSigning");let a;return await Ke({appDetails:s,privateKey:r.appPrivateKey,stxAddress:i,network:o,domain:{name:((d=t.domain)==null?void 0:d.name)??s.name,version:((u=t.domain)==null?void 0:u.version)??"1.0.0",chainId:((S=t.domain)==null?void 0:S.chainId)??o.chainId},message:t.message,onFinish:l=>{var c;a=l,(c=t==null?void 0:t.onFinish)==null||c.call(t,l),this.setIsIdle("status/StructuredMessageSigning");},onCancel:l=>{var c;(c=t==null?void 0:t.onCancel)==null||c.call(t,l),this.setIsIdle("status/StructuredMessageSigning");}}),a};setNetwork=t=>{if(!this.config.enableNetworkSwitching)throw new Error(P("Network switching is currently disabled. Set `enableNetworkSwitching` to `true` to enable."));typeof t=="string"?this.setState(s=>({...s,network:t==="mainnet"?new i$1:new l$2})):this.setState(s=>({...s,network:t})),this.persist();};selectGaiaHubConfig(t){let e=this.selectHasSession(t),s=this.selectAccount(t);if(!(!e||!(s!=null&&s.appPrivateKey)))return je({gaiaHubUrl:"https://hub.blockstack.org",privateKey:s.appPrivateKey})}putFile=(t,e,{encrypt:s=!0,sign:i})=>{let r=this.selectHasSession(this.getState()),o=this.selectGaiaHubConfig(this.getState()),a=this.selectAccount(this.getState());if(!r){console.warn("There is not current user session available. Please make sure the user has signed in before attempting this action.");return}if(!(a!=null&&a.appPrivateKey)||!o){console.warn("The current user session has no `appPrivateKey` defined. Certain actions require an `appPrivateKey`, such as using gaia or encryption.");return}return nt(t,e,{privateKey:a.appPrivateKey,gaiaHubConfig:o,encrypt:s,sign:i,wasString:typeof e=="string"})};getFile=(t,{decrypt:e=!0,verify:s})=>{let i=this.selectHasSession(this.getState()),r=this.selectGaiaHubConfig(this.getState()),o=this.selectAccount(this.getState());if(!i){console.warn("There is not current user session available. Please make sure the user has signed in before attempting this action.");return}if(!(o!=null&&o.appPrivateKey)||!r){console.warn("The current user session has no `appPrivateKey` defined. Certain actions require an `appPrivateKey`, such as using gaia or encryption.");return}return Bt(t,{privateKey:o.appPrivateKey,gaiaHubConfig:r,decrypt:e,verify:s})};async fetchBNSName(){var i;let t=this.selectStxAddress(this.getState()),e=this.selectNetwork(this.getState());if(!t){console.warn("No Stacks address found while trying to fetch BNS name");return}let s=e.getCoreApiUrl()+`/v1/addresses/stacks/${t}`;try{let o=await(await this.fetcher(s)).json();return (i=o==null?void 0:o.names)==null?void 0:i[0]}catch(r){console.log("[@micro-stacks/client] fetchBNSName failed",r);}}async fetchZoneFile(){try{let t=this.selectStxAddress(this.getState()),e=this.selectNetwork(this.getState());if(!t){console.warn("No Stacks address found while trying to fetch zonefile name");return}let s=e.getCoreApiUrl()+`/v1/names/${t}/zonefile`;return await(await this.fetcher(s)).json()}catch(t){console.log("[@micro-stacks/client] fetchZoneFile failed",t);}}async fetchProfile(){let t=this.selectAccount(this.getState());if(!!(t!=null&&t.profile_url))try{return await(await this.fetcher(t.profile_url)).json()}catch(e){console.log("[@micro-stacks/client] fetchProfile failed",e);}}encrypt(t,e={}){var s;if((e==null?void 0:e.publicKey)&&(e==null?void 0:e.privateKey))throw Error("Error: do not pass both `publicKey` and `privateKey` to client.encrypt");return Rr(t,{...e,privateKey:e.privateKey??((s=this.selectAccount(this.getState()))==null?void 0:s.appPrivateKey)})}decrypt(t,e){var i;let s=e.privateKey??((i=this.selectAccount(this.getState()))==null?void 0:i.appPrivateKey);if(!s)throw Error("You must pass a `privateKey` value to client.decrypt");return Ir(t,{privateKey:s})}};var $;function tt(n){let t=(n==null?void 0:n.client)??new x(n==null?void 0:n.config);return C$1?t:($=t,$)}function p$1(n){return C$1?tt(n):$??tt(n)}var Be=({client:n,state:t})=>n.selectAccount(t||n.getState()),Le=({client:n,state:t})=>n.selectStxAddress(t||n.getState()),ze=({client:n,state:t})=>n.selectIdentityAddress(t||n.getState()),qe=({client:n,state:t})=>n.selectDecentralizedID(t||n.getState()),We=({client:n,state:t})=>n.selectStatuses(t||n.getState()),Je=(n,t=p$1())=>t.subscribe(t.selectAccount,n,{equalityFn:es6}),Ze=(n,t=p$1())=>t.subscribe(t.selectStxAddress,n,{equalityFn:es6}),Xe=(n,t=p$1())=>t.subscribe(t.selectIdentityAddress,n,{equalityFn:es6}),Ye=(n,t=p$1())=>t.subscribe(t.selectDecentralizedID,n,{equalityFn:es6}),ts=(n,t=p$1())=>t.subscribe(t.selectStatuses,n,{equalityFn:es6});
 
 var y="micro-stacks-client-context";var se=({appName:e,appIconUrl:o,storage:i=F,network:g,dehydratedState:s,onPersistState:t,onSignOut:r,onAuthentication:u,onNoWalletFound:d,fetcher:x})=>{setContext(y,tt({config:{appName:e,appIconUrl:o,storage:i,network:g,dehydratedState:s,onPersistState:t,onSignOut:r,onAuthentication:u,onNoWalletFound:d,fetcher:x}}));},J="No MicroStacksClient set, mount the client in your app by wrapping your app in `ClientProvider` or using `mountClient`",C=()=>{let e=getContext(y);if(!e)throw new Error(J);return e};function h(e,o){return ()=>{let i=C();return readable(e({client:i}),g=>o(g,i))}}var Q=h(Le,Ze),Y=h(Be,Je),Z=h(ze,Xe),w=h(We,ts),p=h(qe,Ye);function a(){return derived([Y(),Q(),Z(),p()],([e,o,i,g])=>({appPrivateKey:(e==null?void 0:e.appPrivateKey)??null,rawAddress:(e==null?void 0:e.address)??null,stxAddress:o,identityAddress:i,decentralizedID:g,profileUrl:(e==null?void 0:e.profile_url)??null}))}function Ce(){let e=C();return derived([a(),w()],([o,i])=>({openAuthRequest:e.authenticate,signOut:e.signOut,isSignedIn:!!o.stxAddress,isRequestPending:i[L.Authentication]===z.IsLoading}))}
 
@@ -2241,12 +2299,10 @@ var lib = {};
 
 var encoding = {};
 
-const require$$2 = /*@__PURE__*/getAugmentedNamespace(utils$1);
-
 (function (exports) {
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.c32decode = exports.c32normalize = exports.c32encode = exports.c32 = void 0;
-	const utils_1 = require$$2;
+	const utils_1 = utils;
 	exports.c32 = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 	const hex = '0123456789abcdef';
 	/**
@@ -2393,7 +2449,7 @@ const require$$0 = /*@__PURE__*/getAugmentedNamespace(sha256$1);
 Object.defineProperty(checksum, "__esModule", { value: true });
 checksum.c32checkDecode = checksum.c32checkEncode = void 0;
 const sha256_1$1 = require$$0;
-const utils_1$1 = require$$2;
+const utils_1$1 = utils;
 const encoding_1 = encoding;
 /**
  * Get the c32check checksum of a hex-encoded string
@@ -2597,7 +2653,7 @@ var src = base;
 Object.defineProperty(base58check, "__esModule", { value: true });
 base58check.decode = base58check.encode = void 0;
 const sha256_1 = require$$0;
-const utils_1 = require$$2;
+const utils_1 = utils;
 const basex = src;
 const ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 function encode(data, prefix = '00') {
@@ -2630,7 +2686,7 @@ base58check.decode = decode;
 	exports.c32ToB58 = exports.b58ToC32 = exports.c32addressDecode = exports.c32address = exports.versions = void 0;
 	const checksum_1 = checksum;
 	const base58check$1 = base58check;
-	const utils_1 = require$$2;
+	const utils_1 = utils;
 	exports.versions = {
 	    mainnet: {
 	        p2pkh: 22,
@@ -2848,7 +2904,14 @@ const sbtcConfig = persisted("sbtcConfig", {
     low_fee_per_kb: 2e4,
     medium_fee_per_kb: 30998
   },
-  feeToApply: 2e4,
+  feeCalc: {
+    pegInFeeCalc: {
+      feeToApply: 2e4
+    },
+    pegOutFeeCalc: {
+      feeToApply: 2e4
+    }
+  },
   pegIn: true
 });
 
@@ -3163,32 +3226,40 @@ async function fetchAddressDetails(network, address) {
   }
   throw new Error("Address not found - is the network correct?");
 }
-async function fetchUTXOs(network, address, txs) {
+async function fetchUTXOs(network, address) {
   checkNetwork(network);
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
   const response = await fetch(url + "/address/" + address + "/utxo");
-  if (response.status === 200) {
-    const utxos = await response.json();
-    if (txs && txs.length > 0) {
-      utxos.forEach((utxo) => {
-        const tx = txs.find((tx2) => tx2.txid === utxo.txid);
-        if (tx)
-          utxo.fullout = tx.vout.find((o) => o.value === utxo.value);
-      });
-    }
-    return utxos;
+  if (response.status !== 200) {
+    throw new Error("Bitcoin address not know - is the network correct?");
   }
-  throw new Error("Bitcoin address not know - is the network correct?");
+  const utxos = await response.json();
+  return utxos;
 }
-async function fetchTxs(network, address) {
+async function fetchTransaction(network, txid) {
   checkNetwork(network);
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
-  const response = await fetch(url + "/address/" + address + "/txs");
-  if (response.status === 200) {
-    const txs = await response.json();
-    return txs;
+  let response = await fetch(url + "/tx/" + txid);
+  if (response.status !== 200) {
+    throw new Error("Bitcoin tx not found.");
   }
-  throw new Error("Bitcoin address not know - is the network correct?");
+  const tx = await response.json();
+  response = await fetch(url + "/tx/" + txid + "/hex");
+  const hex = await response.text();
+  tx.hex = hex;
+  return tx;
+}
+async function attachTransaction(network, utxo) {
+  const tx = await fetchTransaction(network, utxo.txid);
+  utxo.tx = tx;
+  return utxo;
+}
+async function attachAllInputTransactions(network, utxos) {
+  checkNetwork(network);
+  for (let utxo of utxos) {
+    utxo = await attachTransaction(network, utxo);
+  }
+  return utxos;
 }
 function maxCommit(utxos) {
   const summ = utxos?.map((item) => item.value).reduce((prev, curr) => prev + curr, 0);
@@ -3207,4 +3278,2353 @@ function checkNetwork(network) {
   }
 }
 
-export { ArrowUp as A, Ce as C, T$2 as T, __viteBrowserExternal$1 as _, ArrowDown as a, l$2 as b, c$1 as c, se as d, C as e, fetchFeeEstimate as f, a as g, decodeStacksAddress as h, i, fetchUTXOs as j, fetchTxs as k, login as l, maxCommit as m, fetchAddressDetails as n, getAugmentedNamespace as o, commonjsGlobal as p, sbtcConfig as s };
+var buffer = {};
+
+var base64Js = {};
+
+base64Js.byteLength = byteLength;
+base64Js.toByteArray = toByteArray;
+base64Js.fromByteArray = fromByteArray;
+
+var lookup = [];
+var revLookup = [];
+var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array;
+
+var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
+for (var i = 0, len = code.length; i < len; ++i) {
+  lookup[i] = code[i];
+  revLookup[code.charCodeAt(i)] = i;
+}
+
+// Support decoding URL-safe base64 strings, as Node.js does.
+// See: https://en.wikipedia.org/wiki/Base64#URL_applications
+revLookup['-'.charCodeAt(0)] = 62;
+revLookup['_'.charCodeAt(0)] = 63;
+
+function getLens (b64) {
+  var len = b64.length;
+
+  if (len % 4 > 0) {
+    throw new Error('Invalid string. Length must be a multiple of 4')
+  }
+
+  // Trim off extra bytes after placeholder bytes are found
+  // See: https://github.com/beatgammit/base64-js/issues/42
+  var validLen = b64.indexOf('=');
+  if (validLen === -1) validLen = len;
+
+  var placeHoldersLen = validLen === len
+    ? 0
+    : 4 - (validLen % 4);
+
+  return [validLen, placeHoldersLen]
+}
+
+// base64 is 4/3 + up to two characters of the original data
+function byteLength (b64) {
+  var lens = getLens(b64);
+  var validLen = lens[0];
+  var placeHoldersLen = lens[1];
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function _byteLength (b64, validLen, placeHoldersLen) {
+  return ((validLen + placeHoldersLen) * 3 / 4) - placeHoldersLen
+}
+
+function toByteArray (b64) {
+  var tmp;
+  var lens = getLens(b64);
+  var validLen = lens[0];
+  var placeHoldersLen = lens[1];
+
+  var arr = new Arr(_byteLength(b64, validLen, placeHoldersLen));
+
+  var curByte = 0;
+
+  // if there are placeholders, only get up to the last complete 4 chars
+  var len = placeHoldersLen > 0
+    ? validLen - 4
+    : validLen;
+
+  var i;
+  for (i = 0; i < len; i += 4) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 18) |
+      (revLookup[b64.charCodeAt(i + 1)] << 12) |
+      (revLookup[b64.charCodeAt(i + 2)] << 6) |
+      revLookup[b64.charCodeAt(i + 3)];
+    arr[curByte++] = (tmp >> 16) & 0xFF;
+    arr[curByte++] = (tmp >> 8) & 0xFF;
+    arr[curByte++] = tmp & 0xFF;
+  }
+
+  if (placeHoldersLen === 2) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 2) |
+      (revLookup[b64.charCodeAt(i + 1)] >> 4);
+    arr[curByte++] = tmp & 0xFF;
+  }
+
+  if (placeHoldersLen === 1) {
+    tmp =
+      (revLookup[b64.charCodeAt(i)] << 10) |
+      (revLookup[b64.charCodeAt(i + 1)] << 4) |
+      (revLookup[b64.charCodeAt(i + 2)] >> 2);
+    arr[curByte++] = (tmp >> 8) & 0xFF;
+    arr[curByte++] = tmp & 0xFF;
+  }
+
+  return arr
+}
+
+function tripletToBase64 (num) {
+  return lookup[num >> 18 & 0x3F] +
+    lookup[num >> 12 & 0x3F] +
+    lookup[num >> 6 & 0x3F] +
+    lookup[num & 0x3F]
+}
+
+function encodeChunk (uint8, start, end) {
+  var tmp;
+  var output = [];
+  for (var i = start; i < end; i += 3) {
+    tmp =
+      ((uint8[i] << 16) & 0xFF0000) +
+      ((uint8[i + 1] << 8) & 0xFF00) +
+      (uint8[i + 2] & 0xFF);
+    output.push(tripletToBase64(tmp));
+  }
+  return output.join('')
+}
+
+function fromByteArray (uint8) {
+  var tmp;
+  var len = uint8.length;
+  var extraBytes = len % 3; // if we have 1 byte left, pad 2 bytes
+  var parts = [];
+  var maxChunkLength = 16383; // must be multiple of 3
+
+  // go through the array every three bytes, we'll deal with trailing stuff later
+  for (var i = 0, len2 = len - extraBytes; i < len2; i += maxChunkLength) {
+    parts.push(encodeChunk(uint8, i, (i + maxChunkLength) > len2 ? len2 : (i + maxChunkLength)));
+  }
+
+  // pad the end with zeros, but make sure to not forget the extra bytes
+  if (extraBytes === 1) {
+    tmp = uint8[len - 1];
+    parts.push(
+      lookup[tmp >> 2] +
+      lookup[(tmp << 4) & 0x3F] +
+      '=='
+    );
+  } else if (extraBytes === 2) {
+    tmp = (uint8[len - 2] << 8) + uint8[len - 1];
+    parts.push(
+      lookup[tmp >> 10] +
+      lookup[(tmp >> 4) & 0x3F] +
+      lookup[(tmp << 2) & 0x3F] +
+      '='
+    );
+  }
+
+  return parts.join('')
+}
+
+var ieee754 = {};
+
+/*! ieee754. BSD-3-Clause License. Feross Aboukhadijeh <https://feross.org/opensource> */
+
+ieee754.read = function (buffer, offset, isLE, mLen, nBytes) {
+  var e, m;
+  var eLen = (nBytes * 8) - mLen - 1;
+  var eMax = (1 << eLen) - 1;
+  var eBias = eMax >> 1;
+  var nBits = -7;
+  var i = isLE ? (nBytes - 1) : 0;
+  var d = isLE ? -1 : 1;
+  var s = buffer[offset + i];
+
+  i += d;
+
+  e = s & ((1 << (-nBits)) - 1);
+  s >>= (-nBits);
+  nBits += eLen;
+  for (; nBits > 0; e = (e * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  m = e & ((1 << (-nBits)) - 1);
+  e >>= (-nBits);
+  nBits += mLen;
+  for (; nBits > 0; m = (m * 256) + buffer[offset + i], i += d, nBits -= 8) {}
+
+  if (e === 0) {
+    e = 1 - eBias;
+  } else if (e === eMax) {
+    return m ? NaN : ((s ? -1 : 1) * Infinity)
+  } else {
+    m = m + Math.pow(2, mLen);
+    e = e - eBias;
+  }
+  return (s ? -1 : 1) * m * Math.pow(2, e - mLen)
+};
+
+ieee754.write = function (buffer, value, offset, isLE, mLen, nBytes) {
+  var e, m, c;
+  var eLen = (nBytes * 8) - mLen - 1;
+  var eMax = (1 << eLen) - 1;
+  var eBias = eMax >> 1;
+  var rt = (mLen === 23 ? Math.pow(2, -24) - Math.pow(2, -77) : 0);
+  var i = isLE ? 0 : (nBytes - 1);
+  var d = isLE ? 1 : -1;
+  var s = value < 0 || (value === 0 && 1 / value < 0) ? 1 : 0;
+
+  value = Math.abs(value);
+
+  if (isNaN(value) || value === Infinity) {
+    m = isNaN(value) ? 1 : 0;
+    e = eMax;
+  } else {
+    e = Math.floor(Math.log(value) / Math.LN2);
+    if (value * (c = Math.pow(2, -e)) < 1) {
+      e--;
+      c *= 2;
+    }
+    if (e + eBias >= 1) {
+      value += rt / c;
+    } else {
+      value += rt * Math.pow(2, 1 - eBias);
+    }
+    if (value * c >= 2) {
+      e++;
+      c /= 2;
+    }
+
+    if (e + eBias >= eMax) {
+      m = 0;
+      e = eMax;
+    } else if (e + eBias >= 1) {
+      m = ((value * c) - 1) * Math.pow(2, mLen);
+      e = e + eBias;
+    } else {
+      m = value * Math.pow(2, eBias - 1) * Math.pow(2, mLen);
+      e = 0;
+    }
+  }
+
+  for (; mLen >= 8; buffer[offset + i] = m & 0xff, i += d, m /= 256, mLen -= 8) {}
+
+  e = (e << mLen) | m;
+  eLen += mLen;
+  for (; eLen > 0; buffer[offset + i] = e & 0xff, i += d, e /= 256, eLen -= 8) {}
+
+  buffer[offset + i - d] |= s * 128;
+};
+
+/*!
+ * The buffer module from node.js, for the browser.
+ *
+ * @author   Feross Aboukhadijeh <https://feross.org>
+ * @license  MIT
+ */
+
+(function (exports) {
+
+	const base64 = base64Js;
+	const ieee754$1 = ieee754;
+	const customInspectSymbol =
+	  (typeof Symbol === 'function' && typeof Symbol['for'] === 'function') // eslint-disable-line dot-notation
+	    ? Symbol['for']('nodejs.util.inspect.custom') // eslint-disable-line dot-notation
+	    : null;
+
+	exports.Buffer = Buffer;
+	exports.SlowBuffer = SlowBuffer;
+	exports.INSPECT_MAX_BYTES = 50;
+
+	const K_MAX_LENGTH = 0x7fffffff;
+	exports.kMaxLength = K_MAX_LENGTH;
+
+	/**
+	 * If `Buffer.TYPED_ARRAY_SUPPORT`:
+	 *   === true    Use Uint8Array implementation (fastest)
+	 *   === false   Print warning and recommend using `buffer` v4.x which has an Object
+	 *               implementation (most compatible, even IE6)
+	 *
+	 * Browsers that support typed arrays are IE 10+, Firefox 4+, Chrome 7+, Safari 5.1+,
+	 * Opera 11.6+, iOS 4.2+.
+	 *
+	 * We report that the browser does not support typed arrays if the are not subclassable
+	 * using __proto__. Firefox 4-29 lacks support for adding new properties to `Uint8Array`
+	 * (See: https://bugzilla.mozilla.org/show_bug.cgi?id=695438). IE 10 lacks support
+	 * for __proto__ and has a buggy typed array implementation.
+	 */
+	Buffer.TYPED_ARRAY_SUPPORT = typedArraySupport();
+
+	if (!Buffer.TYPED_ARRAY_SUPPORT && typeof console !== 'undefined' &&
+	    typeof console.error === 'function') {
+	  console.error(
+	    'This browser lacks typed array (Uint8Array) support which is required by ' +
+	    '`buffer` v5.x. Use `buffer` v4.x if you require old browser support.'
+	  );
+	}
+
+	function typedArraySupport () {
+	  // Can typed array instances can be augmented?
+	  try {
+	    const arr = new Uint8Array(1);
+	    const proto = { foo: function () { return 42 } };
+	    Object.setPrototypeOf(proto, Uint8Array.prototype);
+	    Object.setPrototypeOf(arr, proto);
+	    return arr.foo() === 42
+	  } catch (e) {
+	    return false
+	  }
+	}
+
+	Object.defineProperty(Buffer.prototype, 'parent', {
+	  enumerable: true,
+	  get: function () {
+	    if (!Buffer.isBuffer(this)) return undefined
+	    return this.buffer
+	  }
+	});
+
+	Object.defineProperty(Buffer.prototype, 'offset', {
+	  enumerable: true,
+	  get: function () {
+	    if (!Buffer.isBuffer(this)) return undefined
+	    return this.byteOffset
+	  }
+	});
+
+	function createBuffer (length) {
+	  if (length > K_MAX_LENGTH) {
+	    throw new RangeError('The value "' + length + '" is invalid for option "size"')
+	  }
+	  // Return an augmented `Uint8Array` instance
+	  const buf = new Uint8Array(length);
+	  Object.setPrototypeOf(buf, Buffer.prototype);
+	  return buf
+	}
+
+	/**
+	 * The Buffer constructor returns instances of `Uint8Array` that have their
+	 * prototype changed to `Buffer.prototype`. Furthermore, `Buffer` is a subclass of
+	 * `Uint8Array`, so the returned instances will have all the node `Buffer` methods
+	 * and the `Uint8Array` methods. Square bracket notation works as expected -- it
+	 * returns a single octet.
+	 *
+	 * The `Uint8Array` prototype remains unmodified.
+	 */
+
+	function Buffer (arg, encodingOrOffset, length) {
+	  // Common case.
+	  if (typeof arg === 'number') {
+	    if (typeof encodingOrOffset === 'string') {
+	      throw new TypeError(
+	        'The "string" argument must be of type string. Received type number'
+	      )
+	    }
+	    return allocUnsafe(arg)
+	  }
+	  return from(arg, encodingOrOffset, length)
+	}
+
+	Buffer.poolSize = 8192; // not used by this implementation
+
+	function from (value, encodingOrOffset, length) {
+	  if (typeof value === 'string') {
+	    return fromString(value, encodingOrOffset)
+	  }
+
+	  if (ArrayBuffer.isView(value)) {
+	    return fromArrayView(value)
+	  }
+
+	  if (value == null) {
+	    throw new TypeError(
+	      'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
+	      'or Array-like Object. Received type ' + (typeof value)
+	    )
+	  }
+
+	  if (isInstance(value, ArrayBuffer) ||
+	      (value && isInstance(value.buffer, ArrayBuffer))) {
+	    return fromArrayBuffer(value, encodingOrOffset, length)
+	  }
+
+	  if (typeof SharedArrayBuffer !== 'undefined' &&
+	      (isInstance(value, SharedArrayBuffer) ||
+	      (value && isInstance(value.buffer, SharedArrayBuffer)))) {
+	    return fromArrayBuffer(value, encodingOrOffset, length)
+	  }
+
+	  if (typeof value === 'number') {
+	    throw new TypeError(
+	      'The "value" argument must not be of type number. Received type number'
+	    )
+	  }
+
+	  const valueOf = value.valueOf && value.valueOf();
+	  if (valueOf != null && valueOf !== value) {
+	    return Buffer.from(valueOf, encodingOrOffset, length)
+	  }
+
+	  const b = fromObject(value);
+	  if (b) return b
+
+	  if (typeof Symbol !== 'undefined' && Symbol.toPrimitive != null &&
+	      typeof value[Symbol.toPrimitive] === 'function') {
+	    return Buffer.from(value[Symbol.toPrimitive]('string'), encodingOrOffset, length)
+	  }
+
+	  throw new TypeError(
+	    'The first argument must be one of type string, Buffer, ArrayBuffer, Array, ' +
+	    'or Array-like Object. Received type ' + (typeof value)
+	  )
+	}
+
+	/**
+	 * Functionally equivalent to Buffer(arg, encoding) but throws a TypeError
+	 * if value is a number.
+	 * Buffer.from(str[, encoding])
+	 * Buffer.from(array)
+	 * Buffer.from(buffer)
+	 * Buffer.from(arrayBuffer[, byteOffset[, length]])
+	 **/
+	Buffer.from = function (value, encodingOrOffset, length) {
+	  return from(value, encodingOrOffset, length)
+	};
+
+	// Note: Change prototype *after* Buffer.from is defined to workaround Chrome bug:
+	// https://github.com/feross/buffer/pull/148
+	Object.setPrototypeOf(Buffer.prototype, Uint8Array.prototype);
+	Object.setPrototypeOf(Buffer, Uint8Array);
+
+	function assertSize (size) {
+	  if (typeof size !== 'number') {
+	    throw new TypeError('"size" argument must be of type number')
+	  } else if (size < 0) {
+	    throw new RangeError('The value "' + size + '" is invalid for option "size"')
+	  }
+	}
+
+	function alloc (size, fill, encoding) {
+	  assertSize(size);
+	  if (size <= 0) {
+	    return createBuffer(size)
+	  }
+	  if (fill !== undefined) {
+	    // Only pay attention to encoding if it's a string. This
+	    // prevents accidentally sending in a number that would
+	    // be interpreted as a start offset.
+	    return typeof encoding === 'string'
+	      ? createBuffer(size).fill(fill, encoding)
+	      : createBuffer(size).fill(fill)
+	  }
+	  return createBuffer(size)
+	}
+
+	/**
+	 * Creates a new filled Buffer instance.
+	 * alloc(size[, fill[, encoding]])
+	 **/
+	Buffer.alloc = function (size, fill, encoding) {
+	  return alloc(size, fill, encoding)
+	};
+
+	function allocUnsafe (size) {
+	  assertSize(size);
+	  return createBuffer(size < 0 ? 0 : checked(size) | 0)
+	}
+
+	/**
+	 * Equivalent to Buffer(num), by default creates a non-zero-filled Buffer instance.
+	 * */
+	Buffer.allocUnsafe = function (size) {
+	  return allocUnsafe(size)
+	};
+	/**
+	 * Equivalent to SlowBuffer(num), by default creates a non-zero-filled Buffer instance.
+	 */
+	Buffer.allocUnsafeSlow = function (size) {
+	  return allocUnsafe(size)
+	};
+
+	function fromString (string, encoding) {
+	  if (typeof encoding !== 'string' || encoding === '') {
+	    encoding = 'utf8';
+	  }
+
+	  if (!Buffer.isEncoding(encoding)) {
+	    throw new TypeError('Unknown encoding: ' + encoding)
+	  }
+
+	  const length = byteLength(string, encoding) | 0;
+	  let buf = createBuffer(length);
+
+	  const actual = buf.write(string, encoding);
+
+	  if (actual !== length) {
+	    // Writing a hex string, for example, that contains invalid characters will
+	    // cause everything after the first invalid character to be ignored. (e.g.
+	    // 'abxxcd' will be treated as 'ab')
+	    buf = buf.slice(0, actual);
+	  }
+
+	  return buf
+	}
+
+	function fromArrayLike (array) {
+	  const length = array.length < 0 ? 0 : checked(array.length) | 0;
+	  const buf = createBuffer(length);
+	  for (let i = 0; i < length; i += 1) {
+	    buf[i] = array[i] & 255;
+	  }
+	  return buf
+	}
+
+	function fromArrayView (arrayView) {
+	  if (isInstance(arrayView, Uint8Array)) {
+	    const copy = new Uint8Array(arrayView);
+	    return fromArrayBuffer(copy.buffer, copy.byteOffset, copy.byteLength)
+	  }
+	  return fromArrayLike(arrayView)
+	}
+
+	function fromArrayBuffer (array, byteOffset, length) {
+	  if (byteOffset < 0 || array.byteLength < byteOffset) {
+	    throw new RangeError('"offset" is outside of buffer bounds')
+	  }
+
+	  if (array.byteLength < byteOffset + (length || 0)) {
+	    throw new RangeError('"length" is outside of buffer bounds')
+	  }
+
+	  let buf;
+	  if (byteOffset === undefined && length === undefined) {
+	    buf = new Uint8Array(array);
+	  } else if (length === undefined) {
+	    buf = new Uint8Array(array, byteOffset);
+	  } else {
+	    buf = new Uint8Array(array, byteOffset, length);
+	  }
+
+	  // Return an augmented `Uint8Array` instance
+	  Object.setPrototypeOf(buf, Buffer.prototype);
+
+	  return buf
+	}
+
+	function fromObject (obj) {
+	  if (Buffer.isBuffer(obj)) {
+	    const len = checked(obj.length) | 0;
+	    const buf = createBuffer(len);
+
+	    if (buf.length === 0) {
+	      return buf
+	    }
+
+	    obj.copy(buf, 0, 0, len);
+	    return buf
+	  }
+
+	  if (obj.length !== undefined) {
+	    if (typeof obj.length !== 'number' || numberIsNaN(obj.length)) {
+	      return createBuffer(0)
+	    }
+	    return fromArrayLike(obj)
+	  }
+
+	  if (obj.type === 'Buffer' && Array.isArray(obj.data)) {
+	    return fromArrayLike(obj.data)
+	  }
+	}
+
+	function checked (length) {
+	  // Note: cannot use `length < K_MAX_LENGTH` here because that fails when
+	  // length is NaN (which is otherwise coerced to zero.)
+	  if (length >= K_MAX_LENGTH) {
+	    throw new RangeError('Attempt to allocate Buffer larger than maximum ' +
+	                         'size: 0x' + K_MAX_LENGTH.toString(16) + ' bytes')
+	  }
+	  return length | 0
+	}
+
+	function SlowBuffer (length) {
+	  if (+length != length) { // eslint-disable-line eqeqeq
+	    length = 0;
+	  }
+	  return Buffer.alloc(+length)
+	}
+
+	Buffer.isBuffer = function isBuffer (b) {
+	  return b != null && b._isBuffer === true &&
+	    b !== Buffer.prototype // so Buffer.isBuffer(Buffer.prototype) will be false
+	};
+
+	Buffer.compare = function compare (a, b) {
+	  if (isInstance(a, Uint8Array)) a = Buffer.from(a, a.offset, a.byteLength);
+	  if (isInstance(b, Uint8Array)) b = Buffer.from(b, b.offset, b.byteLength);
+	  if (!Buffer.isBuffer(a) || !Buffer.isBuffer(b)) {
+	    throw new TypeError(
+	      'The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array'
+	    )
+	  }
+
+	  if (a === b) return 0
+
+	  let x = a.length;
+	  let y = b.length;
+
+	  for (let i = 0, len = Math.min(x, y); i < len; ++i) {
+	    if (a[i] !== b[i]) {
+	      x = a[i];
+	      y = b[i];
+	      break
+	    }
+	  }
+
+	  if (x < y) return -1
+	  if (y < x) return 1
+	  return 0
+	};
+
+	Buffer.isEncoding = function isEncoding (encoding) {
+	  switch (String(encoding).toLowerCase()) {
+	    case 'hex':
+	    case 'utf8':
+	    case 'utf-8':
+	    case 'ascii':
+	    case 'latin1':
+	    case 'binary':
+	    case 'base64':
+	    case 'ucs2':
+	    case 'ucs-2':
+	    case 'utf16le':
+	    case 'utf-16le':
+	      return true
+	    default:
+	      return false
+	  }
+	};
+
+	Buffer.concat = function concat (list, length) {
+	  if (!Array.isArray(list)) {
+	    throw new TypeError('"list" argument must be an Array of Buffers')
+	  }
+
+	  if (list.length === 0) {
+	    return Buffer.alloc(0)
+	  }
+
+	  let i;
+	  if (length === undefined) {
+	    length = 0;
+	    for (i = 0; i < list.length; ++i) {
+	      length += list[i].length;
+	    }
+	  }
+
+	  const buffer = Buffer.allocUnsafe(length);
+	  let pos = 0;
+	  for (i = 0; i < list.length; ++i) {
+	    let buf = list[i];
+	    if (isInstance(buf, Uint8Array)) {
+	      if (pos + buf.length > buffer.length) {
+	        if (!Buffer.isBuffer(buf)) buf = Buffer.from(buf);
+	        buf.copy(buffer, pos);
+	      } else {
+	        Uint8Array.prototype.set.call(
+	          buffer,
+	          buf,
+	          pos
+	        );
+	      }
+	    } else if (!Buffer.isBuffer(buf)) {
+	      throw new TypeError('"list" argument must be an Array of Buffers')
+	    } else {
+	      buf.copy(buffer, pos);
+	    }
+	    pos += buf.length;
+	  }
+	  return buffer
+	};
+
+	function byteLength (string, encoding) {
+	  if (Buffer.isBuffer(string)) {
+	    return string.length
+	  }
+	  if (ArrayBuffer.isView(string) || isInstance(string, ArrayBuffer)) {
+	    return string.byteLength
+	  }
+	  if (typeof string !== 'string') {
+	    throw new TypeError(
+	      'The "string" argument must be one of type string, Buffer, or ArrayBuffer. ' +
+	      'Received type ' + typeof string
+	    )
+	  }
+
+	  const len = string.length;
+	  const mustMatch = (arguments.length > 2 && arguments[2] === true);
+	  if (!mustMatch && len === 0) return 0
+
+	  // Use a for loop to avoid recursion
+	  let loweredCase = false;
+	  for (;;) {
+	    switch (encoding) {
+	      case 'ascii':
+	      case 'latin1':
+	      case 'binary':
+	        return len
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8ToBytes(string).length
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return len * 2
+	      case 'hex':
+	        return len >>> 1
+	      case 'base64':
+	        return base64ToBytes(string).length
+	      default:
+	        if (loweredCase) {
+	          return mustMatch ? -1 : utf8ToBytes(string).length // assume utf8
+	        }
+	        encoding = ('' + encoding).toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	}
+	Buffer.byteLength = byteLength;
+
+	function slowToString (encoding, start, end) {
+	  let loweredCase = false;
+
+	  // No need to verify that "this.length <= MAX_UINT32" since it's a read-only
+	  // property of a typed array.
+
+	  // This behaves neither like String nor Uint8Array in that we set start/end
+	  // to their upper/lower bounds if the value passed is out of range.
+	  // undefined is handled specially as per ECMA-262 6th Edition,
+	  // Section 13.3.3.7 Runtime Semantics: KeyedBindingInitialization.
+	  if (start === undefined || start < 0) {
+	    start = 0;
+	  }
+	  // Return early if start > this.length. Done here to prevent potential uint32
+	  // coercion fail below.
+	  if (start > this.length) {
+	    return ''
+	  }
+
+	  if (end === undefined || end > this.length) {
+	    end = this.length;
+	  }
+
+	  if (end <= 0) {
+	    return ''
+	  }
+
+	  // Force coercion to uint32. This will also coerce falsey/NaN values to 0.
+	  end >>>= 0;
+	  start >>>= 0;
+
+	  if (end <= start) {
+	    return ''
+	  }
+
+	  if (!encoding) encoding = 'utf8';
+
+	  while (true) {
+	    switch (encoding) {
+	      case 'hex':
+	        return hexSlice(this, start, end)
+
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8Slice(this, start, end)
+
+	      case 'ascii':
+	        return asciiSlice(this, start, end)
+
+	      case 'latin1':
+	      case 'binary':
+	        return latin1Slice(this, start, end)
+
+	      case 'base64':
+	        return base64Slice(this, start, end)
+
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return utf16leSlice(this, start, end)
+
+	      default:
+	        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+	        encoding = (encoding + '').toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	}
+
+	// This property is used by `Buffer.isBuffer` (and the `is-buffer` npm package)
+	// to detect a Buffer instance. It's not possible to use `instanceof Buffer`
+	// reliably in a browserify context because there could be multiple different
+	// copies of the 'buffer' package in use. This method works even for Buffer
+	// instances that were created from another copy of the `buffer` package.
+	// See: https://github.com/feross/buffer/issues/154
+	Buffer.prototype._isBuffer = true;
+
+	function swap (b, n, m) {
+	  const i = b[n];
+	  b[n] = b[m];
+	  b[m] = i;
+	}
+
+	Buffer.prototype.swap16 = function swap16 () {
+	  const len = this.length;
+	  if (len % 2 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 16-bits')
+	  }
+	  for (let i = 0; i < len; i += 2) {
+	    swap(this, i, i + 1);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.swap32 = function swap32 () {
+	  const len = this.length;
+	  if (len % 4 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 32-bits')
+	  }
+	  for (let i = 0; i < len; i += 4) {
+	    swap(this, i, i + 3);
+	    swap(this, i + 1, i + 2);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.swap64 = function swap64 () {
+	  const len = this.length;
+	  if (len % 8 !== 0) {
+	    throw new RangeError('Buffer size must be a multiple of 64-bits')
+	  }
+	  for (let i = 0; i < len; i += 8) {
+	    swap(this, i, i + 7);
+	    swap(this, i + 1, i + 6);
+	    swap(this, i + 2, i + 5);
+	    swap(this, i + 3, i + 4);
+	  }
+	  return this
+	};
+
+	Buffer.prototype.toString = function toString () {
+	  const length = this.length;
+	  if (length === 0) return ''
+	  if (arguments.length === 0) return utf8Slice(this, 0, length)
+	  return slowToString.apply(this, arguments)
+	};
+
+	Buffer.prototype.toLocaleString = Buffer.prototype.toString;
+
+	Buffer.prototype.equals = function equals (b) {
+	  if (!Buffer.isBuffer(b)) throw new TypeError('Argument must be a Buffer')
+	  if (this === b) return true
+	  return Buffer.compare(this, b) === 0
+	};
+
+	Buffer.prototype.inspect = function inspect () {
+	  let str = '';
+	  const max = exports.INSPECT_MAX_BYTES;
+	  str = this.toString('hex', 0, max).replace(/(.{2})/g, '$1 ').trim();
+	  if (this.length > max) str += ' ... ';
+	  return '<Buffer ' + str + '>'
+	};
+	if (customInspectSymbol) {
+	  Buffer.prototype[customInspectSymbol] = Buffer.prototype.inspect;
+	}
+
+	Buffer.prototype.compare = function compare (target, start, end, thisStart, thisEnd) {
+	  if (isInstance(target, Uint8Array)) {
+	    target = Buffer.from(target, target.offset, target.byteLength);
+	  }
+	  if (!Buffer.isBuffer(target)) {
+	    throw new TypeError(
+	      'The "target" argument must be one of type Buffer or Uint8Array. ' +
+	      'Received type ' + (typeof target)
+	    )
+	  }
+
+	  if (start === undefined) {
+	    start = 0;
+	  }
+	  if (end === undefined) {
+	    end = target ? target.length : 0;
+	  }
+	  if (thisStart === undefined) {
+	    thisStart = 0;
+	  }
+	  if (thisEnd === undefined) {
+	    thisEnd = this.length;
+	  }
+
+	  if (start < 0 || end > target.length || thisStart < 0 || thisEnd > this.length) {
+	    throw new RangeError('out of range index')
+	  }
+
+	  if (thisStart >= thisEnd && start >= end) {
+	    return 0
+	  }
+	  if (thisStart >= thisEnd) {
+	    return -1
+	  }
+	  if (start >= end) {
+	    return 1
+	  }
+
+	  start >>>= 0;
+	  end >>>= 0;
+	  thisStart >>>= 0;
+	  thisEnd >>>= 0;
+
+	  if (this === target) return 0
+
+	  let x = thisEnd - thisStart;
+	  let y = end - start;
+	  const len = Math.min(x, y);
+
+	  const thisCopy = this.slice(thisStart, thisEnd);
+	  const targetCopy = target.slice(start, end);
+
+	  for (let i = 0; i < len; ++i) {
+	    if (thisCopy[i] !== targetCopy[i]) {
+	      x = thisCopy[i];
+	      y = targetCopy[i];
+	      break
+	    }
+	  }
+
+	  if (x < y) return -1
+	  if (y < x) return 1
+	  return 0
+	};
+
+	// Finds either the first index of `val` in `buffer` at offset >= `byteOffset`,
+	// OR the last index of `val` in `buffer` at offset <= `byteOffset`.
+	//
+	// Arguments:
+	// - buffer - a Buffer to search
+	// - val - a string, Buffer, or number
+	// - byteOffset - an index into `buffer`; will be clamped to an int32
+	// - encoding - an optional encoding, relevant is val is a string
+	// - dir - true for indexOf, false for lastIndexOf
+	function bidirectionalIndexOf (buffer, val, byteOffset, encoding, dir) {
+	  // Empty buffer means no match
+	  if (buffer.length === 0) return -1
+
+	  // Normalize byteOffset
+	  if (typeof byteOffset === 'string') {
+	    encoding = byteOffset;
+	    byteOffset = 0;
+	  } else if (byteOffset > 0x7fffffff) {
+	    byteOffset = 0x7fffffff;
+	  } else if (byteOffset < -0x80000000) {
+	    byteOffset = -0x80000000;
+	  }
+	  byteOffset = +byteOffset; // Coerce to Number.
+	  if (numberIsNaN(byteOffset)) {
+	    // byteOffset: it it's undefined, null, NaN, "foo", etc, search whole buffer
+	    byteOffset = dir ? 0 : (buffer.length - 1);
+	  }
+
+	  // Normalize byteOffset: negative offsets start from the end of the buffer
+	  if (byteOffset < 0) byteOffset = buffer.length + byteOffset;
+	  if (byteOffset >= buffer.length) {
+	    if (dir) return -1
+	    else byteOffset = buffer.length - 1;
+	  } else if (byteOffset < 0) {
+	    if (dir) byteOffset = 0;
+	    else return -1
+	  }
+
+	  // Normalize val
+	  if (typeof val === 'string') {
+	    val = Buffer.from(val, encoding);
+	  }
+
+	  // Finally, search either indexOf (if dir is true) or lastIndexOf
+	  if (Buffer.isBuffer(val)) {
+	    // Special case: looking for empty string/buffer always fails
+	    if (val.length === 0) {
+	      return -1
+	    }
+	    return arrayIndexOf(buffer, val, byteOffset, encoding, dir)
+	  } else if (typeof val === 'number') {
+	    val = val & 0xFF; // Search for a byte value [0-255]
+	    if (typeof Uint8Array.prototype.indexOf === 'function') {
+	      if (dir) {
+	        return Uint8Array.prototype.indexOf.call(buffer, val, byteOffset)
+	      } else {
+	        return Uint8Array.prototype.lastIndexOf.call(buffer, val, byteOffset)
+	      }
+	    }
+	    return arrayIndexOf(buffer, [val], byteOffset, encoding, dir)
+	  }
+
+	  throw new TypeError('val must be string, number or Buffer')
+	}
+
+	function arrayIndexOf (arr, val, byteOffset, encoding, dir) {
+	  let indexSize = 1;
+	  let arrLength = arr.length;
+	  let valLength = val.length;
+
+	  if (encoding !== undefined) {
+	    encoding = String(encoding).toLowerCase();
+	    if (encoding === 'ucs2' || encoding === 'ucs-2' ||
+	        encoding === 'utf16le' || encoding === 'utf-16le') {
+	      if (arr.length < 2 || val.length < 2) {
+	        return -1
+	      }
+	      indexSize = 2;
+	      arrLength /= 2;
+	      valLength /= 2;
+	      byteOffset /= 2;
+	    }
+	  }
+
+	  function read (buf, i) {
+	    if (indexSize === 1) {
+	      return buf[i]
+	    } else {
+	      return buf.readUInt16BE(i * indexSize)
+	    }
+	  }
+
+	  let i;
+	  if (dir) {
+	    let foundIndex = -1;
+	    for (i = byteOffset; i < arrLength; i++) {
+	      if (read(arr, i) === read(val, foundIndex === -1 ? 0 : i - foundIndex)) {
+	        if (foundIndex === -1) foundIndex = i;
+	        if (i - foundIndex + 1 === valLength) return foundIndex * indexSize
+	      } else {
+	        if (foundIndex !== -1) i -= i - foundIndex;
+	        foundIndex = -1;
+	      }
+	    }
+	  } else {
+	    if (byteOffset + valLength > arrLength) byteOffset = arrLength - valLength;
+	    for (i = byteOffset; i >= 0; i--) {
+	      let found = true;
+	      for (let j = 0; j < valLength; j++) {
+	        if (read(arr, i + j) !== read(val, j)) {
+	          found = false;
+	          break
+	        }
+	      }
+	      if (found) return i
+	    }
+	  }
+
+	  return -1
+	}
+
+	Buffer.prototype.includes = function includes (val, byteOffset, encoding) {
+	  return this.indexOf(val, byteOffset, encoding) !== -1
+	};
+
+	Buffer.prototype.indexOf = function indexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, true)
+	};
+
+	Buffer.prototype.lastIndexOf = function lastIndexOf (val, byteOffset, encoding) {
+	  return bidirectionalIndexOf(this, val, byteOffset, encoding, false)
+	};
+
+	function hexWrite (buf, string, offset, length) {
+	  offset = Number(offset) || 0;
+	  const remaining = buf.length - offset;
+	  if (!length) {
+	    length = remaining;
+	  } else {
+	    length = Number(length);
+	    if (length > remaining) {
+	      length = remaining;
+	    }
+	  }
+
+	  const strLen = string.length;
+
+	  if (length > strLen / 2) {
+	    length = strLen / 2;
+	  }
+	  let i;
+	  for (i = 0; i < length; ++i) {
+	    const parsed = parseInt(string.substr(i * 2, 2), 16);
+	    if (numberIsNaN(parsed)) return i
+	    buf[offset + i] = parsed;
+	  }
+	  return i
+	}
+
+	function utf8Write (buf, string, offset, length) {
+	  return blitBuffer(utf8ToBytes(string, buf.length - offset), buf, offset, length)
+	}
+
+	function asciiWrite (buf, string, offset, length) {
+	  return blitBuffer(asciiToBytes(string), buf, offset, length)
+	}
+
+	function base64Write (buf, string, offset, length) {
+	  return blitBuffer(base64ToBytes(string), buf, offset, length)
+	}
+
+	function ucs2Write (buf, string, offset, length) {
+	  return blitBuffer(utf16leToBytes(string, buf.length - offset), buf, offset, length)
+	}
+
+	Buffer.prototype.write = function write (string, offset, length, encoding) {
+	  // Buffer#write(string)
+	  if (offset === undefined) {
+	    encoding = 'utf8';
+	    length = this.length;
+	    offset = 0;
+	  // Buffer#write(string, encoding)
+	  } else if (length === undefined && typeof offset === 'string') {
+	    encoding = offset;
+	    length = this.length;
+	    offset = 0;
+	  // Buffer#write(string, offset[, length][, encoding])
+	  } else if (isFinite(offset)) {
+	    offset = offset >>> 0;
+	    if (isFinite(length)) {
+	      length = length >>> 0;
+	      if (encoding === undefined) encoding = 'utf8';
+	    } else {
+	      encoding = length;
+	      length = undefined;
+	    }
+	  } else {
+	    throw new Error(
+	      'Buffer.write(string, encoding, offset[, length]) is no longer supported'
+	    )
+	  }
+
+	  const remaining = this.length - offset;
+	  if (length === undefined || length > remaining) length = remaining;
+
+	  if ((string.length > 0 && (length < 0 || offset < 0)) || offset > this.length) {
+	    throw new RangeError('Attempt to write outside buffer bounds')
+	  }
+
+	  if (!encoding) encoding = 'utf8';
+
+	  let loweredCase = false;
+	  for (;;) {
+	    switch (encoding) {
+	      case 'hex':
+	        return hexWrite(this, string, offset, length)
+
+	      case 'utf8':
+	      case 'utf-8':
+	        return utf8Write(this, string, offset, length)
+
+	      case 'ascii':
+	      case 'latin1':
+	      case 'binary':
+	        return asciiWrite(this, string, offset, length)
+
+	      case 'base64':
+	        // Warning: maxLength not taken into account in base64Write
+	        return base64Write(this, string, offset, length)
+
+	      case 'ucs2':
+	      case 'ucs-2':
+	      case 'utf16le':
+	      case 'utf-16le':
+	        return ucs2Write(this, string, offset, length)
+
+	      default:
+	        if (loweredCase) throw new TypeError('Unknown encoding: ' + encoding)
+	        encoding = ('' + encoding).toLowerCase();
+	        loweredCase = true;
+	    }
+	  }
+	};
+
+	Buffer.prototype.toJSON = function toJSON () {
+	  return {
+	    type: 'Buffer',
+	    data: Array.prototype.slice.call(this._arr || this, 0)
+	  }
+	};
+
+	function base64Slice (buf, start, end) {
+	  if (start === 0 && end === buf.length) {
+	    return base64.fromByteArray(buf)
+	  } else {
+	    return base64.fromByteArray(buf.slice(start, end))
+	  }
+	}
+
+	function utf8Slice (buf, start, end) {
+	  end = Math.min(buf.length, end);
+	  const res = [];
+
+	  let i = start;
+	  while (i < end) {
+	    const firstByte = buf[i];
+	    let codePoint = null;
+	    let bytesPerSequence = (firstByte > 0xEF)
+	      ? 4
+	      : (firstByte > 0xDF)
+	          ? 3
+	          : (firstByte > 0xBF)
+	              ? 2
+	              : 1;
+
+	    if (i + bytesPerSequence <= end) {
+	      let secondByte, thirdByte, fourthByte, tempCodePoint;
+
+	      switch (bytesPerSequence) {
+	        case 1:
+	          if (firstByte < 0x80) {
+	            codePoint = firstByte;
+	          }
+	          break
+	        case 2:
+	          secondByte = buf[i + 1];
+	          if ((secondByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0x1F) << 0x6 | (secondByte & 0x3F);
+	            if (tempCodePoint > 0x7F) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	          break
+	        case 3:
+	          secondByte = buf[i + 1];
+	          thirdByte = buf[i + 2];
+	          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0xF) << 0xC | (secondByte & 0x3F) << 0x6 | (thirdByte & 0x3F);
+	            if (tempCodePoint > 0x7FF && (tempCodePoint < 0xD800 || tempCodePoint > 0xDFFF)) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	          break
+	        case 4:
+	          secondByte = buf[i + 1];
+	          thirdByte = buf[i + 2];
+	          fourthByte = buf[i + 3];
+	          if ((secondByte & 0xC0) === 0x80 && (thirdByte & 0xC0) === 0x80 && (fourthByte & 0xC0) === 0x80) {
+	            tempCodePoint = (firstByte & 0xF) << 0x12 | (secondByte & 0x3F) << 0xC | (thirdByte & 0x3F) << 0x6 | (fourthByte & 0x3F);
+	            if (tempCodePoint > 0xFFFF && tempCodePoint < 0x110000) {
+	              codePoint = tempCodePoint;
+	            }
+	          }
+	      }
+	    }
+
+	    if (codePoint === null) {
+	      // we did not generate a valid codePoint so insert a
+	      // replacement char (U+FFFD) and advance only 1 byte
+	      codePoint = 0xFFFD;
+	      bytesPerSequence = 1;
+	    } else if (codePoint > 0xFFFF) {
+	      // encode to utf16 (surrogate pair dance)
+	      codePoint -= 0x10000;
+	      res.push(codePoint >>> 10 & 0x3FF | 0xD800);
+	      codePoint = 0xDC00 | codePoint & 0x3FF;
+	    }
+
+	    res.push(codePoint);
+	    i += bytesPerSequence;
+	  }
+
+	  return decodeCodePointsArray(res)
+	}
+
+	// Based on http://stackoverflow.com/a/22747272/680742, the browser with
+	// the lowest limit is Chrome, with 0x10000 args.
+	// We go 1 magnitude less, for safety
+	const MAX_ARGUMENTS_LENGTH = 0x1000;
+
+	function decodeCodePointsArray (codePoints) {
+	  const len = codePoints.length;
+	  if (len <= MAX_ARGUMENTS_LENGTH) {
+	    return String.fromCharCode.apply(String, codePoints) // avoid extra slice()
+	  }
+
+	  // Decode in chunks to avoid "call stack size exceeded".
+	  let res = '';
+	  let i = 0;
+	  while (i < len) {
+	    res += String.fromCharCode.apply(
+	      String,
+	      codePoints.slice(i, i += MAX_ARGUMENTS_LENGTH)
+	    );
+	  }
+	  return res
+	}
+
+	function asciiSlice (buf, start, end) {
+	  let ret = '';
+	  end = Math.min(buf.length, end);
+
+	  for (let i = start; i < end; ++i) {
+	    ret += String.fromCharCode(buf[i] & 0x7F);
+	  }
+	  return ret
+	}
+
+	function latin1Slice (buf, start, end) {
+	  let ret = '';
+	  end = Math.min(buf.length, end);
+
+	  for (let i = start; i < end; ++i) {
+	    ret += String.fromCharCode(buf[i]);
+	  }
+	  return ret
+	}
+
+	function hexSlice (buf, start, end) {
+	  const len = buf.length;
+
+	  if (!start || start < 0) start = 0;
+	  if (!end || end < 0 || end > len) end = len;
+
+	  let out = '';
+	  for (let i = start; i < end; ++i) {
+	    out += hexSliceLookupTable[buf[i]];
+	  }
+	  return out
+	}
+
+	function utf16leSlice (buf, start, end) {
+	  const bytes = buf.slice(start, end);
+	  let res = '';
+	  // If bytes.length is odd, the last 8 bits must be ignored (same as node.js)
+	  for (let i = 0; i < bytes.length - 1; i += 2) {
+	    res += String.fromCharCode(bytes[i] + (bytes[i + 1] * 256));
+	  }
+	  return res
+	}
+
+	Buffer.prototype.slice = function slice (start, end) {
+	  const len = this.length;
+	  start = ~~start;
+	  end = end === undefined ? len : ~~end;
+
+	  if (start < 0) {
+	    start += len;
+	    if (start < 0) start = 0;
+	  } else if (start > len) {
+	    start = len;
+	  }
+
+	  if (end < 0) {
+	    end += len;
+	    if (end < 0) end = 0;
+	  } else if (end > len) {
+	    end = len;
+	  }
+
+	  if (end < start) end = start;
+
+	  const newBuf = this.subarray(start, end);
+	  // Return an augmented `Uint8Array` instance
+	  Object.setPrototypeOf(newBuf, Buffer.prototype);
+
+	  return newBuf
+	};
+
+	/*
+	 * Need to make sure that buffer isn't trying to write out of bounds.
+	 */
+	function checkOffset (offset, ext, length) {
+	  if ((offset % 1) !== 0 || offset < 0) throw new RangeError('offset is not uint')
+	  if (offset + ext > length) throw new RangeError('Trying to access beyond buffer length')
+	}
+
+	Buffer.prototype.readUintLE =
+	Buffer.prototype.readUIntLE = function readUIntLE (offset, byteLength, noAssert) {
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  let val = this[offset];
+	  let mul = 1;
+	  let i = 0;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    val += this[offset + i] * mul;
+	  }
+
+	  return val
+	};
+
+	Buffer.prototype.readUintBE =
+	Buffer.prototype.readUIntBE = function readUIntBE (offset, byteLength, noAssert) {
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) {
+	    checkOffset(offset, byteLength, this.length);
+	  }
+
+	  let val = this[offset + --byteLength];
+	  let mul = 1;
+	  while (byteLength > 0 && (mul *= 0x100)) {
+	    val += this[offset + --byteLength] * mul;
+	  }
+
+	  return val
+	};
+
+	Buffer.prototype.readUint8 =
+	Buffer.prototype.readUInt8 = function readUInt8 (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 1, this.length);
+	  return this[offset]
+	};
+
+	Buffer.prototype.readUint16LE =
+	Buffer.prototype.readUInt16LE = function readUInt16LE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  return this[offset] | (this[offset + 1] << 8)
+	};
+
+	Buffer.prototype.readUint16BE =
+	Buffer.prototype.readUInt16BE = function readUInt16BE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  return (this[offset] << 8) | this[offset + 1]
+	};
+
+	Buffer.prototype.readUint32LE =
+	Buffer.prototype.readUInt32LE = function readUInt32LE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return ((this[offset]) |
+	      (this[offset + 1] << 8) |
+	      (this[offset + 2] << 16)) +
+	      (this[offset + 3] * 0x1000000)
+	};
+
+	Buffer.prototype.readUint32BE =
+	Buffer.prototype.readUInt32BE = function readUInt32BE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset] * 0x1000000) +
+	    ((this[offset + 1] << 16) |
+	    (this[offset + 2] << 8) |
+	    this[offset + 3])
+	};
+
+	Buffer.prototype.readBigUInt64LE = defineBigIntMethod(function readBigUInt64LE (offset) {
+	  offset = offset >>> 0;
+	  validateNumber(offset, 'offset');
+	  const first = this[offset];
+	  const last = this[offset + 7];
+	  if (first === undefined || last === undefined) {
+	    boundsError(offset, this.length - 8);
+	  }
+
+	  const lo = first +
+	    this[++offset] * 2 ** 8 +
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 24;
+
+	  const hi = this[++offset] +
+	    this[++offset] * 2 ** 8 +
+	    this[++offset] * 2 ** 16 +
+	    last * 2 ** 24;
+
+	  return BigInt(lo) + (BigInt(hi) << BigInt(32))
+	});
+
+	Buffer.prototype.readBigUInt64BE = defineBigIntMethod(function readBigUInt64BE (offset) {
+	  offset = offset >>> 0;
+	  validateNumber(offset, 'offset');
+	  const first = this[offset];
+	  const last = this[offset + 7];
+	  if (first === undefined || last === undefined) {
+	    boundsError(offset, this.length - 8);
+	  }
+
+	  const hi = first * 2 ** 24 +
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 8 +
+	    this[++offset];
+
+	  const lo = this[++offset] * 2 ** 24 +
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 8 +
+	    last;
+
+	  return (BigInt(hi) << BigInt(32)) + BigInt(lo)
+	});
+
+	Buffer.prototype.readIntLE = function readIntLE (offset, byteLength, noAssert) {
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  let val = this[offset];
+	  let mul = 1;
+	  let i = 0;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    val += this[offset + i] * mul;
+	  }
+	  mul *= 0x80;
+
+	  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+	  return val
+	};
+
+	Buffer.prototype.readIntBE = function readIntBE (offset, byteLength, noAssert) {
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) checkOffset(offset, byteLength, this.length);
+
+	  let i = byteLength;
+	  let mul = 1;
+	  let val = this[offset + --i];
+	  while (i > 0 && (mul *= 0x100)) {
+	    val += this[offset + --i] * mul;
+	  }
+	  mul *= 0x80;
+
+	  if (val >= mul) val -= Math.pow(2, 8 * byteLength);
+
+	  return val
+	};
+
+	Buffer.prototype.readInt8 = function readInt8 (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 1, this.length);
+	  if (!(this[offset] & 0x80)) return (this[offset])
+	  return ((0xff - this[offset] + 1) * -1)
+	};
+
+	Buffer.prototype.readInt16LE = function readInt16LE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  const val = this[offset] | (this[offset + 1] << 8);
+	  return (val & 0x8000) ? val | 0xFFFF0000 : val
+	};
+
+	Buffer.prototype.readInt16BE = function readInt16BE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 2, this.length);
+	  const val = this[offset + 1] | (this[offset] << 8);
+	  return (val & 0x8000) ? val | 0xFFFF0000 : val
+	};
+
+	Buffer.prototype.readInt32LE = function readInt32LE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset]) |
+	    (this[offset + 1] << 8) |
+	    (this[offset + 2] << 16) |
+	    (this[offset + 3] << 24)
+	};
+
+	Buffer.prototype.readInt32BE = function readInt32BE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+
+	  return (this[offset] << 24) |
+	    (this[offset + 1] << 16) |
+	    (this[offset + 2] << 8) |
+	    (this[offset + 3])
+	};
+
+	Buffer.prototype.readBigInt64LE = defineBigIntMethod(function readBigInt64LE (offset) {
+	  offset = offset >>> 0;
+	  validateNumber(offset, 'offset');
+	  const first = this[offset];
+	  const last = this[offset + 7];
+	  if (first === undefined || last === undefined) {
+	    boundsError(offset, this.length - 8);
+	  }
+
+	  const val = this[offset + 4] +
+	    this[offset + 5] * 2 ** 8 +
+	    this[offset + 6] * 2 ** 16 +
+	    (last << 24); // Overflow
+
+	  return (BigInt(val) << BigInt(32)) +
+	    BigInt(first +
+	    this[++offset] * 2 ** 8 +
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 24)
+	});
+
+	Buffer.prototype.readBigInt64BE = defineBigIntMethod(function readBigInt64BE (offset) {
+	  offset = offset >>> 0;
+	  validateNumber(offset, 'offset');
+	  const first = this[offset];
+	  const last = this[offset + 7];
+	  if (first === undefined || last === undefined) {
+	    boundsError(offset, this.length - 8);
+	  }
+
+	  const val = (first << 24) + // Overflow
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 8 +
+	    this[++offset];
+
+	  return (BigInt(val) << BigInt(32)) +
+	    BigInt(this[++offset] * 2 ** 24 +
+	    this[++offset] * 2 ** 16 +
+	    this[++offset] * 2 ** 8 +
+	    last)
+	});
+
+	Buffer.prototype.readFloatLE = function readFloatLE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+	  return ieee754$1.read(this, offset, true, 23, 4)
+	};
+
+	Buffer.prototype.readFloatBE = function readFloatBE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 4, this.length);
+	  return ieee754$1.read(this, offset, false, 23, 4)
+	};
+
+	Buffer.prototype.readDoubleLE = function readDoubleLE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 8, this.length);
+	  return ieee754$1.read(this, offset, true, 52, 8)
+	};
+
+	Buffer.prototype.readDoubleBE = function readDoubleBE (offset, noAssert) {
+	  offset = offset >>> 0;
+	  if (!noAssert) checkOffset(offset, 8, this.length);
+	  return ieee754$1.read(this, offset, false, 52, 8)
+	};
+
+	function checkInt (buf, value, offset, ext, max, min) {
+	  if (!Buffer.isBuffer(buf)) throw new TypeError('"buffer" argument must be a Buffer instance')
+	  if (value > max || value < min) throw new RangeError('"value" argument is out of bounds')
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+	}
+
+	Buffer.prototype.writeUintLE =
+	Buffer.prototype.writeUIntLE = function writeUIntLE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) {
+	    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
+	    checkInt(this, value, offset, byteLength, maxBytes, 0);
+	  }
+
+	  let mul = 1;
+	  let i = 0;
+	  this[offset] = value & 0xFF;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    this[offset + i] = (value / mul) & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeUintBE =
+	Buffer.prototype.writeUIntBE = function writeUIntBE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  byteLength = byteLength >>> 0;
+	  if (!noAssert) {
+	    const maxBytes = Math.pow(2, 8 * byteLength) - 1;
+	    checkInt(this, value, offset, byteLength, maxBytes, 0);
+	  }
+
+	  let i = byteLength - 1;
+	  let mul = 1;
+	  this[offset + i] = value & 0xFF;
+	  while (--i >= 0 && (mul *= 0x100)) {
+	    this[offset + i] = (value / mul) & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeUint8 =
+	Buffer.prototype.writeUInt8 = function writeUInt8 (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 1, 0xff, 0);
+	  this[offset] = (value & 0xff);
+	  return offset + 1
+	};
+
+	Buffer.prototype.writeUint16LE =
+	Buffer.prototype.writeUInt16LE = function writeUInt16LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+	  this[offset] = (value & 0xff);
+	  this[offset + 1] = (value >>> 8);
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeUint16BE =
+	Buffer.prototype.writeUInt16BE = function writeUInt16BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0xffff, 0);
+	  this[offset] = (value >>> 8);
+	  this[offset + 1] = (value & 0xff);
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeUint32LE =
+	Buffer.prototype.writeUInt32LE = function writeUInt32LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+	  this[offset + 3] = (value >>> 24);
+	  this[offset + 2] = (value >>> 16);
+	  this[offset + 1] = (value >>> 8);
+	  this[offset] = (value & 0xff);
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeUint32BE =
+	Buffer.prototype.writeUInt32BE = function writeUInt32BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0xffffffff, 0);
+	  this[offset] = (value >>> 24);
+	  this[offset + 1] = (value >>> 16);
+	  this[offset + 2] = (value >>> 8);
+	  this[offset + 3] = (value & 0xff);
+	  return offset + 4
+	};
+
+	function wrtBigUInt64LE (buf, value, offset, min, max) {
+	  checkIntBI(value, min, max, buf, offset, 7);
+
+	  let lo = Number(value & BigInt(0xffffffff));
+	  buf[offset++] = lo;
+	  lo = lo >> 8;
+	  buf[offset++] = lo;
+	  lo = lo >> 8;
+	  buf[offset++] = lo;
+	  lo = lo >> 8;
+	  buf[offset++] = lo;
+	  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
+	  buf[offset++] = hi;
+	  hi = hi >> 8;
+	  buf[offset++] = hi;
+	  hi = hi >> 8;
+	  buf[offset++] = hi;
+	  hi = hi >> 8;
+	  buf[offset++] = hi;
+	  return offset
+	}
+
+	function wrtBigUInt64BE (buf, value, offset, min, max) {
+	  checkIntBI(value, min, max, buf, offset, 7);
+
+	  let lo = Number(value & BigInt(0xffffffff));
+	  buf[offset + 7] = lo;
+	  lo = lo >> 8;
+	  buf[offset + 6] = lo;
+	  lo = lo >> 8;
+	  buf[offset + 5] = lo;
+	  lo = lo >> 8;
+	  buf[offset + 4] = lo;
+	  let hi = Number(value >> BigInt(32) & BigInt(0xffffffff));
+	  buf[offset + 3] = hi;
+	  hi = hi >> 8;
+	  buf[offset + 2] = hi;
+	  hi = hi >> 8;
+	  buf[offset + 1] = hi;
+	  hi = hi >> 8;
+	  buf[offset] = hi;
+	  return offset + 8
+	}
+
+	Buffer.prototype.writeBigUInt64LE = defineBigIntMethod(function writeBigUInt64LE (value, offset = 0) {
+	  return wrtBigUInt64LE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
+	});
+
+	Buffer.prototype.writeBigUInt64BE = defineBigIntMethod(function writeBigUInt64BE (value, offset = 0) {
+	  return wrtBigUInt64BE(this, value, offset, BigInt(0), BigInt('0xffffffffffffffff'))
+	});
+
+	Buffer.prototype.writeIntLE = function writeIntLE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) {
+	    const limit = Math.pow(2, (8 * byteLength) - 1);
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+	  }
+
+	  let i = 0;
+	  let mul = 1;
+	  let sub = 0;
+	  this[offset] = value & 0xFF;
+	  while (++i < byteLength && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i - 1] !== 0) {
+	      sub = 1;
+	    }
+	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeIntBE = function writeIntBE (value, offset, byteLength, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) {
+	    const limit = Math.pow(2, (8 * byteLength) - 1);
+
+	    checkInt(this, value, offset, byteLength, limit - 1, -limit);
+	  }
+
+	  let i = byteLength - 1;
+	  let mul = 1;
+	  let sub = 0;
+	  this[offset + i] = value & 0xFF;
+	  while (--i >= 0 && (mul *= 0x100)) {
+	    if (value < 0 && sub === 0 && this[offset + i + 1] !== 0) {
+	      sub = 1;
+	    }
+	    this[offset + i] = ((value / mul) >> 0) - sub & 0xFF;
+	  }
+
+	  return offset + byteLength
+	};
+
+	Buffer.prototype.writeInt8 = function writeInt8 (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 1, 0x7f, -0x80);
+	  if (value < 0) value = 0xff + value + 1;
+	  this[offset] = (value & 0xff);
+	  return offset + 1
+	};
+
+	Buffer.prototype.writeInt16LE = function writeInt16LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+	  this[offset] = (value & 0xff);
+	  this[offset + 1] = (value >>> 8);
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeInt16BE = function writeInt16BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 2, 0x7fff, -0x8000);
+	  this[offset] = (value >>> 8);
+	  this[offset + 1] = (value & 0xff);
+	  return offset + 2
+	};
+
+	Buffer.prototype.writeInt32LE = function writeInt32LE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+	  this[offset] = (value & 0xff);
+	  this[offset + 1] = (value >>> 8);
+	  this[offset + 2] = (value >>> 16);
+	  this[offset + 3] = (value >>> 24);
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeInt32BE = function writeInt32BE (value, offset, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) checkInt(this, value, offset, 4, 0x7fffffff, -0x80000000);
+	  if (value < 0) value = 0xffffffff + value + 1;
+	  this[offset] = (value >>> 24);
+	  this[offset + 1] = (value >>> 16);
+	  this[offset + 2] = (value >>> 8);
+	  this[offset + 3] = (value & 0xff);
+	  return offset + 4
+	};
+
+	Buffer.prototype.writeBigInt64LE = defineBigIntMethod(function writeBigInt64LE (value, offset = 0) {
+	  return wrtBigUInt64LE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
+	});
+
+	Buffer.prototype.writeBigInt64BE = defineBigIntMethod(function writeBigInt64BE (value, offset = 0) {
+	  return wrtBigUInt64BE(this, value, offset, -BigInt('0x8000000000000000'), BigInt('0x7fffffffffffffff'))
+	});
+
+	function checkIEEE754 (buf, value, offset, ext, max, min) {
+	  if (offset + ext > buf.length) throw new RangeError('Index out of range')
+	  if (offset < 0) throw new RangeError('Index out of range')
+	}
+
+	function writeFloat (buf, value, offset, littleEndian, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) {
+	    checkIEEE754(buf, value, offset, 4);
+	  }
+	  ieee754$1.write(buf, value, offset, littleEndian, 23, 4);
+	  return offset + 4
+	}
+
+	Buffer.prototype.writeFloatLE = function writeFloatLE (value, offset, noAssert) {
+	  return writeFloat(this, value, offset, true, noAssert)
+	};
+
+	Buffer.prototype.writeFloatBE = function writeFloatBE (value, offset, noAssert) {
+	  return writeFloat(this, value, offset, false, noAssert)
+	};
+
+	function writeDouble (buf, value, offset, littleEndian, noAssert) {
+	  value = +value;
+	  offset = offset >>> 0;
+	  if (!noAssert) {
+	    checkIEEE754(buf, value, offset, 8);
+	  }
+	  ieee754$1.write(buf, value, offset, littleEndian, 52, 8);
+	  return offset + 8
+	}
+
+	Buffer.prototype.writeDoubleLE = function writeDoubleLE (value, offset, noAssert) {
+	  return writeDouble(this, value, offset, true, noAssert)
+	};
+
+	Buffer.prototype.writeDoubleBE = function writeDoubleBE (value, offset, noAssert) {
+	  return writeDouble(this, value, offset, false, noAssert)
+	};
+
+	// copy(targetBuffer, targetStart=0, sourceStart=0, sourceEnd=buffer.length)
+	Buffer.prototype.copy = function copy (target, targetStart, start, end) {
+	  if (!Buffer.isBuffer(target)) throw new TypeError('argument should be a Buffer')
+	  if (!start) start = 0;
+	  if (!end && end !== 0) end = this.length;
+	  if (targetStart >= target.length) targetStart = target.length;
+	  if (!targetStart) targetStart = 0;
+	  if (end > 0 && end < start) end = start;
+
+	  // Copy 0 bytes; we're done
+	  if (end === start) return 0
+	  if (target.length === 0 || this.length === 0) return 0
+
+	  // Fatal error conditions
+	  if (targetStart < 0) {
+	    throw new RangeError('targetStart out of bounds')
+	  }
+	  if (start < 0 || start >= this.length) throw new RangeError('Index out of range')
+	  if (end < 0) throw new RangeError('sourceEnd out of bounds')
+
+	  // Are we oob?
+	  if (end > this.length) end = this.length;
+	  if (target.length - targetStart < end - start) {
+	    end = target.length - targetStart + start;
+	  }
+
+	  const len = end - start;
+
+	  if (this === target && typeof Uint8Array.prototype.copyWithin === 'function') {
+	    // Use built-in when available, missing from IE11
+	    this.copyWithin(targetStart, start, end);
+	  } else {
+	    Uint8Array.prototype.set.call(
+	      target,
+	      this.subarray(start, end),
+	      targetStart
+	    );
+	  }
+
+	  return len
+	};
+
+	// Usage:
+	//    buffer.fill(number[, offset[, end]])
+	//    buffer.fill(buffer[, offset[, end]])
+	//    buffer.fill(string[, offset[, end]][, encoding])
+	Buffer.prototype.fill = function fill (val, start, end, encoding) {
+	  // Handle string cases:
+	  if (typeof val === 'string') {
+	    if (typeof start === 'string') {
+	      encoding = start;
+	      start = 0;
+	      end = this.length;
+	    } else if (typeof end === 'string') {
+	      encoding = end;
+	      end = this.length;
+	    }
+	    if (encoding !== undefined && typeof encoding !== 'string') {
+	      throw new TypeError('encoding must be a string')
+	    }
+	    if (typeof encoding === 'string' && !Buffer.isEncoding(encoding)) {
+	      throw new TypeError('Unknown encoding: ' + encoding)
+	    }
+	    if (val.length === 1) {
+	      const code = val.charCodeAt(0);
+	      if ((encoding === 'utf8' && code < 128) ||
+	          encoding === 'latin1') {
+	        // Fast path: If `val` fits into a single byte, use that numeric value.
+	        val = code;
+	      }
+	    }
+	  } else if (typeof val === 'number') {
+	    val = val & 255;
+	  } else if (typeof val === 'boolean') {
+	    val = Number(val);
+	  }
+
+	  // Invalid ranges are not set to a default, so can range check early.
+	  if (start < 0 || this.length < start || this.length < end) {
+	    throw new RangeError('Out of range index')
+	  }
+
+	  if (end <= start) {
+	    return this
+	  }
+
+	  start = start >>> 0;
+	  end = end === undefined ? this.length : end >>> 0;
+
+	  if (!val) val = 0;
+
+	  let i;
+	  if (typeof val === 'number') {
+	    for (i = start; i < end; ++i) {
+	      this[i] = val;
+	    }
+	  } else {
+	    const bytes = Buffer.isBuffer(val)
+	      ? val
+	      : Buffer.from(val, encoding);
+	    const len = bytes.length;
+	    if (len === 0) {
+	      throw new TypeError('The value "' + val +
+	        '" is invalid for argument "value"')
+	    }
+	    for (i = 0; i < end - start; ++i) {
+	      this[i + start] = bytes[i % len];
+	    }
+	  }
+
+	  return this
+	};
+
+	// CUSTOM ERRORS
+	// =============
+
+	// Simplified versions from Node, changed for Buffer-only usage
+	const errors = {};
+	function E (sym, getMessage, Base) {
+	  errors[sym] = class NodeError extends Base {
+	    constructor () {
+	      super();
+
+	      Object.defineProperty(this, 'message', {
+	        value: getMessage.apply(this, arguments),
+	        writable: true,
+	        configurable: true
+	      });
+
+	      // Add the error code to the name to include it in the stack trace.
+	      this.name = `${this.name} [${sym}]`;
+	      // Access the stack to generate the error message including the error code
+	      // from the name.
+	      this.stack; // eslint-disable-line no-unused-expressions
+	      // Reset the name to the actual name.
+	      delete this.name;
+	    }
+
+	    get code () {
+	      return sym
+	    }
+
+	    set code (value) {
+	      Object.defineProperty(this, 'code', {
+	        configurable: true,
+	        enumerable: true,
+	        value,
+	        writable: true
+	      });
+	    }
+
+	    toString () {
+	      return `${this.name} [${sym}]: ${this.message}`
+	    }
+	  };
+	}
+
+	E('ERR_BUFFER_OUT_OF_BOUNDS',
+	  function (name) {
+	    if (name) {
+	      return `${name} is outside of buffer bounds`
+	    }
+
+	    return 'Attempt to access memory outside buffer bounds'
+	  }, RangeError);
+	E('ERR_INVALID_ARG_TYPE',
+	  function (name, actual) {
+	    return `The "${name}" argument must be of type number. Received type ${typeof actual}`
+	  }, TypeError);
+	E('ERR_OUT_OF_RANGE',
+	  function (str, range, input) {
+	    let msg = `The value of "${str}" is out of range.`;
+	    let received = input;
+	    if (Number.isInteger(input) && Math.abs(input) > 2 ** 32) {
+	      received = addNumericalSeparator(String(input));
+	    } else if (typeof input === 'bigint') {
+	      received = String(input);
+	      if (input > BigInt(2) ** BigInt(32) || input < -(BigInt(2) ** BigInt(32))) {
+	        received = addNumericalSeparator(received);
+	      }
+	      received += 'n';
+	    }
+	    msg += ` It must be ${range}. Received ${received}`;
+	    return msg
+	  }, RangeError);
+
+	function addNumericalSeparator (val) {
+	  let res = '';
+	  let i = val.length;
+	  const start = val[0] === '-' ? 1 : 0;
+	  for (; i >= start + 4; i -= 3) {
+	    res = `_${val.slice(i - 3, i)}${res}`;
+	  }
+	  return `${val.slice(0, i)}${res}`
+	}
+
+	// CHECK FUNCTIONS
+	// ===============
+
+	function checkBounds (buf, offset, byteLength) {
+	  validateNumber(offset, 'offset');
+	  if (buf[offset] === undefined || buf[offset + byteLength] === undefined) {
+	    boundsError(offset, buf.length - (byteLength + 1));
+	  }
+	}
+
+	function checkIntBI (value, min, max, buf, offset, byteLength) {
+	  if (value > max || value < min) {
+	    const n = typeof min === 'bigint' ? 'n' : '';
+	    let range;
+	    if (byteLength > 3) {
+	      if (min === 0 || min === BigInt(0)) {
+	        range = `>= 0${n} and < 2${n} ** ${(byteLength + 1) * 8}${n}`;
+	      } else {
+	        range = `>= -(2${n} ** ${(byteLength + 1) * 8 - 1}${n}) and < 2 ** ` +
+	                `${(byteLength + 1) * 8 - 1}${n}`;
+	      }
+	    } else {
+	      range = `>= ${min}${n} and <= ${max}${n}`;
+	    }
+	    throw new errors.ERR_OUT_OF_RANGE('value', range, value)
+	  }
+	  checkBounds(buf, offset, byteLength);
+	}
+
+	function validateNumber (value, name) {
+	  if (typeof value !== 'number') {
+	    throw new errors.ERR_INVALID_ARG_TYPE(name, 'number', value)
+	  }
+	}
+
+	function boundsError (value, length, type) {
+	  if (Math.floor(value) !== value) {
+	    validateNumber(value, type);
+	    throw new errors.ERR_OUT_OF_RANGE(type || 'offset', 'an integer', value)
+	  }
+
+	  if (length < 0) {
+	    throw new errors.ERR_BUFFER_OUT_OF_BOUNDS()
+	  }
+
+	  throw new errors.ERR_OUT_OF_RANGE(type || 'offset',
+	                                    `>= ${type ? 1 : 0} and <= ${length}`,
+	                                    value)
+	}
+
+	// HELPER FUNCTIONS
+	// ================
+
+	const INVALID_BASE64_RE = /[^+/0-9A-Za-z-_]/g;
+
+	function base64clean (str) {
+	  // Node takes equal signs as end of the Base64 encoding
+	  str = str.split('=')[0];
+	  // Node strips out invalid characters like \n and \t from the string, base64-js does not
+	  str = str.trim().replace(INVALID_BASE64_RE, '');
+	  // Node converts strings with length < 2 to ''
+	  if (str.length < 2) return ''
+	  // Node allows for non-padded base64 strings (missing trailing ===), base64-js does not
+	  while (str.length % 4 !== 0) {
+	    str = str + '=';
+	  }
+	  return str
+	}
+
+	function utf8ToBytes (string, units) {
+	  units = units || Infinity;
+	  let codePoint;
+	  const length = string.length;
+	  let leadSurrogate = null;
+	  const bytes = [];
+
+	  for (let i = 0; i < length; ++i) {
+	    codePoint = string.charCodeAt(i);
+
+	    // is surrogate component
+	    if (codePoint > 0xD7FF && codePoint < 0xE000) {
+	      // last char was a lead
+	      if (!leadSurrogate) {
+	        // no lead yet
+	        if (codePoint > 0xDBFF) {
+	          // unexpected trail
+	          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	          continue
+	        } else if (i + 1 === length) {
+	          // unpaired lead
+	          if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	          continue
+	        }
+
+	        // valid lead
+	        leadSurrogate = codePoint;
+
+	        continue
+	      }
+
+	      // 2 leads in a row
+	      if (codePoint < 0xDC00) {
+	        if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	        leadSurrogate = codePoint;
+	        continue
+	      }
+
+	      // valid surrogate pair
+	      codePoint = (leadSurrogate - 0xD800 << 10 | codePoint - 0xDC00) + 0x10000;
+	    } else if (leadSurrogate) {
+	      // valid bmp char, but last char was a lead
+	      if ((units -= 3) > -1) bytes.push(0xEF, 0xBF, 0xBD);
+	    }
+
+	    leadSurrogate = null;
+
+	    // encode utf8
+	    if (codePoint < 0x80) {
+	      if ((units -= 1) < 0) break
+	      bytes.push(codePoint);
+	    } else if (codePoint < 0x800) {
+	      if ((units -= 2) < 0) break
+	      bytes.push(
+	        codePoint >> 0x6 | 0xC0,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else if (codePoint < 0x10000) {
+	      if ((units -= 3) < 0) break
+	      bytes.push(
+	        codePoint >> 0xC | 0xE0,
+	        codePoint >> 0x6 & 0x3F | 0x80,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else if (codePoint < 0x110000) {
+	      if ((units -= 4) < 0) break
+	      bytes.push(
+	        codePoint >> 0x12 | 0xF0,
+	        codePoint >> 0xC & 0x3F | 0x80,
+	        codePoint >> 0x6 & 0x3F | 0x80,
+	        codePoint & 0x3F | 0x80
+	      );
+	    } else {
+	      throw new Error('Invalid code point')
+	    }
+	  }
+
+	  return bytes
+	}
+
+	function asciiToBytes (str) {
+	  const byteArray = [];
+	  for (let i = 0; i < str.length; ++i) {
+	    // Node's code seems to be doing this and not & 0x7F..
+	    byteArray.push(str.charCodeAt(i) & 0xFF);
+	  }
+	  return byteArray
+	}
+
+	function utf16leToBytes (str, units) {
+	  let c, hi, lo;
+	  const byteArray = [];
+	  for (let i = 0; i < str.length; ++i) {
+	    if ((units -= 2) < 0) break
+
+	    c = str.charCodeAt(i);
+	    hi = c >> 8;
+	    lo = c % 256;
+	    byteArray.push(lo);
+	    byteArray.push(hi);
+	  }
+
+	  return byteArray
+	}
+
+	function base64ToBytes (str) {
+	  return base64.toByteArray(base64clean(str))
+	}
+
+	function blitBuffer (src, dst, offset, length) {
+	  let i;
+	  for (i = 0; i < length; ++i) {
+	    if ((i + offset >= dst.length) || (i >= src.length)) break
+	    dst[i + offset] = src[i];
+	  }
+	  return i
+	}
+
+	// ArrayBuffer or Uint8Array objects from other contexts (i.e. iframes) do not pass
+	// the `instanceof` check but they should be treated as of that type.
+	// See: https://github.com/feross/buffer/issues/166
+	function isInstance (obj, type) {
+	  return obj instanceof type ||
+	    (obj != null && obj.constructor != null && obj.constructor.name != null &&
+	      obj.constructor.name === type.name)
+	}
+	function numberIsNaN (obj) {
+	  // For IE11 support
+	  return obj !== obj // eslint-disable-line no-self-compare
+	}
+
+	// Create lookup table for `toString('hex')`
+	// See: https://github.com/feross/buffer/issues/219
+	const hexSliceLookupTable = (function () {
+	  const alphabet = '0123456789abcdef';
+	  const table = new Array(256);
+	  for (let i = 0; i < 16; ++i) {
+	    const i16 = i * 16;
+	    for (let j = 0; j < 16; ++j) {
+	      table[i16 + j] = alphabet[i] + alphabet[j];
+	    }
+	  }
+	  return table
+	})();
+
+	// Return not function with Error if BigInt not supported
+	function defineBigIntMethod (fn) {
+	  return typeof BigInt === 'undefined' ? BufferBigIntNotDefined : fn
+	}
+
+	function BufferBigIntNotDefined () {
+	  throw new Error('BigInt not supported')
+	}
+} (buffer));
+
+export { ArrowUp as A, Ce as C, T$2 as T, __viteBrowserExternal$1 as _, ArrowDown as a, l$2 as b, c$1 as c, se as d, C as e, buffer as f, fetchFeeEstimate as g, a as h, i$1 as i, decodeStacksAddress as j, getAugmentedNamespace as k, login as l, maxCommit as m, commonjsGlobal as n, getDefaultExportFromCjs as o, fetchUTXOs as p, attachAllInputTransactions as q, fetchAddressDetails as r, sbtcConfig as s };

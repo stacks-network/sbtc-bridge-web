@@ -967,14 +967,18 @@ let __tla = (async () => {
   }
   const matchers = {};
   const nodes = [
-    () => __vitePreload(() => import("./chunks/0-ec7aacf1.js"), true ? ["./chunks/0-ec7aacf1.js","./components/pages/_layout.svelte-2e9430e8.js","./chunks/preload-helper-6910039e.js","./chunks/index-5e67b194.js","./chunks/utxos-80045232.js","./assets/_layout-408de3d2.css"] : void 0, import.meta.url),
+    () => __vitePreload(() => import("./chunks/0-32d34dd9.js"), true ? ["./chunks/0-32d34dd9.js","./components/pages/_layout.svelte-722c7f56.js","./chunks/preload-helper-6910039e.js","./chunks/index-5e67b194.js","./chunks/index-48c4ca09.js","./assets/_layout-408de3d2.css"] : void 0, import.meta.url),
     () => __vitePreload(() => import("./chunks/1-a57855af.js"), true ? ["./chunks/1-a57855af.js","./components/error.svelte-58991c5f.js","./chunks/index-5e67b194.js","./chunks/singletons-8cca75f2.js"] : void 0, import.meta.url),
-    () => __vitePreload(() => import("./chunks/2-4136c4c7.js"), true ? ["./chunks/2-4136c4c7.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-959afaad.js","./chunks/index-5e67b194.js","./chunks/utxos-80045232.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/_page-1aa4e89a.css"] : void 0, import.meta.url)
+    () => __vitePreload(() => import("./chunks/2-e2be853e.js"), true ? ["./chunks/2-e2be853e.js","./chunks/_page-ff02d51a.js","./components/pages/_page.svelte-187b9df4.js","./chunks/index-5e67b194.js","./chunks/PegOut-473aa5d8.js","./chunks/index-48c4ca09.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-e3d58e84.css"] : void 0, import.meta.url),
+    () => __vitePreload(() => import("./chunks/3-972899d5.js"), true ? ["./chunks/3-972899d5.js","./components/pages/history/_page.svelte-f90fff7d.js","./chunks/index-5e67b194.js","./chunks/PegOut-473aa5d8.js","./chunks/index-48c4ca09.js","./chunks/bootstrap.esm-e88d1e6f.js","./assets/PegOut-4c3c0c3e.css","./assets/_page-731f6875.css"] : void 0, import.meta.url)
   ];
   const server_loads = [];
   const dictionary = {
     "/": [
       2
+    ],
+    "/history": [
+      3
     ]
   };
   const hooks = {

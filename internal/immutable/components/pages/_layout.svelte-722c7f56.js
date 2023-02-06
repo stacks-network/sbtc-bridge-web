@@ -1,6 +1,6 @@
 import { _ as __vitePreload } from "../../chunks/preload-helper-6910039e.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, x as text, p as claim_element, q as children, y as claim_text, J as src_url_equal, r as attr_dev, w as add_location, K as append_hydration_dev, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, c as space, A as create_component, f as claim_space, B as claim_component, C as mount_component, h as group_outros, t as transition_out, j as check_outros, k as transition_in, z as set_data_dev, D as destroy_component, O as run_all, F as writable, P as onDestroy, E as tick, Q as globals, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-5e67b194.js";
-import { C as Ce, l as login, T, c, s as sbtcConfig, A as ArrowUp, a as ArrowDown, i, b as l, d as se, e as C, f as fetchFeeEstimate } from "../../chunks/utxos-80045232.js";
+import { C as Ce, l as login, T, c, s as sbtcConfig, A as ArrowUp, a as ArrowDown, i, b as l, d as se, e as C, f as buffer, g as fetchFeeEstimate } from "../../chunks/index-48c4ca09.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -524,7 +524,7 @@ let __tla = (async () => {
       block,
       id: create_else_block$1.name,
       type: "else",
-      source: "(41:295) {:else}",
+      source: "(46:295) {:else}",
       ctx
     });
     return block;
@@ -575,7 +575,7 @@ let __tla = (async () => {
       block,
       id: create_if_block$1.name,
       type: "if",
-      source: "(41:215) {#if $sbtcConfig.pegIn}",
+      source: "(46:215) {#if $sbtcConfig.pegIn}",
       ctx
     });
     return block;
@@ -596,25 +596,31 @@ let __tla = (async () => {
     let span2;
     let span1;
     let a1;
+    let t2;
+    let t3;
+    let li1;
+    let span4;
+    let span3;
+    let a2;
     let current_block_type_index;
     let if_block;
-    let t2;
-    let li3;
-    let span3;
-    let t3;
-    let t4_value = ctx[0].network + "";
     let t4;
+    let li4;
+    let span5;
     let t5;
-    let ul0;
-    let li1;
-    let a2;
+    let t6_value = ctx[0].network + "";
     let t6;
     let t7;
+    let ul0;
     let li2;
     let a3;
     let t8;
     let t9;
-    let li4;
+    let li3;
+    let a4;
+    let t10;
+    let t11;
+    let li5;
     let walletconnectbutton;
     let current;
     let mounted;
@@ -650,23 +656,29 @@ let __tla = (async () => {
         span2 = element("span");
         span1 = element("span");
         a1 = element("a");
-        if_block.c();
-        t2 = space();
-        li3 = element("li");
-        span3 = element("span");
-        t3 = text("Network: ");
-        t4 = text(t4_value);
-        t5 = space();
-        ul0 = element("ul");
+        t2 = text("Transactions");
+        t3 = space();
         li1 = element("li");
+        span4 = element("span");
+        span3 = element("span");
         a2 = element("a");
-        t6 = text("Testnet");
+        if_block.c();
+        t4 = space();
+        li4 = element("li");
+        span5 = element("span");
+        t5 = text("Network: ");
+        t6 = text(t6_value);
         t7 = space();
+        ul0 = element("ul");
         li2 = element("li");
         a3 = element("a");
-        t8 = text("Mainnet");
+        t8 = text("Testnet");
         t9 = space();
-        li4 = element("li");
+        li3 = element("li");
+        a4 = element("a");
+        t10 = text("Mainnet");
+        t11 = space();
+        li5 = element("li");
         create_component(walletconnectbutton.$$.fragment);
         this.h();
       },
@@ -736,44 +748,59 @@ let __tla = (async () => {
           href: true
         });
         var a1_nodes = children(a1);
-        if_block.l(a1_nodes);
+        t2 = claim_text(a1_nodes, "Transactions");
         a1_nodes.forEach(detach_dev);
         span1_nodes.forEach(detach_dev);
         span2_nodes.forEach(detach_dev);
         li0_nodes.forEach(detach_dev);
-        t2 = claim_space(ul1_nodes);
-        li3 = claim_element(ul1_nodes, "LI", {
+        t3 = claim_space(ul1_nodes);
+        li1 = claim_element(ul1_nodes, "LI", {
           class: true
         });
-        var li3_nodes = children(li3);
-        span3 = claim_element(li3_nodes, "SPAN", {
+        var li1_nodes = children(li1);
+        span4 = claim_element(li1_nodes, "SPAN", {
+          class: true
+        });
+        var span4_nodes = children(span4);
+        span3 = claim_element(span4_nodes, "SPAN", {
+          "data-bs-toggle": true,
+          "data-bs-placement": true,
+          "data-bs-custom-class": true,
+          title: true
+        });
+        var span3_nodes = children(span3);
+        a2 = claim_element(span3_nodes, "A", {
+          class: true,
+          href: true
+        });
+        var a2_nodes = children(a2);
+        if_block.l(a2_nodes);
+        a2_nodes.forEach(detach_dev);
+        span3_nodes.forEach(detach_dev);
+        span4_nodes.forEach(detach_dev);
+        li1_nodes.forEach(detach_dev);
+        t4 = claim_space(ul1_nodes);
+        li4 = claim_element(ul1_nodes, "LI", {
+          class: true
+        });
+        var li4_nodes = children(li4);
+        span5 = claim_element(li4_nodes, "SPAN", {
           class: true,
           id: true,
           role: true,
           "data-bs-toggle": true,
           "aria-expanded": true
         });
-        var span3_nodes = children(span3);
-        t3 = claim_text(span3_nodes, "Network: ");
-        t4 = claim_text(span3_nodes, t4_value);
-        span3_nodes.forEach(detach_dev);
-        t5 = claim_space(li3_nodes);
-        ul0 = claim_element(li3_nodes, "UL", {
+        var span5_nodes = children(span5);
+        t5 = claim_text(span5_nodes, "Network: ");
+        t6 = claim_text(span5_nodes, t6_value);
+        span5_nodes.forEach(detach_dev);
+        t7 = claim_space(li4_nodes);
+        ul0 = claim_element(li4_nodes, "UL", {
           class: true,
           "aria-labelledby": true
         });
         var ul0_nodes = children(ul0);
-        li1 = claim_element(ul0_nodes, "LI", {});
-        var li1_nodes = children(li1);
-        a2 = claim_element(li1_nodes, "A", {
-          class: true,
-          href: true
-        });
-        var a2_nodes = children(a2);
-        t6 = claim_text(a2_nodes, "Testnet");
-        a2_nodes.forEach(detach_dev);
-        li1_nodes.forEach(detach_dev);
-        t7 = claim_space(ul0_nodes);
         li2 = claim_element(ul0_nodes, "LI", {});
         var li2_nodes = children(li2);
         a3 = claim_element(li2_nodes, "A", {
@@ -781,18 +808,29 @@ let __tla = (async () => {
           href: true
         });
         var a3_nodes = children(a3);
-        t8 = claim_text(a3_nodes, "Mainnet");
+        t8 = claim_text(a3_nodes, "Testnet");
         a3_nodes.forEach(detach_dev);
         li2_nodes.forEach(detach_dev);
-        ul0_nodes.forEach(detach_dev);
+        t9 = claim_space(ul0_nodes);
+        li3 = claim_element(ul0_nodes, "LI", {});
+        var li3_nodes = children(li3);
+        a4 = claim_element(li3_nodes, "A", {
+          class: true,
+          href: true
+        });
+        var a4_nodes = children(a4);
+        t10 = claim_text(a4_nodes, "Mainnet");
+        a4_nodes.forEach(detach_dev);
         li3_nodes.forEach(detach_dev);
-        t9 = claim_space(ul1_nodes);
-        li4 = claim_element(ul1_nodes, "LI", {
+        ul0_nodes.forEach(detach_dev);
+        li4_nodes.forEach(detach_dev);
+        t11 = claim_space(ul1_nodes);
+        li5 = claim_element(ul1_nodes, "LI", {
           class: true
         });
-        var li4_nodes = children(li4);
-        claim_component(walletconnectbutton.$$.fragment, li4_nodes);
-        li4_nodes.forEach(detach_dev);
+        var li5_nodes = children(li5);
+        claim_component(walletconnectbutton.$$.fragment, li5_nodes);
+        li5_nodes.forEach(detach_dev);
         ul1_nodes.forEach(detach_dev);
         div0_nodes.forEach(detach_dev);
         div1_nodes.forEach(detach_dev);
@@ -819,38 +857,50 @@ let __tla = (async () => {
         attr_dev(button, "aria-label", "Toggle navigation");
         add_location(button, file$3, 33, 3, 1272);
         attr_dev(a1, "class", "text-white");
-        attr_dev(a1, "href", "/");
-        add_location(a1, file$3, 40, 140, 1811);
+        attr_dev(a1, "href", "/history");
+        add_location(a1, file$3, 40, 138, 1809);
         attr_dev(span1, "data-bs-toggle", "tooltip");
         attr_dev(span1, "data-bs-placement", "top");
         attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
-        attr_dev(span1, "title", "Toggle pegging in / pegging out");
+        attr_dev(span1, "title", "Your SBTC Transaction History");
         add_location(span1, file$3, 40, 7, 1678);
         attr_dev(span2, "class", "pointer nav-link");
         add_location(span2, file$3, 39, 6, 1639);
         attr_dev(li0, "class", "nav-item");
         add_location(li0, file$3, 38, 5, 1611);
-        attr_dev(span3, "class", "nav-link dropdown-toggle ");
-        attr_dev(span3, "id", "navbarDropdown");
-        attr_dev(span3, "role", "button");
-        attr_dev(span3, "data-bs-toggle", "dropdown");
-        attr_dev(span3, "aria-expanded", "false");
-        add_location(span3, file$3, 44, 6, 2118);
-        attr_dev(a2, "class", "dropdown-item");
+        attr_dev(a2, "class", "text-white");
         attr_dev(a2, "href", "/");
-        add_location(a2, file$3, 48, 12, 2391);
-        add_location(li1, file$3, 48, 8, 2387);
+        add_location(a2, file$3, 45, 140, 2101);
+        attr_dev(span3, "data-bs-toggle", "tooltip");
+        attr_dev(span3, "data-bs-placement", "top");
+        attr_dev(span3, "data-bs-custom-class", "custom-tooltip");
+        attr_dev(span3, "title", "Toggle pegging in / pegging out");
+        add_location(span3, file$3, 45, 7, 1968);
+        attr_dev(span4, "class", "pointer nav-link");
+        add_location(span4, file$3, 44, 6, 1929);
+        attr_dev(li1, "class", "nav-item");
+        add_location(li1, file$3, 43, 5, 1901);
+        attr_dev(span5, "class", "nav-link dropdown-toggle ");
+        attr_dev(span5, "id", "navbarDropdown");
+        attr_dev(span5, "role", "button");
+        attr_dev(span5, "data-bs-toggle", "dropdown");
+        attr_dev(span5, "aria-expanded", "false");
+        add_location(span5, file$3, 49, 6, 2408);
         attr_dev(a3, "class", "dropdown-item");
         attr_dev(a3, "href", "/");
-        add_location(a3, file$3, 49, 12, 2511);
-        add_location(li2, file$3, 49, 8, 2507);
+        add_location(a3, file$3, 53, 12, 2681);
+        add_location(li2, file$3, 53, 8, 2677);
+        attr_dev(a4, "class", "dropdown-item");
+        attr_dev(a4, "href", "/");
+        add_location(a4, file$3, 54, 12, 2801);
+        add_location(li3, file$3, 54, 8, 2797);
         attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
         attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-        add_location(ul0, file$3, 47, 6, 2299);
-        attr_dev(li3, "class", "nav-item dropdown");
-        add_location(li3, file$3, 43, 5, 2081);
-        attr_dev(li4, "class", "nav-item mb-1");
-        add_location(li4, file$3, 52, 5, 2647);
+        add_location(ul0, file$3, 52, 6, 2589);
+        attr_dev(li4, "class", "nav-item dropdown");
+        add_location(li4, file$3, 48, 5, 2371);
+        attr_dev(li5, "class", "nav-item mb-1");
+        add_location(li5, file$3, 57, 5, 2937);
         attr_dev(ul1, "class", "navbar-nav text-white");
         add_location(ul1, file$3, 37, 4, 1571);
         attr_dev(div0, "class", "collapse navbar-collapse");
@@ -876,30 +926,36 @@ let __tla = (async () => {
         append_hydration_dev(li0, span2);
         append_hydration_dev(span2, span1);
         append_hydration_dev(span1, a1);
-        if_blocks[current_block_type_index].m(a1, null);
-        append_hydration_dev(ul1, t2);
-        append_hydration_dev(ul1, li3);
-        append_hydration_dev(li3, span3);
-        append_hydration_dev(span3, t3);
-        append_hydration_dev(span3, t4);
-        append_hydration_dev(li3, t5);
-        append_hydration_dev(li3, ul0);
-        append_hydration_dev(ul0, li1);
-        append_hydration_dev(li1, a2);
-        append_hydration_dev(a2, t6);
-        append_hydration_dev(ul0, t7);
+        append_hydration_dev(a1, t2);
+        append_hydration_dev(ul1, t3);
+        append_hydration_dev(ul1, li1);
+        append_hydration_dev(li1, span4);
+        append_hydration_dev(span4, span3);
+        append_hydration_dev(span3, a2);
+        if_blocks[current_block_type_index].m(a2, null);
+        append_hydration_dev(ul1, t4);
+        append_hydration_dev(ul1, li4);
+        append_hydration_dev(li4, span5);
+        append_hydration_dev(span5, t5);
+        append_hydration_dev(span5, t6);
+        append_hydration_dev(li4, t7);
+        append_hydration_dev(li4, ul0);
         append_hydration_dev(ul0, li2);
         append_hydration_dev(li2, a3);
         append_hydration_dev(a3, t8);
-        append_hydration_dev(ul1, t9);
-        append_hydration_dev(ul1, li4);
-        mount_component(walletconnectbutton, li4, null);
+        append_hydration_dev(ul0, t9);
+        append_hydration_dev(ul0, li3);
+        append_hydration_dev(li3, a4);
+        append_hydration_dev(a4, t10);
+        append_hydration_dev(ul1, t11);
+        append_hydration_dev(ul1, li5);
+        mount_component(walletconnectbutton, li5, null);
         current = true;
         if (!mounted) {
           dispose = [
-            listen_dev(a1, "click", prevent_default(ctx[3]), false, true, false),
-            listen_dev(a2, "click", prevent_default(ctx[4]), false, true, false),
-            listen_dev(a3, "click", prevent_default(ctx[5]), false, true, false)
+            listen_dev(a2, "click", prevent_default(ctx[3]), false, true, false),
+            listen_dev(a3, "click", prevent_default(ctx[4]), false, true, false),
+            listen_dev(a4, "click", prevent_default(ctx[5]), false, true, false)
           ];
           mounted = true;
         }
@@ -919,10 +975,10 @@ let __tla = (async () => {
             if_block.c();
           }
           transition_in(if_block, 1);
-          if_block.m(a1, null);
+          if_block.m(a2, null);
         }
-        if ((!current || dirty & 1) && t4_value !== (t4_value = ctx2[0].network + ""))
-          set_data_dev(t4, t4_value);
+        if ((!current || dirty & 1) && t6_value !== (t6_value = ctx2[0].network + ""))
+          set_data_dev(t6, t6_value);
       },
       i: function intro(local) {
         if (current)
@@ -2237,7 +2293,7 @@ let __tla = (async () => {
       block,
       id: create_if_block.name,
       type: "if",
-      source: "(71:0) {#if inited}",
+      source: "(73:0) {#if inited}",
       ctx
     });
     return block;
@@ -2310,23 +2366,23 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(p0, file, 81, 2, 2742);
+        add_location(p0, file, 83, 2, 2828);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 82, 116, 2895);
+        add_location(img, file, 84, 116, 2981);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 82, 96, 2875);
+        add_location(span0, file, 84, 96, 2961);
         attr_dev(a, "href", "/");
         attr_dev(a, "class", "pointer px-2");
-        add_location(a, file, 82, 28, 2807);
+        add_location(a, file, 84, 28, 2893);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 82, 5, 2784);
-        add_location(p1, file, 82, 2, 2781);
+        add_location(span1, file, 84, 5, 2870);
+        add_location(p1, file, 84, 2, 2867);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-        add_location(div, file, 80, 0, 2712);
+        add_location(div, file, 82, 0, 2798);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2358,7 +2414,7 @@ let __tla = (async () => {
       block,
       id: create_else_block.name,
       type: "else",
-      source: "(80:0) {:else}",
+      source: "(82:0) {:else}",
       ctx
     });
     return block;
@@ -2404,7 +2460,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-        add_location(div, file, 72, 0, 2579);
+        add_location(div, file, 74, 0, 2665);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2454,7 +2510,7 @@ let __tla = (async () => {
       block,
       id: create_if_block_1.name,
       type: "if",
-      source: "(72:0) {#if $auth.isSignedIn}",
+      source: "(74:0) {#if $auth.isSignedIn}",
       ctx
     });
     return block;
@@ -2504,7 +2560,7 @@ let __tla = (async () => {
       block,
       id: create_key_block.name,
       type: "key",
-      source: "(75:2) {#key componentKey}",
+      source: "(77:2) {#key componentKey}",
       ctx
     });
     return block;
@@ -2619,12 +2675,14 @@ let __tla = (async () => {
     };
     let bootstrap;
     onMount(async () => {
+      globalThis.Buffer = buffer.Buffer;
+      window.Buffer = buffer.Buffer;
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
         await fetchWalletAddress();
         const conf = $sbtcConfig;
         conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
-        conf.feeToApply = conf.feeInfo.low_fee_per_kb;
+        conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
         sbtcConfig.update(() => conf);
         $$invalidate(1, inited = true);
       } catch (err) {
@@ -2670,6 +2728,7 @@ let __tla = (async () => {
       fetchFeeEstimate,
       login,
       stx_eco_wallet_off,
+      Buffer: buffer.Buffer,
       componentKey,
       unsubscribe,
       networkChange,
