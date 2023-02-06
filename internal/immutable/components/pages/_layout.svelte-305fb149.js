@@ -1,6 +1,6 @@
 import { _ as __vitePreload } from "../../chunks/preload-helper-6910039e.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, x as text, p as claim_element, q as children, y as claim_text, J as src_url_equal, r as attr_dev, w as add_location, K as append_hydration_dev, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, c as space, A as create_component, f as claim_space, B as claim_component, C as mount_component, h as group_outros, t as transition_out, j as check_outros, k as transition_in, z as set_data_dev, D as destroy_component, O as run_all, F as writable, P as onDestroy, E as tick, Q as globals, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-5e67b194.js";
-import { C as Ce, l as login, T, c, s as sbtcConfig, A as ArrowUp, a as ArrowDown, i, b as l, d as se, e as C, f as buffer, g as fetchFeeEstimate } from "../../chunks/index-48c4ca09.js";
+import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-f69c3e93.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -443,40 +443,6 @@ let __tla = (async () => {
     }
   }
   const logoWhite = "" + new URL("../../assets/logo-white-68f65e57.jpeg", import.meta.url).href;
-  async function fetchSbtcWalletAddress(network) {
-    const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha";
-    const data = {
-      contractAddress: contractId.split(".")[0],
-      contractName: contractId.split(".")[1],
-      functionName: "get-bitcoin-wallet-address",
-      functionArgs: [],
-      network
-    };
-    const result = await callContractReadOnly(data);
-    if (result.type.indexOf("some") > -1)
-      return result.value;
-    if (network === "testnet") {
-      return "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
-    }
-    return "bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6";
-  }
-  async function callContractReadOnly(data) {
-    const path = data.network === "mainnet" ? "https://stacks-node-api.mainnet.stacks.co" : "https://stacks-node-api.mainnet.stacks.co";
-    const url = path + "/v2/contracts/call-read/" + data.contractAddress + "/" + data.contractName + "/" + data.functionName;
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        arguments: data.functionArgs,
-        sender: data.contractAddress
-      })
-    });
-    const val = await response.json();
-    const result = T(c(val.result));
-    return result;
-  }
   const file$3 = "src/lib/header/Header.svelte";
   function create_else_block$1(ctx) {
     let arrowdown;
@@ -524,7 +490,7 @@ let __tla = (async () => {
       block,
       id: create_else_block$1.name,
       type: "else",
-      source: "(46:295) {:else}",
+      source: "(47:280) {:else}",
       ctx
     });
     return block;
@@ -575,7 +541,7 @@ let __tla = (async () => {
       block,
       id: create_if_block$1.name,
       type: "if",
-      source: "(46:215) {#if $sbtcConfig.pegIn}",
+      source: "(47:200) {#if $sbtcConfig.pegIn}",
       ctx
     });
     return block;
@@ -842,12 +808,12 @@ let __tla = (async () => {
         if (!src_url_equal(img.src, img_src_value = logoWhite))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "CityCoins Test");
-        add_location(img, file$3, 31, 4, 1199);
+        add_location(img, file$3, 32, 4, 1249);
         attr_dev(a0, "class", "navbar-brand");
         attr_dev(a0, "href", "/");
-        add_location(a0, file$3, 30, 5, 1161);
+        add_location(a0, file$3, 31, 5, 1211);
         attr_dev(span0, "class", "navbar-toggler-icon");
-        add_location(span0, file$3, 34, 4, 1455);
+        add_location(span0, file$3, 35, 4, 1505);
         attr_dev(button, "class", "navbar-toggler");
         attr_dev(button, "type", "button");
         attr_dev(button, "data-bs-toggle", "collapse");
@@ -855,61 +821,61 @@ let __tla = (async () => {
         attr_dev(button, "aria-controls", "navbarNav");
         attr_dev(button, "aria-expanded", "false");
         attr_dev(button, "aria-label", "Toggle navigation");
-        add_location(button, file$3, 33, 3, 1272);
+        add_location(button, file$3, 34, 3, 1322);
         attr_dev(a1, "class", "text-white");
         attr_dev(a1, "href", "/history");
-        add_location(a1, file$3, 40, 138, 1809);
+        add_location(a1, file$3, 41, 138, 1859);
         attr_dev(span1, "data-bs-toggle", "tooltip");
         attr_dev(span1, "data-bs-placement", "top");
         attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span1, "title", "Your SBTC Transaction History");
-        add_location(span1, file$3, 40, 7, 1678);
+        add_location(span1, file$3, 41, 7, 1728);
         attr_dev(span2, "class", "pointer nav-link");
-        add_location(span2, file$3, 39, 6, 1639);
+        add_location(span2, file$3, 40, 6, 1689);
         attr_dev(li0, "class", "nav-item");
-        add_location(li0, file$3, 38, 5, 1611);
+        add_location(li0, file$3, 39, 5, 1661);
         attr_dev(a2, "class", "text-white");
         attr_dev(a2, "href", "/");
-        add_location(a2, file$3, 45, 140, 2101);
+        add_location(a2, file$3, 46, 140, 2151);
         attr_dev(span3, "data-bs-toggle", "tooltip");
         attr_dev(span3, "data-bs-placement", "top");
         attr_dev(span3, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span3, "title", "Toggle pegging in / pegging out");
-        add_location(span3, file$3, 45, 7, 1968);
+        add_location(span3, file$3, 46, 7, 2018);
         attr_dev(span4, "class", "pointer nav-link");
-        add_location(span4, file$3, 44, 6, 1929);
+        add_location(span4, file$3, 45, 6, 1979);
         attr_dev(li1, "class", "nav-item");
-        add_location(li1, file$3, 43, 5, 1901);
+        add_location(li1, file$3, 44, 5, 1951);
         attr_dev(span5, "class", "nav-link dropdown-toggle ");
         attr_dev(span5, "id", "navbarDropdown");
         attr_dev(span5, "role", "button");
         attr_dev(span5, "data-bs-toggle", "dropdown");
         attr_dev(span5, "aria-expanded", "false");
-        add_location(span5, file$3, 49, 6, 2408);
+        add_location(span5, file$3, 50, 6, 2443);
         attr_dev(a3, "class", "dropdown-item");
         attr_dev(a3, "href", "/");
-        add_location(a3, file$3, 53, 12, 2681);
-        add_location(li2, file$3, 53, 8, 2677);
+        add_location(a3, file$3, 54, 12, 2716);
+        add_location(li2, file$3, 54, 8, 2712);
         attr_dev(a4, "class", "dropdown-item");
         attr_dev(a4, "href", "/");
-        add_location(a4, file$3, 54, 12, 2801);
-        add_location(li3, file$3, 54, 8, 2797);
+        add_location(a4, file$3, 55, 12, 2836);
+        add_location(li3, file$3, 55, 8, 2832);
         attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
         attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-        add_location(ul0, file$3, 52, 6, 2589);
+        add_location(ul0, file$3, 53, 6, 2624);
         attr_dev(li4, "class", "nav-item dropdown");
-        add_location(li4, file$3, 48, 5, 2371);
+        add_location(li4, file$3, 49, 5, 2406);
         attr_dev(li5, "class", "nav-item mb-1");
-        add_location(li5, file$3, 57, 5, 2937);
+        add_location(li5, file$3, 58, 5, 2972);
         attr_dev(ul1, "class", "navbar-nav text-white");
-        add_location(ul1, file$3, 37, 4, 1571);
+        add_location(ul1, file$3, 38, 4, 1621);
         attr_dev(div0, "class", "collapse navbar-collapse");
         attr_dev(div0, "id", "navbarNav");
-        add_location(div0, file$3, 36, 3, 1513);
+        add_location(div0, file$3, 37, 3, 1563);
         attr_dev(div1, "class", "container-fluid mx-5");
-        add_location(div1, file$3, 29, 2, 1121);
+        add_location(div1, file$3, 30, 2, 1171);
         attr_dev(nav, "class", "navbar navbar-expand-md transparent");
-        add_location(nav, file$3, 28, 1, 1069);
+        add_location(nav, file$3, 29, 1, 1119);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, nav, anchor);
@@ -953,7 +919,7 @@ let __tla = (async () => {
         current = true;
         if (!mounted) {
           dispose = [
-            listen_dev(a2, "click", prevent_default(ctx[3]), false, true, false),
+            listen_dev(a2, "click", ctx[3], false, false, false),
             listen_dev(a3, "click", prevent_default(ctx[4]), false, true, false),
             listen_dev(a4, "click", prevent_default(ctx[5]), false, true, false)
           ];
@@ -1023,11 +989,13 @@ let __tla = (async () => {
       const addr = await fetchSbtcWalletAddress(newNet);
       const currentPeg = $sbtcConfig.pegIn;
       const feeInfo = $sbtcConfig.feeInfo;
+      const feeCalc = $sbtcConfig.feeCalc;
       let conf = {
         network: newNet,
         sbtcWalletAddress: addr,
         pegIn: currentPeg,
-        feeInfo
+        feeInfo,
+        feeCalc
       };
       sbtcConfig.update(() => conf);
       dispatch("network_change", {});
@@ -2293,7 +2261,7 @@ let __tla = (async () => {
       block,
       id: create_if_block.name,
       type: "if",
-      source: "(73:0) {#if inited}",
+      source: "(76:0) {#if inited}",
       ctx
     });
     return block;
@@ -2366,23 +2334,23 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(p0, file, 83, 2, 2828);
+        add_location(p0, file, 86, 2, 2947);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 84, 116, 2981);
+        add_location(img, file, 87, 116, 3100);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 84, 96, 2961);
+        add_location(span0, file, 87, 96, 3080);
         attr_dev(a, "href", "/");
         attr_dev(a, "class", "pointer px-2");
-        add_location(a, file, 84, 28, 2893);
+        add_location(a, file, 87, 28, 3012);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 84, 5, 2870);
-        add_location(p1, file, 84, 2, 2867);
+        add_location(span1, file, 87, 5, 2989);
+        add_location(p1, file, 87, 2, 2986);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-        add_location(div, file, 82, 0, 2798);
+        add_location(div, file, 85, 0, 2917);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2414,7 +2382,7 @@ let __tla = (async () => {
       block,
       id: create_else_block.name,
       type: "else",
-      source: "(82:0) {:else}",
+      source: "(85:0) {:else}",
       ctx
     });
     return block;
@@ -2460,7 +2428,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-        add_location(div, file, 74, 0, 2665);
+        add_location(div, file, 77, 0, 2784);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2510,7 +2478,7 @@ let __tla = (async () => {
       block,
       id: create_if_block_1.name,
       type: "if",
-      source: "(74:0) {#if $auth.isSignedIn}",
+      source: "(77:0) {#if $auth.isSignedIn}",
       ctx
     });
     return block;
@@ -2560,7 +2528,7 @@ let __tla = (async () => {
       block,
       id: create_key_block.name,
       type: "key",
-      source: "(77:2) {#key componentKey}",
+      source: "(80:2) {#key componentKey}",
       ctx
     });
     return block;
@@ -2680,7 +2648,9 @@ let __tla = (async () => {
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
         await fetchWalletAddress();
-        const conf = $sbtcConfig;
+        let conf = $sbtcConfig;
+        if (!conf || !conf.feeCalc)
+          conf = defaultSbtcConfig;
         conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
         conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
         sbtcConfig.update(() => conf);
@@ -2729,6 +2699,7 @@ let __tla = (async () => {
       login,
       stx_eco_wallet_off,
       Buffer: buffer.Buffer,
+      defaultSbtcConfig,
       componentKey,
       unsubscribe,
       networkChange,
