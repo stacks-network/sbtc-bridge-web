@@ -17,7 +17,7 @@
 				{/if}
 				<div class="my-3 d-flex justify-content-between text-white">
 					<span>SBTC Wallet: { $sbtcConfig.sbtcWalletAddress }</span>
-					{#if $sbtcConfig.pegIn && $sbtcConfig.pegInAmount}<span class="text-end">Amount: { $sbtcConfig.pegInAmount }</span>{/if}
+					{#if $sbtcConfig.pegIn && $sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount}<span class="text-end">Amount: { $sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount }</span>{/if}
 				</div>
 				{#if $sbtcConfig.pegIn}
 				<div class="d-flex justify-content-center">

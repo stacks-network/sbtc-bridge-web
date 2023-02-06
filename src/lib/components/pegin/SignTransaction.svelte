@@ -1,6 +1,6 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { Buffer } from "buffer/";
+//import { Buffer } from "buffer/";
 import { transactionHex, transactionData } from "$lib/psbt";
 import { sbtcConfig } from '$stores/stores'
 import { createEventDispatcher } from "svelte";
@@ -15,11 +15,11 @@ const updateTransaction = () => {
   dispatch('update_transaction');
 }
 const convertUint8ToHex = (bytes: Uint8Array) => {
-  let hex = Buffer.from(bytes).toString('hex');
+  let hex = globalThis.Buffer.from(bytes).toString('hex');
   return hex;
 }
 const convertHexToString = (bytes: Uint8Array) => {
-  let hex = Buffer.from(bytes).toString('hex');
+  let hex = globalThis.Buffer.from(bytes).toString('hex');
   return hex;
 }
 

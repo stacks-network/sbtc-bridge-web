@@ -7,11 +7,12 @@ import { PatchQuestion } from "svelte-bootstrap-icons";
 import { dustAmount } from "$lib/psbt";
 
 const dispatch = createEventDispatcher();
-let pegOutAmount:number = $sbtcConfig.pegOutAmount;
+let pegOutAmount:number = $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount;
 let errorReason:string|undefined;
 let changeErrorReason:string|undefined;
 
 const balance = 100000000;
+let change = maxCommit($sbtcConfig.utxos) - $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply - $sbtcConfig.feeCalc.pegOutFeeCalc.dustAmount;
 const changePegOut = (maxValue:boolean) => {
   const maxPeg = maxCommit($sbtcConfig.utxos);
   errorReason = undefined;
@@ -22,28 +23,25 @@ const changePegOut = (maxValue:boolean) => {
     return
   }
   const conf:SbtcConfig = $sbtcConfig;
-  const fee = $sbtcConfig.feeToApply || 0;
-  const change = maxPeg - fee - dustAmount;
-  conf.pegOutChangeAmount = Number(change);
-  conf.pegOutAmount = Number(pegOutAmount);
+  conf.feeCalc.pegOutFeeCalc.pegOutAmount = Number(pegOutAmount);
   sbtcConfig.set(conf);
 }
 
 let componentKey = 0;
 const changeRate = (rate:string) => {
   const conf:SbtcConfig = $sbtcConfig;
-  if (rate === 'low') conf.feeToApply = $sbtcConfig.feeInfo.low_fee_per_kb;
-  else if (rate === 'medium') conf.feeToApply = $sbtcConfig.feeInfo.medium_fee_per_kb;
-  else if (rate === 'high') conf.feeToApply = $sbtcConfig.feeInfo.high_fee_per_kb;
+  if (rate === 'low') conf.feeCalc.pegOutFeeCalc.feeToApply = $sbtcConfig.feeInfo.low_fee_per_kb;
+  else if (rate === 'medium') conf.feeCalc.pegOutFeeCalc.feeToApply = $sbtcConfig.feeInfo.medium_fee_per_kb;
+  else if (rate === 'high') conf.feeCalc.pegOutFeeCalc.feeToApply = $sbtcConfig.feeInfo.high_fee_per_kb;
   sbtcConfig.set(conf);
-  if ($sbtcConfig.pegInAmount > 0) {
+  if ($sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount > 0) {
     changePegOut(true)
   }
   componentKey++;
 }
-$: low = $sbtcConfig.feeInfo.low_fee_per_kb === $sbtcConfig.feeToApply
-$: medium = $sbtcConfig.feeInfo.medium_fee_per_kb === $sbtcConfig.feeToApply
-$: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeToApply
+$: low = $sbtcConfig.feeInfo.low_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
+$: medium = $sbtcConfig.feeInfo.medium_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
+$: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
 </script>
 
 <div class="row">
@@ -55,7 +53,7 @@ $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeToApply
     {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
     <input type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegOutAmount}  on:input={() => changePegOut(false)}/>
     <div class="d-flex justify-content-between  text-info">
-      <div>Fee rate <span class="text-success">{$sbtcConfig.feeToApply}</span> (sats/kb):
+      <div>Fee rate <span class="text-success">{$sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply}</span> (sats/kb):
         {#key componentKey}
         <span  class="mx-2 border-right"><a href="/" class={(low) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate('low')}>low</a></span>
         <span  class="mx-2 border-right"><a href="/" class={(medium) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate('medium')}>medium</a></span>
@@ -64,13 +62,13 @@ $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeToApply
       </div>
       <div><a href="/" class="" on:click|preventDefault={() => changePegOut(true)}>max</a></div>
     </div>
-    {#if $sbtcConfig.pegOutAmount && $sbtcConfig.pegOutAmount > 0}
+    {#if $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount && $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount > 0}
     <div class="d-flex justify-content-center">
       <div class="text-center w-50 bg-light text-dark py-3 px-4 my-4 border-radius">
-        <p>Pegging out {$sbtcConfig.pegOutAmount} satoshi</p>
+        <p>Pegging out {$sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount} satoshi</p>
         <p>Dust to the SBTC wallet - {dustAmount} satoshi</p>
-        <p>Fee will be calculated at {$sbtcConfig.feeToApply} sats/kb</p>
-        {#if $sbtcConfig.pegOutChangeAmount > 0}<p>{$sbtcConfig.pegOutChangeAmount} sats, will be sent back to your sending address.</p>{/if}
+        <p>Fee will be calculated at {$sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply} sats/kb</p>
+        {#if change > 0}<p>{change} sats, will be sent back to your sending address.</p>{/if}
       </div>
     </div>
     {/if}

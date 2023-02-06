@@ -18,7 +18,7 @@ const requestSignature = () => {
 const amountUpdated = () => {}
 
 $: showPegOutAmount = $sbtcConfig.fromBtcAddress;
-$: showButton = $sbtcConfig.pegOutChangeAmount >= 0 && $sbtcConfig.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.pegOutAmount > 0;
+$: showButton = $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply > 0 && $sbtcConfig.fromBtcAddress && $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount > 0;
 
 onMount(async () => {
 })

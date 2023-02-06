@@ -14,6 +14,13 @@ export const sbtcConfig = persisted('sbtcConfig', {
         low_fee_per_kb:  20000,
         medium_fee_per_kb: 30998,
     },
-    feeToApply: 20000,
+    feeCalc: {
+        pegInFeeCalc: {
+            feeToApply: 20000,
+        },
+        pegOutFeeCalc: {
+            feeToApply: 20000,
+        }
+    },
     pegIn: true 
 } as SbtcConfig)

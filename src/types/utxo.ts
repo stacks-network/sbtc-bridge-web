@@ -8,6 +8,7 @@ export type UTXO = {
     scriptpubkey_type:string;
     value:number;
   };
+  tx: any;
   status: {
     confirmed: boolean;
     block_height: number;
