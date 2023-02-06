@@ -46,22 +46,26 @@ export function getRedeemScript(network:string, utxo:UTXO) {
   let redeemScript;
   //let witnessScript;
   //console.log('-------------------', utxo.tx.vout[utxo.vout])
-  if (utxo.tx.vout[utxo.vout].scriptpubkey_type === 'pay-to-witness-script-hash') {
+  const sciptType = utxo.tx.vout[utxo.vout].scriptpubkey_type;
+  if (sciptType === 'pay-to-witness-script-hash') {
     //const p2shObj = getP2SHToP2WPKH(network);
     //const p2shObj = payments.p2sh({pubkey: keyPairs[0].publicKey});
     //const { address } = p2shObj;
     const p2w = payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) });
     redeemScript = p2w?.redeem?.output;
-  } else if (utxo.tx.vout[utxo.vout].scriptpubkey_type === 'pay-to-script-hash') { //BC pay-to-script-hash
-    //const { output } = payments.p2sh({pubkey: keyPairs[0].publicKey, network: getNetwork(network)});
-    const p2sh = payments.p2sh({pubkey: keyPairs[0].publicKey, network: getNetwork(network)});
+  } else if (sciptType === 'pay-to-script-hash' || sciptType === 'p2sh') { //BC pay-to-script-hash
+    const paymentParams = {
+      redeem: payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) }),
+      network: getNetwork(network)
+    }
+    const p2sh = payments.p2sh(paymentParams);
     redeemScript = p2sh?.redeem?.output;
-  } else if (utxo.tx.vout[utxo.vout].scriptpubkey_type === 'v0_p2wpkh') { //BC pay-to-witness-pubkey-hash
+  } else if (sciptType === 'v0_p2wpkh') { //BC pay-to-witness-pubkey-hash
     const p2shObj = getP2SHToP2WPKH(network);
     //const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) }),});
     redeemScript = p2shObj?.redeem?.output;
   } else {
-    throw new Error('Unhandled type: ' + utxo.tx.vout[utxo.vout].scriptpubkey_type);
+    throw new Error('Unhandled type: ' + sciptType);
   }
   //const p2shObj = getP2SHToP2WPKH(network);
   //redeemScript = p2shObj?.redeem?.output;
@@ -92,7 +96,7 @@ function buildTransaction(config:SbtcConfig) {
   })
   const totalInputValue = maxCommit(config.utxos);
   if (config.pegIn) {
-    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.sbtcWalletAddress, totalInputValue, config.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
+    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
   } else {
     addPegOutOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegOutFeeCalc.pegOutAmount, config.feeCalc.pegOutFeeCalc.feeToApply);
   }

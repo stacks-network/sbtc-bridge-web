@@ -42,6 +42,11 @@
 				<ul class="navbar-nav text-white">
 					<li class="nav-item">
 						<span class="pointer nav-link">
+							<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your SBTC Transaction History"><a class="text-white" href="/history">Transactions</a></span>
+						</span>
+					</li>
+					<li class="nav-item">
+						<span class="pointer nav-link">
 							<span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Toggle pegging in / pegging out"><a class="text-white" href="/" on:click|preventDefault={() => togglePeg()}>{#if $sbtcConfig.pegIn}<ArrowUp width={30} height={30} class="mx-1"/> Pegging In{:else}<ArrowDown width={30} height={30} class="mx-1"/> Pegging Out{/if} </a></span>
 						</span>
 					</li>

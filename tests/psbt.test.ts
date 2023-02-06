@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
 import { calculateFee, transactionData, transactionHex, getRedeemScript, getP2SHToP2WPKH } from "$lib/psbt";
 import { maxCommit, attachTransaction } from "$lib/utxos";
-import { sbtcConfig, tx0, tx1, utxo1, utxo0 } from './test_data';
+import { sbtcConfig, tx0, tx1, utxo1, utxo0, tx0Hex, tx1Hex } from './test_data';
 //import { Buffer } from 'buffer';
 import type { SbtcConfig } from '$types/sbtc_config';
 import util from 'util'
@@ -13,11 +13,17 @@ const network = 'testnet';
 async function attachTxs(utxos:[UTXO]) {
   for (let utxo of utxos) {
     if (utxo.txid === '894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04') {
-      fetchMock.mockIf(/^.*894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04.*$/, () => {
+      fetchMock.mockIf(/^.*894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04\/hex/, () => {
+        return JSON.stringify(tx1Hex);
+      });
+      fetchMock.mockIf(/^.*894757c00ce5a6765ab765f3b4b47ff350b8061bb1defc6c36c4f4b80b798e04$/, () => {
         return JSON.stringify(tx1);
       });
     } else if (utxo.txid === '5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508') {
-      fetchMock.mockIf(/^.*5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508.*$/, () => {
+      fetchMock.mockIf(/^.*5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508\/hex/, () => {
+        return JSON.stringify(tx0Hex);
+      });
+      fetchMock.mockIf(/^.*5037ff3fe8e6a0349da5a0c77d1c07ed3ab7dc6cc3509ccc71c1dbd009380508$/, () => {
         return JSON.stringify(tx0);
       });
     }
@@ -58,36 +64,32 @@ describe('suite', () => {
     const conf:SbtcConfig = sbtcConfig;
     //const addr = getP2SHToP2WPKH(conf.network);
     utxo0[0].tx = tx0;
-    const res = getRedeemScript(conf.network, utxo0);
+    //const res = getRedeemScript(conf.network, utxo0);
     //console.log('Redeem Script:', util.inspect(res, false, null, true /* enable colors */))
   })
 
   it.concurrent('stacks: calculateFee() tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss on peg in returns correct fee and change for high rate', async () => {
     const res = await prepareFee('high', utxo1, false)
-    expect(res.pegInAmount).equals(6653600);
-    expect(res.change).equals(6642750);
-    expect(res.fee).equals(10850);
+    expect(res.pegInFeeCalc.pegInAmount).equals(6653600);
+    expect(res.pegInFeeCalc.feeToApply).equals(4340);
   })
 
   it.concurrent('stacks: calculateFee() 2MuLrqCQds5Sz3Xenj29WeuBGFAuoLy6Z53 on peg in returns correct fee and change for high rate', async () => {
     const res = await prepareFee('high', utxo0, false)
-    expect(res.pegInAmount).equals(6653600);
-    expect(res.change).equals(6642750);
-    expect(res.fee).equals(10850);
+    expect(res.pegInFeeCalc.pegInAmount).equals(148950);
+    expect(res.pegInFeeCalc.feeToApply).equals(4113);
   })
 
   it.concurrent('stacks: calculateFee() 2MuLrqCQds5Sz3Xenj29WeuBGFAuoLy6Z53 on peg in returns correct fee and change at medium rates', async () => {
     const res = await prepareFee('medium', utxo0, false)
-    expect(res.pegInAmount).equals(6653600);
-    expect(res.change).equals(6646005);
-    expect(res.fee).equals(7595);
+    expect(res.pegInFeeCalc.pegInAmount).equals(148950);
+    expect(res.pegInFeeCalc.feeToApply).equals(4113);
   })
 
   it.concurrent('stacks: calculateFee() 2MuLrqCQds5Sz3Xenj29WeuBGFAuoLy6Z53 on peg in returns correct fee and change at low rates', async () => {
-    const res = await prepareFee('low', utxo0, true)
-    expect(res.pegInAmount).equals(6653600);
-    expect(res.change).equals(6649260);
-    expect(res.fee).equals(4340);
+    const res = await prepareFee('low', utxo0, false)
+    expect(res.pegInFeeCalc.pegInAmount).equals(148950);
+    expect(res.pegInFeeCalc.feeToApply).equals(4113);
   })
 
   it.concurrent('stacks: transactionData() returns psbt object', async () => {

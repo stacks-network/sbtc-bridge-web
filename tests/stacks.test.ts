@@ -30,14 +30,13 @@ describe('suite', () => {
 
   it.concurrent('stacks: decodeStacksAddress() check testnet stacks address can be decoded', async () => {
     const res = decodeStacksAddress(allowed[1].stx);
-    console.log(res)
     expect(res[0]).equals(26);
     expect(res[1]).equals('e594280c8eebb93598b5641b66d29e99f26f38f5');
   })
 
   it.concurrent('stacks: decodeStacksAddress() check testnet bitcoin address can be encoded', async () => {
     const res = encodeStacksAddress(network, allowed[1].btc);
-    console.log(res)
+    //console.log(res)
     expect(res).equals('ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW');
   })
 
