@@ -54,3 +54,8 @@ clarinet integrate
 4. Sign back into the web wallet with this seed
 5. change network to devnet
 
+## Tests
+
+### Flow 1: Peg In (no API)
+
+![flow-pegin-1](https://raw.githubusercontent.com/Trust-Machines/sbtc-bridge/feat/tx_history/static/flow-pegin-1.png)
