@@ -1,6 +1,7 @@
 # sbtc-bridge
 
-![ci](https://github.com/Trust-Machines/sbtc-bridge/actions/workflows/ci.yml/badge.svg)
+![ci](https://github.com/Trust-Machines/sbtc-bridge)
+
 
 ## Introduction
 
