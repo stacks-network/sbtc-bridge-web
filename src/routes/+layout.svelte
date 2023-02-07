@@ -8,7 +8,7 @@ import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
 import { client } from "$stores/client";
 import { fetchSbtcWalletAddress } from "$lib/sbtc";
 import { sbtcConfig } from '$stores/stores'
-import { StacksTestnet, StacksMainnet } from "micro-stacks/network";
+import { StacksMocknet, StacksMainnet } from "micro-stacks/network";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { fetchFeeEstimate } from "$lib/utxos";
 import { login } from "$lib/stacks";
@@ -32,7 +32,7 @@ if (typeof window !== 'undefined') {
 const config = {
   appName: 'sBTC Client',
   appIconUrl: origin + '/img/logo.png',
-  network: ($sbtcConfig.network === 'mainnet') ? new StacksMainnet() : new StacksTestnet()
+  network: ($sbtcConfig.network === 'mainnet') ? new StacksMainnet() : new StacksMocknet()
 };
 mountClient(config);
 client.set(getMicroStacksClient());
@@ -106,6 +106,6 @@ onMount(async () => {
   width: 100%;
   height: 100%;
   border: 3px solid #4786cd;
-  padding-top: 500px;
+  padding-top: 200px;
 }
 </style>

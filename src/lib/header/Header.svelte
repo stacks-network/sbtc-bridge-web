@@ -1,73 +1,81 @@
 <script lang="ts">
-	//import { onDestroy } from 'svelte';
-	import WalletConnectButton from './WalletConnectButton.svelte'
-	import logoWhite from '$lib/assets/logo-white.jpeg';
-	import { sbtcConfig } from '$stores/stores';
-	import { fetchSbtcWalletAddress } from "$lib/sbtc";
-	import type { SbtcConfig } from '$types/sbtc_config';
-	import { createEventDispatcher } from "svelte";
-	import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
-	import {base} from '$app/paths'
+//import { onDestroy } from 'svelte';
+import WalletConnectButton from './WalletConnectButton.svelte'
+import logoWhite from '$lib/assets/logo-white.jpeg';
+import { sbtcConfig } from '$stores/stores';
+import { fetchSbtcWalletAddress } from "$lib/sbtc";
+import type { SbtcConfig } from '$types/sbtc_config';
+import { createEventDispatcher } from "svelte";
+import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
+import { base } from '$app/paths'
 
-	const dispatch = createEventDispatcher();
-	
-	//const unsubscribe = sbtcConfig.subscribe(value => {
-	//  console.log('myConfig: ', value)
-	//});
-	//onDestroy(unsubscribe);
-	
-	const updateNetwork = async (newNet:string) => {
-		if (newNet === $sbtcConfig.network) return;
-		const addr = await fetchSbtcWalletAddress(newNet);
-		const currentPeg =  $sbtcConfig.pegIn;
-		const feeInfo = $sbtcConfig.feeInfo;
-		const feeCalc = $sbtcConfig.feeCalc;
-		let conf = { network: newNet, sbtcWalletAddress: addr, pegIn: currentPeg, feeInfo, feeCalc } as SbtcConfig;
-		sbtcConfig.update(() => conf)
-		dispatch("network_change", {});
-	}
-	const togglePeg = () => {
-		const conf:SbtcConfig = $sbtcConfig;
-		conf.pegIn = !conf.pegIn;
-  		sbtcConfig.set(conf);
-	}
-	</script>
-	<nav class="navbar navbar-expand-md transparent">
-		<div class="container-fluid mx-5">
-			  <a class="navbar-brand" href="{base}">
-				<img class="nav-logo" src={logoWhite} alt="CityCoins Test" />
-			</a>
-			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav text-white">
-					<li class="nav-item">
-						<span class="pointer nav-link">
-							<span title="Your SBTC Transaction History"><a class="text-white" href="{base}/history">Transactions</a></span>
-						</span>
-					</li>
-					<li class="nav-item">
-						<span class="pointer nav-link">
-							<span title="Toggle pegging in / pegging out"><a class="text-white" href="{base}" on:click={() => togglePeg()}>{#if $sbtcConfig.pegIn}<ArrowUp width={30} height={30} class="mx-1"/> Pegging In{:else}<ArrowDown width={30} height={30} class="mx-1"/> Pegging Out{/if} </a></span>
-						</span>
-					</li>
-					<li class="nav-item dropdown">
-						<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							Network: {$sbtcConfig.network}
-						</span>
-						<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						  <li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('testnet')}>Testnet</a></li>
-						  <li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('mainnet')}>Mainnet</a></li>
-						</ul>
-					</li>
-					<li class="nav-item mb-1">
-						<WalletConnectButton />
-					</li>
-				</ul>
-			</div>
+const dispatch = createEventDispatcher();
+
+//const unsubscribe = sbtcConfig.subscribe(value => {
+//  console.log('myConfig: ', value)
+//});
+//onDestroy(unsubscribe);
+
+const updateNetwork = async (newNet:string) => {
+	if (newNet === $sbtcConfig.network) return;
+	const addr = await fetchSbtcWalletAddress(newNet);
+	const currentPeg =  $sbtcConfig.pegIn;
+	const feeInfo = $sbtcConfig.feeInfo;
+	const feeCalc = $sbtcConfig.feeCalc;
+	let conf = { network: newNet, sbtcWalletAddress: addr, pegIn: currentPeg, feeInfo, feeCalc } as SbtcConfig;
+	sbtcConfig.update(() => conf)
+	dispatch("network_change", {});
+}
+const togglePeg = () => {
+	const conf:SbtcConfig = $sbtcConfig;
+	conf.pegIn = !conf.pegIn;
+	sbtcConfig.set(conf);
+}
+</script>
+<nav class="navbar navbar-expand-md transparent">
+	<div class="container-fluid mx-5">
+			<a class="navbar-brand" href="{base}">
+			<img class="nav-logo" src={logoWhite} alt="CityCoins Test" />
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<span class="pointer nav-link">
+						<span title="Your SBTC Transaction History"><a class="" href="{base}/history">History</a></span>
+					</span>
+				</li>
+				<li class="nav-item dropdown">
+					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						{#if $sbtcConfig.pegIn}Peg In{:else}Peg Out{/if}
+					</span>
+					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+						{#if $sbtcConfig.pegIn}<li><a class="dropdown-item" href="/" on:click={() => togglePeg()}>Peg Out</a></li>
+						{:else}<li><a class="dropdown-item" href="/" on:click={() => togglePeg()}>Peg In</a></li>{/if}
+					</ul>
+				</li>
+				<li class="nav-item dropdown">
+					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						{$sbtcConfig.network}
+					</span>
+					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('testnet')}>Testnet</a></li>
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('mainnet')}>Mainnet</a></li>
+					</ul>
+				</li>
+				<WalletConnectButton />
+			</ul>
 		</div>
-	</nav>
-	
-	<style>
-	</style>
+	</div>
+</nav>
+
+<style>
+	 .dropdown-item {
+		font-size: 0.7rem;
+	 }
+	.nav-item {
+		font-size: 0.9rem;
+	}
+</style>
