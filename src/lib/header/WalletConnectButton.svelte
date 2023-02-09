@@ -7,7 +7,7 @@ import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { c32ToB58 } from "micro-stacks/crypto";
 import { base } from '$app/paths'
-import { coordinator } from '$lib/sbtc'
+import { coordinator } from '$lib/sbtc_admin'
 
 const auth = getAuth();
 const account = getAccount();

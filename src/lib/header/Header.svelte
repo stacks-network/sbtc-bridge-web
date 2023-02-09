@@ -26,9 +26,9 @@ const updateNetwork = async (newNet:string) => {
 	sbtcConfig.update(() => conf)
 	dispatch("network_change", {});
 }
-const togglePeg = () => {
+const togglePeg = (pegin:boolean) => {
 	const conf:SbtcConfig = $sbtcConfig;
-	conf.pegIn = !conf.pegIn;
+	conf.pegIn = pegin;
 	sbtcConfig.set(conf);
 }
 </script>
@@ -49,11 +49,11 @@ const togglePeg = () => {
 				</li>
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						{#if $sbtcConfig.pegIn}Peg In{:else}Peg Out{/if}
+						Peg
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						{#if $sbtcConfig.pegIn}<li><a class="dropdown-item" href="/" on:click={() => togglePeg()}>Peg Out</a></li>
-						{:else}<li><a class="dropdown-item" href="/" on:click={() => togglePeg()}>Peg In</a></li>{/if}
+						<li><a class="dropdown-item" href="/" on:click={() => togglePeg(true)}>Peg In</a></li>
+						<li><a class="dropdown-item" href="/" on:click={() => togglePeg(false)}>Peg Out</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">

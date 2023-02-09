@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
-import { calculateFee, transactionData, transactionHex, getRedeemScript, getP2SHToP2WPKH } from "$lib/psbt";
+import { calculateFee, transactionData, transactionHex, getRedeemScript, getNetwork } from "$lib/psbt";
 import { maxCommit, attachTransaction } from "$lib/utxos";
 import { sbtcConfig, tx0, tx1, utxo1, utxo0, tx0Hex, tx1Hex } from './test_data';
 //import { Buffer } from 'buffer';
@@ -7,6 +7,9 @@ import type { SbtcConfig } from '$types/sbtc_config';
 import util from 'util'
 import { assert } from 'console';
 import type { UTXO } from '$types/utxo';
+import * as ecc from 'tiny-secp256k1';
+import ECPairFactory from 'ecpair';
+const ECPair = ECPairFactory(ecc);
 
 const network = 'testnet';
 
@@ -68,8 +71,11 @@ describe('suite', () => {
     const conf:SbtcConfig = sbtcConfig;
     //const addr = getP2SHToP2WPKH(conf.network);
     utxo0[0].tx = tx0;
-    //const res = getRedeemScript(conf.network, utxo0);
-    //console.log('Redeem Script:', util.inspect(res, false, null, true /* enable colors */))
+    console.log('Redeem Script utxo0:', util.inspect(utxo0, false, null, true /* enable colors */))
+    const alice_pair = ECPair.fromWIF('cN5Ciwee1NA32zD7WNG78TmXBrnAb4jfQZohmh2Zj53mQjNAZV3R', getNetwork(network));
+    const res = getRedeemScript(conf.network, utxo0[0], alice_pair.publicKey);
+    expect(res.toString('hex')).equals('00143e16009af8fc7edac27cd978ef590cc8e8c11240');
+    console.log('Redeem:', util.inspect(res, false, null, true /* enable colors */))
   })
 
   it.concurrent('stacks: calculateFee() tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss on peg in returns correct fee and change for high rate', async () => {

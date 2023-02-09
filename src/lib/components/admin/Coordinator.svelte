@@ -1,6 +1,9 @@
 <script lang="ts">
-import { setCoordinator, setBtcWallet, coordinator } from "$lib/sbtc";
+import { setCoordinator, setBtcWallet, coordinator, mintTo } from "$lib/sbtc_admin";
 import { getOpenContractCall } from '@micro-stacks/svelte';
+import MintTokens from './MintTokens.svelte'
+import BurnTokens from './BurnTokens.svelte'
+import { sbtcConfig } from '$stores/stores'
 
 const contractCall = getOpenContractCall();
 
@@ -10,6 +13,7 @@ const coordinate = async () => {
 const wallet = async () => {
   const res = await setBtcWallet($contractCall);
 }
+
 </script>
    
 <div class="card border p-4">
@@ -20,14 +24,15 @@ const wallet = async () => {
     </div>
   </div>
   <div class="row">
-    <div>SBTC Wallet: {coordinator.btcAddress}</div>
-    <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
+    <div class="col">
+      <div>SBTC Wallet: {coordinator.btcAddress}</div>
+      <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
+    </div>
   </div>
-  <div class="row">
-    <div>Mint SBTC: {coordinator.btcAddress}</div>
-    <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
-  </div>
+  <MintTokens />
+  <BurnTokens />
 </div>
+
 
 <style>
   .row {

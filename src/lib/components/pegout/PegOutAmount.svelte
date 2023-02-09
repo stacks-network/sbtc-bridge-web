@@ -5,22 +5,29 @@ import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { dustAmount } from "$lib/psbt";
+import { fetchUserBalance } from '$lib/sbtc'
+import { getAccount } from "@micro-stacks/svelte";
+import UserBalance from '$lib/components/UserBalance.svelte'
+
+const account = getAccount();
 
 const dispatch = createEventDispatcher();
 let pegOutAmount:number = $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount;
 let errorReason:string|undefined;
 let changeErrorReason:string|undefined;
 
-const balance = 100000000;
 let change = maxCommit($sbtcConfig.utxos) - $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply - $sbtcConfig.feeCalc.pegOutFeeCalc.dustAmount;
-const changePegOut = (maxValue:boolean) => {
+const changePegOut = async (maxValue:boolean) => {
   const maxPeg = maxCommit($sbtcConfig.utxos);
   errorReason = undefined;
   changeErrorReason = undefined;
-  if (pegOutAmount > balance) {
-    //pegOutAmount = maxPeg - feeToUse;
-    errorReason = 'Cannot commit more BTC then is available at your address';
-    return
+  if ($sbtcConfig.stxAddress) {
+    const balance = await fetchUserBalance($sbtcConfig.network, $sbtcConfig.stxAddress);
+    if (pegOutAmount > balance) {
+      //pegOutAmount = maxPeg - feeToUse;
+      errorReason = 'Cannot commit more BTC then is available at your address';
+      return
+    }
   }
   const conf:SbtcConfig = $sbtcConfig;
   conf.feeCalc.pegOutFeeCalc.pegOutAmount = Number(pegOutAmount);
@@ -42,6 +49,7 @@ const changeRate = (rate:string) => {
 $: low = $sbtcConfig.feeInfo.low_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
 $: medium = $sbtcConfig.feeInfo.medium_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
 $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply
+
 </script>
 
 <div class="row">
@@ -74,6 +82,7 @@ $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeC
     {/if}
   </div>
 </div>
+<UserBalance showAddress={false}/>
 
 <style>
 </style>

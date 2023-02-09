@@ -1,5 +1,5 @@
 <script lang="ts">
-import Coordinate from '$lib/components/admin/Coordinate.svelte';
+import Coordinator from '$lib/components/admin/Coordinator.svelte';
 import { sbtcConfig } from '$stores/stores';
 
 </script>
@@ -7,12 +7,13 @@ import { sbtcConfig } from '$stores/stores';
 <section class="bg-dark">
 	<div class="my-4 p-4">
 		<div class="card-width">
-			<h1 class="text-info"><span class="strokeme-info">Transaction</span> Coordination</h1>
+			<h1 class="text-info"><span class="strokeme-info">Devnet</span> Coordinator</h1>
+			<h6>{$sbtcConfig.sbtcWalletAddress}</h6>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col">
-			<Coordinate/>
+			<Coordinator/>
 		</div>
 	</div>
 </section>

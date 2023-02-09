@@ -18,7 +18,7 @@ export async function transactionHex(psbt:Psbt) {
   //return psbt.finalizeAllInputs().extractTransaction().toHex();
 }
 
-function getNetwork (network:string) {
+export function getNetwork (network:string) {
   return (network === 'testnet') ? networks.testnet : networks.bitcoin
 }
 
@@ -31,49 +31,34 @@ const keyPairs = [
 
 export function getP2SHToP2WPKH(network:string) {
   const alice_pair = ECPair.fromWIF(signer, getNetwork(network));
-  const pubkeys = [keyPairs[0].publicKey]; //[alice_pair.publicKey].map(hex => Buffer.from(hex, 'hex'));
-  //const { address } = payments.p2sh({ redeem: payments.p2ms({ m: 1, pubkeys, network: getNetwork(network) })});
-  //const p2shObj =  payments.p2sh({ redeem: payments.p2ms({ m: 1, pubkeys, network: getNetwork(config) })});
   const p2shObj = payments.p2sh({
     redeem: payments.p2wpkh({ pubkey: alice_pair.publicKey, network: getNetwork(network) }),
   });
   return p2shObj;
 }
 
-export function getRedeemScript(network:string, utxo:UTXO) {
+export function getRedeemScript(network:string, utxo:UTXO, pubKey:any) {
   // Note: Using Mempool API Tx format.
-  console.log('-------------keyPairs[0].publicKey', keyPairs[0].publicKey)
-  const pk = Buffer.from(keyPairs[0].publicKey).toString('hex');
-  console.log('-------------keyPairs[0].publicKey', pk);
-  console.log('-------------keyPairs[0].publicKey', Buffer.from(pk, 'hex'));
+  const pk = Buffer.from(pubKey).toString('hex');
   if (!utxo.tx || !utxo.tx.vout) throw new Error('No outputs');
   let redeemScript;
-  //let witnessScript;
-  //console.log('-------------------', utxo.tx.vout[utxo.vout])
   const sciptType = utxo.tx.vout[utxo.vout].scriptpubkey_type;
   if (sciptType === 'pay-to-witness-script-hash') {
-    //const p2shObj = getP2SHToP2WPKH(network);
-    //const p2shObj = payments.p2sh({pubkey: keyPairs[0].publicKey});
-    //const { address } = p2shObj;
-    const p2w = payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) });
+    const p2w = payments.p2wpkh({ pubkey: pubKey, network: getNetwork(network) });
     redeemScript = p2w?.redeem?.output;
-  } else if (sciptType === 'pay-to-script-hash' || sciptType === 'p2sh') { //BC pay-to-script-hash
+  } else if (sciptType === 'pay-to-script-hash' || sciptType === 'p2sh') {
     const paymentParams = {
-      redeem: payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) }),
+      redeem: payments.p2wpkh({ pubkey: pubKey, network: getNetwork(network) }),
       network: getNetwork(network)
     }
     const p2sh = payments.p2sh(paymentParams);
     redeemScript = p2sh?.redeem?.output;
-  } else if (sciptType === 'v0_p2wpkh') { //BC pay-to-witness-pubkey-hash
+  } else if (sciptType === 'v0_p2wpkh') {
     const p2shObj = getP2SHToP2WPKH(network);
-    //const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: keyPairs[0].publicKey, network: getNetwork(network) }),});
     redeemScript = p2shObj?.redeem?.output;
   } else {
     throw new Error('Unhandled type: ' + sciptType);
   }
-  //const p2shObj = getP2SHToP2WPKH(network);
-  //redeemScript = p2shObj?.redeem?.output;
-
   return redeemScript;
 }
 
@@ -88,7 +73,7 @@ function getInput(unspent:any, redeemScript:any, witnessScript:any) {
 }
 
 function buildTransaction(config:SbtcConfig) {
-  if (!config.fromBtcAddress || !config.sbtcWalletAddress || (config.pegIn && !config.stxAddress) || !config.utxos) throw new Error('wallet or inputs not defined.');
+  if (!config.fromBtcAddress || !config.sbtcWalletAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
   const network = getNetwork(config.network);
   const psbt = new Psbt({ network });
   config.utxos.forEach((utxo) => {
@@ -100,7 +85,8 @@ function buildTransaction(config:SbtcConfig) {
   })
   const totalInputValue = maxCommit(config.utxos);
   if (config.pegIn) {
-    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
+    if (!config.stxAddress) throw new Error('stxAddress not defined.');
+    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.stxAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
   } else {
     addPegOutOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegOutFeeCalc.pegOutAmount, config.feeCalc.pegOutFeeCalc.feeToApply);
   }
@@ -118,7 +104,7 @@ export function calculateFee(config:SbtcConfig) {
   const psbt = new Psbt({ network });
   config.utxos.forEach((utxo) => {
     const nonWitnessUtxo = globalThis.Buffer.from(utxo.tx.hex, 'hex');
-    const redeemScript = getRedeemScript(config.network, utxo);
+    const redeemScript = getRedeemScript(config.network, utxo, keyPairs[0].publicKey);
     psbt.addInput({
       hash: utxo.txid, 
       index: utxo.vout,

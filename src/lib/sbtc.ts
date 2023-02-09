@@ -1,62 +1,25 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { deserializeCV, cvToJSON } from "micro-stacks/clarity";
+import { deserializeCV, cvToJSON, serializeCV } from "micro-stacks/clarity";
 import type { SbtcConfig } from '$types/sbtc_config';
-import { stringAsciiCV, tupleCV, bufferCVFromString, principalCV } from 'micro-stacks/clarity';
-import { PostConditionMode } from 'micro-stacks/transactions';
+import { principalCV } from 'micro-stacks/clarity';
+import { bytesToHex } from "micro-stacks/common";
 
-export const coordinator = {
-	stxAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-	btcAddress: 'tb1qnzqsylm7xv2svujkqunj20t7zs7l67n85pj8qf'  // electrum1
-}
-export async function setCoordinator(contractCall:any) {
-  //data {addr: principal, key: (buff 33)}
-  const datum = tupleCV({
-    addr: principalCV(coordinator.stxAddress),
-    key: bufferCVFromString(coordinator.btcAddress)
-  });
-  const functionArgs = [datum]
-  await contractCall.openContractCall({
-    postConditions: [],
-    postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-    contractName: 'sbtc-alpha',
-    functionName: 'set-coordinator-data',
-    functionArgs: functionArgs,
-    onFinish: (data: any) => {
-      console.log('TX Data: ', data);
-      return data;
-    },
-    onCancel: () => {
-      console.log('popup closed!');
-    }
-  });
-}
-
-export async function setBtcWallet(contractCall:any) {
-  const datum = stringAsciiCV(coordinator.btcAddress)
-  const functionArgs = [datum]
-  await contractCall.openContractCall({
-    postConditions: [],
-    postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
-    contractName: 'sbtc-alpha',
-    functionName: 'set-bitcoin-wallet-address',
-    functionArgs: functionArgs,
-    onFinish: (data: any) => {
-      console.log('TX Data: ', data);
-      return data;
-    },
-    onCancel: () => {
-      console.log('popup closed!');
-    }
-  });
+export async function readEvents(network:string) {
+  const path = (network === 'mainnet') ? import.meta.env.VITE_APP_STACKS_MAINNET_API : import.meta.env.VITE_APP_STACKS_TESTNET_API;
+  const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+  const url = path + '/extended/v1/contract/' + contractId + '/events';
+  const response = await fetch(url);
+  const val = await response.json();
+  for (const event of val.results) {
+    event.data = cvToJSON(deserializeCV(event.contract_log.value.hex));
+  }
+  return val.results;
 }
 
 export async function fetchSbtcWalletAddress(network:string) {
   const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
-	//const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
 	const data = {
 		contractAddress: contractId.split('.')[0],
 		contractName: contractId.split('.')[1],
@@ -65,6 +28,9 @@ export async function fetchSbtcWalletAddress(network:string) {
     network
 	}
 	const result = await callContractReadOnly(data);
+  if (result.value && result.value.value) {
+    return result.value.value
+  }
   if (result.type.indexOf('some') > -1) return result.value
   if (network === 'testnet') {
     return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss'; // alice
@@ -72,8 +38,26 @@ export async function fetchSbtcWalletAddress(network:string) {
   return 'bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6';
 }
 
+export async function fetchUserBalance(network:string, stxAddress:string) {
+  const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+	//const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
+	const functionArgs = [`0x${bytesToHex(serializeCV(principalCV(stxAddress)))}`];
+	const data = {
+		contractAddress: contractId.split('.')[0],
+		contractName: contractId.split('.')[1],
+		functionName: 'get-balance',
+		functionArgs,
+    network
+	}
+	const result = await callContractReadOnly(data);
+  if (result.value && result.value.value) {
+    return Number(result.value.value);
+  }
+  return 0;
+}
+
 async function callContractReadOnly(data:any) {
-  const path = (data.network === 'mainnet') ? import.meta.env.VITE_APP_STACKS_MAINNET_API : import.meta.env.VITE_APP_STACKS_MAINNET_API;
+  const path = (data.network === 'mainnet') ? import.meta.env.VITE_APP_STACKS_MAINNET_API : import.meta.env.VITE_APP_STACKS_TESTNET_API;
   const url = path + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
   const response = await fetch(url, {
     method: 'POST',

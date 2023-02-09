@@ -5,6 +5,7 @@ import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { getAuth, getAccount } from "@micro-stacks/svelte";
+import UserBalance from '$lib/components/UserBalance.svelte'
 
 const account = getAccount();
 const format = /[ `!@#$%^&*()_+=\[\]{};':"\\|,<>\/?~]/;
@@ -27,7 +28,7 @@ const report = (errors:boolean) => {
   });
 }
 
-const changeStxAddress = () => {
+const changeStxAddress = async () => {
   errored = false;
 
   if (!stxAddress) {
@@ -63,13 +64,14 @@ const changeStxAddress = () => {
 <div class="row">
   <div class="col">
     <label for="transact-path" class="d-flex justify-content-between">
-      <span>Stacks/Contract Principal ({$sbtcConfig.network}):</span>
+      <span>Stacks/Contract Principal:</span>
       <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your Stacks address. The equivalent amount of sBTC will be sent to this wallet"><PatchQuestion width={30} height={30}/></span>
     </label>
     <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
     {#if errored && stxAddress && stxAddress.length > 0}<div class="text-danger">{reason}</div>{/if}
   </div>
 </div>
+<UserBalance showAddress={false}/>
 
 <style>
 </style>
