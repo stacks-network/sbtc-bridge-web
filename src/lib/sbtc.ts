@@ -99,7 +99,7 @@ export const defaultSbtcConfig:SbtcConfig = {
     pegOutFeeCalc: {
       feeToApply: 20000,
       pegOutAmount: 0,
-      dustAmount: 500,
+      DUST_AMOUNT: 500,
       high: {
         change: 0,
         fee: 500000,

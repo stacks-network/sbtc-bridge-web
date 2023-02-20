@@ -1,5 +1,14 @@
 import type { SbtcConfig } from '$types/sbtc_config';
 
+export const DEPLOYER_PK = {
+    "privateKey": "753b7cc01a1a2e86221266a154af739463fce51219d97e4f856cd7200c3bd2a601",
+    "publicKey": "0390a5cac7c33fda49f70bc1b0866fa0ba7a9440d9de647fecb8132ceb76a94dfa",
+    "address": "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM",
+    "btcAddress": "mqVnk6NPRdhntvfm4hh9vvjiRkFDUuSYsH",
+    "wif": "cRWawjcDj2J28jczAtjJGKs1pzFxM6V6tJHNZp3WrYoLhr2PLMVB",
+    "index": 0
+}
+
 export const sbtcConfig:SbtcConfig = {
 	network: 'testnet',
 	fromBtcAddress: 'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5',
@@ -50,7 +59,7 @@ export const sbtcConfig:SbtcConfig = {
         pegOutFeeCalc: {
             feeToApply: 20000,
 			pegOutAmount: 0,
-			dustAmount: 500,
+			DUST_AMOUNT: 500,
 			high: {
 				change: 0,
 				fee: 500000,
@@ -79,9 +88,6 @@ export const addressList = [
 	'2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb', // bitcoin core testnet
 	'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5' // electrum alice testnet
 ];
-//'p2wpkh:cN5Ciwee1NA32zD7WNG78TmXBrnAb4jfQZohmh2Zj53mQjNAZV3R'
-export const privkey = 'cN5Ciwee1NA32zD7WNG78TmXBrnAb4jfQZohmh2Zj53mQjNAZV3R'
-
 //https://api.blockcypher.com/v1/btc/test3
 export const feeData = JSON.parse('{"name":"BTC.test3","height":2418577,"hash":"000000000036d33670c2bcf3231b8d2e3979fc72ddc9d5862c2d9df4a23a656c","time":"2023-02-02T21:31:45.191472924Z","latest_url":"https://api.blockcypher.com/v1/btc/test3/blocks/000000000036d33670c2bcf3231b8d2e3979fc72ddc9d5862c2d9df4a23a656c","previous_hash":"0000000000000012ece64a47c6bfaea36d3c8e4026bbe9087c1d0b0d20ba475a","previous_url":"https://api.blockcypher.com/v1/btc/test3/blocks/0000000000000012ece64a47c6bfaea36d3c8e4026bbe9087c1d0b0d20ba475a","peer_count":225,"unconfirmed_count":22,"high_fee_per_kb":48783,"medium_fee_per_kb":30998,"low_fee_per_kb":18955,"last_fork_height":2418464,"last_fork_hash":"00000000001a8f9342f1557cca0237914a6f7d7f02fc4de8ca38bdba5eae8db2"}');
 

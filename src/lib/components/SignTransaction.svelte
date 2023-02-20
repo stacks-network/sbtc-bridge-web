@@ -1,6 +1,5 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-//import { Buffer } from "buffer/";
 import { transactionHex, transactionData } from "$lib/psbt";
 import { sbtcConfig } from '$stores/stores'
 import { createEventDispatcher } from "svelte";
@@ -12,7 +11,7 @@ const dispatch = createEventDispatcher();
 let showTx = false;
 
 const updateTransaction = () => {
-  dispatch('update_transaction');
+  dispatch('update_transaction', { success: true });
 }
 const convertUint8ToHex = (bytes: Uint8Array) => {
   let hex = globalThis.Buffer.from(bytes).toString('hex');
@@ -25,16 +24,13 @@ const convertHexToString = (bytes: Uint8Array) => {
 
 let psbt:Psbt|undefined;
 let hexTx:string|undefined;
-//let tzPubKey:any;
 onMount(async () => {
-  psbt = await transactionData($sbtcConfig);
-  hexTx = await transactionHex(psbt);
-  //console.log('TrezorConnect:', window.TrezorConnect)
-  //tzPubKey = await getPubkey(window.TrezorConnect);
-  //console.log('tzPubKey:', tzPubKey)
-  //setTimeout(function () {
-    //registerTooltips();
-  //}, 500)
+  try {
+    psbt = await transactionData($sbtcConfig);
+    hexTx = await transactionHex(psbt);
+  } catch(err:any) {
+    dispatch('update_transaction', { success: false, reason: err.message });
+  }
 })
 </script>
         

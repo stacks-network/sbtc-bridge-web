@@ -4,7 +4,7 @@ import { sbtcConfig } from '$stores/stores'
 import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
-import { dustAmount } from "$lib/psbt";
+import { DUST_AMOUNT } from "$lib/psbt";
 import { fetchUserBalance } from '$lib/sbtc'
 import { getAccount } from "@micro-stacks/svelte";
 import UserBalance from '$lib/components/UserBalance.svelte'
@@ -16,7 +16,7 @@ let pegOutAmount:number = $sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount;
 let errorReason:string|undefined;
 let changeErrorReason:string|undefined;
 
-let change = maxCommit($sbtcConfig.utxos) - $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply - $sbtcConfig.feeCalc.pegOutFeeCalc.dustAmount;
+let change = maxCommit($sbtcConfig.utxos) - $sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply - $sbtcConfig.feeCalc.pegOutFeeCalc.DUST_AMOUNT;
 const changePegOut = async (maxValue:boolean) => {
   const maxPeg = maxCommit($sbtcConfig.utxos);
   errorReason = undefined;
@@ -74,7 +74,7 @@ $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeCalc.pegOutFeeC
     <div class="d-flex justify-content-center">
       <div class="text-center w-50 bg-light text-dark py-3 px-4 my-4 border-radius">
         <p>Pegging out {$sbtcConfig.feeCalc.pegOutFeeCalc.pegOutAmount} satoshi</p>
-        <p>Dust to the SBTC wallet - {dustAmount} satoshi</p>
+        <p>Dust to the SBTC wallet - {DUST_AMOUNT} satoshi</p>
         <p>Fee will be calculated at {$sbtcConfig.feeCalc.pegOutFeeCalc.feeToApply} sats/kb</p>
         {#if change > 0}<p>{change} sats, will be sent back to your sending address.</p>{/if}
       </div>

@@ -1,6 +1,6 @@
 <script lang="ts">
 import BuildTransaction from '$lib/components/pegin/BuildTransaction.svelte';
-import SignTransaction from '$lib/components/pegin/SignTransaction.svelte';
+import SignTransaction from '$lib/components/SignTransaction.svelte';
 
 $: view = 'build_tx_view';
 const requestSignature = () => {

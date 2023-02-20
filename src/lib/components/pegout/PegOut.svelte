@@ -1,6 +1,6 @@
 <script lang="ts">
 import OutTransaction from '$lib/components/pegout/OutTransaction.svelte';
-import SignTransaction from '$lib/components/pegin/SignTransaction.svelte';
+import SignTransaction from '$lib/components/SignTransaction.svelte';
 
 $: view = 'build_tx_view';
 const requestSignature = () => {

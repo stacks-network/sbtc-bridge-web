@@ -5,9 +5,11 @@ export type SbtcConfig = {
   network: string;
   balance: number;
   stxAddress?: string;
+  pegOutStxAddress?:string;
   sbtcWalletAddress?: string;
   fromBtcAddress?:string;
   addressDetails:AddressDetails,
+  sigData:any;
   utxos: Array<UTXO>;
   feeInfo: {low_fee_per_kb:number, medium_fee_per_kb:number, high_fee_per_kb:number};
   feeCalc: { 
@@ -30,7 +32,7 @@ export type SbtcConfig = {
     pegOutFeeCalc: {
       feeToApply:number;
       pegOutAmount: number;
-      dustAmount: number;
+      DUST_AMOUNT: number;
       high: { 
         change: number;
         fee: number;

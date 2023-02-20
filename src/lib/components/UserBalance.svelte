@@ -42,7 +42,7 @@ onMount(async () => {
     {#if showAddress}{(bal.address)}{/if}
   </div>
   <div class="col-4 text-end">
-    Bal. {fmtSatoshiToBitcoin(bal.balance)} btc
+    Bal. {fmtSatoshiToBitcoin(bal.balance)} sBTC
   </div>
   {/each}
 </div>

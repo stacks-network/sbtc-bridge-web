@@ -108,3 +108,22 @@ Update 1: the tx only has 3 confirmations - maybe this is why.
 TXID=0e1474207bb7787b4557c9f365b3cba3aa3737b61729110070569f24fcce51ee
 ```
 
+#### 4 BTC Peg Out
+
+From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
+SBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
+Stacks Address: `ST2ST2H80NP5C9SPR4ENJ1Z9CDM9PKAJVPYWPQZ50` (Balance before 0.05578706 sBTC)
+Peg Out Amount: 35000 (see op_return vout 0)
+Peg Out Stx Address: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM (see op_return vout 0)
+Peg Out Dust: 500 (0.000005)
+Peg Out Change: tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5	     0.05517706
+
+Question: SBTC Wallet is a Bitcoin-QT v 19.1 wallet. Even though this tx is broadcast and confirmed the wallet
+does not seem to read the UTXO. Note the OP_RETURN is at index 0 and the SBTC Wallet UTXO
+is index 1.
+
+Update 1: the tx only has 3 confirmations - maybe this is why.
+
+```bash
+TXID=523700c7597e94e91f2879f55a125e8379b37408512a67b48c69b31d9915f879
+```
