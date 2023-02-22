@@ -2316,7 +2316,7 @@ let __tla = (async () => {
         t2 = text(" connect");
         t3 = space();
         p2 = element("p");
-        t4 = text("Currently in Beta testing - invitation only!");
+        t4 = text("We are currently in Beta testing - invitation only!");
         this.h();
       },
       l: function claim(nodes) {
@@ -2362,7 +2362,7 @@ let __tla = (async () => {
           class: true
         });
         var p2_nodes = children(p2);
-        t4 = claim_text(p2_nodes, "Currently in Beta testing - invitation only!");
+        t4 = claim_text(p2_nodes, "We are currently in Beta testing - invitation only!");
         p2_nodes.forEach(detach_dev);
         div_nodes.forEach(detach_dev);
         this.h();
