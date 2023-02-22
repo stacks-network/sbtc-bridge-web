@@ -3,7 +3,7 @@ import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_
 import { C as Ce, a, Q as Qt, s as sbtcConfig, f as fetchSbtcWalletAddress, i, c, b as se, d as C, e as defaultSbtcConfig } from "../../chunks/stores-96fe850b.js";
 import { l as login, c as client } from "../../chunks/stacks-fe7b74c7.js";
 import { c as coordinator } from "../../chunks/sbtc_admin-d603c98c.js";
-import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-49893d7a.js";
+import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-438f9248.js";
 let Layout;
 let __tla = (async () => {
   const app = "";

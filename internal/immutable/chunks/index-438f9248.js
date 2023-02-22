@@ -302,6 +302,14 @@ class ArrowUp extends SvelteComponentDev {
 	}
 }
 
+function isSupported(network, address) {
+  if (address.startsWith("1") || address.startsWith("m") || address.startsWith("n")) {
+    throw new Error("Legacy addresses are not supported in the current version.");
+  } else if ((address.startsWith("bc1") || address.startsWith("tb1")) && address.length !== 42) {
+    throw new Error("P2WSH addresses are not supported in the current version.");
+  }
+  return true;
+}
 async function fetchAddressDetails(network, address) {
   checkNetwork(network);
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
@@ -2711,4 +2719,4 @@ ieee754.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 	}
 } (buffer));
 
-export { ArrowUp as A, ArrowDown as a, buffer as b, fetchUTXOs as c, attachAllInputTransactions as d, fetchAddressDetails as e, fetchFeeEstimate as f, maxCommit as m };
+export { ArrowUp as A, ArrowDown as a, buffer as b, fetchUTXOs as c, attachAllInputTransactions as d, fetchAddressDetails as e, fetchFeeEstimate as f, isSupported as i, maxCommit as m };
