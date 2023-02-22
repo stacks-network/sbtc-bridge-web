@@ -11,12 +11,12 @@ const account = getAccount();
 const format = /[ `!@#$%^&*()_+=\[\]{};':"\\|,<>\/?~]/;
 const dispatch = createEventDispatcher();
 const auth = getAuth();
-if (!$sbtcConfig.stxAddress) {
+if (!$sbtcConfig.pegOutStxAddress) {
   if ($auth.isSignedIn) {
-    $sbtcConfig.stxAddress = $account.stxAddress
+    $sbtcConfig.pegOutStxAddress = $account.stxAddress
   }
 }
-let stxAddress:string|undefined = $sbtcConfig.stxAddress;
+let stxAddress:string|undefined = $sbtcConfig.pegOutStxAddress;
 const mainReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
 let reason = mainReason;
 let errored = false;
@@ -51,7 +51,7 @@ const changeStxAddress = async () => {
         return;
       }
       const conf:SbtcConfig = $sbtcConfig;
-      conf.stxAddress = stxAddress;
+      conf.pegOutStxAddress = stxAddress;
       sbtcConfig.update(() => conf);
       report(false);
     } catch (err:any) {

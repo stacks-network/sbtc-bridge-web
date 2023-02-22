@@ -35,31 +35,25 @@ export async function fetchUTXOs(network:string, address:string) {
   return utxos;
 }
 
-export async function fetchTxsForAddress(network:string, address:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
-  const response = await fetch(url + '/address/' + address + '/txs');
-  if (response.status !== 200) {
-    throw new Error('Bitcoin address not know - is the network correct?');
-  }
-  const txs = await response.json();
-  return txs;
-}
-
-export async function fetchTransaction(network:string, txid:string) {
+export async function fetchTransactionHex(network:string, txid:string) {
   //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
   //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
   checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
   //const response = await fetch(url + '/txs/' + txid + '?includeHex=true');
-  let response = await fetch(url + '/tx/' + txid);
+  const response = await fetch(url + '/tx/' + txid + '/hex');
+  const hex = await response.text();
+  return hex;
+}
+
+export async function fetchTransaction(network:string, txid:string) {
+  checkNetwork(network)
+  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+  const response = await fetch(url + '/tx/' + txid);
   if (response.status !== 200) {
     throw new Error('Bitcoin tx not found.');
   }
   const tx = await response.json();
-  response = await fetch(url + '/tx/' + txid + '/hex');
-  const hex = await response.text();
-  tx.hex = hex
   return tx;
 }
 
@@ -71,6 +65,8 @@ export async function attachTransaction(network:string, utxo:UTXO) {
   //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
   //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
   const tx = await fetchTransaction(network, utxo.txid);
+  const hex = await fetchTransaction(network, utxo.txid);
+  tx.hex = hex
   utxo.tx = tx;
   return utxo;
 }
