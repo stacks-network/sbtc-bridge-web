@@ -1,6 +1,9 @@
 import { b as base, _ as __vitePreload } from "../../chunks/preload-helper-bd152303.js";
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, x as text, p as claim_element, q as children, y as claim_text, J as src_url_equal, r as attr_dev, w as add_location, K as append_hydration_dev, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, c as space, A as create_component, f as claim_space, B as claim_component, C as mount_component, h as group_outros, t as transition_out, j as check_outros, k as transition_in, z as set_data_dev, D as destroy_component, O as run_all, F as writable, P as onDestroy, E as tick, Q as globals, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-5e67b194.js";
-import { C as Ce, l as login, s as sbtcConfig, f as fetchSbtcWalletAddress, A as ArrowUp, a as ArrowDown, i, b as l, c as se, d as C, e as buffer, g as defaultSbtcConfig, h as fetchFeeEstimate } from "../../chunks/index-1cc608bb.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, c as space, n as element, f as claim_space, p as claim_element, q as children, l as detach_dev, r as attr_dev, w as add_location, g as insert_hydration_dev, I as noop, x as text, y as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, A as create_component, B as claim_component, C as mount_component, z as set_data_dev, k as transition_in, t as transition_out, D as destroy_component, O as run_all, e as empty, j as check_outros, P as onDestroy, E as tick, Q as globals, h as group_outros, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-2f10db54.js";
+import { C as Ce, a, Q as Qt, s as sbtcConfig, f as fetchSbtcWalletAddress, i, c, b as se, d as C, e as defaultSbtcConfig } from "../../chunks/stores-96fe850b.js";
+import { l as login, c as client } from "../../chunks/stacks-fe7b74c7.js";
+import { c as coordinator } from "../../chunks/sbtc_admin-d603c98c.js";
+import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-49893d7a.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -8,9 +11,72 @@ let __tla = (async () => {
   const stx_eco_wallet_off = "" + new URL("../../assets/stx_eco_wallet_off-7e8f173f.png", import.meta.url).href;
   const WalletConnectButton_svelte_svelte_type_style_lang = "";
   const file$4 = "src/lib/header/WalletConnectButton.svelte";
-  function create_else_block$2(ctx) {
+  function create_if_block_3(ctx) {
+    let li;
+    let span;
+    let a2;
+    let t;
+    const block = {
+      c: function create() {
+        li = element("li");
+        span = element("span");
+        a2 = element("a");
+        t = text("Admin");
+        this.h();
+      },
+      l: function claim(nodes) {
+        li = claim_element(nodes, "LI", {
+          class: true
+        });
+        var li_nodes = children(li);
+        span = claim_element(li_nodes, "SPAN", {
+          class: true
+        });
+        var span_nodes = children(span);
+        a2 = claim_element(span_nodes, "A", {
+          href: true,
+          class: true
+        });
+        var a_nodes = children(a2);
+        t = claim_text(a_nodes, "Admin");
+        a_nodes.forEach(detach_dev);
+        span_nodes.forEach(detach_dev);
+        li_nodes.forEach(detach_dev);
+        this.h();
+      },
+      h: function hydrate() {
+        attr_dev(a2, "href", base + "/admin");
+        attr_dev(a2, "class", "pointer px-2");
+        add_location(a2, file$4, 32, 1, 1117);
+        attr_dev(span, "class", "nav-link");
+        add_location(span, file$4, 31, 1, 1092);
+        attr_dev(li, "class", "nav-item mb-1 s-03Bkx-y2PLke");
+        add_location(li, file$4, 30, 0, 1064);
+      },
+      m: function mount(target, anchor) {
+        insert_hydration_dev(target, li, anchor);
+        append_hydration_dev(li, span);
+        append_hydration_dev(span, a2);
+        append_hydration_dev(a2, t);
+      },
+      p: noop,
+      d: function destroy(detaching) {
+        if (detaching)
+          detach_dev(li);
+      }
+    };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_if_block_3.name,
+      type: "if",
+      source: "(30:0) {#if coordinator.stxAddress === $account.stxAddress}",
+      ctx
+    });
+    return block;
+  }
+  function create_else_block$1(ctx) {
     let span1;
-    let a;
+    let a2;
     let span0;
     let img;
     let img_src_value;
@@ -20,7 +86,7 @@ let __tla = (async () => {
     const block = {
       c: function create() {
         span1 = element("span");
-        a = element("a");
+        a2 = element("a");
         span0 = element("span");
         img = element("img");
         t = text(" connect");
@@ -31,11 +97,11 @@ let __tla = (async () => {
           class: true
         });
         var span1_nodes = children(span1);
-        a = claim_element(span1_nodes, "A", {
+        a2 = claim_element(span1_nodes, "A", {
           href: true,
           class: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         span0 = claim_element(a_nodes, "SPAN", {
           class: true
         });
@@ -58,23 +124,23 @@ let __tla = (async () => {
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file$4, 39, 120, 1447);
+        add_location(img, file$4, 52, 120, 2078);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file$4, 39, 100, 1427);
-        attr_dev(a, "href", "/");
-        attr_dev(a, "class", "pointer px-2");
-        add_location(a, file$4, 39, 24, 1351);
-        attr_dev(span1, "class", "nav-item s-03Bkx-y2PLke");
-        add_location(span1, file$4, 39, 1, 1328);
+        add_location(span0, file$4, 52, 100, 2058);
+        attr_dev(a2, "href", "/");
+        attr_dev(a2, "class", "pointer px-2");
+        add_location(a2, file$4, 52, 24, 1982);
+        attr_dev(span1, "class", "nav-link");
+        add_location(span1, file$4, 52, 1, 1959);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, span1, anchor);
-        append_hydration_dev(span1, a);
-        append_hydration_dev(a, span0);
+        append_hydration_dev(span1, a2);
+        append_hydration_dev(a2, span0);
         append_hydration_dev(span0, img);
-        append_hydration_dev(a, t);
+        append_hydration_dev(a2, t);
         if (!mounted) {
-          dispose = listen_dev(a, "click", prevent_default(ctx[5]), false, true, false);
+          dispose = listen_dev(a2, "click", prevent_default(ctx[7]), false, true, false);
           mounted = true;
         }
       },
@@ -88,16 +154,16 @@ let __tla = (async () => {
     };
     dispatch_dev("SvelteRegisterBlock", {
       block,
-      id: create_else_block$2.name,
+      id: create_else_block$1.name,
       type: "else",
-      source: "(39:0) {:else}",
+      source: "(52:0) {:else}",
       ctx
     });
     return block;
   }
   function create_if_block_2(ctx) {
     let span1;
-    let a;
+    let a2;
     let span0;
     let img;
     let img_src_value;
@@ -107,7 +173,7 @@ let __tla = (async () => {
     const block = {
       c: function create() {
         span1 = element("span");
-        a = element("a");
+        a2 = element("a");
         span0 = element("span");
         img = element("img");
         t = text(" connect");
@@ -118,10 +184,10 @@ let __tla = (async () => {
           class: true
         });
         var span1_nodes = children(span1);
-        a = claim_element(span1_nodes, "A", {
+        a2 = claim_element(span1_nodes, "A", {
           href: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         span0 = claim_element(a_nodes, "SPAN", {
           class: true
         });
@@ -144,22 +210,22 @@ let __tla = (async () => {
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file$4, 37, 88, 1207);
+        add_location(img, file$4, 50, 88, 1838);
         attr_dev(span0, "class", "px-2");
-        add_location(span0, file$4, 37, 68, 1187);
-        attr_dev(a, "href", "/");
-        add_location(a, file$4, 37, 24, 1143);
-        attr_dev(span1, "class", "nav-item s-03Bkx-y2PLke");
-        add_location(span1, file$4, 37, 1, 1120);
+        add_location(span0, file$4, 50, 68, 1818);
+        attr_dev(a2, "href", "/");
+        add_location(a2, file$4, 50, 24, 1774);
+        attr_dev(span1, "class", "nav-link");
+        add_location(span1, file$4, 50, 1, 1751);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, span1, anchor);
-        append_hydration_dev(span1, a);
-        append_hydration_dev(a, span0);
+        append_hydration_dev(span1, a2);
+        append_hydration_dev(a2, span0);
         append_hydration_dev(span0, img);
-        append_hydration_dev(a, t);
+        append_hydration_dev(a2, t);
         if (!mounted) {
-          dispose = listen_dev(a, "click", prevent_default(login), false, true, false);
+          dispose = listen_dev(a2, "click", prevent_default(login), false, true, false);
           mounted = true;
         }
       },
@@ -175,14 +241,14 @@ let __tla = (async () => {
       block,
       id: create_if_block_2.name,
       type: "if",
-      source: "(37:33) ",
+      source: "(50:33) ",
       ctx
     });
     return block;
   }
   function create_if_block_1$1(ctx) {
     let span1;
-    let a;
+    let a2;
     let span0;
     let img;
     let img_src_value;
@@ -191,7 +257,7 @@ let __tla = (async () => {
     const block = {
       c: function create() {
         span1 = element("span");
-        a = element("a");
+        a2 = element("a");
         span0 = element("span");
         img = element("img");
         this.h();
@@ -201,12 +267,12 @@ let __tla = (async () => {
           class: true
         });
         var span1_nodes = children(span1);
-        a = claim_element(span1_nodes, "A", {
+        a2 = claim_element(span1_nodes, "A", {
           href: true,
           class: true,
           style: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         span0 = claim_element(a_nodes, "SPAN", {
           class: true
         });
@@ -228,23 +294,23 @@ let __tla = (async () => {
         attr_dev(img, "alt", "Wallet Connected");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file$4, 33, 23, 982);
+        add_location(img, file$4, 46, 23, 1613);
         attr_dev(span0, "class", "px-2");
-        add_location(span0, file$4, 33, 3, 962);
-        attr_dev(a, "href", "/");
-        attr_dev(a, "class", "pointer");
-        set_style(a, "vertical-align", "middle");
-        add_location(a, file$4, 32, 2, 865);
-        attr_dev(span1, "class", "nav-item s-03Bkx-y2PLke");
-        add_location(span1, file$4, 31, 1, 839);
+        add_location(span0, file$4, 46, 3, 1593);
+        attr_dev(a2, "href", "/");
+        attr_dev(a2, "class", "pointer");
+        set_style(a2, "vertical-align", "middle");
+        add_location(a2, file$4, 45, 2, 1496);
+        attr_dev(span1, "class", "nav-link");
+        add_location(span1, file$4, 44, 1, 1470);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, span1, anchor);
-        append_hydration_dev(span1, a);
-        append_hydration_dev(a, span0);
+        append_hydration_dev(span1, a2);
+        append_hydration_dev(a2, span0);
         append_hydration_dev(span0, img);
         if (!mounted) {
-          dispose = listen_dev(a, "click", prevent_default(ctx[2]), false, true, false);
+          dispose = listen_dev(a2, "click", prevent_default(ctx[4]), false, true, false);
           mounted = true;
         }
       },
@@ -260,19 +326,19 @@ let __tla = (async () => {
       block,
       id: create_if_block_1$1.name,
       type: "if",
-      source: "(31:27) ",
+      source: "(44:27) ",
       ctx
     });
     return block;
   }
-  function create_if_block$2(ctx) {
+  function create_if_block$1(ctx) {
     let span;
-    let a;
+    let a2;
     let t;
     const block = {
       c: function create() {
         span = element("span");
-        a = element("a");
+        a2 = element("a");
         t = text("Install Web Wallet");
         this.h();
       },
@@ -282,33 +348,33 @@ let __tla = (async () => {
           style: true
         });
         var span_nodes = children(span);
-        a = claim_element(span_nodes, "A", {
+        a2 = claim_element(span_nodes, "A", {
           href: true,
           class: true,
           target: true,
           rel: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         t = claim_text(a_nodes, "Install Web Wallet");
         a_nodes.forEach(detach_dev);
         span_nodes.forEach(detach_dev);
         this.h();
       },
       h: function hydrate() {
-        attr_dev(a, "href", "https://wallet.hiro.so/wallet/install-web");
-        attr_dev(a, "class", "pointer");
-        attr_dev(a, "target", "_blank");
-        attr_dev(a, "rel", "noreferrer");
-        add_location(a, file$4, 26, 1, 673);
-        attr_dev(span, "class", "nav-item s-03Bkx-y2PLke");
+        attr_dev(a2, "href", "https://wallet.hiro.so/wallet/install-web");
+        attr_dev(a2, "class", "pointer");
+        attr_dev(a2, "target", "_blank");
+        attr_dev(a2, "rel", "noreferrer");
+        add_location(a2, file$4, 39, 1, 1304);
+        attr_dev(span, "class", "nav-link");
         set_style(span, "position", "relative");
         set_style(span, "top", "2px");
-        add_location(span, file$4, 25, 0, 610);
+        add_location(span, file$4, 38, 0, 1241);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, span, anchor);
-        append_hydration_dev(span, a);
-        append_hydration_dev(a, t);
+        append_hydration_dev(span, a2);
+        append_hydration_dev(a2, t);
       },
       p: noop,
       d: function destroy(detaching) {
@@ -318,57 +384,94 @@ let __tla = (async () => {
     };
     dispatch_dev("SvelteRegisterBlock", {
       block,
-      id: create_if_block$2.name,
+      id: create_if_block$1.name,
       type: "if",
-      source: "(25:0) {#if webWalletNeeded}",
+      source: "(38:0) {#if webWalletNeeded}",
       ctx
     });
     return block;
   }
   function create_fragment$4(ctx) {
-    let if_block_anchor;
+    let t;
+    let li;
+    let if_block0 = coordinator.stxAddress === ctx[1].stxAddress && create_if_block_3(ctx);
     function select_block_type(ctx2, dirty) {
-      if (ctx2[4])
-        return create_if_block$2;
+      if (ctx2[6])
+        return create_if_block$1;
       if (ctx2[0].isSignedIn)
         return create_if_block_1$1;
       if (ctx2[0].isRequestPending)
         return create_if_block_2;
-      return create_else_block$2;
+      return create_else_block$1;
     }
     let current_block_type = select_block_type(ctx);
-    let if_block = current_block_type(ctx);
+    let if_block1 = current_block_type(ctx);
     const block = {
       c: function create() {
-        if_block.c();
-        if_block_anchor = empty();
+        if (if_block0)
+          if_block0.c();
+        t = space();
+        li = element("li");
+        if_block1.c();
+        this.h();
       },
       l: function claim(nodes) {
-        if_block.l(nodes);
-        if_block_anchor = empty();
+        if (if_block0)
+          if_block0.l(nodes);
+        t = claim_space(nodes);
+        li = claim_element(nodes, "LI", {
+          class: true
+        });
+        var li_nodes = children(li);
+        if_block1.l(li_nodes);
+        li_nodes.forEach(detach_dev);
+        this.h();
+      },
+      h: function hydrate() {
+        attr_dev(li, "class", "nav-item mb-1 s-03Bkx-y2PLke");
+        add_location(li, file$4, 36, 0, 1192);
       },
       m: function mount(target, anchor) {
-        if_block.m(target, anchor);
-        insert_hydration_dev(target, if_block_anchor, anchor);
+        if (if_block0)
+          if_block0.m(target, anchor);
+        insert_hydration_dev(target, t, anchor);
+        insert_hydration_dev(target, li, anchor);
+        if_block1.m(li, null);
       },
       p: function update(ctx2, [dirty]) {
-        if (current_block_type === (current_block_type = select_block_type(ctx2)) && if_block) {
-          if_block.p(ctx2, dirty);
+        if (coordinator.stxAddress === ctx2[1].stxAddress) {
+          if (if_block0) {
+            if_block0.p(ctx2, dirty);
+          } else {
+            if_block0 = create_if_block_3(ctx2);
+            if_block0.c();
+            if_block0.m(t.parentNode, t);
+          }
+        } else if (if_block0) {
+          if_block0.d(1);
+          if_block0 = null;
+        }
+        if (current_block_type === (current_block_type = select_block_type(ctx2)) && if_block1) {
+          if_block1.p(ctx2, dirty);
         } else {
-          if_block.d(1);
-          if_block = current_block_type(ctx2);
-          if (if_block) {
-            if_block.c();
-            if_block.m(if_block_anchor.parentNode, if_block_anchor);
+          if_block1.d(1);
+          if_block1 = current_block_type(ctx2);
+          if (if_block1) {
+            if_block1.c();
+            if_block1.m(li, null);
           }
         }
       },
       i: noop,
       o: noop,
       d: function destroy(detaching) {
-        if_block.d(detaching);
+        if (if_block0)
+          if_block0.d(detaching);
         if (detaching)
-          detach_dev(if_block_anchor);
+          detach_dev(t);
+        if (detaching)
+          detach_dev(li);
+        if_block1.d();
       }
     };
     dispatch_dev("SvelteRegisterBlock", {
@@ -382,11 +485,21 @@ let __tla = (async () => {
   }
   function instance$4($$self, $$props, $$invalidate) {
     let $auth;
+    let $account;
     let { $$slots: slots = {}, $$scope } = $$props;
     validate_slots("WalletConnectButton", slots, []);
     const auth = Ce();
     validate_store(auth, "auth");
     component_subscribe($$self, auth, (value) => $$invalidate(0, $auth = value));
+    const account = a();
+    validate_store(account, "account");
+    component_subscribe($$self, account, (value) => $$invalidate(1, $account = value));
+    const decodeAddr = () => {
+      return Qt($account.stxAddress);
+    };
+    const explorerUrl = function(address) {
+      return "http://localhost:8000/address/" + address + "/?chain=testnet";
+    };
     const logout = () => {
       $auth.signOut();
     };
@@ -404,26 +517,36 @@ let __tla = (async () => {
     const click_handler = () => doLogin();
     $$self.$capture_state = () => ({
       getAuth: Ce,
+      getAccount: a,
       login,
       onMount,
       stx_eco_wallet_on,
       stx_eco_wallet_off,
+      c32ToB58: Qt,
+      base,
+      coordinator,
       auth,
+      account,
+      decodeAddr,
+      explorerUrl,
       logout,
       doLogin,
       webWalletNeeded,
-      $auth
+      $auth,
+      $account
     });
     $$self.$inject_state = ($$props2) => {
       if ("webWalletNeeded" in $$props2)
-        $$invalidate(4, webWalletNeeded = $$props2.webWalletNeeded);
+        $$invalidate(6, webWalletNeeded = $$props2.webWalletNeeded);
     };
     if ($$props && "$$inject" in $$props) {
       $$self.$inject_state($$props.$$inject);
     }
     return [
       $auth,
+      $account,
       auth,
+      account,
       logout,
       doLogin,
       webWalletNeeded,
@@ -443,109 +566,8 @@ let __tla = (async () => {
     }
   }
   const logoWhite = "" + new URL("../../assets/logo-white-68f65e57.jpeg", import.meta.url).href;
+  const Header_svelte_svelte_type_style_lang = "";
   const file$3 = "src/lib/header/Header.svelte";
-  function create_else_block$1(ctx) {
-    let arrowdown;
-    let t;
-    let current;
-    arrowdown = new ArrowDown({
-      props: {
-        width: 30,
-        height: 30,
-        class: "mx-1"
-      },
-      $$inline: true
-    });
-    const block = {
-      c: function create() {
-        create_component(arrowdown.$$.fragment);
-        t = text(" Pegging Out");
-      },
-      l: function claim(nodes) {
-        claim_component(arrowdown.$$.fragment, nodes);
-        t = claim_text(nodes, " Pegging Out");
-      },
-      m: function mount(target, anchor) {
-        mount_component(arrowdown, target, anchor);
-        insert_hydration_dev(target, t, anchor);
-        current = true;
-      },
-      i: function intro(local) {
-        if (current)
-          return;
-        transition_in(arrowdown.$$.fragment, local);
-        current = true;
-      },
-      o: function outro(local) {
-        transition_out(arrowdown.$$.fragment, local);
-        current = false;
-      },
-      d: function destroy(detaching) {
-        destroy_component(arrowdown, detaching);
-        if (detaching)
-          detach_dev(t);
-      }
-    };
-    dispatch_dev("SvelteRegisterBlock", {
-      block,
-      id: create_else_block$1.name,
-      type: "else",
-      source: "(48:198) {:else}",
-      ctx
-    });
-    return block;
-  }
-  function create_if_block$1(ctx) {
-    let arrowup;
-    let t;
-    let current;
-    arrowup = new ArrowUp({
-      props: {
-        width: 30,
-        height: 30,
-        class: "mx-1"
-      },
-      $$inline: true
-    });
-    const block = {
-      c: function create() {
-        create_component(arrowup.$$.fragment);
-        t = text(" Pegging In");
-      },
-      l: function claim(nodes) {
-        claim_component(arrowup.$$.fragment, nodes);
-        t = claim_text(nodes, " Pegging In");
-      },
-      m: function mount(target, anchor) {
-        mount_component(arrowup, target, anchor);
-        insert_hydration_dev(target, t, anchor);
-        current = true;
-      },
-      i: function intro(local) {
-        if (current)
-          return;
-        transition_in(arrowup.$$.fragment, local);
-        current = true;
-      },
-      o: function outro(local) {
-        transition_out(arrowup.$$.fragment, local);
-        current = false;
-      },
-      d: function destroy(detaching) {
-        destroy_component(arrowup, detaching);
-        if (detaching)
-          detach_dev(t);
-      }
-    };
-    dispatch_dev("SvelteRegisterBlock", {
-      block,
-      id: create_if_block$1.name,
-      type: "if",
-      source: "(48:118) {#if $sbtcConfig.pegIn}",
-      ctx
-    });
-    return block;
-  }
   function create_fragment$3(ctx) {
     let nav;
     let div1;
@@ -557,52 +579,44 @@ let __tla = (async () => {
     let span0;
     let t1;
     let div0;
-    let ul1;
+    let ul2;
     let li0;
     let span2;
     let span1;
     let a1;
     let t2;
     let t3;
-    let li1;
-    let span4;
+    let li3;
     let span3;
-    let a2;
-    let current_block_type_index;
-    let if_block;
     let t4;
-    let li4;
-    let span5;
     let t5;
-    let t6_value = ctx[0].network + "";
+    let ul0;
+    let li1;
+    let a2;
     let t6;
     let t7;
-    let ul0;
     let li2;
     let a3;
     let t8;
     let t9;
-    let li3;
-    let a4;
+    let li6;
+    let span4;
+    let t10_value = ctx[0].network + "";
     let t10;
     let t11;
+    let ul1;
+    let li4;
+    let a4;
+    let t12;
+    let t13;
     let li5;
+    let a5;
+    let t14;
+    let t15;
     let walletconnectbutton;
     let current;
     let mounted;
     let dispose;
-    const if_block_creators = [
-      create_if_block$1,
-      create_else_block$1
-    ];
-    const if_blocks = [];
-    function select_block_type(ctx2, dirty) {
-      if (ctx2[0].pegIn)
-        return 0;
-      return 1;
-    }
-    current_block_type_index = select_block_type(ctx);
-    if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
     walletconnectbutton = new WalletConnectButton({
       $$inline: true
     });
@@ -617,34 +631,39 @@ let __tla = (async () => {
         span0 = element("span");
         t1 = space();
         div0 = element("div");
-        ul1 = element("ul");
+        ul2 = element("ul");
         li0 = element("li");
         span2 = element("span");
         span1 = element("span");
         a1 = element("a");
-        t2 = text("Transactions");
+        t2 = text("History");
         t3 = space();
-        li1 = element("li");
-        span4 = element("span");
+        li3 = element("li");
         span3 = element("span");
-        a2 = element("a");
-        if_block.c();
-        t4 = space();
-        li4 = element("li");
-        span5 = element("span");
-        t5 = text("Network: ");
-        t6 = text(t6_value);
-        t7 = space();
+        t4 = text("Peg");
+        t5 = space();
         ul0 = element("ul");
+        li1 = element("li");
+        a2 = element("a");
+        t6 = text("Peg In");
+        t7 = space();
         li2 = element("li");
         a3 = element("a");
-        t8 = text("Testnet");
+        t8 = text("Peg Out");
         t9 = space();
-        li3 = element("li");
-        a4 = element("a");
-        t10 = text("Mainnet");
+        li6 = element("li");
+        span4 = element("span");
+        t10 = text(t10_value);
         t11 = space();
+        ul1 = element("ul");
+        li4 = element("li");
+        a4 = element("a");
+        t12 = text("Testnet");
+        t13 = space();
         li5 = element("li");
+        a5 = element("a");
+        t14 = text("Mainnet");
+        t15 = space();
         create_component(walletconnectbutton.$$.fragment);
         this.h();
       },
@@ -690,11 +709,11 @@ let __tla = (async () => {
           id: true
         });
         var div0_nodes = children(div0);
-        ul1 = claim_element(div0_nodes, "UL", {
+        ul2 = claim_element(div0_nodes, "UL", {
           class: true
         });
-        var ul1_nodes = children(ul1);
-        li0 = claim_element(ul1_nodes, "LI", {
+        var ul2_nodes = children(ul2);
+        li0 = claim_element(ul2_nodes, "LI", {
           class: true
         });
         var li0_nodes = children(li0);
@@ -711,56 +730,43 @@ let __tla = (async () => {
           href: true
         });
         var a1_nodes = children(a1);
-        t2 = claim_text(a1_nodes, "Transactions");
+        t2 = claim_text(a1_nodes, "History");
         a1_nodes.forEach(detach_dev);
         span1_nodes.forEach(detach_dev);
         span2_nodes.forEach(detach_dev);
         li0_nodes.forEach(detach_dev);
-        t3 = claim_space(ul1_nodes);
-        li1 = claim_element(ul1_nodes, "LI", {
+        t3 = claim_space(ul2_nodes);
+        li3 = claim_element(ul2_nodes, "LI", {
           class: true
         });
-        var li1_nodes = children(li1);
-        span4 = claim_element(li1_nodes, "SPAN", {
-          class: true
-        });
-        var span4_nodes = children(span4);
-        span3 = claim_element(span4_nodes, "SPAN", {
-          title: true
-        });
-        var span3_nodes = children(span3);
-        a2 = claim_element(span3_nodes, "A", {
-          class: true,
-          href: true
-        });
-        var a2_nodes = children(a2);
-        if_block.l(a2_nodes);
-        a2_nodes.forEach(detach_dev);
-        span3_nodes.forEach(detach_dev);
-        span4_nodes.forEach(detach_dev);
-        li1_nodes.forEach(detach_dev);
-        t4 = claim_space(ul1_nodes);
-        li4 = claim_element(ul1_nodes, "LI", {
-          class: true
-        });
-        var li4_nodes = children(li4);
-        span5 = claim_element(li4_nodes, "SPAN", {
+        var li3_nodes = children(li3);
+        span3 = claim_element(li3_nodes, "SPAN", {
           class: true,
           id: true,
           role: true,
           "data-bs-toggle": true,
           "aria-expanded": true
         });
-        var span5_nodes = children(span5);
-        t5 = claim_text(span5_nodes, "Network: ");
-        t6 = claim_text(span5_nodes, t6_value);
-        span5_nodes.forEach(detach_dev);
-        t7 = claim_space(li4_nodes);
-        ul0 = claim_element(li4_nodes, "UL", {
+        var span3_nodes = children(span3);
+        t4 = claim_text(span3_nodes, "Peg");
+        span3_nodes.forEach(detach_dev);
+        t5 = claim_space(li3_nodes);
+        ul0 = claim_element(li3_nodes, "UL", {
           class: true,
           "aria-labelledby": true
         });
         var ul0_nodes = children(ul0);
+        li1 = claim_element(ul0_nodes, "LI", {});
+        var li1_nodes = children(li1);
+        a2 = claim_element(li1_nodes, "A", {
+          class: true,
+          href: true
+        });
+        var a2_nodes = children(a2);
+        t6 = claim_text(a2_nodes, "Peg In");
+        a2_nodes.forEach(detach_dev);
+        li1_nodes.forEach(detach_dev);
+        t7 = claim_space(ul0_nodes);
         li2 = claim_element(ul0_nodes, "LI", {});
         var li2_nodes = children(li2);
         a3 = claim_element(li2_nodes, "A", {
@@ -768,30 +774,58 @@ let __tla = (async () => {
           href: true
         });
         var a3_nodes = children(a3);
-        t8 = claim_text(a3_nodes, "Testnet");
+        t8 = claim_text(a3_nodes, "Peg Out");
         a3_nodes.forEach(detach_dev);
         li2_nodes.forEach(detach_dev);
-        t9 = claim_space(ul0_nodes);
-        li3 = claim_element(ul0_nodes, "LI", {});
-        var li3_nodes = children(li3);
-        a4 = claim_element(li3_nodes, "A", {
+        ul0_nodes.forEach(detach_dev);
+        li3_nodes.forEach(detach_dev);
+        t9 = claim_space(ul2_nodes);
+        li6 = claim_element(ul2_nodes, "LI", {
+          class: true
+        });
+        var li6_nodes = children(li6);
+        span4 = claim_element(li6_nodes, "SPAN", {
+          class: true,
+          id: true,
+          role: true,
+          "data-bs-toggle": true,
+          "aria-expanded": true
+        });
+        var span4_nodes = children(span4);
+        t10 = claim_text(span4_nodes, t10_value);
+        span4_nodes.forEach(detach_dev);
+        t11 = claim_space(li6_nodes);
+        ul1 = claim_element(li6_nodes, "UL", {
+          class: true,
+          "aria-labelledby": true
+        });
+        var ul1_nodes = children(ul1);
+        li4 = claim_element(ul1_nodes, "LI", {});
+        var li4_nodes = children(li4);
+        a4 = claim_element(li4_nodes, "A", {
           class: true,
           href: true
         });
         var a4_nodes = children(a4);
-        t10 = claim_text(a4_nodes, "Mainnet");
+        t12 = claim_text(a4_nodes, "Testnet");
         a4_nodes.forEach(detach_dev);
-        li3_nodes.forEach(detach_dev);
-        ul0_nodes.forEach(detach_dev);
         li4_nodes.forEach(detach_dev);
-        t11 = claim_space(ul1_nodes);
-        li5 = claim_element(ul1_nodes, "LI", {
-          class: true
-        });
+        t13 = claim_space(ul1_nodes);
+        li5 = claim_element(ul1_nodes, "LI", {});
         var li5_nodes = children(li5);
-        claim_component(walletconnectbutton.$$.fragment, li5_nodes);
+        a5 = claim_element(li5_nodes, "A", {
+          class: true,
+          href: true
+        });
+        var a5_nodes = children(a5);
+        t14 = claim_text(a5_nodes, "Mainnet");
+        a5_nodes.forEach(detach_dev);
         li5_nodes.forEach(detach_dev);
         ul1_nodes.forEach(detach_dev);
+        li6_nodes.forEach(detach_dev);
+        t15 = claim_space(ul2_nodes);
+        claim_component(walletconnectbutton.$$.fragment, ul2_nodes);
+        ul2_nodes.forEach(detach_dev);
         div0_nodes.forEach(detach_dev);
         div1_nodes.forEach(detach_dev);
         nav_nodes.forEach(detach_dev);
@@ -802,12 +836,12 @@ let __tla = (async () => {
         if (!src_url_equal(img.src, img_src_value = logoWhite))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "CityCoins Test");
-        add_location(img, file$3, 33, 4, 1289);
+        add_location(img, file$3, 33, 3, 1283);
         attr_dev(a0, "class", "navbar-brand");
         attr_dev(a0, "href", base);
-        add_location(a0, file$3, 32, 5, 1246);
+        add_location(a0, file$3, 32, 3, 1241);
         attr_dev(span0, "class", "navbar-toggler-icon");
-        add_location(span0, file$3, 36, 4, 1545);
+        add_location(span0, file$3, 36, 3, 1536);
         attr_dev(button, "class", "navbar-toggler");
         attr_dev(button, "type", "button");
         attr_dev(button, "data-bs-toggle", "collapse");
@@ -815,55 +849,63 @@ let __tla = (async () => {
         attr_dev(button, "aria-controls", "navbarNav");
         attr_dev(button, "aria-expanded", "false");
         attr_dev(button, "aria-label", "Toggle navigation");
-        add_location(button, file$3, 35, 3, 1362);
-        attr_dev(a1, "class", "text-white");
+        add_location(button, file$3, 35, 2, 1354);
+        attr_dev(a1, "class", "");
         attr_dev(a1, "href", base + "/history");
-        add_location(a1, file$3, 42, 51, 1812);
+        add_location(a1, file$3, 42, 50, 1786);
         attr_dev(span1, "title", "Your SBTC Transaction History");
-        add_location(span1, file$3, 42, 7, 1768);
+        add_location(span1, file$3, 42, 6, 1742);
         attr_dev(span2, "class", "pointer nav-link");
-        add_location(span2, file$3, 41, 6, 1729);
-        attr_dev(li0, "class", "nav-item");
-        add_location(li0, file$3, 40, 5, 1701);
-        attr_dev(a2, "class", "text-white");
-        attr_dev(a2, "href", base);
-        add_location(a2, file$3, 47, 53, 2023);
-        attr_dev(span3, "title", "Toggle pegging in / pegging out");
-        add_location(span3, file$3, 47, 7, 1977);
-        attr_dev(span4, "class", "pointer nav-link");
-        add_location(span4, file$3, 46, 6, 1938);
-        attr_dev(li1, "class", "nav-item");
-        add_location(li1, file$3, 45, 5, 1910);
-        attr_dev(span5, "class", "nav-link dropdown-toggle ");
-        attr_dev(span5, "id", "navbarDropdown");
-        attr_dev(span5, "role", "button");
-        attr_dev(span5, "data-bs-toggle", "dropdown");
-        attr_dev(span5, "aria-expanded", "false");
-        add_location(span5, file$3, 51, 6, 2320);
-        attr_dev(a3, "class", "dropdown-item");
+        add_location(span2, file$3, 41, 5, 1704);
+        attr_dev(li0, "class", "nav-item s-WFTADzNPIVrM");
+        add_location(li0, file$3, 40, 4, 1677);
+        attr_dev(span3, "class", "nav-link dropdown-toggle ");
+        attr_dev(span3, "id", "navbarDropdown");
+        attr_dev(span3, "role", "button");
+        attr_dev(span3, "data-bs-toggle", "dropdown");
+        attr_dev(span3, "aria-expanded", "false");
+        add_location(span3, file$3, 46, 5, 1902);
+        attr_dev(a2, "class", "dropdown-item s-WFTADzNPIVrM");
+        attr_dev(a2, "href", "/");
+        add_location(a2, file$3, 50, 10, 2143);
+        add_location(li1, file$3, 50, 6, 2139);
+        attr_dev(a3, "class", "dropdown-item s-WFTADzNPIVrM");
         attr_dev(a3, "href", "/");
-        add_location(a3, file$3, 55, 12, 2593);
-        add_location(li2, file$3, 55, 8, 2589);
-        attr_dev(a4, "class", "dropdown-item");
-        attr_dev(a4, "href", "/");
-        add_location(a4, file$3, 56, 12, 2713);
-        add_location(li3, file$3, 56, 8, 2709);
+        add_location(a3, file$3, 51, 10, 2236);
+        add_location(li2, file$3, 51, 6, 2232);
         attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
         attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-        add_location(ul0, file$3, 54, 6, 2501);
-        attr_dev(li4, "class", "nav-item dropdown");
-        add_location(li4, file$3, 50, 5, 2283);
-        attr_dev(li5, "class", "nav-item mb-1");
-        add_location(li5, file$3, 59, 5, 2849);
-        attr_dev(ul1, "class", "navbar-nav text-white");
-        add_location(ul1, file$3, 39, 4, 1661);
+        add_location(ul0, file$3, 49, 5, 2053);
+        attr_dev(li3, "class", "nav-item dropdown s-WFTADzNPIVrM");
+        add_location(li3, file$3, 45, 4, 1866);
+        attr_dev(span4, "class", "nav-link dropdown-toggle ");
+        attr_dev(span4, "id", "navbarDropdown");
+        attr_dev(span4, "role", "button");
+        attr_dev(span4, "data-bs-toggle", "dropdown");
+        attr_dev(span4, "aria-expanded", "false");
+        add_location(span4, file$3, 55, 5, 2382);
+        attr_dev(a4, "class", "dropdown-item s-WFTADzNPIVrM");
+        attr_dev(a4, "href", "/");
+        add_location(a4, file$3, 59, 10, 2641);
+        add_location(li4, file$3, 59, 6, 2637);
+        attr_dev(a5, "class", "dropdown-item s-WFTADzNPIVrM");
+        attr_dev(a5, "href", "/");
+        add_location(a5, file$3, 60, 10, 2759);
+        add_location(li5, file$3, 60, 6, 2755);
+        attr_dev(ul1, "class", "dropdown-menu dropdown-menu-start");
+        attr_dev(ul1, "aria-labelledby", "navbarDropdown");
+        add_location(ul1, file$3, 58, 5, 2551);
+        attr_dev(li6, "class", "nav-item dropdown s-WFTADzNPIVrM");
+        add_location(li6, file$3, 54, 4, 2346);
+        attr_dev(ul2, "class", "navbar-nav");
+        add_location(ul2, file$3, 39, 3, 1649);
         attr_dev(div0, "class", "collapse navbar-collapse");
         attr_dev(div0, "id", "navbarNav");
-        add_location(div0, file$3, 38, 3, 1603);
+        add_location(div0, file$3, 38, 2, 1592);
         attr_dev(div1, "class", "container-fluid mx-5");
-        add_location(div1, file$3, 31, 2, 1206);
+        add_location(div1, file$3, 31, 1, 1203);
         attr_dev(nav, "class", "navbar navbar-expand-md transparent");
-        add_location(nav, file$3, 30, 1, 1154);
+        add_location(nav, file$3, 30, 0, 1152);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, nav, anchor);
@@ -875,81 +917,68 @@ let __tla = (async () => {
         append_hydration_dev(button, span0);
         append_hydration_dev(div1, t1);
         append_hydration_dev(div1, div0);
-        append_hydration_dev(div0, ul1);
-        append_hydration_dev(ul1, li0);
+        append_hydration_dev(div0, ul2);
+        append_hydration_dev(ul2, li0);
         append_hydration_dev(li0, span2);
         append_hydration_dev(span2, span1);
         append_hydration_dev(span1, a1);
         append_hydration_dev(a1, t2);
-        append_hydration_dev(ul1, t3);
-        append_hydration_dev(ul1, li1);
-        append_hydration_dev(li1, span4);
-        append_hydration_dev(span4, span3);
-        append_hydration_dev(span3, a2);
-        if_blocks[current_block_type_index].m(a2, null);
-        append_hydration_dev(ul1, t4);
-        append_hydration_dev(ul1, li4);
-        append_hydration_dev(li4, span5);
-        append_hydration_dev(span5, t5);
-        append_hydration_dev(span5, t6);
-        append_hydration_dev(li4, t7);
-        append_hydration_dev(li4, ul0);
+        append_hydration_dev(ul2, t3);
+        append_hydration_dev(ul2, li3);
+        append_hydration_dev(li3, span3);
+        append_hydration_dev(span3, t4);
+        append_hydration_dev(li3, t5);
+        append_hydration_dev(li3, ul0);
+        append_hydration_dev(ul0, li1);
+        append_hydration_dev(li1, a2);
+        append_hydration_dev(a2, t6);
+        append_hydration_dev(ul0, t7);
         append_hydration_dev(ul0, li2);
         append_hydration_dev(li2, a3);
         append_hydration_dev(a3, t8);
-        append_hydration_dev(ul0, t9);
-        append_hydration_dev(ul0, li3);
-        append_hydration_dev(li3, a4);
-        append_hydration_dev(a4, t10);
-        append_hydration_dev(ul1, t11);
+        append_hydration_dev(ul2, t9);
+        append_hydration_dev(ul2, li6);
+        append_hydration_dev(li6, span4);
+        append_hydration_dev(span4, t10);
+        append_hydration_dev(li6, t11);
+        append_hydration_dev(li6, ul1);
+        append_hydration_dev(ul1, li4);
+        append_hydration_dev(li4, a4);
+        append_hydration_dev(a4, t12);
+        append_hydration_dev(ul1, t13);
         append_hydration_dev(ul1, li5);
-        mount_component(walletconnectbutton, li5, null);
+        append_hydration_dev(li5, a5);
+        append_hydration_dev(a5, t14);
+        append_hydration_dev(ul2, t15);
+        mount_component(walletconnectbutton, ul2, null);
         current = true;
         if (!mounted) {
           dispose = [
             listen_dev(a2, "click", ctx[3], false, false, false),
-            listen_dev(a3, "click", prevent_default(ctx[4]), false, true, false),
-            listen_dev(a4, "click", prevent_default(ctx[5]), false, true, false)
+            listen_dev(a3, "click", ctx[4], false, false, false),
+            listen_dev(a4, "click", prevent_default(ctx[5]), false, true, false),
+            listen_dev(a5, "click", prevent_default(ctx[6]), false, true, false)
           ];
           mounted = true;
         }
       },
       p: function update(ctx2, [dirty]) {
-        let previous_block_index = current_block_type_index;
-        current_block_type_index = select_block_type(ctx2);
-        if (current_block_type_index !== previous_block_index) {
-          group_outros();
-          transition_out(if_blocks[previous_block_index], 1, 1, () => {
-            if_blocks[previous_block_index] = null;
-          });
-          check_outros();
-          if_block = if_blocks[current_block_type_index];
-          if (!if_block) {
-            if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx2);
-            if_block.c();
-          }
-          transition_in(if_block, 1);
-          if_block.m(a2, null);
-        }
-        if ((!current || dirty & 1) && t6_value !== (t6_value = ctx2[0].network + ""))
-          set_data_dev(t6, t6_value);
+        if ((!current || dirty & 1) && t10_value !== (t10_value = ctx2[0].network + ""))
+          set_data_dev(t10, t10_value);
       },
       i: function intro(local) {
         if (current)
           return;
-        transition_in(if_block);
         transition_in(walletconnectbutton.$$.fragment, local);
         current = true;
       },
       o: function outro(local) {
-        transition_out(if_block);
         transition_out(walletconnectbutton.$$.fragment, local);
         current = false;
       },
       d: function destroy(detaching) {
         if (detaching)
           detach_dev(nav);
-        if_blocks[current_block_type_index].d();
         destroy_component(walletconnectbutton);
         mounted = false;
         run_all(dispose);
@@ -988,9 +1017,9 @@ let __tla = (async () => {
       sbtcConfig.update(() => conf);
       dispatch("network_change", {});
     };
-    const togglePeg = () => {
+    const togglePeg = (pegin) => {
       const conf = $sbtcConfig;
-      conf.pegIn = !conf.pegIn;
+      conf.pegIn = pegin;
       sbtcConfig.set(conf);
     };
     const writable_props = [];
@@ -998,9 +1027,10 @@ let __tla = (async () => {
       if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
         console.warn(`<Header> was created with unknown prop '${key}'`);
     });
-    const click_handler = () => togglePeg();
-    const click_handler_1 = () => updateNetwork("testnet");
-    const click_handler_2 = () => updateNetwork("mainnet");
+    const click_handler = () => togglePeg(true);
+    const click_handler_1 = () => togglePeg(false);
+    const click_handler_2 = () => updateNetwork("testnet");
+    const click_handler_3 = () => updateNetwork("mainnet");
     $$self.$capture_state = () => ({
       WalletConnectButton,
       logoWhite,
@@ -1021,7 +1051,8 @@ let __tla = (async () => {
       togglePeg,
       click_handler,
       click_handler_1,
-      click_handler_2
+      click_handler_2,
+      click_handler_3
     ];
   }
   class Header extends SvelteComponentDev {
@@ -1926,7 +1957,7 @@ let __tla = (async () => {
     let div5;
     let div1;
     let div0;
-    let a;
+    let a2;
     let img;
     let img_src_value;
     let t0;
@@ -1954,7 +1985,7 @@ let __tla = (async () => {
         div5 = element("div");
         div1 = element("div");
         div0 = element("div");
-        a = element("a");
+        a2 = element("a");
         img = element("img");
         t0 = space();
         div4 = element("div");
@@ -1994,11 +2025,11 @@ let __tla = (async () => {
           class: true
         });
         var div0_nodes = children(div0);
-        a = claim_element(div0_nodes, "A", {
+        a2 = claim_element(div0_nodes, "A", {
           class: true,
           href: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         img = claim_element(a_nodes, "IMG", {
           src: true,
           alt: true,
@@ -2066,9 +2097,9 @@ let __tla = (async () => {
         attr_dev(img, "width", "198");
         attr_dev(img, "height", "auto");
         add_location(img, file$1, 10, 14, 361);
-        attr_dev(a, "class", "navbar-brand");
-        attr_dev(a, "href", "/");
-        add_location(a, file$1, 9, 12, 313);
+        attr_dev(a2, "class", "navbar-brand");
+        attr_dev(a2, "href", "/");
+        add_location(a2, file$1, 9, 12, 313);
         attr_dev(div0, "class", "");
         add_location(div0, file$1, 8, 10, 286);
         attr_dev(div1, "class", "px-0 col-4");
@@ -2103,8 +2134,8 @@ let __tla = (async () => {
         append_hydration_dev(div11, div5);
         append_hydration_dev(div5, div1);
         append_hydration_dev(div1, div0);
-        append_hydration_dev(div0, a);
-        append_hydration_dev(a, img);
+        append_hydration_dev(div0, a2);
+        append_hydration_dev(a2, img);
         append_hydration_dev(div5, t0);
         append_hydration_dev(div5, div4);
         append_hydration_dev(div4, div3);
@@ -2173,7 +2204,6 @@ let __tla = (async () => {
       });
     }
   }
-  const client = writable({});
   const _layout_svelte_svelte_type_style_lang = "";
   const { console: console_1 } = globals;
   const file = "src/routes/+layout.svelte";
@@ -2262,7 +2292,7 @@ let __tla = (async () => {
     let t1;
     let p1;
     let span1;
-    let a;
+    let a2;
     let span0;
     let img;
     let img_src_value;
@@ -2277,7 +2307,7 @@ let __tla = (async () => {
         t1 = space();
         p1 = element("p");
         span1 = element("span");
-        a = element("a");
+        a2 = element("a");
         span0 = element("span");
         img = element("img");
         t2 = text(" connect");
@@ -2299,11 +2329,11 @@ let __tla = (async () => {
           class: true
         });
         var span1_nodes = children(span1);
-        a = claim_element(span1_nodes, "A", {
+        a2 = claim_element(span1_nodes, "A", {
           href: true,
           class: true
         });
-        var a_nodes = children(a);
+        var a_nodes = children(a2);
         span0 = claim_element(a_nodes, "SPAN", {
           class: true
         });
@@ -2332,9 +2362,9 @@ let __tla = (async () => {
         add_location(img, file, 86, 116, 3072);
         attr_dev(span0, "class", "px-1");
         add_location(span0, file, 86, 96, 3052);
-        attr_dev(a, "href", "/");
-        attr_dev(a, "class", "pointer px-2");
-        add_location(a, file, 86, 28, 2984);
+        attr_dev(a2, "href", "/");
+        attr_dev(a2, "class", "pointer px-2");
+        add_location(a2, file, 86, 28, 2984);
         attr_dev(span1, "class", "nav-item");
         add_location(span1, file, 86, 5, 2961);
         add_location(p1, file, 86, 2, 2958);
@@ -2348,12 +2378,12 @@ let __tla = (async () => {
         append_hydration_dev(div, t1);
         append_hydration_dev(div, p1);
         append_hydration_dev(p1, span1);
-        append_hydration_dev(span1, a);
-        append_hydration_dev(a, span0);
+        append_hydration_dev(span1, a2);
+        append_hydration_dev(a2, span0);
         append_hydration_dev(span0, img);
-        append_hydration_dev(a, t2);
+        append_hydration_dev(a2, t2);
         if (!mounted) {
-          dispose = listen_dev(a, "click", prevent_default(ctx[5]), false, true, false);
+          dispose = listen_dev(a2, "click", prevent_default(ctx[5]), false, true, false);
           mounted = true;
         }
       },
@@ -2614,7 +2644,7 @@ let __tla = (async () => {
     const config = {
       appName: "sBTC Client",
       appIconUrl: origin + "/img/logo.png",
-      network: $sbtcConfig.network === "mainnet" ? new i() : new l()
+      network: $sbtcConfig.network === "mainnet" ? new i() : new c()
     };
     se(config);
     client.set(C());
@@ -2681,7 +2711,7 @@ let __tla = (async () => {
       client,
       fetchSbtcWalletAddress,
       sbtcConfig,
-      StacksTestnet: l,
+      StacksMocknet: c,
       StacksMainnet: i,
       fetchFeeEstimate,
       login,

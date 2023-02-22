@@ -1,5 +1,5 @@
-import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, n as element, x as text, c as space, p as claim_element, q as children, y as claim_text, l as detach_dev, f as claim_space, w as add_location, g as insert_hydration_dev, K as append_hydration_dev, z as set_data_dev, I as noop, G as validate_store, H as component_subscribe, v as validate_slots } from '../chunks/index-5e67b194.js';
-import { s as stores } from '../chunks/singletons-8cca75f2.js';
+import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, n as element, x as text, c as space, p as claim_element, q as children, y as claim_text, l as detach_dev, f as claim_space, w as add_location, g as insert_hydration_dev, J as append_hydration_dev, z as set_data_dev, I as noop, G as validate_store, H as component_subscribe, v as validate_slots } from '../chunks/index-2f10db54.js';
+import { s as stores } from '../chunks/singletons-cfe4d95f.js';
 
 /**
  * @type {import('$app/stores').getStores}
