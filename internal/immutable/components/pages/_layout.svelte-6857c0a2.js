@@ -2218,7 +2218,7 @@ let __tla = (async () => {
     ];
     const if_blocks = [];
     function select_block_type(ctx2, dirty) {
-      if (ctx2[1].isSignedIn)
+      if (ctx2[2].isSignedIn)
         return 0;
       return 1;
     }
@@ -2316,7 +2316,7 @@ let __tla = (async () => {
         t2 = text(" connect");
         t3 = space();
         p2 = element("p");
-        t4 = text("We are currently in Beta testing - invitation only!");
+        t4 = text("Currently in Beta testing - invitation only!");
         this.h();
       },
       l: function claim(nodes) {
@@ -2362,32 +2362,32 @@ let __tla = (async () => {
           class: true
         });
         var p2_nodes = children(p2);
-        t4 = claim_text(p2_nodes, "We are currently in Beta testing - invitation only!");
+        t4 = claim_text(p2_nodes, "Currently in Beta testing - invitation only!");
         p2_nodes.forEach(detach_dev);
         div_nodes.forEach(detach_dev);
         this.h();
       },
       h: function hydrate() {
         attr_dev(p0, "class", "text-white");
-        add_location(p0, file, 83, 2, 2888);
+        add_location(p0, file, 85, 2, 2920);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 84, 116, 3078);
+        add_location(img, file, 86, 116, 3110);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 84, 96, 3058);
+        add_location(span0, file, 86, 96, 3090);
         attr_dev(a2, "href", "/");
         attr_dev(a2, "class", "pointer px-2");
-        add_location(a2, file, 84, 28, 2990);
+        add_location(a2, file, 86, 28, 3022);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 84, 5, 2967);
-        add_location(p1, file, 84, 2, 2964);
+        add_location(span1, file, 86, 5, 2999);
+        add_location(p1, file, 86, 2, 2996);
         attr_dev(p2, "class", "mt-5 text-warning");
-        add_location(p2, file, 85, 2, 3196);
+        add_location(p2, file, 87, 2, 3228);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-        add_location(div, file, 82, 0, 2858);
+        add_location(div, file, 84, 0, 2890);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2404,7 +2404,7 @@ let __tla = (async () => {
         append_hydration_dev(div, p2);
         append_hydration_dev(p2, t4);
         if (!mounted) {
-          dispose = listen_dev(a2, "click", prevent_default(ctx[4]), false, true, false);
+          dispose = listen_dev(a2, "click", prevent_default(ctx[5]), false, true, false);
           mounted = true;
         }
       },
@@ -2422,7 +2422,7 @@ let __tla = (async () => {
       block,
       id: create_else_block.name,
       type: "else",
-      source: "(82:0) {:else}",
+      source: "(84:0) {:else}",
       ctx
     });
     return block;
@@ -2431,15 +2431,15 @@ let __tla = (async () => {
     let div;
     let header;
     let t0;
+    let previous_key = ctx[0];
     let t1;
     let footer;
     let current;
     header = new Header({
       $$inline: true
     });
-    header.$on("network_change", ctx[2]);
-    const default_slot_template = ctx[6].default;
-    const default_slot = create_slot(default_slot_template, ctx, ctx[5], null);
+    header.$on("network_change", ctx[3]);
+    let key_block = create_key_block(ctx);
     footer = new Footer({
       $$inline: true
     });
@@ -2448,8 +2448,7 @@ let __tla = (async () => {
         div = element("div");
         create_component(header.$$.fragment);
         t0 = space();
-        if (default_slot)
-          default_slot.c();
+        key_block.c();
         t1 = space();
         create_component(footer.$$.fragment);
         this.h();
@@ -2461,8 +2460,7 @@ let __tla = (async () => {
         var div_nodes = children(div);
         claim_component(header.$$.fragment, div_nodes);
         t0 = claim_space(div_nodes);
-        if (default_slot)
-          default_slot.l(div_nodes);
+        key_block.l(div_nodes);
         t1 = claim_space(div_nodes);
         claim_component(footer.$$.fragment, div_nodes);
         div_nodes.forEach(detach_dev);
@@ -2476,31 +2474,35 @@ let __tla = (async () => {
         insert_hydration_dev(target, div, anchor);
         mount_component(header, div, null);
         append_hydration_dev(div, t0);
-        if (default_slot) {
-          default_slot.m(div, null);
-        }
+        key_block.m(div, null);
         append_hydration_dev(div, t1);
         mount_component(footer, div, null);
         current = true;
       },
       p: function update(ctx2, dirty) {
-        if (default_slot) {
-          if (default_slot.p && (!current || dirty & 32)) {
-            update_slot_base(default_slot, default_slot_template, ctx2, ctx2[5], !current ? get_all_dirty_from_scope(ctx2[5]) : get_slot_changes(default_slot_template, ctx2[5], dirty, null), null);
-          }
+        if (dirty & 1 && safe_not_equal(previous_key, previous_key = ctx2[0])) {
+          group_outros();
+          transition_out(key_block, 1, 1, noop);
+          check_outros();
+          key_block = create_key_block(ctx2);
+          key_block.c();
+          transition_in(key_block, 1);
+          key_block.m(div, t1);
+        } else {
+          key_block.p(ctx2, dirty);
         }
       },
       i: function intro(local) {
         if (current)
           return;
         transition_in(header.$$.fragment, local);
-        transition_in(default_slot, local);
+        transition_in(key_block);
         transition_in(footer.$$.fragment, local);
         current = true;
       },
       o: function outro(local) {
         transition_out(header.$$.fragment, local);
-        transition_out(default_slot, local);
+        transition_out(key_block);
         transition_out(footer.$$.fragment, local);
         current = false;
       },
@@ -2508,8 +2510,7 @@ let __tla = (async () => {
         if (detaching)
           detach_dev(div);
         destroy_component(header);
-        if (default_slot)
-          default_slot.d(detaching);
+        key_block.d(detaching);
         destroy_component(footer);
       }
     };
@@ -2522,10 +2523,60 @@ let __tla = (async () => {
     });
     return block;
   }
+  function create_key_block(ctx) {
+    let current;
+    const default_slot_template = ctx[7].default;
+    const default_slot = create_slot(default_slot_template, ctx, ctx[6], null);
+    const block = {
+      c: function create() {
+        if (default_slot)
+          default_slot.c();
+      },
+      l: function claim(nodes) {
+        if (default_slot)
+          default_slot.l(nodes);
+      },
+      m: function mount(target, anchor) {
+        if (default_slot) {
+          default_slot.m(target, anchor);
+        }
+        current = true;
+      },
+      p: function update(ctx2, dirty) {
+        if (default_slot) {
+          if (default_slot.p && (!current || dirty & 64)) {
+            update_slot_base(default_slot, default_slot_template, ctx2, ctx2[6], !current ? get_all_dirty_from_scope(ctx2[6]) : get_slot_changes(default_slot_template, ctx2[6], dirty, null), null);
+          }
+        }
+      },
+      i: function intro(local) {
+        if (current)
+          return;
+        transition_in(default_slot, local);
+        current = true;
+      },
+      o: function outro(local) {
+        transition_out(default_slot, local);
+        current = false;
+      },
+      d: function destroy(detaching) {
+        if (default_slot)
+          default_slot.d(detaching);
+      }
+    };
+    dispatch_dev("SvelteRegisterBlock", {
+      block,
+      id: create_key_block.name,
+      type: "key",
+      source: "(79:2) {#key componentKey}",
+      ctx
+    });
+    return block;
+  }
   function create_fragment(ctx) {
     let if_block_anchor;
     let current;
-    let if_block = ctx[0] && create_if_block(ctx);
+    let if_block = ctx[1] && create_if_block(ctx);
     const block = {
       c: function create() {
         if (if_block)
@@ -2544,10 +2595,10 @@ let __tla = (async () => {
         current = true;
       },
       p: function update(ctx2, [dirty]) {
-        if (ctx2[0]) {
+        if (ctx2[1]) {
           if (if_block) {
             if_block.p(ctx2, dirty);
-            if (dirty & 1) {
+            if (dirty & 2) {
               transition_in(if_block, 1);
             }
           } else {
@@ -2604,7 +2655,7 @@ let __tla = (async () => {
     });
     onDestroy(unsubscribe);
     const networkChange = () => {
-      componentKey++;
+      $$invalidate(0, componentKey++, componentKey);
     };
     let inited = false;
     let origin = "";
@@ -2620,7 +2671,7 @@ let __tla = (async () => {
     client.set(C());
     const auth = Ce();
     validate_store(auth, "auth");
-    component_subscribe($$self, auth, (value) => $$invalidate(1, $auth = value));
+    component_subscribe($$self, auth, (value) => $$invalidate(2, $auth = value));
     const doLogin = () => {
       login($auth);
     };
@@ -2635,7 +2686,7 @@ let __tla = (async () => {
       globalThis.Buffer = buffer.Buffer;
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
-        $$invalidate(0, inited = true);
+        $$invalidate(1, inited = true);
         await fetchWalletAddress();
         let conf = $sbtcConfig;
         if (!conf || !conf.feeCalc)
@@ -2667,7 +2718,7 @@ let __tla = (async () => {
     });
     $$self.$$set = ($$props2) => {
       if ("$$scope" in $$props2)
-        $$invalidate(5, $$scope = $$props2.$$scope);
+        $$invalidate(6, $$scope = $$props2.$$scope);
     };
     $$self.$capture_state = () => ({
       getAuth: Ce,
@@ -2703,9 +2754,9 @@ let __tla = (async () => {
     });
     $$self.$inject_state = ($$props2) => {
       if ("componentKey" in $$props2)
-        componentKey = $$props2.componentKey;
+        $$invalidate(0, componentKey = $$props2.componentKey);
       if ("inited" in $$props2)
-        $$invalidate(0, inited = $$props2.inited);
+        $$invalidate(1, inited = $$props2.inited);
       if ("origin" in $$props2)
         origin = $$props2.origin;
       if ("bootstrap" in $$props2)
@@ -2715,6 +2766,7 @@ let __tla = (async () => {
       $$self.$inject_state($$props.$$inject);
     }
     return [
+      componentKey,
       inited,
       $auth,
       networkChange,

@@ -7,13 +7,13 @@
     "file": "internal/immutable/assets/logo-white-68f65e57.jpeg",
     "src": "src/lib/assets/logo-white.jpeg"
   },
-  "src/lib/assets/png-assets/stx_eco_discord.png": {
-    "file": "internal/immutable/assets/stx_eco_discord-5cc61295.png",
-    "src": "src/lib/assets/png-assets/stx_eco_discord.png"
-  },
   "src/lib/assets/png-assets/stx_eco_wallet_on.png": {
     "file": "internal/immutable/assets/stx_eco_wallet_on-090e5a93.png",
     "src": "src/lib/assets/png-assets/stx_eco_wallet_on.png"
+  },
+  "src/lib/assets/png-assets/stx_eco_discord.png": {
+    "file": "internal/immutable/assets/stx_eco_discord-5cc61295.png",
+    "src": "src/lib/assets/png-assets/stx_eco_discord.png"
   },
   "src/lib/assets/png-assets/stx_eco_twitter.png": {
     "file": "internal/immutable/assets/stx_eco_twitter-b58c754c.png",
@@ -23,30 +23,6 @@
     "file": "internal/immutable/assets/stx_eco_github-0e15c254.png",
     "src": "src/lib/assets/png-assets/stx_eco_github.png"
   },
-  "src/lib/assets/wallets/electrum2.png": {
-    "file": "internal/immutable/assets/electrum2-8623e396.png",
-    "src": "src/lib/assets/wallets/electrum2.png"
-  },
-  "src/lib/assets/wallets/electrum3.png": {
-    "file": "internal/immutable/assets/electrum3-a984e762.png",
-    "src": "src/lib/assets/wallets/electrum3.png"
-  },
-  "src/lib/assets/wallets/electrum1.png": {
-    "file": "internal/immutable/assets/electrum1-b86953ea.png",
-    "src": "src/lib/assets/wallets/electrum1.png"
-  },
-  "src/lib/assets/wallets/trezor1.png": {
-    "file": "internal/immutable/assets/trezor1-52a60956.png",
-    "src": "src/lib/assets/wallets/trezor1.png"
-  },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-latin-ext-400-normal-6bfabd30.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2"
-  },
-  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2": {
-    "file": "internal/immutable/assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
-    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2"
-  },
   "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-cyrillic-ext-400-normal-3df7909e.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-ext-400-normal.woff2"
@@ -55,9 +31,17 @@
     "file": "internal/immutable/assets/fira-mono-cyrillic-400-normal-c7d433fd.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-cyrillic-400-normal.woff2"
   },
+  "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-greek-ext-400-normal-9e2fe623.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-ext-400-normal.woff2"
+  },
   "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-greek-400-normal-a8be01ce.woff2",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-greek-400-normal.woff2"
+  },
+  "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2": {
+    "file": "internal/immutable/assets/fira-mono-latin-ext-400-normal-6bfabd30.woff2",
+    "src": "node_modules/@fontsource/fira-mono/files/fira-mono-latin-ext-400-normal.woff2"
   },
   "node_modules/@fontsource/fira-mono/files/fira-mono-latin-400-normal.woff2": {
     "file": "internal/immutable/assets/fira-mono-latin-400-normal-e43b3538.woff2",
@@ -66,6 +50,22 @@
   "node_modules/@fontsource/fira-mono/files/fira-mono-all-400-normal.woff": {
     "file": "internal/immutable/assets/fira-mono-all-400-normal-1e3b098c.woff",
     "src": "node_modules/@fontsource/fira-mono/files/fira-mono-all-400-normal.woff"
+  },
+  "src/lib/assets/wallets/electrum1.png": {
+    "file": "internal/immutable/assets/electrum1-b86953ea.png",
+    "src": "src/lib/assets/wallets/electrum1.png"
+  },
+  "src/lib/assets/wallets/electrum2.png": {
+    "file": "internal/immutable/assets/electrum2-8623e396.png",
+    "src": "src/lib/assets/wallets/electrum2.png"
+  },
+  "src/lib/assets/wallets/electrum3.png": {
+    "file": "internal/immutable/assets/electrum3-a984e762.png",
+    "src": "src/lib/assets/wallets/electrum3.png"
+  },
+  "src/lib/assets/wallets/trezor1.png": {
+    "file": "internal/immutable/assets/trezor1-52a60956.png",
+    "src": "src/lib/assets/wallets/trezor1.png"
   },
   "node_modules/tiny-secp256k1/lib/secp256k1.wasm": {
     "file": "internal/immutable/assets/secp256k1-f1fb5561.wasm",
@@ -88,7 +88,7 @@
     "src": "src/routes/+layout.css"
   },
   "node_modules/@sveltejs/kit/src/runtime/client/start.js": {
-    "file": "internal/immutable/start-c76ea09d.js",
+    "file": "internal/immutable/start-208f999a.js",
     "src": "node_modules/@sveltejs/kit/src/runtime/client/start.js",
     "isEntry": true,
     "imports": [
@@ -166,7 +166,7 @@
     "file": "internal/immutable/chunks/_page-ff02d51a.js"
   },
   ".svelte-kit/generated/nodes/0.js": {
-    "file": "internal/immutable/chunks/0-fca6598a.js",
+    "file": "internal/immutable/chunks/0-0b374302.js",
     "src": ".svelte-kit/generated/nodes/0.js",
     "isDynamicEntry": true,
     "imports": [
@@ -265,7 +265,7 @@
     ]
   },
   "src/routes/+layout.svelte": {
-    "file": "internal/immutable/components/pages/_layout.svelte-25819aee.js",
+    "file": "internal/immutable/components/pages/_layout.svelte-6857c0a2.js",
     "src": "src/routes/+layout.svelte",
     "isEntry": true,
     "imports": [
