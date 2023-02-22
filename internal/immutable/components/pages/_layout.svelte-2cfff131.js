@@ -1,7 +1,7 @@
 import { b as base, _ as __vitePreload } from "../../chunks/preload-helper-bd152303.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, c as space, n as element, f as claim_space, p as claim_element, q as children, l as detach_dev, r as attr_dev, w as add_location, g as insert_hydration_dev, I as noop, x as text, y as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, A as create_component, B as claim_component, C as mount_component, z as set_data_dev, k as transition_in, t as transition_out, D as destroy_component, O as run_all, e as empty, j as check_outros, P as onDestroy, E as tick, Q as globals, h as group_outros, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-2f10db54.js";
 import { C as Ce, a, Q as Qt, s as sbtcConfig, f as fetchSbtcWalletAddress, i, c, b as se, d as C, e as defaultSbtcConfig } from "../../chunks/stores-96fe850b.js";
-import { l as login, c as client } from "../../chunks/stacks-fe7b74c7.js";
+import { l as login, c as client } from "../../chunks/stacks-71c6e6ab.js";
 import { c as coordinator } from "../../chunks/sbtc_admin-d603c98c.js";
 import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-3d62e9f1.js";
 let Layout;
@@ -2297,13 +2297,16 @@ let __tla = (async () => {
     let img;
     let img_src_value;
     let t2;
+    let t3;
+    let p2;
+    let t4;
     let mounted;
     let dispose;
     const block = {
       c: function create() {
         div = element("div");
         p0 = element("p");
-        t0 = text("Connect wallet to continue...");
+        t0 = text("Connect your Hiro web wallet to peg in to SBTC!");
         t1 = space();
         p1 = element("p");
         span1 = element("span");
@@ -2311,6 +2314,9 @@ let __tla = (async () => {
         span0 = element("span");
         img = element("img");
         t2 = text(" connect");
+        t3 = space();
+        p2 = element("p");
+        t4 = text("Currently in Beta testing - invitation only!");
         this.h();
       },
       l: function claim(nodes) {
@@ -2318,9 +2324,11 @@ let __tla = (async () => {
           class: true
         });
         var div_nodes = children(div);
-        p0 = claim_element(div_nodes, "P", {});
+        p0 = claim_element(div_nodes, "P", {
+          class: true
+        });
         var p0_nodes = children(p0);
-        t0 = claim_text(p0_nodes, "Connect wallet to continue...");
+        t0 = claim_text(p0_nodes, "Connect your Hiro web wallet to peg in to SBTC!");
         p0_nodes.forEach(detach_dev);
         t1 = claim_space(div_nodes);
         p1 = claim_element(div_nodes, "P", {});
@@ -2349,25 +2357,35 @@ let __tla = (async () => {
         a_nodes.forEach(detach_dev);
         span1_nodes.forEach(detach_dev);
         p1_nodes.forEach(detach_dev);
+        t3 = claim_space(div_nodes);
+        p2 = claim_element(div_nodes, "P", {
+          class: true
+        });
+        var p2_nodes = children(p2);
+        t4 = claim_text(p2_nodes, "Currently in Beta testing - invitation only!");
+        p2_nodes.forEach(detach_dev);
         div_nodes.forEach(detach_dev);
         this.h();
       },
       h: function hydrate() {
+        attr_dev(p0, "class", "text-white");
         add_location(p0, file, 85, 2, 2919);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 86, 116, 3072);
+        add_location(img, file, 86, 116, 3109);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 86, 96, 3052);
+        add_location(span0, file, 86, 96, 3089);
         attr_dev(a2, "href", "/");
         attr_dev(a2, "class", "pointer px-2");
-        add_location(a2, file, 86, 28, 2984);
+        add_location(a2, file, 86, 28, 3021);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 86, 5, 2961);
-        add_location(p1, file, 86, 2, 2958);
+        add_location(span1, file, 86, 5, 2998);
+        add_location(p1, file, 86, 2, 2995);
+        attr_dev(p2, "class", "mt-5 text-warning");
+        add_location(p2, file, 87, 2, 3227);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
         add_location(div, file, 84, 0, 2889);
       },
@@ -2382,6 +2400,9 @@ let __tla = (async () => {
         append_hydration_dev(a2, span0);
         append_hydration_dev(span0, img);
         append_hydration_dev(a2, t2);
+        append_hydration_dev(div, t3);
+        append_hydration_dev(div, p2);
+        append_hydration_dev(p2, t4);
         if (!mounted) {
           dispose = listen_dev(a2, "click", prevent_default(ctx[5]), false, true, false);
           mounted = true;
