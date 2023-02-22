@@ -8,7 +8,7 @@ import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_
 import { s as sbtcConfig, a, C as Ce, _ as __viteBrowserExternal, k as fetchUserBalance } from "../../chunks/stores-96fe850b.js";
 import { d as decodeStacksAddress, g as getAugmentedNamespace, a as commonjsGlobal, b as getDefaultExportFromCjs, r as requestSignMessage } from "../../chunks/stacks-fe7b74c7.js";
 import { U as UserBalance } from "../../chunks/UserBalance-bf786f0c.js";
-import { m as maxCommit, b as buffer, c as fetchUTXOs, d as attachAllInputTransactions, e as fetchAddressDetails, i as isSupported, A as ArrowUp, a as ArrowDown } from "../../chunks/index-438f9248.js";
+import { m as maxCommit, b as buffer, c as fetchUTXOs, d as attachAllInputTransactions, e as fetchAddressDetails, A as ArrowUp, a as ArrowDown } from "../../chunks/index-3d62e9f1.js";
 import { Tooltip } from "../../chunks/bootstrap.esm-e88d1e6f.js";
 let Page;
 let __tla = (async () => {
@@ -30462,12 +30462,12 @@ let __tla = (async () => {
     });
     const totalInputValue = maxCommit(config2.utxos);
     if (config2.pegIn) {
-      if (!config2.stxAddress)
+      if (!feeCalc && !config2.stxAddress)
         throw new Error("stxAddress not defined.");
-      const fee2Apply = feeCalc ? 0 : config2.feeCalc.pegInFeeCalc.feeToApply;
-      const stxAddress = feeCalc ? "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW" : config2.stxAddress;
-      const pegInAmount = feeCalc ? Math.floor(totalInputValue / 2) : config2.feeCalc.pegInFeeCalc.pegInAmount;
-      addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, stxAddress, totalInputValue, pegInAmount, fee2Apply);
+      if (feeCalc)
+        addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW", totalInputValue, Math.floor(totalInputValue / 2), 0);
+      else
+        addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, config2.stxAddress, totalInputValue, config2.feeCalc.pegInFeeCalc.pegInAmount, config2.feeCalc.pegInFeeCalc.feeToApply);
     } else {
       let sig = config2.sigData.signature;
       let feeToApply = config2.feeCalc.pegOutFeeCalc.feeToApply;
@@ -30653,7 +30653,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "text-warning");
-        add_location(div, file$b, 45, 17, 1641);
+        add_location(div, file$b, 37, 17, 1438);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -30672,7 +30672,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block_2$5.name,
       type: "if",
-      source: "(46:0) {#if errorReason}",
+      source: "(38:0) {#if errorReason}",
       ctx
     });
     return block2;
@@ -30697,7 +30697,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "text-danger");
-        add_location(div, file$b, 59, 6, 2623);
+        add_location(div, file$b, 51, 6, 2420);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -30713,7 +30713,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block_1$6.name,
       type: "if",
-      source: "(59:29) ",
+      source: "(51:29) ",
       ctx
     });
     return block2;
@@ -30775,13 +30775,13 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(div0, file$b, 55, 6, 2375);
+        add_location(div0, file$b, 47, 6, 2172);
         attr_dev(a2, "href", "/");
         attr_dev(a2, "class", "");
-        add_location(a2, file$b, 56, 11, 2484);
-        add_location(div1, file$b, 56, 6, 2479);
+        add_location(a2, file$b, 48, 11, 2281);
+        add_location(div1, file$b, 48, 6, 2276);
         attr_dev(div2, "class", "d-flex justify-content-between text-info");
-        add_location(div2, file$b, 54, 4, 2313);
+        add_location(div2, file$b, 46, 4, 2110);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div2, anchor);
@@ -30817,7 +30817,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block$9.name,
       type: "if",
-      source: "(54:4) {#if showUtxos}",
+      source: "(46:4) {#if showUtxos}",
       ctx
     });
     return block2;
@@ -30929,25 +30929,25 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(span0, file$b, 49, 6, 1807);
+        add_location(span0, file$b, 41, 6, 1604);
         attr_dev(span1, "class", "pointer text-info");
         attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
         attr_dev(span1, "data-bs-placement", "top");
         attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
-        add_location(span1, file$b, 50, 6, 1865);
+        add_location(span1, file$b, 42, 6, 1662);
         attr_dev(label, "for", "transact-path");
         attr_dev(label, "class", "d-flex justify-content-between");
-        add_location(label, file$b, 48, 4, 1734);
+        add_location(label, file$b, 40, 4, 1531);
         attr_dev(input, "type", "text");
         attr_dev(input, "id", "from-address");
         attr_dev(input, "class", "form-control");
         attr_dev(input, "autocomplete", "off");
-        add_location(input, file$b, 52, 4, 2142);
+        add_location(input, file$b, 44, 4, 1939);
         attr_dev(div0, "class", "col");
-        add_location(div0, file$b, 47, 2, 1712);
+        add_location(div0, file$b, 39, 2, 1509);
         attr_dev(div1, "class", "row");
-        add_location(div1, file$b, 46, 0, 1692);
+        add_location(div1, file$b, 38, 0, 1489);
       },
       m: function mount(target, anchor) {
         if (if_block0)
@@ -31057,12 +31057,6 @@ let __tla = (async () => {
         $$invalidate(2, errorReason = "Invalid address");
         return;
       }
-      try {
-        isSupported($sbtcConfig.network, bitcoinAddress);
-      } catch (err) {
-        $$invalidate(2, errorReason = err.message);
-        return;
-      }
       if (!force && $sbtcConfig.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
         return;
       }
@@ -31099,11 +31093,9 @@ let __tla = (async () => {
       fetchUTXOs,
       attachAllInputTransactions,
       fetchAddressDetails,
-      isSupported,
       PatchQuestion,
       maxCommit,
       calculateFee,
-      address: src$3.address,
       bitcoinAddress,
       errorReason,
       configureUTXOs,
