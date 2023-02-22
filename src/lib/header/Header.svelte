@@ -52,8 +52,8 @@ const togglePeg = (pegin:boolean) => {
 						Peg
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="/" on:click={() => togglePeg(true)}>Peg In</a></li>
-						<li><a class="dropdown-item" href="/" on:click={() => togglePeg(false)}>Peg Out</a></li>
+						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(true)}>Peg In</a></li>
+						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(false)}>Peg Out</a></li>
 					</ul>
 				</li>
 				<li class="nav-item dropdown">

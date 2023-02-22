@@ -65,7 +65,7 @@ export async function attachTransaction(network:string, utxo:UTXO) {
   //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
   //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
   const tx = await fetchTransaction(network, utxo.txid);
-  const hex = await fetchTransaction(network, utxo.txid);
+  const hex = await fetchTransactionHex(network, utxo.txid);
   tx.hex = hex
   utxo.tx = tx;
   return utxo;

@@ -92,7 +92,7 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
   })
   const totalInputValue = maxCommit(config.utxos);
   if (config.pegIn) {
-    if (!config.stxAddress) throw new Error('stxAddress not defined.');
+    if (!feeCalc && !config.stxAddress) throw new Error('stxAddress not defined.');
     if (feeCalc) addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, 'ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW', totalInputValue, Math.floor(totalInputValue/2), 0);
     else addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.stxAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
   } else {
