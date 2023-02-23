@@ -127,3 +127,17 @@ Update 1: the tx only has 3 confirmations - maybe this is why.
 ```bash
 TXID=523700c7597e94e91f2879f55a125e8379b37408512a67b48c69b31d9915f879
 ```
+
+##### 4.1 Peg Out 23/Feb
+
+From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
+SBTC Wallet: `tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss`
+Stacks Address: `ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5` (Balance before 0.05578706 sBTC)
+Peg Out Amount: 35000 (see op_return vout 0)
+Peg Out Stx Address: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM (see op_return vout 0)
+Peg Out Dust: 500 (0.000005)
+Peg Out Change: tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e	     7647521
+
+```bash
+TXID=e48f84d6a9a4df155eac836bdeac2f9396b79ab18cda0fef13e9d2e6856d607b
+```

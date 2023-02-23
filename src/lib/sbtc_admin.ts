@@ -17,7 +17,7 @@ export async function mintTo(contractCall:any, amount:number, stxAddress: string
   await contractCall.openContractCall({
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+    contractAddress: import.meta.env.VITE_SBTC_DEPLOYER_ADDRESS,
     contractName: 'sbtc-alpha',
     functionName: 'mint!',
     functionArgs: functionArgs,
@@ -39,7 +39,7 @@ export async function burnFrom(contractCall:any, amount:number, stxAddress: stri
   await contractCall.openContractCall({
     postConditions: [],
     postConditionMode: PostConditionMode.Allow,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+    contractAddress: import.meta.env.VITE_SBTC_DEPLOYER_ADDRESS,
     contractName: 'sbtc-alpha',
     functionName: 'burn!',
     functionArgs: functionArgs,
@@ -63,7 +63,7 @@ export async function setCoordinator(contractCall:any) {
   await contractCall.openContractCall({
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+    contractAddress: import.meta.env.VITE_SBTC_DEPLOYER_ADDRESS,
     contractName: 'sbtc-alpha',
     functionName: 'set-coordinator-data',
     functionArgs: functionArgs,
@@ -83,7 +83,7 @@ export async function setBtcWallet(contractCall:any) {
   await contractCall.openContractCall({
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_DAO_DEPLOY_ADDRESS,
+    contractAddress: import.meta.env.VITE_SBTC_DEPLOYER_ADDRESS,
     contractName: 'sbtc-alpha',
     functionName: 'set-bitcoin-wallet-address',
     functionArgs: functionArgs,
