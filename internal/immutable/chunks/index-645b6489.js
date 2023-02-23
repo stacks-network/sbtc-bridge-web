@@ -302,6 +302,12 @@ class ArrowUp extends SvelteComponentDev {
 	}
 }
 
+function isSupported(network, address) {
+  if (address.startsWith("1") || address.startsWith("m") || address.startsWith("n")) {
+    throw new Error("Legacy addresses are not supported in the current version.");
+  }
+  return true;
+}
 async function fetchAddressDetails(network, address) {
   checkNetwork(network);
   const url = network === "mainnet" ? "https://mempool.space/api" : "https://mempool.space/testnet/api";
@@ -357,11 +363,15 @@ function maxCommit(utxos) {
   return summ || 0;
 }
 async function fetchFeeEstimate(network) {
-  checkNetwork(network);
-  const url = network === "mainnet" ? "https://api.blockcypher.com/v1/btc/main" : "https://api.blockcypher.com/v1/btc/test3";
-  const response = await fetch(url);
-  const info = await response.json();
-  return info;
+  try {
+    checkNetwork(network);
+    const url = network === "mainnet" ? "https://api.blockcypher.com/v1/btc/main" : "https://api.blockcypher.com/v1/btc/test3";
+    const response = await fetch(url);
+    const info = await response.json();
+    return info;
+  } catch (err) {
+    console.log(err);
+  }
 }
 function checkNetwork(network) {
   if (network !== "testnet" && network !== "mainnet") {
@@ -2718,4 +2728,4 @@ ieee754.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 	}
 } (buffer));
 
-export { ArrowUp as A, ArrowDown as a, buffer as b, fetchUTXOs as c, attachAllInputTransactions as d, fetchAddressDetails as e, fetchFeeEstimate as f, maxCommit as m };
+export { ArrowUp as A, ArrowDown as a, buffer as b, fetchUTXOs as c, attachAllInputTransactions as d, fetchAddressDetails as e, fetchFeeEstimate as f, isSupported as i, maxCommit as m };

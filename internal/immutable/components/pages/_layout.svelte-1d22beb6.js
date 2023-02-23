@@ -1,9 +1,9 @@
 import { b as base, _ as __vitePreload } from "../../chunks/preload-helper-bd152303.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, G as validate_store, H as component_subscribe, o as onMount, c as space, n as element, f as claim_space, p as claim_element, q as children, l as detach_dev, r as attr_dev, w as add_location, g as insert_hydration_dev, I as noop, x as text, y as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, u as set_style, N as createEventDispatcher, A as create_component, B as claim_component, C as mount_component, z as set_data_dev, k as transition_in, t as transition_out, D as destroy_component, O as run_all, e as empty, j as check_outros, P as onDestroy, E as tick, Q as globals, h as group_outros, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../../chunks/index-2f10db54.js";
-import { C as Ce, a, Q as Qt, s as sbtcConfig, f as fetchSbtcWalletAddress, i, c, b as se, d as C, e as defaultSbtcConfig } from "../../chunks/stores-96fe850b.js";
-import { l as login, c as client } from "../../chunks/stacks-71c6e6ab.js";
-import { c as coordinator } from "../../chunks/sbtc_admin-d603c98c.js";
-import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-3d62e9f1.js";
+import { C as Ce, a, Q as Qt, s as sbtcConfig, f as fetchSbtcWalletAddress, i, c, b as se, d as C, e as defaultSbtcConfig } from "../../chunks/stores-c1b5a995.js";
+import { l as login, c as client } from "../../chunks/stacks-194c9e5a.js";
+import { c as coordinator } from "../../chunks/sbtc_admin-e992fadc.js";
+import { A as ArrowUp, a as ArrowDown, b as buffer, f as fetchFeeEstimate } from "../../chunks/index-645b6489.js";
 let Layout;
 let __tla = (async () => {
   const app = "";
@@ -838,8 +838,8 @@ let __tla = (async () => {
         attr_dev(img, "alt", "CityCoins Test");
         add_location(img, file$3, 33, 3, 1283);
         attr_dev(a0, "class", "navbar-brand");
-        attr_dev(a0, "href", base);
-        add_location(a0, file$3, 32, 3, 1241);
+        attr_dev(a0, "href", base + "/");
+        add_location(a0, file$3, 32, 2, 1240);
         attr_dev(span0, "class", "navbar-toggler-icon");
         add_location(span0, file$3, 36, 3, 1536);
         attr_dev(button, "class", "navbar-toggler");
@@ -2280,7 +2280,7 @@ let __tla = (async () => {
       block,
       id: create_if_block.name,
       type: "if",
-      source: "(75:0) {#if inited}",
+      source: "(82:0) {#if inited}",
       ctx
     });
     return block;
@@ -2369,25 +2369,25 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(p0, "class", "text-white");
-        add_location(p0, file, 85, 2, 2920);
+        add_location(p0, file, 92, 2, 3068);
         if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
           attr_dev(img, "src", img_src_value);
         attr_dev(img, "alt", "Connect Wallet / Login");
         attr_dev(img, "width", "40");
         attr_dev(img, "height", "auto");
-        add_location(img, file, 86, 116, 3110);
+        add_location(img, file, 93, 116, 3258);
         attr_dev(span0, "class", "px-1");
-        add_location(span0, file, 86, 96, 3090);
+        add_location(span0, file, 93, 96, 3238);
         attr_dev(a2, "href", "/");
         attr_dev(a2, "class", "pointer px-2");
-        add_location(a2, file, 86, 28, 3022);
+        add_location(a2, file, 93, 28, 3170);
         attr_dev(span1, "class", "nav-item");
-        add_location(span1, file, 86, 5, 2999);
-        add_location(p1, file, 86, 2, 2996);
+        add_location(span1, file, 93, 5, 3147);
+        add_location(p1, file, 93, 2, 3144);
         attr_dev(p2, "class", "mt-5 text-warning");
-        add_location(p2, file, 87, 2, 3228);
+        add_location(p2, file, 94, 2, 3376);
         attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-        add_location(div, file, 84, 0, 2890);
+        add_location(div, file, 91, 0, 3038);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2422,7 +2422,7 @@ let __tla = (async () => {
       block,
       id: create_else_block.name,
       type: "else",
-      source: "(84:0) {:else}",
+      source: "(91:0) {:else}",
       ctx
     });
     return block;
@@ -2468,7 +2468,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-        add_location(div, file, 76, 0, 2756);
+        add_location(div, file, 83, 0, 2904);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -2518,7 +2518,7 @@ let __tla = (async () => {
       block,
       id: create_if_block_1.name,
       type: "if",
-      source: "(76:0) {#if $auth.isSignedIn}",
+      source: "(83:0) {#if $auth.isSignedIn}",
       ctx
     });
     return block;
@@ -2568,7 +2568,7 @@ let __tla = (async () => {
       block,
       id: create_key_block.name,
       type: "key",
-      source: "(79:2) {#key componentKey}",
+      source: "(86:2) {#key componentKey}",
       ctx
     });
     return block;
@@ -2687,11 +2687,17 @@ let __tla = (async () => {
       bootstrap = await __vitePreload(() => import("../../chunks/bootstrap.esm-e88d1e6f.js"), true ? [] : void 0, import.meta.url);
       try {
         $$invalidate(1, inited = true);
-        await fetchWalletAddress();
+        try {
+          await fetchWalletAddress();
+        } catch (err) {
+          console.log(err);
+        }
         let conf = $sbtcConfig;
         if (!conf || !conf.feeCalc)
           conf = defaultSbtcConfig;
-        conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+        const feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+        if (feeInfo)
+          conf.feeInfo = feeInfo;
         conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
         sbtcConfig.update(() => conf);
       } catch (err) {

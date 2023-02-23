@@ -5,10 +5,10 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, R as create_slot, _ as assign, $ as compute_rest_props, v as validate_slots, a0 as exclude_internal_props, a1 as svg_element, a2 as claim_svg_element, q as children, l as detach_dev, r as attr_dev, w as add_location, a3 as set_svg_attributes, a4 as toggle_class, g as insert_hydration_dev, J as append_hydration_dev, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes, a5 as get_spread_update, k as transition_in, t as transition_out, G as validate_store, H as component_subscribe, N as createEventDispatcher, a6 as set_store_value, n as element, x as text, c as space, A as create_component, p as claim_element, y as claim_text, f as claim_space, B as claim_component, C as mount_component, a7 as set_input_value, L as listen_dev, D as destroy_component, O as run_all, z as set_data_dev, M as prevent_default, a8 as to_number, Q as globals$1, I as noop$3, o as onMount, e as empty, h as group_outros, j as check_outros, K as src_url_equal, a9 as validate_each_argument, u as set_style, aa as prop_dev, ab as destroy_each } from "../../chunks/index-2f10db54.js";
-import { s as sbtcConfig, a, C as Ce, _ as __viteBrowserExternal, k as fetchUserBalance } from "../../chunks/stores-96fe850b.js";
-import { d as decodeStacksAddress, g as getAugmentedNamespace, a as commonjsGlobal, b as getDefaultExportFromCjs, r as requestSignMessage } from "../../chunks/stacks-71c6e6ab.js";
-import { U as UserBalance } from "../../chunks/UserBalance-bf786f0c.js";
-import { m as maxCommit, b as buffer, c as fetchUTXOs, d as attachAllInputTransactions, e as fetchAddressDetails, A as ArrowUp, a as ArrowDown } from "../../chunks/index-3d62e9f1.js";
+import { s as sbtcConfig, a, C as Ce, _ as __viteBrowserExternal, k as fetchUserBalance } from "../../chunks/stores-c1b5a995.js";
+import { d as decodeStacksAddress, g as getAugmentedNamespace, a as commonjsGlobal, b as getDefaultExportFromCjs, r as requestSignMessage } from "../../chunks/stacks-194c9e5a.js";
+import { U as UserBalance } from "../../chunks/UserBalance-2f207d1d.js";
+import { m as maxCommit, b as buffer, c as fetchUTXOs, d as attachAllInputTransactions, e as fetchAddressDetails, i as isSupported, A as ArrowUp, a as ArrowDown } from "../../chunks/index-645b6489.js";
 import { Tooltip } from "../../chunks/bootstrap.esm-e88d1e6f.js";
 let Page;
 let __tla = (async () => {
@@ -30375,6 +30375,7 @@ let __tla = (async () => {
     verify
   };
   const ECPair = ECPairFactory(ecc);
+  const STX_ADDRESS_FEE_CALC = "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW";
   const DUST_AMOUNT = 500;
   const MESSAGE = "This is an example of a signed message.";
   const SIGNER = "cN5Ciwee1NA32zD7WNG78TmXBrnAb4jfQZohmh2Zj53mQjNAZV3R";
@@ -30464,10 +30465,10 @@ let __tla = (async () => {
     if (config2.pegIn) {
       if (!feeCalc && !config2.stxAddress)
         throw new Error("stxAddress not defined.");
-      if (feeCalc)
-        addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, "ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW", totalInputValue, Math.floor(totalInputValue / 2), 0);
-      else
-        addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, config2.stxAddress, totalInputValue, config2.feeCalc.pegInFeeCalc.pegInAmount, config2.feeCalc.pegInFeeCalc.feeToApply);
+      const fee2Apply = feeCalc ? 0 : config2.feeCalc.pegInFeeCalc.feeToApply;
+      const stxAddress = feeCalc ? STX_ADDRESS_FEE_CALC : config2.stxAddress;
+      const pegInAmount = feeCalc ? Math.floor(totalInputValue / 2) : config2.feeCalc.pegInFeeCalc.pegInAmount;
+      addPegInOutputs(psbt2, config2.fromBtcAddress, config2.sbtcWalletAddress, stxAddress, totalInputValue, pegInAmount, fee2Apply);
     } else {
       let sig = config2.sigData.signature;
       let feeToApply = config2.feeCalc.pegOutFeeCalc.feeToApply;
@@ -30653,7 +30654,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "text-warning");
-        add_location(div, file$b, 37, 17, 1438);
+        add_location(div, file$b, 44, 17, 1600);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -30672,7 +30673,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block_2$5.name,
       type: "if",
-      source: "(38:0) {#if errorReason}",
+      source: "(45:0) {#if errorReason}",
       ctx
     });
     return block2;
@@ -30697,7 +30698,7 @@ let __tla = (async () => {
       },
       h: function hydrate() {
         attr_dev(div, "class", "text-danger");
-        add_location(div, file$b, 51, 6, 2420);
+        add_location(div, file$b, 58, 6, 2582);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
@@ -30713,7 +30714,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block_1$6.name,
       type: "if",
-      source: "(51:29) ",
+      source: "(58:29) ",
       ctx
     });
     return block2;
@@ -30775,13 +30776,13 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(div0, file$b, 47, 6, 2172);
+        add_location(div0, file$b, 54, 6, 2334);
         attr_dev(a2, "href", "/");
         attr_dev(a2, "class", "");
-        add_location(a2, file$b, 48, 11, 2281);
-        add_location(div1, file$b, 48, 6, 2276);
+        add_location(a2, file$b, 55, 11, 2443);
+        add_location(div1, file$b, 55, 6, 2438);
         attr_dev(div2, "class", "d-flex justify-content-between text-info");
-        add_location(div2, file$b, 46, 4, 2110);
+        add_location(div2, file$b, 53, 4, 2272);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div2, anchor);
@@ -30817,7 +30818,7 @@ let __tla = (async () => {
       block: block2,
       id: create_if_block$9.name,
       type: "if",
-      source: "(46:4) {#if showUtxos}",
+      source: "(53:4) {#if showUtxos}",
       ctx
     });
     return block2;
@@ -30929,25 +30930,25 @@ let __tla = (async () => {
         this.h();
       },
       h: function hydrate() {
-        add_location(span0, file$b, 41, 6, 1604);
+        add_location(span0, file$b, 48, 6, 1766);
         attr_dev(span1, "class", "pointer text-info");
         attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
         attr_dev(span1, "data-bs-placement", "top");
         attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
         attr_dev(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
-        add_location(span1, file$b, 42, 6, 1662);
+        add_location(span1, file$b, 49, 6, 1824);
         attr_dev(label, "for", "transact-path");
         attr_dev(label, "class", "d-flex justify-content-between");
-        add_location(label, file$b, 40, 4, 1531);
+        add_location(label, file$b, 47, 4, 1693);
         attr_dev(input, "type", "text");
         attr_dev(input, "id", "from-address");
         attr_dev(input, "class", "form-control");
         attr_dev(input, "autocomplete", "off");
-        add_location(input, file$b, 44, 4, 1939);
+        add_location(input, file$b, 51, 4, 2101);
         attr_dev(div0, "class", "col");
-        add_location(div0, file$b, 39, 2, 1509);
+        add_location(div0, file$b, 46, 2, 1671);
         attr_dev(div1, "class", "row");
-        add_location(div1, file$b, 38, 0, 1489);
+        add_location(div1, file$b, 45, 0, 1651);
       },
       m: function mount(target, anchor) {
         if (if_block0)
@@ -31057,6 +31058,12 @@ let __tla = (async () => {
         $$invalidate(2, errorReason = "Invalid address");
         return;
       }
+      try {
+        isSupported($sbtcConfig.network, bitcoinAddress);
+      } catch (err) {
+        $$invalidate(2, errorReason = err.message);
+        return;
+      }
       if (!force && $sbtcConfig.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
         return;
       }
@@ -31093,6 +31100,7 @@ let __tla = (async () => {
       fetchUTXOs,
       attachAllInputTransactions,
       fetchAddressDetails,
+      isSupported,
       PatchQuestion,
       maxCommit,
       calculateFee,
@@ -35802,15 +35810,9 @@ let __tla = (async () => {
   }
   function create_else_block(ctx) {
     let div;
-    let pegout;
-    let current;
-    pegout = new PegOut({
-      $$inline: true
-    });
     const block2 = {
       c: function create() {
         div = element("div");
-        create_component(pegout.$$.fragment);
         this.h();
       },
       l: function claim(nodes) {
@@ -35818,33 +35820,19 @@ let __tla = (async () => {
           class: true
         });
         var div_nodes = children(div);
-        claim_component(pegout.$$.fragment, div_nodes);
         div_nodes.forEach(detach_dev);
         this.h();
       },
       h: function hydrate() {
         attr_dev(div, "class", "d-flex justify-content-center");
-        add_location(div, file, 23, 4, 875);
+        add_location(div, file, 23, 4, 885);
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
-        mount_component(pegout, div, null);
-        current = true;
-      },
-      i: function intro(local) {
-        if (current)
-          return;
-        transition_in(pegout.$$.fragment, local);
-        current = true;
-      },
-      o: function outro(local) {
-        transition_out(pegout.$$.fragment, local);
-        current = false;
       },
       d: function destroy2(detaching) {
         if (detaching)
           detach_dev(div);
-        destroy_component(pegout);
       }
     };
     dispatch_dev("SvelteRegisterBlock", {
@@ -35858,15 +35846,9 @@ let __tla = (async () => {
   }
   function create_if_block(ctx) {
     let div;
-    let pegin;
-    let current;
-    pegin = new PegIn({
-      $$inline: true
-    });
     const block2 = {
       c: function create() {
         div = element("div");
-        create_component(pegin.$$.fragment);
         this.h();
       },
       l: function claim(nodes) {
@@ -35874,7 +35856,6 @@ let __tla = (async () => {
           class: true
         });
         var div_nodes = children(div);
-        claim_component(pegin.$$.fragment, div_nodes);
         div_nodes.forEach(detach_dev);
         this.h();
       },
@@ -35884,23 +35865,10 @@ let __tla = (async () => {
       },
       m: function mount(target, anchor) {
         insert_hydration_dev(target, div, anchor);
-        mount_component(pegin, div, null);
-        current = true;
-      },
-      i: function intro(local) {
-        if (current)
-          return;
-        transition_in(pegin.$$.fragment, local);
-        current = true;
-      },
-      o: function outro(local) {
-        transition_out(pegin.$$.fragment, local);
-        current = false;
       },
       d: function destroy2(detaching) {
         if (detaching)
           detach_dev(div);
-        destroy_component(pegin);
       }
     };
     dispatch_dev("SvelteRegisterBlock", {
@@ -35923,9 +35891,6 @@ let __tla = (async () => {
     let t2_value = ctx[0].sbtcWalletAddress + "";
     let t2;
     let t3;
-    let current_block_type_index;
-    let if_block1;
-    let current;
     function select_block_type(ctx2, dirty) {
       if (ctx2[0].pegIn)
         return create_if_block_1;
@@ -35933,18 +35898,13 @@ let __tla = (async () => {
     }
     let current_block_type = select_block_type(ctx);
     let if_block0 = current_block_type(ctx);
-    const if_block_creators = [
-      create_if_block,
-      create_else_block
-    ];
-    const if_blocks = [];
     function select_block_type_1(ctx2, dirty) {
       if (ctx2[0].pegIn)
-        return 0;
-      return 1;
+        return create_if_block;
+      return create_else_block;
     }
-    current_block_type_index = select_block_type_1(ctx);
-    if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+    let current_block_type_1 = select_block_type_1(ctx);
+    let if_block1 = current_block_type_1(ctx);
     const block2 = {
       c: function create() {
         section = element("section");
@@ -36014,8 +35974,7 @@ let __tla = (async () => {
         append_hydration_dev(span, t1);
         append_hydration_dev(span, t2);
         append_hydration_dev(div1, t3);
-        if_blocks[current_block_type_index].m(div1, null);
-        current = true;
+        if_block1.m(div1, null);
       },
       p: function update(ctx2, [dirty]) {
         if (current_block_type !== (current_block_type = select_block_type(ctx2))) {
@@ -36026,40 +35985,24 @@ let __tla = (async () => {
             if_block0.m(div1, t0);
           }
         }
-        if ((!current || dirty & 1) && t2_value !== (t2_value = ctx2[0].sbtcWalletAddress + ""))
+        if (dirty & 1 && t2_value !== (t2_value = ctx2[0].sbtcWalletAddress + ""))
           set_data_dev(t2, t2_value);
-        let previous_block_index = current_block_type_index;
-        current_block_type_index = select_block_type_1(ctx2);
-        if (current_block_type_index !== previous_block_index) {
-          group_outros();
-          transition_out(if_blocks[previous_block_index], 1, 1, () => {
-            if_blocks[previous_block_index] = null;
-          });
-          check_outros();
-          if_block1 = if_blocks[current_block_type_index];
-          if (!if_block1) {
-            if_block1 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx2);
+        if (current_block_type_1 !== (current_block_type_1 = select_block_type_1(ctx2))) {
+          if_block1.d(1);
+          if_block1 = current_block_type_1(ctx2);
+          if (if_block1) {
             if_block1.c();
+            if_block1.m(div1, null);
           }
-          transition_in(if_block1, 1);
-          if_block1.m(div1, null);
         }
       },
-      i: function intro(local) {
-        if (current)
-          return;
-        transition_in(if_block1);
-        current = true;
-      },
-      o: function outro(local) {
-        transition_out(if_block1);
-        current = false;
-      },
+      i: noop$3,
+      o: noop$3,
       d: function destroy2(detaching) {
         if (detaching)
           detach_dev(section);
         if_block0.d();
-        if_blocks[current_block_type_index].d();
+        if_block1.d();
       }
     };
     dispatch_dev("SvelteRegisterBlock", {

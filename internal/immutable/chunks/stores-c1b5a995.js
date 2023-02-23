@@ -2265,40 +2265,47 @@ async function readEvents(network) {
   return val.results;
 }
 async function fetchSbtcWalletAddress(network) {
-  const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha";
-  const data = {
-    contractAddress: contractId.split(".")[0],
-    contractName: contractId.split(".")[1],
-    functionName: "get-bitcoin-wallet-address",
-    functionArgs: [],
-    network
-  };
-  const result = await callContractReadOnly(data);
-  if (result.value && result.value.value) {
-    return result.value.value;
+  try {
+    const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha";
+    const data = {
+      contractAddress: contractId.split(".")[0],
+      contractName: contractId.split(".")[1],
+      functionName: "get-bitcoin-wallet-address",
+      functionArgs: [],
+      network
+    };
+    const result = await callContractReadOnly(data);
+    if (result.value && result.value.value) {
+      return result.value.value;
+    }
+    if (result.type.indexOf("some") > -1)
+      return result.value;
+    if (network === "testnet") {
+      return "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
+    }
+  } catch (err) {
+    return "bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6";
   }
-  if (result.type.indexOf("some") > -1)
-    return result.value;
-  if (network === "testnet") {
-    return "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
-  }
-  return "bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6";
 }
 async function fetchUserBalance(network, stxAddress) {
-  const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha";
-  const functionArgs = [`0x${p$4(m$2(Ir(stxAddress)))}`];
-  const data = {
-    contractAddress: contractId.split(".")[0],
-    contractName: contractId.split(".")[1],
-    functionName: "get-balance",
-    functionArgs,
-    network
-  };
-  const result = await callContractReadOnly(data);
-  if (result.value && result.value.value) {
-    return Number(result.value.value);
+  try {
+    const contractId = network === "mainnet" ? "SP2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADPGK1C2F.sbtc-alpha" : "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha";
+    const functionArgs = [`0x${p$4(m$2(Ir(stxAddress)))}`];
+    const data = {
+      contractAddress: contractId.split(".")[0],
+      contractName: contractId.split(".")[1],
+      functionName: "get-balance",
+      functionArgs,
+      network
+    };
+    const result = await callContractReadOnly(data);
+    if (result.value && result.value.value) {
+      return Number(result.value.value);
+    }
+    return 0;
+  } catch (err) {
+    return 0;
   }
-  return 0;
 }
 async function callContractReadOnly(data) {
   const path = data.network === "mainnet" ? "https://stacks-node-api.mainnet.stacks.co" : "http://localhost:3999";

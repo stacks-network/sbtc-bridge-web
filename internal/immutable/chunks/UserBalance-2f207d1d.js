@@ -1,5 +1,5 @@
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, o as onMount, a9 as validate_each_argument, e as empty, g as insert_hydration_dev, I as noop, l as detach_dev, n as element, p as claim_element, q as children, r as attr_dev, w as add_location, ab as destroy_each, c as space, x as text, f as claim_space, y as claim_text, J as append_hydration_dev } from './index-2f10db54.js';
-import { s as sbtcConfig, a, k as fetchUserBalance } from './stores-96fe850b.js';
+import { s as sbtcConfig, a, k as fetchUserBalance } from './stores-c1b5a995.js';
 
 const btcPrecision = 1e8;
 function fmtSatoshiToBitcoin(amountSats) {
