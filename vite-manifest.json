@@ -11,13 +11,13 @@
     "file": "internal/immutable/assets/stx_eco_wallet_on-090e5a93.png",
     "src": "src/lib/assets/png-assets/stx_eco_wallet_on.png"
   },
-  "src/lib/assets/png-assets/stx_eco_discord.png": {
-    "file": "internal/immutable/assets/stx_eco_discord-5cc61295.png",
-    "src": "src/lib/assets/png-assets/stx_eco_discord.png"
-  },
   "src/lib/assets/png-assets/stx_eco_twitter.png": {
     "file": "internal/immutable/assets/stx_eco_twitter-b58c754c.png",
     "src": "src/lib/assets/png-assets/stx_eco_twitter.png"
+  },
+  "src/lib/assets/png-assets/stx_eco_discord.png": {
+    "file": "internal/immutable/assets/stx_eco_discord-5cc61295.png",
+    "src": "src/lib/assets/png-assets/stx_eco_discord.png"
   },
   "src/lib/assets/png-assets/stx_eco_github.png": {
     "file": "internal/immutable/assets/stx_eco_github-0e15c254.png",
