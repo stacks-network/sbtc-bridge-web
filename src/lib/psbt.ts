@@ -27,7 +27,7 @@ export async function transactionHex(psbt:Psbt) {
   //return psbt.finalizeAllInputs().extractTransaction().toHex();
 }
 
-export function getNetwork () {
+function getNetwork () {
   return (network === 'testnet') ? networks.testnet : networks.bitcoin
 }
 

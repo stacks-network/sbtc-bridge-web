@@ -16,7 +16,7 @@ import { privateAdd, privateNegate } from 'tiny-secp256k1';
 import tinysecp from 'tiny-secp256k1';
 //import { ECPairFactory } from 'ecpair';
 //import type { ECPairAPI, TinySecp256k1Interface } from 'ecpair';
-import { SIGNER, getNetwork } from "$lib/psbt";
+import { SIGNER } from "$lib/psbt";
 
 initEccLib(tinysecp as any);
 const ECPair = ECPairFactory(ecc);
@@ -101,7 +101,7 @@ describe('suite', () => {
   const keypair1 = ECPair.makeRandom({ network });
   //console.log('test 1: keypair1 privateKey: ' + keypair1.privateKey!.toString('hex'));
 
-  const keypair = ECPair.fromWIF(SIGNER, getNetwork('testnet'));
+  const keypair = ECPair.fromWIF(SIGNER, networks.testnet);
   const tweakedSigner = tweakSigner(keypair, { network });
   let p2pktr: payments.Payment;
 
