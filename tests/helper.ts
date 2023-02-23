@@ -6,16 +6,14 @@ import util from 'util'
 import { assert } from 'console';
 import { calculateFee } from "$lib/psbt";
 import { payments } from 'bitcoinjs-lib';
-import { getNetwork } from "$lib/psbt";
-
-const network = getNetwork()
+import { networks } from 'bitcoinjs-lib';
 
 export function getBtcAddress(pubKey:Buffer) {
 	return payments.p2sh({
 	redeem: payments.p2wpkh({
 		pubkey: pubKey,
-		network: network,
-	}), network: network,
+		network: networks.testnet,
+	}), network: networks.testnet,
 	}).address;
 }
 
@@ -28,12 +26,12 @@ export function getBtcAddressP2WPKH(pubKey:Buffer) {
 	//const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: pubKey, network: network })});
 	//const redeemScript = p2shObj?.redeem?.output;
 	//if (!redeemScript) throw new Error('')
-	const {address} = payments.p2wpkh({ pubkey: pubKey, network });
+	const {address} = payments.p2wpkh({ pubkey: pubKey, network: networks.testnet });
 	return address;
 }
 
 export function getBtcAddressP2SHP2WPKH(pubKey:Buffer) {
-	const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: pubKey, network: network })});
+	const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: pubKey, network: networks.testnet })});
 	//const redeemScript = p2shObj?.redeem?.output;
 	//if (!redeemScript) throw new Error('')
 	//const {address} = payments.p2wpkh({ pubkey: pubKey, network });

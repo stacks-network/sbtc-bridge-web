@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
-import { SIGNER, MESSAGE, getSignedTransaction, buildPsbt, transactionData, transactionHex, getRedeemScript, getNetwork, getSigData } from "$lib/psbt";
+import { SIGNER, MESSAGE, getSignedTransaction, buildPsbt, transactionData, transactionHex, getRedeemScript, getSigData } from "$lib/psbt";
 import { verifySignedMessage } from '$lib/stacks'
 import bitcoinMessage from 'bitcoinjs-message';
 import { attachTxs, prepareFee, getBtcAddress, getBtcAddressLegacy, getBtcAddressP2WPKH, getBtcAddressP2SHP2WPKH } from './helper'
@@ -9,6 +9,7 @@ import * as ecc from 'tiny-secp256k1';
 import ECPairFactory from 'ecpair';
 import assert, { fail } from 'assert';
 import util from 'util'
+import { networks } from 'bitcoinjs-lib';
 
 const ECPair = ECPairFactory(ecc);
 
@@ -24,7 +25,7 @@ describe('suite', () => {
   it.concurrent('psbt: getRedeemScript() returns Redeem Script object', async () => {
     const conf:SbtcConfig = sbtcConfig;
     utxo0[0].tx = tx0;
-    const alice_pair = ECPair.fromWIF(SIGNER, getNetwork());
+    const alice_pair = ECPair.fromWIF(SIGNER, networks.testnet);
     const res = getRedeemScript(utxo0[0], alice_pair.publicKey);
     expect(res?.toString('hex')).equals('00143e16009af8fc7edac27cd978ef590cc8e8c11240');
   })
@@ -56,7 +57,7 @@ describe('suite', () => {
   it.concurrent('psbt: transactionHex() returns hex object', async () => {
     const conf:SbtcConfig = sbtcConfig;
     conf.utxos = utxo1;
-    const keyPair = ECPair.fromWIF(SIGNER, getNetwork());
+    const keyPair = ECPair.fromWIF(SIGNER, networks.testnet);
     conf.sigData = getSigData(keyPair, MESSAGE);
     const res = await transactionData(conf);
     const hex = await transactionHex(res);
@@ -172,7 +173,7 @@ describe('suite', () => {
  * TODO: more tests of the stacks signature process are needed.
  */
 it.concurrent('psbt: verifySignedMessage() verify stacks message', async () => {
-    const deployer = ECPair.fromWIF(DEPLOYER_PK.wif, getNetwork());
+    const deployer = ECPair.fromWIF(DEPLOYER_PK.wif, networks.testnet);
     //const address = getBtcAddressLegacy(getNetwork(network), deployer.publicKey);
     //console.log('address:' + address);
     // msg, sig is taken from the signature produced by the ui for the deployer account.
