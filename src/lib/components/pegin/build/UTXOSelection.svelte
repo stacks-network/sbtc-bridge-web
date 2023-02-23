@@ -8,6 +8,7 @@ import { calculateFee } from "$lib/psbt";
 
 let bitcoinAddress:string|undefined = $sbtcConfig.fromBtcAddress;
 let errorReason:string|undefined;
+const network = import.meta.env.VITE_NETWORK;
 
 const configureUTXOs = async (force:boolean) => {
   errorReason = undefined;
@@ -16,7 +17,7 @@ const configureUTXOs = async (force:boolean) => {
     return;
   }
   try {
-    isSupported($sbtcConfig.network, bitcoinAddress);
+    isSupported(bitcoinAddress);
   } catch (err:any) {
     errorReason = err.message;
     return;
@@ -27,11 +28,11 @@ const configureUTXOs = async (force:boolean) => {
   }
   try {
     const conf:SbtcConfig = $sbtcConfig;
-    let result = await fetchAddressDetails($sbtcConfig.network, bitcoinAddress);
+    let result = await fetchAddressDetails(bitcoinAddress);
     conf.fromBtcAddress = bitcoinAddress;
     conf.addressDetails = result;
-    let uxtos = await fetchUTXOs($sbtcConfig.network, bitcoinAddress);
-    uxtos = await attachAllInputTransactions($sbtcConfig.network, uxtos);
+    let uxtos = await fetchUTXOs(bitcoinAddress);
+    uxtos = await attachAllInputTransactions(uxtos);
     conf.utxos = uxtos;
     const feeCalc = await calculateFee(conf);
     console.log(feeCalc);
@@ -51,7 +52,7 @@ $: showUtxos = bitcoinAddress && $sbtcConfig.utxos?.length > 0;
 <div class="row">
   <div class="col">
     <label for="transact-path" class="d-flex justify-content-between">
-      <span>Bitcoin {$sbtcConfig.network} Address:</span>
+      <span>Bitcoin {network} Address:</span>
       <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC"><PatchQuestion width={30} height={30}/></span>
     </label>
     <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />

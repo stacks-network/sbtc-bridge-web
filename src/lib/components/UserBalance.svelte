@@ -14,7 +14,7 @@ onMount(async () => {
   const stxAddressAuth = $account.stxAddress;
   const stxAddressForm = $sbtcConfig.stxAddress;
   if (stxAddressAuth) {
-    const balance = await fetchUserBalance($sbtcConfig.network, stxAddressAuth);
+    const balance = await fetchUserBalance(stxAddressAuth);
     if (balance > 0) {
       balanceObjs.push({
         address: stxAddressAuth,
@@ -23,7 +23,7 @@ onMount(async () => {
     }
   }
   if (stxAddressForm && stxAddressForm !== stxAddressAuth) {
-    const balance = await fetchUserBalance($sbtcConfig.network, stxAddressForm);
+    const balance = await fetchUserBalance(stxAddressForm);
     if (balance > 0) {
       balanceObjs.push({
         address: stxAddressForm,

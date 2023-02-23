@@ -4,7 +4,7 @@
 //import TrezorConnect from '@trezor/connect-web';
 import type { UTXO } from '$types/utxo';
 
-export function isSupported(network:string, address:string) {
+export function isSupported(address:string) {
   /**
    * TODO: return once other issues are cleared up and we have reliable access to bitcoin rpc
    * 
@@ -15,9 +15,8 @@ export function isSupported(network:string, address:string) {
   return true;
 }
 
-export async function fetchTxHex(network:string, txid:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+export async function fetchTxHex(txid:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/tx/' + txid + '/hex');
   if (response.status === 200) {
     return await response.json();
@@ -25,9 +24,8 @@ export async function fetchTxHex(network:string, txid:string) {
   throw new Error('Address not found - is the network correct?');
 }
 
-export async function fetchAddressDetails(network:string, address:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+export async function fetchAddressDetails(address:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/address/' + address);
   if (response.status === 200) {
     return await response.json();
@@ -35,9 +33,8 @@ export async function fetchAddressDetails(network:string, address:string) {
   throw new Error('Address not found - is the network correct?');
 }
 
-export async function fetchUTXOs(network:string, address:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+export async function fetchUTXOs(address:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/address/' + address + '/utxo');
   if (response.status !== 200) {
     throw new Error('Bitcoin address not know - is the network correct?');
@@ -46,20 +43,18 @@ export async function fetchUTXOs(network:string, address:string) {
   return utxos;
 }
 
-export async function fetchTransactionHex(network:string, txid:string) {
+export async function fetchTransactionHex(txid:string) {
   //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
   //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   //const response = await fetch(url + '/txs/' + txid + '?includeHex=true');
   const response = await fetch(url + '/tx/' + txid + '/hex');
   const hex = await response.text();
   return hex;
 }
 
-export async function fetchTransaction(network:string, txid:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+export async function fetchTransaction(txid:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/tx/' + txid);
   if (response.status !== 200) {
     throw new Error('Bitcoin tx not found.');
@@ -72,11 +67,11 @@ export async function fetchTransaction(network:string, txid:string) {
  * Fetch the transaction referenced by each utxo.
  * The hex of the referenced tx is needed in the fee calculation 
  */
-export async function attachTransaction(network:string, utxo:UTXO) {
+export async function attachTransaction(utxo:UTXO) {
   //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
   //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
-  const tx = await fetchTransaction(network, utxo.txid);
-  const hex = await fetchTransactionHex(network, utxo.txid);
+  const tx = await fetchTransaction(utxo.txid);
+  const hex = await fetchTransactionHex(utxo.txid);
   tx.hex = hex
   utxo.tx = tx;
   return utxo;
@@ -86,10 +81,9 @@ export async function attachTransaction(network:string, utxo:UTXO) {
  * Fetch the transaction referenced by each utxo.
  * The hex of the referenced tx is needed in the fee calculation 
  */
-export async function attachAllInputTransactions(network:string, utxos:[UTXO]) {
-  checkNetwork(network)
+export async function attachAllInputTransactions(utxos:[UTXO]) {
   for (let utxo of utxos) {
-    utxo = await attachTransaction(network, utxo);
+    utxo = await attachTransaction(utxo);
   }  
   return utxos;
 }
@@ -99,21 +93,14 @@ export function maxCommit(utxos:any) {
   return summ || 0;
 }
 
-export async function fetchFeeEstimate(network:string) {
+export async function fetchFeeEstimate() {
   try {
-    checkNetwork(network)
-    const url = (network === 'mainnet') ? import.meta.env.VITE_BLOCKCYPHER_EXPLORER_MAINNET : import.meta.env.VITE_BLOCKCYPHER_EXPLORER_TESTNET;
+    const url = import.meta.env.VITE_BLOCKCYPHER_EXPLORER;
     const response = await fetch(url);
     const info = await response.json();
     return info
   } catch (err) {
     console.log(err)
+    return { low_fee_per_kb:20000, medium_fee_per_kb:30000, high_fee_per_kb:40000 }
   }
 }
-
-function checkNetwork(network:string) {
-  if (network !== 'testnet' && network !== 'mainnet') {
-    throw new Error('Unknown Network')
-  }
-}
-

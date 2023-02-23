@@ -9,6 +9,7 @@ import bitcoinMessage from 'bitcoinjs-message';
 
 const ECPair = ECPairFactory(ecc);
 const STX_ADDRESS_FEE_CALC='ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW';
+const network = import.meta.env.VITE_NETWORK;
 
 // Used in peg out - amount sent to peg out wallet
 export const DUST_AMOUNT = 500;
@@ -26,7 +27,7 @@ export async function transactionHex(psbt:Psbt) {
   //return psbt.finalizeAllInputs().extractTransaction().toHex();
 }
 
-export function getNetwork (network:string) {
+export function getNetwork () {
   return (network === 'testnet') ? networks.testnet : networks.bitcoin
 }
 
@@ -35,32 +36,32 @@ export const keyPairs = [
   ECPair.makeRandom({ network: networks.testnet }),
 ];
 
-export function getP2SHToP2WPKH(network:string) {
-  const alice_pair = ECPair.fromWIF(SIGNER, getNetwork(network));
+export function getP2SHToP2WPKH() {
+  const alice_pair = ECPair.fromWIF(SIGNER, getNetwork());
   const p2shObj = payments.p2sh({
-    redeem: payments.p2wpkh({ pubkey: alice_pair.publicKey, network: getNetwork(network) }),
+    redeem: payments.p2wpkh({ pubkey: alice_pair.publicKey, network: getNetwork() }),
   });
   return p2shObj;
 }
 
-export function getRedeemScript(network:string, utxo:UTXO, pubKey:any) {
+export function getRedeemScript(utxo:UTXO, pubKey:any) {
   // Note: Using Mempool API Tx format.
   const pk = Buffer.from(pubKey).toString('hex');
   if (!utxo.tx || !utxo.tx.vout) throw new Error('No outputs');
   let redeemScript;
   const sciptType = utxo.tx.vout[utxo.vout].scriptpubkey_type;
   if (sciptType === 'pay-to-witness-script-hash') {
-    const p2w = payments.p2wpkh({ pubkey: pubKey, network: getNetwork(network) });
+    const p2w = payments.p2wpkh({ pubkey: pubKey, network: getNetwork() });
     redeemScript = p2w?.redeem?.output;
   } else if (sciptType === 'pay-to-script-hash' || sciptType === 'p2sh') {
     const paymentParams = {
-      redeem: payments.p2wpkh({ pubkey: pubKey, network: getNetwork(network) }),
-      network: getNetwork(network)
+      redeem: payments.p2wpkh({ pubkey: pubKey, network: getNetwork() }),
+      network: getNetwork()
     }
     const p2sh = payments.p2sh(paymentParams);
     redeemScript = p2sh?.redeem?.output;
   } else if (sciptType === 'v0_p2wpkh') {
-    const p2shObj = getP2SHToP2WPKH(network);
+    const p2shObj = getP2SHToP2WPKH();
     redeemScript = p2shObj?.redeem?.output;
   } else {
     throw new Error('Unhandled type: ' + sciptType);
@@ -80,12 +81,12 @@ function getInput(unspent:any, redeemScript:any, witnessScript:any) {
 
 export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
   if (!config.fromBtcAddress || !config.sbtcWalletAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
-  const network = getNetwork(config.network);
+  const network = getNetwork();
   const psbt = new Psbt({ network });
   config.utxos.forEach((utxo) => {
     if (feeCalc) {
       const nonWitnessUtxo = globalThis.Buffer.from(utxo.tx.hex, 'hex');
-      const redeemScript = getRedeemScript(config.network, utxo, keyPairs[0].publicKey);
+      const redeemScript = getRedeemScript(utxo, keyPairs[0].publicKey);
       psbt.addInput({ hash: utxo.txid, index: utxo.vout, nonWitnessUtxo, redeemScript });
     } else {
       psbt.addInput({ hash: utxo.txid, index: utxo.vout });
@@ -99,8 +100,8 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
     const pegInAmount = (feeCalc) ? Math.floor(totalInputValue/2) : config.feeCalc.pegInFeeCalc.pegInAmount;
     addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, stxAddress!, totalInputValue, pegInAmount, fee2Apply);
   } else {
-    let sig = config.sigData.signature;
-    let feeToApply = config.feeCalc.pegOutFeeCalc.feeToApply
+    let sig = config.sigData?.signature;
+    let feeToApply = config.feeCalc?.pegOutFeeCalc?.feeToApply
     if (feeCalc) {
       feeToApply = 0;
       const keyPair = ECPair.fromWIF(SIGNER, network);
@@ -136,12 +137,12 @@ const validator = (
 export function calculateFee(config:SbtcConfig) {
   const psbt = buildPsbt(config, true);
   const totalInputValue = maxCommit(config.utxos);
-  const pegInFeeCalc = calcFeesIn(config.network, config, psbt, totalInputValue);
-  const pegOutFeeCalc = calcFeesOut(config.network, config, psbt, totalInputValue);
+  const pegInFeeCalc = calcFeesIn(config, psbt, totalInputValue);
+  const pegOutFeeCalc = calcFeesOut(config, psbt, totalInputValue);
   return { pegInFeeCalc, pegOutFeeCalc }
 }
 
-function calcFeesIn(network:string, config:SbtcConfig, psbt:Psbt, totalInputValue:number) {
+function calcFeesIn(config:SbtcConfig, psbt:Psbt, totalInputValue:number) {
   const pegInAmount = Math.floor(totalInputValue/2);
   const fees = getVsizes(network, psbt, config.feeInfo, config.utxos.length);
   return {
@@ -153,7 +154,7 @@ function calcFeesIn(network:string, config:SbtcConfig, psbt:Psbt, totalInputValu
   }
 }
 
-function calcFeesOut(network:string, config:SbtcConfig, psbt:Psbt, totalInputValue:number) {
+function calcFeesOut(config:SbtcConfig, psbt:Psbt, totalInputValue:number) {
   // peg out 1M satoshis
   const fees = getVsizes(network, psbt, config.feeInfo, config.utxos.length);
   return {
@@ -166,8 +167,8 @@ function calcFeesOut(network:string, config:SbtcConfig, psbt:Psbt, totalInputVal
   }
 }
 
-export function getSignedTransaction(net:string, psbt:Psbt) {
-  const network = getNetwork(net);
+export function getSignedTransaction(psbt:Psbt) {
+  const network = getNetwork();
   const alice = ECPair.fromWIF(SIGNER, network);
   psbt.signAllInputs(alice);
   psbt.validateSignaturesOfInput(0, validator);
@@ -178,7 +179,7 @@ export function getSignedTransaction(net:string, psbt:Psbt) {
 
 function getVsizes(network:string, psbt:Psbt, feeInfo:any, numbInputs:number) {
   try {
-    const transaction = getSignedTransaction(network, psbt);
+    const transaction = getSignedTransaction(psbt);
     let vsize = transaction.virtualSize();
     vsize = vsize + numbInputs; // add 1 byte per signature
     const feeH = Math.floor((feeInfo.high_fee_per_kb / 1000) * vsize) // where feeRate is satoshi / byte
