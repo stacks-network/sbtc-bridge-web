@@ -1,5 +1,5 @@
-import { u as utils, g as sha256, p as pe, S, K, h as se } from './stores-c1b5a995.js';
-import { F as writable, Z as get_store_value } from './index-2f10db54.js';
+import { u as utils, e as sha256, p as pe, S, K, g as se } from './stores-dd03c1bb.js';
+import { B as writable, U as get_store_value } from './index-963bdb90.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -575,14 +575,14 @@ function isAllowed(address) {
   return allowed.indexOf(address) > -1;
 }
 const domain = {
-  name: "SBTC Bridge",
+  name: "sBTC Bridge",
   version: "1.0.0",
-  "chain-id": 2147483648 /* Testnet */
+  "chain-id": 1 /* Mainnet */  /* Testnet */
 };
 pe({
-  name: S("SBTC Bridge"),
+  name: S("sBTC Bridge"),
   version: S("1.0.0"),
-  "chain-id": K(2147483648 /* Testnet */)
+  "chain-id": K(1 /* Mainnet */  /* Testnet */)
 });
 function signatureDataBuffers(data) {
   return {

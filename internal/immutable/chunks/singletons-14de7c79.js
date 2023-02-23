@@ -1,4 +1,5 @@
-import { F as writable } from './index-2f10db54.js';
+import { B as writable } from './index-963bdb90.js';
+import { b as assets, v as version } from './shared-8b543b29.js';
 
 const SCROLL_KEY = 'sveltekit:scroll';
 const INDEX_KEY = 'sveltekit:index';
@@ -32,17 +33,6 @@ function scroll_state() {
 	};
 }
 
-const warned = new WeakSet();
-
-/** @typedef {keyof typeof valid_link_options} LinkOptionName */
-
-const valid_link_options = /** @type {const} */ ({
-	'preload-code': ['', 'off', 'tap', 'hover', 'viewport', 'eager'],
-	'preload-data': ['', 'off', 'tap', 'hover'],
-	noscroll: ['', 'off'],
-	reload: ['', 'off']
-});
-
 /**
  * @template {LinkOptionName} T
  * @typedef {typeof valid_link_options[T][number]} ValidLinkOptions
@@ -58,34 +48,7 @@ function link_option(element, name) {
 		element.getAttribute(`data-sveltekit-${name}`)
 	);
 
-	{
-		validate_link_option(element, name, value);
-	}
-
 	return value;
-}
-
-/**
- * @template {LinkOptionName} T
- * @template {ValidLinkOptions<T> | null} U
- * @param {Element} element
- * @param {T} name
- * @param {U} value
- */
-function validate_link_option(element, name, value) {
-	if (value === null) return;
-
-	// @ts-expect-error - includes is dumb
-	if (!warned.has(element) && !valid_link_options[name].includes(value)) {
-		console.error(
-			`Unexpected value for ${name} — should be one of ${valid_link_options[name]
-				.map((option) => JSON.stringify(option))
-				.join(', ')}`,
-			element
-		);
-
-		warned.add(element);
-	}
 }
 
 const levels = {
@@ -213,9 +176,34 @@ function notifiable_store(value) {
 function create_updated_store() {
 	const { set, subscribe } = writable(false);
 
+	/** @type {NodeJS.Timeout} */
+	let timeout;
+
 	/** @type {() => Promise<boolean>} */
 	async function check() {
-		return false;
+
+		clearTimeout(timeout);
+
+		const res = await fetch(`${assets}/${"internal/version.json"}`, {
+			headers: {
+				pragma: 'no-cache',
+				'cache-control': 'no-cache'
+			}
+		});
+
+		if (res.ok) {
+			const data = await res.json();
+			const updated = data.version !== version;
+
+			if (updated) {
+				set(true);
+				clearTimeout(timeout);
+			}
+
+			return updated;
+		} else {
+			throw new Error(`Version check failed: ${res.status}`);
+		}
 	}
 
 	return {

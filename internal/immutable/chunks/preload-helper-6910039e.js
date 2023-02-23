@@ -1,11 +1,3 @@
-let base = '';
-
-/** @param {{ base: string, assets: string }} paths */
-function set_paths(paths) {
-	base = paths.base;
-	paths.assets || base;
-}
-
 const scriptRel = 'modulepreload';const assetsURL = function(dep, importerUrl) { return new URL(dep, importerUrl).href };const seen = {};const __vitePreload = function preload(baseModule, deps, importerUrl) {
     // @ts-expect-error true will be replaced with boolean later
     if (!true || !deps || deps.length === 0) {
@@ -54,4 +46,4 @@ const scriptRel = 'modulepreload';const assetsURL = function(dep, importerUrl) {
     })).then(() => baseModule());
 };
 
-export { __vitePreload as _, base as b, set_paths as s };
+export { __vitePreload as _ };
