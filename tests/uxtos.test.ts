@@ -46,17 +46,16 @@ describe('suite', () => {
     }
   })
 
-  it.concurrent('uxto: check legacy addresses are not supported', async () => {
+  it.concurrent('uxto: check p2sh addresses are supported', async () => {
+    expect(isSupported('testnet', '2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb')).equals(true)
+  })
+
+  it.concurrent('uxto: check p2wpkh addresses are supported', async () => {
     expect(isSupported('testnet', 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4')).equals(true)
   })
 
-  it.concurrent('uxto: check legacy addresses are not supported', async () => {
-    try {
-      expect(isSupported('testnet', 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3')).equals(true)
-      fail('should not come here')
-    } catch(err:any) {
-      expect(err.message).equals('P2WSH addresses are not supported in the current version.');
-    }
+  it.concurrent('uxto: check p2wsh addresses are supported', async () => {
+    expect(isSupported('testnet', 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3')).equals(true)
   })
 
   it.concurrent('uxto: check legacy addresses are not supported', async () => {
