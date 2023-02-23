@@ -19,41 +19,48 @@ export async function readEvents(network:string) {
 }
 
 export async function fetchSbtcWalletAddress(network:string) {
-  const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
-	const data = {
-		contractAddress: contractId.split('.')[0],
-		contractName: contractId.split('.')[1],
-		functionName: 'get-bitcoin-wallet-address',
-		functionArgs: [],
-    network
-	}
-	const result = await callContractReadOnly(data);
-  if (result.value && result.value.value) {
-    return result.value.value
+  try {
+    const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+    const data = {
+      contractAddress: contractId.split('.')[0],
+      contractName: contractId.split('.')[1],
+      functionName: 'get-bitcoin-wallet-address',
+      functionArgs: [],
+      network
+    }
+    const result = await callContractReadOnly(data);
+    if (result.value && result.value.value) {
+      return result.value.value
+    }
+    if (result.type.indexOf('some') > -1) return result.value
+    if (network === 'testnet') {
+      return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss'; // alice
+    }
+  } catch (err) {
+    return 'bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6';
   }
-  if (result.type.indexOf('some') > -1) return result.value
-  if (network === 'testnet') {
-    return 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss'; // alice
-  }
-  return 'bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6';
 }
 
 export async function fetchUserBalance(network:string, stxAddress:string) {
-  const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
-	//const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
-	const functionArgs = [`0x${bytesToHex(serializeCV(principalCV(stxAddress)))}`];
-	const data = {
-		contractAddress: contractId.split('.')[0],
-		contractName: contractId.split('.')[1],
-		functionName: 'get-balance',
-		functionArgs,
-    network
-	}
-	const result = await callContractReadOnly(data);
-  if (result.value && result.value.value) {
-    return Number(result.value.value);
+  try {
+    const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+    //const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
+    const functionArgs = [`0x${bytesToHex(serializeCV(principalCV(stxAddress)))}`];
+    const data = {
+      contractAddress: contractId.split('.')[0],
+      contractName: contractId.split('.')[1],
+      functionName: 'get-balance',
+      functionArgs,
+      network
+    }
+    const result = await callContractReadOnly(data);
+    if (result.value && result.value.value) {
+      return Number(result.value.value);
+    }
+    return 0;
+  } catch (err) {
+    return 0;
   }
-  return 0;
 }
 
 async function callContractReadOnly(data:any) {

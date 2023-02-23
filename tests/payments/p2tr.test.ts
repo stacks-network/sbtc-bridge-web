@@ -46,12 +46,12 @@ export function tweakSigner(signer: Signer, opts: any = {}): Signer {
   if (!privateKey) {
       throw new Error('Private key is required for tweaking signer!');
   }
-  console.log('tweakSigner: signer.publicKey: ' + signer.publicKey.toString('hex'));
-  console.log('tweakSigner: privateKey: ' + Buffer.from(privateKey).toString('hex'));
+  //console.log('tweakSigner: signer.publicKey: ' + signer.publicKey.toString('hex'));
+  //console.log('tweakSigner: privateKey: ' + Buffer.from(privateKey).toString('hex'));
   if (signer.publicKey[0] === 3) {
       privateKey = privateNegate(privateKey);
   }
-  console.log('tweakSigner: signer.publicKey[0]: ' + signer.publicKey[0]);
+  //console.log('tweakSigner: signer.publicKey[0]: ' + signer.publicKey[0]);
 
   const tweakedPrivateKey = privateAdd( 
       privateKey,
@@ -60,7 +60,7 @@ export function tweakSigner(signer: Signer, opts: any = {}): Signer {
   if (!tweakedPrivateKey) {
       throw new Error('Invalid tweaked private key!');
   }
-  console.log('tweakSigner: tweakedPrivateKey: ' + Buffer.from(tweakedPrivateKey).toString('hex'));
+  //console.log('tweakSigner: tweakedPrivateKey: ' + Buffer.from(tweakedPrivateKey).toString('hex'));
   //return ECPair.fromWIF(SIGNER, opts.network);
   return ECPair.fromPrivateKey(Buffer.from(tweakedPrivateKey), {
     network: opts.network,
@@ -99,7 +99,7 @@ describe('suite', () => {
   const vout = 1;
   
   const keypair1 = ECPair.makeRandom({ network });
-  console.log('test 1: keypair1 privateKey: ' + keypair1.privateKey!.toString('hex'));
+  //console.log('test 1: keypair1 privateKey: ' + keypair1.privateKey!.toString('hex'));
 
   const keypair = ECPair.fromWIF(SIGNER, getNetwork('testnet'));
   const tweakedSigner = tweakSigner(keypair, { network });
@@ -111,9 +111,9 @@ describe('suite', () => {
       network
     });
     assert(p2pktr.address?.startsWith('tb1p'));
-    console.log('test 1: p2tr test address: ' + p2pktr.address);
-    console.log('test 1: p2tr test address length: ' + p2pktr.address!.length);
-    console.log('test 1: p2tr output: ' + p2pktr.output!.toString('hex'));
+    //console.log('test 1: p2tr test address: ' + p2pktr.address);
+    //console.log('test 1: p2tr test address length: ' + p2pktr.address!.length);
+    //console.log('test 1: p2tr output: ' + p2pktr.output!.toString('hex'));
   })
   /**
   it.concurrent('p2tr: can generate taproot key-spend transaction', async () => {

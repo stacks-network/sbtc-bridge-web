@@ -67,8 +67,8 @@ describe('suite', () => {
   it.concurrent('p2wsh: can create address with custom locking script', async () => {
     p2wsh = payments.p2wsh({ redeem: { output: lockingScript, network }, network });
     assert(p2wsh.address?.startsWith('tb1'));
-    console.log('test 1: p2wsh test address: ' + p2wsh.address);
-    if (p2wsh.output) console.log('test 1: p2wsh output: ' + p2wsh.output.toString('hex'));
+    //console.log('test 1: p2wsh test address: ' + p2wsh.address);
+    //if (p2wsh.output) //console.log('test 1: p2wsh output: ' + p2wsh.output.toString('hex'));
   })
 
   it.concurrent('p2wsh: can create tx to spend btc locked by locking script', async () => {
@@ -92,7 +92,7 @@ describe('suite', () => {
     psbt.finalizeInput(0, finalizeInput);
     const tx = psbt.extractTransaction();
     expect(tx.version).equals(2);
-    console.log(tx.toHex());
+    //console.log(tx.toHex());
   })
 
   /**
@@ -144,7 +144,7 @@ describe('suite', () => {
     p2wsh = payments.p2wsh({ redeem: { output: lockingScript2, network }, network });
     assert(p2wsh.address?.startsWith('tb1'));
     console.log('test 2: p2wsh address: ' + p2wsh.address);
-    if (p2wsh.output) console.log('test 2: p2wsh output: ' + p2wsh.output.toString('hex'));
+    //if (p2wsh.output) console.log('test 2: p2wsh output: ' + p2wsh.output.toString('hex'));
   })
 
   it.concurrent('p2wsh: can create tx to spend btc locked by locking script', async () => {
@@ -168,8 +168,10 @@ describe('suite', () => {
     psbt.signInput(0, keypair);
     psbt.finalizeInput(0, finalizeInput2);
     const tx = psbt.extractTransaction();
+    
     expect(tx.version).equals(2);
-    console.log('test 2: tx hex: ' + tx.toHex());
+    //console.log('test 2: tx hex: ' + tx.toHex());
+    //console.log('test 2: tx.outs[0].script: ' + tx.outs[0].script.toString('hex'));
   })
 
 })
