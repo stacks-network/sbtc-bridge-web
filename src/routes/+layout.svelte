@@ -26,13 +26,14 @@ const networkChange = () => {
 
 let inited = false;
 let origin = import.meta.env.VITE_ORIGIN;
+const network = import.meta.env.VITE_NETWORK;
 if (typeof window !== 'undefined') {
   origin = window.location.origin;
 }
 const config = {
   appName: 'sBTC Client',
   appIconUrl: origin + '/img/logo.png',
-  network: ($sbtcConfig.network === 'mainnet') ? new StacksMainnet() : new StacksMocknet()
+  network: (network === 'mainnet') ? new StacksMainnet() : new StacksMocknet()
 };
 mountClient(config);
 client.set(getMicroStacksClient());
@@ -43,7 +44,7 @@ const doLogin = () => {
 }
 
 const fetchWalletAddress = async () => {
-  const addr = await fetchSbtcWalletAddress($sbtcConfig.network);
+  const addr = await fetchSbtcWalletAddress();
   const conf = $sbtcConfig;
   conf.sbtcWalletAddress = addr;
   sbtcConfig.update(() => conf);
@@ -62,7 +63,7 @@ onMount(async () => {
     }
     let conf:SbtcConfig = $sbtcConfig;
     if (!conf || !conf.feeCalc) conf = defaultSbtcConfig;
-    const feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+    const feeInfo = await fetchFeeEstimate();
     if (feeInfo) conf.feeInfo = feeInfo;
     conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
     sbtcConfig.update(() => conf);

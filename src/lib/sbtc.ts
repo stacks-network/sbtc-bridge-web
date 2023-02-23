@@ -6,9 +6,11 @@ import type { SbtcConfig } from '$types/sbtc_config';
 import { principalCV } from 'micro-stacks/clarity';
 import { bytesToHex } from "micro-stacks/common";
 
-export async function readEvents(network:string) {
-  const path = (network === 'mainnet') ? import.meta.env.VITE_APP_STACKS_MAINNET_API : import.meta.env.VITE_APP_STACKS_TESTNET_API;
-  const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+const network = import.meta.env.VITE_NETWORK;
+
+export async function readEvents() {
+  const path = import.meta.env.VITE_STACKS_API;
+  const contractId = import.meta.env.VITE_SBTC_CONTRACT_ID;
   const url = path + '/extended/v1/contract/' + contractId + '/events';
   const response = await fetch(url);
   const val = await response.json();
@@ -18,9 +20,9 @@ export async function readEvents(network:string) {
   return val.results;
 }
 
-export async function fetchSbtcWalletAddress(network:string) {
+export async function fetchSbtcWalletAddress() {
   try {
-    const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+    const contractId = import.meta.env.VITE_SBTC_CONTRACT_ID;
     const data = {
       contractAddress: contractId.split('.')[0],
       contractName: contractId.split('.')[1],
@@ -41,9 +43,9 @@ export async function fetchSbtcWalletAddress(network:string) {
   }
 }
 
-export async function fetchUserBalance(network:string, stxAddress:string) {
+export async function fetchUserBalance(stxAddress:string) {
   try {
-    const contractId = (network === 'mainnet') ? import.meta.env.VITE_SBTC_CONTRACT_ID_MAINNET : import.meta.env.VITE_SBTC_CONTRACT_ID_TESTNET;
+    const contractId = import.meta.env.VITE_SBTC_CONTRACT_ID;
     //const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
     const functionArgs = [`0x${bytesToHex(serializeCV(principalCV(stxAddress)))}`];
     const data = {
@@ -64,7 +66,7 @@ export async function fetchUserBalance(network:string, stxAddress:string) {
 }
 
 async function callContractReadOnly(data:any) {
-  const path = (data.network === 'mainnet') ? import.meta.env.VITE_APP_STACKS_MAINNET_API : import.meta.env.VITE_APP_STACKS_TESTNET_API;
+  const path = import.meta.env.VITE_STACKS_API;
   const url = path + '/v2/contracts/call-read/' + data.contractAddress + '/' + data.contractName + '/' + data.functionName
   const response = await fetch(url, {
     method: 'POST',
@@ -140,5 +142,6 @@ export const defaultSbtcConfig:SbtcConfig = {
       tx_count: 0
     }
   },
-  utxos: []
+  utxos: [],
+  sigData: undefined
 }

@@ -22,7 +22,7 @@ const changePegOut = async (maxValue:boolean) => {
   errorReason = undefined;
   changeErrorReason = undefined;
   if ($sbtcConfig.stxAddress) {
-    const balance = await fetchUserBalance($sbtcConfig.network, $sbtcConfig.stxAddress);
+    const balance = await fetchUserBalance($sbtcConfig.stxAddress);
     if (pegOutAmount > balance) {
       //pegOutAmount = maxPeg - feeToUse;
       errorReason = 'Cannot commit more BTC then is available at your address';

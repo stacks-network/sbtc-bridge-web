@@ -16,16 +16,6 @@ const dispatch = createEventDispatcher();
 //});
 //onDestroy(unsubscribe);
 
-const updateNetwork = async (newNet:string) => {
-	if (newNet === $sbtcConfig.network) return;
-	const addr = await fetchSbtcWalletAddress(newNet);
-	const currentPeg =  $sbtcConfig.pegIn;
-	const feeInfo = $sbtcConfig.feeInfo;
-	const feeCalc = $sbtcConfig.feeCalc;
-	let conf = { network: newNet, sbtcWalletAddress: addr, pegIn: currentPeg, feeInfo, feeCalc } as SbtcConfig;
-	sbtcConfig.update(() => conf)
-	dispatch("network_change", {});
-}
 const togglePeg = (pegin:boolean) => {
 	const conf:SbtcConfig = $sbtcConfig;
 	conf.pegIn = pegin;
@@ -54,15 +44,6 @@ const togglePeg = (pegin:boolean) => {
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(true)}>Peg In</a></li>
 						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(false)}>Peg Out</a></li>
-					</ul>
-				</li>
-				<li class="nav-item dropdown">
-					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						{$sbtcConfig.network}
-					</span>
-					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('testnet')}>Testnet</a></li>
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateNetwork('mainnet')}>Mainnet</a></li>
 					</ul>
 				</li>
 				<WalletConnectButton />

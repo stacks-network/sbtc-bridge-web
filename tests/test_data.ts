@@ -39,9 +39,9 @@ export const sbtcConfig:SbtcConfig = {
 		medium_fee_per_kb: 35000,
 		high_fee_per_kb: 50000
 	},
-    feeCalc: {
-        pegInFeeCalc: {
-            feeToApply: 20000,
+	feeCalc: {
+		pegInFeeCalc: {
+			feeToApply: 20000,
 			pegInAmount: 0,
 			high: {
 				change: 0,
@@ -55,9 +55,9 @@ export const sbtcConfig:SbtcConfig = {
 				change: 0,
 				fee: 500000,
 			},
-        },
-        pegOutFeeCalc: {
-            feeToApply: 20000,
+		},
+		pegOutFeeCalc: {
+			feeToApply: 20000,
 			pegOutAmount: 0,
 			DUST_AMOUNT: 500,
 			high: {
@@ -72,8 +72,9 @@ export const sbtcConfig:SbtcConfig = {
 				change: 0,
 				fee: 500000,
 			},
-        }
-    },
+		}
+	},
+	sigData: undefined
 }
 
 

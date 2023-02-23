@@ -8,6 +8,7 @@ import { getAuth, getAccount } from "@micro-stacks/svelte";
 import UserBalance from '$lib/components/UserBalance.svelte'
 
 const account = getAccount();
+const network = import.meta.env.VITE_NETWORK;
 const format = /[ `!@#$%^&*()_+=\[\]{};':"\\|,<>\/?~]/;
 const dispatch = createEventDispatcher();
 const auth = getAuth();
@@ -17,7 +18,7 @@ if (!$sbtcConfig.stxAddress) {
   }
 }
 let stxAddress:string|undefined = $sbtcConfig.stxAddress;
-const mainReason = 'Please enter a valid stacks blockchain ' + $sbtcConfig.network + ' address';
+const mainReason = 'Please enter a valid stacks blockchain ' + network + ' address';
 let reason = mainReason;
 let errored = false;
 const report = (errors:boolean) => {
@@ -40,12 +41,12 @@ const changeStxAddress = async () => {
   } else {
     try {
       const decoded = decodeStacksAddress(stxAddress.split('.')[0]);
-      if ($sbtcConfig.network === 'testnet' && decoded[0] !== 26) {
+      if (network === 'testnet' && decoded[0] !== 26) {
         reason = mainReason;
         report(true);
         return;
       }
-      if ($sbtcConfig.network === 'mainnet' && decoded[0] !== 22) {
+      if (network === 'mainnet' && decoded[0] !== 22) {
         reason = mainReason;
         report(true);
         return;

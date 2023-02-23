@@ -3,9 +3,9 @@ import { decodeStacksAddress } from "$lib/stacks";
 
 //const TC1_TXID='6a54178bd2b94249d49199588ea5cbb52fb03a2abf065eef9eb511c6497ddd4f';
 
-export async function readTx(network:string, txid:string, replace:boolean) {
+export async function readTx(txid:string, replace:boolean) {
   //if (replace) txid = TC1_TXID
-  const path = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+  const path = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const url = path + '/tx/' + txid;
   const response = await fetch(url);
   const val = await response.json();
@@ -18,8 +18,8 @@ export async function readTx(network:string, txid:string, replace:boolean) {
   throw new Error(error);
 }
 
-export async function fetchSbtcTransactions(network:string, address:string) {
-  const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
+export async function fetchSbtcTransactions(address:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/address/' + address + '/txs');
   if (response.status !== 200) {
     throw new Error('Bitcoin address not know - is the network correct?');

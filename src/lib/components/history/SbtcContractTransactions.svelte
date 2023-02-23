@@ -10,10 +10,10 @@ import UserBalance from '$lib/components/UserBalance.svelte'
 let events:any[] = []
 let transactions = false;
 const fetchTxs = async () => {
-  events = await readEvents($sbtcConfig.network);
+  events = await readEvents();
   const txs = [];
   for (let event of events) {
-    event.txData = await readTx($sbtcConfig.network, event.data.value, false);
+    event.txData = await readTx(event.data.value, false);
   }
   console.log('events: ', events)
   transactions = true;

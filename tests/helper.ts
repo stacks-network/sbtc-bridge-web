@@ -6,8 +6,11 @@ import util from 'util'
 import { assert } from 'console';
 import { calculateFee } from "$lib/psbt";
 import { payments } from 'bitcoinjs-lib';
+import { getNetwork } from "$lib/psbt";
 
-export function getBtcAddress(network:any, pubKey:Buffer) {
+const network = getNetwork()
+
+export function getBtcAddress(pubKey:Buffer) {
 	return payments.p2sh({
 	redeem: payments.p2wpkh({
 		pubkey: pubKey,
@@ -16,12 +19,12 @@ export function getBtcAddress(network:any, pubKey:Buffer) {
 	}).address;
 }
 
-export function getBtcAddressLegacy(network:any, pubKey:Buffer) {
+export function getBtcAddressLegacy(pubKey:Buffer) {
 	const { address } = payments.p2pkh({ pubkey: pubKey });
 	return address;
 }
 
-export function getBtcAddressP2WPKH(network:any, pubKey:Buffer) {
+export function getBtcAddressP2WPKH(pubKey:Buffer) {
 	//const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: pubKey, network: network })});
 	//const redeemScript = p2shObj?.redeem?.output;
 	//if (!redeemScript) throw new Error('')
@@ -29,7 +32,7 @@ export function getBtcAddressP2WPKH(network:any, pubKey:Buffer) {
 	return address;
 }
 
-export function getBtcAddressP2SHP2WPKH(network:any, pubKey:Buffer) {
+export function getBtcAddressP2SHP2WPKH(pubKey:Buffer) {
 	const p2shObj = payments.p2sh({redeem: payments.p2wpkh({ pubkey: pubKey, network: network })});
 	//const redeemScript = p2shObj?.redeem?.output;
 	//if (!redeemScript) throw new Error('')

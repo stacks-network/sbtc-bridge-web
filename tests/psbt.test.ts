@@ -11,7 +11,6 @@ import assert, { fail } from 'assert';
 import util from 'util'
 
 const ECPair = ECPairFactory(ecc);
-const network = 'testnet';
 
 describe('suite', () => {
   beforeAll(async () => {
@@ -24,10 +23,9 @@ describe('suite', () => {
 
   it.concurrent('psbt: getRedeemScript() returns Redeem Script object', async () => {
     const conf:SbtcConfig = sbtcConfig;
-    //const addr = getP2SHToP2WPKH(conf.network);
     utxo0[0].tx = tx0;
-    const alice_pair = ECPair.fromWIF(SIGNER, getNetwork(network));
-    const res = getRedeemScript(conf.network, utxo0[0], alice_pair.publicKey);
+    const alice_pair = ECPair.fromWIF(SIGNER, getNetwork());
+    const res = getRedeemScript(utxo0[0], alice_pair.publicKey);
     expect(res?.toString('hex')).equals('00143e16009af8fc7edac27cd978ef590cc8e8c11240');
   })
 
@@ -58,7 +56,7 @@ describe('suite', () => {
   it.concurrent('psbt: transactionHex() returns hex object', async () => {
     const conf:SbtcConfig = sbtcConfig;
     conf.utxos = utxo1;
-    const keyPair = ECPair.fromWIF(SIGNER, getNetwork(network));
+    const keyPair = ECPair.fromWIF(SIGNER, getNetwork());
     conf.sigData = getSigData(keyPair, MESSAGE);
     const res = await transactionData(conf);
     const hex = await transactionHex(res);
@@ -68,7 +66,7 @@ describe('suite', () => {
   it.concurrent('psbt: getSigData() verifies signature for p2sh', async () => {
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE, { segwitType: 'p2sh(p2wpkh)' });
-    const address = getBtcAddress(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddress(keyPair.publicKey);
     if (!address) throw new Error('no address');
     assert(address.startsWith('2'))
     const valid = bitcoinMessage.verify(MESSAGE, address, sigData.signature)
@@ -78,7 +76,7 @@ describe('suite', () => {
   it.concurrent('psbt: getSigData() verifies signature for legacy address', async () => {
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE);
-    const address = getBtcAddressLegacy(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddressLegacy(keyPair.publicKey);
     if (!address) throw new Error('no address');
     assert(address.startsWith('1'))
     const valid = bitcoinMessage.verify(MESSAGE, address, sigData.signature)
@@ -88,7 +86,7 @@ describe('suite', () => {
   it.concurrent('psbt: getSigData() verifies signature for segwit p2wpkh', async () => {
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE, { segwitType: 'p2wpkh' });
-    const address = getBtcAddressP2WPKH(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddressP2WPKH(keyPair.publicKey);
     if (!address) throw new Error('no address');
     assert(address.startsWith('tb1')) 
     const valid = bitcoinMessage.verify(MESSAGE, address, sigData.signature)
@@ -98,7 +96,7 @@ describe('suite', () => {
   it.concurrent('psbt: getSigData() verifies signature for segwit p2sh(p2wpkh)', async () => {
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE, { segwitType: 'p2sh(p2wpkh)' });
-    const address = getBtcAddressP2SHP2WPKH(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddressP2SHP2WPKH(keyPair.publicKey);
     if (!address) throw new Error('no address');
     assert(address.startsWith('2'));
     const valid = bitcoinMessage.verify(MESSAGE, address, sigData.signature)
@@ -113,12 +111,12 @@ describe('suite', () => {
     conf.feeCalc.pegOutFeeCalc.feeToApply = 0;
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE, { segwitType: 'p2wpkh' });
-    const address = getBtcAddressP2WPKH(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddressP2WPKH(keyPair.publicKey);
     conf.sigData = sigData;
 
     // Build the psbt and sign to extract full transaction - check correct number of inputs and outputs
     const psbt = await buildPsbt(conf, true);
-    const tx = getSignedTransaction(conf.network, psbt);
+    const tx = getSignedTransaction(psbt);
     assert(tx.ins.length === 1);
     assert(tx.outs.length === 3);
 
@@ -146,12 +144,12 @@ describe('suite', () => {
     conf.feeCalc.pegOutFeeCalc.feeToApply = 0;
     const keyPair = ECPair.makeRandom();
     const sigData = getSigData(keyPair, MESSAGE, { segwitType: 'p2sh(p2wpkh)' });
-    const address = getBtcAddress(getNetwork(network), keyPair.publicKey);
+    const address = getBtcAddress(keyPair.publicKey);
     conf.sigData = sigData;
 
     // Build the psbt and sign to extract full transaction - check correct number of inputs and outputs
     const psbt = await buildPsbt(conf, true);
-    const tx = getSignedTransaction(conf.network, psbt);
+    const tx = getSignedTransaction(psbt);
     assert(tx.ins.length === 1);
     assert(tx.outs.length === 3);
 
@@ -174,7 +172,7 @@ describe('suite', () => {
  * TODO: more tests of the stacks signature process are needed.
  */
 it.concurrent('psbt: verifySignedMessage() verify stacks message', async () => {
-    const deployer = ECPair.fromWIF(DEPLOYER_PK.wif, getNetwork(network));
+    const deployer = ECPair.fromWIF(DEPLOYER_PK.wif, getNetwork());
     //const address = getBtcAddressLegacy(getNetwork(network), deployer.publicKey);
     //console.log('address:' + address);
     // msg, sig is taken from the signature produced by the ui for the deployer account.
