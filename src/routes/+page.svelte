@@ -20,11 +20,11 @@
 				</div>
 				{#if $sbtcConfig.pegIn}
 				<div class="d-flex justify-content-center">
-					<PegIn/>
-				</div>
+					<!-- <PegIn/> -->
+ 				</div>
 				{:else}
 				<div class="d-flex justify-content-center">
-					<PegOut/>
+					<!-- <PegOut/> -->
 				</div>
 				{/if}
 			</div>

@@ -1,7 +1,7 @@
 <script lang="ts">
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
-import { fetchUTXOs, attachAllInputTransactions, fetchAddressDetails } from "$lib/utxos";
+import { fetchUTXOs, attachAllInputTransactions, fetchAddressDetails, isSupported } from "$lib/utxos";
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { maxCommit } from "$lib/utxos";
 import { calculateFee } from "$lib/psbt";
@@ -15,6 +15,13 @@ const configureUTXOs = async (force:boolean) => {
     errorReason = 'Invalid address';
     return;
   }
+  try {
+    isSupported($sbtcConfig.network, bitcoinAddress);
+  } catch (err:any) {
+    errorReason = err.message;
+    return;
+  }
+
   if (!force && $sbtcConfig.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
     return;
   }

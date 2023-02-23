@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
-import { fetchTransactionHex, fetchTransaction, fetchAddressDetails, fetchUTXOs, maxCommit, fetchFeeEstimate } from "$lib/utxos";
+import { fetchTransactionHex, isSupported, fetchAddressDetails, fetchUTXOs, maxCommit, fetchFeeEstimate } from "$lib/utxos";
 import { addressList, addresses, tx0, tx0Hex, tx1, tx1Hex, utxo0, utxo1, feeData } from './test_data';
 import util from 'util'
 import { fail } from 'assert';
@@ -35,6 +35,31 @@ describe('suite', () => {
     } catch(err:any) {
       expect(err.message);
     }
+  })
+  
+  it.concurrent('uxto: check legacy addresses are not supported', async () => {
+    try {
+      isSupported('testnet', '1vBMSEYstWetqTFn5Au4m4GFg7xJaNVN2');
+      fail('should not come here')
+    } catch(err:any) {
+      expect(err.message).equals('Legacy addresses are not supported in the current version.');
+    }
+  })
+
+  it.concurrent('uxto: check p2sh addresses are supported', async () => {
+    expect(isSupported('testnet', '2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb')).equals(true)
+  })
+
+  it.concurrent('uxto: check p2wpkh addresses are supported', async () => {
+    expect(isSupported('testnet', 'bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4')).equals(true)
+  })
+
+  it.concurrent('uxto: check p2wsh addresses are supported', async () => {
+    expect(isSupported('testnet', 'bc1qrp33g0q5c5txsp9arysrx4k6zdkfs4nce4xj0gdcccefvpysxf3qccfmv3')).equals(true)
+  })
+
+  it.concurrent('uxto: check legacy addresses are not supported', async () => {
+    expect(isSupported('testnet', 'tb1qw508d6qejxtdg4y5r3zarvary0c5xw7kxpjzsx')).equals(true)
   })
 
   it.concurrent('uxto: fetchAddressDetails() returns correct details for address 0', async () => {

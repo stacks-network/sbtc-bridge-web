@@ -8,6 +8,7 @@ import type { UTXO } from '$types/utxo';
 import bitcoinMessage from 'bitcoinjs-message';
 
 const ECPair = ECPairFactory(ecc);
+const STX_ADDRESS_FEE_CALC='ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW';
 
 // Used in peg out - amount sent to peg out wallet
 export const DUST_AMOUNT = 500;
@@ -93,8 +94,10 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
   const totalInputValue = maxCommit(config.utxos);
   if (config.pegIn) {
     if (!feeCalc && !config.stxAddress) throw new Error('stxAddress not defined.');
-    if (feeCalc) addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, 'ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW', totalInputValue, Math.floor(totalInputValue/2), 0);
-    else addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, config.stxAddress, totalInputValue, config.feeCalc.pegInFeeCalc.pegInAmount, config.feeCalc.pegInFeeCalc.feeToApply);
+    const fee2Apply = (feeCalc) ? 0 : config.feeCalc.pegInFeeCalc.feeToApply;
+    const stxAddress = (feeCalc) ? STX_ADDRESS_FEE_CALC : config.stxAddress;
+    const pegInAmount = (feeCalc) ? Math.floor(totalInputValue/2) : config.feeCalc.pegInFeeCalc.pegInAmount;
+    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, stxAddress!, totalInputValue, pegInAmount, fee2Apply);
   } else {
     let sig = config.sigData.signature;
     let feeToApply = config.feeCalc.pegOutFeeCalc.feeToApply
@@ -119,8 +122,8 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
  */
 export function getSigData(keyPair:ECPairInterface, message:string, opts?:any) {
   const privateKey = keyPair.privateKey;
-  if (!privateKey) throw new Error('Private key is undefined.')
-  const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed, opts)
+  if (!privateKey) throw new Error('Private key is undefined.');
+  const signature = bitcoinMessage.sign(message, privateKey, keyPair.compressed, opts);
   return { signature, keyPair };
 }
 

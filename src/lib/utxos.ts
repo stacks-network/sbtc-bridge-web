@@ -4,6 +4,17 @@
 //import TrezorConnect from '@trezor/connect-web';
 import type { UTXO } from '$types/utxo';
 
+export function isSupported(network:string, address:string) {
+  /**
+   * TODO: return once other issues are cleared up and we have reliable access to bitcoin rpc
+   * 
+   */
+  if (address.startsWith('1') || address.startsWith('m') || address.startsWith('n')) {
+    throw new Error('Legacy addresses are not supported in the current version.');
+  }
+  return true;
+}
+
 export async function fetchTxHex(network:string, txid:string) {
   checkNetwork(network)
   const url = (network === 'mainnet') ? import.meta.env.VITE_MEMPOOL_EXPLORER_MAINNET : import.meta.env.VITE_MEMPOOL_EXPLORER_TESTNET;
@@ -89,11 +100,15 @@ export function maxCommit(utxos:any) {
 }
 
 export async function fetchFeeEstimate(network:string) {
-  checkNetwork(network)
-  const url = (network === 'mainnet') ? import.meta.env.VITE_BLOCKCYPHER_EXPLORER_MAINNET : import.meta.env.VITE_BLOCKCYPHER_EXPLORER_TESTNET;
-  const response = await fetch(url);
-  const info = await response.json();
-  return info
+  try {
+    checkNetwork(network)
+    const url = (network === 'mainnet') ? import.meta.env.VITE_BLOCKCYPHER_EXPLORER_MAINNET : import.meta.env.VITE_BLOCKCYPHER_EXPLORER_TESTNET;
+    const response = await fetch(url);
+    const info = await response.json();
+    return info
+  } catch (err) {
+    console.log(err)
+  }
 }
 
 function checkNetwork(network:string) {

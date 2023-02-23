@@ -55,10 +55,15 @@ onMount(async () => {
   bootstrap = (await import('bootstrap'));
   try {
     inited = true;
-    await fetchWalletAddress();
+    try {
+      await fetchWalletAddress();
+    } catch (err) {
+      console.log(err)
+    }
     let conf:SbtcConfig = $sbtcConfig;
     if (!conf || !conf.feeCalc) conf = defaultSbtcConfig;
-    conf.feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+    const feeInfo = await fetchFeeEstimate($sbtcConfig.network);
+    if (feeInfo) conf.feeInfo = feeInfo;
     conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
     sbtcConfig.update(() => conf);
   } catch (err) {
