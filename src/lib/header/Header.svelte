@@ -3,10 +3,8 @@
 import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
-import { fetchSbtcWalletAddress } from "$lib/sbtc";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { createEventDispatcher } from "svelte";
-import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
 import { base } from '$app/paths'
 
 const dispatch = createEventDispatcher();

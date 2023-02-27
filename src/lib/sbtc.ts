@@ -1,14 +1,10 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { deserializeCV, cvToJSON, serializeCV } from "micro-stacks/clarity";
 import type { SbtcConfig } from '$types/sbtc_config';
-import { principalCV } from 'micro-stacks/clarity';
-import { bytesToHex } from "micro-stacks/common";
 
-const network = import.meta.env.VITE_NETWORK;
-
-export async function readEvents() {
+/**
+export async function fetchSbtcEvents() {
   const path = import.meta.env.VITE_STACKS_API;
   const contractId = import.meta.env.VITE_SBTC_CONTRACT_ID;
   const url = path + '/extended/v1/contract/' + contractId + '/events';
@@ -42,8 +38,7 @@ export async function fetchSbtcWalletAddress() {
     return 'bc1q0pcvvu8ewfqw3p270cwxtsd5pe7us3s8kznftnrhs74w4nfl4rtqjt6hp6';
   }
 }
-
-export async function fetchUserBalance(stxAddress:string) {
+export async function fetchUserSbtcBalance(stxAddress:string) {
   try {
     const contractId = import.meta.env.VITE_SBTC_CONTRACT_ID;
     //const functionArgs = [`0x${bytesToHex(serializeCV(uintCV(1)))}`, `0x${bytesToHex(serializeCV(standardPrincipalCV(address)))}`];
@@ -80,6 +75,7 @@ async function callContractReadOnly(data:any) {
   const result = cvToJSON(deserializeCV(val.result));
   return result;
 }
+ */
 
 export const defaultSbtcConfig:SbtcConfig = {
   network: 'mainnet',

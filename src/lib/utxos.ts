@@ -15,6 +15,7 @@ export function isSupported(address:string) {
   return true;
 }
 
+/**
 export async function fetchTxHex(txid:string) {
   const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/tx/' + txid + '/hex');
@@ -23,8 +24,7 @@ export async function fetchTxHex(txid:string) {
   }
   throw new Error('Address not found - is the network correct?');
 }
-
-export async function fetchAddressDetails(address:string) {
+export async function fetchUtxoSet(address:string) {
   const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/address/' + address);
   if (response.status === 200) {
@@ -32,7 +32,6 @@ export async function fetchAddressDetails(address:string) {
   }
   throw new Error('Address not found - is the network correct?');
 }
-
 export async function fetchUTXOs(address:string) {
   const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/address/' + address + '/utxo');
@@ -42,16 +41,8 @@ export async function fetchUTXOs(address:string) {
   const utxos = await response.json();
   return utxos;
 }
+ */
 
-export async function fetchTransactionHex(txid:string) {
-  //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
-  //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
-  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
-  //const response = await fetch(url + '/txs/' + txid + '?includeHex=true');
-  const response = await fetch(url + '/tx/' + txid + '/hex');
-  const hex = await response.text();
-  return hex;
-}
 
 export async function fetchTransaction(txid:string) {
   const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
@@ -63,36 +54,34 @@ export async function fetchTransaction(txid:string) {
   return tx;
 }
 
-/**
- * Fetch the transaction referenced by each utxo.
- * The hex of the referenced tx is needed in the fee calculation 
- */
-export async function attachTransaction(utxo:UTXO) {
-  //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
-  //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
-  const tx = await fetchTransaction(utxo.txid);
-  const hex = await fetchTransactionHex(utxo.txid);
-  tx.hex = hex
-  utxo.tx = tx;
-  return utxo;
-}
     
 /**
  * Fetch the transaction referenced by each utxo.
  * The hex of the referenced tx is needed in the fee calculation 
- */
 export async function attachAllInputTransactions(utxos:[UTXO]) {
   for (let utxo of utxos) {
     utxo = await attachTransaction(utxo);
   }  
   return utxos;
 }
-    
-export function maxCommit(utxos:any) {
-  const summ = utxos?.map((item:{value:number}) => item.value).reduce((prev:number, curr:number) => prev + curr, 0);
-  return summ || 0;
+export async function attachTransaction(utxo:UTXO) {
+  //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
+  //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
+  const tx = await fetchTransaction(utxo.txid);
+  const hex = await fetchTransactionHex(utxo.txid);
+  tx.hex = hex;
+  utxo.tx = tx;
+  return utxo;
 }
-
+export async function fetchTransactionHex(txid:string) {
+  //https://api.blockcypher.com/v1/btc/test3/txs/<txID here>?includeHex=true
+  //https://mempool.space/api/tx/15e10745f15593a899cef391191bdd3d7c12412cc4696b7bcb669d0feadc8521/hex
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
+  //const response = await fetch(url + '/txs/' + txid + '?includeHex=true');
+  const response = await fetch(url + '/tx/' + txid + '/hex');
+  const hex = await response.text();
+  return hex;
+}
 export async function fetchFeeEstimate() {
   try {
     const url = import.meta.env.VITE_BLOCKCYPHER_EXPLORER;
@@ -104,3 +93,11 @@ export async function fetchFeeEstimate() {
     return { low_fee_per_kb:20000, medium_fee_per_kb:30000, high_fee_per_kb:40000 }
   }
 }
+
+ */
+    
+export function maxCommit(utxos:any) {
+  const summ = utxos?.map((item:{value:number}) => item.value).reduce((prev:number, curr:number) => prev + curr, 0);
+  return summ || 0;
+}
+

@@ -1,7 +1,5 @@
 <script lang="ts">
-import { sbtcConfig } from '$stores/stores'
-import { readEvents } from "$lib/sbtc";
-import { readTx } from "$lib/btc_api";
+import { fetchSbtcEvents } from "$lib/bridge_api";
 import { ArrowRepeat, SortAlphaUp } from "svelte-bootstrap-icons";
 import { truncate } from '$lib/utils'
 import { onMount } from 'svelte';
@@ -10,14 +8,17 @@ import UserBalance from '$lib/components/UserBalance.svelte'
 let events:any[] = []
 let transactions = false;
 const fetchTxs = async () => {
-  events = await readEvents();
+  events = await fetchSbtcEvents();
+  /**
   const txs = [];
   for (let event of events) {
-    event.txData = await readTx(event.data.value, false);
+    event.txData = await readTx(event.data.value);
   }
   console.log('events: ', events)
   transactions = true;
+  */
 }
+
 let sortDir = true;
 let sortField = 'title';
 let componentKey = 0;

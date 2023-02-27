@@ -59,7 +59,6 @@ export async function attachTxs(utxos:[UTXO]) {
 		utxo.tx = tx0;
 		utxo.tx.hex = tx0Hex;
 	  }
-	  //utxo = await attachTransaction(network, utxo);
 	}
 	return utxos;
   }

@@ -1,7 +1,8 @@
 <script lang="ts">
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
-import { fetchUTXOs, attachAllInputTransactions, fetchAddressDetails, isSupported } from "$lib/utxos";
+import { isSupported } from "$lib/utxos";
+import { fetchUtxoSet } from "$lib/bridge_api";
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { maxCommit } from "$lib/utxos";
 import { calculateFee } from "$lib/psbt";
@@ -28,14 +29,13 @@ const configureUTXOs = async (force:boolean) => {
   }
   try {
     const conf:SbtcConfig = $sbtcConfig;
-    let result = await fetchAddressDetails(bitcoinAddress);
+    let result = await fetchUtxoSet(bitcoinAddress);
     conf.fromBtcAddress = bitcoinAddress;
-    conf.addressDetails = result;
-    let uxtos = await fetchUTXOs(bitcoinAddress);
-    uxtos = await attachAllInputTransactions(uxtos);
-    conf.utxos = uxtos;
+    conf.addressDetails = result.addressDetails;
+    //let uxtos = await fetchUTXOs(bitcoinAddress);
+    //uxtos = await attachAllInputTransactions(uxtos);
+    conf.utxos = result.uxtos;
     const feeCalc = await calculateFee(conf);
-    console.log(feeCalc);
     console.log('utxos --> ', result);
     conf.feeCalc = feeCalc;
     sbtcConfig.update(() => conf);

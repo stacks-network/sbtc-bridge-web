@@ -6,11 +6,10 @@ import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
 import { client } from "$stores/client";
-import { fetchSbtcWalletAddress } from "$lib/sbtc";
+import { fetchSbtcWalletAddress, fetchCurrentFeeRates } from "$lib/bridge_api";
 import { sbtcConfig } from '$stores/stores'
-import { StacksMocknet, StacksMainnet } from "micro-stacks/network";
+import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
 import type { SbtcConfig } from '$types/sbtc_config';
-import { fetchFeeEstimate } from "$lib/utxos";
 import { login } from "$lib/stacks";
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
@@ -30,10 +29,15 @@ const network = import.meta.env.VITE_NETWORK;
 if (typeof window !== 'undefined') {
   origin = window.location.origin;
 }
+console.log(process.env.NODE_ENV)
+let stxNetwork:StacksMainnet|StacksMocknet|StacksTestnet = new StacksMainnet();
+if (process.env.NODE_ENV === 'development') stxNetwork = new StacksMocknet();
+else if (process.env.NODE_ENV === 'testnet') stxNetwork = new StacksTestnet();
+
 const config = {
   appName: 'sBTC Client',
   appIconUrl: origin + '/img/logo.png',
-  network: (network === 'mainnet') ? new StacksMainnet() : new StacksMocknet()
+  network: stxNetwork
 };
 mountClient(config);
 client.set(getMicroStacksClient());
@@ -43,33 +47,29 @@ const doLogin = () => {
   login($auth);
 }
 
-const fetchWalletAddress = async () => {
+const initApplication = async () => {
   const addr = await fetchSbtcWalletAddress();
   const conf = $sbtcConfig;
   conf.sbtcWalletAddress = addr;
+  const feeInfo = await fetchCurrentFeeRates();
+  if (feeInfo) conf.feeInfo = feeInfo;
+  conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
   sbtcConfig.update(() => conf);
+  return conf;
 }
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
   globalThis.Buffer = Buffer;
   bootstrap = (await import('bootstrap'));
+  let conf;
   try {
-    inited = true;
-    try {
-      await fetchWalletAddress();
-    } catch (err) {
-      console.log(err)
-    }
-    let conf:SbtcConfig = $sbtcConfig;
-    if (!conf || !conf.feeCalc) conf = defaultSbtcConfig;
-    const feeInfo = await fetchFeeEstimate();
-    if (feeInfo) conf.feeInfo = feeInfo;
-    conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
-    sbtcConfig.update(() => conf);
+    conf = await initApplication();
   } catch (err) {
+    conf = defaultSbtcConfig;
     console.log(err)
   }
+  inited = true;
   await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');

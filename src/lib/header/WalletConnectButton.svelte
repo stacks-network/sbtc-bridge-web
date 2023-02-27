@@ -7,7 +7,7 @@ import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { c32ToB58 } from "micro-stacks/crypto";
 import { base } from '$app/paths'
-import { coordinator } from '$lib/sbtc_admin'
+import { isCoordinator } from '$lib/sbtc_admin'
 
 const auth = getAuth();
 const account = getAccount();
@@ -32,7 +32,7 @@ onMount(async () => {
 
 </script>
 
-{#if coordinator.stxAddress === $account.stxAddress}
+{#if isCoordinator($account.stxAddress)}
 <li class="nav-item mb-1">
 	<span class="nav-link">
 	<a href="{base}/admin" class="pointer px-2">Admin</a> 
