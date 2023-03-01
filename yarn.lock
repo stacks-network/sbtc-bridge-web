@@ -527,11 +527,27 @@
     "@vitest/utils" "0.28.5"
     chai "^4.3.7"
 
+"@vitest/expect@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/expect/-/expect-0.29.1.tgz#befba6278167fc3d4d47a87557eaf41f3b06a7cf"
+  dependencies:
+    "@vitest/spy" "0.29.1"
+    "@vitest/utils" "0.29.1"
+    chai "^4.3.7"
+
 "@vitest/runner@0.28.5":
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/@vitest/runner/-/runner-0.28.5.tgz#4a18fe0e40b25569763f9f1f64b799d1629b3026"
   dependencies:
     "@vitest/utils" "0.28.5"
+    p-limit "^4.0.0"
+    pathe "^1.1.0"
+
+"@vitest/runner@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/runner/-/runner-0.29.1.tgz#798184b710e6b4ebd81f7ae8efeab64ad1bc627a"
+  dependencies:
+    "@vitest/utils" "0.29.1"
     p-limit "^4.0.0"
     pathe "^1.1.0"
 
@@ -541,9 +557,25 @@
   dependencies:
     tinyspy "^1.0.2"
 
+"@vitest/spy@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/spy/-/spy-0.29.1.tgz#e84f4d96a268e555e8140aeddcda65d6fd4e1d7b"
+  dependencies:
+    tinyspy "^1.0.2"
+
 "@vitest/utils@0.28.5":
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.28.5.tgz#7b82b528df86adfbd4a1f6a3b72c39790e81de0d"
+  dependencies:
+    cli-truncate "^3.1.0"
+    diff "^5.1.0"
+    loupe "^2.3.6"
+    picocolors "^1.0.0"
+    pretty-format "^27.5.1"
+
+"@vitest/utils@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.29.1.tgz#b5de0f836becd18539a8bf9a68c1b06eee23307c"
   dependencies:
     cli-truncate "^3.1.0"
     diff "^5.1.0"
@@ -5591,6 +5623,17 @@ vite-node@0.28.5:
     source-map-support "^0.5.21"
     vite "^3.0.0 || ^4.0.0"
 
+vite-node@0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/vite-node/-/vite-node-0.29.1.tgz#cc1e5fea46ff52645e0cf03d4ee03bf706d60308"
+  dependencies:
+    cac "^6.7.14"
+    debug "^4.3.4"
+    mlly "^1.1.0"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    vite "^3.0.0 || ^4.0.0"
+
 vite-plugin-top-level-await@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/vite-plugin-top-level-await/-/vite-plugin-top-level-await-1.2.2.tgz"
@@ -5635,7 +5678,7 @@ vitest-fetch-mock@^0.2.1:
   dependencies:
     cross-fetch "^3.0.6"
 
-vitest@0.28.5, vitest@^0.28.5:
+vitest@0.28.5:
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.28.5.tgz#94410a8924cd7189e4f1adffa8c5cde809cbf2f9"
   dependencies:
@@ -5662,6 +5705,35 @@ vitest@0.28.5, vitest@^0.28.5:
     tinyspy "^1.0.2"
     vite "^3.0.0 || ^4.0.0"
     vite-node "0.28.5"
+    why-is-node-running "^2.2.2"
+
+vitest@^0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.29.1.tgz#1a5aa3494a8ff96556d7601a39d57f7c890022c4"
+  dependencies:
+    "@types/chai" "^4.3.4"
+    "@types/chai-subset" "^1.3.3"
+    "@types/node" "*"
+    "@vitest/expect" "0.29.1"
+    "@vitest/runner" "0.29.1"
+    "@vitest/spy" "0.29.1"
+    "@vitest/utils" "0.29.1"
+    acorn "^8.8.1"
+    acorn-walk "^8.2.0"
+    cac "^6.7.14"
+    chai "^4.3.7"
+    debug "^4.3.4"
+    local-pkg "^0.4.2"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    source-map "^0.6.1"
+    std-env "^3.3.1"
+    strip-literal "^1.0.0"
+    tinybench "^2.3.1"
+    tinypool "^0.3.1"
+    tinyspy "^1.0.2"
+    vite "^3.0.0 || ^4.0.0"
+    vite-node "0.29.1"
     why-is-node-running "^2.2.2"
 
 vlq@^0.2.1, vlq@^0.2.2:
