@@ -254,27 +254,27 @@
   dependencies:
     import-meta-resolve "^2.2.0"
 
-"@sveltejs/adapter-static@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.npmjs.org/@sveltejs/adapter-static/-/adapter-static-1.0.4.tgz"
+"@sveltejs/adapter-static@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/adapter-static/-/adapter-static-2.0.1.tgz#b76f7742ae635e1c063efcab8c6de064255f6292"
 
-"@sveltejs/kit@^1.0.0":
-  version "1.1.1"
-  resolved "https://registry.npmjs.org/@sveltejs/kit/-/kit-1.1.1.tgz"
+"@sveltejs/kit@^1.9.1":
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/@sveltejs/kit/-/kit-1.9.1.tgz#516fe33ab6ee990c9efb18d88fe0ddd6e85c69e9"
   dependencies:
     "@sveltejs/vite-plugin-svelte" "^2.0.0"
     "@types/cookie" "^0.5.1"
     cookie "^0.5.0"
-    devalue "^4.2.2"
+    devalue "^4.3.0"
     esm-env "^1.0.0"
     kleur "^4.1.5"
-    magic-string "^0.27.0"
+    magic-string "^0.30.0"
     mime "^3.0.0"
     sade "^1.8.1"
     set-cookie-parser "^2.5.1"
     sirv "^2.0.2"
     tiny-glob "^0.2.9"
-    undici "5.15.0"
+    undici "5.20.0"
 
 "@sveltejs/vite-plugin-svelte@^2.0.0":
   version "2.0.2"
@@ -527,11 +527,27 @@
     "@vitest/utils" "0.28.5"
     chai "^4.3.7"
 
+"@vitest/expect@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/expect/-/expect-0.29.1.tgz#befba6278167fc3d4d47a87557eaf41f3b06a7cf"
+  dependencies:
+    "@vitest/spy" "0.29.1"
+    "@vitest/utils" "0.29.1"
+    chai "^4.3.7"
+
 "@vitest/runner@0.28.5":
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/@vitest/runner/-/runner-0.28.5.tgz#4a18fe0e40b25569763f9f1f64b799d1629b3026"
   dependencies:
     "@vitest/utils" "0.28.5"
+    p-limit "^4.0.0"
+    pathe "^1.1.0"
+
+"@vitest/runner@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/runner/-/runner-0.29.1.tgz#798184b710e6b4ebd81f7ae8efeab64ad1bc627a"
+  dependencies:
+    "@vitest/utils" "0.29.1"
     p-limit "^4.0.0"
     pathe "^1.1.0"
 
@@ -541,9 +557,25 @@
   dependencies:
     tinyspy "^1.0.2"
 
+"@vitest/spy@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/spy/-/spy-0.29.1.tgz#e84f4d96a268e555e8140aeddcda65d6fd4e1d7b"
+  dependencies:
+    tinyspy "^1.0.2"
+
 "@vitest/utils@0.28.5":
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.28.5.tgz#7b82b528df86adfbd4a1f6a3b72c39790e81de0d"
+  dependencies:
+    cli-truncate "^3.1.0"
+    diff "^5.1.0"
+    loupe "^2.3.6"
+    picocolors "^1.0.0"
+    pretty-format "^27.5.1"
+
+"@vitest/utils@0.29.1":
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/@vitest/utils/-/utils-0.29.1.tgz#b5de0f836becd18539a8bf9a68c1b06eee23307c"
   dependencies:
     cli-truncate "^3.1.0"
     diff "^5.1.0"
@@ -1882,9 +1914,9 @@ detective@^4.0.0:
     acorn "^5.2.1"
     defined "^1.0.0"
 
-devalue@^4.2.2:
-  version "4.2.2"
-  resolved "https://registry.npmjs.org/devalue/-/devalue-4.2.2.tgz"
+devalue@^4.3.0:
+  version "4.3.0"
+  resolved "https://registry.yarnpkg.com/devalue/-/devalue-4.3.0.tgz#d86db8fee63a70317c2355be0d3d1b4d8f89a44e"
 
 diff@5.0.0:
   version "5.0.0"
@@ -2104,7 +2136,7 @@ esbuild@^0.15.9:
     esbuild-windows-64 "0.15.18"
     esbuild-windows-arm64 "0.15.18"
 
-esbuild@^0.16.3:
+esbuild@^0.16.14:
   version "0.16.17"
   resolved "https://registry.npmjs.org/esbuild/-/esbuild-0.16.17.tgz"
   optionalDependencies:
@@ -3560,6 +3592,12 @@ magic-string@^0.27.0:
   dependencies:
     "@jridgewell/sourcemap-codec" "^1.4.13"
 
+magic-string@^0.30.0:
+  version "0.30.0"
+  resolved "https://registry.yarnpkg.com/magic-string/-/magic-string-0.30.0.tgz#fd58a4748c5c4547338a424e90fa5dd17f4de529"
+  dependencies:
+    "@jridgewell/sourcemap-codec" "^1.4.13"
+
 make-dir@^3.0.0, make-dir@^3.0.2:
   version "3.1.0"
   resolved "https://registry.npmjs.org/make-dir/-/make-dir-3.1.0.tgz"
@@ -4211,7 +4249,7 @@ postcss-reporter@^7.0.0:
     picocolors "^1.0.0"
     thenby "^1.3.4"
 
-postcss@^8.4.14, postcss@^8.4.18, postcss@^8.4.20:
+postcss@^8.4.14, postcss@^8.4.18, postcss@^8.4.21:
   version "8.4.21"
   resolved "https://registry.npmjs.org/postcss/-/postcss-8.4.21.tgz"
   dependencies:
@@ -4690,9 +4728,9 @@ rollup@^2.79.1:
   optionalDependencies:
     fsevents "~2.3.2"
 
-rollup@^3.7.0:
-  version "3.10.0"
-  resolved "https://registry.npmjs.org/rollup/-/rollup-3.10.0.tgz"
+rollup@^3.10.0:
+  version "3.17.3"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-3.17.3.tgz#ee7c4e1a262da55c491a4788b632fa123315f6ef"
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -5402,9 +5440,9 @@ typeforce@^1.11.3, typeforce@^1.11.5, typeforce@^1.18.0:
   version "1.18.0"
   resolved "https://registry.npmjs.org/typeforce/-/typeforce-1.18.0.tgz"
 
-typescript@^4.9.3, typescript@^4.9.4:
-  version "4.9.4"
-  resolved "https://registry.npmjs.org/typescript/-/typescript-4.9.4.tgz"
+typescript@^4.9.4, typescript@^4.9.5:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
 
 ufo@^1.0.1:
   version "1.0.1"
@@ -5434,9 +5472,9 @@ undeclared-identifiers@^1.1.2:
     simple-concat "^1.0.0"
     xtend "^4.0.1"
 
-undici@5.15.0:
-  version "5.15.0"
-  resolved "https://registry.npmjs.org/undici/-/undici-5.15.0.tgz"
+undici@5.20.0:
+  version "5.20.0"
+  resolved "https://registry.yarnpkg.com/undici/-/undici-5.20.0.tgz#6327462f5ce1d3646bcdac99da7317f455bcc263"
   dependencies:
     busboy "^1.6.0"
 
@@ -5585,6 +5623,17 @@ vite-node@0.28.5:
     source-map-support "^0.5.21"
     vite "^3.0.0 || ^4.0.0"
 
+vite-node@0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/vite-node/-/vite-node-0.29.1.tgz#cc1e5fea46ff52645e0cf03d4ee03bf706d60308"
+  dependencies:
+    cac "^6.7.14"
+    debug "^4.3.4"
+    mlly "^1.1.0"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    vite "^3.0.0 || ^4.0.0"
+
 vite-plugin-top-level-await@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/vite-plugin-top-level-await/-/vite-plugin-top-level-await-1.2.2.tgz"
@@ -5608,14 +5657,14 @@ vite@^3:
   optionalDependencies:
     fsevents "~2.3.2"
 
-"vite@^3.0.0 || ^4.0.0", vite@^4.0.0:
-  version "4.0.4"
-  resolved "https://registry.npmjs.org/vite/-/vite-4.0.4.tgz"
+"vite@^3.0.0 || ^4.0.0", vite@^4.1.4:
+  version "4.1.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-4.1.4.tgz#170d93bcff97e0ebc09764c053eebe130bfe6ca0"
   dependencies:
-    esbuild "^0.16.3"
-    postcss "^8.4.20"
+    esbuild "^0.16.14"
+    postcss "^8.4.21"
     resolve "^1.22.1"
-    rollup "^3.7.0"
+    rollup "^3.10.0"
   optionalDependencies:
     fsevents "~2.3.2"
 
@@ -5629,7 +5678,7 @@ vitest-fetch-mock@^0.2.1:
   dependencies:
     cross-fetch "^3.0.6"
 
-vitest@0.28.5, vitest@^0.28.5:
+vitest@0.28.5:
   version "0.28.5"
   resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.28.5.tgz#94410a8924cd7189e4f1adffa8c5cde809cbf2f9"
   dependencies:
@@ -5656,6 +5705,35 @@ vitest@0.28.5, vitest@^0.28.5:
     tinyspy "^1.0.2"
     vite "^3.0.0 || ^4.0.0"
     vite-node "0.28.5"
+    why-is-node-running "^2.2.2"
+
+vitest@^0.29.1:
+  version "0.29.1"
+  resolved "https://registry.yarnpkg.com/vitest/-/vitest-0.29.1.tgz#1a5aa3494a8ff96556d7601a39d57f7c890022c4"
+  dependencies:
+    "@types/chai" "^4.3.4"
+    "@types/chai-subset" "^1.3.3"
+    "@types/node" "*"
+    "@vitest/expect" "0.29.1"
+    "@vitest/runner" "0.29.1"
+    "@vitest/spy" "0.29.1"
+    "@vitest/utils" "0.29.1"
+    acorn "^8.8.1"
+    acorn-walk "^8.2.0"
+    cac "^6.7.14"
+    chai "^4.3.7"
+    debug "^4.3.4"
+    local-pkg "^0.4.2"
+    pathe "^1.1.0"
+    picocolors "^1.0.0"
+    source-map "^0.6.1"
+    std-env "^3.3.1"
+    strip-literal "^1.0.0"
+    tinybench "^2.3.1"
+    tinypool "^0.3.1"
+    tinyspy "^1.0.2"
+    vite "^3.0.0 || ^4.0.0"
+    vite-node "0.29.1"
     why-is-node-running "^2.2.2"
 
 vlq@^0.2.1, vlq@^0.2.2:
