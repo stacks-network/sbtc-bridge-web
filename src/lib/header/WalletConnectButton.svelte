@@ -7,7 +7,7 @@ import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { c32ToB58 } from "micro-stacks/crypto";
 import { base } from '$app/paths'
-import { coordinator } from '$lib/sbtc_admin'
+import { isCoordinator } from '$lib/sbtc_admin'
 
 const auth = getAuth();
 const account = getAccount();
@@ -32,7 +32,7 @@ onMount(async () => {
 
 </script>
 
-{#if coordinator.stxAddress === $account.stxAddress}
+{#if isCoordinator($account.stxAddress)}
 <li class="nav-item mb-1">
 	<span class="nav-link">
 	<a href="{base}/admin" class="pointer px-2">Admin</a> 
@@ -48,14 +48,14 @@ onMount(async () => {
 </span>
 {:else if $auth.isSignedIn}
 	<span class="nav-link">
-		<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
+		<a href="{base}/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
 			<span  class="px-2"><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /></span>
 		</a>
 	</span>
 {:else if $auth.isRequestPending}
-	<span class="nav-link"><a href="/" on:click|preventDefault={login}><span  class="px-2"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-link"><a href="{base}/" on:click|preventDefault={login}><span  class="px-2"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {:else}
-	<span class="nav-link"><a href="/" class="pointer px-2" on:click|preventDefault={() => doLogin()} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
+	<span class="nav-link"><a href="{base}/" class="pointer px-2" on:click|preventDefault={() => doLogin()} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {/if}
 </li>
 

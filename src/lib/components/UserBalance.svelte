@@ -1,6 +1,6 @@
 <script lang="ts">
 import { sbtcConfig } from '$stores/stores'
-import { fetchUserBalance } from '$lib/sbtc'
+import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import { getAccount } from "@micro-stacks/svelte";
 import { onMount} from 'svelte';
 import { fmtSatoshiToBitcoin, truncate } from '$lib/utils'
@@ -14,7 +14,7 @@ onMount(async () => {
   const stxAddressAuth = $account.stxAddress;
   const stxAddressForm = $sbtcConfig.stxAddress;
   if (stxAddressAuth) {
-    const balance = await fetchUserBalance(stxAddressAuth);
+    const balance = await fetchUserSbtcBalance(stxAddressAuth);
     if (balance > 0) {
       balanceObjs.push({
         address: stxAddressAuth,
@@ -23,7 +23,7 @@ onMount(async () => {
     }
   }
   if (stxAddressForm && stxAddressForm !== stxAddressAuth) {
-    const balance = await fetchUserBalance(stxAddressForm);
+    const balance = await fetchUserSbtcBalance(stxAddressForm);
     if (balance > 0) {
       balanceObjs.push({
         address: stxAddressForm,

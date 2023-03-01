@@ -2,11 +2,10 @@ import type { UTXO } from "$types/utxo";
 import type { AddressDetails } from "$types/address_details";
 
 export type SbtcConfig = {
-  network: string;
+  sbtcContractData:any;
   balance: number;
   stxAddress?: string;
   pegOutStxAddress?:string;
-  sbtcWalletAddress?: string;
   fromBtcAddress?:string;
   addressDetails:AddressDetails,
   sigData:any;

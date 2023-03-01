@@ -26,7 +26,6 @@ export async function transactionHex(psbt:Psbt) {
   return psbt.toHex();
   //return psbt.finalizeAllInputs().extractTransaction().toHex();
 }
-
 export function getNetwork () {
   return (network === 'testnet') ? networks.testnet : networks.bitcoin
 }
@@ -80,7 +79,7 @@ function getInput(unspent:any, redeemScript:any, witnessScript:any) {
 }
 
 export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
-  if (!config.fromBtcAddress || !config.sbtcWalletAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
+  if (!config.fromBtcAddress || !config.sbtcContractData.sbtcWalletAddress || !config.utxos) throw new Error('wallet or inputs not defined.');
   const network = getNetwork();
   const psbt = new Psbt({ network });
   config.utxos.forEach((utxo) => {
@@ -98,7 +97,7 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
     const fee2Apply = (feeCalc) ? 0 : config.feeCalc.pegInFeeCalc.feeToApply;
     const stxAddress = (feeCalc) ? STX_ADDRESS_FEE_CALC : config.stxAddress;
     const pegInAmount = (feeCalc) ? Math.floor(totalInputValue/2) : config.feeCalc.pegInFeeCalc.pegInAmount;
-    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, stxAddress!, totalInputValue, pegInAmount, fee2Apply);
+    addPegInOutputs(psbt, config.fromBtcAddress, config.sbtcContractData.sbtcWalletAddress, stxAddress!, totalInputValue, pegInAmount, fee2Apply);
   } else {
     let sig = config.sigData?.signature;
     let feeToApply = config.feeCalc?.pegOutFeeCalc?.feeToApply
@@ -107,7 +106,7 @@ export function buildPsbt(config:SbtcConfig, feeCalc:boolean) {
       const keyPair = ECPair.fromWIF(SIGNER, network);
       sig = getSigData(keyPair, MESSAGE).signature;
     }
-    addPegOutOutputs(psbt, config.fromBtcAddress, config.sbtcWalletAddress, totalInputValue, config.feeCalc.pegOutFeeCalc.pegOutAmount, feeToApply, sig);
+    addPegOutOutputs(psbt, config.fromBtcAddress, config.sbtcContractData.sbtcWalletAddress, totalInputValue, config.feeCalc.pegOutFeeCalc.pegOutAmount, feeToApply, sig);
   }
   return psbt;
 }

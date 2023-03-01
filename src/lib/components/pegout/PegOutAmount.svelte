@@ -5,7 +5,7 @@ import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { DUST_AMOUNT } from "$lib/psbt";
-import { fetchUserBalance } from '$lib/sbtc'
+import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import { getAccount } from "@micro-stacks/svelte";
 import UserBalance from '$lib/components/UserBalance.svelte'
 
@@ -22,7 +22,7 @@ const changePegOut = async (maxValue:boolean) => {
   errorReason = undefined;
   changeErrorReason = undefined;
   if ($sbtcConfig.stxAddress) {
-    const balance = await fetchUserBalance($sbtcConfig.stxAddress);
+    const balance = await fetchUserSbtcBalance($sbtcConfig.stxAddress);
     if (pegOutAmount > balance) {
       //pegOutAmount = maxPeg - feeToUse;
       errorReason = 'Cannot commit more BTC then is available at your address';

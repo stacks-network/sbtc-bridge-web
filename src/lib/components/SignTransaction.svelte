@@ -60,7 +60,7 @@ onMount(async () => {
       <div class="col-2">Output {i + 1}</div>
       <div class="col-8">
           {#if i === 0}<span class="text-info">OP_RETURN:</span> {convertUint8ToHex(output.script)}
-          {:else if i === 1 && psbt?.txOutputs.length > 2} <span class="text-info">To:</span> {$sbtcConfig.sbtcWalletAddress}
+          {:else if i === 1 && psbt?.txOutputs.length > 2} <span class="text-info">To:</span> {$sbtcConfig.sbtcContractData.sbtcWalletAddress}
           {:else}<span class="text-info">Change:</span> {$sbtcConfig.fromBtcAddress}
           {/if}
       </div>
