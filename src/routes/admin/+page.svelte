@@ -7,8 +7,8 @@ import { sbtcConfig } from '$stores/stores';
 <section class="bg-dark">
 	<div class="my-4 p-4">
 		<div class="card-width">
-			<h1 class="text-info"><span class="strokeme-info">Devnet</span> Coordinator</h1>
-			<h6>{$sbtcConfig.sbtcWalletAddress}</h6>
+			<h1 class="text-info"><span class="strokeme-info">sBTC</span> Coordinator</h1>
+			<h6>{import.meta.env.VITE_SBTC_CONTRACT_ID}</h6>
 		</div>
 	</div>
 	<div class="row">

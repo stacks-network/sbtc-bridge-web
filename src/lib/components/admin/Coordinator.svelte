@@ -7,11 +7,21 @@ import { sbtcConfig } from '$stores/stores'
 
 const contractCall = getOpenContractCall();
 
+let coordinator:string = import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0];
+if ($sbtcConfig.sbtcContractData.bitcoinWalletAddress) {
+  coordinator = $sbtcConfig.sbtcContractData.coordinator;
+}
+
+let sbtcWallet:string = import.meta.env.VITE_SBTC_WALLET;
+if ($sbtcConfig?.sbtcContractData?.bitcoinWalletAddress) {
+  sbtcWallet = $sbtcConfig.sbtcContractData.bitcoinWalletAddress;
+}
+
 const coordinate = async () => {
-  const res = await setCoordinator($contractCall);
+  const res = await setCoordinator(coordinator, $contractCall);
 }
 const wallet = async () => {
-  const res = await setBtcWallet($contractCall);
+  const res = await setBtcWallet(sbtcWallet, $contractCall);
 }
 
 </script>
@@ -19,13 +29,15 @@ const wallet = async () => {
 <div class="card border p-4">
   <div class="row">
     <div class="col">
-      <div>Coordinator: {coordinators[0].stxAddress}</div>
+      <div>Coordinator: {coordinator}</div>
+      <input type="text" id="stxAddress" class="form-control" bind:value={coordinator}/>
       <div><button class="btn btn-outline-light" on:click={() => coordinate()}>Set Coordinator</button></div>
     </div>
   </div>
   <div class="row">
     <div class="col">
-      <div>SBTC Wallet: {coordinators[0].btcAddress}</div>
+      <div>SBTC Wallet: {sbtcWallet}</div>
+      <input type="text" id="sbtcWallet" class="form-control" bind:value={sbtcWallet}/>
       <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
     </div>
   </div>

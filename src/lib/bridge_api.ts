@@ -1,6 +1,6 @@
 
 export async function fetchCurrentFeeRates() {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc-fee-estimate';
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/blocks/fee-estimate';
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not know - is the network correct?');
@@ -10,7 +10,7 @@ export async function fetchCurrentFeeRates() {
 }
 
 export async function fetchUtxoSet(address:string) {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc/address/' + address + '/utxos';
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos';
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not know - is the network correct?');
@@ -32,6 +32,13 @@ export async function fetchSbtcEvents() {
 
 export async function fetchSbtcWalletAddress() {
   const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/wallet-address';
+  const response = await fetch(path);
+  const result = await response.text();
+  return result;
+}
+
+export async function fetchSbtcData() {
+  const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/data';
   const response = await fetch(path);
   const result = await response.text();
   return result;

@@ -44,6 +44,10 @@ export async function fetchUTXOs(address:string) {
  */
 
 
+    
+/**
+ * Fetch the transaction referenced by each utxo.
+ * The hex of the referenced tx is needed in the fee calculation 
 export async function fetchTransaction(txid:string) {
   const url = import.meta.env.VITE_MEMPOOL_EXPLORER;
   const response = await fetch(url + '/tx/' + txid);
@@ -54,10 +58,6 @@ export async function fetchTransaction(txid:string) {
   return tx;
 }
 
-    
-/**
- * Fetch the transaction referenced by each utxo.
- * The hex of the referenced tx is needed in the fee calculation 
 export async function attachAllInputTransactions(utxos:[UTXO]) {
   for (let utxo of utxos) {
     utxo = await attachTransaction(utxo);

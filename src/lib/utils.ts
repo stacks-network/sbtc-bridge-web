@@ -9,6 +9,10 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 
+export function explorerTxUrl(txid:string) {
+	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + import.meta.env.VITE_NETWORK;
+}
+
 export function fmtSatoshiToBitcoin(amountSats:number) {
   return  Math.round(amountSats) / btcPrecision
 }

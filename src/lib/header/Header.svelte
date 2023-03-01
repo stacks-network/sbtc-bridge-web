@@ -6,6 +6,7 @@ import { sbtcConfig } from '$stores/stores';
 import type { SbtcConfig } from '$types/sbtc_config';
 import { createEventDispatcher } from "svelte";
 import { base } from '$app/paths'
+import { goto } from "$app/navigation";
 
 const dispatch = createEventDispatcher();
 
@@ -18,12 +19,13 @@ const togglePeg = (pegin:boolean) => {
 	const conf:SbtcConfig = $sbtcConfig;
 	conf.pegIn = pegin;
 	sbtcConfig.set(conf);
+	(pegin) ? goto('/wrap') : goto('/unwrap');
 }
 </script>
 <nav class="navbar navbar-expand-md transparent">
 	<div class="container-fluid mx-5">
 		<a class="navbar-brand" href="{base}/">
-			<img class="nav-logo" src={logoWhite} alt="CityCoins Test" />
+			<img width="40px" height="40px" class="nav-logo" src={logoWhite} alt="CityCoins Test" />
 		</a>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
@@ -40,8 +42,8 @@ const togglePeg = (pegin:boolean) => {
 						Peg
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(true)}>Peg In</a></li>
-						<li><a class="dropdown-item" href="{base}/" on:click={() => togglePeg(false)}>Peg Out</a></li>
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(true)}>Peg In</a></li>
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(false)}>Peg Out</a></li>
 					</ul>
 				</li>
 				<WalletConnectButton />

@@ -10,9 +10,10 @@ export const DEPLOYER_PK = {
 }
 
 export const sbtcConfig:SbtcConfig = {
-	network: 'testnet',
 	fromBtcAddress: 'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5',
-	sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	sbtcContractData: {
+		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	},
 	stxAddress: 'ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW',
 	pegIn: false,
 	balance: 0,
@@ -113,7 +114,9 @@ export const tx1Hex = '020000000001039e72459244c7fc25f3f071e590da3d024b5390c729a
 // ------------------------------------------------------------------------
 export const sbtcConfig10 = {
 	network: 'testnet',
-	sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	sbtcContractData: {
+		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	},
 	fromBtcAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
 	addressDetails: {
 		address: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
@@ -249,7 +252,9 @@ export const sbtcConfig10 = {
 };
 export const sbtcConfig1 = {
 	network: 'testnet',
-	sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	sbtcContractData: {
+		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
+	},
 	fromBtcAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
 	addressDetails: {
 		address: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
