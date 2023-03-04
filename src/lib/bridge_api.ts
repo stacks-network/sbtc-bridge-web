@@ -49,7 +49,7 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
     const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance';
     const response = await fetch(path);
     const result = await response.json();
-    return Number(result.balance);
+    return (result);
   } catch (err) {
     return 0;
   }

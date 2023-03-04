@@ -21,7 +21,7 @@ const selectFee = (fee:number) => {
   const pegInAmount = maxPeg - feeToApply;
   const change = maxPeg - (pegInAmount + feeToApply);
   if (change < 0) {
-    changeErrorReason = 'Max peg in allowed at this fee rate is ' + (maxPeg - feeToApply);
+    changeErrorReason = 'Max amount allowed at this fee rate is ' + (maxPeg - feeToApply);
   }
   const conf:SbtcConfig = $sbtcConfig;
   conf.feeCalc.pegInFeeCalc.pegInAmount = pegInAmount;

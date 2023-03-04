@@ -1,9 +1,14 @@
 import type { UTXO } from "$types/utxo";
 import type { AddressDetails } from "$types/address_details";
+import type { PegInTransactionI } from "$lib/domain/PegInTransaction";
+import type { PegOutTransactionI } from "$lib/domain/PegOutTransaction";
 
+export type SbtcBalance = {address:string,balance:number};
 export type SbtcConfig = {
+  pegInTransaction:PegInTransactionI;
+  pegOutTransaction:PegOutTransactionI;
   sbtcContractData:any;
-  balance: number;
+  balance: SbtcBalance;
   stxAddress?: string;
   pegOutStxAddress?:string;
   fromBtcAddress?:string;

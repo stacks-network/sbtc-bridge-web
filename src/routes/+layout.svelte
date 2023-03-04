@@ -4,42 +4,19 @@ import { getAuth } from "@micro-stacks/svelte";
 import {tick, onMount, onDestroy} from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
-import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
-import { client } from "$stores/client";
 import { sbtcConfig } from '$stores/stores'
-import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
-import type { SbtcConfig } from '$types/sbtc_config';
 import { login } from "$lib/stacks";
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
 import { defaultSbtcConfig } from '$lib/sbtc'
+import { setUpMicroStacks } from '$lib/stacks'
 
+// data - imported from layout.ts
 export let data:any;
-const unsubscribe = sbtcConfig.subscribe(() => {
-});
+const unsubscribe = sbtcConfig.subscribe(() => {});
 onDestroy(unsubscribe);
-
+setUpMicroStacks();
 let inited = false;
-let origin = import.meta.env.VITE_ORIGIN;
-const network = import.meta.env.VITE_NETWORK;
-if (typeof window !== 'undefined') {
-  origin = window.location.origin;
-}
-console.log('layout.svelte: ' + process.env.NODE_ENV)
-console.log('layout.svelte: ' + network)
-let stxNetwork:StacksMainnet|StacksMocknet|StacksTestnet;
-if (network === 'testnet') stxNetwork = new StacksTestnet();
-else if (network === 'mainnet') stxNetwork = new StacksMainnet();
-else stxNetwork = new StacksMocknet();
-
-const config = {
-  appName: 'sBTC Client',
-  appIconUrl: origin + '/img/logo.png',
-  network: stxNetwork
-};
-console.log('layout.svelte: ', config)
-mountClient(config);
-client.set(getMicroStacksClient());
 const auth = getAuth();
 
 const doLogin = () => {
@@ -48,10 +25,7 @@ const doLogin = () => {
 
 const initApplication = async () => {
   const conf = $sbtcConfig;
-  conf.feeInfo = data.feeInfo;
   conf.sbtcContractData = data.sbtcContractData;
-  conf.feeCalc.pegOutFeeCalc.feeToApply = conf.feeInfo.low_fee_per_kb;
-  console.log('conf: ', conf);
   sbtcConfig.update(() => conf);
   return conf;
 }

@@ -141,3 +141,10 @@ Peg Out Change: tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e	     7647521
 ```bash
 TXID=e48f84d6a9a4df155eac836bdeac2f9396b79ab18cda0fef13e9d2e6856d607b
 ```
+
+=======================================================================================================
+
+## Bitcoin Signer
+
+Wrap (2/Mar):
+txid=f5e10a2b08f2e0205666d49acb54ab880b2df6a45ac87b33d523d22abfe1e1bb

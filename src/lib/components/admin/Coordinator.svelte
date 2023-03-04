@@ -8,13 +8,13 @@ import { sbtcConfig } from '$stores/stores'
 const contractCall = getOpenContractCall();
 
 let coordinator:string = import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0];
-if ($sbtcConfig.sbtcContractData.bitcoinWalletAddress) {
-  coordinator = $sbtcConfig.sbtcContractData.coordinator;
+if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
+  coordinator = $sbtcConfig.sbtcContractData.coordinator.addr.value;
 }
 
 let sbtcWallet:string = import.meta.env.VITE_SBTC_WALLET;
-if ($sbtcConfig?.sbtcContractData?.bitcoinWalletAddress) {
-  sbtcWallet = $sbtcConfig.sbtcContractData.bitcoinWalletAddress;
+if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
+  sbtcWallet = $sbtcConfig.sbtcContractData.sbtcWalletAddress;
 }
 
 const coordinate = async () => {

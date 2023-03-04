@@ -5,8 +5,8 @@ import { sbtcConfig } from '$stores/stores'
 
 const contractCall = getOpenContractCall();
 
-let pegInAmount:number = $sbtcConfig.feeCalc.pegInFeeCalc.pegInAmount;
-let stxAddress:string|undefined = $sbtcConfig.stxAddress;
+let pegInAmount:number = $sbtcConfig?.pegInTransaction?.pegInData.amount;
+let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
 let btcTxId:string|undefined;
 let error:string|undefined;
 const mint = async () => {

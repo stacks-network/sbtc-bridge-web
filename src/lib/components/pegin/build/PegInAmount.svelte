@@ -48,7 +48,7 @@ $: high = $sbtcConfig.feeInfo.high_fee_per_kb === $sbtcConfig.feeCalc.pegInFeeCa
 <div class="row">
   <div class="col-12">
     <label for="transact-path" class="d-flex justify-content-between">
-      <span>Peg In Amount / Sats:</span>
+      <span>Amount / Sats:</span>
       <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out."><PatchQuestion width={30} height={30}/></span>
     </label>
     <input type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegInAmount}  on:input={() => changePegIn(false)}/>

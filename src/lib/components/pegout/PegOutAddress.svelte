@@ -5,7 +5,7 @@ import { createEventDispatcher } from "svelte";
 import type { SbtcConfig } from '$types/sbtc_config';
 import { PatchQuestion } from "svelte-bootstrap-icons";
 import { getAuth, getAccount } from "@micro-stacks/svelte";
-import UserBalance from '$lib/components/UserBalance.svelte'
+import UserBalance from '$lib/components/common/UserBalance.svelte'
 
 const account = getAccount();
 const network = import.meta.env.VITE_NETWORK;

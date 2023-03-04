@@ -4,7 +4,7 @@
 	"type": "module",
 	"author": "Mike Cohen",
 	"scripts": {
-		"dev": "vite dev --port=8080 --mode staging",
+		"dev": "vite dev --port=8080 --mode development",
 		"build-stag": "vite build --mode staging",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -51,7 +51,11 @@
 	},
 	"dependencies": {
 		"@micro-stacks/svelte": "^1.0.6",
+		"@noble/secp256k1": "^1.7.1",
+		"@scure/base": "^1.1.1",
+		"@scure/bip32": "^1.1.0",
 		"@types/bitcoinjs-lib": "^5.0.0",
+		"assert": "^2.0.0",
 		"big-integer": "^1.6.51",
 		"bip32": "^3.1.0",
 		"bitcoinjs-lib": "^6.1.0",
@@ -61,6 +65,7 @@
 		"ecpair": "^2.1.0",
 		"events": "^3.3.0",
 		"gh-pages": "^5.0.0",
+		"micro-btc-signer": "^0.4.2",
 		"micro-stacks": "^1.1.4",
 		"popper": "^1.0.1",
 		"postcss": "^8.4.14",

@@ -5,8 +5,8 @@ import { sbtcConfig } from '$stores/stores'
 
 const contractCall = getOpenContractCall();
 
-let pegOutAmount:number = $sbtcConfig.feeCalc.pegInFeeCalc.pegOutAmount;
-let stxAddress:string|undefined = $sbtcConfig.stxAddress;
+let pegOutAmount:number = $sbtcConfig?.pegOutTransaction?.pegInData.amount;
+let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
 let btcTxId:string|undefined;
 let error:string|undefined;
 const burn = async () => {

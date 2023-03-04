@@ -103,12 +103,15 @@ button:focus:not(:focus-visible) {
   font-size: 1.1rem;
 }
 
+.info-panel {
+  border-radius: 10px !important;
+}
 input, textarea {
   border-radius: 10px !important;
   font-weight: 500!important;
   font-size: 1.1rem!important;
   color: #363636!important;
-  margin: 15px 0 5px 0;
+  margin: 5px 0 5px 0;
   background-color: #e90;
 }
 .btn {

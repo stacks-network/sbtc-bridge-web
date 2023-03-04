@@ -7,7 +7,7 @@ import { PatchQuestion } from "svelte-bootstrap-icons";
 import { DUST_AMOUNT } from "$lib/psbt";
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import { getAccount } from "@micro-stacks/svelte";
-import UserBalance from '$lib/components/UserBalance.svelte'
+import UserBalance from '$lib/components/common/UserBalance.svelte'
 
 const account = getAccount();
 

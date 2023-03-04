@@ -5,14 +5,27 @@
 import type { UTXO } from '$types/utxo';
 
 export function isSupported(address:string) {
-  /**
-   * TODO: return once other issues are cleared up and we have reliable access to bitcoin rpc
-   * 
-   */
-  if (address.startsWith('1') || address.startsWith('m') || address.startsWith('n')) {
-    throw new Error('Legacy addresses are not supported in the current version.');
+  const network = import.meta.env.VITE_NETWORK;
+  const msg = 'Please enter a valid ' + network + ' bitcoin address.'
+  if (!address || address.length < 10) {
+    throw new Error(msg);
   }
-  return true;
+  if (address.startsWith('1') || address.startsWith('m') || address.startsWith('n')) {
+    throw new Error('Legacy addresses are not supported in the current version. ' + msg);
+  }
+  let valid = false;
+  if (address.startsWith('2') || address.startsWith('3')) {
+    // classis non segwit
+    valid = true;
+  }
+  if (address.startsWith('tb') || address.startsWith('bc')) {
+    // segwit
+    valid = true;
+  }
+  if (!valid) {
+    throw new Error('Addresses is neither a classic (p2pkh/p2sh) or segwit (p2wpkh/p2wsh) address. ' + msg);
+  }
+  return valid;
 }
 
 /**

@@ -9,6 +9,14 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 
+export function getNet(network:string) {
+  if (network === 'litecoin') return { pubKeyHash: 0x30, scriptHash: 0x32 };
+  if (network === 'testnet') return { bech32: 'tb', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+  if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+}
+export function explorerAddressUrl(addr:string) {
+	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + import.meta.env.VITE_NETWORK;
+}
 export function explorerTxUrl(txid:string) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + import.meta.env.VITE_NETWORK;
 }

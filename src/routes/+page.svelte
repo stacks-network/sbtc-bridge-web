@@ -29,7 +29,7 @@ const togglePeg = (pegin:boolean) => {
 						<h1 class="mt-5 text-info">Wrap <span class="strokeme-info">sBTC</span></h1>
 						<h2 class="text-info mb-5">BTC to sBTC</h2>
 						<div class="">
-							<button on:click|preventDefault={() => togglePeg(true)} class="w-50 btn btn-outline-info">Unwrap</button>
+							<button on:click|preventDefault={() => togglePeg(true)} class="w-50 btn btn-outline-info">Wrap</button>
 						</div>
 					</div>
 				</div>

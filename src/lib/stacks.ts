@@ -6,6 +6,12 @@ import { hexToBytes } from "micro-stacks/common";
 import type { Message } from '$types/message';
 import type { SignatureData as MicroStacksSignatureData } from "micro-stacks/connect";
 import { get_client } from "$stores/client";
+import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
+import { client } from "$stores/client";
+import { sbtcConfig } from '$stores/stores'
+import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
+import { fetchUserSbtcBalance } from '$lib/bridge_api'
+import type { SbtcConfig } from '$types/sbtc_config';
 
 export let webWalletNeeded = false;
 
@@ -25,6 +31,26 @@ const allowed = [
 	
 export function isAllowed(address:string) {
 	return allowed.find((o) => o.stx === address);
+}
+
+export function setUpMicroStacks() {
+	let origin = import.meta.env.VITE_ORIGIN;
+	const network = import.meta.env.VITE_NETWORK;
+	if (typeof window !== 'undefined') {
+	origin = window.location.origin;
+	}
+	let stxNetwork:StacksMainnet|StacksMocknet|StacksTestnet;
+	if (network === 'testnet') stxNetwork = new StacksTestnet();
+	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
+	else stxNetwork = new StacksMocknet();
+	const config = {
+		appName: 'sBTC Client',
+		appIconUrl: origin + '/img/logo.png',
+		network: stxNetwork
+	};
+	//console.log('layout.svelte: ', config)
+	mountClient(config);
+	client.set(getMicroStacksClient());
 }
 
 export const domain = {
@@ -89,13 +115,26 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
+export async function fetchSbtcBalance (addr:string) {
+	const result = await fetchUserSbtcBalance(addr);
+	sbtcConfig.update((conf:SbtcConfig) => { 
+		conf.balance = result
+		conf.balance.address = addr;
+		return conf; 
+	});
+}
+
 export async function login($auth: any) {
 	try {
 		$auth.openAuthRequest({
-			onFinish: (payload: any) => {
+			onFinish: async (payload: any) => {
 				console.log('payload:', payload);
 				if (!isAllowed(payload.addresses.mainnet)) {
 					$auth.signOut();
+				} else {
+					const network = import.meta.env.VITE_NETWORK;
+					const addr = (network === 'testnet') ? payload.addresses.testnet : payload.addresses.mainnet;
+					await fetchSbtcBalance(addr);
 				}
 			},
 			onCancel: () => {

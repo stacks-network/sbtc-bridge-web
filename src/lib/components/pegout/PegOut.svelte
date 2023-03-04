@@ -1,6 +1,6 @@
 <script lang="ts">
 import OutTransaction from '$lib/components/pegout/OutTransaction.svelte';
-import SignTransaction from '$lib/components/SignTransaction.svelte';
+import SignTransaction from '$lib/components/common/SignTransaction.svelte';
 
 $: view = 'build_tx_view';
 const requestSignature = () => {
@@ -16,8 +16,6 @@ const updateTransaction = () => {
   <div>
     {#if view === 'build_tx_view'}
     <OutTransaction on:request_signature={requestSignature}/>
-    {:else}
-    <SignTransaction on:update_transaction={updateTransaction}/>
     {/if}
   </div>
 </div>

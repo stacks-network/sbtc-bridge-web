@@ -1,4 +1,3 @@
-//import { Buffer } from 'buffer';
 import { Psbt, payments, networks } from 'bitcoinjs-lib';
 import type { SbtcConfig } from '$types/sbtc_config';
 import * as ecc from 'tiny-secp256k1';

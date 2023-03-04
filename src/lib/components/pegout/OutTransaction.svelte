@@ -4,7 +4,6 @@ import { sbtcConfig } from '$stores/stores'
 import PegOutAddress from "$lib/components/pegout/PegOutAddress.svelte";
 import PegOutAmount from "$lib/components/pegout/PegOutAmount.svelte";
 import UTXOSelection from "$lib/components/pegin/build/UTXOSelection.svelte";
-import { Tooltip } from "bootstrap";
 import { createEventDispatcher } from "svelte";
 import { requestSignMessage } from '$lib/stacks'
 import { getAccount } from '@micro-stacks/svelte';
@@ -14,7 +13,6 @@ const dispatch = createEventDispatcher();
 const account = getAccount();
 
 let errorReason:string|undefined;
-let stxAddressOk = true;
 
 const requestSignature = async () => {
   const msg = {
