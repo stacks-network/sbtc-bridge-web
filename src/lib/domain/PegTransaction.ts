@@ -76,7 +76,7 @@ export default class PegTransaction implements PegTransactionI {
 		high_fee_per_kb: number;
 	} = {low_fee_per_kb: 20000, medium_fee_per_kb: 20000, high_fee_per_kb: 20000};
 
-	private constructor() {
+	public constructor() {
 		// use create function
 	}
  
@@ -86,8 +86,8 @@ export default class PegTransaction implements PegTransactionI {
 	 * @param fromBtcAddress 
 	 * @returns 
 	 */
-	public static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
-		const me = new PegTransaction();
+	protected static createInternal = async (me:PegTransactionI, network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
+		//const me = new PegTransaction();
 		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		me.fromBtcAddress = fromBtcAddress;
 		// utxos have to come from a hosted indexer or external service
@@ -97,11 +97,6 @@ export default class PegTransaction implements PegTransactionI {
 		me.feeInfo = btcFeeRates.feeInfo;
 		//me.calculateFees(network);
 		me.ready = true;
-		return me;
-	};
- 
-	public static create1 = (): PegTransactionI => {
-		const me = new PegTransaction();
 		return me;
 	};
  

@@ -1,7 +1,8 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
+import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 
-export let amtData:{label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number};
+export let amtData:{pegIn:true, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
 
 const dispatch = createEventDispatcher();
 let reason:string|undefined;
@@ -20,7 +21,8 @@ const changePegIn = (maxValue:boolean) => {
   }
 }
 
-const changeRate = (rate:number) => {
+const changeRate = (event:any) => {
+  const rate = event.detail.newFeeRate;
   dispatch('amount_updated', { opCode:'prio', error: false, newAmount: pegAmount, newFeeRate: rate });
 }
 
@@ -42,25 +44,10 @@ function init(el:any) {
     </label>
     <input use:init type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegAmount}  on:input={() => changePegIn(false)}/>
     <div class="text-small">{amtData.info}</div>
-    <div class="text-small d-flex justify-content-between  text-info">
-      <div class="p-1">Fee: <span class="text-success">{amtData.fee} sats/kb</span><span class="ms-5 text-white">priority:</span>
-        <span  class="mx-0 "><a href="/" class={(low) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(0)}>low</a></span>
-        <span  class="mx-0"><a href="/" class={(medium) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(1)}>medium</a></span>
-        <span  class="mx-0"><a href="/" class={(high) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(2)}>high</a></span>
-      </div>
+    <div class="text-small d-flex justify-content-end  text-info">
       {#if amtData.change > 0}<span><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>set max</a></span>{/if}
     </div>
-    <!--
-    <div class="d-flex justify-content-center">
-      <div class="text-center w-50 bg-light text-dark py-3 px-4 my-4 border-radius">
-      </div>
-    </div>
-    -->
-    <div class="border-top border-bottom my-4">
-      <div>Wrapping {amtData.pegAmount} satoshi</div>
-      <div>{#if amtData.change === 0}No change{:else}Change {amtData.change} (add change address?){/if}</div>
-      <div>Fee: {amtData.fee} sats</div>
-    </div>
+    <FeeDisplay {amtData} currentPeg={pegAmount} on:fee_rate_updated={changeRate}/>
   </div>
 </div>
 

@@ -1,8 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { sbtcConfig } from '$stores/stores'
+  import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 
-  export let amtData:{label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
+  export let amtData:{pegIn:false, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
   
   const dispatch = createEventDispatcher();
   let reason:string|undefined;
@@ -26,7 +27,8 @@
     }
   }
   
-  const changeRate = (rate:number) => {
+  const changeRate = (event:any) => {
+    const rate = event.detail.newFeeRate;
     dispatch('amount_updated', { opCode:'prio', error: false, newAmount: pegAmount, newFeeRate: rate });
   }
   
@@ -61,20 +63,7 @@
       <input type="number" readonly id="dust" class="form-control" style="background:#999;" bind:value={amtData.dust}/>
       <div class="text-small" title="Required for book keeping.">Tiny amount of bitcoin is sent to the sBTC wallet for book keeping purposes</div>
     </div>
-      <div class="mt-5 col-12">
-          <h4>Unwrapping {pegAmount} SBTC</h4>
-          <div>Dust {amtData.dust} BTC</div>
-          <div>{#if amtData.change === 0}No change{:else}Change {amtData.change} (add change address?){/if}</div>
-          <div class="d-flex justify-content-between">
-            <div class="">Fee: <span class="text-success">{amtData.fee} sats/kb</span></div>
-            <div>
-              <span class="ms-5 text-white">priority: </span>
-              <span  class="mx-0 "><a href="/" class={(low) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(0)}>low</a></span>
-              <span  class="mx-0"><a href="/" class={(medium) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(1)}>medium</a></span>
-              <span  class="mx-0"><a href="/" class={(high) ? 'text-success' : 'text-info'} on:click|preventDefault={() => changeRate(2)}>high</a></span>
-            </div>
-        </div>
-    </div>
+    <FeeDisplay {amtData} currentPeg={pegAmount} on:fee_rate_updated={changeRate}/>
   </div>
   
   <style>
