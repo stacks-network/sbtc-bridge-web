@@ -3,7 +3,7 @@
   import { sbtcConfig } from '$stores/stores'
   import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 
-  export let amtData:{pegIn:false, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
+  export let amtData:{pegIn:boolean, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
   
   const dispatch = createEventDispatcher();
   let reason:string|undefined;

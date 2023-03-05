@@ -1,7 +1,8 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
-import { ArrowUp, ArrowDown } from "svelte-bootstrap-icons";
+import { ArrowUp, ArrowDown, CheckCircle } from "svelte-bootstrap-icons";
+import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 import WalletHelp from '$lib/components/wallets/WalletHelp.svelte';
 import { hex } from '@scure/base';
 
@@ -11,9 +12,20 @@ export let sigData: { tx: any; outputsForDisplay: Array<any>; inputsForDisplay: 
 let hexTx:string;
 let psbt:Uint8Array;
 let showTx = false;
+let showHex = false;
+let copied = false;
 
 const updateTransaction = () => {
   dispatch('update_transaction', { success: true });
+}
+
+const copy = () => {
+		const app = new CopyClipboard({
+			target: document.getElementById('clipboard')!,
+			props: { name: hexTx },
+		});
+		app.$destroy();
+    copied = !copied;
 }
 
 onMount(async () => {
@@ -25,53 +37,69 @@ onMount(async () => {
   }
 })
 </script>
-        
 
-<div class="row">
-  <div class="col">
-    <div class="d-flex justify-content-between">
-      <h2>Step 2: Sign Transaction</h2>
-      <div>
-        <span class="mx-3"><a href="/" on:click|preventDefault={() => showTx = ! showTx}>{#if showTx}<ArrowUp/>{:else}<ArrowDown/>{/if} show tx</a></span>
-        <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
-      </div>
-    </div>
-    
-    {#if showTx && hexTx}
+<div id="clipboard"></div>
+<section class="mb-3">
+  <div class="d-flex justify-content-between">
+    <h2>Step 2: Sign & Broadcast</h2>
+  </div>
+  <div class="text-small d-flex justify-content-end">
+    <span class="mx-1"><a href="/" on:click|preventDefault={() => {showHex = !showHex; showTx = false;}}>{#if showHex}<ArrowUp/>{:else}<ArrowDown/>{/if} show raw tx</a></span>
+    <span class="mx-1 me-4"><a href="/" on:click|preventDefault={() => {showTx = !showTx; showHex = false;}}>{#if showTx}<ArrowUp/>{:else}<ArrowDown/>{/if} show tx details</a></span>
+    <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
+  </div>
+</section>
+  {#if showTx && hexTx}
+  <section class="mb-4">
     <h4>Transaction Inputs</h4>
-    {#each sigData.inputsForDisplay as input}
-    <div class="info-panel text-small mx-1 row bg-light my-1 py-1 text-dark">
-      <div class="col-10">{input.txid}:<span class="text-dark">{input.vout}</span></div>
-      <div class="col-2">{input.value}</div>
-    </div>
-    {/each}
-    <h4>Transaction Outputs</h4>
-    {#each sigData.outputsForDisplay as output, i}
-    <div class="info-panel text-small mx-1 row bg-light my-1 py-1 text-danger">
-      <div class="col-2">{#if typeof output.amount === 'number'}Output {i + 1}{/if}</div>
-      <div class="col-8">
-        {#if output.address}<span class="text-dark">{output.address}</span>{/if}
-        {#if output.script}<span class="text-dark">{output.script}</span>{/if}
-      </div>
-      <div class="col-2">{#if output.amount}<span class="text-dark">{output?.amount}</span>{/if}</div>
-    </div>
-    {/each}
-    {/if}
+  {#each sigData.inputsForDisplay as input}
+  <div class="info-panel text-small mx-1 row bg-light my-1 py-1 text-dark">
+    <div class="col-10">{input.txid}:<span class="text-dark">{input.vout}</span></div>
+    <div class="col-2">{input.value}</div>
   </div>
-</div>
-<div class="row">
-  <div class="col">
-    <p>This transaction can be read by your wallet where you can provide your digital signature
-      and broadcast to the Bitcoin network.</p>
-    <p class="text-center"><span class="text-warning">Always double check your wallet displays the correct recipient address and amount.</span></p>
+  {/each}
+  </section>
+<section>
+  <h4>Transaction Outputs</h4>
+  {#each sigData.outputsForDisplay as output, i}
+  <div class="info-panel text-small mx-1 row bg-light my-1 py-1 text-danger">
+    <div class="col-2">{#if typeof output.amount === 'number'}Output {i + 1}{/if}</div>
+    <div class="col-8">
+      {#if output.address}<span class="text-dark">{output.address}</span>{/if}
+      {#if output.script}<span class="text-dark">{output.script}</span>{/if}
+    </div>
+    <div class="col-2">{#if output.amount}<span class="text-dark">{output?.amount}</span>{/if}</div>
+  </div>
+  {/each}
+</section>
+  {:else if showHex}
     <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hexTx}</textarea>
-  </div>
-</div>
+  {/if}
+<section>
+    <div class="my-5 d-flex justify-content-center">
+      <div><button class="px-5 btn btn-outline-warning border-radius" on:click={copy}>copy transaction {#if copied}<span class="mx-2"><CheckCircle fill="green" /></span>{/if}</button></div>
+    </div>
+    {#if copied}
+    <ol>
+      <li>Choose your wallet from the options below.</li>
+      <li>Follow the instructions to paste the transaction.</li>
+      <li>Sign and broadcast your transaction.</li>
+    </ol>
+    <p class="text-center"><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
+    {/if}
+    <input bind:value={hexTx} style="visibility:hidden;" />
+</section>
+{#if copied}
 <WalletHelp />
+{/if}
       
   <style>
   .row {
     margin-top: 20px;
     margin-bottom: 40px;
+  }
+  .btn {
+    border-radius: 20px!important;
+
   }
   </style>

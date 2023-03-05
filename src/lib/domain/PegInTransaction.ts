@@ -9,7 +9,7 @@ import PegTransaction from './PegTransaction';
 
 export interface PegInTransactionI extends PegTransactionI {
 
-	buildTransaction: () => btc.Transaction;
+	buildTransaction: (signature:string|undefined) => btc.Transaction;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
@@ -33,7 +33,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		super();
 	}
  
-	protected static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
+	public static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
 		const me = new PegInTransaction();
 		return super.createInternal(me, network, fromBtcAddress);
 	};
@@ -101,6 +101,8 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
 		tx.sign(privKey);
 		tx.finalize();
+		this.scureFee = Number(tx.fee);
+
 		const vsize = tx.vsize + this.addressInfo.utxos.length; // add 1 byte per signature
 		this.fees = [
 			Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),

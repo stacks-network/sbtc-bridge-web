@@ -6,21 +6,23 @@ import { sbtcConfig } from '$stores/stores'
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
 
-let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : PegOutTransaction.create1();
+let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
 
 $: view = 'build_tx_view';
 
 let sigData: { tx: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
-const requestSignature = () => {
+const openSigView = () => {
+	const signature = $sbtcConfig.sigData.signature;
+	const tx = poTx!.buildTransaction(signature);
 	sigData = {
-		tx: poTx!.buildTransaction(),
+		tx,
 		outputsForDisplay: poTx!.getOutputsForDisplay(),
 		inputsForDisplay: poTx!.addressInfo.utxos
 	}
   	view = 'sign_tx_view';
 }
 
-const updateTransaction = () => {
+const openBuildView = () => {
   view = 'build_tx_view';
 }
 
@@ -38,9 +40,9 @@ const updateTransaction = () => {
 				<div class="card border p-4">
 					<div>
 					  {#if view === 'build_tx_view'}
-					  <BuildTransaction {poTx} on:request_signature={requestSignature}/>
+					  <BuildTransaction {poTx} on:request_signature={openSigView}/>
 					  {:else}
-					  {#if sigData}<SignTransaction {sigData} on:update_transaction={updateTransaction}/>{/if}
+					  {#if sigData}<SignTransaction {sigData} on:update_transaction={openBuildView}/>{/if}
 					  {/if}
 					</div>
 				</div>

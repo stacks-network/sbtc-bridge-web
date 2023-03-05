@@ -10,6 +10,7 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
+import { requestSignMessage } from '$lib/stacks'
 
 export let poTx:PegOutTransactionI;
   
@@ -19,6 +20,7 @@ $: principalData = {
   currentAddress: poTx.pegInData.stacksAddress,
 }
 $: amtData = {
+  pegIn: false,
   label: 'Amount (SBTC)',
   info: 'The amount to unwrap cannot exceed your sBTC balance',
   pegAmount: $sbtcConfig.balance.balance,
@@ -52,7 +54,14 @@ const updateConfig = () => {
   sbtcConfig.update(() => conf);
 }
 
-const requestSignature = () => {
+const requestSignature = async () => {
+  const script = poTx.getOutput2ScriptPubKey();
+  const msg = { script }
+  const sigData = await requestSignMessage(msg);
+  const conf:SbtcConfig = $sbtcConfig;
+  conf.sigData = sigData;
+  sbtcConfig.update(() => conf);
+  console.log(sigData);
   dispatch('request_signature');
 }
 
@@ -103,7 +112,7 @@ onMount(async () => {
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
-    <p class="mb-4">Account <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a> as no sBTC</p>
+    <p class="mb-4">No SBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
     <p><a href="{base}/wrap">Get sBTC here!</a></p>
   </div>
   {:else}

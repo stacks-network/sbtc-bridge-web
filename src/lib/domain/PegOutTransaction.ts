@@ -9,10 +9,11 @@ import PegTransaction from './PegTransaction';
 
 export interface PegOutTransactionI extends PegTransactionI {
 
-	buildTransaction: () => btc.Transaction;
+	buildTransaction: (signature:string|undefined) => btc.Transaction;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
+	getOutput2ScriptPubKey: () => string;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -30,11 +31,13 @@ keySetForFeeCalculation.push({
 
 export default class PegOutTransaction extends PegTransaction implements PegOutTransactionI {
 
+	privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
+
 	public constructor() {
 		super();
 	}
  
-	protected static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
+	public static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
 		const me = new PegOutTransaction();
 		return super.createInternal(me, network, fromBtcAddress);
 	};
@@ -72,7 +75,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		// prepare random signer
 		const p2Ret = btc.p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
 		assert('wpkh' === p2Ret.type);
-		const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		console.log('utxoSet: ', this.addressInfo.utxos)
 		// create a set of inputs corresponding to the utxo set
@@ -85,7 +87,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				index: utxo.vout,
 				witnessUtxo: {
 					amount: 600n,
-					script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
+					script: btc.p2wpkh(secp256k1.getPublicKey(this.privKey, true)).script,
 				  },
 			});
 	  	}
@@ -100,13 +102,14 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
 		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
-		tx.sign(privKey);
+		tx.sign(this.privKey);
 		tx.finalize();
+		this.scureFee = Number(tx.fee);
 		const vsize = tx.vsize + this.addressInfo.utxos.length; // add 1 byte per signature
 		this.fees = [
-			Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
+			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
+			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
+			this.scureFee * 1.2, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
 		]
 		this.fee = this.fees[1];
 		if (this.pegInData.amount === 0) {
@@ -125,11 +128,20 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return outs;
 	}
 
+	getOutput2ScriptPubKey = () => {
+		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
+		const buf1 = Buffer.allocUnsafe(11);
+		buf1.writeUInt32LE(this.pegInData.amount, 0);
+		const buf2 = Buffer.from(script);
+		const data = Buffer.concat([buf1, buf2]);
+		return data.toString('hex');
+	}
+
 	/**
 	 * Calculating fees or building the transaction
 	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
 	 */
-	buildTransaction = () => {
+	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		console.log('utxoSet: ', this.addressInfo.utxos)
@@ -139,11 +151,16 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				txid: hex.decode(utxo.txid),
 				index: utxo.vout,
 			});
-	  	}
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+	  	}		
+		const buf1 = Buffer.allocUnsafe(11);
+		buf1.writeUInt32LE(this.pegInData.amount, 0);
+		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
+		const buf2 = Buffer.from(signature);
+		const data = Buffer.concat([buf1, buf2]);
+		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
+		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
+		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+
 		return tx; //hex.encode(tx.toPSBT());
 	}
 };

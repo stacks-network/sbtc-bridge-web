@@ -6,7 +6,7 @@ import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 
-let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : PegInTransaction.create1();
+let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 let sigData: { tx: any; outputsForDisplay: any; inputsForDisplay: any; };
 
 $: view = 'build_tx_view';

@@ -9,11 +9,11 @@ let wallet = 0;
 
 <div class="row">
   <div class="col">
-    <div class="d-flex justify-content-between">
-      <button class="{wallet === 1 ? 'btn w-100 btn-info' : 'btn w-100'}" aria-current="page" on:click={() => (wallet === 1) ? wallet = 0 : wallet = 1}>Electrum</button>
+    <div class="menu d-flex justify-content-start">
+      <button class="{wallet === 1 ? 'btn w-25 btn-info' : 'btn btn-outline-info w-25'}" aria-current="page" on:click={() => (wallet === 1) ? wallet = 0 : wallet = 1}>Electrum</button>
       <!--
-      <button class="{wallet === 2 ? 'btn w-100 btn-info' : 'btn w-100'}" on:click={() => wallet = 2}>Trezor</button>
-      <button class="{wallet === 3 ? 'btn w-100 btn-info' : 'btn w-100'}" tabindex="-1" aria-disabled="true" on:click={() => wallet = 3}>Ledger</button>
+      <button class="{wallet === 2 ? 'btn w-25 btn-info' : 'btn btn-outline-info w-25'}" on:click={() => wallet = 2}>Trezor</button>
+      <button class="{wallet === 3 ? 'btn w-25 btn-info' : 'btn btn-outline-info w-25'}" tabindex="-1" aria-disabled="true" on:click={() => wallet = 3}>Ledger</button>
       -->
     </div>
     <div class="" id="myTabContent">
@@ -27,5 +27,8 @@ let wallet = 0;
 <style>
 .pane {
   margin: 0px;
+}
+.menu {
+  border-bottom: 1pt dotted #4786cd;
 }
 </style>

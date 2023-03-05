@@ -30,9 +30,10 @@ export interface PegTransactionI {
 	}
 	fees: Array<number>;
 	fee: number;
+	scureFee:number;
 	dust: number;
 
-	buildTransaction: () => btc.Transaction;
+	buildTransaction: (signature:string|undefined) => btc.Transaction;
 	calculateFees: () => void;
 	maxCommit: () => number;
 	setStacksAddress: (stacksAddress:string|undefined) => void;
@@ -40,6 +41,7 @@ export interface PegTransactionI {
 	getChange: () => number;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
+	getOutput2ScriptPubKey: () => string;
 	getInputsForDisplay: () => Array<any>;
 }
 
@@ -69,6 +71,7 @@ export default class PegTransaction implements PegTransactionI {
 	addressInfo: any = {};
 	fees: Array<number> = [20000, 35000, 50000];
 	fee = 0;
+	scureFee = 0;
 	dust = 500;
 	feeInfo: {
 		low_fee_per_kb: number;
@@ -79,11 +82,13 @@ export default class PegTransaction implements PegTransactionI {
 	public constructor() {
 		// use create function
 	}
+
+	getOutput2ScriptPubKey!: () => string;
  
 	/**
 	 * User's btc address is needed to fetch utxo's and calculate tx fee.
 	 * This gives us the max amount they can peg as the sum of utxo amounts.
-	 * @param fromBtcAddress 
+	 * @param fromBtcAddress
 	 * @returns 
 	 */
 	protected static createInternal = async (me:PegTransactionI, network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
@@ -150,57 +155,7 @@ export default class PegTransaction implements PegTransactionI {
 		this.pegInData.stacksAddress = stacksAddress;
 	}
 
-	calculateFees = ():void => {
-
-		// random addresses for calculating the fee.
-		if (!this.ready) throw new Error('Not ready!');
-		const stacksAddress = 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN';
-		const sbtcWalletAddress = 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss';
-
-		// prepare random signer
-		const p2Ret = btc.p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
-		assert('wpkh' === p2Ret.type);
-		const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
-		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		console.log('utxoSet: ', this.addressInfo.utxos)
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			//const nonWitnessUtxo = globalThis.Buffer.from(utxo.tx.hex, 'hex');
-			//const redeemScript = getRedeemScript(utxo, keyPairs[0].publicKey);
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				//txid: utxo.txid,
-				index: utxo.vout,
-				witnessUtxo: {
-					amount: 600n,
-					script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
-				  },
-			});
-	  	}
-		const inputsVal = this.maxCommit();
-		const changeAmount = Math.floor(this.maxCommit() - (2 * this.dust));
-		console.log('inputsVal:' + inputsVal)
-		console.log('changeAmount:' + changeAmount)
-		// internals of adding outputs - 'data length' : 'op code' : 'data'
-		// const opCode = Buffer.from('2a6a', 'hex');
-		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
-		// tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
-		tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
-		tx.sign(privKey);
-		tx.finalize();
-		const vsize = tx.vsize + this.addressInfo.utxos.length; // add 1 byte per signature
-		this.fees = [
-			Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
-		]
-		this.fee = this.fees[1];
-		if (this.pegInData.amount === 0) {
-			this.pegInData.amount = this.maxCommit() - this.fee;
-		}
-	}
+	calculateFees!: () => void;
 
 	getOutputsForDisplay = () => {
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
@@ -222,26 +177,9 @@ export default class PegTransaction implements PegTransactionI {
 	}
 
 	/**
-	 * Calculating fees or building the transaction
-	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
+	 * Overridden by super classes
 	 */
-	buildTransaction = () => {
-		if (!this.ready) throw new Error('Not ready!');
-		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		console.log('utxoSet: ', this.addressInfo.utxos)
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-	  	}
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx; //hex.encode(tx.toPSBT());
-	}
+	buildTransaction!: (signature:string|undefined) => btc.Transaction;
 
 	maxCommit() {
 		if (!this.ready) return 0;

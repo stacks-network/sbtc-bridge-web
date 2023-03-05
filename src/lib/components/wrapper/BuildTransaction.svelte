@@ -19,6 +19,7 @@ $: principalData = {
 }
 const amtData = () => {
   return {
+    pegIn: true,
     label: 'Amount (Satoshis)',
     info: 'The amount to wrap cannot exceed your balance less some satoshi to pay gas fees',
     pegAmount: (piTx.pegInData.amount) ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee,
@@ -26,6 +27,7 @@ const amtData = () => {
     change: piTx.getChange(),
     fee: piTx.fee,
     fees: piTx.fees,
+    dust: piTx.dust
   }
 }
 

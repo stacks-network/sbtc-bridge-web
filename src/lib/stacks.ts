@@ -1,6 +1,6 @@
 
 import { c32address, c32addressDecode } from 'c32check';
-import { tupleCV, stringUtf8CV, uintCV, stringAsciiCV } from "micro-stacks/clarity";
+import { tupleCV, bufferCV, uintCV, stringAsciiCV } from "micro-stacks/clarity";
 import { verifyStructuredDataSignature } from '$lib/structured-data';
 import { hexToBytes } from "micro-stacks/common";
 import type { Message } from '$types/message';
@@ -97,8 +97,7 @@ export async function requestSignMessage(message: any): Promise<SignatureData | 
 
 function messageToTuple(message: Message) {
 	return tupleCV({
-		btcAddress: stringUtf8CV(message.btcAddress),
-		amount: uintCV(message.amount)
+		script: bufferCV(message.script)
 	});
 }
 
