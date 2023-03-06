@@ -117,7 +117,6 @@ onMount(async () => {
 </script>  
 
 {#if ready}
-  {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
