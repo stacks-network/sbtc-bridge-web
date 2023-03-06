@@ -101,9 +101,9 @@ const utxoUpdated = async (event:any) => {
   }
 }
 
-$: showStxAddress = piTx.ready;
-$: showAmount = piTx.ready && stxAddressOk;
-$: showButton = piTx.ready && amountOk;
+$: showStxAddress = piTx.ready && !errorReason;
+$: showAmount = piTx.ready && stxAddressOk && !errorReason;
+$: showButton = piTx.ready && amountOk && !errorReason;
 
 let inited = false;
 onMount(async () => {

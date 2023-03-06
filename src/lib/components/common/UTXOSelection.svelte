@@ -1,7 +1,6 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
-import { sbtcConfig } from '$stores/stores'
-import { isSupported } from "$lib/utxos";
+import { isSupported } from "$lib/utils";
 
 const dispatch = createEventDispatcher();
 
@@ -27,9 +26,9 @@ const configureUTXOs = async (force:boolean) => {
     errorReason = err.message;
     return;
   }
-  if (!force && utxoData.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
-    return;
-  }
+  //if (utxoData.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
+    //return;
+  //}
   try {
     await dispatch('utxo_updated', { errored: false, opCode: 'address-change', bitcoinAddress});
   } catch(err:any) {
