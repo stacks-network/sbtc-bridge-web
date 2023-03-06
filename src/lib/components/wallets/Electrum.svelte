@@ -3,9 +3,16 @@ import electrum1 from '$lib/assets/wallets/electrum1.png';
 import electrum2 from '$lib/assets/wallets/electrum2.png';
 import electrum3 from '$lib/assets/wallets/electrum3.png';
 
+const network = import.meta.env.VITE_NETWORK;
 </script>
-  
+
 <div class="">
+  <div class="p-3 border">
+    <p>Open your Electrum wallet</p>
+    {#if network === 'testnet'}
+    <p>Hint: /Applications/Electrum.app/Contents/MacOS/run_electrum --testnet</p>
+    {/if}
+  </div>
   <div class="p-3 border">
     <p>Copy / paste the transaction above into your Electrum wallet</p>
     <img src={electrum1} alt="night time" />

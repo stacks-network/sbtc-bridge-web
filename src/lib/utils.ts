@@ -9,6 +9,44 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 
+export function isSupported(address:string) {
+  const network = import.meta.env.VITE_NETWORK;
+  const msg = 'Please enter a valid ' + network + ' bitcoin address.'
+  if (!address || address.length < 10) {
+    throw new Error(msg);
+  }
+  if (address.startsWith('1') || address.startsWith('m') || address.startsWith('n')) {
+    throw new Error('Legacy addresses are not supported in the current version. ' + msg);
+  }
+  let valid = false;
+  if (address.startsWith('2') || address.startsWith('3')) {
+    // classis non segwit
+    valid = true;
+  }
+  if (address.startsWith('tb') || address.startsWith('bc')) {
+    // segwit
+    valid = true;
+  }
+  if (!valid) {
+    throw new Error('Addresses is neither a classic (p2pkh/p2sh) or segwit (p2wpkh/p2wsh) address. ' + msg);
+  }
+  return valid;
+}
+
+export function getNet(network:string) {
+  if (network === 'litecoin') return { pubKeyHash: 0x30, scriptHash: 0x32 };
+  if (network === 'testnet') return { bech32: 'tb', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+  if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+}
+export function explorerAddressUrl(addr:string) {
+	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + import.meta.env.VITE_NETWORK;
+}
+export function explorerBtcTxUrl(txid:string) {
+	return import.meta.env.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
+}
+export function explorerBtcAddressUrl(address:string) {
+	return import.meta.env.VITE_BSTREAM_EXPLORER + '/address/' + address;
+}
 export function explorerTxUrl(txid:string) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + import.meta.env.VITE_NETWORK;
 }

@@ -22,7 +22,7 @@ export default defineConfig({
     threads: false,
     watch: false,
     //include: ['**/__tests__/*.{js,tsx,ts}'],
-    setupFiles: './tests/setup.ts'
+    setupFiles: './tests/utils/setup.ts'
   },
   plugins: [
     sveltekit(),
@@ -85,7 +85,7 @@ export default defineConfig({
         plugins: [
           NodeGlobalsPolyfillPlugin({
               process: false,
-              buffer: true
+              buffer: false
           }),
           NodeModulesPolyfillPlugin()
       ]

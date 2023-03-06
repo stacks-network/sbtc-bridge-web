@@ -46,7 +46,7 @@ export const defaultSbtcConfig:SbtcConfig = {
     }
   },
   pegIn: true,
-  balance: 0,
+  balance: { balance:0, address:''},
   addressDetails: {
     address: "",
     chain_stats: {

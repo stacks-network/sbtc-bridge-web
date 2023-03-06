@@ -3,7 +3,7 @@ import { fetchSbtcEvents } from "$lib/bridge_api";
 import { ArrowRepeat, SortAlphaUp } from "svelte-bootstrap-icons";
 import { truncate } from '$lib/utils'
 import { onMount } from 'svelte';
-import UserBalance from '$lib/components/UserBalance.svelte'
+import UserBalance from '$lib/components/common/UserBalance.svelte'
 
 let events:any[] = []
 let transactions = false;

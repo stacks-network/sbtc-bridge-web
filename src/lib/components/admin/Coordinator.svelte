@@ -8,13 +8,13 @@ import { sbtcConfig } from '$stores/stores'
 const contractCall = getOpenContractCall();
 
 let coordinator:string = import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0];
-if ($sbtcConfig.sbtcContractData.bitcoinWalletAddress) {
-  coordinator = $sbtcConfig.sbtcContractData.coordinator;
+if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
+  coordinator = $sbtcConfig.sbtcContractData.coordinator.addr.value;
 }
 
 let sbtcWallet:string = import.meta.env.VITE_SBTC_WALLET;
-if ($sbtcConfig?.sbtcContractData?.bitcoinWalletAddress) {
-  sbtcWallet = $sbtcConfig.sbtcContractData.bitcoinWalletAddress;
+if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
+  sbtcWallet = $sbtcConfig.sbtcContractData.sbtcWalletAddress;
 }
 
 const coordinate = async () => {
@@ -36,7 +36,7 @@ const wallet = async () => {
   </div>
   <div class="row">
     <div class="col">
-      <div>SBTC Wallet: {sbtcWallet}</div>
+      <div>SBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
       <input type="text" id="sbtcWallet" class="form-control" bind:value={sbtcWallet}/>
       <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
     </div>

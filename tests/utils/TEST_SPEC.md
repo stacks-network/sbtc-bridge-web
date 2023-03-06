@@ -141,3 +141,26 @@ Peg Out Change: tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e	     7647521
 ```bash
 TXID=e48f84d6a9a4df155eac836bdeac2f9396b79ab18cda0fef13e9d2e6856d607b
 ```
+
+=======================================================================================================
+
+## Bitcoin Signer
+
+Wrap (2/Mar):
+txid=f5e10a2b08f2e0205666d49acb54ab880b2df6a45ac87b33d523d22abfe1e1bb
+
+Unwrap (5/Mar)
+txid=9f60d74ac1fb62f1ba90743404797634e36ce069076609aaffaba26bfe2311b4
+
+descwallet bitcoin core -> taproot
+txid=74bec3453dd356b0765ba88e0b872ad5ea4b3c20ac2101bd5db8c12157ceea63
+pays 0.04btc from electrum testnet_wallet to taproot 1
+
+Unwrap (6/Mar)
+descwallet bitcoin core -> taproot
+txid=432eb3f6be554134576d3af164d47e7cf259d911e175776f35b0ac6521a5bfb7
+pays 0.04btc from electrum testnet_wallet to taproot 1
+* Sends 0.00000000 BTC to 
+* Sends 0.00000500 BTC to tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss
+* Sends 0.03998900 BTC to tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8
+* Pays transaction fee: 0.00000600 BTC

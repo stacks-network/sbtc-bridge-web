@@ -3,7 +3,7 @@ export async function fetchCurrentFeeRates() {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/blocks/fee-estimate';
   const response = await fetch(path);
   if (response.status !== 200) {
-    throw new Error('Bitcoin address not know - is the network correct?');
+    throw new Error('Bitcoin address not known - is the network correct?');
   }
   const txs = await response.json();
   return txs;
@@ -13,7 +13,7 @@ export async function fetchUtxoSet(address:string) {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos';
   const response = await fetch(path);
   if (response.status !== 200) {
-    throw new Error('Bitcoin address not know - is the network correct?');
+    throw new Error('Bitcoin address not known - is the network correct?');
   }
   const txs = await response.json();
   return txs;
@@ -49,7 +49,7 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
     const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance';
     const response = await fetch(path);
     const result = await response.json();
-    return Number(result.balance);
+    return (result);
   } catch (err) {
     return 0;
   }

@@ -1,5 +1,4 @@
 export type Message = {
-	btcAddress: string,
-	amount: number,
+	script: Uint8Array,
 	signature?: Uint8Array | string
 };
