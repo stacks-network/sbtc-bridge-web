@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
 import { fetchUtxoSet, fetchCurrentFeeRates } from '$lib/bridge_api'
 import { isSupported, maxCommit } from "$lib/utxos";
-import { addressList, addresses, tx0Hex, tx1, tx1Hex, utxo0, utxo1, feeData } from './test_data';
+import { addressList, addresses, tx0Hex, tx1, tx1Hex, utxo0, utxo1, feeData } from './data/test_data';
 import util from 'util'
 import { fail } from 'assert';
 

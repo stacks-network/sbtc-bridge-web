@@ -16,7 +16,7 @@ export const sbtcConfig:SbtcConfig = {
 	},
 	stxAddress: 'ST3JS8A0CHVNVJDCRPNJ1PSPJKTCZ4VSRYNVA55TW',
 	pegIn: false,
-	balance: 0,
+	balance: { balance: 0, address: '' },
 	addressDetails: {
 		address: '',
 		chain_stats: {
@@ -75,7 +75,9 @@ export const sbtcConfig:SbtcConfig = {
 			},
 		}
 	},
-	sigData: undefined
+	sigData: undefined,
+	pegInTransaction: undefined,
+	pegOutTransaction: undefined
 }
 
 

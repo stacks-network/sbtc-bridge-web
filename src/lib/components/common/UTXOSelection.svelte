@@ -1,10 +1,7 @@
 <script lang="ts">
-import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { sbtcConfig } from '$stores/stores'
 import { isSupported } from "$lib/utxos";
-import { PatchQuestion } from "svelte-bootstrap-icons";
-	import { number } from 'bitcoinjs-lib/src/script';
 
 const dispatch = createEventDispatcher();
 

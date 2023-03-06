@@ -52,12 +52,16 @@ const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.pegOutTransaction = poTx;
   sbtcConfig.update(() => conf);
+  amountOk = conf.pegOutTransaction.pegInData.amount > 0;
 }
 
 const requestSignature = async () => {
   const script = poTx.getOutput2ScriptPubKey();
   const msg = { script }
   const sigData = await requestSignMessage(msg);
+  if (sigData.error) {
+    return;
+  }
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
@@ -87,9 +91,13 @@ const principalUpdated = (event:any) => {
 const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
-    poTx = await PegOutTransaction.create(network, data.bitcoinAddress);
-    poTx.calculateFees();
-    updateConfig();
+    try {
+      poTx = await PegOutTransaction.create(network, data.bitcoinAddress);
+      poTx.calculateFees();
+      updateConfig();
+    } catch (err:any) {
+      errorReason = err.message;
+    }
   }
 }
 

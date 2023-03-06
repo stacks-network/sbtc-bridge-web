@@ -8,7 +8,7 @@ import { networks, script, opcodes, payments, Psbt, crypto, address } from 'bitc
 import assert, { fail } from 'assert';
 import { witnessStackToScriptWitness } from './helper'
 import util from 'util'
-import { addressList } from '../test_data';
+import { addressList } from '../data/test_data';
 import * as ecc from 'tiny-secp256k1';
 import ECPairFactory from 'ecpair';
 

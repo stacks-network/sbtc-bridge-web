@@ -2,8 +2,8 @@ import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
 import { SIGNER, MESSAGE, getSignedTransaction, buildPsbt, transactionData, transactionHex, getRedeemScript, getSigData } from "$lib/psbt";
 import { verifySignedMessage } from '$lib/stacks'
 import bitcoinMessage from 'bitcoinjs-message';
-import { attachTxs, prepareFee, getBtcAddress, getBtcAddressLegacy, getBtcAddressP2WPKH, getBtcAddressP2SHP2WPKH } from './helper'
-import { DEPLOYER_PK, sbtcConfig, tx0, utxo1, utxo0 } from './test_data';
+import { attachTxs, prepareFee, getBtcAddress, getBtcAddressLegacy, getBtcAddressP2WPKH, getBtcAddressP2SHP2WPKH } from './utils/helper'
+import { DEPLOYER_PK, sbtcConfig, tx0, utxo1, utxo0 } from './data/test_data';
 import type { SbtcConfig } from '$types/sbtc_config';
 import * as ecc from 'tiny-secp256k1';
 import ECPairFactory from 'ecpair';

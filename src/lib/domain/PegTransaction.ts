@@ -2,10 +2,7 @@ import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import * as btc from 'micro-btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
-import { Buffer } from "buffer/";
 import { decodeStacksAddress } from "$lib/stacks";
-import assert from 'assert';
-import { secp256k1 } from '@noble/curves/secp256k1';
 
 type PegInData = {
 	stacksAddress: string;
@@ -36,8 +33,8 @@ export interface PegTransactionI {
 	buildTransaction: (signature:string|undefined) => btc.Transaction;
 	calculateFees: () => void;
 	maxCommit: () => number;
-	setStacksAddress: (stacksAddress:string|undefined) => void;
 	setAmount: (pegInAmount:number) => void;
+	setStacksAddress: (stacksAddress:string|undefined) => void;
 	getChange: () => number;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
@@ -84,7 +81,11 @@ export default class PegTransaction implements PegTransactionI {
 	}
 
 	getOutput2ScriptPubKey!: () => string;
- 
+	setAmount = (amount:number) => {
+		// overridden
+		console.log(amount);
+	};
+
 	/**
 	 * User's btc address is needed to fetch utxo's and calculate tx fee.
 	 * This gives us the max amount they can peg as the sum of utxo amounts.
@@ -122,7 +123,7 @@ export default class PegTransaction implements PegTransactionI {
 	};
  
 	setFeeRate = (rate: number) => {
-		this.fee = (rate >=0 && rate < 3) ? this.fees[rate] : this.fees[2];
+		this.fee = (rate >=0 && rate < 3) ? this.fees[rate] : this.fees[1];
 		if ((this.pegInData.amount + this.fee) > this.maxCommit()) {
 			this.pegInData.amount = this.maxCommit() - this.fee;
 		}
@@ -132,12 +133,7 @@ export default class PegTransaction implements PegTransactionI {
 		return this.maxCommit() - this.fee - this.dust;
 	};
  
-	setAmount(amount:number) {
-		if (amount > this.maxCommit() - this.fee) {
-			throw new Error('Amount is more than available ' + this.maxCommit() + ' less the gas ' + this.fee);
-		}
-		this.pegInData.amount = amount;
-	}
+	//setAmount = (amount:number) => void;
 
 	setStacksAddress(stacksAddress:string|undefined) {
 		if (!stacksAddress) {
@@ -157,16 +153,7 @@ export default class PegTransaction implements PegTransactionI {
 
 	calculateFees!: () => void;
 
-	getOutputsForDisplay = () => {
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		const outs:Array<any> = [
-			{ script: 'RETURN ' + Buffer.from(this.pegInData.stacksAddress, 'utf8'), amount: 0 },
-			{ address: this.pegInData.sbtcWalletAddress, amount: this.pegInData.amount },
-		]
-		if (changeAmount > 0) outs.push({ address: this.fromBtcAddress, amount: changeAmount });
-		outs.push({ address: 'pays ' + this.fee + ' satoshis to miner.' });
-		return outs;
-	}
+	getOutputsForDisplay!: () => Array<any>;
 
 	getInputsForDisplay = () => {
 		const inputs = [];

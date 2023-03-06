@@ -1,6 +1,6 @@
 import type { SbtcConfig } from '$types/sbtc_config';
 import { maxCommit } from "$lib/utxos";
-import { sbtcConfig, tx0, tx1, tx0Hex, tx1Hex } from './test_data';
+import { sbtcConfig, tx0, tx1, tx0Hex, tx1Hex } from '../data/test_data';
 import type { UTXO } from '$types/utxo';
 import util from 'util'
 import { assert } from 'console';

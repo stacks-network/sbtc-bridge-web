@@ -36,12 +36,12 @@ onMount(async () => {
   let conf = defaultSbtcConfig;
   try {
     conf = await initApplication();
+    globalThis.Buffer = Buffer;
     inited = true;
   } catch (err) {
     console.log(err)
   }
   await tick();
-  globalThis.Buffer = Buffer;
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

@@ -84,13 +84,13 @@ function signatureDataBuffers(data: MicroStacksSignatureData) {
 	};
 }
 
-export async function requestSignMessage(message: any): Promise<SignatureData | false> {
+export async function requestSignMessage(message: any): Promise<SignatureData | {error:boolean, reason:string}> {
 	return new Promise(resolve =>
 		get_client().signStructuredMessage({
 			message: messageToTuple(message),
 			domain: domain,
 			onFinish: (result: MicroStacksSignatureData) => resolve(signatureDataBuffers(result)),
-			onCancel: () => resolve(false)
+			onCancel: () => resolve(({error: true, reason:'user canceled sign operation'}))
 		})
 	);
 }

@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
 import { isAllowed, decodeStacksAddress, encodeStacksAddress } from "$lib/stacks";
-import { allowed } from './test_data';
+import { allowed } from './data/test_data';
 
 const network = 'testnet'
 describe('suite', () => {

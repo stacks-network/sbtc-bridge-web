@@ -1,7 +1,6 @@
 import * as btc from 'micro-btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
-import { Buffer } from "buffer/";
 import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
@@ -46,6 +45,9 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		me.pegInData = o.pegInData;
 		me.addressInfo = o.addressInfo;
 		me.feeInfo = o.feeInfo;
+		me.fees = o.fees;
+		me.fee = o.fee;
+		me.scureFee = o.scureFee;
 		me.ready = o.ready;
 		return me;
 	};
@@ -54,7 +56,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return this.maxCommit() - this.pegInData.amount - this.fee;
 	};
  
-	setAmount(amount:number) {
+	setAmount = (amount:number) => {
 		if (amount > this.maxCommit() - this.fee) {
 			throw new Error('Amount is more than available ' + this.maxCommit() + ' less the gas ' + this.fee);
 		}
@@ -73,11 +75,8 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		assert('wpkh' === p2Ret.type);
 		const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		console.log('utxoSet: ', this.addressInfo.utxos)
 		// create a set of inputs corresponding to the utxo set
 		for (const utxo of this.addressInfo.utxos) {
-			//const nonWitnessUtxo = globalThis.Buffer.from(utxo.tx.hex, 'hex');
-			//const redeemScript = getRedeemScript(utxo, keyPairs[0].publicKey);
 			tx.addInput({
 				txid: hex.decode(utxo.txid),
 				//txid: utxo.txid,
@@ -90,13 +89,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 	  	}
 		const inputsVal = this.maxCommit();
 		const changeAmount = Math.floor(this.maxCommit() - (2 * this.dust));
-		console.log('inputsVal:' + inputsVal)
-		console.log('changeAmount:' + changeAmount)
-		// internals of adding outputs - 'data length' : 'op code' : 'data'
-		// const opCode = Buffer.from('2a6a', 'hex');
-		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
-		// tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
+		tx.addOutput({ script: btc.Script.encode(['RETURN', globalThis.Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
 		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
 		tx.sign(privKey);
@@ -105,9 +98,9 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 
 		const vsize = tx.vsize + this.addressInfo.utxos.length; // add 1 byte per signature
 		this.fees = [
-			Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
+			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
+			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
+			this.scureFee * 1.2, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
 		]
 		this.fee = this.fees[1];
 		if (this.pegInData.amount === 0) {
@@ -116,9 +109,9 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 	}
 
 	getOutputsForDisplay = () => {
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+		const changeAmount = this.getChange();
 		const outs:Array<any> = [
-			{ script: 'RETURN ' + Buffer.from(this.pegInData.stacksAddress, 'utf8'), amount: 0 },
+			{ script: 'RETURN ' + (this.pegInData.stacksAddress), amount: 0 },
 			{ address: this.pegInData.sbtcWalletAddress, amount: this.pegInData.amount },
 		]
 		if (changeAmount > 0) outs.push({ address: this.fromBtcAddress, amount: changeAmount });
@@ -130,10 +123,10 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 	 * Calculating fees or building the transaction
 	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
 	 */
-	buildTransaction = () => {
+	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
+		if (signature) throw new Error('signature only for peg out!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		console.log('utxoSet: ', this.addressInfo.utxos)
 		// create a set of inputs corresponding to the utxo set
 		for (const utxo of this.addressInfo.utxos) {
 			tx.addInput({
@@ -141,7 +134,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 				index: utxo.vout,
 			});
 	  	}
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
+		tx.addOutput({ script: btc.Script.encode(['RETURN', globalThis.Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);

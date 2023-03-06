@@ -151,3 +151,7 @@ txid=f5e10a2b08f2e0205666d49acb54ab880b2df6a45ac87b33d523d22abfe1e1bb
 
 Unwrap (5/Mar)
 txid=9f60d74ac1fb62f1ba90743404797634e36ce069076609aaffaba26bfe2311b4
+
+descwallet bitcoin core -> taproot
+txid=74bec3453dd356b0765ba88e0b872ad5ea4b3c20ac2101bd5db8c12157ceea63
+pays 0.04btc from electrum testnet_wallet to taproot 1

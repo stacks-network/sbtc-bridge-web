@@ -12,7 +12,7 @@ let sigData: { tx: any; outputsForDisplay: any; inputsForDisplay: any; };
 $: view = 'build_tx_view';
 const requestSignature = () => {
 	sigData = {
-		tx: piTx?.buildTransaction(),
+		tx: piTx?.buildTransaction(undefined),
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}

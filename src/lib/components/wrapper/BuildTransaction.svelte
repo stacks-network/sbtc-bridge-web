@@ -53,6 +53,7 @@ const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.pegInTransaction = piTx;
   sbtcConfig.update(() => conf);
+  amountOk = conf.pegOutTransaction?.pegInData?.amount > 0;
 }
 
 const requestSignature = () => {
@@ -90,9 +91,13 @@ const utxoUpdated = async (event:any) => {
   errorReason = undefined;
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
-    piTx = await PegInTransaction.create(network, data.bitcoinAddress);
-    piTx.calculateFees();
-    updateConfig();
+    try {
+      piTx = await PegInTransaction.create(network, data.bitcoinAddress);
+      piTx.calculateFees();
+      updateConfig();
+    } catch (err:any) {
+      errorReason = err.message;
+    }
   }
 }
 
@@ -112,7 +117,6 @@ onMount(async () => {
 
 </script>  
 {#if inited}
-  {#if errorReason}<div class="text-warning">{errorReason}</div>{/if}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if showStxAddress}
   <div class="mb-4"><Principal {principalData} on:principal_updated={principalUpdated} /></div>
@@ -122,7 +126,7 @@ onMount(async () => {
   <div class="mb-4"><PegInAmount amtData={amtData()} on:amount_updated={amountUpdated} /></div>
   {/key}
   {/if}
-  {#if errorReason}<div class="text-warning">{errorReason}</div>{/if}
+  {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
     <div class="col">
