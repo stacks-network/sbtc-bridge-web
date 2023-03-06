@@ -89,6 +89,7 @@ const principalUpdated = (event:any) => {
 }
 
 const utxoUpdated = async (event:any) => {
+  errorReason = undefined;
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
@@ -101,9 +102,9 @@ const utxoUpdated = async (event:any) => {
   }
 }
 
-$: showStxAddress = poTx.ready;
-$: showAmount = poTx.ready && stxAddressOk;
-$: showButton = poTx.ready && amountOk;
+$: showStxAddress = poTx.ready && !errorReason;
+$: showAmount = poTx.ready && stxAddressOk && !errorReason;
+$: showButton = poTx.ready && amountOk && !errorReason;
 
 onMount(async () => {
   if (!poTx.pegInData.stacksAddress) stxAddressOk = false;

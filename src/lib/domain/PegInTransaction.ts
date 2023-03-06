@@ -119,10 +119,6 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return outs;
 	}
 
-	/**
-	 * Calculating fees or building the transaction
-	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
-	 */
 	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (signature) throw new Error('signature only for peg out!');

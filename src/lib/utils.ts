@@ -41,6 +41,12 @@ export function getNet(network:string) {
 export function explorerAddressUrl(addr:string) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + import.meta.env.VITE_NETWORK;
 }
+export function explorerBtcTxUrl(txid:string) {
+	return import.meta.env.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
+}
+export function explorerBtcAddressUrl(address:string) {
+	return import.meta.env.VITE_BSTREAM_EXPLORER + '/address/' + address;
+}
 export function explorerTxUrl(txid:string) {
 	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + import.meta.env.VITE_NETWORK;
 }

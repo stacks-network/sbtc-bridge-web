@@ -133,10 +133,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return data.toString('hex');
 	}
 
-	/**
-	 * Calculating fees or building the transaction
-	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
-	 */
 	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');

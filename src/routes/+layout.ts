@@ -6,7 +6,6 @@ export const prerender = false
 export async function load() {
     try {
         const sbtcContractData = await fetchSbtcData();
-        console.log('sbtcContractData: ', sbtcContractData)
         return { 
             sbtcContractData: JSON.parse(sbtcContractData),
         };

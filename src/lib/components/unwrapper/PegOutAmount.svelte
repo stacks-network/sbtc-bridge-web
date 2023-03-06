@@ -49,8 +49,8 @@
         <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out."></span>
       </label>
       <input use:init type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegAmount}  on:input={() => changePegIn(false)}/>
-      <div class="text-small">{amtData.info}</div>
-      <div class="text-small d-flex justify-content-between  text-info">
+      <div class="text-small d-flex justify-content-between">
+        <div class="text-small">{amtData.info}</div>
         {#if amtData.change > 0}<span><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>set max</a></span>{/if}
       </div>
     </div>

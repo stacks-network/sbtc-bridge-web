@@ -11,10 +11,6 @@ type PegInData = {
 };
 
 export interface PegTransactionI {
-	/**
-	 * Calculating fees or building the transaction
-	 * see: https://github.com/bitcoinjs/bitcoinjs-lib/issues/1566
-	 */
 	net:any;
     ready:boolean;
     fromBtcAddress:string;

@@ -52,7 +52,6 @@ onMount(async () => {
 })
 </script>
   
-  <!-- <LibLoader url="/public/bitcoinjs.js" on:loaded="{onLoaded}" />-->
 {#if inited}
 {#if $auth.isSignedIn}
 <div class="app">
