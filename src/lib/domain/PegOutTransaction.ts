@@ -5,6 +5,7 @@ import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
+import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 
 export interface PegOutTransactionI extends PegTransactionI {
 
@@ -12,7 +13,7 @@ export interface PegOutTransactionI extends PegTransactionI {
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
-	getOutput2ScriptPubKey: () => string;
+	getOutput2ScriptPubKey: () => Buffer;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -36,9 +37,23 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		super();
 	}
  
-	public static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
+	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string):Promise<PegTransactionI> => {
 		const me = new PegOutTransaction();
-		return super.createInternal(me, network, fromBtcAddress);
+		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		me.fromBtcAddress = fromBtcAddress;
+		me.pegInData = {
+			amount: 0,
+			stacksAddress: undefined,
+			sbtcWalletAddress
+		}
+		// utxos have to come from a hosted indexer or external service
+		// client catches errors
+		me.addressInfo = await fetchUtxoSet(fromBtcAddress);
+		const btcFeeRates = await fetchCurrentFeeRates();
+		me.feeInfo = btcFeeRates.feeInfo;
+		//me.calculateFees(network);
+		me.ready = true;
+		return me;
 	};
 
 	public static hydrate = (o:PegOutTransactionI) => {
@@ -49,6 +64,9 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		me.pegInData = o.pegInData;
 		me.addressInfo = o.addressInfo;
 		me.feeInfo = o.feeInfo;
+		me.fees = o.fees;
+		me.fee = o.fee;
+		me.scureFee = o.scureFee;
 		me.ready = o.ready;
 		return me;
 	};
@@ -89,8 +107,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				  },
 			});
 	  	}
-		const inputsVal = this.maxCommit();
-		const changeAmount = Math.floor(this.maxCommit() - (2 * this.dust));
 		// internals of adding outputs - 'data length' : 'op code' : 'data'
 		// const opCode = Buffer.from('2a6a', 'hex');
 		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
@@ -115,8 +131,9 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 
 	getOutputsForDisplay = () => {
 		const changeAmount = Math.floor(this.maxCommit() - this.dust - this.fee);
+		const addr = this.pegInData.stacksAddress || 'stx address unknown'
 		const outs:Array<any> = [
-			{ script: 'RETURN ' + globalThis.Buffer.from(this.pegInData.stacksAddress, 'utf8'), amount: 0 },
+			{ script: 'RETURN ' + globalThis.Buffer.from(addr), amount: 0 },
 			{ address: this.pegInData.sbtcWalletAddress, amount: this.dust },
 		]
 		if (changeAmount > 0) outs.push({ address: this.fromBtcAddress, amount: changeAmount });
@@ -125,12 +142,12 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	}
 
 	getOutput2ScriptPubKey = () => {
+		const amtBuf = Buffer.alloc(9);
+		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		const buf1 = globalThis.Buffer.allocUnsafe(11);
-		buf1.writeUInt32LE(this.pegInData.amount, 0);
-		const buf2 = globalThis.Buffer.from(script);
-		const data = globalThis.Buffer.concat([buf1, buf2]);
-		return data.toString('hex');
+		const scriptBuf = globalThis.Buffer.from(script);
+		const data = globalThis.Buffer.concat([amtBuf, scriptBuf]);
+		return data;
 	}
 
 	buildTransaction = (signature:string|undefined) => {
@@ -143,8 +160,8 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				txid: hex.decode(utxo.txid),
 				index: utxo.vout,
 			});
-	  	}		
-		const buf1 = globalThis.Buffer.allocUnsafe(11);
+	  	}
+		const buf1 = globalThis.Buffer.allocUnsafe(9);
 		buf1.writeUInt32LE(this.pegInData.amount, 0);
 		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const buf2 = globalThis.Buffer.from(signature);

@@ -11,9 +11,12 @@ import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
 import { requestSignMessage } from '$lib/stacks'
+import { getAccount } from '@micro-stacks/svelte';
 
 export let poTx:PegOutTransactionI;
   
+const account = getAccount();
+if (!poTx.pegInData.stacksAddress) poTx.pegInData.stacksAddress = $account.stxAddress
 $: principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
@@ -23,7 +26,7 @@ $: amtData = {
   pegIn: false,
   label: 'Amount (SBTC)',
   info: 'The amount to unwrap cannot exceed your sBTC balance',
-  pegAmount: $sbtcConfig.balance.balance,
+  pegAmount: (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance,
   maxCommit: poTx.maxCommit(),
   change: poTx.getChange(),
   fee: poTx.fee,
@@ -46,19 +49,19 @@ let ready = true;
 
 let errorReason:string|undefined;
 let stxAddressOk = true;
-let amountOk = false;
+let amountOk = true;
 
 const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.pegOutTransaction = poTx;
   sbtcConfig.update(() => conf);
-  amountOk = conf.pegOutTransaction.pegInData.amount > 0;
+  amountOk = poTx.pegInData.amount > 0;
 }
 
 const requestSignature = async () => {
   const script = poTx.getOutput2ScriptPubKey();
-  const msg = { script }
-  const sigData = await requestSignMessage(msg);
+  const msg = { script: script.toString('hex') }
+  const sigData:any = await requestSignMessage(msg);
   if (sigData.error) {
     return;
   }
@@ -93,7 +96,7 @@ const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
-      poTx = await PegOutTransaction.create(network, data.bitcoinAddress);
+      poTx = await PegOutTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
       poTx.calculateFees();
       updateConfig();
     } catch (err:any) {

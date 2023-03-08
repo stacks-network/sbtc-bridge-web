@@ -1,5 +1,5 @@
 <script lang="ts">
-import SbtcContractTransactions from '$lib/components/history/SbtcContractTransactions.svelte';
+import Pegs from '$lib/components/history/Pegs.svelte';
 
 </script>
 
@@ -11,7 +11,7 @@ import SbtcContractTransactions from '$lib/components/history/SbtcContractTransa
 				  <h1 class="pointer text-white"><span class="strokeme-white">SBTC</span> Transaction History</h1>
 				</div>
 			</div>
-			<SbtcContractTransactions />
+			<Pegs />
 		</div>
 	</div>
 </section>

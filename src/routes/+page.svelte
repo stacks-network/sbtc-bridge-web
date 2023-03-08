@@ -17,14 +17,14 @@ const togglePeg = (pegin:boolean) => {
 </script>
 
 <section class="bg-dark">
-	<div class="my-4 p-4">
-		<div class="text-center mb-5 text-center text-white">
+	<div class="m-4">
+		<div class="text-small text-center mb-5 text-center text-white">
 			<div>SBTC Wallet: { $sbtcConfig.sbtcContractData.sbtcWalletAddress }</div>
 			<div>Contract: <a href={sbtcContractUrl} target="_blank" rel="noreferrer">{ sbtcContract }</a></div>
 		</div>
 		<div class="">
 			<div class="row">
-				<div class="col-6 px-2">
+				<div class="col-md-6 col-sm-12 mb-4">
 					<div class="card-sm text-center">
 						<h1 class="mt-5 text-info">Wrap <span class="strokeme-info">sBTC</span></h1>
 						<h2 class="text-info mb-5">BTC to sBTC</h2>
@@ -33,7 +33,7 @@ const togglePeg = (pegin:boolean) => {
 						</div>
 					</div>
 				</div>
-				<div class="col-6 px-2">
+				<div class="col-md-6 col-sm-12">
 					<div class="card-sm text-center">
 						<h1 class="mt-5 text-warning">Unwrap <span class="strokeme-warning">sBTC</span></h1>
 						<h2 class="text-warning mb-5">sBTC to BTC</h2>
@@ -48,19 +48,11 @@ const togglePeg = (pegin:boolean) => {
 <style>
 .card-sm {
 	min-width: 40vw;
-	height: 400px;
+	min-height: 400px;
 	border: 1pt solid #ccc;
 	border-radius: 10px;
 	padding: 10px;
 
-}
-section {
-	display: flex;
-	flex-direction: column;
-	justify-content: top;
-	align-items: center;
-	flex: 0.6;
-	min-height: 90vh;
 }
 h1 {
 	width: 100%;

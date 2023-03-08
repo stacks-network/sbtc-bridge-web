@@ -1,11 +1,10 @@
-import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import * as btc from 'micro-btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { decodeStacksAddress } from "$lib/stacks";
 
 type PegInData = {
-	stacksAddress: string;
+	stacksAddress?: string;
 	sbtcWalletAddress: string;
 	amount: number,
 };
@@ -34,7 +33,7 @@ export interface PegTransactionI {
 	getChange: () => number;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
-	getOutput2ScriptPubKey: () => string;
+	getOutput2ScriptPubKey: () => Buffer;
 	getInputsForDisplay: () => Array<any>;
 }
 
@@ -76,7 +75,7 @@ export default class PegTransaction implements PegTransactionI {
 		// use create function
 	}
 
-	getOutput2ScriptPubKey!: () => string;
+	getOutput2ScriptPubKey!: () => Buffer;
 	setAmount = (amount:number) => {
 		// overridden
 		console.log(amount);
@@ -88,20 +87,6 @@ export default class PegTransaction implements PegTransactionI {
 	 * @param fromBtcAddress
 	 * @returns 
 	 */
-	protected static createInternal = async (me:PegTransactionI, network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
-		//const me = new PegTransaction();
-		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-		me.fromBtcAddress = fromBtcAddress;
-		// utxos have to come from a hosted indexer or external service
-		// client catches errors
-		me.addressInfo = await fetchUtxoSet(fromBtcAddress);
-		const btcFeeRates = await fetchCurrentFeeRates();
-		me.feeInfo = btcFeeRates.feeInfo;
-		//me.calculateFees(network);
-		me.ready = true;
-		return me;
-	};
- 
 	public static hydrate = (o:PegTransactionI) => {
 		const me = new PegTransaction();
 		me.net = o.net;

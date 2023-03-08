@@ -21,7 +21,7 @@ export async function fetchUtxoSet(address:string) {
 
 export async function fetchSbtcEvents() {
   try {
-    const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/events';
+    const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/events/0';
     const response = await fetch(path);
     const result = await response.json();
     return result;
