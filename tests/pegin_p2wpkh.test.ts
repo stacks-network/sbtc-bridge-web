@@ -215,4 +215,10 @@ describe('suite', () => {
     expect(tx.toPSBT());
   })
 
+  //02c1176d0095ebfe3019d1b3488a0015eeb01d793f58379c08f5099bf2bbc40131
+  it.concurrent('PegInTransaction.encodeAddress() ', async () => {
+    //const addr = btc.Address(btc.TEST_NETWORK).encode(btc.OutScript.decode())
+    //expect(addr).equals('tb1qyxeczljl4g744py6u37r0csr2q4grlh7yhp9km');
+  })
+
 })

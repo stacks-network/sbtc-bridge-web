@@ -5,6 +5,7 @@ import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
+import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 
 export interface PegInTransactionI extends PegTransactionI {
 
@@ -32,9 +33,23 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		super();
 	}
  
-	public static create = async (network:string, fromBtcAddress:string):Promise<PegTransactionI> => {
+	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string):Promise<PegTransactionI> => {
 		const me = new PegInTransaction();
-		return super.createInternal(me, network, fromBtcAddress);
+		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		me.fromBtcAddress = fromBtcAddress;
+		me.pegInData = {
+			amount: 0,
+			stacksAddress: undefined,
+			sbtcWalletAddress
+		}
+		// utxos have to come from a hosted indexer or external service
+		// client catches errors
+		me.addressInfo = await fetchUtxoSet(fromBtcAddress);
+		const btcFeeRates = await fetchCurrentFeeRates();
+		me.feeInfo = btcFeeRates.feeInfo;
+		//me.calculateFees(network);
+		me.ready = true;
+		return me;
 	};
 
 	public static hydrate = (o:PegInTransactionI) => {

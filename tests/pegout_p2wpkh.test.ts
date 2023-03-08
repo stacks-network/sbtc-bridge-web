@@ -7,6 +7,7 @@ import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import assert, { fail } from 'assert';
 import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
+import util from 'util'
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -20,6 +21,10 @@ keySetForFeeCalculation.push({
   ecdsaPub: secp.getPublicKey(priv, true),
   schnorrPub: secp.schnorr.getPublicKey(priv)
 })
+function hexToAscii(input:string) {
+	const buf = Buffer.from(input, "hex");
+	return buf.toString("ascii");
+}
 
 describe('suite', () => {
   beforeAll(async () => {
@@ -47,35 +52,35 @@ describe('suite', () => {
     expect(piTx.addressInfo.utxos[0].txid).equals('c40b8cd078aaa183c14d6e8f2fc28645f65006bde137a20035f5d427bbca151b');
     expect(piTx.addressInfo.utxos[0].vout).equals(0);
     //console.log('piTx.fee=' + piTx.fee);
-    expect(piTx.fees[1]).equals(35000);
+    expect(piTx.fees[1]).equals(600);
     expect(piTx.feeInfo.high_fee_per_kb).equals(51156);
-    expect(piTx.fee).equals(0);
-    expect(piTx.scureFee).equals(0);
+    expect(piTx.fee).equals(600);
+    expect(piTx.scureFee).equals(600);
     expect(piTx.ready);
     expect(piTx.dust).equals(500);
   })
 
   it.concurrent('PegOutTransaction.getChange() returns the correct change', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
-    expect(myPeg.getChange()).equals(4205367)
+    expect(myPeg.getChange()).equals(4204767)
     myPeg.setAmount(myPeg.maxCommit() - myPeg.fee - myPeg.dust - 1)
-    expect(myPeg.getChange()).equals(4205367)
+    expect(myPeg.getChange()).equals(4204767)
   })
 
   it.concurrent('PegOutTransaction.setAmount() throws if amount too high', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
-    expect(myPeg.getChange()).equals(4205367)
+    expect(myPeg.getChange()).equals(4204767)
     try {
-      myPeg.setAmount(4205368)
+      myPeg.setAmount(4204768)
       fail('error expected');
     } catch(err) { expect(err)}
   })
 
   it.concurrent('PegOutTransaction.setAmount() throws if amount too high', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
-    expect(myPeg.getChange()).equals(4205367)
+    expect(myPeg.getChange()).equals(4204767)
     try {
-      myPeg.setAmount(4205368)
+      myPeg.setAmount(4204768)
       fail('error expected');
     } catch(err) { expect(err)}
   })
@@ -163,7 +168,7 @@ describe('suite', () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     const outputs = myPeg.getOutputsForDisplay();
     myPeg.setAmount(myPeg.maxCommit() - myPeg.fee)
-    expect(myPeg.getChange()).equals(4205367)
+    expect(myPeg.getChange()).equals(4204767)
     expect(outputs.length).equals(4);
     expect(outputs[0].script).equals('RETURN ' + myPeg.pegInData.stacksAddress)
     expect(outputs[0].amount).equals(0)
@@ -189,7 +194,7 @@ describe('suite', () => {
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
     const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
-    expect(tx.version).equals(2)
+    expect(tx.version).equals(2);
     expect(tx.hasWitnesses).equals(false)
   })
 
@@ -203,14 +208,53 @@ describe('suite', () => {
 
   it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() ensure signature can be passed to builder.', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.pegInData.amount = 2500;
     const script = myPeg.getOutput2ScriptPubKey();
-    expect(script.length).equals(66);
+    console.log('script ', util.inspect(script.toString('hex'), false, null, true /* enable colors */));
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256(script), privKey);
-    //expect(sig.length).equals(70);
     const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
     const verified = secp.verify(sig, sha256(script), secp.getPublicKey(privKey, true));
     expect(verified).equals(true)
+  })
+
+  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() returns correct buffer.', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.pegInData.amount = 2500;
+    myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
+    const data1 = myPeg.getOutput2ScriptPubKey();
+		
+		const amtBuf = Buffer.alloc(9);
+		amtBuf.writeUInt32LE(2500, 0);
+    const script = btc.OutScript.encode(btc.Address(btc.TEST_NETWORK).decode('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8'))
+    const scriptBuf = Buffer.from(script);
+		const data2 = Buffer.concat([amtBuf, scriptBuf]);
+    
+    expect(data2.toString('hex')).equals(data1.toString('hex'));
+  })
+
+  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() returns encodes amount.', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.pegInData.amount = 2500;
+    myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
+    const data1 = myPeg.getOutput2ScriptPubKey();
+    const pegOutAmount = data1.subarray(0,9).readUInt32LE();
+    expect(pegOutAmount).equals(myPeg.pegInData.amount);
+  })
+
+  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() ensure signature can be passed to builder.', async () => {
+		const b1 = Buffer.alloc(2);
+		const amtBuf = Buffer.alloc(9);
+		amtBuf.writeUInt32LE(2500, 0);
+		const data = Buffer.concat([b1, amtBuf]);
+    console.log('amtBuf: ' + (amtBuf.toString('hex')))
+    console.log('data: ' + data.toString('hex'))
+  
+    const pegOutAmount = amtBuf.readUInt32LE();
+    const pegOutAmount1 = data.subarray(2,11).readUInt32LE();
+    console.log('decodePegOutOutputs:amtB1 ', util.inspect(amtBuf.toString('hex'), false, null, true /* enable colors */));
+    console.log('decodePegOutOutputs:amtBuf3 ', util.inspect(pegOutAmount, false, null, true /* enable colors */));
+    console.log('decodePegOutOutputs:amtBuf4 ', util.inspect(pegOutAmount1, false, null, true /* enable colors */));
   })
 
 })

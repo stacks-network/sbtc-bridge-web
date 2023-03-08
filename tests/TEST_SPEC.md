@@ -164,3 +164,32 @@ pays 0.04btc from electrum testnet_wallet to taproot 1
 * Sends 0.00000500 BTC to tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss
 * Sends 0.03998900 BTC to tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8
 * Pays transaction fee: 0.00000600 BTC
+
+Wrap (7/Mar)
+txid=8f221a6e120140d660faa7d5d3baf3e8d5413a20237ad234571cb4d8c3438fc4
+amt=5000
+from=tb1qyxeczljl4g744py6u37r0csr2q4grlh7yhp9km
+wallet: electrum testnet
+mint to stacks addr: ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN
+
+Unwrap (7/Mar)
+txid=61340871d880ffe44a5c3a67d025e1165942b48151912086b9266fd659d83689
+wallet: bitcoin descwallet
+burn from stacks addr: ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN
+amt=2500
+* Sends 0.00000000 BTC to 
+* Sends 0.00000500 BTC to tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8
+* Sends 0.08997200 BTC to tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8
+* Pays transaction fee: 0.00001200 BTC
+
+Total Amount: 0.08997700 BTC
+(=89.97700 mBTC or 89 977.00 bits or 8 997 700 sat)
+
+Unwrap (7/Mar)
+txid=d535779265442d72e2dea9c6d6df7141977efecff45edaff074461ba28cb05ec
+wallet: electrum alice
+burn from stacks addr: ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN
+amt=3250
+SCRIPT 6a4c8bb20c0000000000000037363164353362656334616366383461623330646165363031386432393537636663656165333365326130386362353638313436666437393964313665643931343466336165366666643564666565633764316135373731656634323232316233306164333765346565653164623365383063663435386637346439636334653030	     0.        
+tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8	     0.000005  
+tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq	     0.04204767
