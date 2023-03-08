@@ -26,12 +26,6 @@ onMount(async () => {
 
 </script>
 
-<div class="row">
-  <div class="d-flex justify-content-between">
-    <p class="strapline">Transactions can be filtered and sorted.</p>
-    <a href="/" on:click|preventDefault={() => fetchTxs()} class="pointer text-info"><ArrowRepeat width={20} height={20}/></a>
-  </div>
-</div>
 <div class="text-white">
   <div class="row">
     <div class="col-1">
