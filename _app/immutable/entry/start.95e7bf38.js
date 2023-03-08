@@ -1,6 +1,6 @@
 import { o as onMount, t as tick } from '../chunks/index.b12fea3b.js';
-import { S as SCROLL_KEY, a as SNAPSHOT_KEY, I as INDEX_KEY, g as get_base_uri, f as find_anchor, b as get_link_info, c as get_router_options, s as stores, i as is_external_url, d as scroll_state, P as PRELOAD_PRIORITIES, e as init } from '../chunks/singletons.6abbeba9.js';
-import { b as base } from '../chunks/paths.050ac54d.js';
+import { S as SCROLL_KEY, a as SNAPSHOT_KEY, I as INDEX_KEY, g as get_base_uri, f as find_anchor, b as get_link_info, c as get_router_options, s as stores, i as is_external_url, d as scroll_state, P as PRELOAD_PRIORITIES, e as init } from '../chunks/singletons.977f5788.js';
+import { b as base } from '../chunks/paths.b4a1dc3c.js';
 
 /**
  * @param {string} path
@@ -428,6 +428,14 @@ function exec(match, params, matchers) {
 
 		if (!param.matcher || matchers[param.matcher](value)) {
 			result[param.name] = value;
+
+			// Now that the params match, reset the buffer if the next param isn't the [...rest]
+			// and the next value is defined, otherwise the buffer will cause us to skip values
+			const next_param = params[i + 1];
+			const next_value = values[i + 1];
+			if (next_param && !next_param.rest && next_value) {
+				buffered = 0;
+			}
 			continue;
 		}
 
@@ -2153,14 +2161,19 @@ function create_client(app, target) {
 				goto(result.location, { invalidateAll: true }, []);
 			} else {
 				/** @type {Record<string, any>} */
-				const props = {
-					form: result.data,
+				root.$set({
+					// this brings Svelte's view of the world in line with SvelteKit's
+					// after use:enhance reset the form....
+					form: null,
 					page: { ...page, form: result.data, status: result.status }
-				};
-				root.$set(props);
+				});
+
+				// ...so that setting the `form` prop takes effect and isn't ignored
+				await tick();
+				root.$set({ form: result.data });
 
 				if (result.type === 'success') {
-					tick().then(reset_focus);
+					reset_focus();
 				}
 			}
 		},

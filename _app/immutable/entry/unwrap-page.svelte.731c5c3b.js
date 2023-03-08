@@ -1,7 +1,7 @@
 import { S as SvelteComponentDev, b as init$1, s as safe_not_equal, d as dispatch_dev, K as validate_store, L as component_subscribe, v as validate_slots, Q as createEventDispatcher, u as element, B as text, c as space, G as create_component, w as claim_element, x as children, C as claim_text, l as detach_dev, f as claim_space, H as claim_component, A as add_location, y as attr_dev, z as set_style, g as insert_hydration_dev, M as append_hydration_dev, _ as set_input_value, I as mount_component, aa as action_destroyer, O as listen_dev, D as set_data_dev, $ as to_number, k as transition_in, h as transition_out, J as destroy_component, r as run_all, P as prevent_default, n as noop, o as onMount, T as globals, e as empty, E as group_outros, j as check_outros } from '../chunks/index.b12fea3b.js';
 import { s as sbtcConfig } from '../chunks/stores.ec24a7a6.js';
 import { F as FeeDisplay, u as utils, g as getPublicKey, s as schnorr, P as PegTransaction, h as hex, p as p2wpkh, a as assert, T as Transaction, b as secp256k1, S as Script, O as OutScript, A as Address, c as Principal, U as UTXOSelection, d as SbtcWalletDisplay, e as SignTransaction } from '../chunks/SbtcWalletDisplay.065605d5.js';
-import { b as base } from '../chunks/paths.050ac54d.js';
+import { b as base } from '../chunks/paths.b4a1dc3c.js';
 import { a as explorerAddressUrl } from '../chunks/utils.460c8e3b.js';
 import { r as requestSignMessage } from '../chunks/stacks.63c7db87.js';
 
