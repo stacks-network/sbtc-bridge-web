@@ -18,7 +18,7 @@ async function fetchUtxoSet(address) {
 }
 async function fetchSbtcEvents() {
   try {
-    const path = "https://localhost:3010/bridge-api/v1" + "/sbtc/events";
+    const path = "https://localhost:3010/bridge-api/v1" + "/sbtc/events/0";
     const response = await fetch(path);
     const result = await response.json();
     return result;

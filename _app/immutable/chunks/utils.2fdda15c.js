@@ -23,6 +23,9 @@ function isSupported(address) {
 function explorerAddressUrl(addr) {
   return "https://explorer.stacks.co" + "/address/" + addr + "?chain=" + "mainnet";
 }
+function explorerBtcTxUrl(txid) {
+  return "https://blockstream.info" + "/tx/" + txid;
+}
 function explorerBtcAddressUrl(address) {
   return "https://blockstream.info" + "/address/" + address;
 }
@@ -36,4 +39,4 @@ function truncate(stringy) {
   return stringy.substring(0, 6) + ".." + stringy.substring(stringy.length - 8);
 }
 
-export { explorerAddressUrl as a, explorerBtcAddressUrl as b, explorerTxUrl as e, fmtSatoshiToBitcoin as f, isSupported as i, truncate as t };
+export { explorerBtcTxUrl as a, explorerAddressUrl as b, explorerBtcAddressUrl as c, explorerTxUrl as e, fmtSatoshiToBitcoin as f, isSupported as i, truncate as t };

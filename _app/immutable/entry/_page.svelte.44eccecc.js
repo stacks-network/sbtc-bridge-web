@@ -1,7 +1,7 @@
 import { S as SvelteComponentDev, b as init, d as dispatch_dev, s as safe_not_equal, u as element, B as text, c as space, w as claim_element, x as children, C as claim_text, l as detach_dev, f as claim_space, A as add_location, y as attr_dev, g as insert_hydration_dev, M as append_hydration_dev, O as listen_dev, P as prevent_default, D as set_data_dev, n as noop, r as run_all, K as validate_store, L as component_subscribe, v as validate_slots } from '../chunks/index.b12fea3b.js';
-import { g as goto } from '../chunks/navigation.ade13dcb.js';
-import { s as sbtcConfig } from '../chunks/stores.ec24a7a6.js';
-import { e as explorerTxUrl } from '../chunks/utils.460c8e3b.js';
+import { g as goto } from '../chunks/navigation.0f990d2d.js';
+import { s as sbtcConfig } from '../chunks/stores.f243a9e0.js';
+import { e as explorerTxUrl } from '../chunks/utils.2fdda15c.js';
 
 const _page_svelte_svelte_type_style_lang = '';
 
@@ -183,47 +183,47 @@ function create_fragment(ctx) {
 			this.h();
 		},
 		h: function hydrate() {
-			add_location(div0, file, 16, 3, 541);
+			add_location(div0, file, 16, 3, 547);
 			attr_dev(a, "href", /*sbtcContractUrl*/ ctx[2]);
 			attr_dev(a, "target", "_blank");
 			attr_dev(a, "rel", "noreferrer");
-			add_location(a, file, 17, 18, 634);
-			add_location(div1, file, 17, 3, 619);
-			attr_dev(div2, "class", "text-center mb-5 text-center text-white");
-			add_location(div2, file, 15, 2, 484);
+			add_location(a, file, 17, 18, 640);
+			add_location(div1, file, 17, 3, 625);
+			attr_dev(div2, "class", "text-small text-center mb-5 text-center text-white");
+			add_location(div2, file, 15, 2, 479);
 			attr_dev(span0, "class", "strokeme-info");
-			add_location(span0, file, 23, 38, 873);
+			add_location(span0, file, 23, 38, 892);
 			attr_dev(h10, "class", "mt-5 text-info s-y_bCXRrkrYfP");
-			add_location(h10, file, 23, 6, 841);
+			add_location(h10, file, 23, 6, 860);
 			attr_dev(h20, "class", "text-info mb-5");
-			add_location(h20, file, 24, 6, 924);
+			add_location(h20, file, 24, 6, 943);
 			attr_dev(button0, "class", "w-50 btn btn-outline-info");
-			add_location(button0, file, 26, 7, 996);
+			add_location(button0, file, 26, 7, 1015);
 			attr_dev(div3, "class", "");
-			add_location(div3, file, 25, 6, 974);
+			add_location(div3, file, 25, 6, 993);
 			attr_dev(div4, "class", "card-sm text-center s-y_bCXRrkrYfP");
-			add_location(div4, file, 22, 5, 801);
-			attr_dev(div5, "class", "col-6 px-2");
-			add_location(div5, file, 21, 4, 771);
+			add_location(div4, file, 22, 5, 820);
+			attr_dev(div5, "class", "col-md-6 col-sm-12 mb-4");
+			add_location(div5, file, 21, 4, 777);
 			attr_dev(span1, "class", "strokeme-warning");
-			add_location(span1, file, 32, 43, 1247);
+			add_location(span1, file, 32, 43, 1274);
 			attr_dev(h11, "class", "mt-5 text-warning s-y_bCXRrkrYfP");
-			add_location(h11, file, 32, 6, 1210);
+			add_location(h11, file, 32, 6, 1237);
 			attr_dev(h21, "class", "text-warning mb-5");
-			add_location(h21, file, 33, 6, 1301);
+			add_location(h21, file, 33, 6, 1328);
 			attr_dev(button1, "class", "w-50 btn btn-outline-warning");
-			add_location(button1, file, 34, 6, 1354);
+			add_location(button1, file, 34, 6, 1381);
 			attr_dev(div6, "class", "card-sm text-center s-y_bCXRrkrYfP");
-			add_location(div6, file, 31, 5, 1170);
-			attr_dev(div7, "class", "col-6 px-2");
-			add_location(div7, file, 30, 4, 1140);
+			add_location(div6, file, 31, 5, 1197);
+			attr_dev(div7, "class", "col-md-6 col-sm-12");
+			add_location(div7, file, 30, 4, 1159);
 			attr_dev(div8, "class", "row");
-			add_location(div8, file, 20, 3, 749);
+			add_location(div8, file, 20, 3, 755);
 			attr_dev(div9, "class", "");
-			add_location(div9, file, 19, 2, 731);
-			attr_dev(div10, "class", "my-4 p-4");
+			add_location(div9, file, 19, 2, 737);
+			attr_dev(div10, "class", "m-4");
 			add_location(div10, file, 14, 1, 459);
-			attr_dev(section, "class", "bg-dark s-y_bCXRrkrYfP");
+			attr_dev(section, "class", "bg-dark");
 			add_location(section, file, 13, 0, 432);
 		},
 		m: function mount(target, anchor) {

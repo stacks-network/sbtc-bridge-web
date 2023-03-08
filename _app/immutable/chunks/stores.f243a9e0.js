@@ -48,69 +48,12 @@ function persisted(key, initialValue, options) {
 }
 
 const defaultSbtcConfig = {
-  network: "mainnet",
-  feeInfo: {
-    high_fee_per_kb: 48783,
-    low_fee_per_kb: 2e4,
-    medium_fee_per_kb: 30998
-  },
-  feeCalc: {
-    pegInFeeCalc: {
-      feeToApply: 2e4,
-      pegInAmount: 0,
-      high: {
-        change: 0,
-        fee: 5e5
-      },
-      medium: {
-        change: 0,
-        fee: 5e5
-      },
-      low: {
-        change: 0,
-        fee: 5e5
-      }
-    },
-    pegOutFeeCalc: {
-      feeToApply: 2e4,
-      pegOutAmount: 0,
-      DUST_AMOUNT: 500,
-      high: {
-        change: 0,
-        fee: 5e5
-      },
-      medium: {
-        change: 0,
-        fee: 5e5
-      },
-      low: {
-        change: 0,
-        fee: 5e5
-      }
-    }
-  },
   pegIn: true,
   balance: { balance: 0, address: "" },
-  addressDetails: {
-    address: "",
-    chain_stats: {
-      funded_txo_count: 0,
-      funded_txo_sum: 0,
-      spent_txo_count: 0,
-      spent_txo_sum: 0,
-      tx_count: 0
-    },
-    mempool_stats: {
-      funded_txo_count: 0,
-      funded_txo_sum: 0,
-      spent_txo_count: 0,
-      spent_txo_sum: 0,
-      tx_count: 0
-    }
-  },
-  utxos: [],
   sigData: void 0,
-  sbtcContractData: void 0
+  sbtcContractData: void 0,
+  pegInTransaction: void 0,
+  pegOutTransaction: void 0
 };
 
 const sbtcConfig = persisted("sbtcConfig", defaultSbtcConfig);
