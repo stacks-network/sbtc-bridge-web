@@ -1,6 +1,6 @@
 import { o as onMount, t as tick } from '../chunks/index.b12fea3b.js';
-import { S as SCROLL_KEY, a as SNAPSHOT_KEY, I as INDEX_KEY, g as get_base_uri, f as find_anchor, b as get_link_info, c as get_router_options, s as stores, i as is_external_url, d as scroll_state, P as PRELOAD_PRIORITIES, e as init } from '../chunks/singletons.32d75f4f.js';
-import { b as base } from '../chunks/paths.ea63ca3a.js';
+import { S as SCROLL_KEY, a as SNAPSHOT_KEY, I as INDEX_KEY, g as get_base_uri, f as find_anchor, b as get_link_info, c as get_router_options, s as stores, i as is_external_url, d as scroll_state, P as PRELOAD_PRIORITIES, e as init } from '../chunks/singletons.f42f57a6.js';
+import { b as base } from '../chunks/paths.ec2909a9.js';
 
 /**
  * @param {string} path

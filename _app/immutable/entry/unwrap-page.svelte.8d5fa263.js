@@ -2,7 +2,7 @@ import { S as SvelteComponentDev, b as init$1, s as safe_not_equal, d as dispatc
 import { s as sbtcConfig } from '../chunks/stores.f243a9e0.js';
 import { F as FeeDisplay, u as utils, g as getPublicKey, s as schnorr, T as TEST_NETWORK, N as NETWORK, P as PegTransaction, h as hex, p as p2wpkh, a as assert, b as Transaction, c as secp256k1, S as Script, O as OutScript, A as Address, d as Principal, U as UTXOSelection, e as SbtcWalletDisplay, f as SignTransaction } from '../chunks/SbtcWalletDisplay.326058b4.js';
 import { c as fetchUtxoSet, d as fetchCurrentFeeRates } from '../chunks/bridge_api.deae4e30.js';
-import { b as base } from '../chunks/paths.ea63ca3a.js';
+import { b as base } from '../chunks/paths.ec2909a9.js';
 import { b as explorerAddressUrl } from '../chunks/utils.2fdda15c.js';
 import { r as requestSignMessage } from '../chunks/stacks.95325083.js';
 import { a } from '../chunks/index.802ed381.js';
