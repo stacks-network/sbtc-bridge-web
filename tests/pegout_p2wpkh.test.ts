@@ -194,8 +194,8 @@ describe('suite', () => {
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
     const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
-    expect(tx.version).equals(2);
-    expect(tx.hasWitnesses).equals(false)
+    expect(tx.opReturn.version).equals(2);
+    expect(tx.opReturn.hasWitnesses).equals(false)
   })
 
   it.concurrent('PegOutTransaction.buildTransaction() ensure PSBT can be estracted form tx', async () => {
@@ -203,7 +203,7 @@ describe('suite', () => {
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
     const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
-    expect(tx.toPSBT());
+    expect(tx.opReturn.toPSBT());
   })
 
   it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() ensure signature can be passed to builder.', async () => {
@@ -211,11 +211,11 @@ describe('suite', () => {
     myPeg.pegInData.amount = 2500;
     const script = myPeg.getOutput2ScriptPubKey();
     console.log('script ', util.inspect(script.toString('hex'), false, null, true /* enable colors */));
-    const privKey = secp.utils.randomPrivateKey()
+    const privKey = secp.utils.randomPrivateKey();
     const sig = await secp.sign(sha256(script), privKey);
     const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
     const verified = secp.verify(sig, sha256(script), secp.getPublicKey(privKey, true));
-    expect(verified).equals(true)
+    expect(verified).equals(true);
   })
 
   it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() returns correct buffer.', async () => {
@@ -256,5 +256,4 @@ describe('suite', () => {
     console.log('decodePegOutOutputs:amtBuf3 ', util.inspect(pegOutAmount, false, null, true /* enable colors */));
     console.log('decodePegOutOutputs:amtBuf4 ', util.inspect(pegOutAmount1, false, null, true /* enable colors */));
   })
-
 })

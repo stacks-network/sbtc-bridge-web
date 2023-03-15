@@ -10,12 +10,13 @@ let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegO
 
 $: view = 'build_tx_view';
 
-let sigData: { tx: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
+let sigData: { txs: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
 const openSigView = () => {
+	poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
 	const signature = $sbtcConfig.sigData.signature;
-	const tx = poTx!.buildTransaction(signature);
+	const txs = poTx!.buildTransaction(signature);
 	sigData = {
-		tx,
+		txs,
 		outputsForDisplay: poTx!.getOutputsForDisplay(),
 		inputsForDisplay: poTx!.addressInfo.utxos
 	}

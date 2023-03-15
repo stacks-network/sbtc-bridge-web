@@ -11,13 +11,7 @@ import { isCoordinator } from '$lib/sbtc_admin'
 
 const auth = getAuth();
 const account = getAccount();
-const decodeAddr = () => {
-	return c32ToB58($account.stxAddress);
-} 
-const explorerUrl = function (address:string) {
-	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + address + '/?chain=' + import.meta.env.VITE_NETWORK;
-}
-
+const coordinator = isCoordinator($account.stxAddress!)
 const logout = () => {
 	$auth.signOut();
 }
@@ -32,7 +26,7 @@ onMount(async () => {
 
 </script>
 
-{#if isCoordinator($account.stxAddress)}
+{#if coordinator}
 <li class="nav-item mb-1">
 	<span class="nav-link">
 	<a href="{base}/admin" class="pointer px-2">Admin</a> 

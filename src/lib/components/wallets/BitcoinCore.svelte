@@ -7,39 +7,39 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 import { sbtcConfig } from '$stores/stores';
 
 const network = import.meta.env.VITE_NETWORK;
-
+const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
-  if ($sbtcConfig.pegIn) {
-    return explorerBtcAddressUrl($sbtcConfig.pegInTransaction.fromBtcAddress)
-  } else {
-    return explorerBtcAddressUrl($sbtcConfig.pegOutTransaction.fromBtcAddress)
-  }
+  return explorerBtcAddressUrl(from!)
 }
 </script>
 
 <div class="">
-  <div class="p-3 border">
-    <p>Open your Bitcoin Core wallet</p>
+  <div class="my-4">
+    <h4>Intro.</h4>
+    <p>The transaction has been copied to the clipboard.</p>
+    <p>This flow tested with Bitcoin Core 22</p>
+    <p>Once sent the transaction will show up on the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">explorer</a></p>
     {#if network === 'testnet'}
-    <p>Hint: /Applications/Bitcoin-Qt.app/Contents/MacOS/Bitcoin-Qt -testnet -datadir=[user.home]/Library/Application\ Support/Bitcoin/testnet -conf=[user.home]/Library/Application\ Support/Bitcoin/testnet/bitcoin.conf</p>
+    <p class="text-small">Testnet Hint: /Applications/Bitcoin-Qt.app/Contents/MacOS/Bitcoin-Qt -testnet -datadir=[user.home]/Library/Application\ Support/Bitcoin/testnet -conf=[user.home]/Library/Application\ Support/Bitcoin/testnet/bitcoin.conf</p>
     {/if}
   </div>
-  <div class="p-3 border">
-    <p>Copy / paste the transaction above into your Bitcoin Core (v22 or above) wallet</p>
+  <div class="slide">
+    <h4>1. Paste the Transaction.</h4>
+    <p>Open your Bitcoin Core wallet</p>
+    <p>Paste the transaction (already in the clipboard) into your Bitcoin Core wallet</p>
     <img src={bitcoincore1} alt="night time" />
   </div>
-  <div class="p-3 border">
-    Sign the transaction
+  <div class="slide">
+    <h4>2. Sign the Transaction.</h4>
     <img src={bitcoincore2} alt="night time" />
   </div>
-  <div class="p-3 border">
-    <p>Broadcast the transaction</p>
-    <p>Always check the amount and recipient address!</p>
+  <div class="slide">
+    <h4>3. Broadcast the Transaction.</h4>
+    <p class=""><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
     <img src={bitcoincore3} alt="night time" />
   </div>
-  <div class="p-3 border">
+  <div class="slide">
     <p>Check the transaction is sent successfully!</p>
-    <p>View on <a href={getExplorerUrl()} target="_blank" rel="noreferrer">{$sbtcConfig.balance.address}</a></p>
     <img src={bitcoincore4} alt="night time" />
   </div>
 </div>

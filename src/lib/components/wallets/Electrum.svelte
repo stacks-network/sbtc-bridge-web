@@ -2,27 +2,41 @@
 import electrum1 from '$lib/assets/wallets/electrum1.png';
 import electrum2 from '$lib/assets/wallets/electrum2.png';
 import electrum3 from '$lib/assets/wallets/electrum3.png';
+import { explorerBtcAddressUrl } from "$lib/utils";
+import { sbtcConfig } from '$stores/stores';
 
 const network = import.meta.env.VITE_NETWORK;
+const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
+const getExplorerUrl = () => {
+  return explorerBtcAddressUrl(from!)
+}
 </script>
 
 <div class="">
-  <div class="p-3 border">
-    <p>Open your Electrum wallet</p>
+  <div class="my-4">
+    <h4>Intro.</h4>
+    <p>The transaction has been copied to the clipboard.</p>
+    <p>This flow has been tested with Electrum 4.3.3.</p>
+    <p>Once sent the transaction will show up on the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">explorer</a></p>
     {#if network === 'testnet'}
-    <p>Hint: /Applications/Electrum.app/Contents/MacOS/run_electrum --testnet</p>
+    <p class="text-small">Testnet Hint: /Applications/Electrum.app/Contents/MacOS/run_electrum --testnet</p>
     {/if}
   </div>
-  <div class="p-3 border">
-    <p>Copy / paste the transaction above into your Electrum wallet</p>
+  <div class="slide">
+    <h4>1. Paste the Transaction.</h4>
+    <p>Paste the transaction into your Electrum wallet</p>
     <img src={electrum1} alt="night time" />
   </div>
-  <div class="p-3 border">
+  <div class="">
     <img src={electrum2} alt="night time" />
   </div>
-  <div class="p-3 border">
-    <p>Sign and broadcast the transaction</p>
-    <p>Always check the amount and recipient address!</p>
+  <div class="slide">
+    <h4>2. Sign the Transaction.</h4>
+    <img src={electrum2} alt="night time" />
+  </div>
+  <div class="slide">
+    <h4>3. Broadcast the Transaction.</h4>
+    <p class=""><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
     <img src={electrum3} alt="night time" />
   </div>
 </div>

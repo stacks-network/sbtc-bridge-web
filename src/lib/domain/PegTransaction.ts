@@ -25,7 +25,7 @@ export interface PegTransactionI {
 	scureFee:number;
 	dust: number;
 
-	buildTransaction: (signature:string|undefined) => btc.Transaction;
+	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 	calculateFees: () => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
@@ -147,7 +147,7 @@ export default class PegTransaction implements PegTransactionI {
 	/**
 	 * Overridden by super classes
 	 */
-	buildTransaction!: (signature:string|undefined) => btc.Transaction;
+	buildTransaction!: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 
 	maxCommit() {
 		if (!this.ready) return 0;

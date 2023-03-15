@@ -17,8 +17,7 @@ $: high = amtData.fee === amtData.fees[2];
 </script>
 
 {#if amtData.pegIn}
-<div class="mt-5 col-12">
-  <h4>Wrapping {currentPeg} SBTC</h4>
+<div class="mt-4 mb-5 col-12">
   <div>{#if amtData.change === 0}No change{:else}Change {amtData.change} (add change address?){/if}</div>
   <div class="d-flex justify-content-between">
     <div class="">Fee: <span class="text-success">{amtData.fee} sats/kb</span></div>
@@ -31,8 +30,7 @@ $: high = amtData.fee === amtData.fees[2];
   </div>
 </div>
 {:else}
-<div class="mt-5 col-12">
-  <h4>Unwrapping {currentPeg} SBTC</h4>
+<div class="mb-5 col-12">
   <div>Dust {amtData.dust} BTC</div>
   <div>{#if amtData.change === 0}No change{:else}Change {amtData.change} (add change address?){/if}</div>
   <div class="d-flex justify-content-between">

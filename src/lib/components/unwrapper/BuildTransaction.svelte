@@ -10,14 +10,17 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
-import { requestSignMessage } from '$lib/stacks'
-import { getAccount } from '@micro-stacks/svelte';
+import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data'
+import { getOpenSignMessage } from '@micro-stacks/svelte';
+import type { SignatureData } from "micro-stacks/connect";
+import { getAuth, getAccount } from '@micro-stacks/svelte';
 
 export let poTx:PegOutTransactionI;
   
 const account = getAccount();
-if (!poTx.pegInData.stacksAddress) poTx.pegInData.stacksAddress = $account.stxAddress
-$: principalData = {
+const auth = getAuth();
+if (!poTx.pegInData.stacksAddress && $account.stxAddress) poTx.pegInData.stacksAddress = $account.stxAddress
+const principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
   currentAddress: poTx.pegInData.stacksAddress,
@@ -43,7 +46,6 @@ $: utxoData = {
   network
 }
   
-console.log('poTx:', poTx);
 const dispatch = createEventDispatcher();
 let ready = true;
 
@@ -58,17 +60,43 @@ const updateConfig = () => {
   amountOk = poTx.pegInData.amount > 0;
 }
 
+let sigError:string|undefined;
+let sigData: SignatureData | undefined;
+const signMessage = getOpenSignMessage();
+const onSignMessage = async (message:string):Promise<SignatureData | undefined> => {
+  return await $signMessage.openSignMessage({
+    message,
+    onFinish: (value) => {
+      (sigData = value)
+      return value;
+    },
+    onCancel: (error) => { sigError = error; },
+  });
+}
+
 const requestSignature = async () => {
   const script = poTx.getOutput2ScriptPubKey();
-  const msg = { script: script.toString('hex') }
-  const sigData:any = await requestSignMessage(msg);
-  if (sigData.error) {
+  sigData = await onSignMessage(script.toString('hex'));
+
+  //const msg = { script: script.toString('hex') }
+  //const sigData:any = await requestSignMessage(msg);
+  if (sigError) {
     return;
   }
+  if (!verifyDataSignature(script.toString('hex'), sigData!.publicKey, sigData!.signature)) {
+    console.log('Unable to validate sig?')
+  } else {
+    console.log('Yay sig is valid')
+  }
+	console.log('pubkey0:    ' + sigData!.publicKey)
+	console.log('signature0: ' + sigData!.signature)
+	console.log('message0:   ' + script.toString('hex'))
+  console.log('mshHash0:   ' + 'd035cb3da71b311a942259894fa60eb5b82658679967c413a1b34c199cfb5d6e')
+  const addreObj = getStacksAddressFromSignature(script.toString('hex'), sigData!.signature)
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
-  console.log(sigData);
+  console.log(addreObj);
   dispatch('request_signature');
 }
 
