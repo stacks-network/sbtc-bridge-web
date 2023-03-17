@@ -9,6 +9,8 @@ Sbtc-bridge supports a trustless two way peg between BTC and sBTC.
 sBTC is a SIP-010 fungible token on the Stacks Blockchain that can be used in
 defi protocols, nft marketplaces, governance and many more applications.
 
+[sbtc-bridge.pages.dev](https://sbtc-bridge.pages.dev).
+
 ## Testnet
 
 App has been tested with the Electrum wallet. On MacOs open Electrum wallet on testnet;
