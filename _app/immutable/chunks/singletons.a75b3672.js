@@ -1,5 +1,5 @@
 import { w as writable } from './index.059b192c.js';
-import './paths.fe9f13e5.js';
+import './paths.7afa7f42.js';
 
 const SNAPSHOT_KEY = 'sveltekit:snapshot';
 const SCROLL_KEY = 'sveltekit:scroll';
