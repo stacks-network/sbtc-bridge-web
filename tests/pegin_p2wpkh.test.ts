@@ -39,7 +39,7 @@ describe('suite', () => {
   it.concurrent('PegInTransaction.hydrate() returns pegin builder in state not ready', async () => {
     const piTx:PegInTransactionI = await PegInTransaction.hydrate(pegin1);
     expect(piTx.fromBtcAddress).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
-    expect(piTx.pegInData.sbtcWalletAddress).equals('tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss');
+    expect(piTx.pegInData.sbtcWalletAddress).equals('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
     expect(piTx.pegInData.stacksAddress).equals('ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN');
     expect(piTx.pegInData.amount).equals(4203951);
     expect(piTx.addressInfo.address).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
@@ -205,20 +205,47 @@ describe('suite', () => {
   it.concurrent('PegInTransaction.buildTransaction() returns transaction object', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     const tx = myPeg.buildTransaction(undefined);
-    expect(tx.version).equals(2)
-    expect(tx.hasWitnesses).equals(false)
+    expect(tx.opReturn.version).equals(2)
+    expect(tx.opReturn.hasWitnesses).equals(false)
   })
 
   it.concurrent('PegInTransaction.buildTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     const tx = myPeg.buildTransaction(undefined);
-    expect(tx.toPSBT());
+    expect(tx.opReturn.toPSBT());
   })
 
-  //02c1176d0095ebfe3019d1b3488a0015eeb01d793f58379c08f5099bf2bbc40131
+  const pubkey = Buffer.from('51204faa61bcd4f553d1ca945d6f74b18f60705d85191f61d76d34158b0e7798b710');
   it.concurrent('PegInTransaction.encodeAddress() ', async () => {
-    //const addr = btc.Address(btc.TEST_NETWORK).encode(btc.OutScript.decode())
+    let obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.pegInData.sbtcWalletAddress);
+    expect(obj.type).equals('tr')
+    console.log(obj)
+    obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.fromBtcAddress);
+    expect(obj.type).equals('wpkh')
+    console.log(obj)
+    const script = btc.OutScript.encode(obj)
+    
+    const asmScript = btc.Script.encode([Buffer.from(pegin1.pegInData.stacksAddress, 'utf8'), 'DROP','DUP','HASH160', Buffer.from(pegin1.pegInData.sbtcWalletAddress), 'EQUALVERIFY','CHECKSIG'])
+		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		tx.addOutput({ script: asmScript, amount: BigInt(pegin1.pegInData.amount) });
+
+    //const addr = btc.Address(btc.TEST_NETWORK).encode(btc.OutScript.encode(pubkey))
+    //console.log(addr)
     //expect(addr).equals('tb1qyxeczljl4g744py6u37r0csr2q4grlh7yhp9km');
+    const decoded = btc.OutScript.decode(
+      hex.decode(
+        '5221030000000000000000000000000000000000000000000000000000000000000001210300000000000000000000000000000000000000000000000000000000000000022103000000000000000000000000000000000000000000000000000000000000000353ae'
+      )
+    )
+    console.log(script)
+
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.setAmount(2500)
+    const txs = myPeg.buildTransaction(undefined);
+    //tx.addOutput({ script: btc.Script.encode(['RETURN', globalThis.Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
+		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
+
+    //txs.opReturn.
   })
 
 })

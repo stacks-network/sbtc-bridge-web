@@ -1,3 +1,4 @@
+import * as btc from 'micro-btc-signer';
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -15,20 +16,26 @@ export function isSupported(address:string) {
   if (!address || address.length < 10) {
     throw new Error(msg);
   }
-  if (address.startsWith('1') || address.startsWith('m') || address.startsWith('n')) {
+  const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+  const obj = btc.Address(net).decode(address);
+
+  if (obj.type === 'pk') {
     throw new Error('Legacy addresses are not supported in the current version. ' + msg);
   }
+  if (obj.type === 'ms' || obj.type === 'tr_ms') {
+    throw new Error('Multisig addresses are not supported in the current version. ' + msg);
+  }
   let valid = false;
-  if (address.startsWith('2') || address.startsWith('3')) {
+  if (obj.type === 'pkh' || obj.type === 'sh') {
     // classis non segwit
     valid = true;
   }
-  if (address.startsWith('tb') || address.startsWith('bc')) {
+  if (obj.type === 'wpkh' || obj.type === 'wsh' || obj.type === 'tr') {
     // segwit
     valid = true;
   }
   if (!valid) {
-    throw new Error('Addresses is neither a classic (p2pkh/p2sh) or segwit (p2wpkh/p2wsh) address. ' + msg);
+    throw new Error('Addresses is neither a classic (p2pkh/p2sh) or segwit (p2wpkh/p2wsh) or taproot address. ' + msg);
   }
   return valid;
 }

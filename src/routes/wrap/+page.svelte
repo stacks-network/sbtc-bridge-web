@@ -7,12 +7,13 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 
 let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
-let sigData: { tx: any; outputsForDisplay: any; inputsForDisplay: any; };
+let sigData: { txs: any; outputsForDisplay: any; inputsForDisplay: any; };
 
 $: view = 'build_tx_view';
-const requestSignature = () => {
+const openSigView = () => {
+	piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);
 	sigData = {
-		tx: piTx?.buildTransaction(undefined),
+		txs: piTx?.buildTransaction(undefined),
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
@@ -36,7 +37,7 @@ const updateTransaction = () => {
 				<div class="card border p-4">
 					<div>
 						{#if view === 'build_tx_view'}
-							<BuildTransaction {piTx} on:request_signature={requestSignature}/>
+							<BuildTransaction {piTx} on:request_signature={openSigView}/>
 						{:else}
 							{#if sigData}<SignTransaction {sigData} on:update_transaction={updateTransaction}/>{/if}
 						{/if}

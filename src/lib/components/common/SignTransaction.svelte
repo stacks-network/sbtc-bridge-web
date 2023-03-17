@@ -8,17 +8,35 @@ import { hex, base64 } from '@scure/base';
 
 const dispatch = createEventDispatcher();
 let wallet:string;
+let opMechanism:string|undefined;
 
-export let sigData: { tx: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
-let hexTx:string;
-let b64Tx:string;
-let psbt:Uint8Array;
+export let sigData: { txs: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
 let showTx = false;
 let showHex = false;
 let copied = false;
 
+let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
+
+const setCurrent = () => {
+  if (opMechanism === 'return') {
+    const psbt = sigData.txs.opReturn.toPSBT();
+    (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
+  } else if (opMechanism === 'drop') {
+    const psbt = sigData.txs.opDrop.toPSBT();
+    (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
+  }
+}
+
 const updateWallet = (newWallet:string) => {
+  copied = false;
+  opMechanism = undefined;
   wallet = newWallet;
+  setCurrent();
+}
+
+const updateOpMechanism = (newOpMechanism:string) => {
+  opMechanism = newOpMechanism;
+  setCurrent();
   copy();
 }
 
@@ -33,11 +51,9 @@ const updateTransaction = () => {
 }
 
 const copy = () => {
-  let txSer = hexTx;
-  if (wallet === 'Bitcoin Core') txSer = b64Tx;
   const app = new CopyClipboard({
     target: document.getElementById('clipboard')!,
-    props: { name: txSer },
+    props: { name: currentTx },
   });
   app.$destroy();
   copied = true;
@@ -45,9 +61,7 @@ const copy = () => {
 
 onMount(async () => {
   try {
-    psbt = sigData.tx.toPSBT()
-    hexTx = hex.encode(psbt);
-    b64Tx = base64.encode(psbt);
+
   } catch(err:any) {
     dispatch('update_transaction', { success: false, reason: err.message });
   }
@@ -65,7 +79,7 @@ onMount(async () => {
     <span><a href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
   </div>
 </section>
-  {#if showTx && hexTx}
+  {#if showTx}
   <section class="mb-4">
     <h4>Transaction Inputs</h4>
   {#each sigData.inputsForDisplay as input}
@@ -89,17 +103,17 @@ onMount(async () => {
   {/each}
 </section>
   {:else if showHex}
-    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hexTx}</textarea>
+    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{currentTx}</textarea>
   {/if}
 
 <!-- Select Wallet -->
 <section>
-  <div class="my-5 d-flex justify-content-center">
+  <div class="my-3 d-flex justify-content-start">
     <div>
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						Select Wallet
+						1. Select Wallet: {#if wallet}({wallet}){/if}
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateWallet('Bitcoin Core')}>Bitcoin Core</a></li>
@@ -109,23 +123,44 @@ onMount(async () => {
 			</ul>
     </div>
   </div>
-    {#if wallet}
+  {#if wallet}
+  <div class="my-3 d-flex justify-content-start">
+    <div>
+			<ul class="navbar-nav">
+				<li class="nav-item dropdown">
+					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						2. Select Mechanism: {#if opMechanism}({opMechanism}){/if}
+					</span>
+					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateOpMechanism('return')}>OP Return</a></li>
+						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateOpMechanism('drop')}>OP Drop</a></li>
+					</ul>
+				</li>
+			</ul>
+    </div>
+  </div>
+  {/if}
+  {#if wallet && opMechanism}
+  <div class="my-3 d-flex justify-content-start">
+    <div>
+			<ul class="navbar-nav">
+				<li class="nav-item dropdown">
+					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						3. Follow the Instructions Below
+					</span>
+				</li>
+			</ul>
+    </div>
+  </div>
+  {/if}
+  {#if wallet}
     <!-- 
     <div class="my-5 d-flex justify-content-center">
       <div><button class="px-5 btn btn-outline-warning border-radius" on:click={copy}>copy transaction {#if copied}<span class="mx-2"><CheckCircle fill="green" /></span>{/if}</button></div>
     </div>
     -->
-    {/if}
-  {#if copied}
-  <h6>{wallet}</h6>
-    <ol>
-      <li>Follow the instructions to paste the transaction.</li>
-      <li>Sign your transaction.</li>
-      <li>Broadcast your transaction.</li>
-    </ol>
-    <p class=""><span class="text-warning">Note: Double check your wallet displays the correct recipient and amount.</span></p>
-    {/if}
-    <input bind:value={hexTx} style="visibility:hidden;" />
+  {/if}
+  <input bind:value={currentTx} style="visibility:hidden;" />
 </section>
 {#if copied}
 <WalletHelp wallet={getWalletId()} />

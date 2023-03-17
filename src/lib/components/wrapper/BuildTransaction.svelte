@@ -14,11 +14,11 @@ export let piTx:PegInTransactionI;
 let componentKey3 = 0;
 
 const account = getAccount();
-if (!piTx.pegInData.stacksAddress) piTx.pegInData.stacksAddress = $account.stxAddress
-$: principalData = {
+if (!piTx.pegInData.stacksAddress && $account.stxAddress) piTx.pegInData.stacksAddress = $account.stxAddress
+const principalData = {
   label: 'Stacks Address (Account or Contract)',
   info: 'sBTC will be minted to this account or contract',
-  currentAddress: piTx.pegInData.stacksAddress,
+  currentAddress: piTx.pegInData.stacksAddress
 }
 const amtData = () => {
   return {
@@ -75,7 +75,7 @@ const amountUpdated = (event:any) => {
     }
   } else if (event.detail.opCode === 'prio') {
     piTx.setFeeRate(event.detail.newFeeRate)
-    piTx.setAmount(piTx.maxCommit() - piTx.fee)
+    if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee) piTx.setAmount(piTx.maxCommit() - piTx.fee)
   }
   updateConfig();
   componentKey3++;

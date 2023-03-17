@@ -63,7 +63,6 @@ Trezor hardware wallet can be paired with Electrum
 
 Transaction signing error: -22: TX decode failed. Make sure the tx has at least one input.
 
-
 ## Development
 
 ```bash
