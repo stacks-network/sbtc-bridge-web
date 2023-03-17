@@ -33,7 +33,7 @@ export interface PegTransactionI {
 	getChange: () => number;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
-	getOutput2ScriptPubKey: () => Buffer;
+	getDataToSign: () => Buffer;
 	getInputsForDisplay: () => Array<any>;
 }
 
@@ -75,7 +75,7 @@ export default class PegTransaction implements PegTransactionI {
 		// use create function
 	}
 
-	getOutput2ScriptPubKey!: () => Buffer;
+	getDataToSign!: () => Buffer;
 	setAmount = (amount:number) => {
 		// overridden
 		console.log(amount);

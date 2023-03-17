@@ -206,10 +206,10 @@ describe('suite', () => {
     expect(tx.opReturn.toPSBT());
   })
 
-  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() ensure signature can be passed to builder.', async () => {
+  it.concurrent('PegOutTransaction.getDataToSign() ensure signature can be passed to builder.', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.pegInData.amount = 2500;
-    const script = myPeg.getOutput2ScriptPubKey();
+    const script = myPeg.getDataToSign();
     console.log('script ', util.inspect(script.toString('hex'), false, null, true /* enable colors */));
     const privKey = secp.utils.randomPrivateKey();
     const sig = await secp.sign(sha256(script), privKey);
@@ -218,11 +218,11 @@ describe('suite', () => {
     expect(verified).equals(true);
   })
 
-  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() returns correct buffer.', async () => {
+  it.concurrent('PegOutTransaction.getDataToSign() returns correct buffer.', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.pegInData.amount = 2500;
     myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
-    const data1 = myPeg.getOutput2ScriptPubKey();
+    const data1 = myPeg.getDataToSign();
 		
 		const amtBuf = Buffer.alloc(9);
 		amtBuf.writeUInt32LE(2500, 0);
@@ -233,16 +233,16 @@ describe('suite', () => {
     expect(data2.toString('hex')).equals(data1.toString('hex'));
   })
 
-  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() returns encodes amount.', async () => {
+  it.concurrent('PegOutTransaction.getDataToSign() returns encodes amount.', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.pegInData.amount = 2500;
     myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
-    const data1 = myPeg.getOutput2ScriptPubKey();
+    const data1 = myPeg.getDataToSign();
     const pegOutAmount = data1.subarray(0,9).readUInt32LE();
     expect(pegOutAmount).equals(myPeg.pegInData.amount);
   })
 
-  it.concurrent('PegOutTransaction.getOutput2ScriptPubKey() ensure signature can be passed to builder.', async () => {
+  it.concurrent('PegOutTransaction.getDataToSign() ensure signature can be passed to builder.', async () => {
 		const b1 = Buffer.alloc(2);
 		const amtBuf = Buffer.alloc(9);
 		amtBuf.writeUInt32LE(2500, 0);

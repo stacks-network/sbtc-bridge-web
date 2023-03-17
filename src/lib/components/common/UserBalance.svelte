@@ -10,7 +10,7 @@ export let showAddress = false;
   {($sbtcConfig.balance.address)}
 </span>
 {/if}
-<span>Bal. {fmtSatoshiToBitcoin($sbtcConfig.balance?.balance || 0)} sBTC</span>
+<span>Bal. {fmtSatoshiToBitcoin($sbtcConfig?.balance?.balance || 0)} sBTC</span>
 
 <style>
 </style>

@@ -66,7 +66,7 @@ onMount(async () => {
       {item.pegData.amountSats}
     </div>
     <div class="col-3">
-      {(item.pegData.pegType === 'pegin') ? truncate(item.pegData.stxAddress) : 'from sig'}
+      {truncate(item.pegData.stxAddress)}
     </div>
     <div class="col-3">
       {truncate(item.pegData.sbtcWallet)}
@@ -77,17 +77,17 @@ onMount(async () => {
     </div>
   </div>
   <div id={'peg-details-' + i} class="p-3 container bg-info" style="display:none;">
-  <div class="row">
-    <div class="col-4">contractId</div><div class="col-8">{item.contractId}</div>
-    <div class="col-4">eventIndex</div><div class="col-8">{item.eventIndex}</div>
-    <div class="col-4">txid</div><div class="col-8">{item.txid}</div>
-    <div class="col-4">bitcoinTxid</div><div class="col-8">{item.bitcoinTxid}</div>
-    <div class="col-4">pegType</div><div class="col-8">{item.pegData.pegType}</div>
-    <div class="col-4">opType</div><div class="col-8">{item.pegData.opType}</div>
-    <div class="col-4">stxAddress</div><div class="col-8">{item.pegData.stxAddress}</div>
-    <div class="col-4">amountSats</div><div class="col-8">{item.pegData.amountSats}</div>
-    <div class="col-4">burnBlockHeight</div><div class="col-8">{item.pegData.burnBlockHeight}</div>
-    <div class="col-4">sbtcWallet</div><div class="col-8">{item.pegData.sbtcWallet}</div>
+  <div class="row text-small">
+    <div class="col-2">contractId</div><div class="col-10">{item.contractId}</div>
+    <div class="col-2">eventIndex</div><div class="col-10">{item.eventIndex}</div>
+    <div class="col-2">txid</div><div class="col-10">{item.txid}</div>
+    <div class="col-2">bitcoinTxid</div><div class="col-10">{item.bitcoinTxid}</div>
+    <div class="col-2">pegType</div><div class="col-10">{item.pegData.pegType}</div>
+    <div class="col-2">opType</div><div class="col-10">{item.pegData.opType}</div>
+    <div class="col-2">stxAddress</div><div class="col-10">{item.pegData.stxAddress}</div>
+    <div class="col-2">amountSats</div><div class="col-10">{item.pegData.amountSats}</div>
+    <div class="col-2">burnBlockHeight</div><div class="col-10">{item.pegData.burnBlockHeight}</div>
+    <div class="col-2">sbtcWallet</div><div class="col-10">{item.pegData.sbtcWallet}</div>
   </div>
 </div>
   {/each}

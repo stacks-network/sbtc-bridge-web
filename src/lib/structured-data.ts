@@ -1,13 +1,14 @@
 import { serializeCV, type ClarityValue } from "micro-stacks/clarity";
 import { sha256 } from "@noble/hashes/sha256";
 import { bytesToHex, concatByteArrays } from "micro-stacks/common";
-import { recoverSignature, getPublicKeyFromSignature, verifyMessageSignature } from "micro-stacks/connect";
+import { recoverSignature, verifyMessageSignature } from "micro-stacks/connect";
 import { tupleCV, bufferCV, uintCV, stringAsciiCV } from "micro-stacks/clarity";
 import { hexToBytes } from "micro-stacks/common";
 import type { SignatureData as MicroStacksSignatureData } from "micro-stacks/connect";
 import { get_client } from "$stores/client";
 import { publicKeyToStxAddress, StacksNetworkVersion } from 'micro-stacks/crypto';
-import { recoverPublicKey, Signature, verify } from '@noble/secp256k1';
+import { recoverPublicKey, Signature } from '@noble/secp256k1';
+import { hashMessage } from '@stacks/encryption';
 
 const network = import.meta.env.VITE_NETWORK;
 const prefix = Uint8Array.from([0x53, 0x49, 0x50, 0x30, 0x31, 0x38]); // SIP018
@@ -88,10 +89,10 @@ export function structuredDataHash(message: Message) {
 	return sha256(concatByteArrays([prefix, hash_cv(domainCV), hash_cv(messageToTuple(message))]));
 }
 
-export function verifyDataSignature(message: string, publicKey: string, signature: string) {
+export function verifyDataSignature(message: Buffer|string, publicKey: string, signature: string) {
 	//const sig = bytesToHex(signature);
 	return verifyMessageSignature({
-		message: message,
+		message: (typeof message === 'string') ? message : message.toString('hex'),
 		signature: signature,
 		publicKey: publicKey
 	});
@@ -106,21 +107,13 @@ export function verifyStructuredDataSignature(message: Message, public_key: Uint
 	});
 }
 
-export function getStacksAddressFromSignature(message: string, signature:string) {
-	//const msg = structuredDataHash(message);
-	//const sig = bytesToHex(signature);
-	//const s1 = Signature.fromCompact(signature) //
+export function getStacksAddressFromSignature(message:string, signature:string) {
 	const sig = recoverSignature({ signature: signature, mode: 'rsv' });
 	const s1 = new Signature(sig.signature.r, sig.signature.s)
-	//console.log('s1-0: ', s1) d035cb3da71b311a942259894fa60eb5b82658679967c413a1b34c199cfb5d6e
-	//console.log('signature-0: ' + signature)
-	//const pubkey = getPublicKeyFromSignature({ hash: Buffer.from('5ca5346af964b82de40793484f68af7a2c757735c2be73aaf6ee8a3411eb05ba'), signature: sig.signature, recoveryBytes: sig.recoveryBytes });
-	//const pubkey = recoverPublicKey(sha256(message), s1, 0, true);
-	const pubkey = recoverPublicKey('d035cb3da71b311a942259894fa60eb5b82658679967c413a1b34c199cfb5d6e', s1, 0, true);
-	console.log('pubkey1:    ' + Buffer.from(pubkey).toString('hex'))
-	console.log('signature1: ' + signature)
-	console.log('message1:   ' + message)
-	console.log('msgHash1:   ' + Buffer.from(sha256(message)).toString('hex'))
+	const msgHash = hashMessage(message)
+	let pubkey:Uint8Array|string = recoverPublicKey(msgHash, s1, 1, true);
+	pubkey = bytesToHex(pubkey);
+	//const pubkey0 = getPublicKeyFromSignature({ hash: Buffer.from(msgUint8), signature: sig.signature, recoveryBytes: sig.recoveryBytes });	
 	const addresses = {
 		tp2pkh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2PKH),
 		tp2sh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2SH),

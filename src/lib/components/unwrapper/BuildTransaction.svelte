@@ -14,6 +14,7 @@ import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structu
 import { getOpenSignMessage } from '@micro-stacks/svelte';
 import type { SignatureData } from "micro-stacks/connect";
 import { getAuth, getAccount } from '@micro-stacks/svelte';
+import { sha256 } from "@noble/hashes/sha256";
 
 export let poTx:PegOutTransactionI;
   
@@ -75,7 +76,7 @@ const onSignMessage = async (message:string):Promise<SignatureData | undefined> 
 }
 
 const requestSignature = async () => {
-  const script = poTx.getOutput2ScriptPubKey();
+  const script = poTx.getDataToSign();
   sigData = await onSignMessage(script.toString('hex'));
 
   //const msg = { script: script.toString('hex') }
@@ -83,20 +84,21 @@ const requestSignature = async () => {
   if (sigError) {
     return;
   }
-  if (!verifyDataSignature(script.toString('hex'), sigData!.publicKey, sigData!.signature)) {
-    console.log('Unable to validate sig?')
+  if (!sigData || !sigData.publicKey || !verifyDataSignature(script, sigData!.publicKey, sigData!.signature)) {
+    throw new Error('Unable to validate signature.')
   } else {
-    console.log('Yay sig is valid')
+    console.log('tx-data:data : ' + script.toString('hex'))
+    console.log('tx-data:publicKey : ' + sigData!.publicKey)
+    console.log('tx-data:amount : ' + poTx.pegInData.amount)
+    console.log('tx-data:sbtcWalletAddress : ' + poTx.pegInData.sbtcWalletAddress)
+    console.log('tx-data:signature : ' + sigData!.signature)
   }
-	console.log('pubkey0:    ' + sigData!.publicKey)
-	console.log('signature0: ' + sigData!.signature)
-	console.log('message0:   ' + script.toString('hex'))
-  console.log('mshHash0:   ' + 'd035cb3da71b311a942259894fa60eb5b82658679967c413a1b34c199cfb5d6e')
+  
   const addreObj = getStacksAddressFromSignature(script.toString('hex'), sigData!.signature)
+  console.log(addreObj);
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
-  console.log(addreObj);
   dispatch('request_signature');
 }
 

@@ -13,7 +13,7 @@ export interface PegOutTransactionI extends PegTransactionI {
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
-	getOutput2ScriptPubKey: () => Buffer;
+	getDataToSign: () => Buffer;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -141,7 +141,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return outs;
 	}
 
-	getOutput2ScriptPubKey = () => {
+	getDataToSign = () => {
 		const amtBuf = Buffer.alloc(9);
 		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
@@ -192,8 +192,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	  	}
 		const asmScript = this.getOpDropP2shScript(signature);
 		tx.addOutput({ script: asmScript, amount: BigInt(this.dust) });
-		//tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
-		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
 		return tx;
 	}
@@ -203,7 +201,18 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		buf1.writeUInt32LE(this.pegInData.amount, 0);
 		const buf2 = Buffer.from(signature);
 		const data = Buffer.concat([buf1, buf2]);
-		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', Buffer.from(this.pegInData.sbtcWalletAddress), 'EQUALVERIFY', 'CHECKSIG'])
+		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))	
+		/**
+		//const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', this.pegInData.sbtcWalletAddress, 'EQUALVERIFY', 'CHECKSIG'])
+		console.log('getOpDropP2shScript:script : ', script);
+		console.log('getOpDropP2shScript:script : ', Buffer.from(script).toString('hex'));
+		const addr = btc.OutScript.decode(script);
+		const addr1 = btc.Address(this.net).encode(addr);
+		console.log('getOpDropP2shScript:addr : ', addr);
+		console.log('getOpDropP2shScript:addr1 : ', addr1);
+		*/
+		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', script, 'EQUALVERIFY', 'CHECKSIG'])
+		console.log('getOpDropP2shScript:asmScript: ', btc.Script.decode(asmScript))
 		return asmScript;
 	}
 
