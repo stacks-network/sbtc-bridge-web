@@ -1,30 +1,38 @@
 <script lang="ts">
 import "../app.scss";
-import { getAuth } from "@micro-stacks/svelte";
-import {tick, onMount, onDestroy} from 'svelte';
+//import { getAuth } from "@micro-stacks/svelte";
+import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { login } from "$lib/stacks";
+import { loginStacksJs } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
 import { defaultSbtcConfig } from '$lib/sbtc'
-import { setUpMicroStacks } from '$lib/stacks'
+//import { setUpMicroStacks } from '$lib/stacks_micro_stacks'
+import { userSession } from '$lib/stacks_connect'
 
 // data - imported from layout.ts
 export let data:any;
-const unsubscribe = sbtcConfig.subscribe(() => {});
+const unsubscribe = sbtcConfig.subscribe((conf) => {
+  if (conf) conf.loggedIn = userSession.isUserSignedIn();
+});
 onDestroy(unsubscribe);
-setUpMicroStacks();
+//setUpMicroStacks();
+//setUpStacksJs();
 let inited = false;
-const auth = getAuth();
 
-const doLogin = () => {
-  login($auth);
+const doLogin = async () => {
+  await loginStacksJs();
+  initApplication();
 }
 
 const initApplication = async () => {
-  const conf = $sbtcConfig;
+  let conf = defaultSbtcConfig;
+  if ($sbtcConfig) conf = $sbtcConfig;
+  if (userSession.isUserSignedIn()) {
+    conf.loggedIn = true;
+  }
   conf.sbtcContractData = data.sbtcContractData;
   sbtcConfig.update(() => conf);
   return conf;
@@ -53,7 +61,7 @@ onMount(async () => {
 </script>
 
 {#if inited}
-{#if $auth.isSignedIn}
+{#if $sbtcConfig && $sbtcConfig.loggedIn}
 <div class="app">
   <Header/>
   <slot />

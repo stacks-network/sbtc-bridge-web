@@ -1,11 +1,11 @@
 <script lang="ts">
-import { mintTo } from "$lib/sbtc_admin";
+import { mintTo } from "$lib/sbtc_admin.js";
 import { getOpenContractCall } from '@micro-stacks/svelte';
 import { sbtcConfig } from '$stores/stores'
 
 const contractCall = getOpenContractCall();
 
-let pegInAmount:number = $sbtcConfig?.pegInTransaction?.pegInData.amount;
+let pegInAmount:number|undefined = $sbtcConfig?.pegInTransaction?.pegInData.amount;
 let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
 let btcTxId:string|undefined;
 let error:string|undefined;
@@ -15,7 +15,7 @@ const mint = async () => {
     return;
   }
   error = undefined;
-  const res = await mintTo($contractCall, pegInAmount, stxAddress, btcTxId);
+  const res = await mintTo($contractCall, pegInAmount||0, stxAddress, btcTxId);
 }
 </script>
 

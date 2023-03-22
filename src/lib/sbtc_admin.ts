@@ -1,8 +1,8 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { uintCV, stringAsciiCV, tupleCV, bufferCVFromString, principalCV } from 'micro-stacks/clarity';
-import { PostConditionMode } from 'micro-stacks/transactions';
+import { PostConditionMode, uintCV, stringAsciiCV, tupleCV, bufferCVFromString, principalCV } from '@stacks/transactions';
+//import { PostConditionMode } from '@stacks/transactions';
 
 export const coordinators = [
   { stxAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', btcAddress: 'tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e' }, // devnet + electrum bob

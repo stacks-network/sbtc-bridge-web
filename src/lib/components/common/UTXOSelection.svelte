@@ -1,6 +1,8 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
 import { isSupported } from "$lib/utils";
+import { onMount } from 'svelte';
+import { addresses } from '$lib/stacks_connect'
 
 const dispatch = createEventDispatcher();
 
@@ -16,6 +18,11 @@ export let utxoData:{label:string,info:string,maxCommit:number,fromBtcAddress:st
 let bitcoinAddress:string|undefined = utxoData.fromBtcAddress;
 let errorReason:string|undefined;
 
+const hiroWallet = async () => {
+  bitcoinAddress = addresses().cardinal;
+  configureUTXOs(true);
+}
+
 const configureUTXOs = async (force:boolean) => {
   errorReason = undefined;
   if (!bitcoinAddress) return;
@@ -23,7 +30,7 @@ const configureUTXOs = async (force:boolean) => {
     isSupported(bitcoinAddress!);
   } catch (err:any) {
     bitcoinAddress = undefined;
-    errorReason = err.message;
+    errorReason = 'Insufficient balance - please use a different bitcoin address';
     return;
   }
   //if (utxoData.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
@@ -32,10 +39,14 @@ const configureUTXOs = async (force:boolean) => {
   try {
     await dispatch('utxo_updated', { errored: false, opCode: 'address-change', bitcoinAddress});
   } catch(err:any) {
-    errorReason = err||'Error - is the address a valid';
+    errorReason = 'Insufficient balance - please use a different bitcoin address';
     return;
   }
 }
+
+onMount(async () => {
+  configureUTXOs(true)
+})
 
 </script>
 
@@ -51,8 +62,13 @@ const configureUTXOs = async (force:boolean) => {
     {#if utxoData.numbInputs > 0}
     <div class="text-small d-flex justify-content-between  text-info">
       <div class="" title={utxoData.numbInputs + ' unspent inputs with total value: ' + utxoData.maxCommit}>BTC Balance {utxoData.maxCommit} Sats.</div>
-      <div><a href="/" class="" on:click|preventDefault={() => configureUTXOs(true)}>refresh</a></div>
+      <div>
+        <a href="/" class="text-white px-3 border-right" on:click|preventDefault={() => hiroWallet()}>hiro wallet</a>
+        <a href="/" class="text-white px-3 " on:click|preventDefault={() => configureUTXOs(true)}>refresh</a>
+      </div>
     </div>
+    {:else}
+      <div><span class="text-warning">Insufficient balance - please use a different bitcoin address</span></div>
     {/if}
     {#if bitcoinAddress && errorReason}
       <div><span class="text-warning">{errorReason}</span></div>

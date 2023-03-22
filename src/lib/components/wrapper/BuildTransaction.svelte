@@ -8,13 +8,13 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { getAccount } from '@micro-stacks/svelte';
+import { addresses } from '$lib/stacks_connect'
 
 export let piTx:PegInTransactionI;
+if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
 let componentKey3 = 0;
 
-const account = getAccount();
-if (!piTx.pegInData.stacksAddress && $account.stxAddress) piTx.pegInData.stacksAddress = $account.stxAddress
+if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Address (Account or Contract)',
   info: 'sBTC will be minted to this account or contract',
@@ -36,10 +36,10 @@ const amtData = () => {
 
 const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
-  label: 'Bitcoin Address',
+  label: 'Your Bitcoin Address',
   info: 'You\'ll send bitcoin from here to the sBTC wallet',
   maxCommit: (piTx.ready) ? piTx.maxCommit() : 0,
-  fromBtcAddress: (piTx.ready) ? piTx.fromBtcAddress : undefined,
+  fromBtcAddress: piTx.fromBtcAddress,
   numbInputs: (piTx.ready) ? piTx.addressInfo.utxos.length : 0,
   network
 }
@@ -95,8 +95,10 @@ const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
+      const p0 = piTx.pegInData;
       piTx = await PegInTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
       piTx.calculateFees();
+      if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
       errorReason = err.message;

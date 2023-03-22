@@ -6,6 +6,8 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
+import { decodeStacksAddress } from '$lib/stacks_connect'
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
 export interface PegInTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
@@ -26,6 +28,7 @@ keySetForFeeCalculation.push({
   ecdsaPub: secp.getPublicKey(priv, true),
   schnorrPub: secp.schnorr.getPublicKey(priv)
 })
+
 export default class PegInTransaction extends PegTransaction implements PegInTransactionI {
 	public constructor() {
 		super();
@@ -142,44 +145,70 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
 	}
 
-	private buildOpReturn = () => {
-		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
-		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		// create a set of inputs corresponding to the utxo set
+	private addInputs = (tx:btc.Transaction) => {
 		for (const utxo of this.addressInfo.utxos) {
+			const script = btc.RawTx.decode(hex.decode(utxo.tx))
 			tx.addInput({
 				txid: hex.decode(utxo.txid),
 				index: utxo.vout,
+				witnessUtxo: {
+					script: script.outputs[utxo.vout].script,
+					amount: BigInt(utxo.value)
+				},
 			});
-		  }
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
+		}
+	}
+
+	private buildOpReturn = () => {
+		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
+		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		this.addInputs(tx);
+		// create a set of inputs corresponding to the utxo set
+		const data = this.buildData(this.pegInData.stacksAddress);
+		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx; //hex.encode(tx.toPSBT());
+		return tx;
+	}
+
+	private buildData = (pricipal:string):Buffer => {
+		const data = Buffer.alloc(78);
+		const magicBuf = (this.net === btc.TEST_NETWORK) ? Buffer.from(MAGIC_BYTES_TESTNET, 'hex') : Buffer.from(MAGIC_BYTES_MAINNET, 'hex');
+		const opCodeBuf = Buffer.from(PEGIN_OPCODE, 'hex');
+		const addr = decodeStacksAddress(pricipal.split('.')[0]);
+		const addr0Buf = Buffer.from(addr[0].toString(16), 'hex');
+		const addr1Buf = Buffer.from(addr[1], 'hex');
+
+		magicBuf.copy(data, 0);
+		opCodeBuf.copy(data, magicBuf.length);
+		addr0Buf.copy(data, magicBuf.length + opCodeBuf.length);
+		addr1Buf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length);
+
+		if (pricipal.indexOf('.') > -1) {
+			const cnameBuf = Buffer.from(pricipal.split('.')[1], 'utf8');		
+			cnameBuf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length + addr1Buf.length);
+			console.log(cnameBuf.toString('utf8'))
+		}
+
+		//console.log(data);
+		return data;
 	}
 
 	private buildOpDrop = () => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-		}
-		//const obj = btc.Address(btc.TEST_NETWORK).decode(this.pegInData.sbtcWalletAddress);
-		const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress,this.pegInData.sbtcWalletAddress)
+		this.addInputs(tx);
+		const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress)
 		tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
-		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx; //hex.encode(tx.toPSBT());
+		return tx;
 	}
 
 	private getOpDropP2shScript(stacksAddress:string, sbtcWalletAddress:string) {
-		const asmScript = btc.Script.encode([Buffer.from(stacksAddress, 'utf8'), 'DROP', 'DUP', 'HASH160', Buffer.from(sbtcWalletAddress), 'EQUALVERIFY', 'CHECKSIG'])
+		const data = this.buildData(stacksAddress);
+		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', Buffer.from(sbtcWalletAddress), 'EQUALVERIFY', 'CHECKSIG'])
 		return asmScript;
 	}
 	  

@@ -1,9 +1,10 @@
 
 import { c32address, c32addressDecode } from 'c32check';
-import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
-import { client } from "$stores/client";
+//import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
+//import { client } from "$stores/client";
 import { sbtcConfig } from '$stores/stores'
 import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
+//import { hashP2WPKH, hashP2WSH, hashP2SH, hashP2PKH, publicKeyToStxAddress } from "micro-stacks/crypto";
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 
@@ -22,6 +23,7 @@ export function isAllowed(address:string) {
 	return allowed.find((o) => o.stx === address);
 }
 
+/**
 export function setUpMicroStacks() {
 	let origin = import.meta.env.VITE_ORIGIN;
 	const network = import.meta.env.VITE_NETWORK;
@@ -41,6 +43,7 @@ export function setUpMicroStacks() {
 	mountClient(config);
 	client.set(getMicroStacksClient());
 }
+ */
 
 export function decodeStacksAddress(stxAddress:string) {
 	if (!stxAddress) throw new Error('Needs a stacks address');
@@ -75,6 +78,7 @@ export async function login($auth: any) {
 				//	$auth.signOut();
 				//} else {
 					const network = import.meta.env.VITE_NETWORK;
+					//const something = hashP2WPKH(payload.public_keys[0])
 					const addr = (network === 'testnet') ? payload.addresses.testnet : payload.addresses.mainnet;
 					await fetchSbtcBalance(addr);
 				//}

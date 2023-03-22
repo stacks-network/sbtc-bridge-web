@@ -1,18 +1,24 @@
 <script lang="ts">
 import BuildTransaction from '$lib/components/wrapper/BuildTransaction.svelte';
 import SignTransaction from '$lib/components/common/SignTransaction.svelte';
+import SignTransactionWeb from '$lib/components/common/SignTransactionWeb.svelte';
 import { sbtcConfig } from '$stores/stores';
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
+import { addresses } from '$lib/stacks_connect'
+import type { SigData } from '$types/sig_data';
 
 let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
-let sigData: { txs: any; outputsForDisplay: any; inputsForDisplay: any; };
 
 $: view = 'build_tx_view';
+let sigData: SigData;
 const openSigView = () => {
 	piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);
+	if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses().stxAddress);
 	sigData = {
+		pegin: true,
+		webWallet: piTx.fromBtcAddress === addresses().cardinal,
 		txs: piTx?.buildTransaction(undefined),
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
@@ -39,10 +45,15 @@ const updateTransaction = () => {
 						{#if view === 'build_tx_view'}
 							<BuildTransaction {piTx} on:request_signature={openSigView}/>
 						{:else}
-							{#if sigData}<SignTransaction {sigData} on:update_transaction={updateTransaction}/>{/if}
+							{#if sigData && !sigData.webWallet}
+								<SignTransaction {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
+							{/if}
+							{#if sigData && sigData.webWallet}
+								<SignTransactionWeb {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
+							{/if}
 						{/if}
 					</div>
-					</div>
+				</div>
 			</div>
 		</div>
 	</div>

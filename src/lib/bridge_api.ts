@@ -1,4 +1,14 @@
 
+export async function sendRawTransaction(txhex: string) {
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/tx/sendrawtx/' + txhex;
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin tx send error.');
+  }
+  const result = await response.text();
+  return result;
+}
+
 export async function fetchCurrentFeeRates() {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/blocks/fee-estimate';
   const response = await fetch(path);

@@ -1,22 +1,30 @@
 <script lang="ts">
-import { getAuth, getAccount } from '@micro-stacks/svelte';
-import { login } from '$lib/stacks'
+//import { getAuth, getAccount } from '@micro-stacks/svelte';
+import { userSession, addresses } from '$lib/stacks_connect'
+import { loginStacksJs } from '$lib/stacks_connect'
 // import { onNoWalletFound } from 'micro-stacks/connect';
 import { onMount } from 'svelte';
 import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { c32ToB58 } from "micro-stacks/crypto";
 import { base } from '$app/paths'
-import { isCoordinator } from '$lib/sbtc_admin'
+import { isCoordinator } from '$lib/sbtc_admin.js'
+import { sbtcConfig } from '$stores/stores'
+import type { SbtcConfig } from '$types/sbtc_config';
 
-const auth = getAuth();
-const account = getAccount();
-const coordinator = isCoordinator($account.stxAddress!)
+//const auth = getAuth();
+//const account = getAccount();
+const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
-	$auth.signOut();
+	//$auth.signOut();
+	userSession.signUserOut();
+	sbtcConfig.update((conf:SbtcConfig) => {
+		conf.loggedIn = false;
+		return conf;
+	});
 }
 const doLogin = () => {
-	login($auth);
+	loginStacksJs();
 }
 
 let webWalletNeeded = false;
@@ -40,14 +48,12 @@ onMount(async () => {
 		Install Web Wallet
 	</a>
 </span>
-{:else if $auth.isSignedIn}
+{:else if $sbtcConfig.loggedIn}
 	<span class="nav-link">
 		<a href="{base}/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
 			<span  class="px-2"><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /></span>
 		</a>
 	</span>
-{:else if $auth.isRequestPending}
-	<span class="nav-link"><a href="{base}/" on:click|preventDefault={login}><span  class="px-2"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {:else}
 	<span class="nav-link"><a href="{base}/" class="pointer px-2" on:click|preventDefault={() => doLogin()} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span>
 {/if}

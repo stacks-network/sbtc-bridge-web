@@ -10,17 +10,13 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
-import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data'
-import { getOpenSignMessage } from '@micro-stacks/svelte';
-import type { SignatureData } from "micro-stacks/connect";
-import { getAuth, getAccount } from '@micro-stacks/svelte';
-import { sha256 } from "@noble/hashes/sha256";
+import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data.js'
+import { addresses, signMessage } from '$lib/stacks_connect'
 
 export let poTx:PegOutTransactionI;
-  
-const account = getAccount();
-const auth = getAuth();
-if (!poTx.pegInData.stacksAddress && $account.stxAddress) poTx.pegInData.stacksAddress = $account.stxAddress
+if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
+
+if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
@@ -39,14 +35,14 @@ $: amtData = {
 }
 const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
-  label: 'Bitcoin Address',
+  label: 'Your Bitcoin Address',
   info: 'Your sBTC will be burned and the equivalent bitcoin then sent to this address',
   maxCommit: (poTx.ready) ? poTx.maxCommit() : 0,
-  fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : undefined,
+  fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal,
   numbInputs: (poTx.ready) ? poTx.addressInfo.utxos.length : 0,
   network
 }
-  
+
 const dispatch = createEventDispatcher();
 let ready = true;
 
@@ -61,41 +57,17 @@ const updateConfig = () => {
   amountOk = poTx.pegInData.amount > 0;
 }
 
-let sigError:string|undefined;
-let sigData: SignatureData | undefined;
-const signMessage = getOpenSignMessage();
-const onSignMessage = async (message:string):Promise<SignatureData | undefined> => {
-  return await $signMessage.openSignMessage({
-    message,
-    onFinish: (value) => {
-      (sigData = value)
-      return value;
-    },
-    onCancel: (error) => { sigError = error; },
-  });
+const requestSignature = () => {
+  const script = poTx.getDataToSign();
+  signMessage(requestSignatureCB, script);
 }
 
-const requestSignature = async () => {
-  const script = poTx.getDataToSign();
-  sigData = await onSignMessage(script.toString('hex'));
-
+const requestSignatureCB = async (sigData:any, message:Buffer) => {
   //const msg = { script: script.toString('hex') }
   //const sigData:any = await requestSignMessage(msg);
-  if (sigError) {
-    return;
-  }
-  if (!sigData || !sigData.publicKey || !verifyDataSignature(script, sigData!.publicKey, sigData!.signature)) {
-    throw new Error('Unable to validate signature.')
-  } else {
-    console.log('tx-data:data : ' + script.toString('hex'))
-    console.log('tx-data:publicKey : ' + sigData!.publicKey)
-    console.log('tx-data:amount : ' + poTx.pegInData.amount)
-    console.log('tx-data:sbtcWalletAddress : ' + poTx.pegInData.sbtcWalletAddress)
-    console.log('tx-data:signature : ' + sigData!.signature)
-  }
-  
-  const addreObj = getStacksAddressFromSignature(script.toString('hex'), sigData!.signature)
-  console.log(addreObj);
+  const script = message.toString('hex');
+  //const valid = verifyDataSignature(message, sigData.publicKey, sigData.signature)
+  //const addreObj = getStacksAddressFromSignature(message.toString('hex'), sigData.signature)
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
@@ -126,8 +98,10 @@ const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
+      const p0 = poTx?.pegInData;
       poTx = await PegOutTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
       poTx.calculateFees();
+      if (p0.amount > 0 && p0.amount < poTx.maxCommit()) poTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
       errorReason = err.message;

@@ -1,5 +1,5 @@
 <script lang="ts">
-import { setCoordinator, setBtcWallet, coordinators, mintTo } from "$lib/sbtc_admin";
+import { setCoordinator, setBtcWallet, coordinators, mintTo } from "$lib/sbtc_admin.js";
 import { getOpenContractCall } from '@micro-stacks/svelte';
 import MintTokens from './MintTokens.svelte'
 import BurnTokens from './BurnTokens.svelte'

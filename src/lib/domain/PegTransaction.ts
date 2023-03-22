@@ -1,13 +1,18 @@
 import * as btc from 'micro-btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
-import { decodeStacksAddress } from "$lib/stacks";
+import { decodeStacksAddress } from "$lib/stacks_connect";
 
 type PegInData = {
 	stacksAddress?: string;
 	sbtcWalletAddress: string;
 	amount: number,
 };
+
+export const MAGIC_BYTES_TESTNET = '5432';
+export const MAGIC_BYTES_MAINNET = '5832';
+export const PEGIN_OPCODE = '3C';
+export const PEGOUT_OPCODE = '3e'; // >
 
 export interface PegTransactionI {
 	net:any;

@@ -6,6 +6,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from './PegTransaction'
 
 export interface PegOutTransactionI extends PegTransactionI {
 
@@ -147,7 +148,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
 		const scriptBuf = Buffer.from(script);
 		const data = Buffer.concat([amtBuf, scriptBuf]);
-		console.log(data.toString('hex'))
+		console.log('getDataToSign: ' + data.toString('hex'))
 		return data;
 	}
 
@@ -157,22 +158,27 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return { opReturn: this.buildOpReturn(signature), opDrop: this.buildOpDrop(signature) };
 	}
 
+	private addInputs = (tx:btc.Transaction) => {
+		for (const utxo of this.addressInfo.utxos) {
+			const script = btc.RawTx.decode(hex.decode(utxo.tx))
+			tx.addInput({
+				txid: hex.decode(utxo.txid),
+				index: utxo.vout,
+				witnessUtxo: {
+					script: script.outputs[utxo.vout].script,
+					amount: BigInt(utxo.value)
+				},
+			});
+		}
+	}
+
 	private buildOpReturn = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-	  	}
-		const buf1 = Buffer.allocUnsafe(9);
-		buf1.writeUInt32LE(this.pegInData.amount, 0);
+		this.addInputs(tx);
 		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
-		const buf2 = Buffer.from(signature);
-		const data = Buffer.concat([buf1, buf2]);
+		const data = this.buildData(signature)
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
@@ -183,13 +189,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	private buildOpDrop = (signature:string|undefined) => {
 		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-	  	}
+		this.addInputs(tx);
 		const asmScript = this.getOpDropP2shScript(signature);
 		tx.addOutput({ script: asmScript, amount: BigInt(this.dust) });
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
@@ -197,23 +197,27 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	}
 
 	private getOpDropP2shScript(signature:string) {
-		const buf1 = Buffer.allocUnsafe(9);
-		buf1.writeUInt32LE(this.pegInData.amount, 0);
-		const buf2 = Buffer.from(signature);
-		const data = Buffer.concat([buf1, buf2]);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))	
-		/**
-		//const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', this.pegInData.sbtcWalletAddress, 'EQUALVERIFY', 'CHECKSIG'])
-		console.log('getOpDropP2shScript:script : ', script);
-		console.log('getOpDropP2shScript:script : ', Buffer.from(script).toString('hex'));
-		const addr = btc.OutScript.decode(script);
-		const addr1 = btc.Address(this.net).encode(addr);
-		console.log('getOpDropP2shScript:addr : ', addr);
-		console.log('getOpDropP2shScript:addr1 : ', addr1);
-		*/
+		const data = this.buildData(signature)
 		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', script, 'EQUALVERIFY', 'CHECKSIG'])
 		console.log('getOpDropP2shScript:asmScript: ', btc.Script.decode(asmScript))
 		return asmScript;
 	}
 
+	private buildData = (signature:string):Buffer => {
+		const data = Buffer.alloc(74);
+		const magicBuf = (this.net === btc.TEST_NETWORK) ? Buffer.from(MAGIC_BYTES_TESTNET, 'hex') : Buffer.from(MAGIC_BYTES_MAINNET, 'hex');
+		const opCodeBuf = Buffer.from(PEGOUT_OPCODE, 'hex');
+		const amtBuf = Buffer.allocUnsafe(9);
+		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
+		const sigBuf = Buffer.from(signature);
+
+		magicBuf.copy(data, 0);
+		opCodeBuf.copy(data, magicBuf.length);
+		amtBuf.copy(data, magicBuf.length + opCodeBuf.length);
+		sigBuf.copy(data, magicBuf.length + opCodeBuf.length + amtBuf.length);
+
+		console.log(data);
+		return data;
+	}
 };

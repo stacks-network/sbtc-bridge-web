@@ -1,10 +1,9 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
-import { getAccount } from "@micro-stacks/svelte";
+import { addresses } from '$lib/stacks_connect'
 
 export let principalData:{ label:string, info:string, currentAddress:string|undefined };
 
-const account = getAccount();
 const network = import.meta.env.VITE_NETWORK;
 const dispatch = createEventDispatcher();
 let stxAddress:string|undefined = principalData.currentAddress;
@@ -34,8 +33,8 @@ const changeStxAddress = async () => {
     <input type="text" id="from-address" class="form-control form-inline" autocomplete="off" bind:value={stxAddress} on:input={() => changeStxAddress()} />
     <div class="d-flex justify-content-between text-small text-info">
       <div class="text-small text-white">{principalData.info}</div>
-      {#if stxAddress !== $account?.stxAddress}
-      <div><a href="/" class="" on:click|preventDefault={() => { stxAddress = $account?.stxAddress; changeStxAddress() }}>mine</a></div>
+      {#if stxAddress !== addresses().stxAddress}
+      <div><a href="/" class="" on:click|preventDefault={() => { stxAddress = addresses().stxAddress; changeStxAddress() }}>mine</a></div>
       {/if}
     </div>
     {#if errored && stxAddress && stxAddress.length > 0}<div class="text-warning">{reason}</div>{/if}

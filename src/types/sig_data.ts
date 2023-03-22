@@ -1,5 +1,8 @@
 export type SigData = {
-  signature: string|undefined;
+  pegin: boolean; 
+  webWallet: boolean; 
+  signature?: string;
+  txs:any;
   outputsForDisplay: any;
   inputsForDisplay: any;
 }
