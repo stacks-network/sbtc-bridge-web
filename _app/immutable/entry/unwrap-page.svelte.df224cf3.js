@@ -3,7 +3,7 @@ import { s as sbtcConfig } from '../chunks/stores.3318b909.js';
 import { F as FeeDisplay, u as utils, g as getPublicKey, s as schnorr, P as PegTransaction, a as assert, S as Signature, r as recoverPublicKey, b as Principal, U as UTXOSelection, c as SbtcWalletDisplay, d as SignTransaction } from '../chunks/SbtcWalletDisplay.b5615205.js';
 import { T as TEST_NETWORK, N as NETWORK, h as hex, p as p2wpkh, b as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, c as explorerAddressUrl } from '../chunks/utils.7513f4f0.js';
 import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from '../chunks/bridge_api.f62e558f.js';
-import { b as base } from '../chunks/paths.89e2a9b2.js';
+import { b as base } from '../chunks/paths.6976ba0e.js';
 import { p as pe, S, K, Z as Ze, b as Z, c as p, q as qe, X, a, C as Ce, y as ye } from '../chunks/index.227a7d99.js';
 import { a as sha256 } from '../chunks/stacks.83285124.js';
 

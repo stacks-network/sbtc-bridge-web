@@ -436,148 +436,147 @@ keySetForFeeCalculation.push({
   ecdsaPub: getPublicKey(priv, true),
   schnorrPub: schnorr.getPublicKey(priv)
 });
-const _PegInTransaction = class extends PegTransaction {
+class PegInTransaction extends PegTransaction {
   constructor() {
     super();
-    this.getChange = () => {
-      return this.maxCommit() - this.pegInData.amount - this.fee;
-    };
-    this.setAmount = (amount) => {
-      if (amount > this.maxCommit() - this.fee) {
-        throw new Error("Amount is more than available " + this.maxCommit() + " less the gas " + this.fee);
-      }
-      this.pegInData.amount = amount;
-    };
-    this.calculateFees = () => {
-      if (!this.ready)
-        throw new Error("Not ready!");
-      const stacksAddress = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN";
-      const sbtcWalletAddress = "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
-      const p2Ret = p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
-      assert("wpkh" === p2Ret.type);
-      const privKey = hex.decode("0101010101010101010101010101010101010101010101010101010101010101");
-      const tx = new Transaction({ allowUnknowOutput: true });
-      for (const utxo of this.addressInfo.utxos) {
-        tx.addInput({
-          txid: hex.decode(utxo.txid),
-          //txid: utxo.txid,
-          index: utxo.vout,
-          witnessUtxo: {
-            amount: 600n,
-            script: p2wpkh(secp256k1.getPublicKey(privKey, true)).script
-          }
-        });
-      }
-      const asmScript = this.getOpDropP2shScript(stacksAddress, sbtcWalletAddress);
-      tx.addOutput({ script: asmScript, amount: BigInt(0) });
-      const changeAmount = Math.floor(0);
-      if (changeAmount > 0)
-        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-      tx.sign(privKey);
-      tx.finalize();
-      this.scureFee = Number(tx.fee);
-      this.fees = [
-        this.scureFee * 0.8,
-        //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-        this.scureFee * 1,
-        //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-        this.scureFee * 1.2
-        //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
-      ];
-      this.fee = this.fees[1];
-      if (this.pegInData.amount === 0) {
-        this.pegInData.amount = this.maxCommit() - this.fee;
-      }
-    };
-    this.getOutputsForDisplay = () => {
-      const changeAmount = this.getChange();
-      const outs = [
-        { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
-        { address: this.pegInData.sbtcWalletAddress, amount: this.pegInData.amount }
-      ];
-      if (changeAmount > 0)
-        outs.push({ address: this.fromBtcAddress, amount: changeAmount });
-      outs.push({ address: "pays " + this.fee + " satoshis to miner." });
-      return outs;
-    };
-    this.buildTransaction = (signature) => {
-      if (!this.ready)
-        throw new Error("Not ready!");
-      if (signature)
-        throw new Error("signature only for peg out!");
-      return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
-    };
-    this.buildOpReturn = () => {
-      if (!this.pegInData.stacksAddress)
-        throw new Error("Stacks address required!");
-      const tx = new Transaction({ allowUnknowOutput: true });
-      for (const utxo of this.addressInfo.utxos) {
-        tx.addInput({
-          txid: hex.decode(utxo.txid),
-          index: utxo.vout
-        });
-      }
-      tx.addOutput({ script: Script.encode(["RETURN", Buffer.from(this.pegInData.stacksAddress, "utf8")]), amount: 0n });
-      tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
-      const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-      if (changeAmount > 0)
-        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-      return tx;
-    };
-    this.buildOpDrop = () => {
-      if (!this.pegInData.stacksAddress)
-        throw new Error("Stacks address required!");
-      const tx = new Transaction({ allowUnknowOutput: true });
-      for (const utxo of this.addressInfo.utxos) {
-        tx.addInput({
-          txid: hex.decode(utxo.txid),
-          index: utxo.vout
-        });
-      }
-      const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress);
-      tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
-      const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-      if (changeAmount > 0)
-        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-      return tx;
-    };
   }
+  static create = async (network, fromBtcAddress, sbtcWalletAddress) => {
+    const me = new PegInTransaction();
+    me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
+    me.fromBtcAddress = fromBtcAddress;
+    me.pegInData = {
+      amount: 0,
+      stacksAddress: void 0,
+      sbtcWalletAddress
+    };
+    me.addressInfo = await fetchUtxoSet(fromBtcAddress);
+    const btcFeeRates = await fetchCurrentFeeRates();
+    me.feeInfo = btcFeeRates.feeInfo;
+    me.ready = true;
+    return me;
+  };
+  static hydrate = (o) => {
+    const me = new PegInTransaction();
+    me.net = o.net;
+    if (!o.fromBtcAddress)
+      throw new Error("No address - use create instead!");
+    me.fromBtcAddress = o.fromBtcAddress;
+    me.pegInData = o.pegInData;
+    me.addressInfo = o.addressInfo;
+    me.feeInfo = o.feeInfo;
+    me.fees = o.fees;
+    me.fee = o.fee;
+    me.scureFee = o.scureFee;
+    me.ready = o.ready;
+    return me;
+  };
+  getChange = () => {
+    return this.maxCommit() - this.pegInData.amount - this.fee;
+  };
+  setAmount = (amount) => {
+    if (amount > this.maxCommit() - this.fee) {
+      throw new Error("Amount is more than available " + this.maxCommit() + " less the gas " + this.fee);
+    }
+    this.pegInData.amount = amount;
+  };
+  calculateFees = () => {
+    if (!this.ready)
+      throw new Error("Not ready!");
+    const stacksAddress = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN";
+    const sbtcWalletAddress = "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
+    const p2Ret = p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
+    assert("wpkh" === p2Ret.type);
+    const privKey = hex.decode("0101010101010101010101010101010101010101010101010101010101010101");
+    const tx = new Transaction({ allowUnknowOutput: true });
+    for (const utxo of this.addressInfo.utxos) {
+      tx.addInput({
+        txid: hex.decode(utxo.txid),
+        //txid: utxo.txid,
+        index: utxo.vout,
+        witnessUtxo: {
+          amount: 600n,
+          script: p2wpkh(secp256k1.getPublicKey(privKey, true)).script
+        }
+      });
+    }
+    const asmScript = this.getOpDropP2shScript(stacksAddress, sbtcWalletAddress);
+    tx.addOutput({ script: asmScript, amount: BigInt(0) });
+    const changeAmount = Math.floor(0);
+    if (changeAmount > 0)
+      tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+    tx.sign(privKey);
+    tx.finalize();
+    this.scureFee = Number(tx.fee);
+    this.fees = [
+      this.scureFee * 0.8,
+      //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
+      this.scureFee * 1,
+      //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
+      this.scureFee * 1.2
+      //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
+    ];
+    this.fee = this.fees[1];
+    if (this.pegInData.amount === 0) {
+      this.pegInData.amount = this.maxCommit() - this.fee;
+    }
+  };
+  getOutputsForDisplay = () => {
+    const changeAmount = this.getChange();
+    const outs = [
+      { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
+      { address: this.pegInData.sbtcWalletAddress, amount: this.pegInData.amount }
+    ];
+    if (changeAmount > 0)
+      outs.push({ address: this.fromBtcAddress, amount: changeAmount });
+    outs.push({ address: "pays " + this.fee + " satoshis to miner." });
+    return outs;
+  };
+  buildTransaction = (signature) => {
+    if (!this.ready)
+      throw new Error("Not ready!");
+    if (signature)
+      throw new Error("signature only for peg out!");
+    return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
+  };
+  buildOpReturn = () => {
+    if (!this.pegInData.stacksAddress)
+      throw new Error("Stacks address required!");
+    const tx = new Transaction({ allowUnknowOutput: true });
+    for (const utxo of this.addressInfo.utxos) {
+      tx.addInput({
+        txid: hex.decode(utxo.txid),
+        index: utxo.vout
+      });
+    }
+    tx.addOutput({ script: Script.encode(["RETURN", Buffer.from(this.pegInData.stacksAddress, "utf8")]), amount: 0n });
+    tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
+    const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+    if (changeAmount > 0)
+      tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+    return tx;
+  };
+  buildOpDrop = () => {
+    if (!this.pegInData.stacksAddress)
+      throw new Error("Stacks address required!");
+    const tx = new Transaction({ allowUnknowOutput: true });
+    for (const utxo of this.addressInfo.utxos) {
+      tx.addInput({
+        txid: hex.decode(utxo.txid),
+        index: utxo.vout
+      });
+    }
+    const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress);
+    tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
+    const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+    if (changeAmount > 0)
+      tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+    return tx;
+  };
   getOpDropP2shScript(stacksAddress, sbtcWalletAddress) {
     const asmScript = Script.encode([Buffer.from(stacksAddress, "utf8"), "DROP", "DUP", "HASH160", Buffer.from(sbtcWalletAddress), "EQUALVERIFY", "CHECKSIG"]);
     return asmScript;
   }
-};
-let PegInTransaction = _PegInTransaction;
-PegInTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) => {
-  const me = new _PegInTransaction();
-  me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
-  me.fromBtcAddress = fromBtcAddress;
-  me.pegInData = {
-    amount: 0,
-    stacksAddress: void 0,
-    sbtcWalletAddress
-  };
-  me.addressInfo = await fetchUtxoSet(fromBtcAddress);
-  const btcFeeRates = await fetchCurrentFeeRates();
-  me.feeInfo = btcFeeRates.feeInfo;
-  me.ready = true;
-  return me;
-};
-PegInTransaction.hydrate = (o) => {
-  const me = new _PegInTransaction();
-  me.net = o.net;
-  if (!o.fromBtcAddress)
-    throw new Error("No address - use create instead!");
-  me.fromBtcAddress = o.fromBtcAddress;
-  me.pegInData = o.pegInData;
-  me.addressInfo = o.addressInfo;
-  me.feeInfo = o.feeInfo;
-  me.fees = o.fees;
-  me.fee = o.fee;
-  me.scureFee = o.scureFee;
-  me.ready = o.ready;
-  return me;
-};
+}
 
 const BuildTransaction_svelte_svelte_type_style_lang = '';
 
