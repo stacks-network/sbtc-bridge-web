@@ -1,7 +1,7 @@
 import { i, s as se, d as C } from './index.227a7d99.js';
 import { w as writable } from './index.cad881cf.js';
 import { s as sbtcConfig } from './stores.3318b909.js';
-import { d as fetchUserSbtcBalance } from './bridge_api.f62e558f.js';
+import { d as fetchUserSbtcBalance } from './bridge_api.2c2497c7.js';
 
 var commonjsGlobal = typeof globalThis !== 'undefined' ? globalThis : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : typeof self !== 'undefined' ? self : {};
 
@@ -1058,7 +1058,7 @@ const client = writable({});
 
 let webWalletNeeded = false;
 function setUpMicroStacks() {
-  let origin = "http://mainnet.stx.eco";
+  let origin = "http://34.135.65.158/bridge-api/v1";
   if (typeof window !== "undefined") {
     origin = window.location.origin;
   }
