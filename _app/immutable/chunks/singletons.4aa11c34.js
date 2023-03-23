@@ -1,5 +1,5 @@
 import { w as writable } from './index.cad881cf.js';
-import './paths.cf4e26dc.js';
+import './paths.1fa528db.js';
 
 const SNAPSHOT_KEY = 'sveltekit:snapshot';
 const SCROLL_KEY = 'sveltekit:scroll';
