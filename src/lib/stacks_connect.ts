@@ -1,8 +1,6 @@
 
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-//import { StacksMocknet } from "micro-stacks/network";
-//import { hashP2WPKH, hashP2WSH, hashP2SH, hashP2PKH, publicKeyToStxAddress, StacksNetworkVersion } from "micro-stacks/crypto";
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
@@ -58,8 +56,15 @@ async function fetchSbtcBalance () {
 	const adrds:AddressObject = addresses();
 	const result = await fetchUserSbtcBalance(adrds.stxAddress);
 	sbtcConfig.update((conf:SbtcConfig) => {
-		if (conf.pegInTransaction) conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
-		if (conf.pegOutTransaction) conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
+		if (conf.pegInTransaction) {
+			conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
+			conf.pegInTransaction.fromBtcAddress = adrds.cardinal;
+		}
+		if (conf.pegOutTransaction) {
+			conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
+			conf.pegOutTransaction.fromBtcAddress = adrds.cardinal;
+		}
+
 		conf.loggedIn = true;
 		conf.balance = result
 		conf.balance.address = adrds.stxAddress;

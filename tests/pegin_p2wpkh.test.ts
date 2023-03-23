@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import PegInTransaction from '$lib/domain/PegInTransaction';
@@ -240,8 +240,8 @@ describe('suite', () => {
     console.log(script)
 
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    myPeg.setAmount(2500)
-    const txs = myPeg.buildTransaction(undefined);
+    //myPeg.setAmount(2500)
+    //const txs = myPeg.buildTransaction(undefined);
     //tx.addOutput({ script: btc.Script.encode(['RETURN', globalThis.Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
 		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 

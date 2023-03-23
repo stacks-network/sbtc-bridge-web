@@ -1,4 +1,4 @@
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import assert from 'assert';
@@ -155,6 +155,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
 		return { opReturn: this.buildOpReturn(signature), opDrop: this.buildOpDrop(signature) };
 	}
 
@@ -181,7 +182,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		const data = this.buildData(signature)
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
-		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
 
 		return tx;
 	}
@@ -192,7 +193,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		this.addInputs(tx);
 		const asmScript = this.getOpDropP2shScript(signature);
 		tx.addOutput({ script: asmScript, amount: BigInt(this.dust) });
-		tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
 		return tx;
 	}
 
@@ -205,19 +206,16 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	}
 
 	private buildData = (signature:string):Buffer => {
-		const data = Buffer.alloc(74);
 		const magicBuf = (this.net === btc.TEST_NETWORK) ? Buffer.from(MAGIC_BYTES_TESTNET, 'hex') : Buffer.from(MAGIC_BYTES_MAINNET, 'hex');
 		const opCodeBuf = Buffer.from(PEGOUT_OPCODE, 'hex');
 		const amtBuf = Buffer.allocUnsafe(9);
 		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
-		const sigBuf = Buffer.from(signature);
-
-		magicBuf.copy(data, 0);
-		opCodeBuf.copy(data, magicBuf.length);
-		amtBuf.copy(data, magicBuf.length + opCodeBuf.length);
-		sigBuf.copy(data, magicBuf.length + opCodeBuf.length + amtBuf.length);
-
+		const sigBuf = Buffer.from(signature, 'hex');
+		console.log('getOpDropP2shScript:signature : ', sigBuf.length);
+		console.log('getOpDropP2shScript:signature : ', sigBuf.toString('hex'));
+		const data = Buffer.concat([magicBuf, opCodeBuf, amtBuf, sigBuf]);
 		console.log(data);
+		console.log('getOpDropP2shScript:data : ', data.toString('hex'));
 		return data;
 	}
 };

@@ -1,22 +1,16 @@
 <script lang="ts">
-//import { getAuth, getAccount } from '@micro-stacks/svelte';
 import { userSession, addresses } from '$lib/stacks_connect'
 import { loginStacksJs } from '$lib/stacks_connect'
-// import { onNoWalletFound } from 'micro-stacks/connect';
 import { onMount } from 'svelte';
 import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
-import { c32ToB58 } from "micro-stacks/crypto";
 import { base } from '$app/paths'
 import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 
-//const auth = getAuth();
-//const account = getAccount();
 const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
-	//$auth.signOut();
 	userSession.signUserOut();
 	sbtcConfig.update((conf:SbtcConfig) => {
 		conf.loggedIn = false;

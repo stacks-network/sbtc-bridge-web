@@ -1,19 +1,13 @@
-import { serializeCV, type ClarityValue } from "micro-stacks/clarity";
 import { sha256 } from "@noble/hashes/sha256";
-import { concatByteArrays } from "micro-stacks/common";
-//import { recoverSignature } from "micro-stacks/connect";
 import { verifyMessageSignature } from "@stacks/encryption";
-import { tupleCV, bufferCV, uintCV, stringAsciiCV } from "@stacks/transactions";
-//import type { SignatureData as MicroStacksSignatureData } from "micro-stacks/connect";
-//import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect';
-//import { get_client } from "$stores/client";
+import { tupleCV, bufferCV, uintCV, stringAsciiCV, serializeCV, type ClarityValue } from "@stacks/transactions";
 import { publicKeyToStxAddress, StacksNetworkVersion } from 'micro-stacks/crypto';
-import { recoverPublicKey, Signature } from '@noble/secp256k1';
+import { recoverPublicKey } from '@noble/secp256k1';
 import { hashMessage } from '@stacks/encryption';
 import { hexToBytes, bytesToHex } from "@stacks/common";
 import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect';
 import { openSignatureRequestPopup } from '@stacks/connect';
-import { addresses, getStacksNetwork } from '$lib/stacks_connect'
+import { getStacksNetwork } from '$lib/stacks_connect'
 
 const network = import.meta.env.VITE_NETWORK;
 const prefix = Uint8Array.from([0x53, 0x49, 0x50, 0x30, 0x31, 0x38]); // SIP018
@@ -105,6 +99,17 @@ export function hash_cv(clarityValue: ClarityValue) {
 	return sha256(serializeCV(clarityValue));
 }
 
+export function concatByteArrays(byteArrays: Uint8Array[]): Uint8Array {
+	const totalSize = byteArrays.reduce((len, bytes) => len + bytes.length, 0);
+	const resultArray = new Uint8Array(totalSize);
+	let offset = 0;
+	for (let i = 0; i < byteArrays.length; i++) {
+	  resultArray.set(byteArrays[i], offset);
+	  offset += byteArrays[i].length;
+	}
+	return resultArray;
+  }
+  
 export function structuredDataHash(message: Message) {
 	return sha256(concatByteArrays([prefix, hash_cv(domainCV), hash_cv(messageToTuple(message))]));
 }

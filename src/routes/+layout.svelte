@@ -1,16 +1,13 @@
 <script lang="ts">
 import "../app.scss";
-//import { getAuth } from "@micro-stacks/svelte";
 import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { loginStacksJs } from '$lib/stacks_connect'
+import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
-import { defaultSbtcConfig } from '$lib/sbtc'
-//import { setUpMicroStacks } from '$lib/stacks_micro_stacks'
-import { userSession } from '$lib/stacks_connect'
+import { defaultSbtcConfig } from '$lib/sbtc';
 
 // data - imported from layout.ts
 export let data:any;

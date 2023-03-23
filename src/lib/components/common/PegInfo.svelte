@@ -47,7 +47,7 @@ const updateTransaction = () => {
       <div class="">
         <span class="mx-1"><a class="text-info" href="/" on:click|preventDefault={() => {showHex = !showHex; showTx = false;}}>{#if showHex}<ArrowUp/>{:else}<ArrowDown/>{/if} show raw tx</a></span>
         <span class="mx-1 me-4"><a class="text-info"  href="/" on:click|preventDefault={() => {showTx = !showTx; showHex = false;}}>{#if showTx}<ArrowUp/>{:else}<ArrowDown/>{/if} show tx details</a></span>
-        <!-- <span><a class="text-info"  href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span> -->
+        <span><a class="text-info"  href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
       </div>    
     </div>
   </div>

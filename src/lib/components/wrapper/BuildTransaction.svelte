@@ -101,7 +101,8 @@ const utxoUpdated = async (event:any) => {
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      errorReason = err.message;
+      if (err.message !== 'No inputs signed') errorReason = err.message;
+      else errorReason = 'Please fix above errors and try again.'
     }
   }
 }

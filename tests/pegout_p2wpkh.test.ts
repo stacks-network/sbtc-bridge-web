@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';

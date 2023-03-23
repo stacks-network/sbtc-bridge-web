@@ -1,4 +1,4 @@
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import assert from 'assert';

@@ -17,6 +17,11 @@ import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
 export default defineConfig({
   test: {
+    deps: {
+      inline: [
+        "@stacks/connect"
+      ]
+    },
     //environment: 'jsdom',
     globals: true,
     threads: false,

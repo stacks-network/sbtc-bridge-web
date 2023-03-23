@@ -4,8 +4,7 @@ import { createEventDispatcher } from "svelte";
 import { hex } from '@scure/base';
 import type { SigData } from '$types/sig_data';
 import { openPsbtRequestPopup } from '@stacks/connect'
-import type { PsbtRequestOptions } from '@stacks/connect'
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTransaction } from '$lib/bridge_api';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
@@ -16,6 +15,7 @@ const dispatch = createEventDispatcher();
 export let sigData:SigData;
 export let pegInfo:any;
 let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
+let errorReason: string|undefined;
 
 const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
@@ -51,19 +51,28 @@ const updateTransaction = () => {
 }
 
 const btnClass = (bb:boolean) => {
- if ($sbtcConfig.pegIn) {
-  return (bb) ? 'mx-2 w-25 btn btn-outline-info' : 'mx-2 w-25 btn btn-info';
- } else {
-  return (bb) ? 'mx-2 w-25 btn btn-outline-warning' : 'mx-2 w-25 btn btn-warning';
- }
+  if ($sbtcConfig.pegIn) {
+    return (bb) ? 'mx-2 w-25 btn btn-outline-info' : 'mx-2 w-25 btn btn-info';
+  } else {
+    return (bb) ? 'mx-2 w-25 btn btn-outline-warning' : 'mx-2 w-25 btn btn-warning';
+  }
 }
 
-let result:string;
+let resp:any;
 let broadcasted:boolean;
-const broadcastTransaction = async (txHex:string) => {
-  result = await sendRawTransaction(txHex);
-  broadcasted = true;
-  console.log(txHex)
+const broadcastTransaction = async (hex:string) => {
+  errorReason = undefined;
+  try {
+    broadcasted = true;
+    resp = await sendRawTransaction({ hex: hex });
+    if (!resp || !resp.result || resp.error) {
+      broadcasted = false;
+      errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+    }
+    console.log(resp);
+  } catch (err) {
+    errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+  }
 }
 
 onMount(async () => {
@@ -78,6 +87,11 @@ onMount(async () => {
 </section>
 <PegInfo {pegInfo} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 <section>
+  {#if errorReason}
+  <div class="my-5 text-center text-danger">
+    <p>{errorReason}</p>
+  </div>
+  {/if}
   {#if broadcasted}
   <div class="my-5 text-center text-warning">
     <p>Your transaction has been sent to the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.
