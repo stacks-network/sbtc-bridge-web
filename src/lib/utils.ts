@@ -83,7 +83,8 @@ export function fmtNumber(amount:number|undefined) {
   if (amount) return new Intl.NumberFormat().format(amount);
 }
 
-export function truncate(stringy:string) {
-  return stringy.substring(0, 3) + '..' + stringy.substring(stringy.length - 4);
+export function truncate(stringy:string, amount?:number) {
+  if (!amount) amount = 4;
+  return stringy.substring(0, amount) + '..' + stringy.substring(stringy.length - amount);
 }
 

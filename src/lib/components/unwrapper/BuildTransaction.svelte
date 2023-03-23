@@ -37,6 +37,7 @@ const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
   label: 'Your Bitcoin Address',
   info: 'Your sBTC will be burned and the equivalent bitcoin then sent to this address',
+  utxos: poTx.addressInfo.utxos,
   maxCommit: (poTx.ready) ? poTx.maxCommit() : 0,
   fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal,
   numbInputs: (poTx.ready) ? poTx.addressInfo.utxos.length : 0,
@@ -117,7 +118,6 @@ $: showButton = poTx.ready && amountOk && !errorReason;
 onMount(async () => {
   if (!poTx.pegInData.stacksAddress) stxAddressOk = false;
   if (poTx.pegInData.amount! > 0) amountOk = true;
-  if (poTx.ready) poTx.calculateFees();
   updateConfig();
 })
 

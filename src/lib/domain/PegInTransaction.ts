@@ -93,16 +93,21 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		// create a set of inputs corresponding to the utxo set
 		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				//txid: utxo.txid,
-				index: utxo.vout,
-				witnessUtxo: {
-					amount: 600n,
-					script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
-				  },
-			});
+			if (this.isUTXOConfirmed(utxo)) {
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					//txid: utxo.txid,
+					index: utxo.vout,
+					witnessUtxo: {
+						amount: 600n,
+						script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
+					  },
+				});
+			} else {
+				this.unconfirmedUtxos = true;
+			}
 	  	}
+		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs')
 		//tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
 		//tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
 		//tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
@@ -147,15 +152,17 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 
 	private addInputs = (tx:btc.Transaction) => {
 		for (const utxo of this.addressInfo.utxos) {
-			const script = btc.RawTx.decode(hex.decode(utxo.tx))
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-				witnessUtxo: {
-					script: script.outputs[utxo.vout].script,
-					amount: BigInt(utxo.value)
-				},
-			});
+			const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
+			if (this.isUTXOConfirmed(utxo)) {
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					index: utxo.vout,
+					witnessUtxo: {
+						script: script.outputs[utxo.vout].script,
+						amount: BigInt(utxo.value)
+					},
+				});
+			}
 		}
 	}
 

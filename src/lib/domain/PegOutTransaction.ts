@@ -98,16 +98,21 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		for (const utxo of this.addressInfo.utxos) {
 			//const nonWitnessUtxo = Buffer.from(utxo.tx.hex, 'hex');
 			//const redeemScript = getRedeemScript(utxo, keyPairs[0].publicKey);
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				//txid: utxo.txid,
-				index: utxo.vout,
-				witnessUtxo: {
-					amount: 600n,
-					script: btc.p2wpkh(secp256k1.getPublicKey(this.privKey, true)).script,
-				  },
-			});
+			if (this.isUTXOConfirmed(utxo)) {
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					//txid: utxo.txid,
+					index: utxo.vout,
+					witnessUtxo: {
+						amount: 600n,
+						script: btc.p2wpkh(secp256k1.getPublicKey(this.privKey, true)).script,
+					  },
+				});
+			} else {
+				this.unconfirmedUtxos = true;
+			}
 	  	}
+		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs')
 		// internals of adding outputs - 'data length' : 'op code' : 'data'
 		// const opCode = Buffer.from('2a6a', 'hex');
 		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
@@ -161,7 +166,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 
 	private addInputs = (tx:btc.Transaction) => {
 		for (const utxo of this.addressInfo.utxos) {
-			const script = btc.RawTx.decode(hex.decode(utxo.tx))
+			const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
 			tx.addInput({
 				txid: hex.decode(utxo.txid),
 				index: utxo.vout,

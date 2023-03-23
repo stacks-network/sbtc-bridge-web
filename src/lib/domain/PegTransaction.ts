@@ -15,6 +15,7 @@ export const PEGIN_OPCODE = '3C';
 export const PEGOUT_OPCODE = '3e'; // >
 
 export interface PegTransactionI {
+	unconfirmedUtxos:boolean;
 	net:any;
     ready:boolean;
     fromBtcAddress:string;
@@ -36,6 +37,7 @@ export interface PegTransactionI {
 	setAmount: (pegInAmount:number) => void;
 	setStacksAddress: (stacksAddress:string|undefined) => void;
 	getChange: () => number;
+	isUTXOConfirmed: (utxo:any) => boolean;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
 	getDataToSign: () => Buffer;
@@ -57,6 +59,7 @@ keySetForFeeCalculation.push({
 
 export default class PegTransaction implements PegTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
+	unconfirmedUtxos = false;
 	net:any;
 	ready = false;
 	fromBtcAddress!: string;
@@ -117,6 +120,10 @@ export default class PegTransaction implements PegTransactionI {
  
 	getChange = () => {
 		return this.maxCommit() - this.fee - this.dust;
+	};
+ 
+	isUTXOConfirmed = (utxo:any) => {
+		return utxo.tx.confirmations > 6;
 	};
  
 	//setAmount = (amount:number) => void;

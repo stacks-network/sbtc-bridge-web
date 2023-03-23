@@ -38,6 +38,7 @@ const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
   label: 'Your Bitcoin Address',
   info: 'You\'ll send bitcoin from here to the sBTC wallet',
+  utxos: piTx.addressInfo.utxos,
   maxCommit: (piTx.ready) ? piTx.maxCommit() : 0,
   fromBtcAddress: piTx.fromBtcAddress,
   numbInputs: (piTx.ready) ? piTx.addressInfo.utxos.length : 0,
@@ -115,7 +116,6 @@ let inited = false;
 onMount(async () => {
   if (!piTx.pegInData.stacksAddress) stxAddressOk = false;
   if (piTx.pegInData.amount! > 0) amountOk = true;
-  if (piTx.ready) piTx.calculateFees();
   updateConfig();
   inited = true;
 })
