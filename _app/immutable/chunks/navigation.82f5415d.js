@@ -1,4 +1,4 @@
-import { h as client } from './singletons.150ea8b4.js';
+import { h as client } from './singletons.2dccca60.js';
 
 client.disable_scroll_handling
 	;
