@@ -60,6 +60,7 @@ keySetForFeeCalculation.push({
 export default class PegTransaction implements PegTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
 	unconfirmedUtxos = false;
+	requiredConfirmed = 6;
 	net:any;
 	ready = false;
 	fromBtcAddress!: string;

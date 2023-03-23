@@ -6,7 +6,7 @@ import type { SigData } from '$types/sig_data';
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
-import { sendRawTransaction } from '$lib/bridge_api';
+import { sendRawTxDirectMempool } from '$lib/bridge_api';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import { sbtcConfig } from '$stores/stores';
 import { explorerBtcAddressUrl } from "$lib/utils";
@@ -16,6 +16,7 @@ export let sigData:SigData;
 export let pegInfo:any;
 let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
 let errorReason: string|undefined;
+let successReason: string|undefined;
 
 const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
@@ -31,13 +32,7 @@ export async function requestSignPsbt() {
       icon: window.location.origin + '/my-app-logo.svg',
     },
     onFinish(data:any) {
-      //const txB = Buffer.from(value, 'hex');
-      const tx = btc.Transaction.fromPSBT(hexToBytes(data.hex));
-      tx.finalize();
-      //tx.extract();
-      const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
-      console.log(txHex);
-      broadcastTransaction(txHex);
+      broadcastTransaction(data.hex);
     },
     onCancel() {
       console.log('User cancelled operation');
@@ -60,18 +55,28 @@ const btnClass = (bb:boolean) => {
 
 let resp:any;
 let broadcasted:boolean;
-const broadcastTransaction = async (hex:string) => {
-  errorReason = undefined;
+const broadcastTransaction = async (psbtHex:string) => {
   try {
-    broadcasted = true;
-    resp = await sendRawTransaction({ hex: hex });
-    if (!resp || !resp.result || resp.error) {
+    const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
+    try {
+      tx.finalize();
+    } catch (err) {
+      errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
+      return;
+    }
+    const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
+    currentTx = txHex;
+    errorReason = undefined;
+    resp = await sendRawTxDirectMempool(txHex);
+    console.log(resp);
+    if (!resp || resp.error) {
       broadcasted = false;
       errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+    } else {
+      broadcasted = true;
     }
-    console.log(resp);
-  } catch (err) {
-    errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+  } catch (err:any) {
+    errorReason = err.message + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
 

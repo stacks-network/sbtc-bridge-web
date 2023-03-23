@@ -1,3 +1,24 @@
+export async function sendRawTxDirectMempool(hex:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER + '/tx';
+  console.log('sendRawTx:mempoolUrl: ', url)
+  const response = await fetch(url, {
+    method: 'POST',
+    //headers: { 'Content-Type': 'application/json' },
+    body: hex
+  });
+  if (response.status !== 200) throw new Error('Mempool error: ' + response.status + ' : ' + response.statusText);
+  try {
+    return await response.json();
+  } catch (err) {
+    try {
+      console.log(err)
+      return await response.text();
+    } catch (err1) {
+      console.log(err1)
+    }
+  }
+  return 'success';
+}
 
 export async function sendRawTransaction(tx: { hex: string; }) {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/tx/sendrawtx';

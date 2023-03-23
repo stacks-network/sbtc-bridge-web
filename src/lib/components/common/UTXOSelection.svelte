@@ -54,7 +54,7 @@ onMount(async () => {
 </script>
 
 
-<div class="row mx-0 px-0">
+<div class="row">
   <div class="col">
     <label for="transact-path" class="d-flex justify-content-between">
       <span>{utxoData.label}</span>
@@ -89,7 +89,7 @@ onMount(async () => {
     <div class="row text-white text-small">
       <div class="col-2"><span class="">{utxo.vout}</span></div>
       <div class="col-2"><span class="">{utxo.value}</span></div>
-      <div class="col-2"><span class="">{utxo.tx.confirmations}</span></div>
+      <div class="col-2"><span class={(utxo.tx.confirmations < 6) ? 'text-warning' : 'text-success'}>{utxo.tx.confirmations} {(utxo.tx.confirmations < 6) ? '(of 6)' : ''}</span></div>
       <div class="col-6"><span class=""><a href={explorerBtcTxUrl(utxo.txid)} target="_blank" rel="noreferrer">{truncate(utxo.txid, 10)}</a></span></div>
     </div>
     {/each}
