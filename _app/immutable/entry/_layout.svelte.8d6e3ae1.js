@@ -1,10 +1,10 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.6910039e.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, o as onMount, c as space, p as element, f as claim_space, q as claim_element, r as children, l as detach_dev, u as attr_dev, x as add_location, g as insert_hydration_dev, I as noop, y as text, z as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, w as set_style, N as createEventDispatcher, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component, O as run_all, P as onDestroy, t as tick, Q as globals, e as empty, j as check_outros, B as group_outros, R as create_slot, T as update_slot_base, U as get_all_dirty_from_scope, V as get_slot_changes } from "../chunks/index.7b7857c7.js";
 import { a as addresses, l as logUserOut, b as loginStacksJs, c as base64Js, i as initSession, d as isLoggedIn, __tla as __tla_0 } from "../chunks/stacks_connect.579cfa64.js";
-import { b as base } from "../chunks/paths.c0114026.js";
+import { b as base } from "../chunks/paths.9c0123c2.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.944757c0.js";
 import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/stores.f738a24a.js";
-import { g as goto } from "../chunks/navigation.657afa07.js";
+import { g as goto } from "../chunks/navigation.d4b41c21.js";
 import { U as UserBalance } from "../chunks/UserBalance.55006da1.js";
 let Layout;
 let __tla = Promise.all([
