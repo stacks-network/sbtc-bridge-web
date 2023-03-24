@@ -1,7 +1,7 @@
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
-import { decodeStacksAddress } from "$lib/stacks_connect";
+import { decodeStacksAddress } from "$lib/stacks_micro_stacks.js";
 
 type PegInData = {
 	stacksAddress?: string;

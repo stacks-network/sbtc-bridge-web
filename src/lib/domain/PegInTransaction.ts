@@ -6,7 +6,7 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
-import { decodeStacksAddress } from '$lib/stacks_connect'
+import { decodeStacksAddress } from '$lib/stacks_micro_stacks.js'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
 export interface PegInTransactionI extends PegTransactionI {
 

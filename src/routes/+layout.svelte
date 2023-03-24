@@ -8,6 +8,11 @@ import { initSession, loginStacksJs, isLoggedIn } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
 import { defaultSbtcConfig } from '$lib/sbtc';
+import { getAuth } from "@micro-stacks/svelte";
+import { setUpMicroStacks } from '$lib/stacks_micro_stacks.js'
+
+setUpMicroStacks();
+const auth = getAuth();
 
 // data - imported from layout.ts
 export let data:any;
