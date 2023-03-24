@@ -124,7 +124,7 @@ export default class PegTransaction implements PegTransactionI {
 	};
  
 	isUTXOConfirmed = (utxo:any) => {
-		return utxo.tx.confirmations > 6;
+		return utxo.tx.confirmations > 3;
 	};
  
 	//setAmount = (amount:number) => void;

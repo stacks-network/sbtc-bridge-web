@@ -112,7 +112,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				this.unconfirmedUtxos = true;
 			}
 	  	}
-		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs (6 confirmations are required)')
+		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs (4 confirmations are required)')
 		// internals of adding outputs - 'data length' : 'op code' : 'data'
 		// const opCode = Buffer.from('2a6a', 'hex');
 		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');

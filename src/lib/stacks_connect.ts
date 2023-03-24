@@ -7,12 +7,8 @@ import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 
-const appConfig = new AppConfig();
-let userSession:UserSession;
-
-export function initSession() {
-	userSession = new UserSession({ appConfig });
-}
+const appConfig = new AppConfig(['store_write', 'publish_data']);
+export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 
 export const webWalletNeeded = false;
 
@@ -99,8 +95,8 @@ export async function loginStacksJs() {
 	try {
 		if (!userSession.isUserSignedIn()) {
 			showConnect({
+				userSession,
 				appDetails,
-				userSession: userSession,
 				onFinish: async () => {
 					return await fetchSbtcBalance();
 				},
