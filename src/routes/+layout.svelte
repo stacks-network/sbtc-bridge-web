@@ -4,7 +4,7 @@ import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { loginStacksJs, userSession } from '$lib/stacks_connect'
+import { initSession, loginStacksJs, isLoggedIn } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
 import { defaultSbtcConfig } from '$lib/sbtc';
@@ -12,7 +12,7 @@ import { defaultSbtcConfig } from '$lib/sbtc';
 // data - imported from layout.ts
 export let data:any;
 const unsubscribe = sbtcConfig.subscribe((conf) => {
-  if (conf) conf.loggedIn = userSession.isUserSignedIn();
+  //if (conf) conf.loggedIn = isLoggedIn();
 });
 onDestroy(unsubscribe);
 //setUpMicroStacks();
@@ -27,7 +27,7 @@ const doLogin = async () => {
 const initApplication = async () => {
   let conf = defaultSbtcConfig;
   if ($sbtcConfig) conf = $sbtcConfig;
-  if (userSession.isUserSignedIn()) {
+  if (isLoggedIn()) {
     conf.loggedIn = true;
   }
   conf.sbtcContractData = data.sbtcContractData;
@@ -47,6 +47,7 @@ onMount(async () => {
     console.log(err)
   }
   await tick();
+  initSession();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

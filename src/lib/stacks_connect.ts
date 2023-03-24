@@ -3,13 +3,16 @@ import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
+import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 
 const appConfig = new AppConfig();
-export const userSession = new UserSession({ appConfig });
+let userSession:UserSession;
 
+export function initSession() {
+	userSession = new UserSession({ appConfig });
+}
 
 export const webWalletNeeded = false;
 
@@ -96,8 +99,8 @@ export async function loginStacksJs() {
 	try {
 		if (!userSession.isUserSignedIn()) {
 			showConnect({
-				userSession,
 				appDetails,
+				userSession: userSession,
 				onFinish: async () => {
 					return await fetchSbtcBalance();
 				},
@@ -106,13 +109,19 @@ export async function loginStacksJs() {
 				},
 			});
 		} else {
-			return userSession;
+			return await fetchSbtcBalance();
 		}
 	} catch (e) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
 	}
 }
 
+export function isLoggedIn() {
+	return userSession.isUserSignedIn();
+}
+export function logUserOut() {
+	return userSession.signUserOut();
+}
 export function signMessage(callback:any, script:Buffer) {
 	openSignatureRequestPopup({
 		message: script.toString('hex'),

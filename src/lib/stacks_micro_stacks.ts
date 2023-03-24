@@ -3,7 +3,6 @@ import { c32address, c32addressDecode } from 'c32check';
 //import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
 //import { client } from "$stores/client";
 import { sbtcConfig } from '$stores/stores'
-import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
 //import { hashP2WPKH, hashP2WSH, hashP2SH, hashP2PKH, publicKeyToStxAddress } from "micro-stacks/crypto";
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';

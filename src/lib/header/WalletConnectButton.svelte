@@ -1,5 +1,5 @@
 <script lang="ts">
-import { userSession, addresses } from '$lib/stacks_connect'
+import { logUserOut, addresses } from '$lib/stacks_connect'
 import { loginStacksJs } from '$lib/stacks_connect'
 import { onMount } from 'svelte';
 import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
@@ -11,7 +11,7 @@ import type { SbtcConfig } from '$types/sbtc_config';
 
 const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
-	userSession.signUserOut();
+	logUserOut();
 	sbtcConfig.update((conf:SbtcConfig) => {
 		conf.loggedIn = false;
 		return conf;
@@ -44,7 +44,7 @@ onMount(async () => {
 </span>
 {:else if $sbtcConfig.loggedIn}
 	<span class="nav-link">
-		<a href="{base}/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={logout}>
+		<a href="{base}/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={() => logout()}>
 			<span  class="px-2"><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /></span>
 		</a>
 	</span>
