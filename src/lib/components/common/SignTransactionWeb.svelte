@@ -3,9 +3,9 @@ import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex } from '@scure/base';
 import type { SigData } from '$types/sig_data';
-import { openPsbtRequestPopup } from '@stacks/connect'
+//import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
-import { hexToBytes } from "@stacks/common";
+import { hexToBytes } from "micro-stacks/common";
 import { sendRawTxDirectMempool } from '$lib/bridge_api';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import { sbtcConfig } from '$stores/stores';
@@ -25,6 +25,8 @@ const getExplorerUrl = () => {
 
 export async function requestSignPsbt() {
   console.log(currentTx);
+  /**
+   * needs to be switched to micro stacks - once PR75 is available.
   openPsbtRequestPopup({
     hex: currentTx,
     appDetails: {
@@ -39,6 +41,7 @@ export async function requestSignPsbt() {
       return;
     }
   });
+  */
 }
 
 const updateTransaction = () => {

@@ -1,14 +1,16 @@
 <script lang="ts">
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
 import { createEventDispatcher } from "svelte";
 import { ArrowUp, ArrowDown, CheckCircle } from "svelte-bootstrap-icons";
 import { sbtcConfig } from '$stores/stores';
+import { getAuth } from "@micro-stacks/svelte";
+const auth = getAuth();
 
 const dispatch = createEventDispatcher();
 export let pegInfo:any;
 export let sigData:any;
 export let currentTx:any;
-const webWallet = pegInfo.fromBtcAddress === addresses().cardinal;
+const webWallet = pegInfo.fromBtcAddress === addresses($auth).cardinal;
 let showTx = false;
 let showHex = false;
 

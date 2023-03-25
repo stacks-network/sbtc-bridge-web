@@ -1,10 +1,11 @@
 <script lang="ts">
-import { setCoordinator, setBtcWallet, coordinators, mintTo } from "$lib/sbtc_admin.js";
+import { setCoordinator, setBtcWallet, coordinators, mintTo } from "$lib/sbtc_admin";
+import { getOpenContractCall } from '@micro-stacks/svelte';
 import MintTokens from './MintTokens.svelte'
 import BurnTokens from './BurnTokens.svelte'
 import { sbtcConfig } from '$stores/stores'
 
-//const contractCall = openContractCall();
+const contractCall = getOpenContractCall();
 
 let coordinator:string = import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0];
 if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
@@ -17,10 +18,10 @@ if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
 }
 
 const coordinate = async () => {
-  const res = await setCoordinator(coordinator);
+  const res = await setCoordinator(contractCall, coordinator);
 }
 const wallet = async () => {
-  const res = await setBtcWallet(sbtcWallet);
+  const res = await setBtcWallet(contractCall, sbtcWallet);
 }
 
 </script>

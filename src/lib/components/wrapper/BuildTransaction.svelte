@@ -8,13 +8,15 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
+import { getAuth } from "@micro-stacks/svelte";
+const auth = getAuth();
 
 export let piTx:PegInTransactionI;
-if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
+if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses($auth).cardinal;
 let componentKey3 = 0;
 
-if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
+if (!piTx.pegInData.stacksAddress && addresses($auth).stxAddress) piTx.pegInData.stacksAddress = addresses($auth).stxAddress
 const principalData = {
   label: 'Stacks Address (Account or Contract)',
   info: 'sBTC will be minted to this account or contract',

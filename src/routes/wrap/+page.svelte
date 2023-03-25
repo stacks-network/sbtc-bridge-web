@@ -6,8 +6,10 @@ import { sbtcConfig } from '$stores/stores';
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
 import type { SigData } from '$types/sig_data';
+import { getAuth } from '@micro-stacks/svelte';
+const auth = getAuth();
 
 let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 
@@ -15,10 +17,10 @@ $: view = 'build_tx_view';
 let sigData: SigData;
 const openSigView = () => {
 	piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);
-	if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses().stxAddress);
+	if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses($auth).stxAddress);
 	sigData = {
 		pegin: true,
-		webWallet: piTx.fromBtcAddress === addresses().cardinal,
+		webWallet: piTx.fromBtcAddress === addresses($auth).cardinal,
 		txs: piTx?.buildTransaction(undefined),
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos

@@ -10,13 +10,19 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
-import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data.js'
-import { addresses, signMessage } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
+import { requestSignMessage, verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data'
+import { getOpenSignMessage } from '@micro-stacks/svelte';
+import type { SignatureData } from "micro-stacks/connect";
+import { getAuth, getAccount } from '@micro-stacks/svelte';
+import { sha256 } from "@noble/hashes/sha256";
 
 export let poTx:PegOutTransactionI;
-if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
+const auth = getAuth();
 
-if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress
+if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses($auth).cardinal;
+
+if (!poTx.pegInData.stacksAddress && addresses($auth).stxAddress) poTx.pegInData.stacksAddress = addresses($auth).stxAddress
 const principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
@@ -60,9 +66,10 @@ const updateConfig = () => {
 
 const requestSignature = () => {
   const script = poTx.getDataToSign();
-  signMessage(requestSignatureCB, script);
+  requestSignMessage(script.toString('hex'));
 }
 
+/**
 const requestSignatureCB = async (sigData:any, message:Buffer) => {
   //const msg = { script: script.toString('hex') }
   //const sigData:any = await requestSignMessage(msg);
@@ -74,6 +81,7 @@ const requestSignatureCB = async (sigData:any, message:Buffer) => {
   sbtcConfig.update(() => conf);
   dispatch('request_signature');
 }
+*/
 
 const amountUpdated = (event:any) => {
   amountOk = !event.detail.error;

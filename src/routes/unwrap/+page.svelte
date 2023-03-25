@@ -7,7 +7,9 @@ import { sbtcConfig } from '$stores/stores'
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { SigData } from '$types/sig_data';
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
+import { getAuth } from '@micro-stacks/svelte';
+const auth = getAuth();
 
 let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
 
@@ -16,12 +18,12 @@ $: view = 'build_tx_view';
 let sigData: SigData;
 const openSigView = () => {
 	poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
-	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses().stxAddress);
+	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses($auth).stxAddress);
 	const signature = $sbtcConfig.sigData.signature;
 	const txs = poTx!.buildTransaction(signature);
 	sigData = {
 		pegin: false,
-		webWallet: poTx.fromBtcAddress === addresses().cardinal,
+		webWallet: poTx.fromBtcAddress === addresses($auth).cardinal,
 		txs,
 		outputsForDisplay: poTx!.getOutputsForDisplay(),
 		inputsForDisplay: poTx!.addressInfo.utxos

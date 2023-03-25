@@ -3,7 +3,7 @@ import { c32address, c32addressDecode } from 'c32check';
 import { mountClient, getMicroStacksClient } from "@micro-stacks/svelte";
 import { client } from "$stores/client";
 import { sbtcConfig } from '$stores/stores'
-import { hashP2WPKH, hashP2WSH, hashP2SH, hashP2PKH, publicKeyToStxAddress } from "micro-stacks/crypto";
+import { StacksMocknet, StacksTestnet, StacksMainnet } from "micro-stacks/network";
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 
@@ -18,6 +18,15 @@ const allowed = [
 	{ btc: 'bc1q8j0gh8754jd9jerlxvpvxx4kc82e4u7f8ynnvp', stx: 'SP1R3S5RB1FSKCGQGW16ZHHPK6FAN57EAQ3RD7HP9'}, // marten
 ]
 	
+export function getStacksNetwork() {
+	const network = import.meta.env.VITE_NETWORK;
+	let stxNetwork:StacksMainnet|StacksTestnet;
+	if (network === 'testnet') stxNetwork = new StacksTestnet();
+	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
+	else stxNetwork = new StacksMocknet();
+	return stxNetwork;
+}
+
 export function isAllowed(address:string) {
 	return allowed.find((o) => o.stx === address);
 }
@@ -40,6 +49,22 @@ export function setUpMicroStacks() {
 	//console.log('layout.svelte: ', config)
 	mountClient(config);
 	client.set(getMicroStacksClient());
+}
+
+type AddressObject = {
+	stxAddress: string; cardinal?: string; ordinal?: string;
+}
+
+export function addresses($account: any):AddressObject {
+	//const userData = $account.loadUserData();
+	//const network = import.meta.env.VITE_NETWORK;
+	//let something = hashP2WPKH(payload.public_keys[0])
+	//const addr = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+	//const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
+	//const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
+	return {
+		stxAddress: $account.stxAddress,
+	};
 }
 
 export function decodeStacksAddress(stxAddress:string) {

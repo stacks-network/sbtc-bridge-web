@@ -4,7 +4,7 @@ import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { initSession, loginStacksJs, isLoggedIn } from '$lib/stacks_connect'
+import { login } from '$lib/stacks_micro_stacks.js'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Buffer } from 'buffer/'
 import { defaultSbtcConfig } from '$lib/sbtc';
@@ -24,15 +24,13 @@ onDestroy(unsubscribe);
 //setUpStacksJs();
 let inited = false;
 
-const doLogin = async () => {
-  await loginStacksJs();
-  initApplication();
+const doLogin = () => {
+  login($auth);
 }
-
 const initApplication = async () => {
   let conf = defaultSbtcConfig;
   if ($sbtcConfig) conf = $sbtcConfig;
-  if (isLoggedIn()) {
+  if ($auth.isSignedIn) {
     conf.loggedIn = true;
   }
   conf.sbtcContractData = data.sbtcContractData;
@@ -52,7 +50,6 @@ onMount(async () => {
     console.log(err)
   }
   await tick();
-  initSession();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
@@ -64,7 +61,7 @@ onMount(async () => {
 </script>
 
 {#if inited}
-{#if $sbtcConfig && $sbtcConfig.loggedIn}
+{#if $auth.isSignedIn}
 <div class="app">
   <Header/>
   <slot />
@@ -73,7 +70,7 @@ onMount(async () => {
 {:else}
 <div class="lobby bg-dark">
   <p class="text-white">Connect your Hiro web wallet to start wrapping SBTC!</p>
-  <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
+  <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={() => doLogin()} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
   <p class="mt-5 text-warning">Currently in Beta testing!</p>
 </div>
 {/if}

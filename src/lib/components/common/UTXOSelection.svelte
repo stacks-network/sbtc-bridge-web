@@ -2,8 +2,10 @@
 import { createEventDispatcher } from "svelte";
 import { isSupported } from "$lib/utils";
 import { onMount } from 'svelte';
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_micro_stacks.js'
 import { truncate, explorerBtcTxUrl, explorerTxUrl } from '$lib/utils'
+import { getAuth } from "@micro-stacks/svelte";
+const auth = getAuth();
 
 const dispatch = createEventDispatcher();
 
@@ -22,7 +24,7 @@ let errorReason:string|undefined;
 let showUtxos:boolean;
 
 const hiroWallet = async () => {
-  bitcoinAddress = addresses().cardinal;
+  bitcoinAddress = addresses($auth).cardinal;
   configureUTXOs(true);
 }
 
