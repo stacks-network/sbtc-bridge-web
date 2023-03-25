@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig } from '$types/SbtcConfig';
 import Principal from "../common/Principal.svelte";
 import PegInAmount from "./PegInAmount.svelte";
 import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";

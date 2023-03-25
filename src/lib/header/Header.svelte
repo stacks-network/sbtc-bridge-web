@@ -3,20 +3,9 @@
 import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
-import type { SbtcConfig } from '$types/sbtc_config';
-import { createEventDispatcher } from "svelte";
+import type { SbtcConfig } from '$types/SbtcConfig';
 import { goto } from "$app/navigation";
 import UserBalance from '$lib/components/common/UserBalance.svelte'
-
-const dispatch = createEventDispatcher();
-
-const sessionEvent = (e:any) => {
-	dispatch('session_event', e.detail);
-}
-//const unsubscribe = sbtcConfig.subscribe(value => {
-//  console.log('myConfig: ', value)
-//});
-//onDestroy(unsubscribe);
 
 const togglePeg = (pegin:boolean) => {
 	const conf:SbtcConfig = $sbtcConfig;
@@ -55,7 +44,7 @@ const network = import.meta.env.VITE_NETWORK;
 						<span title="Your SBTC Transaction History"><a class="" href="/history">History</a></span>
 					</span>
 				</li>
-				<WalletConnectButton on:session_event={sessionEvent}/>
+				<WalletConnectButton/>
 			</ul>
 		</div>
 	</div>

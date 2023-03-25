@@ -4,7 +4,6 @@ import { defineConfig } from 'vite';
 //import inject from '@rollup/plugin-inject';
 import { resolve } from "path";
 import wasm from "vite-plugin-wasm";
-import topLevelAwait from "vite-plugin-top-level-await";
 
 // See https://medium.com/@ftaioli/using-node-js-builtin-modules-with-vite-6194737c2cd2
 // yarn add --dev @esbuild-plugins/node-globals-polyfill
@@ -31,8 +30,6 @@ export default defineConfig({
   },
   plugins: [
     sveltekit(),
-    wasm(),
-    topLevelAwait()
   ],
 	resolve: {
 		alias: {
@@ -63,16 +60,6 @@ export default defineConfig({
   },
 
   build: {
-    minify: false,
-    rollupOptions: {
-        //input: {
-        //  main: resolve(__dirname, 'index.html'),
-        //},
-        plugins: [
-            // Enable rollup polyfills plugin
-            // used during production bundling
-            rollupNodePolyFill()
-        ]
-    }
+    minify: false
   }
 });

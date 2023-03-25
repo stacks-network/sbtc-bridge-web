@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store';
 import { persisted } from 'svelte-local-storage-store'
-import type { SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig } from '$types/SbtcConfig';
 import { defaultSbtcConfig } from '$lib/sbtc'
 
 /** Store for your data. 

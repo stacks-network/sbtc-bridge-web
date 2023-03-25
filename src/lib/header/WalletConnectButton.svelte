@@ -1,18 +1,12 @@
 <script lang="ts">
-import { createEventDispatcher } from "svelte";
 import { logUserOut, addresses } from '$lib/stacks_connect'
 import { onMount } from 'svelte';
 import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcConfig } from '$types/sbtc_config';
-import { loginStacksJs, userSession } from '$lib/stacks_connect'
-
-const dispatch = createEventDispatcher();
-
-$: loggedIn = userSession.isUserSignedIn();
-
+import type { SbtcConfig } from '$types/SbtcConfig';
+import { loginStacksJs } from '$lib/stacks_connect'
 
 const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
@@ -21,11 +15,9 @@ const logout = () => {
 		conf.loggedIn = false;
 		return conf;
 	});
-	dispatch('session_event', { opCode:'logout' });
 }
 const doLogin = async () => {
 	await loginStacksJs();
-	dispatch('session_event', { opCode:'login' });
 }
 
 let webWalletNeeded = false;
@@ -49,7 +41,7 @@ onMount(async () => {
 		Install Web Wallet
 	</a>
 </span>
-{:else if loggedIn}
+{:else if $sbtcConfig.loggedIn}
 	<span class="nav-link">
 		<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={() => logout()}>
 			<span  class="px-2"><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /></span>

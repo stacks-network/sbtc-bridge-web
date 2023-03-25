@@ -4,17 +4,12 @@ import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
+import type { SbtcConfig } from '$types/SbtcConfig'
 import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
-//import { Buffer } from 'buffer'
 import { defaultSbtcConfig } from '$lib/sbtc';
 
 // data - imported from layout.ts
-$: loggedIn = userSession.isUserSignedIn();
-
-const sessionEvent = (e:any) => {
-	loggedIn = userSession.isUserSignedIn();
-}
 
 export let data:any;
 const unsubscribe = sbtcConfig.subscribe((conf) => {
@@ -26,29 +21,26 @@ let inited = false;
 
 const doLogin = async () => {
   await loginStacksJs();
-  loggedIn = userSession.isUserSignedIn();
   initApplication();
 }
 
 const initApplication = async () => {
-  let conf = defaultSbtcConfig;
+  let conf = defaultSbtcConfig as SbtcConfig;
   if ($sbtcConfig) conf = $sbtcConfig;
-  if (loggedIn) {
+  if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
   }
   conf.sbtcContractData = data.sbtcContractData;
   sbtcConfig.update(() => conf);
-  return conf;
 }
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
   await tick();
   bootstrap = (await import('bootstrap'));
-  let conf = defaultSbtcConfig;
   try {
     //console.log(Buffer.from('hex', 'utf8').toString('hex'))
-    conf = await initApplication();
+    await initApplication();
     //globalThis.Buffer = Buffer;
     inited = true;
   } catch (err) {
@@ -67,7 +59,7 @@ onMount(async () => {
 {#if inited}
 {#if $sbtcConfig && $sbtcConfig.loggedIn}
 <div class="app">
-  <Header on:session_event={sessionEvent}/>
+  <Header/>
   <slot />
   <Footer />
 </div>

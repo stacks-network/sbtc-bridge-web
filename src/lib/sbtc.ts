@@ -1,7 +1,7 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import type { SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig } from '$types/SbtcConfig';
 import { bytesToHex } from "@stacks/common";
 
 export const defaultSbtcConfig:SbtcConfig = {

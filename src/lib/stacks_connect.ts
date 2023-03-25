@@ -2,7 +2,7 @@
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores.js'
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
-import type { SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig } from '$types/SbtcConfig';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
@@ -95,11 +95,11 @@ export const appDetails = {
 export async function loginStacksJs() {
 	try {
 		if (!userSession.isUserSignedIn()) {
-			await showConnect({
+			showConnect({
 				userSession,
 				appDetails,
 				onFinish: async () => {
-					return await fetchSbtcBalance();
+					await fetchSbtcBalance();
 				},
 				onCancel: () => {
 					// handle if user closed connection prompt
