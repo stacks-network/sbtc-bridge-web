@@ -1,9 +1,6 @@
 import { sha256 } from "@noble/hashes/sha256";
 import { verifyMessageSignature } from "@stacks/encryption";
 import { tupleCV, bufferCV, uintCV, stringAsciiCV, serializeCV, type ClarityValue } from "@stacks/transactions";
-import { publicKeyToStxAddress, StacksNetworkVersion } from 'micro-stacks/crypto';
-import { recoverPublicKey } from '@noble/secp256k1';
-import { hashMessage } from '@stacks/encryption';
 import { hexToBytes, bytesToHex } from "@stacks/common";
 import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect';
 import { openSignatureRequestPopup } from '@stacks/connect';
@@ -66,27 +63,7 @@ export async function requestSignStructuredMessage(message: any) {
 			return value;
 		  },
 		});
-/**	return new Promise(resolve =>
-		get_client().signStructuredMessage({
-			message: messageToTuple(message),
-			domain: domain,
-			onFinish: (result: MicroStacksSignatureData) => resolve(signatureDataBuffers(result)),
-			onCancel: () => resolve(({error: true, reason:'user canceled sign operation'}))
-		})
-	);
-	 */
 }
-/**
-export async function requestSignMessage(message: string): Promise<SignatureData | {error:boolean, reason:string}> {
-	return new Promise(resolve =>
-		get_client().signMessage({
-			message,
-			onFinish: (result: MicroStacksSignatureData) => resolve(signatureDataBuffers(result)),
-			onCancel: () => resolve(({error: true, reason:'user canceled sign operation'}))
-		})
-	);
-}
- */
 
 function messageToTuple(message: Message) {
 	return tupleCV({
@@ -114,10 +91,10 @@ export function structuredDataHash(message: Message) {
 	return sha256(concatByteArrays([prefix, hash_cv(domainCV), hash_cv(messageToTuple(message))]));
 }
 
-export function verifyDataSignature(message: Buffer, publicKey: string, signature: string) {
+export function verifyDataSignature(message: string, publicKey: string, signature: string) {
 	//const sig = bytesToHex(signature);
 	return verifyMessageSignature({
-		message: message.toString('hex'),
+		message: message,
 		signature: signature,
 		publicKey: publicKey
 	});
@@ -132,13 +109,11 @@ export function verifyStructuredDataSignature(message: Message, public_key: Uint
 	});
 }
 
+/**
 export function getStacksAddressFromSignature(message:string, signature:string) {
-	//const sig = recoverSignature({ signature: signature, mode: 'rsv' });
-	//const s1 = new Signature(sig.signature.r, sig.signature.s)
 	const msgHash = hashMessage(message)
 	let pubkey:Uint8Array|string = recoverPublicKey(msgHash, signature, 1, true);
 	pubkey = bytesToHex(pubkey);
-	//const pubkey0 = getPublicKeyFromSignature({ hash: Buffer.from(msgUint8), signature: sig.signature, recoveryBytes: sig.recoveryBytes });	
 	const addresses = {
 		tp2pkh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2PKH),
 		tp2sh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2SH),
@@ -147,3 +122,4 @@ export function getStacksAddressFromSignature(message:string, signature:string) 
 	}
 	return addresses;
 }
+ */

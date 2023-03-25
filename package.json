@@ -50,7 +50,6 @@
 		"vitest-fetch-mock": "^0.2.1"
 	},
 	"dependencies": {
-		"@micro-stacks/svelte": "^1.0.6",
 		"@noble/secp256k1": "^1.7.1",
 		"@scure/base": "^1.1.1",
 		"@scure/bip32": "^1.1.0",
@@ -66,7 +65,6 @@
 		"ecpair": "^2.1.0",
 		"events": "^3.3.0",
 		"gh-pages": "^5.0.0",
-		"micro-stacks": "^1.1.4",
 		"popper": "^1.0.1",
 		"postcss": "^8.4.14",
 		"postcss-cli": "^10.0.0",

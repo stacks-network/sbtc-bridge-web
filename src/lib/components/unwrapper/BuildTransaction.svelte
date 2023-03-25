@@ -8,9 +8,7 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
-import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
-import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data.js'
 import { addresses, signMessage } from '$lib/stacks_connect'
 
 export let poTx:PegOutTransactionI;
@@ -60,14 +58,14 @@ const updateConfig = () => {
 
 const requestSignature = () => {
   const script = poTx.getDataToSign();
-  signMessage(requestSignatureCB, script);
+  signMessage(requestSignatureCB, script.toString('hex'));
 }
 
 const requestSignatureCB = async (sigData:any, message:Buffer) => {
   //const msg = { script: script.toString('hex') }
   //const sigData:any = await requestSignMessage(msg);
   const script = message.toString('hex');
-  //const valid = verifyDataSignature(message, sigData.publicKey, sigData.signature)
+  //const valid = verifyDataSignature(message.toString('hex'), sigData.publicKey, sigData.signature)
   //const addreObj = getStacksAddressFromSignature(message.toString('hex'), sigData.signature)
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
@@ -129,7 +127,7 @@ onMount(async () => {
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
     <p class="mb-4">No SBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
-    <p><a href="{base}/wrap">Get sBTC here!</a></p>
+    <p><a href="/wrap">Get sBTC here!</a></p>
   </div>
   {:else}
   {#if showStxAddress}

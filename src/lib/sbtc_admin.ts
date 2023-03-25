@@ -1,7 +1,9 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
-import { PostConditionMode, uintCV, stringAsciiCV, tupleCV, bufferCVFromString, principalCV } from '@stacks/transactions';
+import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString } from '@stacks/transactions';
+import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
+import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
 import { openContractCall } from '@stacks/connect';
 import { getStacksNetwork } from './stacks_connect.js'
 

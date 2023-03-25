@@ -5,12 +5,14 @@ import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
 import type { SbtcConfig } from '$types/sbtc_config';
 import { createEventDispatcher } from "svelte";
-import { base } from '$app/paths'
 import { goto } from "$app/navigation";
 import UserBalance from '$lib/components/common/UserBalance.svelte'
 
 const dispatch = createEventDispatcher();
 
+const sessionEvent = (e:any) => {
+	dispatch('session_event', e.detail);
+}
 //const unsubscribe = sbtcConfig.subscribe(value => {
 //  console.log('myConfig: ', value)
 //});
@@ -27,7 +29,7 @@ const network = import.meta.env.VITE_NETWORK;
 </script>
 <nav class="navbar navbar-expand-md transparent">
 	<div class="container-fluid mx-5">
-		<a class="navbar-brand" href="{base}/">
+		<a class="navbar-brand" href="/">
 			<img width="40px" height="40px" class="nav-logo" src={logoWhite} alt="CityCoins Test" />
 		</a>
 		<div class="nav-item text-white">
@@ -50,10 +52,10 @@ const network = import.meta.env.VITE_NETWORK;
 				</li>
 				<li class="badge nav-item">
 					<span class="pointer nav-link">
-						<span title="Your SBTC Transaction History"><a class="" href="{base}/history">History</a></span>
+						<span title="Your SBTC Transaction History"><a class="" href="/history">History</a></span>
 					</span>
 				</li>
-				<WalletConnectButton />
+				<WalletConnectButton on:session_event={sessionEvent}/>
 			</ul>
 		</div>
 	</div>

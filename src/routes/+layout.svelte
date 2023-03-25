@@ -4,15 +4,20 @@ import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { loginStacksJs, isLoggedIn } from '$lib/stacks_connect'
+import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
-import { Buffer } from 'buffer/'
+//import { Buffer } from 'buffer'
 import { defaultSbtcConfig } from '$lib/sbtc';
 
 // data - imported from layout.ts
+$: loggedIn = userSession.isUserSignedIn();
+
+const sessionEvent = (e:any) => {
+	loggedIn = userSession.isUserSignedIn();
+}
+
 export let data:any;
 const unsubscribe = sbtcConfig.subscribe((conf) => {
-  if (conf) conf.loggedIn = isLoggedIn();
 });
 onDestroy(unsubscribe);
 //setUpMicroStacks();
@@ -21,13 +26,14 @@ let inited = false;
 
 const doLogin = async () => {
   await loginStacksJs();
+  loggedIn = userSession.isUserSignedIn();
   initApplication();
 }
 
 const initApplication = async () => {
   let conf = defaultSbtcConfig;
   if ($sbtcConfig) conf = $sbtcConfig;
-  if (isLoggedIn()) {
+  if (loggedIn) {
     conf.loggedIn = true;
   }
   conf.sbtcContractData = data.sbtcContractData;
@@ -37,16 +43,17 @@ const initApplication = async () => {
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
+  await tick();
   bootstrap = (await import('bootstrap'));
   let conf = defaultSbtcConfig;
   try {
+    //console.log(Buffer.from('hex', 'utf8').toString('hex'))
     conf = await initApplication();
-    globalThis.Buffer = Buffer;
+    //globalThis.Buffer = Buffer;
     inited = true;
   } catch (err) {
     console.log(err)
   }
-  await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
@@ -60,7 +67,7 @@ onMount(async () => {
 {#if inited}
 {#if $sbtcConfig && $sbtcConfig.loggedIn}
 <div class="app">
-  <Header/>
+  <Header on:session_event={sessionEvent}/>
   <slot />
   <Footer />
 </div>

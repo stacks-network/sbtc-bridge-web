@@ -1,6 +1,6 @@
 
 import { c32address, c32addressDecode } from 'c32check';
-import { sbtcConfig } from '$stores/stores'
+import { sbtcConfig } from '$stores/stores.js'
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
@@ -69,6 +69,7 @@ async function fetchSbtcBalance () {
 		conf.balance.address = adrds.stxAddress;
 		conf.balance.cardinal = adrds.cardinal;
 		conf.balance.ordinal = adrds.ordinal;
+		conf.loggedIn = true;
 		return conf;
 	});
 }
@@ -94,7 +95,7 @@ export const appDetails = {
 export async function loginStacksJs() {
 	try {
 		if (!userSession.isUserSignedIn()) {
-			showConnect({
+			await showConnect({
 				userSession,
 				appDetails,
 				onFinish: async () => {
@@ -112,15 +113,12 @@ export async function loginStacksJs() {
 	}
 }
 
-export function isLoggedIn() {
-	return userSession.isUserSignedIn();
-}
 export function logUserOut() {
 	return userSession.signUserOut();
 }
-export function signMessage(callback:any, script:Buffer) {
+export function signMessage(callback:any, script:string) {
 	openSignatureRequestPopup({
-		message: script.toString('hex'),
+		message: script,
 		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
 		appDetails: appDetails,
 		onFinish(value) {

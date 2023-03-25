@@ -7,7 +7,11 @@ import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from './PegTransaction'
+import { Buffer as BufferPolyfill } from 'buffer/'
+declare let Buffer: typeof BufferPolyfill;
+globalThis.Buffer = BufferPolyfill
 
+console.log('buffer', Buffer.from('foo', 'hex'))
 export interface PegOutTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
