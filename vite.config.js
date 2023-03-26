@@ -22,7 +22,7 @@ export default defineConfig({
       ]
     },
     //environment: 'jsdom',
-    globals: true,
+    //globals: true,
     threads: false,
     watch: false,
     //include: ['**/__tests__/*.{js,tsx,ts}'],
@@ -30,6 +30,7 @@ export default defineConfig({
   },
   plugins: [
     sveltekit(),
+    wasm(),
   ],
 	resolve: {
 		alias: {
@@ -44,7 +45,7 @@ export default defineConfig({
         plugins: [
           NodeGlobalsPolyfillPlugin({
               process: false,
-              buffer: false
+              //buffer: false
           }),
           NodeModulesPolyfillPlugin()
       ]
@@ -60,6 +61,16 @@ export default defineConfig({
   },
 
   build: {
-    minify: false
+    minify: false,
+    rollupOptions: {
+        //input: {
+        //  main: resolve(__dirname, 'index.html'),
+        //},
+        plugins: [
+            // Enable rollup polyfills plugin
+            // used during production bundling
+            //rollupNodePolyFill()
+        ]
+    }
   }
 });

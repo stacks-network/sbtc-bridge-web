@@ -40,7 +40,7 @@ export interface PegTransactionI {
 	isUTXOConfirmed: (utxo:any) => boolean;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
-	getDataToSign: () => Buffer;
+	getDataToSign: () => string;
 	getInputsForDisplay: () => Array<any>;
 }
 
@@ -84,7 +84,7 @@ export default class PegTransaction implements PegTransactionI {
 		// use create function
 	}
 
-	getDataToSign!: () => Buffer;
+	getDataToSign!: () => string;
 	setAmount = (amount:number) => {
 		// overridden
 		console.log(amount);

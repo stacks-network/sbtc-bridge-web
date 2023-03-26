@@ -4,7 +4,8 @@
 	"type": "module",
 	"author": "Mike Cohen",
 	"scripts": {
-		"dev": "vite dev --port=8080 --mode staging",
+		"dev": "vite dev --port=8080 --mode linode-staging",
+		"build-linode": "vite build --mode linode-staging",
 		"build-stag": "vite build --mode staging",
 		"build": "vite build",
 		"preview": "vite preview",
@@ -34,7 +35,6 @@
 		"@typescript-eslint/eslint-plugin": "^5.54.1",
 		"@typescript-eslint/parser": "^5.45.0",
 		"@vitest/coverage-c8": "^0.29.7",
-		"buffer": "^6.0.3",
 		"eslint": "^8.35.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte3": "^4.0.0",

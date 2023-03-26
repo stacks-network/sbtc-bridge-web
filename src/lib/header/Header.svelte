@@ -3,7 +3,7 @@
 import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
-import type { SbtcConfig } from '$types/SbtcConfig';
+import type { SbtcConfig } from '$types/sbtc_config';
 import { goto } from "$app/navigation";
 import UserBalance from '$lib/components/common/UserBalance.svelte'
 

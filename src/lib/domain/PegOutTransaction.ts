@@ -7,18 +7,14 @@ import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from './PegTransaction'
-import { Buffer as BufferPolyfill } from 'buffer/'
-declare let Buffer: typeof BufferPolyfill;
-globalThis.Buffer = BufferPolyfill
 
-console.log('buffer', Buffer.from('foo', 'hex'))
 export interface PegOutTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
-	getDataToSign: () => Buffer;
+	getDataToSign: () => string;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -121,7 +117,8 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		// const opCode = Buffer.from('2a6a', 'hex');
 		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
 		// tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.stacksAddress, 'utf8')]), amount: 0n });
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
+		const uint8array = new TextEncoder().encode(sbtcWalletAddress);
+		tx.addOutput({ script: btc.Script.encode(['RETURN', uint8array]), amount: 0n });
 		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
 		tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
 		tx.sign(this.privKey);
@@ -141,9 +138,10 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 
 	getOutputsForDisplay = () => {
 		const changeAmount = Math.floor(this.maxCommit() - this.dust - this.fee);
-		const addr = this.pegInData.stacksAddress || 'stx address unknown'
+		//const addr = this.pegInData.stacksAddress || 'stx address unknown'
+		const addr = new TextEncoder().encode(this.pegInData.stacksAddress || 'stx address unknown');
 		const outs:Array<any> = [
-			{ script: 'RETURN ' + Buffer.from(addr), amount: 0 },
+			{ script: 'RETURN ' + addr, amount: 0 },
 			{ address: this.pegInData.sbtcWalletAddress, amount: this.dust },
 		]
 		if (changeAmount > 0) outs.push({ address: this.fromBtcAddress, amount: changeAmount });
@@ -152,19 +150,24 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	}
 
 	getDataToSign = () => {
-		const amtBuf = Buffer.alloc(9);
-		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
+		const view2 = this.amountToUint8(this.pegInData.amount);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		const scriptBuf = Buffer.from(script);
-		const data = Buffer.concat([amtBuf, scriptBuf]);
-		console.log('getDataToSign: ' + data.toString('hex'))
-		return data;
+		const data = new Uint8Array(view2, ...script);
+		return hex.encode(data);
+	}
+
+	private amountToUint8 = (amt:number):Uint8Array => {
+		const buffer = new ArrayBuffer(9);
+		const view1 = new DataView(buffer);
+		view1.setUint32(0, amt, true); // Put 42 in slot 12
+		const view2 = new Uint8Array(view1.buffer);
+		return view2;
 	}
 
 	buildTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
-		console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
+		//console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
 		return { opReturn: this.buildOpReturn(signature), opDrop: this.buildOpDrop(signature) };
 	}
 
@@ -210,21 +213,26 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))	
 		const data = this.buildData(signature)
 		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', script, 'EQUALVERIFY', 'CHECKSIG'])
-		console.log('getOpDropP2shScript:asmScript: ', btc.Script.decode(asmScript))
+		//console.log('getOpDropP2shScript:asmScript: ', btc.Script.decode(asmScript))
 		return asmScript;
 	}
 
-	private buildData = (signature:string):Buffer => {
-		const magicBuf = (this.net === btc.TEST_NETWORK) ? Buffer.from(MAGIC_BYTES_TESTNET, 'hex') : Buffer.from(MAGIC_BYTES_MAINNET, 'hex');
-		const opCodeBuf = Buffer.from(PEGOUT_OPCODE, 'hex');
-		const amtBuf = Buffer.allocUnsafe(9);
-		amtBuf.writeUInt32LE(this.pegInData.amount, 0);
-		const sigBuf = Buffer.from(signature, 'hex');
-		console.log('getOpDropP2shScript:signature : ', sigBuf.length);
-		console.log('getOpDropP2shScript:signature : ', sigBuf.toString('hex'));
-		const data = Buffer.concat([magicBuf, opCodeBuf, amtBuf, sigBuf]);
-		console.log(data);
-		console.log('getOpDropP2shScript:data : ', data.toString('hex'));
+	private buildData = (signature:string):Uint8Array => {
+		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
+		const opCodeBuf = hex.decode(PEGOUT_OPCODE);
+		//const amtBuf = Buffer.allocUnsafe(9);
+		//amtBuf.writeUInt32LE(this.pegInData.amount, 0);
+
+		const view2 = this.amountToUint8(this.pegInData.amount);
+		const sigBuf = hex.decode(signature);
+		//console.log('getOpDropP2shScript:signature : ', sigBuf.length);
+		//console.log('getOpDropP2shScript:signature : ', hex.encode(sigBuf));
+
+		const data = new Uint8Array(magicBuf, ...opCodeBuf, ...view2, ...sigBuf)
+
+		//const data = Buffer.concat([magicBuf, opCodeBuf, amtBuf, sigBuf]);
+		//console.log(data);
+		//console.log('getOpDropP2shScript:data : ', hex.encode(data));
 		return data;
 	}
 };

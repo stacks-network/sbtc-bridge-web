@@ -8,9 +8,6 @@ import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress } from '$lib/stacks_connect'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
-import { Buffer as BufferPolyfill } from 'buffer/'
-declare let Buffer: typeof BufferPolyfill;
-globalThis.Buffer = BufferPolyfill
 
 export interface PegInTransactionI extends PegTransactionI {
 
@@ -183,23 +180,30 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return tx;
 	}
 
-	private buildData = (pricipal:string):Buffer => {
-		const data = Buffer.alloc(78);
-		const magicBuf = (this.net === btc.TEST_NETWORK) ? Buffer.from(MAGIC_BYTES_TESTNET, 'hex') : Buffer.from(MAGIC_BYTES_MAINNET, 'hex');
-		const opCodeBuf = Buffer.from(PEGIN_OPCODE, 'hex');
-		const addr = decodeStacksAddress(pricipal.split('.')[0]);
-		const addr0Buf = Buffer.from(addr[0].toString(16), 'hex');
-		const addr1Buf = Buffer.from(addr[1], 'hex');
+	private buildData = (pricipal:string):Uint8Array => {
 
-		magicBuf.copy(data, 0);
-		opCodeBuf.copy(data, magicBuf.length);
-		addr0Buf.copy(data, magicBuf.length + opCodeBuf.length);
-		addr1Buf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length);
+		//const data = new Uint8Array(78);
+		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
+		const opCodeBuf = hex.decode(PEGIN_OPCODE);
+		const addr = decodeStacksAddress(pricipal.split('.')[0]);
+		const addr0Buf = hex.decode(addr[0].toString(16));
+		const addr1Buf = hex.decode(addr[1]);
+
+		let data:Uint8Array;
+
+		//magicBuf.copy(data, 0);
+		//opCodeBuf.copy(data, magicBuf.length);
+		//addr0Buf.copy(data, magicBuf.length + opCodeBuf.length);
+		//addr1Buf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length);
 
 		if (pricipal.indexOf('.') > -1) {
-			const cnameBuf = Buffer.from(pricipal.split('.')[1], 'utf8');		
-			cnameBuf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length + addr1Buf.length);
-			console.log(cnameBuf.toString('utf8'))
+			const cnameBuf = new TextEncoder().encode(pricipal.split('.')[1]);
+			//const cnameBuf = Buffer.from(pricipal.split('.')[1], 'utf8');		
+			//cnameBuf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length + addr1Buf.length);
+			data = new Uint8Array(magicBuf, ...opCodeBuf, ...addr0Buf, ...addr1Buf, ...cnameBuf)
+			console.log(pricipal.split('.')[1])
+		} else {
+			data = new Uint8Array(magicBuf, ...opCodeBuf, ...addr0Buf, ...addr1Buf)
 		}
 
 		//console.log(data);
@@ -219,7 +223,8 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 
 	private getOpDropP2shScript(stacksAddress:string, sbtcWalletAddress:string) {
 		const data = this.buildData(stacksAddress);
-		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', Buffer.from(sbtcWalletAddress), 'EQUALVERIFY', 'CHECKSIG'])
+		const uint8array = new TextEncoder().encode(sbtcWalletAddress);
+		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', uint8array, 'EQUALVERIFY', 'CHECKSIG'])
 		return asmScript;
 	}
 	  

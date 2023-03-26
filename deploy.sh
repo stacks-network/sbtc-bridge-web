@@ -7,7 +7,7 @@ export PORT=22
 PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
 export SERVER=popper.brightblock.org
-export BUILDER=build-stag
+export BUILDER=build-linode
 if [ "$DEPLOYMENT" == "prod" ]; then
   SERVER=chomsky.brightblock.org;
   BUILDER=build

@@ -5,7 +5,7 @@ import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcConfig } from '$types/SbtcConfig';
+import type { SbtcConfig } from '$types/sbtc_config';
 import { loginStacksJs } from '$lib/stacks_connect'
 
 const coordinator = isCoordinator(addresses().stxAddress)

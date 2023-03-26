@@ -4,7 +4,7 @@ import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcConfig } from '$types/SbtcConfig'
+import type { SbtcConfig } from '$types/sbtc_config'
 import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { defaultSbtcConfig } from '$lib/sbtc';

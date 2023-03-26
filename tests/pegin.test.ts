@@ -195,7 +195,7 @@ describe('suite', () => {
     const sig = await secp.sign(sha256('message'), privKey);
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     try {
-      const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
+      const tx = myPeg.buildTransaction(hex.encode(sig));
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message);
@@ -215,17 +215,18 @@ describe('suite', () => {
     expect(tx.opReturn.toPSBT());
   })
 
-  const pubkey = Buffer.from('51204faa61bcd4f553d1ca945d6f74b18f60705d85191f61d76d34158b0e7798b710');
+  const pubkey = hex.decode('51204faa61bcd4f553d1ca945d6f74b18f60705d85191f61d76d34158b0e7798b710');
   it.concurrent('PegInTransaction.encodeAddress() ', async () => {
     let obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.pegInData.sbtcWalletAddress);
     expect(obj.type).equals('tr')
-    console.log(obj)
     obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.fromBtcAddress);
     expect(obj.type).equals('wpkh')
-    console.log(obj)
     const script = btc.OutScript.encode(obj)
     
-    const asmScript = btc.Script.encode([Buffer.from(pegin1.pegInData.stacksAddress, 'utf8'), 'DROP','DUP','HASH160', Buffer.from(pegin1.pegInData.sbtcWalletAddress), 'EQUALVERIFY','CHECKSIG'])
+    const addr1 = new TextEncoder().encode(pegin1.pegInData.stacksAddress);
+    const addr2 = new TextEncoder().encode(pegin1.pegInData.sbtcWalletAddress);
+
+    const asmScript = btc.Script.encode([addr1, 'DROP','DUP','HASH160', addr2, 'EQUALVERIFY','CHECKSIG'])
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		tx.addOutput({ script: asmScript, amount: BigInt(pegin1.pegInData.amount) });
 
@@ -237,8 +238,6 @@ describe('suite', () => {
         '5221030000000000000000000000000000000000000000000000000000000000000001210300000000000000000000000000000000000000000000000000000000000000022103000000000000000000000000000000000000000000000000000000000000000353ae'
       )
     )
-    console.log(script)
-
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
   })
 

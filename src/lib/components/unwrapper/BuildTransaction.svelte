@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcConfig } from '$types/SbtcConfig';
+import type { SbtcConfig } from '$types/sbtc_config';
 import Principal from "../common/Principal.svelte";
 import PegOutAmount from "./PegOutAmount.svelte";
 import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
@@ -58,7 +58,7 @@ const updateConfig = () => {
 
 const requestSignature = () => {
   const script = poTx.getDataToSign();
-  signMessage(requestSignatureCB, script.toString('hex'));
+  signMessage(requestSignatureCB, script);
 }
 
 const requestSignatureCB = async (sigData:any, message:Buffer) => {
@@ -80,7 +80,7 @@ const amountUpdated = (event:any) => {
     poTx.setAmount(event.detail.newAmount)
     updateConfig();
   } else {
-    errorReason = event.detail.reason;
+    //errorReason = event.detail.reason;
   }
 }
 

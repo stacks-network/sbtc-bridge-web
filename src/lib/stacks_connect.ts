@@ -2,7 +2,7 @@
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores.js'
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
-import type { SbtcConfig } from '$types/SbtcConfig';
+import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
