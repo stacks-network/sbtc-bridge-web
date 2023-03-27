@@ -44,7 +44,7 @@ describe('suite', () => {
     expect(piTx.fromBtcAddress).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
     expect(piTx.pegInData.sbtcWalletAddress).equals('tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss');
     expect(piTx.pegInData.stacksAddress).equals('ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN');
-    expect(piTx.pegInData.amount).equals(4205267);
+    expect(piTx.pegInData.amount).equals(221122);
     expect(piTx.addressInfo.address).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
     expect(piTx.addressInfo.utxos.length).equals(1);
     expect(piTx.addressInfo.utxos[0].txid).equals('c40b8cd078aaa183c14d6e8f2fc28645f65006bde137a20035f5d427bbca151b');
@@ -287,6 +287,26 @@ describe('suite', () => {
     expect(hex.encode(data.slice(2,3))).equals(PEGOUT_OPCODE);
   })
 
+  it.concurrent('PegOutTransaction.buildData() data built reflects correct amount', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(sig);
+    const amountUint8 = data.slice(3,12);
+    expect(amountUint8.length).equals(9);
+    expect(uint8ToAmount(amountUint8)).equals(myPeg.pegInData.amount);
+    console.log(uint8ToAmount(amountUint8))
+  })
+
+  it.concurrent('PegOutTransaction.buildData() data built reflects correct signature', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(sig);
+    const amountUint8 = data.slice(12);
+    expect(amountUint8.length).equals(65);
+    expect(hex.encode(data.slice(12))).equals(sig);
+    console.log(hex.encode(data.slice(12)))
+  })
+
 
 })
 
@@ -296,4 +316,9 @@ const amountToUint8 = (amt:number):Uint8Array => {
   view1.setUint32(0, amt, true); // Put 42 in slot 12
   const view2 = new Uint8Array(view1.buffer);
   return view2;
+}
+
+const uint8ToAmount = (amt:Uint8Array):number => {
+
+  return new DataView(amt.buffer).getUint32(0, true) // For little endian
 }
