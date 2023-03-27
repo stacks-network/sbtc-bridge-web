@@ -5,7 +5,7 @@ var __publicField = (obj, key, value) => {
   return value;
 };
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, Q as create_slot, X as assign, Y as compute_rest_props, v as validate_slots, Z as exclude_internal_props, _ as svg_element, $ as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, a0 as set_svg_attributes, a1 as toggle_class, g as insert_hydration_dev, J as append_hydration_dev, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes, a2 as get_spread_update, k as transition_in, h as transition_out, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, z as claim_text, f as claim_space, V as set_input_value, L as listen_dev, A as set_data_dev, I as noop, N as run_all, M as prevent_default, e as empty, o as onMount, a3 as validate_each_argument, a4 as destroy_each, m as binding_callbacks, G as validate_store, H as component_subscribe, B as group_outros, j as check_outros, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a7 as prop_dev, K as src_url_equal, P as globals } from "./index.0c92228d.js";
-import { _ as _asyncToGenerator, k as _regeneratorRuntime, m as _extends, S as StacksTestnet, n as getUserSession, q as getStacksProvider, r as lib, v as _objectWithoutPropertiesLoose, w as hasAppPrivateKey, x as getKeys, a as addresses, y as commonjsGlobal, z as getDefaultExportFromCjs, e as utils, f as getPublicKey, h as schnorr, j as decodeStacksAddress, A as hexToBytes } from "./stacks_connect.44e9d878.js";
+import { _ as _asyncToGenerator, k as _regeneratorRuntime, m as _extends, S as StacksTestnet, n as getUserSession, q as getStacksProvider, r as lib, v as _objectWithoutPropertiesLoose, w as hasAppPrivateKey, x as getKeys, a as addresses, y as commonjsGlobal, z as getDefaultExportFromCjs, e as utils, f as getPublicKey, h as schnorr, j as decodeStacksAddress, t as tupleCV, s as stringAsciiCV, c as uintCV, A as hexToBytes } from "./stacks_connect.44e9d878.js";
 import { i as isSupported, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl, T as TEST_NETWORK, N as NETWORK, h as hex, d as explorerBtcAddressUrl, g as base64, j as btc, b as Transaction } from "./utils.d534dad3.js";
 import { s as sbtcConfig } from "./hmac.1e7e1fcb.js";
 import { s as sendRawTxDirectMempool } from "./bridge_api.4d7e899c.js";
@@ -6873,6 +6873,7 @@ const _PegTransaction = class {
      * Overridden by super classes
      */
     __publicField(this, "buildTransaction");
+    __publicField(this, "buildData");
   }
   //setAmount = (amount:number) => void;
   setStacksAddress(stacksAddress) {
@@ -6918,6 +6919,25 @@ __publicField(PegTransaction, "hydrate", (o) => {
   me.ready = o.ready;
   return me;
 });
+tupleCV({
+  name: stringAsciiCV("SBTC Bridge"),
+  version: stringAsciiCV("1.0.0"),
+  "chain-id": uintCV(
+    1
+    /* Mainnet */
+    /* Testnet */
+  )
+});
+function concatByteArrays(byteArrays) {
+  const totalSize = byteArrays.reduce((len, bytes) => len + bytes.length, 0);
+  const resultArray = new Uint8Array(totalSize);
+  let offset = 0;
+  for (let i = 0; i < byteArrays.length; i++) {
+    resultArray.set(byteArrays[i], offset);
+    offset += byteArrays[i].length;
+  }
+  return resultArray;
+}
 const file$8 = "src/lib/components/common/CopyClipboard.svelte";
 function create_fragment$8(ctx) {
   let textarea_1;
@@ -12010,9 +12030,10 @@ export {
   UTXOSelection as U,
   assert as a,
   MAGIC_BYTES_MAINNET as b,
-  PEGOUT_OPCODE as c,
-  Principal as d,
-  SignTransaction as e,
-  SignTransactionWeb as f,
-  PEGIN_OPCODE as g
+  concatByteArrays as c,
+  PEGOUT_OPCODE as d,
+  Principal as e,
+  SignTransaction as f,
+  SignTransactionWeb as g,
+  PEGIN_OPCODE as h
 };

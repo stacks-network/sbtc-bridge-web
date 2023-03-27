@@ -3,7 +3,7 @@ import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_
 import { a as addresses, l as logUserOut, b as loginStacksJs, u as userSession } from "../chunks/stacks_connect.44e9d878.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.8c2c8b4b.js";
 import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { g as goto } from "../chunks/navigation.df686fb6.js";
+import { g as goto } from "../chunks/navigation.c1245f11.js";
 import { U as UserBalance } from "../chunks/UserBalance.c86474f0.js";
 const app = "";
 const stx_eco_wallet_on = "" + new URL("../assets/stx_eco_wallet_on.090e5a93.png", import.meta.url).href;
@@ -1961,7 +1961,7 @@ function create_if_block(ctx) {
     block,
     id: create_if_block.name,
     type: "if",
-    source: "(55:0) {#if inited}",
+    source: "(53:0) {#if inited}",
     ctx
   });
   return block;
@@ -2037,25 +2037,25 @@ function create_else_block(ctx) {
     },
     h: function hydrate() {
       attr_dev(p0, "class", "text-white");
-      add_location(p0, file, 63, 2, 1992);
+      add_location(p0, file, 61, 2, 1888);
       if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
         attr_dev(img, "src", img_src_value);
       attr_dev(img, "alt", "Connect Wallet / Login");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file, 64, 116, 2187);
+      add_location(img, file, 62, 116, 2083);
       attr_dev(span0, "class", "px-1");
-      add_location(span0, file, 64, 96, 2167);
+      add_location(span0, file, 62, 96, 2063);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file, 64, 28, 2099);
+      add_location(a, file, 62, 28, 1995);
       attr_dev(span1, "class", "nav-item");
-      add_location(span1, file, 64, 5, 2076);
-      add_location(p1, file, 64, 2, 2073);
+      add_location(span1, file, 62, 5, 1972);
+      add_location(p1, file, 62, 2, 1969);
       attr_dev(p2, "class", "mt-5 text-warning");
-      add_location(p2, file, 65, 2, 2305);
+      add_location(p2, file, 63, 2, 2201);
       attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-      add_location(div, file, 62, 0, 1962);
+      add_location(div, file, 60, 0, 1858);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -2093,7 +2093,7 @@ function create_else_block(ctx) {
     block,
     id: create_else_block.name,
     type: "else",
-    source: "(62:0) {:else}",
+    source: "(60:0) {:else}",
     ctx
   });
   return block;
@@ -2143,7 +2143,7 @@ function create_if_block_1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-      add_location(div, file, 56, 0, 1893);
+      add_location(div, file, 54, 0, 1789);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -2208,7 +2208,7 @@ function create_if_block_1(ctx) {
     block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(56:0) {#if $sbtcConfig && $sbtcConfig.loggedIn}",
+    source: "(54:0) {#if $sbtcConfig && $sbtcConfig.loggedIn}",
     ctx
   });
   return block;
