@@ -3,10 +3,13 @@ import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
+import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { fail } from 'assert';
 import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import util from 'util'
+import { concatByteArrays } from '$lib/structured-data.js'
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from '../src/lib/domain/PegTransaction'
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -198,7 +201,7 @@ describe('suite', () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
-    const tx = myPeg.buildTransaction(hex.encode(sig).toString('hex'));
+    const tx = myPeg.buildTransaction(hex.encode(sig));
     expect(tx.opReturn.toPSBT());
   })
 
@@ -218,12 +221,11 @@ describe('suite', () => {
     myPeg.pegInData.amount = 2500;
     myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
     const data1 = myPeg.getDataToSign();
-    const amtBuf = hex.decode(myPeg.getDataToSign()).subarray(0,9);
+    const amtBuf = amountToUint8(2500);
 
-    const script = btc.OutScript.encode(btc.Address(btc.TEST_NETWORK).decode('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8'))
-    const data2 = new Uint8Array([ ...amtBuf ]);
-
-    expect(hex.encode(data2)).equals(data1);
+    //const script = btc.OutScript.encode(btc.Address(btc.TEST_NETWORK).decode('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8'))
+    //const amt2 = hex.decode(data1).slice(0,9);
+    expect(hex.encode(amtBuf)).equals(hex.encode(hex.decode(data1).slice(0,9)));
   })
 
   it.concurrent('PegOutTransaction.getDataToSign() returns encodes amount.', async () => {
@@ -249,7 +251,8 @@ describe('suite', () => {
 		//amtBuf.writeUInt32LE(2500, 0);
     //const amt = new Uint8Array(view.buffer)
     const amt = amountToUint8(2500)
-    const data = new Uint8Array([ ...b1, ...amt ]);
+		const data = concatByteArrays([b1, amt])
+    expect(data.length).equals(b1.length + amt.length)
 
 		//const data = Buffer.concat([b1, amtBuf]);
     //console.log('amtBuf: ' + (hex.encode(amt)))
@@ -261,6 +264,30 @@ describe('suite', () => {
     //console.log('decodePegOutOutputs:amtBuf3 ', util.inspect(pegOutAmount, false, null, true /* enable colors */));
     //console.log('decodePegOutOutputs:amtBuf4 ', util.inspect(pegOutAmount1, false, null, true /* enable colors */));
   })
+
+  const sig = 'e838d8b8bc0ef04ad9e65e905d1f4c09c5861af913d27ee5c2dd76091b3e5a277144d204948e8cb7ff17cf07b24452e1f5e9430e4ef73555bfe7e1f401f2c17200'
+  it.concurrent('PegOutTransaction.buildData() data built reflects testnet network', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.net = btc.TEST_NETWORK;
+    const data = myPeg.buildData(sig);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_TESTNET);
+  })
+
+  it.concurrent('PegOutTransaction.buildData() data built reflects mainnet network', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(sig);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_MAINNET);
+  })
+
+  it.concurrent('PegOutTransaction.buildData() data built reflects correct opcode', async () => {
+    const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(sig);
+    expect(hex.encode(data.slice(2,3))).equals(PEGOUT_OPCODE);
+  })
+
+
 })
 
 const amountToUint8 = (amt:number):Uint8Array => {

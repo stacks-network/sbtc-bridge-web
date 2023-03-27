@@ -10,6 +10,7 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { explorerAddressUrl } from "$lib/utils";
 import { addresses, signMessage } from '$lib/stacks_connect'
+import { hex } from '@scure/base';
 
 export let poTx:PegOutTransactionI;
 if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
@@ -61,12 +62,8 @@ const requestSignature = () => {
   signMessage(requestSignatureCB, script);
 }
 
-const requestSignatureCB = async (sigData:any, message:Buffer) => {
-  //const msg = { script: script.toString('hex') }
-  //const sigData:any = await requestSignMessage(msg);
-  const script = message.toString('hex');
-  //const valid = verifyDataSignature(message.toString('hex'), sigData.publicKey, sigData.signature)
-  //const addreObj = getStacksAddressFromSignature(message.toString('hex'), sigData.signature)
+const requestSignatureCB = async (sigData:any, message:Uint8Array) => {
+  const script = hex.encode(message);
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);

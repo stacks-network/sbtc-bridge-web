@@ -39,9 +39,7 @@ onMount(async () => {
   await tick();
   bootstrap = (await import('bootstrap'));
   try {
-    //console.log(Buffer.from('hex', 'utf8').toString('hex'))
     await initApplication();
-    //globalThis.Buffer = Buffer;
     inited = true;
   } catch (err) {
     console.log(err)

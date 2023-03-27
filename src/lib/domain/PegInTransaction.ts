@@ -8,10 +8,11 @@ import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress } from '$lib/stacks_connect'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
-
+import { concatByteArrays } from '$lib/structured-data.js'
 export interface PegInTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
@@ -180,32 +181,23 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return tx;
 	}
 
-	private buildData = (pricipal:string):Uint8Array => {
+	buildData = (sigOrPrin:string):Uint8Array => {
 
 		//const data = new Uint8Array(78);
 		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
 		const opCodeBuf = hex.decode(PEGIN_OPCODE);
-		const addr = decodeStacksAddress(pricipal.split('.')[0]);
+		const addr = decodeStacksAddress(sigOrPrin.split('.')[0]);
 		const addr0Buf = hex.decode(addr[0].toString(16));
 		const addr1Buf = hex.decode(addr[1]);
 
 		let data:Uint8Array;
-
-		//magicBuf.copy(data, 0);
-		//opCodeBuf.copy(data, magicBuf.length);
-		//addr0Buf.copy(data, magicBuf.length + opCodeBuf.length);
-		//addr1Buf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length);
-
-		if (pricipal.indexOf('.') > -1) {
-			const cnameBuf = new TextEncoder().encode(pricipal.split('.')[1]);
-			//const cnameBuf = Buffer.from(pricipal.split('.')[1], 'utf8');		
-			//cnameBuf.copy(data, magicBuf.length + opCodeBuf.length + addr0Buf.length + addr1Buf.length);
-			data = new Uint8Array(magicBuf, ...opCodeBuf, ...addr0Buf, ...addr1Buf, ...cnameBuf)
-			console.log(pricipal.split('.')[1])
+		if (sigOrPrin.indexOf('.') > -1) {
+			const cnameBuf = new TextEncoder().encode(sigOrPrin.split('.')[1]);
+			data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf, cnameBuf])
+			console.log(sigOrPrin.split('.')[1])
 		} else {
-			data = new Uint8Array(magicBuf, ...opCodeBuf, ...addr0Buf, ...addr1Buf)
+			data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf])
 		}
-
 		//console.log(data);
 		return data;
 	}

@@ -7,10 +7,12 @@ import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from './PegTransaction'
+import { concatByteArrays } from '$lib/structured-data.js'
 
 export interface PegOutTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
@@ -113,10 +115,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 			}
 	  	}
 		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs (4 confirmations are required)')
-		// internals of adding outputs - 'data length' : 'op code' : 'data'
-		// const opCode = Buffer.from('2a6a', 'hex');
-		// const data1 = Buffer.from(Buffer.from(this.pegInData.stacksAddress, 'utf8').toString('hex'), 'hex');
-		// tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.stacksAddress, 'utf8')]), amount: 0n });
 		const uint8array = new TextEncoder().encode(sbtcWalletAddress);
 		tx.addOutput({ script: btc.Script.encode(['RETURN', uint8array]), amount: 0n });
 		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
@@ -152,7 +150,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 	getDataToSign = () => {
 		const view2 = this.amountToUint8(this.pegInData.amount);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		const data = new Uint8Array(view2, ...script);
+		const data = concatByteArrays([view2, script])
 		return hex.encode(data);
 	}
 
@@ -217,18 +215,18 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return asmScript;
 	}
 
-	private buildData = (signature:string):Uint8Array => {
+	buildData = (sigOrPrin:string):Uint8Array => {
 		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
 		const opCodeBuf = hex.decode(PEGOUT_OPCODE);
 		//const amtBuf = Buffer.allocUnsafe(9);
 		//amtBuf.writeUInt32LE(this.pegInData.amount, 0);
 
 		const view2 = this.amountToUint8(this.pegInData.amount);
-		const sigBuf = hex.decode(signature);
+		const sigBuf = hex.decode(sigOrPrin);
 		//console.log('getOpDropP2shScript:signature : ', sigBuf.length);
 		//console.log('getOpDropP2shScript:signature : ', hex.encode(sigBuf));
 
-		const data = new Uint8Array(magicBuf, ...opCodeBuf, ...view2, ...sigBuf)
+		const data = concatByteArrays([magicBuf, opCodeBuf, view2, sigBuf])
 
 		//const data = Buffer.concat([magicBuf, opCodeBuf, amtBuf, sigBuf]);
 		//console.log(data);
