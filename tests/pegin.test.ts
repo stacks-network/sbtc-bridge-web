@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import PegInTransaction from '$lib/domain/PegInTransaction';
@@ -7,6 +7,8 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import assert, { fail } from 'assert';
 import { pegin1 } from './data/data_pegin_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from '../src/lib/domain/PegTransaction'
+import { c32encode, c32decode, c32address, c32addressDecode, c32checkEncode } from 'c32check';
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -195,7 +197,7 @@ describe('suite', () => {
     const sig = await secp.sign(sha256('message'), privKey);
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     try {
-      const tx = myPeg.buildTransaction(Buffer.from(sig).toString('hex'));
+      const tx = myPeg.buildTransaction(hex.encode(sig));
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message);
@@ -215,37 +217,72 @@ describe('suite', () => {
     expect(tx.opReturn.toPSBT());
   })
 
-  const pubkey = Buffer.from('51204faa61bcd4f553d1ca945d6f74b18f60705d85191f61d76d34158b0e7798b710');
-  it.concurrent('PegInTransaction.encodeAddress() ', async () => {
+  it.concurrent('PegInTransaction.encodeAddress() check bitcoin address encoding', async () => {
     let obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.pegInData.sbtcWalletAddress);
     expect(obj.type).equals('tr')
-    console.log(obj)
     obj = btc.Address(btc.TEST_NETWORK).decode(pegin1.fromBtcAddress);
     expect(obj.type).equals('wpkh')
-    console.log(obj)
-    const script = btc.OutScript.encode(obj)
-    
-    const asmScript = btc.Script.encode([Buffer.from(pegin1.pegInData.stacksAddress, 'utf8'), 'DROP','DUP','HASH160', Buffer.from(pegin1.pegInData.sbtcWalletAddress), 'EQUALVERIFY','CHECKSIG'])
-		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		tx.addOutput({ script: asmScript, amount: BigInt(pegin1.pegInData.amount) });
-
-    //const addr = btc.Address(btc.TEST_NETWORK).encode(btc.OutScript.encode(pubkey))
-    //console.log(addr)
-    //expect(addr).equals('tb1qyxeczljl4g744py6u37r0csr2q4grlh7yhp9km');
-    const decoded = btc.OutScript.decode(
-      hex.decode(
-        '5221030000000000000000000000000000000000000000000000000000000000000001210300000000000000000000000000000000000000000000000000000000000000022103000000000000000000000000000000000000000000000000000000000000000353ae'
-      )
-    )
-    console.log(script)
-
-    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    myPeg.setAmount(2500)
-    const txs = myPeg.buildTransaction(undefined);
-    //tx.addOutput({ script: btc.Script.encode(['RETURN', globalThis.Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
-		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
-
-    //txs.opReturn.
   })
+
+  const addr = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5'
+  const addrM = 'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F'
+  it.concurrent('PegInTransaction.buildData() data built reflects testnet network', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.TEST_NETWORK;
+    const data = myPeg.buildData(addr);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_TESTNET);
+  })
+
+  it.concurrent('PegInTransaction.buildData() data built reflects mainnet network', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(addrM);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_MAINNET);
+  })
+
+  it.concurrent('PegInTransaction.buildData() data built reflects correct opcode', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(addr);
+    expect(hex.encode(data.slice(2,3)).toUpperCase()).equals(PEGIN_OPCODE);
+  })
+
+  it.concurrent('PegInTransaction.buildData() data built stacks mainnet address', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(addrM);
+    const addr0Buf = hex.encode(data.slice(3,4));
+    expect(parseInt(addr0Buf, 16)).equals(22);
+  })
+
+  it.concurrent('PegInTransaction.buildData() data built stacks testnet address', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.TEST_NETWORK;
+    const data = myPeg.buildData(addr);
+    const addr0Buf = hex.encode(data.slice(3,4));    
+    expect(parseInt(addr0Buf, 16)).equals(26);
+  })
+
+  it.concurrent('PegInTransaction.buildData() can recover full stacks testnet from data built', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.TEST_NETWORK;
+    const data = myPeg.buildData(addr);
+
+    const addr0Buf = hex.encode(data.slice(3,4));    
+    const addr1Buf = hex.encode(data.slice(4, 24));
+    const address = c32address(parseInt(addr0Buf, 16), addr1Buf)    
+    expect(address).equals(addr);
+  })
+
+  it.concurrent('PegInTransaction.buildData() can recover full stacks mainnet from data built', async () => {
+    const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
+    myPeg.net = btc.NETWORK;
+    const data = myPeg.buildData(addrM);
+    const addr0Buf = hex.encode(data.slice(3,4));    
+    const addr1Buf = hex.encode(data.slice(4, 24));
+    const address = c32address(parseInt(addr0Buf, 16), addr1Buf)    
+    expect(address).equals(addrM);
+  })
+
 
 })

@@ -1,21 +1,27 @@
 <script lang="ts">
 import BuildTransaction from '$lib/components/unwrapper/BuildTransaction.svelte';
 import SignTransaction from '$lib/components/common/SignTransaction.svelte';
+import SignTransactionWeb from '$lib/components/common/SignTransactionWeb.svelte';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { sbtcConfig } from '$stores/stores'
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
+import type { SigData } from '$types/sig_data';
+import { addresses } from '$lib/stacks_connect'
 
 let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
 
 $: view = 'build_tx_view';
 
-let sigData: { txs: any; outputsForDisplay: Array<any>; inputsForDisplay: Array<any>; };
+let sigData: SigData;
 const openSigView = () => {
 	poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
+	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses().stxAddress);
 	const signature = $sbtcConfig.sigData.signature;
 	const txs = poTx!.buildTransaction(signature);
 	sigData = {
+		pegin: false,
+		webWallet: poTx.fromBtcAddress === addresses().cardinal,
 		txs,
 		outputsForDisplay: poTx!.getOutputsForDisplay(),
 		inputsForDisplay: poTx!.addressInfo.utxos
@@ -23,7 +29,7 @@ const openSigView = () => {
   	view = 'sign_tx_view';
 }
 
-const openBuildView = () => {
+const updateTransaction = () => {
   view = 'build_tx_view';
 }
 
@@ -43,7 +49,12 @@ const openBuildView = () => {
 					  {#if view === 'build_tx_view'}
 					  <BuildTransaction {poTx} on:request_signature={openSigView}/>
 					  {:else}
-					  {#if sigData}<SignTransaction {sigData} on:update_transaction={openBuildView}/>{/if}
+					  	{#if sigData && !sigData.webWallet}
+					  		<SignTransaction {sigData} pegInfo={JSON.parse(JSON.stringify(poTx))} on:update_transaction={updateTransaction}/>
+						{/if}
+						{#if sigData && sigData.webWallet}
+							<SignTransactionWeb {sigData} pegInfo={JSON.parse(JSON.stringify(poTx))} on:update_transaction={updateTransaction}/>
+						{/if}
 					  {/if}
 					</div>
 				</div>

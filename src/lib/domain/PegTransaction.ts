@@ -1,7 +1,7 @@
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
-import { decodeStacksAddress } from "$lib/stacks";
+import { decodeStacksAddress } from "$lib/stacks_connect";
 
 type PegInData = {
 	stacksAddress?: string;
@@ -9,7 +9,13 @@ type PegInData = {
 	amount: number,
 };
 
+export const MAGIC_BYTES_TESTNET = '5432';
+export const MAGIC_BYTES_MAINNET = '5832';
+export const PEGIN_OPCODE = '3C';
+export const PEGOUT_OPCODE = '3e'; // >
+
 export interface PegTransactionI {
+	unconfirmedUtxos:boolean;
 	net:any;
     ready:boolean;
     fromBtcAddress:string;
@@ -25,15 +31,17 @@ export interface PegTransactionI {
 	scureFee:number;
 	dust: number;
 
+	buildData: (sigOrPrin:string) => Uint8Array;
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 	calculateFees: () => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
 	setStacksAddress: (stacksAddress:string|undefined) => void;
 	getChange: () => number;
+	isUTXOConfirmed: (utxo:any) => boolean;
 	setFeeRate: (rate:number) => void;
 	getOutputsForDisplay: () => Array<any>;
-	getDataToSign: () => Buffer;
+	getDataToSign: () => string;
 	getInputsForDisplay: () => Array<any>;
 }
 
@@ -52,6 +60,8 @@ keySetForFeeCalculation.push({
 
 export default class PegTransaction implements PegTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
+	unconfirmedUtxos = false;
+	requiredConfirmed = 6;
 	net:any;
 	ready = false;
 	fromBtcAddress!: string;
@@ -75,7 +85,7 @@ export default class PegTransaction implements PegTransactionI {
 		// use create function
 	}
 
-	getDataToSign!: () => Buffer;
+	getDataToSign!: () => string;
 	setAmount = (amount:number) => {
 		// overridden
 		console.log(amount);
@@ -114,6 +124,10 @@ export default class PegTransaction implements PegTransactionI {
 		return this.maxCommit() - this.fee - this.dust;
 	};
  
+	isUTXOConfirmed = (utxo:any) => {
+		return utxo.tx.confirmations > 3;
+	};
+ 
 	//setAmount = (amount:number) => void;
 
 	setStacksAddress(stacksAddress:string|undefined) {
@@ -148,6 +162,8 @@ export default class PegTransaction implements PegTransactionI {
 	 * Overridden by super classes
 	 */
 	buildTransaction!: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+
+	buildData!: (sigOrPrin:string) => Uint8Array;
 
 	maxCommit() {
 		if (!this.ready) return 0;

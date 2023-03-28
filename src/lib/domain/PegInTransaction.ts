@@ -1,4 +1,4 @@
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import assert from 'assert';
@@ -6,9 +6,13 @@ import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
+import { decodeStacksAddress } from '$lib/stacks_connect'
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
+import { concatByteArrays } from '$lib/structured-data.js'
 export interface PegInTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
@@ -26,6 +30,7 @@ keySetForFeeCalculation.push({
   ecdsaPub: secp.getPublicKey(priv, true),
   schnorrPub: secp.schnorr.getPublicKey(priv)
 })
+
 export default class PegInTransaction extends PegTransaction implements PegInTransactionI {
 	public constructor() {
 		super();
@@ -90,16 +95,21 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		// create a set of inputs corresponding to the utxo set
 		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				//txid: utxo.txid,
-				index: utxo.vout,
-				witnessUtxo: {
-					amount: 600n,
-					script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
-				  },
-			});
+			if (this.isUTXOConfirmed(utxo)) {
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					//txid: utxo.txid,
+					index: utxo.vout,
+					witnessUtxo: {
+						amount: 600n,
+						script: btc.p2wpkh(secp256k1.getPublicKey(privKey, true)).script,
+					  },
+				});
+			} else {
+				this.unconfirmedUtxos = true;
+			}
 	  	}
+		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs')
 		//tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(stacksAddress, 'utf8')]), amount: 0n });
 		//tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
 		//tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
@@ -142,44 +152,71 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
 	}
 
+	private addInputs = (tx:btc.Transaction) => {
+		for (const utxo of this.addressInfo.utxos) {
+			const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
+			if (this.isUTXOConfirmed(utxo)) {
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					index: utxo.vout,
+					witnessUtxo: {
+						script: script.outputs[utxo.vout].script,
+						amount: BigInt(utxo.value)
+					},
+				});
+			}
+		}
+	}
+
 	private buildOpReturn = () => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		this.addInputs(tx);
 		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-		  }
-		tx.addOutput({ script: btc.Script.encode(['RETURN', Buffer.from(this.pegInData.stacksAddress, 'utf8')]), amount: 0n });
+		const data = this.buildData(this.pegInData.stacksAddress);
+		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx; //hex.encode(tx.toPSBT());
+		return tx;
+	}
+
+	buildData = (sigOrPrin:string):Uint8Array => {
+
+		//const data = new Uint8Array(78);
+		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
+		const opCodeBuf = hex.decode(PEGIN_OPCODE);
+		const addr = decodeStacksAddress(sigOrPrin.split('.')[0]);
+		const addr0Buf = hex.decode(addr[0].toString(16));
+		const addr1Buf = hex.decode(addr[1]);
+
+		let data:Uint8Array;
+		if (sigOrPrin.indexOf('.') > -1) {
+			const cnameBuf = new TextEncoder().encode(sigOrPrin.split('.')[1]);
+			data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf, cnameBuf])
+			console.log(sigOrPrin.split('.')[1])
+		} else {
+			data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf])
+		}
+		//console.log(data);
+		return data;
 	}
 
 	private buildOpDrop = () => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		// create a set of inputs corresponding to the utxo set
-		for (const utxo of this.addressInfo.utxos) {
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-			});
-		}
-		//const obj = btc.Address(btc.TEST_NETWORK).decode(this.pegInData.sbtcWalletAddress);
-		const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress,this.pegInData.sbtcWalletAddress)
+		this.addInputs(tx);
+		const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress)
 		tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
-		//tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
 		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx; //hex.encode(tx.toPSBT());
+		return tx;
 	}
 
 	private getOpDropP2shScript(stacksAddress:string, sbtcWalletAddress:string) {
-		const asmScript = btc.Script.encode([Buffer.from(stacksAddress, 'utf8'), 'DROP', 'DUP', 'HASH160', Buffer.from(sbtcWalletAddress), 'EQUALVERIFY', 'CHECKSIG'])
+		const data = this.buildData(stacksAddress);
+		const uint8array = new TextEncoder().encode(sbtcWalletAddress);
+		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', uint8array, 'EQUALVERIFY', 'CHECKSIG'])
 		return asmScript;
 	}
 	  

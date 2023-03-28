@@ -5,19 +5,23 @@ import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 export let amtData:{pegIn:boolean, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
 
 const dispatch = createEventDispatcher();
-let reason:string|undefined;
+let errorReason:string|undefined;
 let pegAmount:number = amtData.pegAmount;
 
 const changePegIn = (maxValue:boolean) => {
-  reason = undefined;
+  errorReason = undefined;
   try {
+    if (pegAmount > amtData.maxCommit) {
+      errorReason = 'Can\'t wrap more btc than available.';
+      return;
+    }
     if (maxValue) {
       pegAmount = amtData.maxCommit - amtData.fee;
     }
     const rate = amtData.fees.find((o) => o === amtData.fee);
     dispatch('amount_updated', { opCode:'user', error: false, newAmount: pegAmount, newFeeRate: rate });
   } catch(err:any) {
-    reason = err||'Amount is not valid';
+    errorReason = err||'Amount is not valid';
   }
 }
 
@@ -47,6 +51,7 @@ function init(el:any) {
     <div class="text-small d-flex justify-content-end  text-info">
       {#if amtData.change > 0}<span><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>set max</a></span>{/if}
     </div>
+    {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
     <FeeDisplay {amtData} currentPeg={pegAmount} on:fee_rate_updated={changeRate}/>
   </div>
 </div>

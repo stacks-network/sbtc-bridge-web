@@ -1,47 +1,49 @@
 <script lang="ts">
 import "../app.scss";
-import { getAuth } from "@micro-stacks/svelte";
-import {tick, onMount, onDestroy} from 'svelte';
+import { tick, onMount, onDestroy } from 'svelte';
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
-import { login } from "$lib/stacks";
+import type { SbtcConfig } from '$types/sbtc_config'
+import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
-import { Buffer } from 'buffer/'
-import { defaultSbtcConfig } from '$lib/sbtc'
-import { setUpMicroStacks } from '$lib/stacks'
+import { defaultSbtcConfig } from '$lib/sbtc';
 
 // data - imported from layout.ts
-export let data:any;
-const unsubscribe = sbtcConfig.subscribe(() => {});
-onDestroy(unsubscribe);
-setUpMicroStacks();
-let inited = false;
-const auth = getAuth();
 
-const doLogin = () => {
-  login($auth);
+export let data:any;
+const unsubscribe = sbtcConfig.subscribe((conf) => {
+});
+onDestroy(unsubscribe);
+//setUpMicroStacks();
+//setUpStacksJs();
+let inited = false;
+
+const doLogin = async () => {
+  await loginStacksJs();
+  initApplication();
 }
 
 const initApplication = async () => {
-  const conf = $sbtcConfig;
+  let conf = defaultSbtcConfig as SbtcConfig;
+  if ($sbtcConfig) conf = $sbtcConfig;
+  if (userSession.isUserSignedIn()) {
+    conf.loggedIn = true;
+  }
   conf.sbtcContractData = data.sbtcContractData;
   sbtcConfig.update(() => conf);
-  return conf;
 }
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
+  await tick();
   bootstrap = (await import('bootstrap'));
-  let conf = defaultSbtcConfig;
   try {
-    conf = await initApplication();
-    globalThis.Buffer = Buffer;
+    await initApplication();
     inited = true;
   } catch (err) {
     console.log(err)
   }
-  await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
@@ -53,7 +55,7 @@ onMount(async () => {
 </script>
 
 {#if inited}
-{#if $auth.isSignedIn}
+{#if $sbtcConfig && $sbtcConfig.loggedIn}
 <div class="app">
   <Header/>
   <slot />
@@ -63,7 +65,7 @@ onMount(async () => {
 <div class="lobby bg-dark">
   <p class="text-white">Connect your Hiro web wallet to start wrapping SBTC!</p>
   <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
-  <p class="mt-5 text-warning">Currently in Beta testing!</p>
+  <p class="mt-5 text-warning">Currently in Alpha Testing!</p>
 </div>
 {/if}
 {/if}

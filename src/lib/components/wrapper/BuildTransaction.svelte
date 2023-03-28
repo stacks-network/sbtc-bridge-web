@@ -8,13 +8,18 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { getAccount } from '@micro-stacks/svelte';
+import { addresses } from '$lib/stacks_connect'
+import { explorerBtcAddressUrl } from "$lib/utils";
 
 export let piTx:PegInTransactionI;
+if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
 let componentKey3 = 0;
 
-const account = getAccount();
-if (!piTx.pegInData.stacksAddress && $account.stxAddress) piTx.pegInData.stacksAddress = $account.stxAddress
+const getExplorerUrl = () => {
+  return explorerBtcAddressUrl(piTx.fromBtcAddress)
+}
+
+if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Address (Account or Contract)',
   info: 'sBTC will be minted to this account or contract',
@@ -36,10 +41,11 @@ const amtData = () => {
 
 const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
-  label: 'Bitcoin Address',
+  label: 'Your Bitcoin Address',
   info: 'You\'ll send bitcoin from here to the sBTC wallet',
+  utxos: piTx.addressInfo.utxos,
   maxCommit: (piTx.ready) ? piTx.maxCommit() : 0,
-  fromBtcAddress: (piTx.ready) ? piTx.fromBtcAddress : undefined,
+  fromBtcAddress: piTx.fromBtcAddress,
   numbInputs: (piTx.ready) ? piTx.addressInfo.utxos.length : 0,
   network
 }
@@ -95,11 +101,15 @@ const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
+      const p0 = piTx.pegInData;
       piTx = await PegInTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
       piTx.calculateFees();
+      if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      errorReason = err.message;
+      errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      //if (err.message !== 'No inputs signed') errorReason = err.message;
+      //else errorReason = 'Please fix above errors and try again.'
     }
   }
 }
@@ -112,7 +122,6 @@ let inited = false;
 onMount(async () => {
   if (!piTx.pegInData.stacksAddress) stxAddressOk = false;
   if (piTx.pegInData.amount! > 0) amountOk = true;
-  if (piTx.ready) piTx.calculateFees();
   updateConfig();
   inited = true;
 })
@@ -129,7 +138,7 @@ onMount(async () => {
   <div class="mb-4"><PegInAmount amtData={amtData()} on:amount_updated={amountUpdated} /></div>
   {/key}
   {/if}
-  {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
+  {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
     <div class="col">

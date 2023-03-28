@@ -32,21 +32,8 @@ import logoWhite from '$lib/assets/logo-white.jpeg';
     </div>
   </div>  
   <style>
-  .footer {
-    font-family: Gilroy-ExtraBold;
-    border-top: 1pt solid #fff;
-    background-color: #262626;
-    min-width: 100vw;
-  }
   .copy {
     margin: 0 0px;
   }
-.copywright {
-    font-family: Akrobat-Thin;
-    text-transform: uppercase;
-    font-size: 1.3rem;
-    line-height: 2em;
-    color: #ededed;
-}
 
   </style>
