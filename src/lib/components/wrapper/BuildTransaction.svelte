@@ -9,10 +9,15 @@ import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import { addresses } from '$lib/stacks_connect'
+import { explorerBtcAddressUrl } from "$lib/utils";
 
 export let piTx:PegInTransactionI;
 if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
 let componentKey3 = 0;
+
+const getExplorerUrl = () => {
+  return explorerBtcAddressUrl(piTx.fromBtcAddress)
+}
 
 if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
@@ -102,8 +107,9 @@ const utxoUpdated = async (event:any) => {
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      if (err.message !== 'No inputs signed') errorReason = err.message;
-      else errorReason = 'Please fix above errors and try again.'
+      errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      //if (err.message !== 'No inputs signed') errorReason = err.message;
+      //else errorReason = 'Please fix above errors and try again.'
     }
   }
 }
@@ -132,7 +138,7 @@ onMount(async () => {
   <div class="mb-4"><PegInAmount amtData={amtData()} on:amount_updated={amountUpdated} /></div>
   {/key}
   {/if}
-  {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
+  {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
     <div class="col">

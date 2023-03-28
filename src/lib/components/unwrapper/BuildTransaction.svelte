@@ -11,9 +11,14 @@ import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { explorerAddressUrl } from "$lib/utils";
 import { addresses, signMessage } from '$lib/stacks_connect'
 import { hex } from '@scure/base';
+import { explorerBtcAddressUrl } from "$lib/utils";
 
 export let poTx:PegOutTransactionI;
 if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
+
+const getExplorerUrl = () => {
+  return explorerBtcAddressUrl(poTx.fromBtcAddress)
+}
 
 if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
@@ -63,7 +68,7 @@ const requestSignature = () => {
 }
 
 const requestSignatureCB = async (sigData:any, message:Uint8Array) => {
-  const script = hex.encode(message);
+  //const script = hex.encode(message);
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
@@ -101,7 +106,12 @@ const utxoUpdated = async (event:any) => {
       updateConfig();
     } catch (err:any) {
       if (err.message !== 'No inputs signed') errorReason = err.message;
-      else errorReason = 'Please fix above errors and try again.'
+      else {
+        if (err.message === 'No confirmed UTXOs') {
+
+        }
+        errorReason = 'Please fix above errors and try again.'
+      }
     }
   }
 }

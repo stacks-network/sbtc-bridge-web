@@ -114,7 +114,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 				this.unconfirmedUtxos = true;
 			}
 	  	}
-		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs (4 confirmations are required)')
+		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs')
 		const uint8array = new TextEncoder().encode(sbtcWalletAddress);
 		tx.addOutput({ script: btc.Script.encode(['RETURN', uint8array]), amount: 0n });
 		tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);

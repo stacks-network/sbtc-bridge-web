@@ -9,6 +9,7 @@ let events:any[] = []
 let transactions = false;
 const fetchTxs = async () => {
   events = await fetchSbtcEvents();
+  events = events.reverse()
   transactions = true;
 }
 
