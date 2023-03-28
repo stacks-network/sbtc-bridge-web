@@ -1,9 +1,3 @@
-var __defProp = Object.defineProperty;
-var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
-var __publicField = (obj, key, value) => {
-  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
-  return value;
-};
 import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, g as insert_hydration_dev, J as append_hydration_dev, V as set_input_value, E as mount_component, a6 as action_destroyer, L as listen_dev, A as set_data_dev, W as to_number, k as transition_in, h as transition_out, F as destroy_component, N as run_all, M as prevent_default, I as noop, G as validate_store, H as component_subscribe, o as onMount, P as globals, e as empty, B as group_outros, j as check_outros } from "../chunks/index.0c92228d.js";
 import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
 import { F as FeeDisplay, P as PegTransaction, a as assert, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, h as PEGIN_OPCODE, c as concatByteArrays, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.49a96897.js";
@@ -564,16 +558,16 @@ keySetForFeeCalculation.push({
 const _PegInTransaction = class extends PegTransaction {
   constructor() {
     super();
-    __publicField(this, "getChange", () => {
+    this.getChange = () => {
       return this.maxCommit() - this.pegInData.amount - this.fee;
-    });
-    __publicField(this, "setAmount", (amount) => {
+    };
+    this.setAmount = (amount) => {
       if (amount > this.maxCommit() - this.fee) {
         throw new Error("Amount is more than available " + this.maxCommit() + " less the gas " + this.fee);
       }
       this.pegInData.amount = amount;
-    });
-    __publicField(this, "calculateFees", () => {
+    };
+    this.calculateFees = () => {
       if (!this.ready)
         throw new Error("Not ready!");
       const stacksAddress = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN";
@@ -619,8 +613,8 @@ const _PegInTransaction = class extends PegTransaction {
       if (this.pegInData.amount === 0) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    });
-    __publicField(this, "getOutputsForDisplay", () => {
+    };
+    this.getOutputsForDisplay = () => {
       const changeAmount = this.getChange();
       const outs = [
         { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
@@ -630,15 +624,15 @@ const _PegInTransaction = class extends PegTransaction {
         outs.push({ address: this.fromBtcAddress, amount: changeAmount });
       outs.push({ address: "pays " + this.fee + " satoshis to miner." });
       return outs;
-    });
-    __publicField(this, "buildTransaction", (signature) => {
+    };
+    this.buildTransaction = (signature) => {
       if (!this.ready)
         throw new Error("Not ready!");
       if (signature)
         throw new Error("signature only for peg out!");
       return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
-    });
-    __publicField(this, "addInputs", (tx) => {
+    };
+    this.addInputs = (tx) => {
       for (const utxo of this.addressInfo.utxos) {
         const script = RawTx.decode(hex.decode(utxo.tx.hex));
         if (this.isUTXOConfirmed(utxo)) {
@@ -652,8 +646,8 @@ const _PegInTransaction = class extends PegTransaction {
           });
         }
       }
-    });
-    __publicField(this, "buildOpReturn", () => {
+    };
+    this.buildOpReturn = () => {
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address required!");
       const tx = new Transaction({ allowUnknowOutput: true });
@@ -665,8 +659,8 @@ const _PegInTransaction = class extends PegTransaction {
       if (changeAmount > 0)
         tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
       return tx;
-    });
-    __publicField(this, "buildData", (sigOrPrin) => {
+    };
+    this.buildData = (sigOrPrin) => {
       const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
       const opCodeBuf = hex.decode(PEGIN_OPCODE);
       const addr = decodeStacksAddress(sigOrPrin.split(".")[0]);
@@ -681,8 +675,8 @@ const _PegInTransaction = class extends PegTransaction {
         data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf]);
       }
       return data;
-    });
-    __publicField(this, "buildOpDrop", () => {
+    };
+    this.buildOpDrop = () => {
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address required!");
       const tx = new Transaction({ allowUnknowOutput: true });
@@ -693,7 +687,7 @@ const _PegInTransaction = class extends PegTransaction {
       if (changeAmount > 0)
         tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
       return tx;
-    });
+    };
   }
   getOpDropP2shScript(stacksAddress, sbtcWalletAddress) {
     const data = this.buildData(stacksAddress);
@@ -703,7 +697,7 @@ const _PegInTransaction = class extends PegTransaction {
   }
 };
 let PegInTransaction = _PegInTransaction;
-__publicField(PegInTransaction, "create", async (network, fromBtcAddress, sbtcWalletAddress) => {
+PegInTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) => {
   const me = new _PegInTransaction();
   me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
   me.fromBtcAddress = fromBtcAddress;
@@ -717,8 +711,8 @@ __publicField(PegInTransaction, "create", async (network, fromBtcAddress, sbtcWa
   me.feeInfo = btcFeeRates.feeInfo;
   me.ready = true;
   return me;
-});
-__publicField(PegInTransaction, "hydrate", (o) => {
+};
+PegInTransaction.hydrate = (o) => {
   const me = new _PegInTransaction();
   me.net = o.net;
   if (!o.fromBtcAddress)
@@ -732,7 +726,7 @@ __publicField(PegInTransaction, "hydrate", (o) => {
   me.scureFee = o.scureFee;
   me.ready = o.ready;
   return me;
-});
+};
 const BuildTransaction_svelte_svelte_type_style_lang = "";
 const { console: console_1 } = globals;
 const file$1 = "src/lib/components/wrapper/BuildTransaction.svelte";
