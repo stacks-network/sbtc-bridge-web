@@ -8,19 +8,19 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
-import { base } from '$app/paths'
 import { explorerAddressUrl } from "$lib/utils";
-import { verifyDataSignature, getStacksAddressFromSignature } from '$lib/structured-data'
-import { getOpenSignMessage } from '@micro-stacks/svelte';
-import type { SignatureData } from "micro-stacks/connect";
-import { getAuth, getAccount } from '@micro-stacks/svelte';
-import { sha256 } from "@noble/hashes/sha256";
+import { addresses, signMessage } from '$lib/stacks_connect'
+import { hex } from '@scure/base';
+import { explorerBtcAddressUrl } from "$lib/utils";
 
 export let poTx:PegOutTransactionI;
-  
-const account = getAccount();
-const auth = getAuth();
-if (!poTx.pegInData.stacksAddress && $account.stxAddress) poTx.pegInData.stacksAddress = $account.stxAddress
+if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
+
+const getExplorerUrl = () => {
+  return explorerBtcAddressUrl(poTx.fromBtcAddress)
+}
+
+if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
@@ -39,14 +39,15 @@ $: amtData = {
 }
 const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
-  label: 'Bitcoin Address',
+  label: 'Your Bitcoin Address',
   info: 'Your sBTC will be burned and the equivalent bitcoin then sent to this address',
+  utxos: poTx.addressInfo.utxos,
   maxCommit: (poTx.ready) ? poTx.maxCommit() : 0,
-  fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : undefined,
+  fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal,
   numbInputs: (poTx.ready) ? poTx.addressInfo.utxos.length : 0,
   network
 }
-  
+
 const dispatch = createEventDispatcher();
 let ready = true;
 
@@ -61,41 +62,13 @@ const updateConfig = () => {
   amountOk = poTx.pegInData.amount > 0;
 }
 
-let sigError:string|undefined;
-let sigData: SignatureData | undefined;
-const signMessage = getOpenSignMessage();
-const onSignMessage = async (message:string):Promise<SignatureData | undefined> => {
-  return await $signMessage.openSignMessage({
-    message,
-    onFinish: (value) => {
-      (sigData = value)
-      return value;
-    },
-    onCancel: (error) => { sigError = error; },
-  });
+const requestSignature = () => {
+  const script = poTx.getDataToSign();
+  signMessage(requestSignatureCB, script);
 }
 
-const requestSignature = async () => {
-  const script = poTx.getDataToSign();
-  sigData = await onSignMessage(script.toString('hex'));
-
-  //const msg = { script: script.toString('hex') }
-  //const sigData:any = await requestSignMessage(msg);
-  if (sigError) {
-    return;
-  }
-  if (!sigData || !sigData.publicKey || !verifyDataSignature(script, sigData!.publicKey, sigData!.signature)) {
-    throw new Error('Unable to validate signature.')
-  } else {
-    console.log('tx-data:data : ' + script.toString('hex'))
-    console.log('tx-data:publicKey : ' + sigData!.publicKey)
-    console.log('tx-data:amount : ' + poTx.pegInData.amount)
-    console.log('tx-data:sbtcWalletAddress : ' + poTx.pegInData.sbtcWalletAddress)
-    console.log('tx-data:signature : ' + sigData!.signature)
-  }
-  
-  const addreObj = getStacksAddressFromSignature(script.toString('hex'), sigData!.signature)
-  console.log(addreObj);
+const requestSignatureCB = async (sigData:any, message:Uint8Array) => {
+  //const script = hex.encode(message);
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
@@ -109,7 +82,7 @@ const amountUpdated = (event:any) => {
     poTx.setAmount(event.detail.newAmount)
     updateConfig();
   } else {
-    errorReason = event.detail.reason;
+    //errorReason = event.detail.reason;
   }
 }
 
@@ -126,11 +99,19 @@ const utxoUpdated = async (event:any) => {
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
+      const p0 = poTx?.pegInData;
       poTx = await PegOutTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
       poTx.calculateFees();
+      if (p0.amount > 0 && p0.amount < poTx.maxCommit()) poTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      errorReason = err.message;
+      if (err.message !== 'No inputs signed') errorReason = err.message;
+      else {
+        if (err.message === 'No confirmed UTXOs') {
+
+        }
+        errorReason = 'Please fix above errors and try again.'
+      }
     }
   }
 }
@@ -142,7 +123,6 @@ $: showButton = poTx.ready && amountOk && !errorReason;
 onMount(async () => {
   if (!poTx.pegInData.stacksAddress) stxAddressOk = false;
   if (poTx.pegInData.amount! > 0) amountOk = true;
-  if (poTx.ready) poTx.calculateFees();
   updateConfig();
 })
 
@@ -154,7 +134,7 @@ onMount(async () => {
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
     <p class="mb-4">No SBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
-    <p><a href="{base}/wrap">Get sBTC here!</a></p>
+    <p><a href="/wrap">Get sBTC here!</a></p>
   </div>
   {:else}
   {#if showStxAddress}

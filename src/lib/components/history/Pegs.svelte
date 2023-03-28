@@ -9,6 +9,7 @@ let events:any[] = []
 let transactions = false;
 const fetchTxs = async () => {
   events = await fetchSbtcEvents();
+  events = events.reverse()
   transactions = true;
 }
 
@@ -44,10 +45,13 @@ onMount(async () => {
     <div class="col-2">
       <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>Amount</a></div>
     </div>
-    <div class="col-3">
+    <div class="col-2">
+      <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>Burn Hieght</a></div>
+    </div>
+    <div class="col-2">
       <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('event')}>From</a></div>
     </div>
-    <div class="col-3">
+    <div class="col-2">
       <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>SBTC Wallet</a></div>
     </div>
     <div class="col-2">
@@ -65,10 +69,13 @@ onMount(async () => {
     <div class="col-2">
       {item.pegData.amountSats}
     </div>
-    <div class="col-3">
+    <div class="col-2">
+      {item.pegData.burnBlockHeight}
+    </div>
+    <div class="col-2">
       {truncate(item.pegData.stxAddress)}
     </div>
-    <div class="col-3">
+    <div class="col-2">
       {truncate(item.pegData.sbtcWallet)}
     </div>
     <div class="col-2">

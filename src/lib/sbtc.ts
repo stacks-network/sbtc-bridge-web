@@ -2,10 +2,11 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import type { SbtcConfig } from '$types/sbtc_config';
-import { bytesToHex } from "micro-stacks/common";
+import { bytesToHex } from "@stacks/common";
 
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
+  loggedIn: false,
   balance: { balance: 0, address: '' },
   sigData: undefined,
   sbtcContractData: undefined,

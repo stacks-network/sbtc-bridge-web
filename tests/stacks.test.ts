@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
-import { isAllowed, decodeStacksAddress, encodeStacksAddress } from "$lib/stacks";
+import { isAllowed, decodeStacksAddress, encodeStacksAddress } from "$lib/stacks_connect";
 import { allowed } from './data/test_data';
 
 const network = 'testnet'

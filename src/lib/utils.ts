@@ -1,4 +1,4 @@
-import * as btc from 'micro-btc-signer';
+import * as btc from '@scure/btc-signer';
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -83,7 +83,8 @@ export function fmtNumber(amount:number|undefined) {
   if (amount) return new Intl.NumberFormat().format(amount);
 }
 
-export function truncate(stringy:string) {
-  return stringy.substring(0, 6) + '..' + stringy.substring(stringy.length - 8);
+export function truncate(stringy:string, amount?:number) {
+  if (!amount) amount = 4;
+  return stringy.substring(0, amount) + '..' + stringy.substring(stringy.length - amount);
 }
 

@@ -19,7 +19,7 @@ export const pegout1:any = {
     "pegInData": {
         "stacksAddress": "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN",
         "sbtcWalletAddress": "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss",
-        "amount": 4205267
+        "amount": 221122
     },
     "addressInfo": {
         "address": "tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq",

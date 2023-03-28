@@ -6,14 +6,6 @@
 @import '@fontsource/fira-mono';
 
 @font-face {
-  font-family: "Akrobat-Black";
-  src: url("/fonts/Akrobat-Black.otf") format("truetype");
-}
-@font-face {
-  font-family: "Akrobat-Regular";
-  src: url("/fonts/Akrobat-Regular.otf") format("truetype");
-}
-@font-face {
   font-family: "Akrobat-Thin";
   src: url("/fonts/Akrobat-Thin.otf") format("truetype");
 }
@@ -95,6 +87,20 @@ button:focus:not(:focus-visible) {
   h1 {
     font-size: 2.4rem;
   }
+}
+
+.footer {
+  font-family: Gilroy-ExtraBold;
+  border-top: 1pt solid #fff;
+  background-color: #262626;
+  min-width: 100vw;
+}
+.copywright {
+  font-family: Akrobat-Thin;
+  text-transform: uppercase;
+  font-size: 1.3rem;
+  line-height: 2em;
+  color: #ededed;
 }
 
 .custom-tooltip {
@@ -189,6 +195,9 @@ input, textarea {
 
 .text-small {
   font-size: small;
+}
+.text-xsmall {
+  font-size: 0.75rem;
 }
 .text-bold {
   font-weight: 700;

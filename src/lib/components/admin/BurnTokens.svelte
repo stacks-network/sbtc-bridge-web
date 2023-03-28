@@ -1,11 +1,8 @@
 <script lang="ts">
-import { burnFrom } from "$lib/sbtc_admin";
-import { getOpenContractCall } from '@micro-stacks/svelte';
+import { burnFrom } from "$lib/sbtc_admin.js";
 import { sbtcConfig } from '$stores/stores'
 
-const contractCall = getOpenContractCall();
-
-let pegOutAmount:number = $sbtcConfig?.pegOutTransaction?.pegInData.amount;
+let pegOutAmount:number|undefined = $sbtcConfig?.pegOutTransaction?.pegInData.amount;
 let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
 let btcTxId:string|undefined;
 let error:string|undefined;
@@ -15,7 +12,7 @@ const burn = async () => {
     return;
   }
   error = undefined;
-  const res = await burnFrom($contractCall, pegOutAmount, stxAddress, btcTxId);
+  const res = await burnFrom(pegOutAmount||0, stxAddress, btcTxId);
 }
 </script>
 

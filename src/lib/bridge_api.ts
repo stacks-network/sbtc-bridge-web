@@ -1,3 +1,42 @@
+export async function sendRawTxDirectMempool(hex:string) {
+  const url = import.meta.env.VITE_MEMPOOL_EXPLORER + '/tx';
+  console.log('sendRawTx:mempoolUrl: ', url)
+  const response = await fetch(url, {
+    method: 'POST',
+    //headers: { 'Content-Type': 'application/json' },
+    body: hex
+  });
+  if (response.status !== 200) throw new Error('Mempool error: ' + response.status + ' : ' + response.statusText);
+  try {
+    return await response.json();
+  } catch (err) {
+    try {
+      console.log(err)
+      return await response.text();
+    } catch (err1) {
+      console.log(err1)
+    }
+  }
+  return 'success';
+}
+
+export async function sendRawTransaction(tx: { hex: string; }) {
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/tx/sendrawtx';
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(tx)
+  });
+
+  if (response.status !== 200) {
+    throw new Error('Bitcoin tx send error.');
+  }
+  try {
+    return await response.text();
+  } catch (err) {
+    return await response.json();
+  }
+}
 
 export async function fetchCurrentFeeRates() {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/blocks/fee-estimate';
@@ -10,7 +49,7 @@ export async function fetchCurrentFeeRates() {
 }
 
 export async function fetchUtxoSet(address:string) {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos';
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos?verbose=true';
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -54,50 +93,3 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
     return 0;
   }
 }
-
-/**
-export async function readTx(txid:string) {
-  const url = import.meta.env.VITE_MEMPOOL_EXPLORER + '/tx/' + txid;
-  const response = await fetch(url);
-  const result = await response.json();
-  let error = '';
-  try {
-    return decodePegInOutputs(result.vout);
-  } catch (err:any) {
-    error = err.message;
-  }
-  throw new Error(error);
-}
-
-function decodePegInOutputs(outputs:any) {
-  if (!outputs || outputs.length < 2) throw new Error('Incorrect number of outputs for a peg in.');
-  const outZeroType = outputs[0].scriptpubkey_type.toLowerCase();
-  if (outZeroType !== 'op_return') throw new Error('OP_RETURN in output 0 was expected but not found.');
-  const stxAddress = hexToAscii(outputs[0].scriptpubkey).substring(2);
-  try {
-    decodeStacksAddress(stxAddress)
-    const amountSats = (outputs[1]) ? outputs[1].value : 0;
-    const sbtcWallet = outputs[1].scriptpubkey_address;
-    return {
-      type: 'pegin',
-      stxAddress,
-      amountSats,
-      sbtcWallet
-    }
-  } catch (err) {
-    return decodePegOutOutputs(outputs);
-  }
-}
-
-function decodePegOutOutputs(outputs:any) {
-  const pegOutValue = Number(hexToAscii(outputs[0].scriptpubkey).substring(2));
-  //const amountSats = outputs[1].value;
-  const sbtcWallet = outputs[1].scriptpubkey_address;
-  return {
-    type: 'pegout',
-    stxAddress: '',
-    amountSats: pegOutValue,
-    sbtcWallet
-  }
-} 
-*/
