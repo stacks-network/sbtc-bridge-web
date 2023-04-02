@@ -3057,27 +3057,35 @@ var shams$1 = function hasSymbols() {
   }
   return true;
 };
-var hasSymbols$2 = shams$1;
+var hasSymbols$1 = shams$1;
 var shams = function hasToStringTagShams() {
-  return hasSymbols$2() && !!Symbol.toStringTag;
+  return hasSymbols$1() && !!Symbol.toStringTag;
 };
-var origSymbol = typeof Symbol !== "undefined" && Symbol;
-var hasSymbolSham = shams$1;
-var hasSymbols$1 = function hasNativeSymbols() {
-  if (typeof origSymbol !== "function") {
-    return false;
-  }
-  if (typeof Symbol !== "function") {
-    return false;
-  }
-  if (typeof origSymbol("foo") !== "symbol") {
-    return false;
-  }
-  if (typeof Symbol("bar") !== "symbol") {
-    return false;
-  }
-  return hasSymbolSham();
-};
+var hasSymbols2;
+var hasRequiredHasSymbols;
+function requireHasSymbols() {
+  if (hasRequiredHasSymbols)
+    return hasSymbols2;
+  hasRequiredHasSymbols = 1;
+  var origSymbol = typeof Symbol !== "undefined" && Symbol;
+  var hasSymbolSham = shams$1;
+  hasSymbols2 = function hasNativeSymbols() {
+    if (typeof origSymbol !== "function") {
+      return false;
+    }
+    if (typeof Symbol !== "function") {
+      return false;
+    }
+    if (typeof origSymbol("foo") !== "symbol") {
+      return false;
+    }
+    if (typeof Symbol("bar") !== "symbol") {
+      return false;
+    }
+    return hasSymbolSham();
+  };
+  return hasSymbols2;
+}
 var implementation$3;
 var hasRequiredImplementation$3;
 function requireImplementation$3() {
@@ -3088,7 +3096,7 @@ function requireImplementation$3() {
   var slice = Array.prototype.slice;
   var toStr2 = Object.prototype.toString;
   var funcType = "[object Function]";
-  implementation$3 = function bind2(that) {
+  implementation$3 = function bind(that) {
     var target = this;
     if (typeof target !== "function" || toStr2.call(target) !== funcType) {
       throw new TypeError(ERROR_MESSAGE + target);
@@ -3139,304 +3147,320 @@ function requireFunctionBind() {
   functionBind = Function.prototype.bind || implementation2;
   return functionBind;
 }
-var bind$1 = requireFunctionBind();
-var src = bind$1.call(Function.call, Object.prototype.hasOwnProperty);
-var undefined$1;
-var $SyntaxError = SyntaxError;
-var $Function = Function;
-var $TypeError = TypeError;
-var getEvalledConstructor = function(expressionSyntax) {
-  try {
-    return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-  } catch (e) {
-  }
-};
-var $gOPD$1 = Object.getOwnPropertyDescriptor;
-if ($gOPD$1) {
-  try {
-    $gOPD$1({}, "");
-  } catch (e) {
-    $gOPD$1 = null;
-  }
+var src;
+var hasRequiredSrc;
+function requireSrc() {
+  if (hasRequiredSrc)
+    return src;
+  hasRequiredSrc = 1;
+  var bind = requireFunctionBind();
+  src = bind.call(Function.call, Object.prototype.hasOwnProperty);
+  return src;
 }
-var throwTypeError = function() {
-  throw new $TypeError();
-};
-var ThrowTypeError = $gOPD$1 ? function() {
-  try {
-    arguments.callee;
-    return throwTypeError;
-  } catch (calleeThrows) {
+var getIntrinsic;
+var hasRequiredGetIntrinsic;
+function requireGetIntrinsic() {
+  if (hasRequiredGetIntrinsic)
+    return getIntrinsic;
+  hasRequiredGetIntrinsic = 1;
+  var undefined$1;
+  var $SyntaxError = SyntaxError;
+  var $Function = Function;
+  var $TypeError = TypeError;
+  var getEvalledConstructor = function(expressionSyntax) {
     try {
-      return $gOPD$1(arguments, "callee").get;
-    } catch (gOPDthrows) {
+      return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
+    } catch (e) {
+    }
+  };
+  var $gOPD2 = Object.getOwnPropertyDescriptor;
+  if ($gOPD2) {
+    try {
+      $gOPD2({}, "");
+    } catch (e) {
+      $gOPD2 = null;
+    }
+  }
+  var throwTypeError = function() {
+    throw new $TypeError();
+  };
+  var ThrowTypeError = $gOPD2 ? function() {
+    try {
+      arguments.callee;
       return throwTypeError;
-    }
-  }
-}() : throwTypeError;
-var hasSymbols2 = hasSymbols$1();
-var getProto$1 = Object.getPrototypeOf || function(x) {
-  return x.__proto__;
-};
-var needsEval = {};
-var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto$1(Uint8Array);
-var INTRINSICS = {
-  "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
-  "%Array%": Array,
-  "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
-  "%ArrayIteratorPrototype%": hasSymbols2 ? getProto$1([][Symbol.iterator]()) : undefined$1,
-  "%AsyncFromSyncIteratorPrototype%": undefined$1,
-  "%AsyncFunction%": needsEval,
-  "%AsyncGenerator%": needsEval,
-  "%AsyncGeneratorFunction%": needsEval,
-  "%AsyncIteratorPrototype%": needsEval,
-  "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
-  "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
-  "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
-  "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
-  "%Boolean%": Boolean,
-  "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
-  "%Date%": Date,
-  "%decodeURI%": decodeURI,
-  "%decodeURIComponent%": decodeURIComponent,
-  "%encodeURI%": encodeURI,
-  "%encodeURIComponent%": encodeURIComponent,
-  "%Error%": Error,
-  "%eval%": eval,
-  // eslint-disable-line no-eval
-  "%EvalError%": EvalError,
-  "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
-  "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
-  "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
-  "%Function%": $Function,
-  "%GeneratorFunction%": needsEval,
-  "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
-  "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
-  "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
-  "%isFinite%": isFinite,
-  "%isNaN%": isNaN,
-  "%IteratorPrototype%": hasSymbols2 ? getProto$1(getProto$1([][Symbol.iterator]())) : undefined$1,
-  "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
-  "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
-  "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-  "%Math%": Math,
-  "%Number%": Number,
-  "%Object%": Object,
-  "%parseFloat%": parseFloat,
-  "%parseInt%": parseInt,
-  "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
-  "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
-  "%RangeError%": RangeError,
-  "%ReferenceError%": ReferenceError,
-  "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
-  "%RegExp%": RegExp,
-  "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
-  "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-  "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
-  "%String%": String,
-  "%StringIteratorPrototype%": hasSymbols2 ? getProto$1(""[Symbol.iterator]()) : undefined$1,
-  "%Symbol%": hasSymbols2 ? Symbol : undefined$1,
-  "%SyntaxError%": $SyntaxError,
-  "%ThrowTypeError%": ThrowTypeError,
-  "%TypedArray%": TypedArray,
-  "%TypeError%": $TypeError,
-  "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
-  "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
-  "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
-  "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
-  "%URIError%": URIError,
-  "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
-  "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
-  "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
-};
-try {
-  null.error;
-} catch (e) {
-  var errorProto = getProto$1(getProto$1(e));
-  INTRINSICS["%Error.prototype%"] = errorProto;
-}
-var doEval = function doEval2(name) {
-  var value;
-  if (name === "%AsyncFunction%") {
-    value = getEvalledConstructor("async function () {}");
-  } else if (name === "%GeneratorFunction%") {
-    value = getEvalledConstructor("function* () {}");
-  } else if (name === "%AsyncGeneratorFunction%") {
-    value = getEvalledConstructor("async function* () {}");
-  } else if (name === "%AsyncGenerator%") {
-    var fn = doEval2("%AsyncGeneratorFunction%");
-    if (fn) {
-      value = fn.prototype;
-    }
-  } else if (name === "%AsyncIteratorPrototype%") {
-    var gen = doEval2("%AsyncGenerator%");
-    if (gen) {
-      value = getProto$1(gen.prototype);
-    }
-  }
-  INTRINSICS[name] = value;
-  return value;
-};
-var LEGACY_ALIASES = {
-  "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-  "%ArrayPrototype%": ["Array", "prototype"],
-  "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-  "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-  "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-  "%ArrayProto_values%": ["Array", "prototype", "values"],
-  "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-  "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-  "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-  "%BooleanPrototype%": ["Boolean", "prototype"],
-  "%DataViewPrototype%": ["DataView", "prototype"],
-  "%DatePrototype%": ["Date", "prototype"],
-  "%ErrorPrototype%": ["Error", "prototype"],
-  "%EvalErrorPrototype%": ["EvalError", "prototype"],
-  "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-  "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-  "%FunctionPrototype%": ["Function", "prototype"],
-  "%Generator%": ["GeneratorFunction", "prototype"],
-  "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-  "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-  "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-  "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-  "%JSONParse%": ["JSON", "parse"],
-  "%JSONStringify%": ["JSON", "stringify"],
-  "%MapPrototype%": ["Map", "prototype"],
-  "%NumberPrototype%": ["Number", "prototype"],
-  "%ObjectPrototype%": ["Object", "prototype"],
-  "%ObjProto_toString%": ["Object", "prototype", "toString"],
-  "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-  "%PromisePrototype%": ["Promise", "prototype"],
-  "%PromiseProto_then%": ["Promise", "prototype", "then"],
-  "%Promise_all%": ["Promise", "all"],
-  "%Promise_reject%": ["Promise", "reject"],
-  "%Promise_resolve%": ["Promise", "resolve"],
-  "%RangeErrorPrototype%": ["RangeError", "prototype"],
-  "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-  "%RegExpPrototype%": ["RegExp", "prototype"],
-  "%SetPrototype%": ["Set", "prototype"],
-  "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-  "%StringPrototype%": ["String", "prototype"],
-  "%SymbolPrototype%": ["Symbol", "prototype"],
-  "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-  "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-  "%TypeErrorPrototype%": ["TypeError", "prototype"],
-  "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-  "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-  "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-  "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-  "%URIErrorPrototype%": ["URIError", "prototype"],
-  "%WeakMapPrototype%": ["WeakMap", "prototype"],
-  "%WeakSetPrototype%": ["WeakSet", "prototype"]
-};
-var bind = requireFunctionBind();
-var hasOwn = src;
-var $concat = bind.call(Function.call, Array.prototype.concat);
-var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
-var $replace = bind.call(Function.call, String.prototype.replace);
-var $strSlice = bind.call(Function.call, String.prototype.slice);
-var $exec = bind.call(Function.call, RegExp.prototype.exec);
-var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
-var reEscapeChar = /\\(\\)?/g;
-var stringToPath = function stringToPath2(string) {
-  var first = $strSlice(string, 0, 1);
-  var last = $strSlice(string, -1);
-  if (first === "%" && last !== "%") {
-    throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-  } else if (last === "%" && first !== "%") {
-    throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-  }
-  var result = [];
-  $replace(string, rePropName, function(match, number, quote, subString) {
-    result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-  });
-  return result;
-};
-var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
-  var intrinsicName = name;
-  var alias;
-  if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
-    alias = LEGACY_ALIASES[intrinsicName];
-    intrinsicName = "%" + alias[0] + "%";
-  }
-  if (hasOwn(INTRINSICS, intrinsicName)) {
-    var value = INTRINSICS[intrinsicName];
-    if (value === needsEval) {
-      value = doEval(intrinsicName);
-    }
-    if (typeof value === "undefined" && !allowMissing) {
-      throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-    }
-    return {
-      alias,
-      name: intrinsicName,
-      value
-    };
-  }
-  throw new $SyntaxError("intrinsic " + name + " does not exist!");
-};
-var getIntrinsic = function GetIntrinsic(name, allowMissing) {
-  if (typeof name !== "string" || name.length === 0) {
-    throw new $TypeError("intrinsic name must be a non-empty string");
-  }
-  if (arguments.length > 1 && typeof allowMissing !== "boolean") {
-    throw new $TypeError('"allowMissing" argument must be a boolean');
-  }
-  if ($exec(/^%?[^%]*%?$/, name) === null) {
-    throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
-  }
-  var parts = stringToPath(name);
-  var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
-  var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
-  var intrinsicRealName = intrinsic.name;
-  var value = intrinsic.value;
-  var skipFurtherCaching = false;
-  var alias = intrinsic.alias;
-  if (alias) {
-    intrinsicBaseName = alias[0];
-    $spliceApply(parts, $concat([0, 1], alias));
-  }
-  for (var i = 1, isOwn = true; i < parts.length; i += 1) {
-    var part = parts[i];
-    var first = $strSlice(part, 0, 1);
-    var last = $strSlice(part, -1);
-    if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
-      throw new $SyntaxError("property names with quotes must have matching quotes");
-    }
-    if (part === "constructor" || !isOwn) {
-      skipFurtherCaching = true;
-    }
-    intrinsicBaseName += "." + part;
-    intrinsicRealName = "%" + intrinsicBaseName + "%";
-    if (hasOwn(INTRINSICS, intrinsicRealName)) {
-      value = INTRINSICS[intrinsicRealName];
-    } else if (value != null) {
-      if (!(part in value)) {
-        if (!allowMissing) {
-          throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-        }
-        return void 0;
+    } catch (calleeThrows) {
+      try {
+        return $gOPD2(arguments, "callee").get;
+      } catch (gOPDthrows) {
+        return throwTypeError;
       }
-      if ($gOPD$1 && i + 1 >= parts.length) {
-        var desc = $gOPD$1(value, part);
-        isOwn = !!desc;
-        if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
-          value = desc.get;
+    }
+  }() : throwTypeError;
+  var hasSymbols3 = requireHasSymbols()();
+  var getProto2 = Object.getPrototypeOf || function(x) {
+    return x.__proto__;
+  };
+  var needsEval = {};
+  var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto2(Uint8Array);
+  var INTRINSICS = {
+    "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
+    "%Array%": Array,
+    "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
+    "%ArrayIteratorPrototype%": hasSymbols3 ? getProto2([][Symbol.iterator]()) : undefined$1,
+    "%AsyncFromSyncIteratorPrototype%": undefined$1,
+    "%AsyncFunction%": needsEval,
+    "%AsyncGenerator%": needsEval,
+    "%AsyncGeneratorFunction%": needsEval,
+    "%AsyncIteratorPrototype%": needsEval,
+    "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
+    "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
+    "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
+    "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
+    "%Boolean%": Boolean,
+    "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
+    "%Date%": Date,
+    "%decodeURI%": decodeURI,
+    "%decodeURIComponent%": decodeURIComponent,
+    "%encodeURI%": encodeURI,
+    "%encodeURIComponent%": encodeURIComponent,
+    "%Error%": Error,
+    "%eval%": eval,
+    // eslint-disable-line no-eval
+    "%EvalError%": EvalError,
+    "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
+    "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
+    "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
+    "%Function%": $Function,
+    "%GeneratorFunction%": needsEval,
+    "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
+    "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
+    "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
+    "%isFinite%": isFinite,
+    "%isNaN%": isNaN,
+    "%IteratorPrototype%": hasSymbols3 ? getProto2(getProto2([][Symbol.iterator]())) : undefined$1,
+    "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
+    "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
+    "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+    "%Math%": Math,
+    "%Number%": Number,
+    "%Object%": Object,
+    "%parseFloat%": parseFloat,
+    "%parseInt%": parseInt,
+    "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
+    "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
+    "%RangeError%": RangeError,
+    "%ReferenceError%": ReferenceError,
+    "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
+    "%RegExp%": RegExp,
+    "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
+    "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+    "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
+    "%String%": String,
+    "%StringIteratorPrototype%": hasSymbols3 ? getProto2(""[Symbol.iterator]()) : undefined$1,
+    "%Symbol%": hasSymbols3 ? Symbol : undefined$1,
+    "%SyntaxError%": $SyntaxError,
+    "%ThrowTypeError%": ThrowTypeError,
+    "%TypedArray%": TypedArray,
+    "%TypeError%": $TypeError,
+    "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
+    "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
+    "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
+    "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
+    "%URIError%": URIError,
+    "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
+    "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
+    "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
+  };
+  try {
+    null.error;
+  } catch (e) {
+    var errorProto = getProto2(getProto2(e));
+    INTRINSICS["%Error.prototype%"] = errorProto;
+  }
+  var doEval = function doEval2(name) {
+    var value;
+    if (name === "%AsyncFunction%") {
+      value = getEvalledConstructor("async function () {}");
+    } else if (name === "%GeneratorFunction%") {
+      value = getEvalledConstructor("function* () {}");
+    } else if (name === "%AsyncGeneratorFunction%") {
+      value = getEvalledConstructor("async function* () {}");
+    } else if (name === "%AsyncGenerator%") {
+      var fn = doEval2("%AsyncGeneratorFunction%");
+      if (fn) {
+        value = fn.prototype;
+      }
+    } else if (name === "%AsyncIteratorPrototype%") {
+      var gen = doEval2("%AsyncGenerator%");
+      if (gen) {
+        value = getProto2(gen.prototype);
+      }
+    }
+    INTRINSICS[name] = value;
+    return value;
+  };
+  var LEGACY_ALIASES = {
+    "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
+    "%ArrayPrototype%": ["Array", "prototype"],
+    "%ArrayProto_entries%": ["Array", "prototype", "entries"],
+    "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
+    "%ArrayProto_keys%": ["Array", "prototype", "keys"],
+    "%ArrayProto_values%": ["Array", "prototype", "values"],
+    "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
+    "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
+    "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
+    "%BooleanPrototype%": ["Boolean", "prototype"],
+    "%DataViewPrototype%": ["DataView", "prototype"],
+    "%DatePrototype%": ["Date", "prototype"],
+    "%ErrorPrototype%": ["Error", "prototype"],
+    "%EvalErrorPrototype%": ["EvalError", "prototype"],
+    "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
+    "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
+    "%FunctionPrototype%": ["Function", "prototype"],
+    "%Generator%": ["GeneratorFunction", "prototype"],
+    "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
+    "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
+    "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
+    "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
+    "%JSONParse%": ["JSON", "parse"],
+    "%JSONStringify%": ["JSON", "stringify"],
+    "%MapPrototype%": ["Map", "prototype"],
+    "%NumberPrototype%": ["Number", "prototype"],
+    "%ObjectPrototype%": ["Object", "prototype"],
+    "%ObjProto_toString%": ["Object", "prototype", "toString"],
+    "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
+    "%PromisePrototype%": ["Promise", "prototype"],
+    "%PromiseProto_then%": ["Promise", "prototype", "then"],
+    "%Promise_all%": ["Promise", "all"],
+    "%Promise_reject%": ["Promise", "reject"],
+    "%Promise_resolve%": ["Promise", "resolve"],
+    "%RangeErrorPrototype%": ["RangeError", "prototype"],
+    "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
+    "%RegExpPrototype%": ["RegExp", "prototype"],
+    "%SetPrototype%": ["Set", "prototype"],
+    "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
+    "%StringPrototype%": ["String", "prototype"],
+    "%SymbolPrototype%": ["Symbol", "prototype"],
+    "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
+    "%TypedArrayPrototype%": ["TypedArray", "prototype"],
+    "%TypeErrorPrototype%": ["TypeError", "prototype"],
+    "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
+    "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
+    "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
+    "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
+    "%URIErrorPrototype%": ["URIError", "prototype"],
+    "%WeakMapPrototype%": ["WeakMap", "prototype"],
+    "%WeakSetPrototype%": ["WeakSet", "prototype"]
+  };
+  var bind = requireFunctionBind();
+  var hasOwn = requireSrc();
+  var $concat = bind.call(Function.call, Array.prototype.concat);
+  var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+  var $replace = bind.call(Function.call, String.prototype.replace);
+  var $strSlice = bind.call(Function.call, String.prototype.slice);
+  var $exec = bind.call(Function.call, RegExp.prototype.exec);
+  var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+  var reEscapeChar = /\\(\\)?/g;
+  var stringToPath = function stringToPath2(string) {
+    var first = $strSlice(string, 0, 1);
+    var last = $strSlice(string, -1);
+    if (first === "%" && last !== "%") {
+      throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
+    } else if (last === "%" && first !== "%") {
+      throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+    }
+    var result = [];
+    $replace(string, rePropName, function(match, number, quote, subString) {
+      result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
+    });
+    return result;
+  };
+  var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
+    var intrinsicName = name;
+    var alias;
+    if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+      alias = LEGACY_ALIASES[intrinsicName];
+      intrinsicName = "%" + alias[0] + "%";
+    }
+    if (hasOwn(INTRINSICS, intrinsicName)) {
+      var value = INTRINSICS[intrinsicName];
+      if (value === needsEval) {
+        value = doEval(intrinsicName);
+      }
+      if (typeof value === "undefined" && !allowMissing) {
+        throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
+      }
+      return {
+        alias,
+        name: intrinsicName,
+        value
+      };
+    }
+    throw new $SyntaxError("intrinsic " + name + " does not exist!");
+  };
+  getIntrinsic = function GetIntrinsic2(name, allowMissing) {
+    if (typeof name !== "string" || name.length === 0) {
+      throw new $TypeError("intrinsic name must be a non-empty string");
+    }
+    if (arguments.length > 1 && typeof allowMissing !== "boolean") {
+      throw new $TypeError('"allowMissing" argument must be a boolean');
+    }
+    if ($exec(/^%?[^%]*%?$/, name) === null) {
+      throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+    }
+    var parts = stringToPath(name);
+    var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
+    var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
+    var intrinsicRealName = intrinsic.name;
+    var value = intrinsic.value;
+    var skipFurtherCaching = false;
+    var alias = intrinsic.alias;
+    if (alias) {
+      intrinsicBaseName = alias[0];
+      $spliceApply(parts, $concat([0, 1], alias));
+    }
+    for (var i = 1, isOwn = true; i < parts.length; i += 1) {
+      var part = parts[i];
+      var first = $strSlice(part, 0, 1);
+      var last = $strSlice(part, -1);
+      if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+        throw new $SyntaxError("property names with quotes must have matching quotes");
+      }
+      if (part === "constructor" || !isOwn) {
+        skipFurtherCaching = true;
+      }
+      intrinsicBaseName += "." + part;
+      intrinsicRealName = "%" + intrinsicBaseName + "%";
+      if (hasOwn(INTRINSICS, intrinsicRealName)) {
+        value = INTRINSICS[intrinsicRealName];
+      } else if (value != null) {
+        if (!(part in value)) {
+          if (!allowMissing) {
+            throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
+          }
+          return void 0;
+        }
+        if ($gOPD2 && i + 1 >= parts.length) {
+          var desc = $gOPD2(value, part);
+          isOwn = !!desc;
+          if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
+            value = desc.get;
+          } else {
+            value = value[part];
+          }
         } else {
+          isOwn = hasOwn(value, part);
           value = value[part];
         }
-      } else {
-        isOwn = hasOwn(value, part);
-        value = value[part];
-      }
-      if (isOwn && !skipFurtherCaching) {
-        INTRINSICS[intrinsicRealName] = value;
+        if (isOwn && !skipFurtherCaching) {
+          INTRINSICS[intrinsicRealName] = value;
+        }
       }
     }
-  }
-  return value;
-};
+    return value;
+  };
+  return getIntrinsic;
+}
 var callBindExports = {};
 var callBind$1 = {
   get exports() {
@@ -3452,14 +3476,14 @@ function requireCallBind() {
     return callBindExports;
   hasRequiredCallBind = 1;
   (function(module) {
-    var bind2 = requireFunctionBind();
-    var GetIntrinsic3 = getIntrinsic;
-    var $apply = GetIntrinsic3("%Function.prototype.apply%");
-    var $call = GetIntrinsic3("%Function.prototype.call%");
-    var $reflectApply = GetIntrinsic3("%Reflect.apply%", true) || bind2.call($call, $apply);
-    var $gOPD2 = GetIntrinsic3("%Object.getOwnPropertyDescriptor%", true);
-    var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
-    var $max = GetIntrinsic3("%Math.max%");
+    var bind = requireFunctionBind();
+    var GetIntrinsic2 = requireGetIntrinsic();
+    var $apply = GetIntrinsic2("%Function.prototype.apply%");
+    var $call = GetIntrinsic2("%Function.prototype.call%");
+    var $reflectApply = GetIntrinsic2("%Reflect.apply%", true) || bind.call($call, $apply);
+    var $gOPD2 = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
+    var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
+    var $max = GetIntrinsic2("%Math.max%");
     if ($defineProperty) {
       try {
         $defineProperty({}, "a", { value: 1 });
@@ -3468,7 +3492,7 @@ function requireCallBind() {
       }
     }
     module.exports = function callBind2(originalFunction) {
-      var func = $reflectApply(bind2, $call, arguments);
+      var func = $reflectApply(bind, $call, arguments);
       if ($gOPD2 && $defineProperty) {
         var desc = $gOPD2(func, "length");
         if (desc.configurable) {
@@ -3482,7 +3506,7 @@ function requireCallBind() {
       return func;
     };
     var applyBind = function applyBind2() {
-      return $reflectApply(bind2, $apply, arguments);
+      return $reflectApply(bind, $apply, arguments);
     };
     if ($defineProperty) {
       $defineProperty(module.exports, "apply", { value: applyBind });
@@ -3492,7 +3516,7 @@ function requireCallBind() {
   })(callBind$1);
   return callBindExports;
 }
-var GetIntrinsic$1 = getIntrinsic;
+var GetIntrinsic$1 = requireGetIntrinsic();
 var callBind = requireCallBind();
 var $indexOf$1 = callBind(GetIntrinsic$1("String.prototype.indexOf"));
 var callBound$3 = function callBoundIntrinsic(name, allowMissing) {
@@ -3741,8 +3765,8 @@ var availableTypedArrays$2 = function availableTypedArrays() {
   }
   return out;
 };
-var GetIntrinsic2 = getIntrinsic;
-var $gOPD = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
+var GetIntrinsic = requireGetIntrinsic();
+var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
 if ($gOPD) {
   try {
     $gOPD([], "length");
@@ -5575,8 +5599,8 @@ function requireHasPropertyDescriptors() {
   if (hasRequiredHasPropertyDescriptors)
     return hasPropertyDescriptors_1;
   hasRequiredHasPropertyDescriptors = 1;
-  var GetIntrinsic3 = getIntrinsic;
-  var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
+  var GetIntrinsic2 = requireGetIntrinsic();
+  var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
   var hasPropertyDescriptors = function hasPropertyDescriptors2() {
     if ($defineProperty) {
       try {
