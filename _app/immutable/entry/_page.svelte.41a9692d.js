@@ -1,5 +1,5 @@
 import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, G as validate_store, H as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, u as attr_dev, g as insert_hydration_dev, J as append_hydration_dev, L as listen_dev, M as prevent_default, A as set_data_dev, I as noop, N as run_all } from "../chunks/index.0c92228d.js";
-import { g as goto } from "../chunks/navigation.080d12b1.js";
+import { g as goto } from "../chunks/navigation.ddc80bdf.js";
 import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
 import { e as explorerTxUrl } from "../chunks/utils.d534dad3.js";
 const _page_svelte_svelte_type_style_lang = "";
