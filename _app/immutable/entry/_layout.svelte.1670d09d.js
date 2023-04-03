@@ -3,7 +3,7 @@ import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_
 import { a as addresses, l as logUserOut, b as loginStacksJs, u as userSession } from "../chunks/stacks_connect.f6f65a5c.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.6fff02eb.js";
 import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { g as goto } from "../chunks/navigation.e625c10f.js";
+import { g as goto } from "../chunks/navigation.067d6158.js";
 import { U as UserBalance } from "../chunks/UserBalance.c86474f0.js";
 const app = "";
 const stx_eco_wallet_on = "" + new URL("../assets/stx_eco_wallet_on.090e5a93.png", import.meta.url).href;
