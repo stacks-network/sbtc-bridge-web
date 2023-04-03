@@ -1,4 +1,4 @@
-import { f as fetchSbtcData } from "./bridge_api.4d7e899c.js";
+import { f as fetchSbtcData } from "./bridge_api.3a0c7c3a.js";
 const prerender = false;
 const ssr = false;
 async function load() {
