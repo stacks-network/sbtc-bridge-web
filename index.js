@@ -14,7 +14,12 @@ async function startServer() {
     app.use('/', express.static("mainnet", { index: 'index.html' }));
     app.use('/testnet', express.static("testnet", { index: 'index.html' }));
 
-    // All other URLs should fallback to index.html
+    app.get("/ping", (req, res) => {
+      res.sendStatus(200);
+      // res.sendFile("index.html");//, { root: "dist" });
+    });
+
+  // All other URLs should fallback to index.html
     // app.get("*", (req, res) => {
     //   res.sendFile("index.html");//, { root: "dist" });
     // });
