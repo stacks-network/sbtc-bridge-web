@@ -166,7 +166,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		//console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
-		return { opReturn: this.buildOpReturn(signature), opDrop: this.buildOpDrop(signature) };
+		return { opReturn: this.buildOpReturnTransaction(signature), opDrop: this.buildOpDropTransaction(signature) };
 	}
 
 	private addInputs = (tx:btc.Transaction) => {
@@ -183,7 +183,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		}
 	}
 
-	private buildOpReturn = (signature:string|undefined) => {
+	private buildOpReturnTransaction = (signature:string|undefined) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
@@ -197,7 +197,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return tx;
 	}
 
-	private buildOpDrop = (signature:string|undefined) => {
+	private buildOpDropTransaction = (signature:string|undefined) => {
 		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		this.addInputs(tx);

@@ -14,7 +14,7 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 const dispatch = createEventDispatcher();
 export let sigData:SigData;
 export let pegInfo:any;
-let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
+let currentTx = hex.encode(sigData.txs.opReturn.toPSBT(2));
 let errorReason: string|undefined;
 let successReason: string|undefined;
 

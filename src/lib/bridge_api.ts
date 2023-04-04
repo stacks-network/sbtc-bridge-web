@@ -48,6 +48,16 @@ export async function fetchCurrentFeeRates() {
   return txs;
 }
 
+export async function fetchAddressTransactions(address:string) {
+  const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/txs';
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const txs = await response.json();
+  return txs;
+}
+
 export async function fetchUtxoSet(address:string) {
   const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos?verbose=true';
   const response = await fetch(path);

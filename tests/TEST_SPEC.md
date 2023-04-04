@@ -454,3 +454,15 @@ Unwrap Return
 btc_txid: 96d8efdb0dbb981a078c9428a1dc9d8c25cc177eac7f8e4563540115dd066aa3
 stx_txid: 0xea10430d6af17ef11e75a2f422a1af03b87e4356a95e67f5db09a6cca0d98dcf
 
+Wrap Drop Locking
+
+btc_txid: 5b5361d2f5e858ce6d68862e2d227818936ead5f500c13ba3ede50723b49bf83
+stx_txid: 
+
+stx_addr: ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN
+btc_addr: tb1qaghq4jp4dz4cc63tfcus3y29gmeu20x8yrqv0k
+amt:      78687
+
+
+Wrap Return Locking
+btc_txid: d8c60878cf2d5e7acca546382371deeff77acfc7d127eeb44b75b25574a1c992

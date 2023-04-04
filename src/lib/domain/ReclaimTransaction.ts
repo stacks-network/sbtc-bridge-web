@@ -3,13 +3,14 @@ import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
+
 import type { PegTransactionI } from './PegTransaction';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress } from '$lib/stacks_connect'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTransaction'
 import { concatByteArrays } from '$lib/structured-data.js'
-export interface PegInTransactionI extends PegTransactionI {
+export interface ReclaimTransactionI extends PegTransactionI {
 
 	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 	buildData: (sigOrPrin:string) => Uint8Array;
@@ -32,13 +33,13 @@ keySetForFeeCalculation.push({
   schnorrPub: secp.schnorr.getPublicKey(priv)
 })
 
-export default class PegInTransaction extends PegTransaction implements PegInTransactionI {
+export default class ReclaimTransaction extends PegTransaction implements ReclaimTransactionI {
 	public constructor() {
 		super();
 	}
  
-	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string):Promise<PegInTransactionI> => {
-		const me = new PegInTransaction();
+	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string):Promise<ReclaimTransactionI> => {
+		const me = new ReclaimTransaction();
 		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		me.fromBtcAddress = fromBtcAddress;
 		me.pegInData = {
@@ -56,8 +57,8 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return me;
 	};
 
-	public static hydrate = (o:PegInTransactionI) => {
-		const me = new PegInTransaction();
+	public static hydrate = (o:ReclaimTransactionI) => {
+		const me = new ReclaimTransaction();
 		me.net = o.net;
 		if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
 		me.fromBtcAddress = o.fromBtcAddress;

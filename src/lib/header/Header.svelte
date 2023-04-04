@@ -37,6 +37,7 @@ const network = import.meta.env.VITE_NETWORK;
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(true)}>Wrap BTC</a></li>
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(false)}>Unwrap sBTC</a></li>
+						<li><a class="dropdown-item" href="/reclaim">Reclaim BTC</a></li>
 					</ul>
 				</li>
 				<li class="badge nav-item">
