@@ -124,3 +124,35 @@ The application can be packaged and uploaded to the npm registry;
 cd package
 npm publish
 ```
+
+## Production Deployment
+`Dockerfile` is used to build the application and then serve.
+Deployment 1 Current setup
+- Merge PR to gcp branch.
+- Then Google Cloud Build will trigger a build because it'w watching the gcp branch.
+- Then Google Cloud Run will deploy the app which will serve the app on https://sbtc.world
+- Has two builds one for mainnet and one for testnet.
+
+Runtime network selection by Mike
+- sbtc.world?net=mainnet&api=https://sbtc-api
+- on the get request, we use mainnet to fetch a json object which has all other params
+- config = configs[query_net]
+- config['api'] = query_api
+- VITE_STACKS_EXPLORER = config['VITE_STACKS_EXPLORER'] = config.VITE_STACKS_EXPLORER = config.vite_stacks_explorer
+- deployment dimension: production and staging
+- /v1 -> ?version=v1 -> if (config.version== v1) -> config else
+- version dimension: v1 v2 
+- net dimension: mainnet and testnet 
+- api dimension:
+
+Deployment 3 for Igor
+- Run local build script to build pages and copy to GCP bucket.
+- Pages will be served statically from GCP bucket.
+- Has one build for any net.
+
+Deployment 4 for Sergey
+- Add to GitHub Actions (prod) and CloudFlare (devel): Run local build script to build pages and copy to GCP bucket.
+- Pages will be served statically from GCP bucket
+- Has one build for any net.
+
+- Nirvana :)

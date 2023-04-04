@@ -11,18 +11,25 @@ async function startServer() {
 
   // if (isProduction) {
     // Serve the files from the dist directory
+    app.use((req, res, next) => {
+      res.header('Access-Control-Allow-Origin', '*');
+      next();
+    });
+
     app.use('/', express.static("mainnet", { index: 'index.html' }));
     app.use('/testnet', express.static("testnet", { index: 'index.html' }));
 
-    app.get("/ping", (req, res) => {
+    // app.get("/ping", (req, res) => {
+    //   res.sendStatus(200);
+    //   // res.sendFile("index.html");//, { root: "dist" });
+    // });
+
+  // All other URLs should fallback to index.html
+    app.get("*", (req, res) => {
+      console.log('req', req);
       res.sendStatus(200);
       // res.sendFile("index.html");//, { root: "dist" });
     });
-
-  // All other URLs should fallback to index.html
-    // app.get("*", (req, res) => {
-    //   res.sendFile("index.html");//, { root: "dist" });
-    // });
   // } else {
   //   // In development, run vite as middleware
   //   const viteServer = await createServer({
