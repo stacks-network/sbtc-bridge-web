@@ -4,11 +4,11 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, Q as create_slot, X as assign, Y as compute_rest_props, v as validate_slots, Z as exclude_internal_props, _ as svg_element, $ as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, a0 as set_svg_attributes, a1 as toggle_class, g as insert_hydration_dev, J as append_hydration_dev, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes, a2 as get_spread_update, k as transition_in, h as transition_out, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, z as claim_text, f as claim_space, V as set_input_value, L as listen_dev, A as set_data_dev, I as noop, N as run_all, M as prevent_default, e as empty, o as onMount, m as binding_callbacks, G as validate_store, H as component_subscribe, B as group_outros, j as check_outros, a3 as validate_each_argument, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a7 as prop_dev, a4 as destroy_each, K as src_url_equal, P as globals } from "./index.0c92228d.js";
-import { _ as _asyncToGenerator, k as _regeneratorRuntime, m as _extends, S as StacksTestnet, n as getUserSession, q as getStacksProvider, r as lib, v as _objectWithoutPropertiesLoose, w as hasAppPrivateKey, x as getKeys, a as addresses, y as commonjsGlobal, z as getDefaultExportFromCjs, e as utils, f as getPublicKey, h as schnorr, i as decodeStacksAddress, t as tupleCV, s as stringAsciiCV, c as uintCV, A as hexToBytes } from "./stacks_connect.7f325cc2.js";
-import { T as TEST_NETWORK, N as NETWORK, h as hex, b as explorerBtcAddressUrl, g as base64, j as btc, c as Transaction } from "./utils.7b5b399c.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, Q as create_slot, X as assign, Y as compute_rest_props, v as validate_slots, Z as exclude_internal_props, _ as svg_element, $ as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, a0 as set_svg_attributes, a1 as toggle_class, g as insert_hydration_dev, J as append_hydration_dev, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes, a2 as get_spread_update, k as transition_in, h as transition_out, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, z as claim_text, f as claim_space, V as set_input_value, L as listen_dev, A as set_data_dev, I as noop, N as run_all, M as prevent_default, e as empty, o as onMount, a3 as validate_each_argument, a4 as destroy_each, m as binding_callbacks, G as validate_store, H as component_subscribe, B as group_outros, j as check_outros, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a7 as prop_dev, K as src_url_equal, P as globals } from "./index.0c92228d.js";
+import { _ as _asyncToGenerator, k as _regeneratorRuntime, m as _extends, S as StacksTestnet, n as getUserSession, q as getStacksProvider, r as lib, v as _objectWithoutPropertiesLoose, w as hasAppPrivateKey, x as getKeys, a as addresses, y as commonjsGlobal, z as getDefaultExportFromCjs, e as utils, f as getPublicKey, h as schnorr, j as decodeStacksAddress, t as tupleCV, s as stringAsciiCV, c as uintCV, A as hexToBytes } from "./stacks_connect.f6f65a5c.js";
+import { i as isSupported, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl, T as TEST_NETWORK, N as NETWORK, h as hex, d as explorerBtcAddressUrl, g as base64, j as btc, b as Transaction } from "./utils.d534dad3.js";
 import { s as sbtcConfig } from "./hmac.1e7e1fcb.js";
-import { s as sendRawTxDirectMempool } from "./bridge_api.fe1b21a1.js";
+import { s as sendRawTxDirectMempool } from "./bridge_api.3a0c7c3a.js";
 var _excluded = ["allowedSighash", "hex", "signAtIndex", "userSession"];
 function signPayload(_x, _x2) {
   return _signPayload.apply(this, arguments);
@@ -140,8 +140,8 @@ function _generateTokenAndOpenPopup() {
 function openPsbtRequestPopup(options) {
   return generateTokenAndOpenPopup(options, makePsbtToken);
 }
-const file$d = "node_modules/svelte-bootstrap-icons/lib/ArrowDown.svelte";
-function create_fragment$d(ctx) {
+const file$e = "node_modules/svelte-bootstrap-icons/lib/ArrowDown.svelte";
+function create_fragment$e(ctx) {
   let svg;
   let path;
   let current;
@@ -196,11 +196,11 @@ function create_fragment$d(ctx) {
     h: function hydrate() {
       attr_dev(path, "fill-rule", "evenodd");
       attr_dev(path, "d", "M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z");
-      add_location(path, file$d, 0, 171, 171);
+      add_location(path, file$e, 0, 171, 171);
       set_svg_attributes(svg, svg_data);
       toggle_class(svg, "bi", true);
       toggle_class(svg, "bi-arrow-down", true);
-      add_location(svg, file$d, 0, 0, 0);
+      add_location(svg, file$e, 0, 0, 0);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, svg, anchor);
@@ -266,14 +266,14 @@ function create_fragment$d(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_fragment$d.name,
+    id: create_fragment$e.name,
     type: "component",
     source: "",
     ctx
   });
   return block;
 }
-function instance$d($$self, $$props, $$invalidate) {
+function instance$e($$self, $$props, $$invalidate) {
   const omit_props_names = [];
   let $$restProps = compute_rest_props($$props, omit_props_names);
   let { $$slots: slots = {}, $$scope } = $$props;
@@ -289,17 +289,17 @@ function instance$d($$self, $$props, $$invalidate) {
 class ArrowDown extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init(this, options, instance$d, create_fragment$d, safe_not_equal, {});
+    init(this, options, instance$e, create_fragment$e, safe_not_equal, {});
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "ArrowDown",
       options,
-      id: create_fragment$d.name
+      id: create_fragment$e.name
     });
   }
 }
-const file$c = "node_modules/svelte-bootstrap-icons/lib/ArrowUp.svelte";
-function create_fragment$c(ctx) {
+const file$d = "node_modules/svelte-bootstrap-icons/lib/ArrowUp.svelte";
+function create_fragment$d(ctx) {
   let svg;
   let path;
   let current;
@@ -354,11 +354,11 @@ function create_fragment$c(ctx) {
     h: function hydrate() {
       attr_dev(path, "fill-rule", "evenodd");
       attr_dev(path, "d", "M8 15a.5.5 0 0 0 .5-.5V2.707l3.146 3.147a.5.5 0 0 0 .708-.708l-4-4a.5.5 0 0 0-.708 0l-4 4a.5.5 0 1 0 .708.708L7.5 2.707V14.5a.5.5 0 0 0 .5.5z");
-      add_location(path, file$c, 0, 169, 169);
+      add_location(path, file$d, 0, 169, 169);
       set_svg_attributes(svg, svg_data);
       toggle_class(svg, "bi", true);
       toggle_class(svg, "bi-arrow-up", true);
-      add_location(svg, file$c, 0, 0, 0);
+      add_location(svg, file$d, 0, 0, 0);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, svg, anchor);
@@ -424,14 +424,14 @@ function create_fragment$c(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_fragment$c.name,
+    id: create_fragment$d.name,
     type: "component",
     source: "",
     ctx
   });
   return block;
 }
-function instance$c($$self, $$props, $$invalidate) {
+function instance$d($$self, $$props, $$invalidate) {
   const omit_props_names = [];
   let $$restProps = compute_rest_props($$props, omit_props_names);
   let { $$slots: slots = {}, $$scope } = $$props;
@@ -447,17 +447,17 @@ function instance$c($$self, $$props, $$invalidate) {
 class ArrowUp extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init(this, options, instance$c, create_fragment$c, safe_not_equal, {});
+    init(this, options, instance$d, create_fragment$d, safe_not_equal, {});
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "ArrowUp",
       options,
-      id: create_fragment$c.name
+      id: create_fragment$d.name
     });
   }
 }
-const file$b = "node_modules/svelte-bootstrap-icons/lib/CheckCircle.svelte";
-function create_fragment$b(ctx) {
+const file$c = "node_modules/svelte-bootstrap-icons/lib/CheckCircle.svelte";
+function create_fragment$c(ctx) {
   let svg;
   let path0;
   let path1;
@@ -515,13 +515,13 @@ function create_fragment$b(ctx) {
     },
     h: function hydrate() {
       attr_dev(path0, "d", "M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z");
-      add_location(path0, file$b, 0, 173, 173);
+      add_location(path0, file$c, 0, 173, 173);
       attr_dev(path1, "d", "M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z");
-      add_location(path1, file$b, 1, 2, 257);
+      add_location(path1, file$c, 1, 2, 257);
       set_svg_attributes(svg, svg_data);
       toggle_class(svg, "bi", true);
       toggle_class(svg, "bi-check-circle", true);
-      add_location(svg, file$b, 0, 0, 0);
+      add_location(svg, file$c, 0, 0, 0);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, svg, anchor);
@@ -588,14 +588,14 @@ function create_fragment$b(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_fragment$b.name,
+    id: create_fragment$c.name,
     type: "component",
     source: "",
     ctx
   });
   return block;
 }
-function instance$b($$self, $$props, $$invalidate) {
+function instance$c($$self, $$props, $$invalidate) {
   const omit_props_names = [];
   let $$restProps = compute_rest_props($$props, omit_props_names);
   let { $$slots: slots = {}, $$scope } = $$props;
@@ -611,17 +611,17 @@ function instance$b($$self, $$props, $$invalidate) {
 class CheckCircle extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init(this, options, instance$b, create_fragment$b, safe_not_equal, {});
+    init(this, options, instance$c, create_fragment$c, safe_not_equal, {});
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "CheckCircle",
       options,
-      id: create_fragment$b.name
+      id: create_fragment$c.name
     });
   }
 }
-const file$a = "src/lib/components/common/Principal.svelte";
-function create_if_block_1$5(ctx) {
+const file$b = "src/lib/components/common/Principal.svelte";
+function create_if_block_1$6(ctx) {
   let div;
   let a;
   let t;
@@ -647,8 +647,8 @@ function create_if_block_1$5(ctx) {
     h: function hydrate() {
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "");
-      add_location(a, file$a, 33, 11, 1511);
-      add_location(div, file$a, 33, 6, 1506);
+      add_location(a, file$b, 33, 11, 1511);
+      add_location(div, file$b, 33, 6, 1506);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -672,14 +672,14 @@ function create_if_block_1$5(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_1$5.name,
+    id: create_if_block_1$6.name,
     type: "if",
     source: "(33:6) {#if stxAddress !== addresses().stxAddress}",
     ctx
   });
   return block;
 }
-function create_if_block$7(ctx) {
+function create_if_block$8(ctx) {
   let div;
   let t;
   const block = {
@@ -704,7 +704,7 @@ function create_if_block$7(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "text-warning");
-      add_location(div, file$a, 36, 56, 1718);
+      add_location(div, file$b, 36, 56, 1718);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -726,14 +726,14 @@ function create_if_block$7(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block$7.name,
+    id: create_if_block$8.name,
     type: "if",
     source: "(37:4) {#if errored && stxAddress && stxAddress.length > 0}",
     ctx
   });
   return block;
 }
-function create_fragment$a(ctx) {
+function create_fragment$b(ctx) {
   let div3;
   let div2;
   let label;
@@ -763,12 +763,12 @@ function create_fragment$a(ctx) {
   let t6;
   let mounted;
   let dispose;
-  let if_block0 = show_if && create_if_block_1$5(ctx);
+  let if_block0 = show_if && create_if_block_1$6(ctx);
   let if_block1 = (
     /*errored*/
     ctx[3] && /*stxAddress*/
     ctx[1] && /*stxAddress*/
-    ctx[1].length > 0 && create_if_block$7(ctx)
+    ctx[1].length > 0 && create_if_block$8(ctx)
   );
   const block = {
     c: function create() {
@@ -840,29 +840,29 @@ function create_fragment$a(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(span0, file$a, 26, 6, 883);
+      add_location(span0, file$b, 26, 6, 883);
       attr_dev(span1, "class", "pointer text-info");
       attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
       attr_dev(span1, "data-bs-placement", "top");
       attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
       attr_dev(span1, "title", "Your Stacks address. The equivalent amount of sBTC will be sent to this wallet");
-      add_location(span1, file$a, 27, 6, 924);
+      add_location(span1, file$b, 27, 6, 924);
       attr_dev(label, "for", "transact-path");
       attr_dev(label, "class", "d-flex justify-content-between");
-      add_location(label, file$a, 25, 4, 810);
+      add_location(label, file$b, 25, 4, 810);
       attr_dev(input, "type", "text");
       attr_dev(input, "id", "from-address");
       attr_dev(input, "class", "form-control form-inline");
       attr_dev(input, "autocomplete", "off");
-      add_location(input, file$a, 29, 4, 1160);
+      add_location(input, file$b, 29, 4, 1160);
       attr_dev(div0, "class", "text-small text-white");
-      add_location(div0, file$a, 31, 6, 1388);
+      add_location(div0, file$b, 31, 6, 1388);
       attr_dev(div1, "class", "d-flex justify-content-between text-small text-info");
-      add_location(div1, file$a, 30, 4, 1316);
+      add_location(div1, file$b, 30, 4, 1316);
       attr_dev(div2, "class", "col");
-      add_location(div2, file$a, 24, 2, 788);
+      add_location(div2, file$b, 24, 2, 788);
       attr_dev(div3, "class", "row");
-      add_location(div3, file$a, 23, 0, 768);
+      add_location(div3, file$b, 23, 0, 768);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div3, anchor);
@@ -937,7 +937,7 @@ function create_fragment$a(ctx) {
         if (if_block0) {
           if_block0.p(ctx2, dirty);
         } else {
-          if_block0 = create_if_block_1$5(ctx2);
+          if_block0 = create_if_block_1$6(ctx2);
           if_block0.c();
           if_block0.m(div1, null);
         }
@@ -954,7 +954,7 @@ function create_fragment$a(ctx) {
         if (if_block1) {
           if_block1.p(ctx2, dirty);
         } else {
-          if_block1 = create_if_block$7(ctx2);
+          if_block1 = create_if_block$8(ctx2);
           if_block1.c();
           if_block1.m(div2, null);
         }
@@ -978,14 +978,14 @@ function create_fragment$a(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_fragment$a.name,
+    id: create_fragment$b.name,
     type: "component",
     source: "",
     ctx
   });
   return block;
 }
-function instance$a($$self, $$props, $$invalidate) {
+function instance$b($$self, $$props, $$invalidate) {
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Principal", slots, []);
   let { principalData } = $$props;
@@ -1068,12 +1068,12 @@ function instance$a($$self, $$props, $$invalidate) {
 class Principal extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init(this, options, instance$a, create_fragment$a, safe_not_equal, { principalData: 0 });
+    init(this, options, instance$b, create_fragment$b, safe_not_equal, { principalData: 0 });
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "Principal",
       options,
-      id: create_fragment$a.name
+      id: create_fragment$b.name
     });
   }
   get principalData() {
@@ -1083,7 +1083,7 @@ class Principal extends SvelteComponentDev {
     throw new Error("<Principal>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
 }
-const file$9 = "src/lib/components/common/FeeDisplay.svelte";
+const file$a = "src/lib/components/common/FeeDisplay.svelte";
 function create_else_block_1$1(ctx) {
   let div5;
   let div0;
@@ -1133,7 +1133,7 @@ function create_else_block_1$1(ctx) {
       /*amtData*/
       ctx2[0].change === 0
     )
-      return create_if_block_2$3;
+      return create_if_block_2$4;
     return create_else_block_2$1;
   }
   let current_block_type = select_block_type_2(ctx);
@@ -1236,37 +1236,37 @@ function create_else_block_1$1(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(div0, file$9, 27, 2, 1292);
-      add_location(div1, file$9, 28, 2, 1329);
+      add_location(div0, file$a, 27, 2, 1292);
+      add_location(div1, file$a, 28, 2, 1329);
       attr_dev(span0, "class", "text-success");
-      add_location(span0, file$9, 30, 23, 1503);
+      add_location(span0, file$a, 30, 23, 1503);
       attr_dev(div2, "class", "");
-      add_location(div2, file$9, 30, 4, 1484);
+      add_location(div2, file$a, 30, 4, 1484);
       attr_dev(span1, "class", "ms-5 text-white");
-      add_location(span1, file$9, 32, 6, 1581);
+      add_location(span1, file$a, 32, 6, 1581);
       attr_dev(a0, "href", "/");
       attr_dev(a0, "class", a0_class_value = /*low*/
       ctx[3] ? "text-success" : "text-info");
-      add_location(a0, file$9, 33, 27, 1656);
+      add_location(a0, file$a, 33, 27, 1656);
       attr_dev(span2, "class", "mx-0 ");
-      add_location(span2, file$9, 33, 6, 1635);
+      add_location(span2, file$a, 33, 6, 1635);
       attr_dev(a1, "href", "/");
       attr_dev(a1, "class", a1_class_value = /*medium*/
       ctx[2] ? "text-success" : "text-info");
-      add_location(a1, file$9, 34, 26, 1800);
+      add_location(a1, file$a, 34, 26, 1800);
       attr_dev(span3, "class", "mx-0");
-      add_location(span3, file$9, 34, 6, 1780);
+      add_location(span3, file$a, 34, 6, 1780);
       attr_dev(a2, "href", "/");
       attr_dev(a2, "class", a2_class_value = /*high*/
       ctx[1] ? "text-success" : "text-info");
-      add_location(a2, file$9, 35, 26, 1950);
+      add_location(a2, file$a, 35, 26, 1950);
       attr_dev(span4, "class", "mx-0");
-      add_location(span4, file$9, 35, 6, 1930);
-      add_location(div3, file$9, 31, 4, 1569);
+      add_location(span4, file$a, 35, 6, 1930);
+      add_location(div3, file$a, 31, 4, 1569);
       attr_dev(div4, "class", "d-flex justify-content-between");
-      add_location(div4, file$9, 29, 2, 1435);
+      add_location(div4, file$a, 29, 2, 1435);
       attr_dev(div5, "class", "mb-5 col-12");
-      add_location(div5, file$9, 26, 0, 1264);
+      add_location(div5, file$a, 26, 0, 1264);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div5, anchor);
@@ -1370,7 +1370,7 @@ function create_else_block_1$1(ctx) {
   });
   return block;
 }
-function create_if_block$6(ctx) {
+function create_if_block$7(ctx) {
   let div4;
   let div0;
   let t0;
@@ -1410,8 +1410,8 @@ function create_if_block$6(ctx) {
       /*amtData*/
       ctx2[0].change === 0
     )
-      return create_if_block_1$4;
-    return create_else_block$2;
+      return create_if_block_1$5;
+    return create_else_block$3;
   }
   let current_block_type = select_block_type_1(ctx);
   let if_block = current_block_type(ctx);
@@ -1501,36 +1501,36 @@ function create_if_block$6(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(div0, file$9, 14, 2, 488);
+      add_location(div0, file$a, 14, 2, 488);
       attr_dev(span0, "class", "text-success");
-      add_location(span0, file$9, 16, 23, 662);
+      add_location(span0, file$a, 16, 23, 662);
       attr_dev(div1, "class", "");
-      add_location(div1, file$9, 16, 4, 643);
+      add_location(div1, file$a, 16, 4, 643);
       attr_dev(span1, "class", "ms-5 text-white");
-      add_location(span1, file$9, 18, 6, 740);
+      add_location(span1, file$a, 18, 6, 740);
       attr_dev(a0, "href", "/");
       attr_dev(a0, "class", a0_class_value = /*low*/
       ctx[3] ? "text-success" : "text-info");
-      add_location(a0, file$9, 19, 27, 815);
+      add_location(a0, file$a, 19, 27, 815);
       attr_dev(span2, "class", "mx-0 ");
-      add_location(span2, file$9, 19, 6, 794);
+      add_location(span2, file$a, 19, 6, 794);
       attr_dev(a1, "href", "/");
       attr_dev(a1, "class", a1_class_value = /*medium*/
       ctx[2] ? "text-success" : "text-info");
-      add_location(a1, file$9, 20, 26, 959);
+      add_location(a1, file$a, 20, 26, 959);
       attr_dev(span3, "class", "mx-0");
-      add_location(span3, file$9, 20, 6, 939);
+      add_location(span3, file$a, 20, 6, 939);
       attr_dev(a2, "href", "/");
       attr_dev(a2, "class", a2_class_value = /*high*/
       ctx[1] ? "text-success" : "text-info");
-      add_location(a2, file$9, 21, 26, 1109);
+      add_location(a2, file$a, 21, 26, 1109);
       attr_dev(span4, "class", "mx-0");
-      add_location(span4, file$9, 21, 6, 1089);
-      add_location(div2, file$9, 17, 4, 728);
+      add_location(span4, file$a, 21, 6, 1089);
+      add_location(div2, file$a, 17, 4, 728);
       attr_dev(div3, "class", "d-flex justify-content-between");
-      add_location(div3, file$9, 15, 2, 594);
+      add_location(div3, file$a, 15, 2, 594);
       attr_dev(div4, "class", "mt-4 mb-5 col-12");
-      add_location(div4, file$9, 13, 0, 455);
+      add_location(div4, file$a, 13, 0, 455);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div4, anchor);
@@ -1618,7 +1618,7 @@ function create_if_block$6(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block$6.name,
+    id: create_if_block$7.name,
     type: "if",
     source: "(13:0) {#if amtData.pegIn}",
     ctx
@@ -1673,7 +1673,7 @@ function create_else_block_2$1(ctx) {
   });
   return block;
 }
-function create_if_block_2$3(ctx) {
+function create_if_block_2$4(ctx) {
   let t;
   const block = {
     c: function create() {
@@ -1693,14 +1693,14 @@ function create_if_block_2$3(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_2$3.name,
+    id: create_if_block_2$4.name,
     type: "if",
     source: "(29:7) {#if amtData.change === 0}",
     ctx
   });
   return block;
 }
-function create_else_block$2(ctx) {
+function create_else_block$3(ctx) {
   let t0;
   let t1_value = (
     /*amtData*/
@@ -1741,14 +1741,14 @@ function create_else_block$2(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_else_block$2.name,
+    id: create_else_block$3.name,
     type: "else",
     source: "(15:42) {:else}",
     ctx
   });
   return block;
 }
-function create_if_block_1$4(ctx) {
+function create_if_block_1$5(ctx) {
   let t;
   const block = {
     c: function create() {
@@ -1768,21 +1768,21 @@ function create_if_block_1$4(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_1$4.name,
+    id: create_if_block_1$5.name,
     type: "if",
     source: "(15:7) {#if amtData.change === 0}",
     ctx
   });
   return block;
 }
-function create_fragment$9(ctx) {
+function create_fragment$a(ctx) {
   let if_block_anchor;
   function select_block_type(ctx2, dirty) {
     if (
       /*amtData*/
       ctx2[0].pegIn
     )
-      return create_if_block$6;
+      return create_if_block$7;
     return create_else_block_1$1;
   }
   let current_block_type = select_block_type(ctx);
@@ -1822,14 +1822,14 @@ function create_fragment$9(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_fragment$9.name,
+    id: create_fragment$a.name,
     type: "component",
     source: "",
     ctx
   });
   return block;
 }
-function instance$9($$self, $$props, $$invalidate) {
+function instance$a($$self, $$props, $$invalidate) {
   let low;
   let medium;
   let high;
@@ -1928,12 +1928,12 @@ function instance$9($$self, $$props, $$invalidate) {
 class FeeDisplay extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init(this, options, instance$9, create_fragment$9, safe_not_equal, { amtData: 0, currentPeg: 5 });
+    init(this, options, instance$a, create_fragment$a, safe_not_equal, { amtData: 0, currentPeg: 5 });
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "FeeDisplay",
       options,
-      id: create_fragment$9.name
+      id: create_fragment$a.name
     });
   }
   get amtData() {
@@ -1947,6 +1947,1057 @@ class FeeDisplay extends SvelteComponentDev {
   }
   set currentPeg(value) {
     throw new Error("<FeeDisplay>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+  }
+}
+const file$9 = "src/lib/components/common/UTXOSelection.svelte";
+function get_each_context$1(ctx, list, i) {
+  const child_ctx = ctx.slice();
+  child_ctx[12] = list[i];
+  return child_ctx;
+}
+function create_else_block$2(ctx) {
+  let div;
+  let span;
+  let t;
+  const block = {
+    c: function create() {
+      div = element("div");
+      span = element("span");
+      t = text("Insufficient balance - please use a different bitcoin address");
+      this.h();
+    },
+    l: function claim(nodes) {
+      div = claim_element(nodes, "DIV", {});
+      var div_nodes = children(div);
+      span = claim_element(div_nodes, "SPAN", { class: true });
+      var span_nodes = children(span);
+      t = claim_text(span_nodes, "Insufficient balance - please use a different bitcoin address");
+      span_nodes.forEach(detach_dev);
+      div_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(span, "class", "text-warning");
+      add_location(span, file$9, 69, 11, 2644);
+      add_location(div, file$9, 69, 6, 2639);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div, anchor);
+      append_hydration_dev(div, span);
+      append_hydration_dev(span, t);
+    },
+    p: noop,
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_else_block$2.name,
+    type: "else",
+    source: "(69:4) {:else}",
+    ctx
+  });
+  return block;
+}
+function create_if_block_2$3(ctx) {
+  let div2;
+  let div0;
+  let t0;
+  let t1_value = (
+    /*utxoData*/
+    ctx[0].maxCommit + ""
+  );
+  let t1;
+  let t2;
+  let div0_title_value;
+  let t3;
+  let div1;
+  let a0;
+  let t4;
+  let t5;
+  let a1;
+  let t6;
+  let t7;
+  let a2;
+  let t8;
+  let mounted;
+  let dispose;
+  const block = {
+    c: function create() {
+      div2 = element("div");
+      div0 = element("div");
+      t0 = text("BTC Balance ");
+      t1 = text(t1_value);
+      t2 = text(" Sats.");
+      t3 = space();
+      div1 = element("div");
+      a0 = element("a");
+      t4 = text("hiro wallet");
+      t5 = space();
+      a1 = element("a");
+      t6 = text("refresh");
+      t7 = space();
+      a2 = element("a");
+      t8 = text("details");
+      this.h();
+    },
+    l: function claim(nodes) {
+      div2 = claim_element(nodes, "DIV", { class: true });
+      var div2_nodes = children(div2);
+      div0 = claim_element(div2_nodes, "DIV", { class: true, title: true });
+      var div0_nodes = children(div0);
+      t0 = claim_text(div0_nodes, "BTC Balance ");
+      t1 = claim_text(div0_nodes, t1_value);
+      t2 = claim_text(div0_nodes, " Sats.");
+      div0_nodes.forEach(detach_dev);
+      t3 = claim_space(div2_nodes);
+      div1 = claim_element(div2_nodes, "DIV", {});
+      var div1_nodes = children(div1);
+      a0 = claim_element(div1_nodes, "A", { href: true, class: true });
+      var a0_nodes = children(a0);
+      t4 = claim_text(a0_nodes, "hiro wallet");
+      a0_nodes.forEach(detach_dev);
+      t5 = claim_space(div1_nodes);
+      a1 = claim_element(div1_nodes, "A", { href: true, class: true });
+      var a1_nodes = children(a1);
+      t6 = claim_text(a1_nodes, "refresh");
+      a1_nodes.forEach(detach_dev);
+      t7 = claim_space(div1_nodes);
+      a2 = claim_element(div1_nodes, "A", { href: true, class: true });
+      var a2_nodes = children(a2);
+      t8 = claim_text(a2_nodes, "details");
+      a2_nodes.forEach(detach_dev);
+      div1_nodes.forEach(detach_dev);
+      div2_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(div0, "class", "");
+      attr_dev(div0, "title", div0_title_value = /*utxoData*/
+      ctx[0].numbInputs + " unspent inputs with total value: " + /*utxoData*/
+      ctx[0].maxCommit);
+      add_location(div0, file$9, 61, 6, 2086);
+      attr_dev(a0, "href", "/");
+      attr_dev(a0, "class", "text-white px-3 border-right");
+      add_location(a0, file$9, 63, 8, 2253);
+      attr_dev(a1, "href", "/");
+      attr_dev(a1, "class", "text-white px-3 border-right");
+      add_location(a1, file$9, 64, 8, 2371);
+      attr_dev(a2, "href", "/");
+      attr_dev(a2, "class", "text-white ps-3 ");
+      add_location(a2, file$9, 65, 8, 2493);
+      add_location(div1, file$9, 62, 6, 2239);
+      attr_dev(div2, "class", "text-small d-flex justify-content-between text-info");
+      add_location(div2, file$9, 60, 4, 2013);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div2, anchor);
+      append_hydration_dev(div2, div0);
+      append_hydration_dev(div0, t0);
+      append_hydration_dev(div0, t1);
+      append_hydration_dev(div0, t2);
+      append_hydration_dev(div2, t3);
+      append_hydration_dev(div2, div1);
+      append_hydration_dev(div1, a0);
+      append_hydration_dev(a0, t4);
+      append_hydration_dev(div1, t5);
+      append_hydration_dev(div1, a1);
+      append_hydration_dev(a1, t6);
+      append_hydration_dev(div1, t7);
+      append_hydration_dev(div1, a2);
+      append_hydration_dev(a2, t8);
+      if (!mounted) {
+        dispose = [
+          listen_dev(a0, "click", prevent_default(
+            /*click_handler*/
+            ctx[8]
+          ), false, true, false, false),
+          listen_dev(a1, "click", prevent_default(
+            /*click_handler_1*/
+            ctx[9]
+          ), false, true, false, false),
+          listen_dev(a2, "click", prevent_default(
+            /*click_handler_2*/
+            ctx[10]
+          ), false, true, false, false)
+        ];
+        mounted = true;
+      }
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*utxoData*/
+      1 && t1_value !== (t1_value = /*utxoData*/
+      ctx2[0].maxCommit + ""))
+        set_data_dev(t1, t1_value);
+      if (dirty & /*utxoData*/
+      1 && div0_title_value !== (div0_title_value = /*utxoData*/
+      ctx2[0].numbInputs + " unspent inputs with total value: " + /*utxoData*/
+      ctx2[0].maxCommit)) {
+        attr_dev(div0, "title", div0_title_value);
+      }
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div2);
+      mounted = false;
+      run_all(dispose);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_if_block_2$3.name,
+    type: "if",
+    source: "(60:4) {#if utxoData.numbInputs > 0}",
+    ctx
+  });
+  return block;
+}
+function create_if_block_1$4(ctx) {
+  let div;
+  let span;
+  let t;
+  const block = {
+    c: function create() {
+      div = element("div");
+      span = element("span");
+      t = text(
+        /*errorReason*/
+        ctx[2]
+      );
+      this.h();
+    },
+    l: function claim(nodes) {
+      div = claim_element(nodes, "DIV", {});
+      var div_nodes = children(div);
+      span = claim_element(div_nodes, "SPAN", { class: true });
+      var span_nodes = children(span);
+      t = claim_text(
+        span_nodes,
+        /*errorReason*/
+        ctx[2]
+      );
+      span_nodes.forEach(detach_dev);
+      div_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(span, "class", "text-warning");
+      add_location(span, file$9, 72, 11, 2807);
+      add_location(div, file$9, 72, 6, 2802);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div, anchor);
+      append_hydration_dev(div, span);
+      append_hydration_dev(span, t);
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*errorReason*/
+      4)
+        set_data_dev(
+          t,
+          /*errorReason*/
+          ctx2[2]
+        );
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_if_block_1$4.name,
+    type: "if",
+    source: "(72:4) {#if bitcoinAddress && errorReason}",
+    ctx
+  });
+  return block;
+}
+function create_if_block$6(ctx) {
+  let div5;
+  let div4;
+  let div0;
+  let span0;
+  let t0;
+  let t1;
+  let div1;
+  let span1;
+  let t2;
+  let t3;
+  let div2;
+  let span2;
+  let t4;
+  let t5;
+  let div3;
+  let span3;
+  let t6;
+  let t7;
+  let each_value = (
+    /*utxoData*/
+    ctx[0].utxos
+  );
+  validate_each_argument(each_value);
+  let each_blocks = [];
+  for (let i = 0; i < each_value.length; i += 1) {
+    each_blocks[i] = create_each_block$1(get_each_context$1(ctx, each_value, i));
+  }
+  const block = {
+    c: function create() {
+      div5 = element("div");
+      div4 = element("div");
+      div0 = element("div");
+      span0 = element("span");
+      t0 = text("Vout");
+      t1 = space();
+      div1 = element("div");
+      span1 = element("span");
+      t2 = text("Sats.");
+      t3 = space();
+      div2 = element("div");
+      span2 = element("span");
+      t4 = text("Confs.");
+      t5 = space();
+      div3 = element("div");
+      span3 = element("span");
+      t6 = text("Txid");
+      t7 = space();
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].c();
+      }
+      this.h();
+    },
+    l: function claim(nodes) {
+      div5 = claim_element(nodes, "DIV", { class: true });
+      var div5_nodes = children(div5);
+      div4 = claim_element(div5_nodes, "DIV", { class: true });
+      var div4_nodes = children(div4);
+      div0 = claim_element(div4_nodes, "DIV", { class: true });
+      var div0_nodes = children(div0);
+      span0 = claim_element(div0_nodes, "SPAN", { class: true });
+      var span0_nodes = children(span0);
+      t0 = claim_text(span0_nodes, "Vout");
+      span0_nodes.forEach(detach_dev);
+      div0_nodes.forEach(detach_dev);
+      t1 = claim_space(div4_nodes);
+      div1 = claim_element(div4_nodes, "DIV", { class: true });
+      var div1_nodes = children(div1);
+      span1 = claim_element(div1_nodes, "SPAN", { class: true });
+      var span1_nodes = children(span1);
+      t2 = claim_text(span1_nodes, "Sats.");
+      span1_nodes.forEach(detach_dev);
+      div1_nodes.forEach(detach_dev);
+      t3 = claim_space(div4_nodes);
+      div2 = claim_element(div4_nodes, "DIV", { class: true });
+      var div2_nodes = children(div2);
+      span2 = claim_element(div2_nodes, "SPAN", { class: true });
+      var span2_nodes = children(span2);
+      t4 = claim_text(span2_nodes, "Confs.");
+      span2_nodes.forEach(detach_dev);
+      div2_nodes.forEach(detach_dev);
+      t5 = claim_space(div4_nodes);
+      div3 = claim_element(div4_nodes, "DIV", { class: true });
+      var div3_nodes = children(div3);
+      span3 = claim_element(div3_nodes, "SPAN", { class: true });
+      var span3_nodes = children(span3);
+      t6 = claim_text(span3_nodes, "Txid");
+      span3_nodes.forEach(detach_dev);
+      div3_nodes.forEach(detach_dev);
+      div4_nodes.forEach(detach_dev);
+      t7 = claim_space(div5_nodes);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        each_blocks[i].l(div5_nodes);
+      }
+      div5_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(span0, "class", "text-warning");
+      add_location(span0, file$9, 77, 25, 2976);
+      attr_dev(div0, "class", "col-2");
+      add_location(div0, file$9, 77, 6, 2957);
+      attr_dev(span1, "class", "text-warning");
+      add_location(span1, file$9, 78, 25, 3046);
+      attr_dev(div1, "class", "col-2");
+      add_location(div1, file$9, 78, 6, 3027);
+      attr_dev(span2, "class", "text-warning");
+      add_location(span2, file$9, 79, 25, 3117);
+      attr_dev(div2, "class", "col-2");
+      add_location(div2, file$9, 79, 6, 3098);
+      attr_dev(span3, "class", "text-warning");
+      add_location(span3, file$9, 80, 25, 3189);
+      attr_dev(div3, "class", "col-6");
+      add_location(div3, file$9, 80, 6, 3170);
+      attr_dev(div4, "class", "row");
+      add_location(div4, file$9, 76, 4, 2933);
+      attr_dev(div5, "class", "mt-3 mb-4 mx-0 px-0");
+      add_location(div5, file$9, 75, 4, 2895);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div5, anchor);
+      append_hydration_dev(div5, div4);
+      append_hydration_dev(div4, div0);
+      append_hydration_dev(div0, span0);
+      append_hydration_dev(span0, t0);
+      append_hydration_dev(div4, t1);
+      append_hydration_dev(div4, div1);
+      append_hydration_dev(div1, span1);
+      append_hydration_dev(span1, t2);
+      append_hydration_dev(div4, t3);
+      append_hydration_dev(div4, div2);
+      append_hydration_dev(div2, span2);
+      append_hydration_dev(span2, t4);
+      append_hydration_dev(div4, t5);
+      append_hydration_dev(div4, div3);
+      append_hydration_dev(div3, span3);
+      append_hydration_dev(span3, t6);
+      append_hydration_dev(div5, t7);
+      for (let i = 0; i < each_blocks.length; i += 1) {
+        if (each_blocks[i]) {
+          each_blocks[i].m(div5, null);
+        }
+      }
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*explorerBtcTxUrl, utxoData, truncate*/
+      1) {
+        each_value = /*utxoData*/
+        ctx2[0].utxos;
+        validate_each_argument(each_value);
+        let i;
+        for (i = 0; i < each_value.length; i += 1) {
+          const child_ctx = get_each_context$1(ctx2, each_value, i);
+          if (each_blocks[i]) {
+            each_blocks[i].p(child_ctx, dirty);
+          } else {
+            each_blocks[i] = create_each_block$1(child_ctx);
+            each_blocks[i].c();
+            each_blocks[i].m(div5, null);
+          }
+        }
+        for (; i < each_blocks.length; i += 1) {
+          each_blocks[i].d(1);
+        }
+        each_blocks.length = each_value.length;
+      }
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div5);
+      destroy_each(each_blocks, detaching);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_if_block$6.name,
+    type: "if",
+    source: "(75:4) {#if showUtxos}",
+    ctx
+  });
+  return block;
+}
+function create_each_block$1(ctx) {
+  let div4;
+  let div0;
+  let span0;
+  let t0_value = (
+    /*utxo*/
+    ctx[12].vout + ""
+  );
+  let t0;
+  let t1;
+  let div1;
+  let span1;
+  let t2_value = (
+    /*utxo*/
+    ctx[12].value + ""
+  );
+  let t2;
+  let t3;
+  let div2;
+  let span2;
+  let t4_value = (
+    /*utxo*/
+    ctx[12].tx.confirmations + ""
+  );
+  let t4;
+  let t5;
+  let t6_value = (
+    /*utxo*/
+    ctx[12].tx.confirmations < 6 ? "(of 6)" : ""
+  );
+  let t6;
+  let span2_class_value;
+  let t7;
+  let div3;
+  let span3;
+  let a;
+  let t8_value = truncate(
+    /*utxo*/
+    ctx[12].txid,
+    10
+  ) + "";
+  let t8;
+  let a_href_value;
+  let t9;
+  const block = {
+    c: function create() {
+      div4 = element("div");
+      div0 = element("div");
+      span0 = element("span");
+      t0 = text(t0_value);
+      t1 = space();
+      div1 = element("div");
+      span1 = element("span");
+      t2 = text(t2_value);
+      t3 = space();
+      div2 = element("div");
+      span2 = element("span");
+      t4 = text(t4_value);
+      t5 = space();
+      t6 = text(t6_value);
+      t7 = space();
+      div3 = element("div");
+      span3 = element("span");
+      a = element("a");
+      t8 = text(t8_value);
+      t9 = space();
+      this.h();
+    },
+    l: function claim(nodes) {
+      div4 = claim_element(nodes, "DIV", { class: true });
+      var div4_nodes = children(div4);
+      div0 = claim_element(div4_nodes, "DIV", { class: true });
+      var div0_nodes = children(div0);
+      span0 = claim_element(div0_nodes, "SPAN", { class: true });
+      var span0_nodes = children(span0);
+      t0 = claim_text(span0_nodes, t0_value);
+      span0_nodes.forEach(detach_dev);
+      div0_nodes.forEach(detach_dev);
+      t1 = claim_space(div4_nodes);
+      div1 = claim_element(div4_nodes, "DIV", { class: true });
+      var div1_nodes = children(div1);
+      span1 = claim_element(div1_nodes, "SPAN", { class: true });
+      var span1_nodes = children(span1);
+      t2 = claim_text(span1_nodes, t2_value);
+      span1_nodes.forEach(detach_dev);
+      div1_nodes.forEach(detach_dev);
+      t3 = claim_space(div4_nodes);
+      div2 = claim_element(div4_nodes, "DIV", { class: true });
+      var div2_nodes = children(div2);
+      span2 = claim_element(div2_nodes, "SPAN", { class: true });
+      var span2_nodes = children(span2);
+      t4 = claim_text(span2_nodes, t4_value);
+      t5 = claim_space(span2_nodes);
+      t6 = claim_text(span2_nodes, t6_value);
+      span2_nodes.forEach(detach_dev);
+      div2_nodes.forEach(detach_dev);
+      t7 = claim_space(div4_nodes);
+      div3 = claim_element(div4_nodes, "DIV", { class: true });
+      var div3_nodes = children(div3);
+      span3 = claim_element(div3_nodes, "SPAN", { class: true });
+      var span3_nodes = children(span3);
+      a = claim_element(span3_nodes, "A", { href: true, target: true, rel: true });
+      var a_nodes = children(a);
+      t8 = claim_text(a_nodes, t8_value);
+      a_nodes.forEach(detach_dev);
+      span3_nodes.forEach(detach_dev);
+      div3_nodes.forEach(detach_dev);
+      t9 = claim_space(div4_nodes);
+      div4_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(span0, "class", "");
+      add_location(span0, file$9, 84, 25, 3349);
+      attr_dev(div0, "class", "col-2");
+      add_location(div0, file$9, 84, 6, 3330);
+      attr_dev(span1, "class", "");
+      add_location(span1, file$9, 85, 25, 3414);
+      attr_dev(div1, "class", "col-2");
+      add_location(div1, file$9, 85, 6, 3395);
+      attr_dev(span2, "class", span2_class_value = /*utxo*/
+      ctx[12].tx.confirmations < 6 ? "text-warning" : "text-success");
+      add_location(span2, file$9, 86, 25, 3480);
+      attr_dev(div2, "class", "col-2");
+      add_location(div2, file$9, 86, 6, 3461);
+      attr_dev(a, "href", a_href_value = explorerBtcTxUrl(
+        /*utxo*/
+        ctx[12].txid
+      ));
+      attr_dev(a, "target", "_blank");
+      attr_dev(a, "rel", "noreferrer");
+      add_location(a, file$9, 87, 40, 3679);
+      attr_dev(span3, "class", "");
+      add_location(span3, file$9, 87, 25, 3664);
+      attr_dev(div3, "class", "col-6");
+      add_location(div3, file$9, 87, 6, 3645);
+      attr_dev(div4, "class", "row text-white text-small");
+      add_location(div4, file$9, 83, 4, 3284);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div4, anchor);
+      append_hydration_dev(div4, div0);
+      append_hydration_dev(div0, span0);
+      append_hydration_dev(span0, t0);
+      append_hydration_dev(div4, t1);
+      append_hydration_dev(div4, div1);
+      append_hydration_dev(div1, span1);
+      append_hydration_dev(span1, t2);
+      append_hydration_dev(div4, t3);
+      append_hydration_dev(div4, div2);
+      append_hydration_dev(div2, span2);
+      append_hydration_dev(span2, t4);
+      append_hydration_dev(span2, t5);
+      append_hydration_dev(span2, t6);
+      append_hydration_dev(div4, t7);
+      append_hydration_dev(div4, div3);
+      append_hydration_dev(div3, span3);
+      append_hydration_dev(span3, a);
+      append_hydration_dev(a, t8);
+      append_hydration_dev(div4, t9);
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*utxoData*/
+      1 && t0_value !== (t0_value = /*utxo*/
+      ctx2[12].vout + ""))
+        set_data_dev(t0, t0_value);
+      if (dirty & /*utxoData*/
+      1 && t2_value !== (t2_value = /*utxo*/
+      ctx2[12].value + ""))
+        set_data_dev(t2, t2_value);
+      if (dirty & /*utxoData*/
+      1 && t4_value !== (t4_value = /*utxo*/
+      ctx2[12].tx.confirmations + ""))
+        set_data_dev(t4, t4_value);
+      if (dirty & /*utxoData*/
+      1 && t6_value !== (t6_value = /*utxo*/
+      ctx2[12].tx.confirmations < 6 ? "(of 6)" : ""))
+        set_data_dev(t6, t6_value);
+      if (dirty & /*utxoData*/
+      1 && span2_class_value !== (span2_class_value = /*utxo*/
+      ctx2[12].tx.confirmations < 6 ? "text-warning" : "text-success")) {
+        attr_dev(span2, "class", span2_class_value);
+      }
+      if (dirty & /*utxoData*/
+      1 && t8_value !== (t8_value = truncate(
+        /*utxo*/
+        ctx2[12].txid,
+        10
+      ) + ""))
+        set_data_dev(t8, t8_value);
+      if (dirty & /*utxoData*/
+      1 && a_href_value !== (a_href_value = explorerBtcTxUrl(
+        /*utxo*/
+        ctx2[12].txid
+      ))) {
+        attr_dev(a, "href", a_href_value);
+      }
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div4);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_each_block$1.name,
+    type: "each",
+    source: "(83:4) {#each utxoData.utxos as utxo}",
+    ctx
+  });
+  return block;
+}
+function create_fragment$9(ctx) {
+  let div2;
+  let div1;
+  let label;
+  let span0;
+  let t0_value = (
+    /*utxoData*/
+    ctx[0].label + ""
+  );
+  let t0;
+  let t1;
+  let span1;
+  let t2;
+  let input;
+  let t3;
+  let div0;
+  let t4_value = (
+    /*utxoData*/
+    ctx[0].info + ""
+  );
+  let t4;
+  let t5;
+  let t6;
+  let t7;
+  let mounted;
+  let dispose;
+  function select_block_type(ctx2, dirty) {
+    if (
+      /*utxoData*/
+      ctx2[0].numbInputs > 0
+    )
+      return create_if_block_2$3;
+    return create_else_block$2;
+  }
+  let current_block_type = select_block_type(ctx);
+  let if_block0 = current_block_type(ctx);
+  let if_block1 = (
+    /*bitcoinAddress*/
+    ctx[1] && /*errorReason*/
+    ctx[2] && create_if_block_1$4(ctx)
+  );
+  let if_block2 = (
+    /*showUtxos*/
+    ctx[3] && create_if_block$6(ctx)
+  );
+  const block = {
+    c: function create() {
+      div2 = element("div");
+      div1 = element("div");
+      label = element("label");
+      span0 = element("span");
+      t0 = text(t0_value);
+      t1 = space();
+      span1 = element("span");
+      t2 = space();
+      input = element("input");
+      t3 = space();
+      div0 = element("div");
+      t4 = text(t4_value);
+      t5 = space();
+      if_block0.c();
+      t6 = space();
+      if (if_block1)
+        if_block1.c();
+      t7 = space();
+      if (if_block2)
+        if_block2.c();
+      this.h();
+    },
+    l: function claim(nodes) {
+      div2 = claim_element(nodes, "DIV", { class: true });
+      var div2_nodes = children(div2);
+      div1 = claim_element(div2_nodes, "DIV", { class: true });
+      var div1_nodes = children(div1);
+      label = claim_element(div1_nodes, "LABEL", { for: true, class: true });
+      var label_nodes = children(label);
+      span0 = claim_element(label_nodes, "SPAN", {});
+      var span0_nodes = children(span0);
+      t0 = claim_text(span0_nodes, t0_value);
+      span0_nodes.forEach(detach_dev);
+      t1 = claim_space(label_nodes);
+      span1 = claim_element(label_nodes, "SPAN", {
+        class: true,
+        "data-bs-toggle": true,
+        "data-bs-placement": true,
+        "data-bs-custom-class": true,
+        title: true
+      });
+      children(span1).forEach(detach_dev);
+      label_nodes.forEach(detach_dev);
+      t2 = claim_space(div1_nodes);
+      input = claim_element(div1_nodes, "INPUT", {
+        type: true,
+        id: true,
+        class: true,
+        autocomplete: true
+      });
+      t3 = claim_space(div1_nodes);
+      div0 = claim_element(div1_nodes, "DIV", { class: true });
+      var div0_nodes = children(div0);
+      t4 = claim_text(div0_nodes, t4_value);
+      div0_nodes.forEach(detach_dev);
+      t5 = claim_space(div1_nodes);
+      if_block0.l(div1_nodes);
+      t6 = claim_space(div1_nodes);
+      if (if_block1)
+        if_block1.l(div1_nodes);
+      t7 = claim_space(div1_nodes);
+      if (if_block2)
+        if_block2.l(div1_nodes);
+      div1_nodes.forEach(detach_dev);
+      div2_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      add_location(span0, file$9, 54, 6, 1504);
+      attr_dev(span1, "class", "pointer text-info");
+      attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
+      attr_dev(span1, "data-bs-placement", "top");
+      attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
+      attr_dev(span1, "title", "Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC");
+      add_location(span1, file$9, 55, 6, 1540);
+      attr_dev(label, "for", "transact-path");
+      attr_dev(label, "class", "d-flex justify-content-between");
+      add_location(label, file$9, 53, 4, 1431);
+      attr_dev(input, "type", "text");
+      attr_dev(input, "id", "from-address");
+      attr_dev(input, "class", "form-control");
+      attr_dev(input, "autocomplete", "off");
+      add_location(input, file$9, 57, 4, 1778);
+      attr_dev(div0, "class", "text-small");
+      add_location(div0, file$9, 58, 4, 1929);
+      attr_dev(div1, "class", "col");
+      add_location(div1, file$9, 52, 2, 1409);
+      attr_dev(div2, "class", "row");
+      add_location(div2, file$9, 51, 0, 1389);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div2, anchor);
+      append_hydration_dev(div2, div1);
+      append_hydration_dev(div1, label);
+      append_hydration_dev(label, span0);
+      append_hydration_dev(span0, t0);
+      append_hydration_dev(label, t1);
+      append_hydration_dev(label, span1);
+      append_hydration_dev(div1, t2);
+      append_hydration_dev(div1, input);
+      set_input_value(
+        input,
+        /*bitcoinAddress*/
+        ctx[1]
+      );
+      append_hydration_dev(div1, t3);
+      append_hydration_dev(div1, div0);
+      append_hydration_dev(div0, t4);
+      append_hydration_dev(div1, t5);
+      if_block0.m(div1, null);
+      append_hydration_dev(div1, t6);
+      if (if_block1)
+        if_block1.m(div1, null);
+      append_hydration_dev(div1, t7);
+      if (if_block2)
+        if_block2.m(div1, null);
+      if (!mounted) {
+        dispose = [
+          listen_dev(
+            input,
+            "input",
+            /*input_input_handler*/
+            ctx[6]
+          ),
+          listen_dev(
+            input,
+            "input",
+            /*input_handler*/
+            ctx[7],
+            false,
+            false,
+            false,
+            false
+          )
+        ];
+        mounted = true;
+      }
+    },
+    p: function update(ctx2, [dirty]) {
+      if (dirty & /*utxoData*/
+      1 && t0_value !== (t0_value = /*utxoData*/
+      ctx2[0].label + ""))
+        set_data_dev(t0, t0_value);
+      if (dirty & /*bitcoinAddress*/
+      2 && input.value !== /*bitcoinAddress*/
+      ctx2[1]) {
+        set_input_value(
+          input,
+          /*bitcoinAddress*/
+          ctx2[1]
+        );
+      }
+      if (dirty & /*utxoData*/
+      1 && t4_value !== (t4_value = /*utxoData*/
+      ctx2[0].info + ""))
+        set_data_dev(t4, t4_value);
+      if (current_block_type === (current_block_type = select_block_type(ctx2)) && if_block0) {
+        if_block0.p(ctx2, dirty);
+      } else {
+        if_block0.d(1);
+        if_block0 = current_block_type(ctx2);
+        if (if_block0) {
+          if_block0.c();
+          if_block0.m(div1, t6);
+        }
+      }
+      if (
+        /*bitcoinAddress*/
+        ctx2[1] && /*errorReason*/
+        ctx2[2]
+      ) {
+        if (if_block1) {
+          if_block1.p(ctx2, dirty);
+        } else {
+          if_block1 = create_if_block_1$4(ctx2);
+          if_block1.c();
+          if_block1.m(div1, t7);
+        }
+      } else if (if_block1) {
+        if_block1.d(1);
+        if_block1 = null;
+      }
+      if (
+        /*showUtxos*/
+        ctx2[3]
+      ) {
+        if (if_block2) {
+          if_block2.p(ctx2, dirty);
+        } else {
+          if_block2 = create_if_block$6(ctx2);
+          if_block2.c();
+          if_block2.m(div1, null);
+        }
+      } else if (if_block2) {
+        if_block2.d(1);
+        if_block2 = null;
+      }
+    },
+    i: noop,
+    o: noop,
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div2);
+      if_block0.d();
+      if (if_block1)
+        if_block1.d();
+      if (if_block2)
+        if_block2.d();
+      mounted = false;
+      run_all(dispose);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_fragment$9.name,
+    type: "component",
+    source: "",
+    ctx
+  });
+  return block;
+}
+function instance$9($$self, $$props, $$invalidate) {
+  let { $$slots: slots = {}, $$scope } = $$props;
+  validate_slots("UTXOSelection", slots, []);
+  const dispatch = createEventDispatcher();
+  let { utxoData = {
+    label: "",
+    info: "",
+    utxos: [],
+    maxCommit: 0,
+    fromBtcAddress: void 0,
+    numbInputs: 0,
+    network: "testnet"
+  } } = $$props;
+  let bitcoinAddress = utxoData.fromBtcAddress;
+  let errorReason;
+  let showUtxos;
+  const hiroWallet = async () => {
+    $$invalidate(1, bitcoinAddress = addresses().cardinal);
+    configureUTXOs();
+  };
+  const configureUTXOs = async (force) => {
+    $$invalidate(2, errorReason = void 0);
+    if (!bitcoinAddress)
+      return;
+    try {
+      isSupported(bitcoinAddress);
+    } catch (err) {
+      $$invalidate(1, bitcoinAddress = void 0);
+      $$invalidate(2, errorReason = "Insufficient balance - please use a different bitcoin address");
+      return;
+    }
+    try {
+      await dispatch("utxo_updated", {
+        errored: false,
+        opCode: "address-change",
+        bitcoinAddress
+      });
+    } catch (err) {
+      $$invalidate(2, errorReason = "Insufficient balance - please use a different bitcoin address");
+      return;
+    }
+  };
+  onMount(async () => {
+    configureUTXOs();
+  });
+  const writable_props = ["utxoData"];
+  Object.keys($$props).forEach((key) => {
+    if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
+      console.warn(`<UTXOSelection> was created with unknown prop '${key}'`);
+  });
+  function input_input_handler() {
+    bitcoinAddress = this.value;
+    $$invalidate(1, bitcoinAddress);
+  }
+  const input_handler = () => configureUTXOs();
+  const click_handler = () => hiroWallet();
+  const click_handler_1 = () => configureUTXOs();
+  const click_handler_2 = () => $$invalidate(3, showUtxos = !showUtxos);
+  $$self.$$set = ($$props2) => {
+    if ("utxoData" in $$props2)
+      $$invalidate(0, utxoData = $$props2.utxoData);
+  };
+  $$self.$capture_state = () => ({
+    createEventDispatcher,
+    isSupported,
+    onMount,
+    addresses,
+    truncate,
+    explorerBtcTxUrl,
+    explorerTxUrl,
+    dispatch,
+    utxoData,
+    bitcoinAddress,
+    errorReason,
+    showUtxos,
+    hiroWallet,
+    configureUTXOs
+  });
+  $$self.$inject_state = ($$props2) => {
+    if ("utxoData" in $$props2)
+      $$invalidate(0, utxoData = $$props2.utxoData);
+    if ("bitcoinAddress" in $$props2)
+      $$invalidate(1, bitcoinAddress = $$props2.bitcoinAddress);
+    if ("errorReason" in $$props2)
+      $$invalidate(2, errorReason = $$props2.errorReason);
+    if ("showUtxos" in $$props2)
+      $$invalidate(3, showUtxos = $$props2.showUtxos);
+  };
+  if ($$props && "$$inject" in $$props) {
+    $$self.$inject_state($$props.$$inject);
+  }
+  return [
+    utxoData,
+    bitcoinAddress,
+    errorReason,
+    showUtxos,
+    hiroWallet,
+    configureUTXOs,
+    input_input_handler,
+    input_handler,
+    click_handler,
+    click_handler_1,
+    click_handler_2
+  ];
+}
+class UTXOSelection extends SvelteComponentDev {
+  constructor(options) {
+    super(options);
+    init(this, options, instance$9, create_fragment$9, safe_not_equal, { utxoData: 0 });
+    dispatch_dev("SvelteRegisterComponent", {
+      component: this,
+      tagName: "UTXOSelection",
+      options,
+      id: create_fragment$9.name
+    });
+  }
+  get utxoData() {
+    throw new Error("<UTXOSelection>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+  }
+  set utxoData(value) {
+    throw new Error("<UTXOSelection>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
 }
 var assertExports$1 = {};
@@ -2006,370 +3057,410 @@ var shams$1 = function hasSymbols() {
   }
   return true;
 };
-var hasSymbols$2 = shams$1;
+var hasSymbols$1 = shams$1;
 var shams = function hasToStringTagShams() {
-  return hasSymbols$2() && !!Symbol.toStringTag;
+  return hasSymbols$1() && !!Symbol.toStringTag;
 };
-var origSymbol = typeof Symbol !== "undefined" && Symbol;
-var hasSymbolSham = shams$1;
-var hasSymbols$1 = function hasNativeSymbols() {
-  if (typeof origSymbol !== "function") {
-    return false;
-  }
-  if (typeof Symbol !== "function") {
-    return false;
-  }
-  if (typeof origSymbol("foo") !== "symbol") {
-    return false;
-  }
-  if (typeof Symbol("bar") !== "symbol") {
-    return false;
-  }
-  return hasSymbolSham();
-};
-var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
-var slice = Array.prototype.slice;
-var toStr$3 = Object.prototype.toString;
-var funcType = "[object Function]";
-var implementation$4 = function bind(that) {
-  var target = this;
-  if (typeof target !== "function" || toStr$3.call(target) !== funcType) {
-    throw new TypeError(ERROR_MESSAGE + target);
-  }
-  var args = slice.call(arguments, 1);
-  var bound;
-  var binder = function() {
-    if (this instanceof bound) {
-      var result = target.apply(
-        this,
-        args.concat(slice.call(arguments))
-      );
-      if (Object(result) === result) {
-        return result;
+var hasSymbols2;
+var hasRequiredHasSymbols;
+function requireHasSymbols() {
+  if (hasRequiredHasSymbols)
+    return hasSymbols2;
+  hasRequiredHasSymbols = 1;
+  var origSymbol = typeof Symbol !== "undefined" && Symbol;
+  var hasSymbolSham = shams$1;
+  hasSymbols2 = function hasNativeSymbols() {
+    if (typeof origSymbol !== "function") {
+      return false;
+    }
+    if (typeof Symbol !== "function") {
+      return false;
+    }
+    if (typeof origSymbol("foo") !== "symbol") {
+      return false;
+    }
+    if (typeof Symbol("bar") !== "symbol") {
+      return false;
+    }
+    return hasSymbolSham();
+  };
+  return hasSymbols2;
+}
+var implementation$3;
+var hasRequiredImplementation$3;
+function requireImplementation$3() {
+  if (hasRequiredImplementation$3)
+    return implementation$3;
+  hasRequiredImplementation$3 = 1;
+  var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
+  var slice = Array.prototype.slice;
+  var toStr2 = Object.prototype.toString;
+  var funcType = "[object Function]";
+  implementation$3 = function bind(that) {
+    var target = this;
+    if (typeof target !== "function" || toStr2.call(target) !== funcType) {
+      throw new TypeError(ERROR_MESSAGE + target);
+    }
+    var args = slice.call(arguments, 1);
+    var bound;
+    var binder = function() {
+      if (this instanceof bound) {
+        var result = target.apply(
+          this,
+          args.concat(slice.call(arguments))
+        );
+        if (Object(result) === result) {
+          return result;
+        }
+        return this;
+      } else {
+        return target.apply(
+          that,
+          args.concat(slice.call(arguments))
+        );
       }
-      return this;
-    } else {
-      return target.apply(
-        that,
-        args.concat(slice.call(arguments))
-      );
+    };
+    var boundLength = Math.max(0, target.length - args.length);
+    var boundArgs = [];
+    for (var i = 0; i < boundLength; i++) {
+      boundArgs.push("$" + i);
+    }
+    bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder);
+    if (target.prototype) {
+      var Empty = function Empty2() {
+      };
+      Empty.prototype = target.prototype;
+      bound.prototype = new Empty();
+      Empty.prototype = null;
+    }
+    return bound;
+  };
+  return implementation$3;
+}
+var functionBind;
+var hasRequiredFunctionBind;
+function requireFunctionBind() {
+  if (hasRequiredFunctionBind)
+    return functionBind;
+  hasRequiredFunctionBind = 1;
+  var implementation2 = requireImplementation$3();
+  functionBind = Function.prototype.bind || implementation2;
+  return functionBind;
+}
+var src;
+var hasRequiredSrc;
+function requireSrc() {
+  if (hasRequiredSrc)
+    return src;
+  hasRequiredSrc = 1;
+  var bind = requireFunctionBind();
+  src = bind.call(Function.call, Object.prototype.hasOwnProperty);
+  return src;
+}
+var getIntrinsic;
+var hasRequiredGetIntrinsic;
+function requireGetIntrinsic() {
+  if (hasRequiredGetIntrinsic)
+    return getIntrinsic;
+  hasRequiredGetIntrinsic = 1;
+  var undefined$1;
+  var $SyntaxError = SyntaxError;
+  var $Function = Function;
+  var $TypeError = TypeError;
+  var getEvalledConstructor = function(expressionSyntax) {
+    try {
+      return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
+    } catch (e) {
     }
   };
-  var boundLength = Math.max(0, target.length - args.length);
-  var boundArgs = [];
-  for (var i = 0; i < boundLength; i++) {
-    boundArgs.push("$" + i);
-  }
-  bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder);
-  if (target.prototype) {
-    var Empty = function Empty2() {
-    };
-    Empty.prototype = target.prototype;
-    bound.prototype = new Empty();
-    Empty.prototype = null;
-  }
-  return bound;
-};
-var implementation$3 = implementation$4;
-var functionBind = Function.prototype.bind || implementation$3;
-var bind$1 = functionBind;
-var src = bind$1.call(Function.call, Object.prototype.hasOwnProperty);
-var undefined$1;
-var $SyntaxError = SyntaxError;
-var $Function = Function;
-var $TypeError = TypeError;
-var getEvalledConstructor = function(expressionSyntax) {
-  try {
-    return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-  } catch (e) {
-  }
-};
-var $gOPD$1 = Object.getOwnPropertyDescriptor;
-if ($gOPD$1) {
-  try {
-    $gOPD$1({}, "");
-  } catch (e) {
-    $gOPD$1 = null;
-  }
-}
-var throwTypeError = function() {
-  throw new $TypeError();
-};
-var ThrowTypeError = $gOPD$1 ? function() {
-  try {
-    arguments.callee;
-    return throwTypeError;
-  } catch (calleeThrows) {
+  var $gOPD2 = Object.getOwnPropertyDescriptor;
+  if ($gOPD2) {
     try {
-      return $gOPD$1(arguments, "callee").get;
-    } catch (gOPDthrows) {
+      $gOPD2({}, "");
+    } catch (e) {
+      $gOPD2 = null;
+    }
+  }
+  var throwTypeError = function() {
+    throw new $TypeError();
+  };
+  var ThrowTypeError = $gOPD2 ? function() {
+    try {
+      arguments.callee;
       return throwTypeError;
-    }
-  }
-}() : throwTypeError;
-var hasSymbols2 = hasSymbols$1();
-var getProto$1 = Object.getPrototypeOf || function(x) {
-  return x.__proto__;
-};
-var needsEval = {};
-var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto$1(Uint8Array);
-var INTRINSICS = {
-  "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
-  "%Array%": Array,
-  "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
-  "%ArrayIteratorPrototype%": hasSymbols2 ? getProto$1([][Symbol.iterator]()) : undefined$1,
-  "%AsyncFromSyncIteratorPrototype%": undefined$1,
-  "%AsyncFunction%": needsEval,
-  "%AsyncGenerator%": needsEval,
-  "%AsyncGeneratorFunction%": needsEval,
-  "%AsyncIteratorPrototype%": needsEval,
-  "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
-  "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
-  "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
-  "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
-  "%Boolean%": Boolean,
-  "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
-  "%Date%": Date,
-  "%decodeURI%": decodeURI,
-  "%decodeURIComponent%": decodeURIComponent,
-  "%encodeURI%": encodeURI,
-  "%encodeURIComponent%": encodeURIComponent,
-  "%Error%": Error,
-  "%eval%": eval,
-  // eslint-disable-line no-eval
-  "%EvalError%": EvalError,
-  "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
-  "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
-  "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
-  "%Function%": $Function,
-  "%GeneratorFunction%": needsEval,
-  "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
-  "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
-  "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
-  "%isFinite%": isFinite,
-  "%isNaN%": isNaN,
-  "%IteratorPrototype%": hasSymbols2 ? getProto$1(getProto$1([][Symbol.iterator]())) : undefined$1,
-  "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
-  "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
-  "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-  "%Math%": Math,
-  "%Number%": Number,
-  "%Object%": Object,
-  "%parseFloat%": parseFloat,
-  "%parseInt%": parseInt,
-  "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
-  "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
-  "%RangeError%": RangeError,
-  "%ReferenceError%": ReferenceError,
-  "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
-  "%RegExp%": RegExp,
-  "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
-  "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-  "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
-  "%String%": String,
-  "%StringIteratorPrototype%": hasSymbols2 ? getProto$1(""[Symbol.iterator]()) : undefined$1,
-  "%Symbol%": hasSymbols2 ? Symbol : undefined$1,
-  "%SyntaxError%": $SyntaxError,
-  "%ThrowTypeError%": ThrowTypeError,
-  "%TypedArray%": TypedArray,
-  "%TypeError%": $TypeError,
-  "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
-  "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
-  "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
-  "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
-  "%URIError%": URIError,
-  "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
-  "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
-  "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
-};
-try {
-  null.error;
-} catch (e) {
-  var errorProto = getProto$1(getProto$1(e));
-  INTRINSICS["%Error.prototype%"] = errorProto;
-}
-var doEval = function doEval2(name) {
-  var value;
-  if (name === "%AsyncFunction%") {
-    value = getEvalledConstructor("async function () {}");
-  } else if (name === "%GeneratorFunction%") {
-    value = getEvalledConstructor("function* () {}");
-  } else if (name === "%AsyncGeneratorFunction%") {
-    value = getEvalledConstructor("async function* () {}");
-  } else if (name === "%AsyncGenerator%") {
-    var fn = doEval2("%AsyncGeneratorFunction%");
-    if (fn) {
-      value = fn.prototype;
-    }
-  } else if (name === "%AsyncIteratorPrototype%") {
-    var gen = doEval2("%AsyncGenerator%");
-    if (gen) {
-      value = getProto$1(gen.prototype);
-    }
-  }
-  INTRINSICS[name] = value;
-  return value;
-};
-var LEGACY_ALIASES = {
-  "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-  "%ArrayPrototype%": ["Array", "prototype"],
-  "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-  "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-  "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-  "%ArrayProto_values%": ["Array", "prototype", "values"],
-  "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-  "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-  "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-  "%BooleanPrototype%": ["Boolean", "prototype"],
-  "%DataViewPrototype%": ["DataView", "prototype"],
-  "%DatePrototype%": ["Date", "prototype"],
-  "%ErrorPrototype%": ["Error", "prototype"],
-  "%EvalErrorPrototype%": ["EvalError", "prototype"],
-  "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-  "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-  "%FunctionPrototype%": ["Function", "prototype"],
-  "%Generator%": ["GeneratorFunction", "prototype"],
-  "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-  "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-  "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-  "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-  "%JSONParse%": ["JSON", "parse"],
-  "%JSONStringify%": ["JSON", "stringify"],
-  "%MapPrototype%": ["Map", "prototype"],
-  "%NumberPrototype%": ["Number", "prototype"],
-  "%ObjectPrototype%": ["Object", "prototype"],
-  "%ObjProto_toString%": ["Object", "prototype", "toString"],
-  "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-  "%PromisePrototype%": ["Promise", "prototype"],
-  "%PromiseProto_then%": ["Promise", "prototype", "then"],
-  "%Promise_all%": ["Promise", "all"],
-  "%Promise_reject%": ["Promise", "reject"],
-  "%Promise_resolve%": ["Promise", "resolve"],
-  "%RangeErrorPrototype%": ["RangeError", "prototype"],
-  "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-  "%RegExpPrototype%": ["RegExp", "prototype"],
-  "%SetPrototype%": ["Set", "prototype"],
-  "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-  "%StringPrototype%": ["String", "prototype"],
-  "%SymbolPrototype%": ["Symbol", "prototype"],
-  "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-  "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-  "%TypeErrorPrototype%": ["TypeError", "prototype"],
-  "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-  "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-  "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-  "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-  "%URIErrorPrototype%": ["URIError", "prototype"],
-  "%WeakMapPrototype%": ["WeakMap", "prototype"],
-  "%WeakSetPrototype%": ["WeakSet", "prototype"]
-};
-var bind2 = functionBind;
-var hasOwn = src;
-var $concat = bind2.call(Function.call, Array.prototype.concat);
-var $spliceApply = bind2.call(Function.apply, Array.prototype.splice);
-var $replace = bind2.call(Function.call, String.prototype.replace);
-var $strSlice = bind2.call(Function.call, String.prototype.slice);
-var $exec = bind2.call(Function.call, RegExp.prototype.exec);
-var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
-var reEscapeChar = /\\(\\)?/g;
-var stringToPath = function stringToPath2(string) {
-  var first = $strSlice(string, 0, 1);
-  var last = $strSlice(string, -1);
-  if (first === "%" && last !== "%") {
-    throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-  } else if (last === "%" && first !== "%") {
-    throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
-  }
-  var result = [];
-  $replace(string, rePropName, function(match, number, quote, subString) {
-    result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-  });
-  return result;
-};
-var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
-  var intrinsicName = name;
-  var alias;
-  if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
-    alias = LEGACY_ALIASES[intrinsicName];
-    intrinsicName = "%" + alias[0] + "%";
-  }
-  if (hasOwn(INTRINSICS, intrinsicName)) {
-    var value = INTRINSICS[intrinsicName];
-    if (value === needsEval) {
-      value = doEval(intrinsicName);
-    }
-    if (typeof value === "undefined" && !allowMissing) {
-      throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-    }
-    return {
-      alias,
-      name: intrinsicName,
-      value
-    };
-  }
-  throw new $SyntaxError("intrinsic " + name + " does not exist!");
-};
-var getIntrinsic = function GetIntrinsic(name, allowMissing) {
-  if (typeof name !== "string" || name.length === 0) {
-    throw new $TypeError("intrinsic name must be a non-empty string");
-  }
-  if (arguments.length > 1 && typeof allowMissing !== "boolean") {
-    throw new $TypeError('"allowMissing" argument must be a boolean');
-  }
-  if ($exec(/^%?[^%]*%?$/, name) === null) {
-    throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
-  }
-  var parts = stringToPath(name);
-  var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
-  var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
-  var intrinsicRealName = intrinsic.name;
-  var value = intrinsic.value;
-  var skipFurtherCaching = false;
-  var alias = intrinsic.alias;
-  if (alias) {
-    intrinsicBaseName = alias[0];
-    $spliceApply(parts, $concat([0, 1], alias));
-  }
-  for (var i = 1, isOwn = true; i < parts.length; i += 1) {
-    var part = parts[i];
-    var first = $strSlice(part, 0, 1);
-    var last = $strSlice(part, -1);
-    if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
-      throw new $SyntaxError("property names with quotes must have matching quotes");
-    }
-    if (part === "constructor" || !isOwn) {
-      skipFurtherCaching = true;
-    }
-    intrinsicBaseName += "." + part;
-    intrinsicRealName = "%" + intrinsicBaseName + "%";
-    if (hasOwn(INTRINSICS, intrinsicRealName)) {
-      value = INTRINSICS[intrinsicRealName];
-    } else if (value != null) {
-      if (!(part in value)) {
-        if (!allowMissing) {
-          throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-        }
-        return void 0;
+    } catch (calleeThrows) {
+      try {
+        return $gOPD2(arguments, "callee").get;
+      } catch (gOPDthrows) {
+        return throwTypeError;
       }
-      if ($gOPD$1 && i + 1 >= parts.length) {
-        var desc = $gOPD$1(value, part);
-        isOwn = !!desc;
-        if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
-          value = desc.get;
+    }
+  }() : throwTypeError;
+  var hasSymbols3 = requireHasSymbols()();
+  var getProto2 = Object.getPrototypeOf || function(x) {
+    return x.__proto__;
+  };
+  var needsEval = {};
+  var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto2(Uint8Array);
+  var INTRINSICS = {
+    "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
+    "%Array%": Array,
+    "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
+    "%ArrayIteratorPrototype%": hasSymbols3 ? getProto2([][Symbol.iterator]()) : undefined$1,
+    "%AsyncFromSyncIteratorPrototype%": undefined$1,
+    "%AsyncFunction%": needsEval,
+    "%AsyncGenerator%": needsEval,
+    "%AsyncGeneratorFunction%": needsEval,
+    "%AsyncIteratorPrototype%": needsEval,
+    "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
+    "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
+    "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
+    "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
+    "%Boolean%": Boolean,
+    "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
+    "%Date%": Date,
+    "%decodeURI%": decodeURI,
+    "%decodeURIComponent%": decodeURIComponent,
+    "%encodeURI%": encodeURI,
+    "%encodeURIComponent%": encodeURIComponent,
+    "%Error%": Error,
+    "%eval%": eval,
+    // eslint-disable-line no-eval
+    "%EvalError%": EvalError,
+    "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
+    "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
+    "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
+    "%Function%": $Function,
+    "%GeneratorFunction%": needsEval,
+    "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
+    "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
+    "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
+    "%isFinite%": isFinite,
+    "%isNaN%": isNaN,
+    "%IteratorPrototype%": hasSymbols3 ? getProto2(getProto2([][Symbol.iterator]())) : undefined$1,
+    "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
+    "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
+    "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+    "%Math%": Math,
+    "%Number%": Number,
+    "%Object%": Object,
+    "%parseFloat%": parseFloat,
+    "%parseInt%": parseInt,
+    "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
+    "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
+    "%RangeError%": RangeError,
+    "%ReferenceError%": ReferenceError,
+    "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
+    "%RegExp%": RegExp,
+    "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
+    "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+    "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
+    "%String%": String,
+    "%StringIteratorPrototype%": hasSymbols3 ? getProto2(""[Symbol.iterator]()) : undefined$1,
+    "%Symbol%": hasSymbols3 ? Symbol : undefined$1,
+    "%SyntaxError%": $SyntaxError,
+    "%ThrowTypeError%": ThrowTypeError,
+    "%TypedArray%": TypedArray,
+    "%TypeError%": $TypeError,
+    "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
+    "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
+    "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
+    "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
+    "%URIError%": URIError,
+    "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
+    "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
+    "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
+  };
+  try {
+    null.error;
+  } catch (e) {
+    var errorProto = getProto2(getProto2(e));
+    INTRINSICS["%Error.prototype%"] = errorProto;
+  }
+  var doEval = function doEval2(name) {
+    var value;
+    if (name === "%AsyncFunction%") {
+      value = getEvalledConstructor("async function () {}");
+    } else if (name === "%GeneratorFunction%") {
+      value = getEvalledConstructor("function* () {}");
+    } else if (name === "%AsyncGeneratorFunction%") {
+      value = getEvalledConstructor("async function* () {}");
+    } else if (name === "%AsyncGenerator%") {
+      var fn = doEval2("%AsyncGeneratorFunction%");
+      if (fn) {
+        value = fn.prototype;
+      }
+    } else if (name === "%AsyncIteratorPrototype%") {
+      var gen = doEval2("%AsyncGenerator%");
+      if (gen) {
+        value = getProto2(gen.prototype);
+      }
+    }
+    INTRINSICS[name] = value;
+    return value;
+  };
+  var LEGACY_ALIASES = {
+    "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
+    "%ArrayPrototype%": ["Array", "prototype"],
+    "%ArrayProto_entries%": ["Array", "prototype", "entries"],
+    "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
+    "%ArrayProto_keys%": ["Array", "prototype", "keys"],
+    "%ArrayProto_values%": ["Array", "prototype", "values"],
+    "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
+    "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
+    "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
+    "%BooleanPrototype%": ["Boolean", "prototype"],
+    "%DataViewPrototype%": ["DataView", "prototype"],
+    "%DatePrototype%": ["Date", "prototype"],
+    "%ErrorPrototype%": ["Error", "prototype"],
+    "%EvalErrorPrototype%": ["EvalError", "prototype"],
+    "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
+    "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
+    "%FunctionPrototype%": ["Function", "prototype"],
+    "%Generator%": ["GeneratorFunction", "prototype"],
+    "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
+    "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
+    "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
+    "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
+    "%JSONParse%": ["JSON", "parse"],
+    "%JSONStringify%": ["JSON", "stringify"],
+    "%MapPrototype%": ["Map", "prototype"],
+    "%NumberPrototype%": ["Number", "prototype"],
+    "%ObjectPrototype%": ["Object", "prototype"],
+    "%ObjProto_toString%": ["Object", "prototype", "toString"],
+    "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
+    "%PromisePrototype%": ["Promise", "prototype"],
+    "%PromiseProto_then%": ["Promise", "prototype", "then"],
+    "%Promise_all%": ["Promise", "all"],
+    "%Promise_reject%": ["Promise", "reject"],
+    "%Promise_resolve%": ["Promise", "resolve"],
+    "%RangeErrorPrototype%": ["RangeError", "prototype"],
+    "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
+    "%RegExpPrototype%": ["RegExp", "prototype"],
+    "%SetPrototype%": ["Set", "prototype"],
+    "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
+    "%StringPrototype%": ["String", "prototype"],
+    "%SymbolPrototype%": ["Symbol", "prototype"],
+    "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
+    "%TypedArrayPrototype%": ["TypedArray", "prototype"],
+    "%TypeErrorPrototype%": ["TypeError", "prototype"],
+    "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
+    "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
+    "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
+    "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
+    "%URIErrorPrototype%": ["URIError", "prototype"],
+    "%WeakMapPrototype%": ["WeakMap", "prototype"],
+    "%WeakSetPrototype%": ["WeakSet", "prototype"]
+  };
+  var bind = requireFunctionBind();
+  var hasOwn = requireSrc();
+  var $concat = bind.call(Function.call, Array.prototype.concat);
+  var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+  var $replace = bind.call(Function.call, String.prototype.replace);
+  var $strSlice = bind.call(Function.call, String.prototype.slice);
+  var $exec = bind.call(Function.call, RegExp.prototype.exec);
+  var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+  var reEscapeChar = /\\(\\)?/g;
+  var stringToPath = function stringToPath2(string) {
+    var first = $strSlice(string, 0, 1);
+    var last = $strSlice(string, -1);
+    if (first === "%" && last !== "%") {
+      throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
+    } else if (last === "%" && first !== "%") {
+      throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+    }
+    var result = [];
+    $replace(string, rePropName, function(match, number, quote, subString) {
+      result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
+    });
+    return result;
+  };
+  var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
+    var intrinsicName = name;
+    var alias;
+    if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+      alias = LEGACY_ALIASES[intrinsicName];
+      intrinsicName = "%" + alias[0] + "%";
+    }
+    if (hasOwn(INTRINSICS, intrinsicName)) {
+      var value = INTRINSICS[intrinsicName];
+      if (value === needsEval) {
+        value = doEval(intrinsicName);
+      }
+      if (typeof value === "undefined" && !allowMissing) {
+        throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
+      }
+      return {
+        alias,
+        name: intrinsicName,
+        value
+      };
+    }
+    throw new $SyntaxError("intrinsic " + name + " does not exist!");
+  };
+  getIntrinsic = function GetIntrinsic2(name, allowMissing) {
+    if (typeof name !== "string" || name.length === 0) {
+      throw new $TypeError("intrinsic name must be a non-empty string");
+    }
+    if (arguments.length > 1 && typeof allowMissing !== "boolean") {
+      throw new $TypeError('"allowMissing" argument must be a boolean');
+    }
+    if ($exec(/^%?[^%]*%?$/, name) === null) {
+      throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+    }
+    var parts = stringToPath(name);
+    var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
+    var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
+    var intrinsicRealName = intrinsic.name;
+    var value = intrinsic.value;
+    var skipFurtherCaching = false;
+    var alias = intrinsic.alias;
+    if (alias) {
+      intrinsicBaseName = alias[0];
+      $spliceApply(parts, $concat([0, 1], alias));
+    }
+    for (var i = 1, isOwn = true; i < parts.length; i += 1) {
+      var part = parts[i];
+      var first = $strSlice(part, 0, 1);
+      var last = $strSlice(part, -1);
+      if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+        throw new $SyntaxError("property names with quotes must have matching quotes");
+      }
+      if (part === "constructor" || !isOwn) {
+        skipFurtherCaching = true;
+      }
+      intrinsicBaseName += "." + part;
+      intrinsicRealName = "%" + intrinsicBaseName + "%";
+      if (hasOwn(INTRINSICS, intrinsicRealName)) {
+        value = INTRINSICS[intrinsicRealName];
+      } else if (value != null) {
+        if (!(part in value)) {
+          if (!allowMissing) {
+            throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
+          }
+          return void 0;
+        }
+        if ($gOPD2 && i + 1 >= parts.length) {
+          var desc = $gOPD2(value, part);
+          isOwn = !!desc;
+          if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
+            value = desc.get;
+          } else {
+            value = value[part];
+          }
         } else {
+          isOwn = hasOwn(value, part);
           value = value[part];
         }
-      } else {
-        isOwn = hasOwn(value, part);
-        value = value[part];
-      }
-      if (isOwn && !skipFurtherCaching) {
-        INTRINSICS[intrinsicRealName] = value;
+        if (isOwn && !skipFurtherCaching) {
+          INTRINSICS[intrinsicRealName] = value;
+        }
       }
     }
-  }
-  return value;
-};
+    return value;
+  };
+  return getIntrinsic;
+}
 var callBindExports = {};
 var callBind$1 = {
   get exports() {
@@ -2379,47 +3470,54 @@ var callBind$1 = {
     callBindExports = v;
   }
 };
-(function(module) {
-  var bind3 = functionBind;
-  var GetIntrinsic3 = getIntrinsic;
-  var $apply = GetIntrinsic3("%Function.prototype.apply%");
-  var $call = GetIntrinsic3("%Function.prototype.call%");
-  var $reflectApply = GetIntrinsic3("%Reflect.apply%", true) || bind3.call($call, $apply);
-  var $gOPD2 = GetIntrinsic3("%Object.getOwnPropertyDescriptor%", true);
-  var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
-  var $max = GetIntrinsic3("%Math.max%");
-  if ($defineProperty) {
-    try {
-      $defineProperty({}, "a", { value: 1 });
-    } catch (e) {
-      $defineProperty = null;
-    }
-  }
-  module.exports = function callBind2(originalFunction) {
-    var func = $reflectApply(bind3, $call, arguments);
-    if ($gOPD2 && $defineProperty) {
-      var desc = $gOPD2(func, "length");
-      if (desc.configurable) {
-        $defineProperty(
-          func,
-          "length",
-          { value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
-        );
+var hasRequiredCallBind;
+function requireCallBind() {
+  if (hasRequiredCallBind)
+    return callBindExports;
+  hasRequiredCallBind = 1;
+  (function(module) {
+    var bind = requireFunctionBind();
+    var GetIntrinsic2 = requireGetIntrinsic();
+    var $apply = GetIntrinsic2("%Function.prototype.apply%");
+    var $call = GetIntrinsic2("%Function.prototype.call%");
+    var $reflectApply = GetIntrinsic2("%Reflect.apply%", true) || bind.call($call, $apply);
+    var $gOPD2 = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
+    var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
+    var $max = GetIntrinsic2("%Math.max%");
+    if ($defineProperty) {
+      try {
+        $defineProperty({}, "a", { value: 1 });
+      } catch (e) {
+        $defineProperty = null;
       }
     }
-    return func;
-  };
-  var applyBind = function applyBind2() {
-    return $reflectApply(bind3, $apply, arguments);
-  };
-  if ($defineProperty) {
-    $defineProperty(module.exports, "apply", { value: applyBind });
-  } else {
-    module.exports.apply = applyBind;
-  }
-})(callBind$1);
-var GetIntrinsic$1 = getIntrinsic;
-var callBind = callBindExports;
+    module.exports = function callBind2(originalFunction) {
+      var func = $reflectApply(bind, $call, arguments);
+      if ($gOPD2 && $defineProperty) {
+        var desc = $gOPD2(func, "length");
+        if (desc.configurable) {
+          $defineProperty(
+            func,
+            "length",
+            { value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
+          );
+        }
+      }
+      return func;
+    };
+    var applyBind = function applyBind2() {
+      return $reflectApply(bind, $apply, arguments);
+    };
+    if ($defineProperty) {
+      $defineProperty(module.exports, "apply", { value: applyBind });
+    } else {
+      module.exports.apply = applyBind;
+    }
+  })(callBind$1);
+  return callBindExports;
+}
+var GetIntrinsic$1 = requireGetIntrinsic();
+var callBind = requireCallBind();
 var $indexOf$1 = callBind(GetIntrinsic$1("String.prototype.indexOf"));
 var callBound$3 = function callBoundIntrinsic(name, allowMissing) {
   var intrinsic = GetIntrinsic$1(name, !!allowMissing);
@@ -2667,8 +3765,8 @@ var availableTypedArrays$2 = function availableTypedArrays() {
   }
   return out;
 };
-var GetIntrinsic2 = getIntrinsic;
-var $gOPD = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
+var GetIntrinsic = requireGetIntrinsic();
+var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
 if ($gOPD) {
   try {
     $gOPD([], "length");
@@ -4466,7 +5564,7 @@ function requireObjectKeys() {
   if (hasRequiredObjectKeys)
     return objectKeys;
   hasRequiredObjectKeys = 1;
-  var slice2 = Array.prototype.slice;
+  var slice = Array.prototype.slice;
   var isArgs = requireIsArguments();
   var origKeys = Object.keys;
   var keysShim = origKeys ? function keys(o) {
@@ -4482,7 +5580,7 @@ function requireObjectKeys() {
       if (!keysWorksWithArguments) {
         Object.keys = function keys(object) {
           if (isArgs(object)) {
-            return originalKeys(slice2.call(object));
+            return originalKeys(slice.call(object));
           }
           return originalKeys(object);
         };
@@ -4501,8 +5599,8 @@ function requireHasPropertyDescriptors() {
   if (hasRequiredHasPropertyDescriptors)
     return hasPropertyDescriptors_1;
   hasRequiredHasPropertyDescriptors = 1;
-  var GetIntrinsic3 = getIntrinsic;
-  var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
+  var GetIntrinsic2 = requireGetIntrinsic();
+  var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
   var hasPropertyDescriptors = function hasPropertyDescriptors2() {
     if ($defineProperty) {
       try {
@@ -4639,7 +5737,7 @@ function requireObjectIs() {
     return objectIs;
   hasRequiredObjectIs = 1;
   var define = requireDefineProperties();
-  var callBind2 = callBindExports;
+  var callBind2 = requireCallBind();
   var implementation2 = requireImplementation$1();
   var getPolyfill = requirePolyfill$1();
   var shim2 = requireShim$1();
@@ -4703,7 +5801,7 @@ function requireIsNan() {
   if (hasRequiredIsNan)
     return isNan;
   hasRequiredIsNan = 1;
-  var callBind2 = callBindExports;
+  var callBind2 = requireCallBind();
   var define = requireDefineProperties();
   var implementation2 = requireImplementation();
   var getPolyfill = requirePolyfill();
@@ -5822,7 +6920,7 @@ __publicField(PegTransaction, "hydrate", (o) => {
   return me;
 });
 tupleCV({
-  name: stringAsciiCV("SBTC Bridge"),
+  name: stringAsciiCV("sBTC Bridge"),
   version: stringAsciiCV("1.0.0"),
   "chain-id": uintCV(
     1
@@ -10255,9 +11353,9 @@ function create_if_block_1(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(p, file$1, 91, 4, 3175);
+      add_location(p, file$1, 91, 4, 3174);
       attr_dev(div, "class", "my-5 text-center text-danger");
-      add_location(div, file$1, 90, 2, 3128);
+      add_location(div, file$1, 90, 2, 3127);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -10328,16 +11426,16 @@ function create_else_block(ctx) {
         /*btnClass*/
         ctx[8](false)
       );
-      add_location(button0, file$1, 103, 4, 3568);
+      add_location(button0, file$1, 103, 4, 3567);
       attr_dev(
         button1,
         "class",
         /*btnClass*/
         ctx[8](true)
       );
-      add_location(button1, file$1, 104, 4, 3665);
+      add_location(button1, file$1, 104, 4, 3664);
       attr_dev(div, "class", "d-flex justify-content-center my-5");
-      add_location(div, file$1, 102, 2, 3515);
+      add_location(div, file$1, 102, 2, 3514);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -10441,11 +11539,11 @@ function create_if_block(ctx) {
       );
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file$1, 96, 45, 3324);
-      add_location(p0, file$1, 96, 4, 3283);
-      add_location(p1, file$1, 98, 4, 3418);
+      add_location(a, file$1, 96, 45, 3323);
+      add_location(p0, file$1, 96, 4, 3282);
+      add_location(p1, file$1, 98, 4, 3417);
       attr_dev(div, "class", "my-5 text-center text-warning");
-      add_location(div, file$1, 95, 2, 3235);
+      add_location(div, file$1, 95, 2, 3234);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -10560,12 +11658,12 @@ function create_fragment$1(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(h2, file$1, 84, 4, 2948);
+      add_location(h2, file$1, 84, 4, 2947);
       attr_dev(div, "class", "d-flex justify-content-between");
-      add_location(div, file$1, 83, 2, 2899);
+      add_location(div, file$1, 83, 2, 2898);
       attr_dev(section0, "class", "mb-3");
-      add_location(section0, file$1, 82, 0, 2874);
-      add_location(section1, file$1, 88, 0, 3096);
+      add_location(section0, file$1, 82, 0, 2873);
+      add_location(section1, file$1, 88, 0, 3095);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, section0, anchor);
@@ -10667,7 +11765,7 @@ function instance$1($$self, $$props, $$invalidate) {
   const dispatch = createEventDispatcher();
   let { sigData } = $$props;
   let { pegInfo } = $$props;
-  let currentTx = hex.encode(sigData.txs.opReturn.toPSBT(2));
+  let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
   let errorReason;
   let successReason;
   const from = $sbtcConfig.pegIn ? (_a = $sbtcConfig == null ? void 0 : $sbtcConfig.pegInTransaction) == null ? void 0 : _a.fromBtcAddress : (_b = $sbtcConfig == null ? void 0 : $sbtcConfig.pegOutTransaction) == null ? void 0 : _b.fromBtcAddress;
@@ -10927,14 +12025,15 @@ class SbtcWalletDisplay extends SvelteComponentDev {
 export {
   FeeDisplay as F,
   MAGIC_BYTES_TESTNET as M,
-  Principal as P,
+  PegTransaction as P,
   SbtcWalletDisplay as S,
-  PegTransaction as a,
-  assert as b,
-  MAGIC_BYTES_MAINNET as c,
-  PEGIN_OPCODE as d,
-  concatByteArrays as e,
+  UTXOSelection as U,
+  assert as a,
+  MAGIC_BYTES_MAINNET as b,
+  concatByteArrays as c,
+  PEGOUT_OPCODE as d,
+  Principal as e,
   SignTransaction as f,
   SignTransactionWeb as g,
-  PEGOUT_OPCODE as h
+  PEGIN_OPCODE as h
 };
