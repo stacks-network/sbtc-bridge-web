@@ -21,7 +21,16 @@ async function sendRawTxDirectMempool(hex) {
   return "success";
 }
 async function fetchCurrentFeeRates() {
-  const path = "https://mainnet.api.sbtc.world/bridge-api/v1/btc/blocks/fee-estimate";
+  const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/btc/blocks/fee-estimate";
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error("Bitcoin address not known - is the network correct?");
+  }
+  const txs = await response.json();
+  return txs;
+}
+async function fetchAddressTransactions(address) {
+  const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/btc/wallet/address/" + address + "/txs";
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error("Bitcoin address not known - is the network correct?");
@@ -30,7 +39,7 @@ async function fetchCurrentFeeRates() {
   return txs;
 }
 async function fetchUtxoSet(address) {
-  const path = "https://mainnet.api.sbtc.world/bridge-api/v1/btc/wallet/address/" + address + "/utxos?verbose=true";
+  const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/btc/wallet/address/" + address + "/utxos?verbose=true";
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error("Bitcoin address not known - is the network correct?");
@@ -40,7 +49,7 @@ async function fetchUtxoSet(address) {
 }
 async function fetchSbtcEvents() {
   try {
-    const path = "https://mainnet.api.sbtc.world/bridge-api/v1/sbtc/events/0";
+    const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/sbtc/events/0";
     const response = await fetch(path);
     const result = await response.json();
     return result;
@@ -49,14 +58,14 @@ async function fetchSbtcEvents() {
   }
 }
 async function fetchSbtcData() {
-  const path = "https://mainnet.api.sbtc.world/bridge-api/v1/sbtc/data";
+  const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/sbtc/data";
   const response = await fetch(path);
   const result = await response.text();
   return result;
 }
 async function fetchUserSbtcBalance(stxAddress) {
   try {
-    const path = "https://mainnet.api.sbtc.world/bridge-api/v1/sbtc/address/" + stxAddress + "/balance";
+    const path = "https://testnet.sbtc-bridge-api.trustmachines.dev/bridge-api/v1/sbtc/address/" + stxAddress + "/balance";
     const response = await fetch(path);
     const result = await response.json();
     return result;
@@ -66,9 +75,10 @@ async function fetchUserSbtcBalance(stxAddress) {
 }
 export {
   fetchSbtcEvents as a,
-  fetchUtxoSet as b,
-  fetchCurrentFeeRates as c,
-  fetchUserSbtcBalance as d,
+  fetchAddressTransactions as b,
+  fetchUtxoSet as c,
+  fetchCurrentFeeRates as d,
+  fetchUserSbtcBalance as e,
   fetchSbtcData as f,
   sendRawTxDirectMempool as s
 };

@@ -1,5 +1,5 @@
 import { u as utils$1, a as sha256$3, h as hmac$2, s as sbtcConfig } from "./hmac.1e7e1fcb.js";
-import { d as fetchUserSbtcBalance } from "./bridge_api.3a0c7c3a.js";
+import { e as fetchUserSbtcBalance } from "./bridge_api.fe1b21a1.js";
 import { _ as __vitePreload } from "./preload-helper.f8376bb0.js";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
@@ -9711,7 +9711,7 @@ const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
       case "connect-modal":
         return __vitePreload(() => import(
           /* webpackMode: "lazy" */
-          "./connect-modal.entry.5890143f.js"
+          "./connect-modal.entry.064c6ce7.js"
         ), true ? [] : void 0, import.meta.url).then(processMod, consoleError);
     }
   }
@@ -9925,8 +9925,8 @@ export {
   getPublicKey$1 as f,
   getStacksNetwork as g,
   schnorr as h,
-  signMessage as i,
-  decodeStacksAddress as j,
+  decodeStacksAddress as i,
+  signMessage as j,
   _regeneratorRuntime as k,
   logUserOut as l,
   _extends as m,

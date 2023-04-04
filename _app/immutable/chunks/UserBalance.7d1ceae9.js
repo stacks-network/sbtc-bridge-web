@@ -1,6 +1,6 @@
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, c as space, p as element, y as text, f as claim_space, q as claim_element, r as children, z as claim_text, l as detach_dev, x as add_location, g as insert_hydration_dev, J as append_hydration_dev, A as set_data_dev, I as noop, u as attr_dev } from "./index.0c92228d.js";
 import { s as sbtcConfig } from "./hmac.1e7e1fcb.js";
-import { f as fmtSatoshiToBitcoin } from "./utils.d534dad3.js";
+import { f as fmtSatoshiToBitcoin } from "./utils.7b5b399c.js";
 const file = "src/lib/components/common/UserBalance.svelte";
 function create_if_block(ctx) {
   let span;
