@@ -1,9 +1,9 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.f8376bb0.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, o as onMount, c as space, p as element, f as claim_space, q as claim_element, r as children, l as detach_dev, u as attr_dev, x as add_location, g as insert_hydration_dev, I as noop, y as text, z as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, w as set_style, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component, N as run_all, O as onDestroy, t as tick, P as globals, e as empty, j as check_outros, B as group_outros, Q as create_slot, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes } from "../chunks/index.0c92228d.js";
-import { a as addresses, l as logUserOut, b as loginStacksJs, u as userSession } from "../chunks/stacks_connect.f6f65a5c.js";
-import { i as isCoordinator } from "../chunks/sbtc_admin.6fff02eb.js";
+import { a as addresses, l as logUserOut, b as loginStacksJs, u as userSession } from "../chunks/stacks_connect.543fae53.js";
+import { i as isCoordinator } from "../chunks/sbtc_admin.5aebc118.js";
 import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { g as goto } from "../chunks/navigation.26c27828.js";
+import { g as goto } from "../chunks/navigation.a94ccc00.js";
 import { U as UserBalance } from "../chunks/UserBalance.c86474f0.js";
 const app = "";
 const stx_eco_wallet_on = "" + new URL("../assets/stx_eco_wallet_on.090e5a93.png", import.meta.url).href;

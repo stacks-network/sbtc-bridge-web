@@ -1,4 +1,4 @@
-import { s as stringAsciiCV, p as principalCV, c as uintCV, o as openContractCall, g as getStacksNetwork, P as PostConditionMode, t as tupleCV, d as bufferCVFromString } from "./stacks_connect.f6f65a5c.js";
+import { s as stringAsciiCV, p as principalCV, c as uintCV, o as openContractCall, g as getStacksNetwork, P as PostConditionMode, t as tupleCV, d as bufferCVFromString } from "./stacks_connect.543fae53.js";
 const coordinators = [
   { stxAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM", btcAddress: "tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e" },
   // devnet + electrum bob
