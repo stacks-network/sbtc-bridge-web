@@ -1,5 +1,5 @@
 import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, G as validate_store, H as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, g as insert_hydration_dev, J as append_hydration_dev, A as set_data_dev, I as noop } from "../chunks/index.0c92228d.js";
-import { s as stores } from "../chunks/singletons.92702271.js";
+import { s as stores } from "../chunks/singletons.5d926556.js";
 const getStores = () => {
   const stores$1 = stores;
   return {
