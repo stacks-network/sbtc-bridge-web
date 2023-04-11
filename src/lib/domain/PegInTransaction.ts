@@ -4,6 +4,7 @@ import { hex } from '@scure/base';
 import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PegTransactionI } from './PegTransaction';
+import type { PeginRequestI } from '$types/pegin_request';
 import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress } from '$lib/stacks_connect'
@@ -11,12 +12,15 @@ import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTra
 import { concatByteArrays } from '$lib/structured-data.js'
 export interface PegInTransactionI extends PegTransactionI {
 
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: PeginRequestI };
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
 	getOutputsForDisplay: () => Array<any>;
+	getWitnessScript?: () => any;
 }
+
+//const pubkey2 = 'deec29b36f0829c98748cf1c3271497ece61e9aa5148242b23378f39d9fb854f'
 
 const priv = secp.utils.randomPrivateKey()
 const isMini = import.meta.env.VITE_SBTC_MINI;
@@ -49,6 +53,33 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		// utxos have to come from a hosted indexer or external service
 		// client catches errors
 		me.addressInfo = await fetchUtxoSet(fromBtcAddress);
+		//me.addressInfo.walletInfo = await fetchUtxoSet('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
+
+		// extract the public key for use in multi sig script later.
+		// note: the public key can't be found directly - it can be fished from the
+		// redeem or witness script that was used to secure prev unspent outputs.
+		// i.e. finds a vin that redeemed a utxo..
+		/**
+		const addr = btc.Address(me.net).decode(fromBtcAddress);
+		if (addr.type === 'wpkh') {
+			me.addressInfo.pubkey = me.addressInfo.utxos[0].tx.vin[0].txinwitness[1];
+			const wpkh = btc.p2wpkh(hex.decode(me.addressInfo.pubkey), me.net);
+			if (wpkh.address !== fromBtcAddress) throw new Error('Public key incorrect');
+		} else if (addr.type === 'pkh') {
+			me.addressInfo.pubkey = me.addressInfo.utxos[0].tx.vin[0].txinwitness[1];
+			const pkh = btc.p2pkh(hex.decode(me.addressInfo.pubkey), me.net);
+			if (pkh.address !== fromBtcAddress) throw new Error('Public key incorrect');
+		} else if (addr.type === 'tr') {
+			me.addressInfo.pubkey = me.addressInfo.utxos[0].tx.vin[0].txinwitness[1];
+			const pkh = btc.p2tr(hex.decode(me.addressInfo.pubkey), me.net);
+			if (pkh.address !== fromBtcAddress) throw new Error('Public key incorrect');
+		}
+		 */
+
+		const sbtcAddr = btc.Address(me.net).decode(sbtcWalletAddress);
+		if (sbtcAddr.type !== 'tr') throw new Error('sBTC address is not taproot?')
+		me.addressInfo.pubkey2 = 'deec29b36f0829c98748cf1c3271497ece61e9aa5148242b23378f39d9fb854f'
+
 		const btcFeeRates = await fetchCurrentFeeRates();
 		me.feeInfo = btcFeeRates.feeInfo;
 		//me.calculateFees(network);
@@ -87,7 +118,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		// random addresses for calculating the fee.
 		if (!this.ready) throw new Error('Not ready!');
 		const stacksAddress = 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN';
-		const sbtcWalletAddress = 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss';
+		const sbtcWalletAddress = 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7';
 
 		// prepare random signer
 		const p2Ret = btc.p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
@@ -149,15 +180,16 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return { opReturn: this.buildOpReturnTransaction(), opDrop: this.buildOpDropTransaction() };
 	}
 
-	private buildOpDropTransaction = () => {
+	private buildOpDropTransaction = ():PeginRequestI => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true, lockTime: 0 });
 		this.addInputs(tx);
-		const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress)
-		tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
-		return tx;
+		//const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress)
+		const request = this.getCSVWitnessScript();
+		//tx.addOutput({ script: request.timeBasedPegin.script, amount: BigInt(this.pegInData.amount) });
+		//const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+		//if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+		return request;
 	}
 
 	private buildOpReturnTransaction = () => {
@@ -237,12 +269,14 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 	*/
 	private getOpDropP2shScript(stacksAddress:string, sbtcWalletAddress:string) {
 		const data = this.buildData(stacksAddress);
-		const walletUint8 = new TextEncoder().encode(sbtcWalletAddress);
-		let asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', walletUint8, 'EQUALVERIFY', 'CHECKSIG'])
+		//const walletUint8 = new TextEncoder().encode(sbtcWalletAddress);
+
+		//const sbtcWalletUint8 = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
+		let asmScript; // = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', walletUint8, 'EQUALVERIFY', 'CHECKSIG'])
 		if (isMini) {
 			asmScript = btc.Script.encode([
-				'IF', 
-				data, 'DROP', 'DUP', 'HASH160', walletUint8, 'EQUALVERIFY', 'CHECKSIG',
+				data, 'DROP', 'IF', 
+				btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)),
 				'ELSE', 
 				144, 'CHECKSEQUENCEVERIFY', 'DROP',
 				btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)),
@@ -253,6 +287,92 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return asmScript;
 	}
 
+	getMSWitnessScript = ():PeginRequestI => {
+		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+		const data = this.buildData(this.pegInData.stacksAddress);
+		const pubkey1 = this.addressInfo.pubkey
+		const pubkey2 = this.addressInfo.pubkey2
+		let script;
+		try {
+			const pmnt = btc.p2tr_ms(1, [pubkey1, pubkey2])
+			const wsh2 = {
+				type: 'wsh',
+				script: btc.Script.encode([data, 'DROP', pmnt.script])
+			}
+			script = btc.p2wsh(wsh2, this.net);
+		} catch (err) {
+			try {
+				const pmnt = btc.p2ms(1, [pubkey1, pubkey2])
+				const wsh2 = {
+					type: 'wsh',
+					script: btc.Script.encode([data, 'DROP', pmnt.script])
+				}
+				script = btc.p2wsh(wsh2, this.net);
+			} catch (err) {
+				script = {
+					type: 'unknown',
+					script: new Uint8Array()
+				};
+			}
+		}
+		return {
+			status: 1,
+			fromBtcAddress: this.fromBtcAddress,
+			stacksAddress: this.pegInData.stacksAddress,
+			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
+			timeBasedPegin: {
+				paymentType: script.type,
+				address: script.address,
+				script: hex.encode(script.script),
+				redeemScript: (script.redeemScript) ? hex.encode(script.redeemScript) : undefined,
+				witnessScript: (script.witnessScript) ? hex.encode(script.witnessScript) : undefined,
+			}
+		};
+	}
+
+	private getCSVScript (data:Uint8Array) {
+		//const pubkey1 = this.addressInfo.pubkey
+		const addrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		if (addrScript.type === 'wpkh') {
+			return {
+				type: 'wsh',
+				script: btc.Script.encode([data, 'DROP', btc.p2wpkh(addrScript.hash).script])
+			}
+		} else if (addrScript.type === 'tr') {
+			
+			return {
+				type: 'tr',
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
+				script: btc.Script.encode([data, 'DROP', btc.p2tr(addrScript.pubkey).script])
+			}
+		}
+	}
+
+	getCSVWitnessScript = ():PeginRequestI => {
+		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+		const data = this.buildData(this.pegInData.stacksAddress);
+		const csvScript = this.getCSVScript(data)
+		if (!csvScript) throw new Error('Script not allowed')
+		const script = btc.p2wsh(csvScript, this.net);
+		return {
+			fromBtcAddress: this.fromBtcAddress,
+			status: 1,
+			stacksAddress: this.pegInData.stacksAddress,
+			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
+			timeBasedPegin: {
+				wsh: hex.encode(script.script),
+				paymentType: script.type,
+				address: script.address,
+				script: hex.encode(script.script),
+				redeemScript: (script.redeemScript) ? hex.encode(script.redeemScript) : undefined,
+				witnessScript: (script.witnessScript) ? hex.encode(script.witnessScript) : undefined,
+			}
+		};
+	}
+
+	
 	buildData = (sigOrPrin:string):Uint8Array => {
 		//const data = new Uint8Array(78);
 		const magicBuf = (this.net === btc.TEST_NETWORK) ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);

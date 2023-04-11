@@ -13,18 +13,16 @@ let opMechanism:string|undefined;
 
 export let sigData:SigData;
 export let pegInfo:any;
-let showTx = false;
-let showHex = false;
 let copied = false;
 
-let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
+let currentTx = hex.encode(sigData.txs.opDrop.toPSBT(2));
 
 const setCurrent = () => {
   if (opMechanism === 'return') {
-    const psbt = sigData.txs.opReturn.toPSBT();
+    const psbt = sigData.txs.opReturn.toPSBT(2);
     (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
   } else if (opMechanism === 'drop') {
-    const psbt = sigData.txs.opDrop.toPSBT();
+    const psbt = sigData.txs.opDrop.toPSBT(2);
     (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
   }
 }

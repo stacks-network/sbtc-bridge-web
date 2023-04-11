@@ -26,8 +26,8 @@ describe('suite', () => {
   const signature = "0383417c35412583899e9a1c37d8c9c2eec4180dbeff275d0634d9ec862d90d758ba3e3026f7ca7e23de2e7c1823d198e7004303854e185671e3c05eff655d9d00"
   // SP3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSQP2HGT6
   it.concurrent('structure-data() verif.', async () => {
-    expect(domain.name).equals('SBTC Bridge');
-    expect(domainCV.data.name.data).equals('SBTC Bridge');
+    expect(domain.name).equals('sBTC Bridge');
+    expect(domainCV.data.name.data).equals('sBTC Bridge');
     expect(domainCV.data.name.type).equals(13);
     expect(domainCV.data['chain-id'].type).equals(1);
     expect(domainCV.data['chain-id'].value).equals(2147483648n);

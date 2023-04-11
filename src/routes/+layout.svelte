@@ -8,6 +8,7 @@ import type { SbtcConfig } from '$types/sbtc_config'
 import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { defaultSbtcConfig } from '$lib/sbtc';
+import { COMMS_ERROR } from '$lib/utils.js'
 
 // data - imported from layout.ts
 
@@ -18,6 +19,7 @@ onDestroy(unsubscribe);
 //setUpMicroStacks();
 //setUpStacksJs();
 let inited = false;
+let errorReason:string|undefined;
 
 const doLogin = async () => {
   await loginStacksJs();
@@ -42,6 +44,7 @@ onMount(async () => {
     await initApplication();
     inited = true;
   } catch (err) {
+    errorReason = COMMS_ERROR
     console.log(err)
   }
   setTimeout(function () {
@@ -55,19 +58,26 @@ onMount(async () => {
 </script>
 
 {#if inited}
-{#if $sbtcConfig && $sbtcConfig.loggedIn}
-<div class="app">
-  <Header/>
-  <slot />
-  <Footer />
-</div>
+  {#if $sbtcConfig && $sbtcConfig.loggedIn}
+    <div class="app">
+      <Header/>
+      <slot />
+      <Footer />
+    </div>
+    {:else}
+    <div class="lobby bg-dark">
+      <p class="text-white">Connect your Hiro web wallet to start wrapping SBTC!</p>
+      <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
+      <p class="mt-5 text-warning">Currently in Alpha Testing!</p>
+    </div>
+  {/if}
 {:else}
-<div class="lobby bg-dark">
-  <p class="text-white">Connect your Hiro web wallet to start wrapping SBTC!</p>
-  <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
-  <p class="mt-5 text-warning">Currently in Alpha Testing!</p>
-</div>
+  <div class="my-3 d-flex justify-content-between text-white">Loading application data..</div>
 {/if}
+{#if errorReason}
+  <div class="card-width">
+    <div class="my-3 d-flex justify-content-between text-white">{errorReason}</div>
+  </div>
 {/if}
 
 <style>

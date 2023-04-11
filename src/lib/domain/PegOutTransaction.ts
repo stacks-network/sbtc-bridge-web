@@ -8,10 +8,11 @@ import PegTransaction from './PegTransaction';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from './PegTransaction'
 import { concatByteArrays } from '$lib/structured-data.js'
+import type { PeginRequestI } from '$types/pegin_request';
 
 export interface PegOutTransactionI extends PegTransactionI {
 
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: PeginRequestI|btc.Transaction };
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -90,7 +91,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		// random addresses for calculating the fee.
 		if (!this.ready) throw new Error('Not ready!');
 		const stacksAddress = 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN';
-		const sbtcWalletAddress = 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss';
+		const sbtcWalletAddress = 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7';
 
 		// prepare random signer
 		const p2Ret = btc.p2wpkh(keySetForFeeCalculation[0].ecdsaPub);

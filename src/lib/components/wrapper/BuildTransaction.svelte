@@ -4,12 +4,15 @@ import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import Principal from "../common/Principal.svelte";
 import PegInAmount from "./PegInAmount.svelte";
+import ScriptHashAddress from "./ScriptHashAddress.svelte";
 import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import { addresses } from '$lib/stacks_connect'
 import { explorerBtcAddressUrl } from "$lib/utils";
+import type { PeginRequestI } from '$types/pegin_request';
+import Modal from '$lib/components/shared/Modal.svelte';
 
 export let piTx:PegInTransactionI;
 if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
@@ -41,18 +44,17 @@ const amtData = () => {
 
 const network = import.meta.env.VITE_NETWORK;
 $: utxoData = {
-  label: 'Your Bitcoin Address',
-  info: 'You\'ll send bitcoin from here to the sBTC wallet',
+  label: 'Return Bitcoin Address',
+  info: 'Your BTC will be returned to this address if for any reason the sBTC does not materialize',
   utxos: piTx.addressInfo.utxos,
   maxCommit: (piTx.ready) ? piTx.maxCommit() : 0,
   fromBtcAddress: piTx.fromBtcAddress,
-  numbInputs: (piTx.ready) ? piTx.addressInfo.utxos.length : 0,
+  numbInputs: (piTx.ready && piTx.addressInfo.utxos) ? piTx.addressInfo.utxos.length : 0,
   network
 }
 
 console.log('piTx:', piTx);
 const dispatch = createEventDispatcher();
-let ready = true;
 
 let errorReason:string|undefined;
 let stxAddressOk = true;
@@ -118,16 +120,41 @@ $: showStxAddress = piTx.ready && !errorReason;
 $: showAmount = piTx.ready && stxAddressOk && !errorReason;
 $: showButton = piTx.ready && amountOk && !errorReason;
 
+let showModal:boolean;
+const toggleModal = (myVote:boolean) => {
+  showModal = !showModal;
+}
+const closeModal = () => {
+  showModal = false;
+}
+const closeOnEscape = (e:any) => {
+  if (e.key === 'Escape') {
+    showModal = false;
+  }
+}
+
+
 let inited = false;
+let peginRequest:PeginRequestI;
 onMount(async () => {
-  if (!piTx.pegInData.stacksAddress) stxAddressOk = false;
+  if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses().stxAddress);
   if (piTx.pegInData.amount! > 0) amountOk = true;
   updateConfig();
+  if (!piTx.ready) piTx = await PegInTransaction.create(network, piTx.fromBtcAddress, piTx.pegInData.sbtcWalletAddress);
+  piTx.setStacksAddress(addresses().stxAddress)
+  peginRequest = piTx?.buildTransaction(undefined).opDrop;
   inited = true;
+  document.addEventListener('keydown', closeOnEscape);
+  //document.addEventListener('click', closeOnEscape);
 })
 
 
-</script>  
+</script>
+<Modal {showModal} showClose={true} on:click={closeModal} on:close_modal={closeModal}>
+  <div slot="title"></div>
+  <div class="mb-4"><ScriptHashAddress peginRequest={peginRequest} amount={piTx.pegInData.amount}/></div>
+</Modal>
+
 {#if inited}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if showStxAddress}
@@ -142,23 +169,11 @@ onMount(async () => {
   {#if showButton}
   <div class="row">
     <div class="col">
-      <button class="btn btn-outline-info w-100" type="button" on:click={() => requestSignature()}>CONTINUE</button>
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => toggleModal(true)}>CONTINUE</button>
     </div>
   </div>
   {/if}
 {/if}
-<!--
-<div class="lobby bg-dark">
-  <p class="text-white">Problem Connecting to APIs</p>
-  <p><span class="nav-item">Status: Bridge API currently experiencing connectivity problems.
-    We are already working on this.
-  <span class="mt-5 text-warning">Please report this to the core engineering team!</span></p>
-</div>
--->
 
 <style>
-.row {
-  margin-top: 20px;
-  margin-bottom: 40px;
-}
 </style>

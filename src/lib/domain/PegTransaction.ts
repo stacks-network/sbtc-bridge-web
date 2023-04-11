@@ -2,8 +2,12 @@ import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { decodeStacksAddress } from "$lib/stacks_connect";
+import type { PeginRequestI } from '$types/pegin_request';
 
-type PegInData = {
+export type PegInData = {
+	requestData?: PeginRequestI;
+	confirmations?: number;
+	burnHeight?: number;
 	stacksAddress?: string;
 	sbtcWalletAddress: string;
 	amount: number,
@@ -32,7 +36,7 @@ export interface PegTransactionI {
 	dust: number;
 
 	buildData: (sigOrPrin:string) => Uint8Array;
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: PeginRequestI };
 	calculateFees: () => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
@@ -43,6 +47,9 @@ export interface PegTransactionI {
 	getOutputsForDisplay: () => Array<any>;
 	getDataToSign: () => string;
 	getInputsForDisplay: () => Array<any>;
+	buildStackerTransaction?: () => any;
+	buildReclaimTransaction?: () => any;
+	getWitnessScript?: () => any;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -67,7 +74,7 @@ export default class PegTransaction implements PegTransactionI {
 	fromBtcAddress!: string;
 	pegInData: PegInData = {
 		stacksAddress: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN', // default for testing
-		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss', // default for testing
+		sbtcWalletAddress: 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7', // default for testing
 		amount: 0	
 	};
 	addressInfo: any = {};
@@ -125,7 +132,7 @@ export default class PegTransaction implements PegTransactionI {
 	};
  
 	isUTXOConfirmed = (utxo:any) => {
-		return utxo.tx.confirmations > 3;
+		return utxo.tx.confirmations >= 0;
 	};
  
 	//setAmount = (amount:number) => void;
@@ -161,7 +168,7 @@ export default class PegTransaction implements PegTransactionI {
 	/**
 	 * Overridden by super classes
 	 */
-	buildTransaction!: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildTransaction!: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: btc.Transaction|PeginRequestI };
 
 	buildData!: (sigOrPrin:string) => Uint8Array;
 

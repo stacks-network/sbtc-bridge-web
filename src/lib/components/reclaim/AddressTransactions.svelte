@@ -3,7 +3,7 @@ import { createEventDispatcher } from "svelte";
 import { isSupported } from "$lib/utils";
 import { onMount } from 'svelte';
 import { addresses } from '$lib/stacks_connect'
-import { truncate, explorerBtcTxUrl, explorerTxUrl } from '$lib/utils'
+import { truncate, explorerBtcTxUrl } from '$lib/utils'
 
 const dispatch = createEventDispatcher();
 
@@ -47,7 +47,6 @@ const configureUTXOs = async (force:boolean) => {
   }
 }
 
-
 onMount(async () => {
   configureUTXOs(true)
 })
@@ -64,6 +63,7 @@ onMount(async () => {
     <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
     <div class="text-small">{utxoData.info}</div>
     {#if utxoData.numbInputs > 0}
+    <!--
     <div class="text-small d-flex justify-content-between  text-info">
       <div class="" title={utxoData.numbInputs + ' unspent inputs with total value: ' + utxoData.maxCommit}>BTC Balance {utxoData.maxCommit} Sats.</div>
       <div>
@@ -72,6 +72,7 @@ onMount(async () => {
         <a href="/" class="text-white ps-3 " on:click|preventDefault={() => showUtxos = !showUtxos}>details</a>
       </div>
     </div>
+    -->
     {:else}
       <div><span class="text-warning">Insufficient balance - please use a different bitcoin address</span></div>
     {/if}

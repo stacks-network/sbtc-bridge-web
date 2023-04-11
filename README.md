@@ -124,3 +124,28 @@ The application can be packaged and uploaded to the npm registry;
 cd package
 npm publish
 ```
+
+
+Scratch
+
+I'm trying to create a custom script that has some arbitrary data followed by a multisig address paying to one of two public keys, where; pubkey1 is user defined (either ecdsa or schnorr derived) and pubkey2 is taproot (segwit v1).
+
+The script is should end up something like;
+
+```
+pmnt = btc.p2tr_ms(1, [hex.decode(pubkey1), hex.decode(pubkey2)])
+or
+pmnt = btc.p2ms(1, [hex.decode(pubkey1), hex.decode(pubkey2)])
+```
+
+with the multi-sig wrapped in a custom script via a p2wsh address (or p2tr address?) e.g.
+
+```
+const wsh2 = {
+    type: 'wsh',
+    script: btc.Script.encode([<data>, 'DROP', pmnt.script])
+}
+const script = btc.p2wsh(wsh2, this.net);
+```
+
+My question is whether this is feasible and which combinations of pubkeys and multi sig payments are currently possible with scure btc signer ?

@@ -1,62 +1,101 @@
 <script lang="ts">
-import BuildTransaction from '$lib/components/reclaim/BuildTransaction.svelte';
-import SignTransaction from '$lib/components/common/SignTransaction.svelte';
-import SignTransactionWeb from '$lib/components/common/SignTransactionWeb.svelte';
+import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores';
-import ReclaimTransaction from '$lib/domain/ReclaimTransaction';
+import PegInTransaction from '$lib/domain/PegInTransaction';
+import SignTransaction from '$lib/components/common/SignTransaction.svelte';
+import Transactions from "$lib/components/reclaim/Transactions.svelte";
 import type { ReclaimTransactionI } from '$lib/domain/ReclaimTransaction';
-import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { addresses } from '$lib/stacks_connect'
 import type { SigData } from '$types/sig_data';
+import { COMMS_ERROR } from '$lib/utils.js'
+import ReclaimTransaction from '$lib/domain/ReclaimTransaction';
+import type { PeginRequestI } from '$types/pegin_request';
+import { goto } from "$app/navigation";
+import { truncate, explorerBtcTxUrl, explorerTxUrl } from '$lib/utils'
 
-let piTx:ReclaimTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? ReclaimTransaction.hydrate($sbtcConfig.pegInTransaction) : new ReclaimTransaction();
+// fetch/hydrate data from local storage 
+if (!$sbtcConfig.peginRequest) 	goto('/listReclaims');
+const peginRequest:PeginRequestI = $sbtcConfig.peginRequest;
+
+let prTx:ReclaimTransactionI = ($sbtcConfig.reclaimTransaction && $sbtcConfig.reclaimTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.reclaimTransaction) : new ReclaimTransaction();
+let inited = false;
+const network = import.meta.env.VITE_NETWORK;
 
 $: view = 'build_tx_view';
-let sigData: SigData;
 const openSigView = () => {
-	piTx = ReclaimTransaction.hydrate($sbtcConfig.pegInTransaction!);
-	if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses().stxAddress);
-	sigData = {
-		pegin: true,
-		webWallet: piTx.fromBtcAddress === addresses().cardinal,
-		txs: piTx?.buildTransaction(undefined),
-		outputsForDisplay: piTx?.getOutputsForDisplay(),
-		inputsForDisplay: piTx?.addressInfo.utxos
-	}
   	view = 'sign_tx_view';
 }
+
+const openBackView = () => {
+	goto('/listReclaims');
+}
+
 const updateTransaction = () => {
   	view = 'build_tx_view';
 }
 
+let errorReason:string|undefined;
+
+onMount(async () => {
+	try {
+		if (!prTx.ready) {
+			prTx = await ReclaimTransaction.create(network, peginRequest.btcTxid!, peginRequest.fromBtcAddress, peginRequest.sbtcWalletAddress);
+		}
+		prTx.pegInData.requestData = peginRequest;
+		prTx.calculateFees();
+		prTx.setStacksAddress(addresses().stxAddress);
+		prTx.pegInData.amount = peginRequest.vout?.value || 0;
+		//prTx.pegInData.confirmations = (prTx.pegInData.burnHeight || 0) - peginRequest.tx.status.block_height;
+		inited = true;
+	} catch (err) {
+		errorReason = COMMS_ERROR + '<br/><br/>This can happen when the address has unconfirmed transactions - we have this issue logged and are working to continuously improve the application.';
+	}
+})
+
 </script>
 
-<section class="bg-dark">
-	<div class="my-4 p-4">
-		<div class="card-width">
-			<h1 class="text-info">Reclaim <span class="strokeme-info">BTC</span></h1>
-			<h2 class="text-info mb-3">Reclaim BTC from previous wrap - if for some reason the signers were unable to spend it.</h2>
-			<div class="my-3 d-flex justify-content-between text-white">
-				<SbtcWalletDisplay />
-			</div>
-			<div class="d-flex justify-content-center">
-				<div class="card border p-4">
-					<div>
-						{#if view === 'build_tx_view'}
-							<BuildTransaction {piTx} on:request_signature={openSigView}/>
-						{:else}
-							{#if sigData && !sigData.webWallet}
-								<SignTransaction {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
-							{/if}
-							{#if sigData && sigData.webWallet}
-								<SignTransactionWeb {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
-							{/if}
-						{/if}
-					</div>
+<section class=" bg-dark text-white">
+	<div class="container my-5 p-5">
+	{#if inited}
+		{#if view === 'sign_tx_view'}
+			<Transactions {prTx}/>
+		{:else if view === 'build_tx_view'}
+			<!--<BuildTransaction {prTx} on:request_signature={openSigView}/>-->
+			<div class="row">
+				<div class="col">
+					<h1>Reclaim Pegin Request</h1>
 				</div>
 			</div>
-		</div>
+
+			<div class="row">
+				<div class="col-2">Return Address</div><div class="col-10">{peginRequest.fromBtcAddress}</div>
+				<div class="col-2">Tx Id</div>
+				<div class="col-10">
+					<a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer">{truncate(peginRequest.btcTxid)}</a>
+				</div>
+				<div class="col-2">Stacks addr</div><div class="col-10">{peginRequest.stacksAddress}</div>
+				<div class="col-2">For</div><div class="col-10">{prTx.pegInData.amount} Sats</div>
+			</div>
+			<div class="row my-5">
+				<div class="col">
+					<button class="btn btn-outline-info w-100" type="button" on:click={() => openSigView()}>CONTINUE</button>
+				</div>
+				<div class="col">
+					<button class="btn btn-outline-info w-100" type="button" on:click={() => openBackView()}>BACK</button>
+				</div>
+			</div>
+		{:else}
+			<div class="card-width">
+				<div class="my-3 d-flex justify-content-between">Loading data..</div>
+			</div>
+		{/if}
+	{/if}
+	{#if errorReason}
+	<div class="card-width">
+		<div class="my-3 d-flex justify-content-between">{@html errorReason}</div>
 	</div>
+	{/if}
+</div>
 </section>
 
 <style>

@@ -3,7 +3,7 @@ import { sbtcConfig } from '$stores/stores';
 
 </script>
 
-<span>SBTC Wallet: { $sbtcConfig.sbtcContractData.sbtcWalletAddress } </span>
+<span>sBTC Wallet: { $sbtcConfig.sbtcContractData.sbtcWalletAddress } </span>
 	
 <style>
 </style>

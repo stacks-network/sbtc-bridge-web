@@ -14,7 +14,7 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 const dispatch = createEventDispatcher();
 export let sigData:SigData;
 export let pegInfo:any;
-let currentTx = hex.encode(sigData.txs.opReturn.toPSBT(2));
+let currentTx = hex.encode(sigData.txs.opDrop.toPSBT(2));
 let errorReason: string|undefined;
 let successReason: string|undefined;
 
@@ -61,6 +61,7 @@ const broadcastTransaction = async (psbtHex:string) => {
     try {
       tx.finalize();
     } catch (err) {
+      console.log('finalize error: ', err)
       errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
       return;
     }
@@ -101,7 +102,7 @@ onMount(async () => {
   <div class="my-5 text-center text-warning">
     <p>Your transaction has been sent to the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.
     </p>
-    <p>Once confirmed your SBTC will be minted to your Stacks Wallet. 
+    <p>Once confirmed your sBTC will be minted to your Stacks Wallet. 
     </p>
   </div>
   {:else}

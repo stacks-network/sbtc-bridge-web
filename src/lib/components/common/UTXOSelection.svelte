@@ -20,6 +20,7 @@ export let utxoData:{label:string,info:string,utxos:Array<any>,maxCommit:number,
 let bitcoinAddress:string|undefined = utxoData.fromBtcAddress;
 let errorReason:string|undefined;
 let showUtxos:boolean;
+let showUtxoInfo = false;
 
 const hiroWallet = async () => {
   bitcoinAddress = addresses().cardinal;
@@ -65,15 +66,18 @@ onMount(async () => {
     {#if utxoData.numbInputs > 0}
     <div class="text-small d-flex justify-content-between  text-info">
       <div class="" title={utxoData.numbInputs + ' unspent inputs with total value: ' + utxoData.maxCommit}>BTC Balance {utxoData.maxCommit} Sats.</div>
+      {#if showUtxoInfo}
       <div>
         <a href="/" class="text-white px-3 border-right" on:click|preventDefault={() => hiroWallet()}>hiro wallet</a>
         <a href="/" class="text-white px-3 border-right" on:click|preventDefault={() => configureUTXOs(true)}>refresh</a>
         <a href="/" class="text-white ps-3 " on:click|preventDefault={() => showUtxos = !showUtxos}>details</a>
       </div>
+      {/if}
     </div>
     {:else}
       <div><span class="text-warning">Insufficient balance - please use a different bitcoin address</span></div>
     {/if}
+    {#if showUtxoInfo}
     {#if bitcoinAddress && errorReason}
       <div><span class="text-warning">{errorReason}</span></div>
     {/if}
@@ -94,6 +98,7 @@ onMount(async () => {
     </div>
     {/each}
     </div>
+    {/if}
     {/if}
 </div>
 </div>

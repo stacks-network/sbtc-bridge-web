@@ -35,7 +35,7 @@ const wallet = async () => {
   </div>
   <div class="row">
     <div class="col">
-      <div>SBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
+      <div>sBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
       <input type="text" id="sbtcWallet" class="form-control" bind:value={sbtcWallet}/>
       <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
     </div>
