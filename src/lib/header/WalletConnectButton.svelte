@@ -32,7 +32,7 @@ const toggleNetwork = async (net:string) => {
 		conf.stxAddress = addresses().stxAddress;
 		if (conf.pegInTransaction) {
 			conf.pegInTransaction.fromBtcAddress = addresses().cardinal;
-			conf.pegInTransaction.setStacksAddress(addresses().stxAddress);
+			if (conf.pegInTransaction.pegInData) conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
 		}
 		if (conf.pegOutTransaction) {
 			conf.pegOutTransaction.fromBtcAddress = addresses().cardinal;

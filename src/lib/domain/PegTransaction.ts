@@ -2,6 +2,7 @@ import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { decodeStacksAddress } from "$lib/stacks_connect";
+import { CONFIG } from '$lib/config';
 
 type PegInData = {
 	stacksAddress?: string;
@@ -62,7 +63,7 @@ export default class PegTransaction implements PegTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
 	unconfirmedUtxos = false;
 	requiredConfirmed = 6;
-	net:any;
+	net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.NETWORK : btc.TEST_NETWORK;
 	ready = false;
 	fromBtcAddress!: string;
 	pegInData: PegInData = {
@@ -137,10 +138,10 @@ export default class PegTransaction implements PegTransactionI {
 			throw new Error('please remove white space / special characters');
 		}
 		const decoded = decodeStacksAddress(stacksAddress.split('.')[0]);
-		if (this.net === btc.TEST_NETWORK && decoded[0] !== 26) {
+		if ((CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') && decoded[0] !== 26) {
 		  throw new Error('Please enter a valid stacks blockchain testnet address');
 		}
-		if (this.net === btc.NETWORK && decoded[0] !== 22) {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && decoded[0] !== 22) {
 			throw new Error('Please enter a valid stacks blockchain mainnet address');
 		}
 		this.pegInData.stacksAddress = stacksAddress;
