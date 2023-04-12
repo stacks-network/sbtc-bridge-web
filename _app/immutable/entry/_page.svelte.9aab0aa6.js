@@ -1,6 +1,6 @@
 import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, U as validate_store, V as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, u as attr_dev, g as insert_hydration_dev, O as append_hydration_dev, W as listen_dev, X as prevent_default, A as set_data_dev, _ as noop, Y as run_all } from "../chunks/index.1d91065c.js";
 import { C as CONFIG, s as sbtcConfig } from "../chunks/hmac.447cb554.js";
-import { g as goto } from "../chunks/navigation.a2a0bf0b.js";
+import { g as goto } from "../chunks/navigation.2aaf1a74.js";
 import { e as explorerTxUrl } from "../chunks/utils.1ded2fdd.js";
 const _page_svelte_svelte_type_style_lang = "";
 const file = "src/routes/+page.svelte";

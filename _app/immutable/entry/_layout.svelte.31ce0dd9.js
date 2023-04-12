@@ -1,8 +1,8 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.f8376bb0.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, U as validate_store, V as component_subscribe, o as onMount, c as space, p as element, C as create_component, y as text, f as claim_space, q as claim_element, D as claim_component, z as claim_text, E as mount_component, W as listen_dev, X as prevent_default, F as destroy_component, Y as run_all, Z as src_url_equal, _ as noop, w as set_style, $ as onDestroy, t as tick, a0 as globals, e as empty, j as check_outros, B as group_outros } from "../chunks/index.1d91065c.js";
 import { s as sbtcConfig, a as setConfig, C as CONFIG, d as defaultSbtcConfig } from "../chunks/hmac.447cb554.js";
-import { g as goto, b as beforeNavigate } from "../chunks/navigation.a2a0bf0b.js";
-import { p as page } from "../chunks/stores.80a5cd86.js";
+import { g as goto, b as beforeNavigate } from "../chunks/navigation.2aaf1a74.js";
+import { p as page } from "../chunks/stores.68658781.js";
 import { a as addresses, l as logUserOut, b as loginStacksJs, f as fetchSbtcBalance, u as userSession } from "../chunks/stacks_connect.857de9b7.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.d6e6a36a.js";
 import { U as UserBalance } from "../chunks/UserBalance.7175a9f2.js";
@@ -2331,7 +2331,7 @@ function create_else_block(ctx) {
     c: function create() {
       div = element("div");
       p0 = element("p");
-      t0 = text("Connect your Hiro web wallet to start wrapping sBTC!");
+      t0 = text("Connect to a Stacks Web Wallet to start Wrapping!");
       t1 = space();
       p1 = element("p");
       span1 = element("span");
@@ -2341,7 +2341,7 @@ function create_else_block(ctx) {
       t2 = text(" connect");
       t3 = space();
       p2 = element("p");
-      t4 = text("Currently in Alpha Testing!");
+      t4 = text("sBTC Alpha Testing!");
       this.h();
     },
     l: function claim(nodes) {
@@ -2349,7 +2349,7 @@ function create_else_block(ctx) {
       var div_nodes = children(div);
       p0 = claim_element(div_nodes, "P", { class: true });
       var p0_nodes = children(p0);
-      t0 = claim_text(p0_nodes, "Connect your Hiro web wallet to start wrapping sBTC!");
+      t0 = claim_text(p0_nodes, "Connect to a Stacks Web Wallet to start Wrapping!");
       p0_nodes.forEach(detach_dev);
       t1 = claim_space(div_nodes);
       p1 = claim_element(div_nodes, "P", {});
@@ -2374,7 +2374,7 @@ function create_else_block(ctx) {
       t3 = claim_space(div_nodes);
       p2 = claim_element(div_nodes, "P", { class: true });
       var p2_nodes = children(p2);
-      t4 = claim_text(p2_nodes, "Currently in Alpha Testing!");
+      t4 = claim_text(p2_nodes, "sBTC Alpha Testing!");
       p2_nodes.forEach(detach_dev);
       div_nodes.forEach(detach_dev);
       this.h();
@@ -2387,17 +2387,17 @@ function create_else_block(ctx) {
       attr_dev(img, "alt", "Connect Wallet / Login");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file, 80, 116, 2701);
+      add_location(img, file, 80, 116, 2698);
       attr_dev(span0, "class", "px-1");
-      add_location(span0, file, 80, 96, 2681);
+      add_location(span0, file, 80, 96, 2678);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file, 80, 28, 2613);
+      add_location(a, file, 80, 28, 2610);
       attr_dev(span1, "class", "nav-item");
-      add_location(span1, file, 80, 5, 2590);
-      add_location(p1, file, 80, 2, 2587);
+      add_location(span1, file, 80, 5, 2587);
+      add_location(p1, file, 80, 2, 2584);
       attr_dev(p2, "class", "mt-5 text-warning");
-      add_location(p2, file, 81, 2, 2819);
+      add_location(p2, file, 81, 2, 2816);
       attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
       add_location(div, file, 78, 0, 2476);
     },
