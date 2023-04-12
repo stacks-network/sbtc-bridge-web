@@ -1,4 +1,4 @@
-import { I as noop, s as safe_not_equal } from "./index.0c92228d.js";
+import { _ as noop, s as safe_not_equal } from "./index.1d91065c.js";
 const subscriber_queue = [];
 function writable(value, start = noop) {
   let stop;

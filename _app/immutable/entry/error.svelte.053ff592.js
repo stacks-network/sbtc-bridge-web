@@ -1,24 +1,5 @@
-import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, G as validate_store, H as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, g as insert_hydration_dev, J as append_hydration_dev, A as set_data_dev, I as noop } from "../chunks/index.0c92228d.js";
-import { s as stores } from "../chunks/singletons.44541033.js";
-const getStores = () => {
-  const stores$1 = stores;
-  return {
-    page: {
-      subscribe: stores$1.page.subscribe
-    },
-    navigating: {
-      subscribe: stores$1.navigating.subscribe
-    },
-    updated: stores$1.updated
-  };
-};
-const page = {
-  /** @param {(value: any) => void} fn */
-  subscribe(fn) {
-    const store = getStores().page;
-    return store.subscribe(fn);
-  }
-};
+import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, U as validate_store, V as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, g as insert_hydration_dev, O as append_hydration_dev, A as set_data_dev, _ as noop } from "../chunks/index.1d91065c.js";
+import { p as page } from "../chunks/stores.87e2d8bb.js";
 const file = "node_modules/@sveltejs/kit/src/runtime/components/error.svelte";
 function create_fragment(ctx) {
   var _a;
@@ -112,7 +93,7 @@ function instance($$self, $$props, $$invalidate) {
   $$self.$capture_state = () => ({ page, $page });
   return [$page];
 }
-let Error$1 = class Error extends SvelteComponentDev {
+class Error extends SvelteComponentDev {
   constructor(options) {
     super(options);
     init(this, options, instance, create_fragment, safe_not_equal, {});
@@ -123,7 +104,7 @@ let Error$1 = class Error extends SvelteComponentDev {
       id: create_fragment.name
     });
   }
-};
+}
 export {
-  Error$1 as default
+  Error as default
 };

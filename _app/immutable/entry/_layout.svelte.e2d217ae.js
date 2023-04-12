@@ -1,13 +1,172 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.f8376bb0.js";
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, o as onMount, c as space, p as element, f as claim_space, q as claim_element, r as children, l as detach_dev, u as attr_dev, x as add_location, g as insert_hydration_dev, I as noop, y as text, z as claim_text, J as append_hydration_dev, K as src_url_equal, L as listen_dev, M as prevent_default, w as set_style, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component, N as run_all, O as onDestroy, t as tick, P as globals, e as empty, j as check_outros, B as group_outros, Q as create_slot, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes } from "../chunks/index.0c92228d.js";
-import { a as addresses, l as logUserOut, b as loginStacksJs, u as userSession } from "../chunks/stacks_connect.543fae53.js";
-import { i as isCoordinator } from "../chunks/sbtc_admin.5aebc118.js";
-import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { g as goto } from "../chunks/navigation.a0c58531.js";
-import { U as UserBalance } from "../chunks/UserBalance.c86474f0.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, U as validate_store, V as component_subscribe, o as onMount, c as space, p as element, C as create_component, y as text, f as claim_space, q as claim_element, D as claim_component, z as claim_text, E as mount_component, W as listen_dev, X as prevent_default, F as destroy_component, Y as run_all, Z as src_url_equal, _ as noop, w as set_style, $ as onDestroy, t as tick, a0 as globals, e as empty, j as check_outros, B as group_outros } from "../chunks/index.1d91065c.js";
+import { s as sbtcConfig, a as setConfig, C as CONFIG, d as defaultSbtcConfig } from "../chunks/hmac.447cb554.js";
+import { g as goto, b as beforeNavigate } from "../chunks/navigation.d9254f90.js";
+import { p as page } from "../chunks/stores.87e2d8bb.js";
+import { a as addresses, l as logUserOut, b as loginStacksJs, f as fetchSbtcBalance, u as userSession } from "../chunks/stacks_connect.857de9b7.js";
+import { i as isCoordinator } from "../chunks/sbtc_admin.d6e6a36a.js";
+import { U as UserBalance } from "../chunks/UserBalance.7175a9f2.js";
+import { f as fetchSbtcData } from "../chunks/bridge_api.65cdfd29.js";
 const app = "";
 const stx_eco_wallet_on = "" + new URL("../assets/stx_eco_wallet_on.090e5a93.png", import.meta.url).href;
 const stx_eco_wallet_off = "" + new URL("../assets/stx_eco_wallet_off.7e8f173f.png", import.meta.url).href;
+const file$5 = "node_modules/svelte-bootstrap-icons/lib/Person.svelte";
+function create_fragment$5(ctx) {
+  let svg;
+  let path;
+  let current;
+  const default_slot_template = (
+    /*#slots*/
+    ctx[2].default
+  );
+  const default_slot = create_slot(
+    default_slot_template,
+    ctx,
+    /*$$scope*/
+    ctx[1],
+    null
+  );
+  let svg_levels = [
+    { xmlns: "http://www.w3.org/2000/svg" },
+    { width: "16" },
+    { height: "16" },
+    { fill: "currentColor" },
+    { viewBox: "0 0 16 16" },
+    /*$$restProps*/
+    ctx[0]
+  ];
+  let svg_data = {};
+  for (let i = 0; i < svg_levels.length; i += 1) {
+    svg_data = assign(svg_data, svg_levels[i]);
+  }
+  const block = {
+    c: function create() {
+      svg = svg_element("svg");
+      if (default_slot)
+        default_slot.c();
+      path = svg_element("path");
+      this.h();
+    },
+    l: function claim(nodes) {
+      svg = claim_svg_element(nodes, "svg", {
+        xmlns: true,
+        width: true,
+        height: true,
+        fill: true,
+        viewBox: true
+      });
+      var svg_nodes = children(svg);
+      if (default_slot)
+        default_slot.l(svg_nodes);
+      path = claim_svg_element(svg_nodes, "path", { d: true });
+      children(path).forEach(detach_dev);
+      svg_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(path, "d", "M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10Z");
+      add_location(path, file$5, 0, 167, 167);
+      set_svg_attributes(svg, svg_data);
+      toggle_class(svg, "bi", true);
+      toggle_class(svg, "bi-person", true);
+      add_location(svg, file$5, 0, 0, 0);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, svg, anchor);
+      if (default_slot) {
+        default_slot.m(svg, null);
+      }
+      append_hydration_dev(svg, path);
+      current = true;
+    },
+    p: function update(ctx2, [dirty]) {
+      if (default_slot) {
+        if (default_slot.p && (!current || dirty & /*$$scope*/
+        2)) {
+          update_slot_base(
+            default_slot,
+            default_slot_template,
+            ctx2,
+            /*$$scope*/
+            ctx2[1],
+            !current ? get_all_dirty_from_scope(
+              /*$$scope*/
+              ctx2[1]
+            ) : get_slot_changes(
+              default_slot_template,
+              /*$$scope*/
+              ctx2[1],
+              dirty,
+              null
+            ),
+            null
+          );
+        }
+      }
+      set_svg_attributes(svg, svg_data = get_spread_update(svg_levels, [
+        { xmlns: "http://www.w3.org/2000/svg" },
+        { width: "16" },
+        { height: "16" },
+        { fill: "currentColor" },
+        { viewBox: "0 0 16 16" },
+        dirty & /*$$restProps*/
+        1 && /*$$restProps*/
+        ctx2[0]
+      ]));
+      toggle_class(svg, "bi", true);
+      toggle_class(svg, "bi-person", true);
+    },
+    i: function intro(local) {
+      if (current)
+        return;
+      transition_in(default_slot, local);
+      current = true;
+    },
+    o: function outro(local) {
+      transition_out(default_slot, local);
+      current = false;
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(svg);
+      if (default_slot)
+        default_slot.d(detaching);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_fragment$5.name,
+    type: "component",
+    source: "",
+    ctx
+  });
+  return block;
+}
+function instance$5($$self, $$props, $$invalidate) {
+  const omit_props_names = [];
+  let $$restProps = compute_rest_props($$props, omit_props_names);
+  let { $$slots: slots = {}, $$scope } = $$props;
+  validate_slots("Person", slots, ["default"]);
+  $$self.$$set = ($$new_props) => {
+    $$props = assign(assign({}, $$props), exclude_internal_props($$new_props));
+    $$invalidate(0, $$restProps = compute_rest_props($$props, omit_props_names));
+    if ("$$scope" in $$new_props)
+      $$invalidate(1, $$scope = $$new_props.$$scope);
+  };
+  return [$$restProps, $$scope, slots];
+}
+class Person extends SvelteComponentDev {
+  constructor(options) {
+    super(options);
+    init(this, options, instance$5, create_fragment$5, safe_not_equal, {});
+    dispatch_dev("SvelteRegisterComponent", {
+      component: this,
+      tagName: "Person",
+      options,
+      id: create_fragment$5.name
+    });
+  }
+}
 const WalletConnectButton_svelte_svelte_type_style_lang = "";
 const file$4 = "src/lib/header/WalletConnectButton.svelte";
 function create_if_block_2(ctx) {
@@ -39,11 +198,11 @@ function create_if_block_2(ctx) {
     h: function hydrate() {
       attr_dev(a, "href", "/admin");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file$4, 27, 1, 885);
+      add_location(a, file$4, 52, 1, 1810);
       attr_dev(span, "class", "nav-link");
-      add_location(span, file$4, 26, 1, 860);
+      add_location(span, file$4, 51, 1, 1785);
       attr_dev(li, "class", "nav-item mb-1 s-03Bkx-y2PLke");
-      add_location(li, file$4, 25, 0, 832);
+      add_location(li, file$4, 50, 0, 1757);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, li, anchor);
@@ -60,7 +219,7 @@ function create_if_block_2(ctx) {
     block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(25:0) {#if coordinator}",
+    source: "(50:0) {#if coordinator}",
     ctx
   });
   return block;
@@ -108,14 +267,14 @@ function create_else_block$1(ctx) {
       attr_dev(img, "alt", "Connect Wallet / Login");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file$4, 45, 120, 1618);
+      add_location(img, file$4, 79, 127, 3386);
       attr_dev(span0, "class", "px-1");
-      add_location(span0, file$4, 45, 100, 1598);
+      add_location(span0, file$4, 79, 107, 3366);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file$4, 45, 24, 1522);
-      attr_dev(span1, "class", "nav-link");
-      add_location(span1, file$4, 45, 1, 1499);
+      add_location(a, file$4, 79, 31, 3290);
+      attr_dev(span1, "class", "dropdown-item");
+      add_location(span1, file$4, 79, 3, 3262);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span1, anchor);
@@ -125,8 +284,8 @@ function create_else_block$1(ctx) {
       append_hydration_dev(a, t);
       if (!mounted) {
         dispose = listen_dev(a, "click", prevent_default(
-          /*click_handler_1*/
-          ctx[6]
+          /*click_handler_4*/
+          ctx[10]
         ), false, true, false, false);
         mounted = true;
       }
@@ -143,7 +302,7 @@ function create_else_block$1(ctx) {
     block,
     id: create_else_block$1.name,
     type: "else",
-    source: "(45:0) {:else}",
+    source: "(79:2) {:else}",
     ctx
   });
   return block;
@@ -154,6 +313,7 @@ function create_if_block_1$1(ctx) {
   let span0;
   let img;
   let img_src_value;
+  let t;
   let mounted;
   let dispose;
   const block = {
@@ -162,6 +322,7 @@ function create_if_block_1$1(ctx) {
       a = element("a");
       span0 = element("span");
       img = element("img");
+      t = text(" disconnect");
       this.h();
     },
     l: function claim(nodes) {
@@ -177,6 +338,7 @@ function create_if_block_1$1(ctx) {
         width: true,
         height: true
       });
+      t = claim_text(span0_nodes, " disconnect");
       span0_nodes.forEach(detach_dev);
       a_nodes.forEach(detach_dev);
       span1_nodes.forEach(detach_dev);
@@ -188,25 +350,26 @@ function create_if_block_1$1(ctx) {
       attr_dev(img, "alt", "Wallet Connected");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file$4, 41, 23, 1387);
+      add_location(img, file$4, 75, 25, 3131);
       attr_dev(span0, "class", "px-2");
-      add_location(span0, file$4, 41, 3, 1367);
+      add_location(span0, file$4, 75, 5, 3111);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer");
       set_style(a, "vertical-align", "middle");
-      add_location(a, file$4, 40, 2, 1262);
-      attr_dev(span1, "class", "nav-link");
-      add_location(span1, file$4, 39, 1, 1236);
+      add_location(a, file$4, 74, 4, 3004);
+      attr_dev(span1, "class", "dropdown-item");
+      add_location(span1, file$4, 73, 3, 2971);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span1, anchor);
       append_hydration_dev(span1, a);
       append_hydration_dev(a, span0);
       append_hydration_dev(span0, img);
+      append_hydration_dev(span0, t);
       if (!mounted) {
         dispose = listen_dev(a, "click", prevent_default(
-          /*click_handler*/
-          ctx[5]
+          /*click_handler_3*/
+          ctx[9]
         ), false, true, false, false);
         mounted = true;
       }
@@ -223,7 +386,7 @@ function create_if_block_1$1(ctx) {
     block,
     id: create_if_block_1$1.name,
     type: "if",
-    source: "(39:31) ",
+    source: "(73:33) ",
     ctx
   });
   return block;
@@ -259,11 +422,11 @@ function create_if_block$1(ctx) {
       attr_dev(a, "class", "pointer");
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file$4, 34, 1, 1066);
-      attr_dev(span, "class", "nav-link");
+      add_location(a, file$4, 68, 3, 2791);
+      attr_dev(span, "class", "dropdown-item");
       set_style(span, "position", "relative");
       set_style(span, "top", "2px");
-      add_location(span, file$4, 33, 0, 1003);
+      add_location(span, file$4, 67, 2, 2721);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span, anchor);
@@ -280,22 +443,50 @@ function create_if_block$1(ctx) {
     block,
     id: create_if_block$1.name,
     type: "if",
-    source: "(33:0) {#if webWalletNeeded}",
+    source: "(67:2) {#if webWalletNeeded}",
     ctx
   });
   return block;
 }
 function create_fragment$4(ctx) {
-  let t;
-  let li;
+  let t0;
+  let li5;
+  let span0;
+  let person;
+  let t1;
+  let ul;
+  let li0;
+  let span1;
+  let t2;
+  let t3;
+  let li1;
+  let a0;
+  let t4;
+  let t5;
+  let li2;
+  let a1;
+  let t6;
+  let t7;
+  let li3;
+  let a2;
+  let t8;
+  let t9;
+  let li4;
+  let current;
+  let mounted;
+  let dispose;
   let if_block0 = (
     /*coordinator*/
     ctx[1] && create_if_block_2(ctx)
   );
+  person = new Person({
+    props: { width: 25, height: 25 },
+    $$inline: true
+  });
   function select_block_type(ctx2, dirty) {
     if (
       /*webWalletNeeded*/
-      ctx2[4]
+      ctx2[5]
     )
       return create_if_block$1;
     if (
@@ -311,31 +502,170 @@ function create_fragment$4(ctx) {
     c: function create() {
       if (if_block0)
         if_block0.c();
-      t = space();
-      li = element("li");
+      t0 = space();
+      li5 = element("li");
+      span0 = element("span");
+      create_component(person.$$.fragment);
+      t1 = space();
+      ul = element("ul");
+      li0 = element("li");
+      span1 = element("span");
+      t2 = text("Toggle Network");
+      t3 = space();
+      li1 = element("li");
+      a0 = element("a");
+      t4 = text("Testnet");
+      t5 = space();
+      li2 = element("li");
+      a1 = element("a");
+      t6 = text("Mainnet");
+      t7 = space();
+      li3 = element("li");
+      a2 = element("a");
+      t8 = text("Devnet");
+      t9 = space();
+      li4 = element("li");
       if_block1.c();
       this.h();
     },
     l: function claim(nodes) {
       if (if_block0)
         if_block0.l(nodes);
-      t = claim_space(nodes);
-      li = claim_element(nodes, "LI", { class: true });
-      var li_nodes = children(li);
-      if_block1.l(li_nodes);
-      li_nodes.forEach(detach_dev);
+      t0 = claim_space(nodes);
+      li5 = claim_element(nodes, "LI", { class: true });
+      var li5_nodes = children(li5);
+      span0 = claim_element(li5_nodes, "SPAN", {
+        class: true,
+        id: true,
+        role: true,
+        "data-bs-toggle": true,
+        "aria-expanded": true
+      });
+      var span0_nodes = children(span0);
+      claim_component(person.$$.fragment, span0_nodes);
+      span0_nodes.forEach(detach_dev);
+      t1 = claim_space(li5_nodes);
+      ul = claim_element(li5_nodes, "UL", { class: true, "aria-labelledby": true });
+      var ul_nodes = children(ul);
+      li0 = claim_element(ul_nodes, "LI", { class: true });
+      var li0_nodes = children(li0);
+      span1 = claim_element(li0_nodes, "SPAN", { class: true });
+      var span1_nodes = children(span1);
+      t2 = claim_text(span1_nodes, "Toggle Network");
+      span1_nodes.forEach(detach_dev);
+      li0_nodes.forEach(detach_dev);
+      t3 = claim_space(ul_nodes);
+      li1 = claim_element(ul_nodes, "LI", { class: true });
+      var li1_nodes = children(li1);
+      a0 = claim_element(li1_nodes, "A", { href: true, class: true });
+      var a0_nodes = children(a0);
+      t4 = claim_text(a0_nodes, "Testnet");
+      a0_nodes.forEach(detach_dev);
+      li1_nodes.forEach(detach_dev);
+      t5 = claim_space(ul_nodes);
+      li2 = claim_element(ul_nodes, "LI", { class: true });
+      var li2_nodes = children(li2);
+      a1 = claim_element(li2_nodes, "A", { href: true, class: true });
+      var a1_nodes = children(a1);
+      t6 = claim_text(a1_nodes, "Mainnet");
+      a1_nodes.forEach(detach_dev);
+      li2_nodes.forEach(detach_dev);
+      t7 = claim_space(ul_nodes);
+      li3 = claim_element(ul_nodes, "LI", { class: true });
+      var li3_nodes = children(li3);
+      a2 = claim_element(li3_nodes, "A", { href: true, class: true });
+      var a2_nodes = children(a2);
+      t8 = claim_text(a2_nodes, "Devnet");
+      a2_nodes.forEach(detach_dev);
+      li3_nodes.forEach(detach_dev);
+      t9 = claim_space(ul_nodes);
+      li4 = claim_element(ul_nodes, "LI", { class: true });
+      var li4_nodes = children(li4);
+      if_block1.l(li4_nodes);
+      li4_nodes.forEach(detach_dev);
+      ul_nodes.forEach(detach_dev);
+      li5_nodes.forEach(detach_dev);
       this.h();
     },
     h: function hydrate() {
-      attr_dev(li, "class", "nav-item mb-1 s-03Bkx-y2PLke");
-      add_location(li, file$4, 31, 0, 954);
+      attr_dev(span0, "class", "nav-link dropdown-toggle text-white");
+      attr_dev(span0, "id", "navbarDropdown");
+      attr_dev(span0, "role", "button");
+      attr_dev(span0, "data-bs-toggle", "dropdown");
+      attr_dev(span0, "aria-expanded", "false");
+      add_location(span0, file$4, 57, 1, 1911);
+      attr_dev(span1, "class", "dropdown-item");
+      add_location(span1, file$4, 61, 23, 2190);
+      attr_dev(li0, "class", "nav-item s-03Bkx-y2PLke");
+      add_location(li0, file$4, 61, 2, 2169);
+      attr_dev(a0, "href", "/");
+      attr_dev(a0, "class", "dropdown-item");
+      add_location(a0, file$4, 62, 33, 2278);
+      attr_dev(li1, "class", "nav-item px-4 mx-4 s-03Bkx-y2PLke");
+      add_location(li1, file$4, 62, 2, 2247);
+      attr_dev(a1, "href", "/");
+      attr_dev(a1, "class", "dropdown-item");
+      add_location(a1, file$4, 63, 33, 2419);
+      attr_dev(li2, "class", "nav-item px-4 mx-4 s-03Bkx-y2PLke");
+      add_location(li2, file$4, 63, 2, 2388);
+      attr_dev(a2, "href", "/");
+      attr_dev(a2, "class", "dropdown-item");
+      add_location(a2, file$4, 64, 33, 2560);
+      attr_dev(li3, "class", "nav-item px-4 mx-4 s-03Bkx-y2PLke");
+      add_location(li3, file$4, 64, 2, 2529);
+      attr_dev(li4, "class", "nav-item mt-4 s-03Bkx-y2PLke");
+      add_location(li4, file$4, 65, 2, 2668);
+      attr_dev(ul, "class", "dropdown-menu dropdown-menu-end");
+      attr_dev(ul, "aria-labelledby", "navbarDropdown");
+      add_location(ul, file$4, 60, 1, 2089);
+      attr_dev(li5, "class", "nav-item dropdown s-03Bkx-y2PLke");
+      add_location(li5, file$4, 56, 0, 1879);
     },
     m: function mount(target, anchor) {
       if (if_block0)
         if_block0.m(target, anchor);
-      insert_hydration_dev(target, t, anchor);
-      insert_hydration_dev(target, li, anchor);
-      if_block1.m(li, null);
+      insert_hydration_dev(target, t0, anchor);
+      insert_hydration_dev(target, li5, anchor);
+      append_hydration_dev(li5, span0);
+      mount_component(person, span0, null);
+      append_hydration_dev(li5, t1);
+      append_hydration_dev(li5, ul);
+      append_hydration_dev(ul, li0);
+      append_hydration_dev(li0, span1);
+      append_hydration_dev(span1, t2);
+      append_hydration_dev(ul, t3);
+      append_hydration_dev(ul, li1);
+      append_hydration_dev(li1, a0);
+      append_hydration_dev(a0, t4);
+      append_hydration_dev(ul, t5);
+      append_hydration_dev(ul, li2);
+      append_hydration_dev(li2, a1);
+      append_hydration_dev(a1, t6);
+      append_hydration_dev(ul, t7);
+      append_hydration_dev(ul, li3);
+      append_hydration_dev(li3, a2);
+      append_hydration_dev(a2, t8);
+      append_hydration_dev(ul, t9);
+      append_hydration_dev(ul, li4);
+      if_block1.m(li4, null);
+      current = true;
+      if (!mounted) {
+        dispose = [
+          listen_dev(a0, "click", prevent_default(
+            /*click_handler*/
+            ctx[6]
+          ), false, true, false, false),
+          listen_dev(a1, "click", prevent_default(
+            /*click_handler_1*/
+            ctx[7]
+          ), false, true, false, false),
+          listen_dev(a2, "click", prevent_default(
+            /*click_handler_2*/
+            ctx[8]
+          ), false, true, false, false)
+        ];
+        mounted = true;
+      }
     },
     p: function update(ctx2, [dirty]) {
       if (current_block_type === (current_block_type = select_block_type(ctx2)) && if_block1) {
@@ -345,20 +675,31 @@ function create_fragment$4(ctx) {
         if_block1 = current_block_type(ctx2);
         if (if_block1) {
           if_block1.c();
-          if_block1.m(li, null);
+          if_block1.m(li4, null);
         }
       }
     },
-    i: noop,
-    o: noop,
+    i: function intro(local) {
+      if (current)
+        return;
+      transition_in(person.$$.fragment, local);
+      current = true;
+    },
+    o: function outro(local) {
+      transition_out(person.$$.fragment, local);
+      current = false;
+    },
     d: function destroy(detaching) {
       if (if_block0)
         if_block0.d(detaching);
       if (detaching)
-        detach_dev(t);
+        detach_dev(t0);
       if (detaching)
-        detach_dev(li);
+        detach_dev(li5);
+      destroy_component(person);
       if_block1.d();
+      mounted = false;
+      run_all(dispose);
     }
   };
   dispatch_dev("SvelteRegisterBlock", {
@@ -387,6 +728,27 @@ function instance$4($$self, $$props, $$invalidate) {
   const doLogin = async () => {
     await loginStacksJs();
   };
+  const toggleNetwork = async (net) => {
+    if (net === CONFIG.VITE_NETWORK)
+      return;
+    setConfig(net);
+    await fetchSbtcBalance();
+    sbtcConfig.update((conf) => {
+      conf.stxAddress = addresses().stxAddress;
+      if (conf.pegInTransaction) {
+        conf.pegInTransaction.fromBtcAddress = addresses().cardinal;
+        if (conf.pegInTransaction.pegInData)
+          conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
+      }
+      if (conf.pegOutTransaction) {
+        conf.pegOutTransaction.fromBtcAddress = addresses().cardinal;
+      }
+      return conf;
+    });
+    const url = new URL(location.href);
+    url.searchParams.set("net", net);
+    location.assign(url.search);
+  };
   let webWalletNeeded = false;
   onMount(async () => {
   });
@@ -395,26 +757,34 @@ function instance$4($$self, $$props, $$invalidate) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
       console.warn(`<WalletConnectButton> was created with unknown prop '${key}'`);
   });
-  const click_handler = () => logout();
-  const click_handler_1 = () => doLogin();
+  const click_handler = () => toggleNetwork("testnet");
+  const click_handler_1 = () => toggleNetwork("mainnet");
+  const click_handler_2 = () => toggleNetwork("devnet");
+  const click_handler_3 = () => logout();
+  const click_handler_4 = () => doLogin();
   $$self.$capture_state = () => ({
     logUserOut,
     addresses,
     onMount,
+    setConfig,
     stx_eco_wallet_on,
     stx_eco_wallet_off,
+    Person,
     isCoordinator,
     sbtcConfig,
     loginStacksJs,
+    fetchSbtcBalance,
+    CONFIG,
     coordinator,
     logout,
     doLogin,
+    toggleNetwork,
     webWalletNeeded,
     $sbtcConfig
   });
   $$self.$inject_state = ($$props2) => {
     if ("webWalletNeeded" in $$props2)
-      $$invalidate(4, webWalletNeeded = $$props2.webWalletNeeded);
+      $$invalidate(5, webWalletNeeded = $$props2.webWalletNeeded);
   };
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
@@ -424,9 +794,13 @@ function instance$4($$self, $$props, $$invalidate) {
     coordinator,
     logout,
     doLogin,
+    toggleNetwork,
     webWalletNeeded,
     click_handler,
-    click_handler_1
+    click_handler_1,
+    click_handler_2,
+    click_handler_3,
+    click_handler_4
   ];
 }
 class WalletConnectButton extends SvelteComponentDev {
@@ -648,20 +1022,20 @@ function create_fragment$3(ctx) {
       if (!src_url_equal(img.src, img_src_value = logoWhite))
         attr_dev(img, "src", img_src_value);
       attr_dev(img, "alt", "CityCoins Test");
-      add_location(img, file$3, 17, 3, 669);
+      add_location(img, file$3, 17, 3, 660);
       attr_dev(a0, "class", "navbar-brand");
       attr_dev(a0, "href", "/");
-      add_location(a0, file$3, 16, 2, 632);
+      add_location(a0, file$3, 16, 2, 623);
       attr_dev(span0, "class", "text-center px-2 bg-white text-black nav-link");
       attr_dev(span0, "id", "navbarDropdown");
       attr_dev(span0, "role", "button");
       attr_dev(span0, "data-bs-toggle", "dropdown");
       attr_dev(span0, "aria-expanded", "false");
-      add_location(span0, file$3, 21, 3, 843);
+      add_location(span0, file$3, 21, 3, 834);
       attr_dev(div0, "class", "nav-item text-white s-WFTADzNPIVrM");
-      add_location(div0, file$3, 19, 2, 767);
+      add_location(div0, file$3, 19, 2, 758);
       attr_dev(span1, "class", "navbar-toggler-icon");
-      add_location(span1, file$3, 24, 3, 1195);
+      add_location(span1, file$3, 24, 3, 1186);
       attr_dev(button, "class", "navbar-toggler");
       attr_dev(button, "type", "button");
       attr_dev(button, "data-bs-toggle", "collapse");
@@ -669,44 +1043,44 @@ function create_fragment$3(ctx) {
       attr_dev(button, "aria-controls", "navbarNav");
       attr_dev(button, "aria-expanded", "false");
       attr_dev(button, "aria-label", "Toggle navigation");
-      add_location(button, file$3, 23, 2, 1013);
+      add_location(button, file$3, 23, 2, 1004);
       attr_dev(span2, "class", "nav-link dropdown-toggle ");
       attr_dev(span2, "id", "navbarDropdown");
       attr_dev(span2, "role", "button");
       attr_dev(span2, "data-bs-toggle", "dropdown");
       attr_dev(span2, "aria-expanded", "false");
-      add_location(span2, file$3, 29, 5, 1372);
+      add_location(span2, file$3, 29, 5, 1363);
       attr_dev(a1, "class", "dropdown-item s-WFTADzNPIVrM");
       attr_dev(a1, "href", "/");
-      add_location(a1, file$3, 33, 10, 1623);
-      add_location(li0, file$3, 33, 6, 1619);
+      add_location(a1, file$3, 33, 10, 1614);
+      add_location(li0, file$3, 33, 6, 1610);
       attr_dev(a2, "class", "dropdown-item s-WFTADzNPIVrM");
       attr_dev(a2, "href", "/");
-      add_location(a2, file$3, 34, 10, 1733);
-      add_location(li1, file$3, 34, 6, 1729);
+      add_location(a2, file$3, 34, 10, 1724);
+      add_location(li1, file$3, 34, 6, 1720);
       attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
       attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-      add_location(ul0, file$3, 32, 5, 1533);
+      add_location(ul0, file$3, 32, 5, 1524);
       attr_dev(li2, "class", "nav-item dropdown s-WFTADzNPIVrM");
-      add_location(li2, file$3, 28, 4, 1336);
+      add_location(li2, file$3, 28, 4, 1327);
       attr_dev(a3, "class", "");
       attr_dev(a3, "href", "/history");
-      add_location(a3, file$3, 39, 50, 1977);
+      add_location(a3, file$3, 39, 50, 1968);
       attr_dev(span3, "title", "Your SBTC Transaction History");
-      add_location(span3, file$3, 39, 6, 1933);
+      add_location(span3, file$3, 39, 6, 1924);
       attr_dev(span4, "class", "pointer nav-link");
-      add_location(span4, file$3, 38, 5, 1895);
+      add_location(span4, file$3, 38, 5, 1886);
       attr_dev(li3, "class", "badge nav-item s-WFTADzNPIVrM");
-      add_location(li3, file$3, 37, 4, 1862);
+      add_location(li3, file$3, 37, 4, 1853);
       attr_dev(ul1, "class", "navbar-nav");
-      add_location(ul1, file$3, 27, 3, 1308);
+      add_location(ul1, file$3, 27, 3, 1299);
       attr_dev(div1, "class", "collapse navbar-collapse");
       attr_dev(div1, "id", "navbarNav");
-      add_location(div1, file$3, 26, 2, 1251);
+      add_location(div1, file$3, 26, 2, 1242);
       attr_dev(div2, "class", "container-fluid mx-5");
-      add_location(div2, file$3, 15, 1, 595);
+      add_location(div2, file$3, 15, 1, 586);
       attr_dev(nav, "class", "navbar navbar-expand-md transparent");
-      add_location(nav, file$3, 14, 0, 544);
+      add_location(nav, file$3, 14, 0, 535);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, nav, anchor);
@@ -803,7 +1177,7 @@ function instance$3($$self, $$props, $$invalidate) {
     sbtcConfig.set(conf);
     pegin ? goto("/wrap") : goto("/unwrap");
   };
-  const network = "mainnet";
+  const network = CONFIG.VITE_NETWORK;
   const writable_props = [];
   Object.keys($$props).forEach((key) => {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
@@ -812,6 +1186,7 @@ function instance$3($$self, $$props, $$invalidate) {
   const click_handler = () => togglePeg(true);
   const click_handler_1 = () => togglePeg(false);
   $$self.$capture_state = () => ({
+    CONFIG,
     WalletConnectButton,
     logoWhite,
     sbtcConfig,
@@ -1961,7 +2336,7 @@ function create_if_block(ctx) {
     block,
     id: create_if_block.name,
     type: "if",
-    source: "(53:0) {#if inited}",
+    source: "(71:0) {#if inited}",
     ctx
   });
   return block;
@@ -2037,25 +2412,25 @@ function create_else_block(ctx) {
     },
     h: function hydrate() {
       attr_dev(p0, "class", "text-white");
-      add_location(p0, file, 61, 2, 1888);
+      add_location(p0, file, 79, 2, 2506);
       if (!src_url_equal(img.src, img_src_value = stx_eco_wallet_off))
         attr_dev(img, "src", img_src_value);
       attr_dev(img, "alt", "Connect Wallet / Login");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file, 62, 116, 2083);
+      add_location(img, file, 80, 116, 2701);
       attr_dev(span0, "class", "px-1");
-      add_location(span0, file, 62, 96, 2063);
+      add_location(span0, file, 80, 96, 2681);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file, 62, 28, 1995);
+      add_location(a, file, 80, 28, 2613);
       attr_dev(span1, "class", "nav-item");
-      add_location(span1, file, 62, 5, 1972);
-      add_location(p1, file, 62, 2, 1969);
+      add_location(span1, file, 80, 5, 2590);
+      add_location(p1, file, 80, 2, 2587);
       attr_dev(p2, "class", "mt-5 text-warning");
-      add_location(p2, file, 63, 2, 2201);
+      add_location(p2, file, 81, 2, 2819);
       attr_dev(div, "class", "lobby bg-dark s-7IPF32Wcq3s8");
-      add_location(div, file, 60, 0, 1858);
+      add_location(div, file, 78, 0, 2476);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -2093,7 +2468,7 @@ function create_else_block(ctx) {
     block,
     id: create_else_block.name,
     type: "else",
-    source: "(60:0) {:else}",
+    source: "(78:0) {:else}",
     ctx
   });
   return block;
@@ -2143,7 +2518,7 @@ function create_if_block_1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "app s-7IPF32Wcq3s8");
-      add_location(div, file, 54, 0, 1789);
+      add_location(div, file, 72, 0, 2407);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -2208,7 +2583,7 @@ function create_if_block_1(ctx) {
     block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(54:0) {#if $sbtcConfig && $sbtcConfig.loggedIn}",
+    source: "(72:0) {#if $sbtcConfig && $sbtcConfig.loggedIn}",
     ctx
   });
   return block;
@@ -2290,10 +2665,24 @@ function create_fragment(ctx) {
 }
 function instance($$self, $$props, $$invalidate) {
   let $sbtcConfig;
+  let $page;
   validate_store(sbtcConfig, "sbtcConfig");
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(1, $sbtcConfig = $$value));
+  validate_store(page, "page");
+  component_subscribe($$self, page, ($$value) => $$invalidate(7, $page = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Layout", slots, ["default"]);
+  console.log("process.env: ", { "VITE_USER_NODE_ENV": "development", "BASE_URL": "./", "MODE": "production", "DEV": true, "PROD": false, "SSR": false });
+  setConfig($page.url.search);
+  const search = $page.url.search;
+  beforeNavigate((nav) => {
+    var _a, _b, _c;
+    const next = (((_a = nav.to) == null ? void 0 : _a.url.pathname) || "") + (((_b = nav.to) == null ? void 0 : _b.url.search) || "");
+    if (((_c = nav.to) == null ? void 0 : _c.url.search.indexOf("testnet")) === -1 && search.indexOf("net=testnet") > -1) {
+      nav.cancel();
+      goto(next + "?net=testnet");
+    }
+  });
   let { data } = $$props;
   const unsubscribe = sbtcConfig.subscribe((conf) => {
   });
@@ -2310,14 +2699,19 @@ function instance($$self, $$props, $$invalidate) {
     if (userSession.isUserSignedIn()) {
       conf.loggedIn = true;
     }
-    conf.sbtcContractData = data.sbtcContractData;
+    conf.sbtcContractData = data;
     sbtcConfig.update(() => conf);
   };
   let bootstrap;
   onMount(async () => {
-    await tick();
+    try {
+      $$invalidate(3, data = JSON.parse(await fetchSbtcData()));
+    } catch (err) {
+      $$invalidate(3, data = {});
+    }
     bootstrap = await __vitePreload(() => import("../chunks/bootstrap.esm.ef76bbff.js"), true ? [] : void 0, import.meta.url);
     try {
+      await tick();
       await initApplication();
       $$invalidate(0, inited = true);
     } catch (err) {
@@ -2352,9 +2746,13 @@ function instance($$self, $$props, $$invalidate) {
       $$invalidate(4, $$scope = $$props2.$$scope);
   };
   $$self.$capture_state = () => ({
+    setConfig,
     tick,
     onMount,
     onDestroy,
+    beforeNavigate,
+    goto,
+    page,
     Header,
     Footer,
     sbtcConfig,
@@ -2362,13 +2760,16 @@ function instance($$self, $$props, $$invalidate) {
     userSession,
     stx_eco_wallet_off,
     defaultSbtcConfig,
+    fetchSbtcData,
+    search,
     data,
     unsubscribe,
     inited,
     doLogin,
     initApplication,
     bootstrap,
-    $sbtcConfig
+    $sbtcConfig,
+    $page
   });
   $$self.$inject_state = ($$props2) => {
     if ("data" in $$props2)

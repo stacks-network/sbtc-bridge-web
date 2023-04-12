@@ -1,6 +1,6 @@
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, p as element, c as space, y as text, q as claim_element, r as children, f as claim_space, z as claim_text, l as detach_dev, u as attr_dev, x as add_location, g as insert_hydration_dev, J as append_hydration_dev, V as set_input_value, L as listen_dev, W as to_number, I as noop, N as run_all, A as set_data_dev, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component } from "../chunks/index.0c92228d.js";
-import { m as mintTo, b as burnFrom, s as setCoordinator, a as setBtcWallet, c as coordinators } from "../chunks/sbtc_admin.5aebc118.js";
-import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, p as element, c as space, y as text, q as claim_element, r as children, f as claim_space, z as claim_text, l as detach_dev, u as attr_dev, x as add_location, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, W as listen_dev, a2 as to_number, _ as noop, Y as run_all, A as set_data_dev, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component } from "../chunks/index.1d91065c.js";
+import { s as sbtcConfig, C as CONFIG } from "../chunks/hmac.447cb554.js";
+import { m as mintTo, b as burnFrom, s as setCoordinator, a as setBtcWallet, c as coordinators } from "../chunks/sbtc_admin.d6e6a36a.js";
 const MintTokens_svelte_svelte_type_style_lang = "";
 const file$3 = "src/lib/components/admin/MintTokens.svelte";
 function create_if_block$1(ctx) {
@@ -934,33 +934,33 @@ function create_fragment$1(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(div0, file$1, 24, 6, 918);
+      add_location(div0, file$1, 25, 6, 938);
       attr_dev(input0, "type", "text");
       attr_dev(input0, "id", "stxAddress");
       attr_dev(input0, "class", "form-control");
-      add_location(input0, file$1, 25, 6, 962);
+      add_location(input0, file$1, 26, 6, 982);
       attr_dev(button0, "class", "btn btn-outline-light");
-      add_location(button0, file$1, 26, 11, 1056);
-      add_location(div1, file$1, 26, 6, 1051);
+      add_location(button0, file$1, 27, 11, 1076);
+      add_location(div1, file$1, 27, 6, 1071);
       attr_dev(div2, "class", "col");
-      add_location(div2, file$1, 23, 4, 894);
+      add_location(div2, file$1, 24, 4, 914);
       attr_dev(div3, "class", "row s-7H2pJ0gch52l");
-      add_location(div3, file$1, 22, 2, 872);
-      add_location(div4, file$1, 31, 6, 1223);
+      add_location(div3, file$1, 23, 2, 892);
+      add_location(div4, file$1, 32, 6, 1243);
       attr_dev(input1, "type", "text");
       attr_dev(input1, "id", "sbtcWallet");
       attr_dev(input1, "class", "form-control");
-      add_location(input1, file$1, 32, 6, 1302);
+      add_location(input1, file$1, 33, 6, 1322);
       attr_dev(button1, "class", "btn btn-outline-light");
-      add_location(button1, file$1, 33, 23, 1407);
+      add_location(button1, file$1, 34, 23, 1427);
       attr_dev(div5, "class", "col");
-      add_location(div5, file$1, 33, 6, 1390);
+      add_location(div5, file$1, 34, 6, 1410);
       attr_dev(div6, "class", "col");
-      add_location(div6, file$1, 30, 4, 1199);
+      add_location(div6, file$1, 31, 4, 1219);
       attr_dev(div7, "class", "row s-7H2pJ0gch52l");
-      add_location(div7, file$1, 29, 2, 1177);
+      add_location(div7, file$1, 30, 2, 1197);
       attr_dev(div8, "class", "card border p-4");
-      add_location(div8, file$1, 21, 0, 840);
+      add_location(div8, file$1, 22, 0, 860);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div8, anchor);
@@ -1108,11 +1108,11 @@ function instance$1($$self, $$props, $$invalidate) {
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(2, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Coordinator", slots, []);
-  let coordinator = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[0];
+  let coordinator = CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[0];
   if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
     coordinator = $sbtcConfig.sbtcContractData.coordinator.addr.value;
   }
-  let sbtcWallet = "tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e";
+  let sbtcWallet = CONFIG.VITE_SBTC_WALLET;
   if ((_a = $sbtcConfig == null ? void 0 : $sbtcConfig.sbtcContractData) == null ? void 0 : _a.sbtcWalletAddress) {
     sbtcWallet = $sbtcConfig.sbtcContractData.sbtcWalletAddress;
   }
@@ -1138,6 +1138,7 @@ function instance$1($$self, $$props, $$invalidate) {
   }
   const click_handler_1 = () => wallet();
   $$self.$capture_state = () => ({
+    CONFIG,
     setCoordinator,
     setBtcWallet,
     coordinators,
@@ -1196,7 +1197,7 @@ function create_fragment(ctx) {
   let t1;
   let t2;
   let h6;
-  let t3_value = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant";
+  let t3_value = CONFIG.VITE_SBTC_CONTRACT_ID + "";
   let t3;
   let t4;
   let div3;
@@ -1257,20 +1258,20 @@ function create_fragment(ctx) {
     },
     h: function hydrate() {
       attr_dev(span, "class", "strokeme-info");
-      add_location(span, file, 7, 25, 245);
+      add_location(span, file, 7, 25, 238);
       attr_dev(h1, "class", "text-info s-7rWotIBe7yq4");
-      add_location(h1, file, 7, 3, 223);
-      add_location(h6, file, 8, 3, 305);
+      add_location(h1, file, 7, 3, 216);
+      add_location(h6, file, 8, 3, 298);
       attr_dev(div0, "class", "card-width");
-      add_location(div0, file, 6, 2, 195);
+      add_location(div0, file, 6, 2, 188);
       attr_dev(div1, "class", "my-4 p-4");
-      add_location(div1, file, 5, 1, 170);
+      add_location(div1, file, 5, 1, 163);
       attr_dev(div2, "class", "col");
-      add_location(div2, file, 12, 2, 392);
+      add_location(div2, file, 12, 2, 376);
       attr_dev(div3, "class", "row");
-      add_location(div3, file, 11, 1, 372);
+      add_location(div3, file, 11, 1, 356);
       attr_dev(section, "class", "bg-dark s-7rWotIBe7yq4");
-      add_location(section, file, 4, 0, 143);
+      add_location(section, file, 4, 0, 136);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, section, anchor);
@@ -1323,7 +1324,7 @@ function instance($$self, $$props, $$invalidate) {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
       console.warn(`<Page> was created with unknown prop '${key}'`);
   });
-  $$self.$capture_state = () => ({ Coordinator, sbtcConfig });
+  $$self.$capture_state = () => ({ Coordinator, CONFIG });
   return [];
 }
 class Page extends SvelteComponentDev {

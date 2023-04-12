@@ -1,4 +1,4 @@
-import { b as hmac, c as concatBytes$2, r as randomBytes, e as sha256, w as wrapConstructor, S as SHA2 } from "./hmac.1e7e1fcb.js";
+import { c as hmac, e as concatBytes$2, r as randomBytes, f as sha256, w as wrapConstructor, S as SHA2, C as CONFIG } from "./hmac.447cb554.js";
 /*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 function assertNumber(n) {
   if (!Number.isSafeInteger(n))
@@ -5361,12 +5361,12 @@ const btc = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty(
 }, Symbol.toStringTag, { value: "Module" }));
 const btcPrecision = 1e8;
 function isSupported(address) {
-  const network = "mainnet";
+  const network = CONFIG.VITE_NETWORK;
   const msg = "Please enter a valid " + network + " bitcoin address.";
   if (!address || address.length < 10) {
     throw new Error(msg);
   }
-  const net = NETWORK;
+  const net = network === "testnet" ? TEST_NETWORK : NETWORK;
   const obj = Address(net).decode(address);
   if (obj.type === "pk") {
     throw new Error("Legacy addresses are not supported in the current version. " + msg);
@@ -5387,16 +5387,16 @@ function isSupported(address) {
   return valid;
 }
 function explorerAddressUrl(addr) {
-  return "https://explorer.stacks.co/address/" + addr + "?chain=mainnet";
+  return CONFIG.VITE_STACKS_EXPLORER + "/address/" + addr + "?chain=" + CONFIG.VITE_NETWORK;
 }
 function explorerBtcTxUrl(txid) {
-  return "https://mempool.space/tx/" + txid;
+  return CONFIG.VITE_BSTREAM_EXPLORER + "/tx/" + txid;
 }
 function explorerBtcAddressUrl(address) {
-  return "https://mempool.space/address/" + address;
+  return CONFIG.VITE_BSTREAM_EXPLORER + "/address/" + address;
 }
 function explorerTxUrl(txid) {
-  return "https://explorer.stacks.co/txid/" + txid + "?chain=mainnet";
+  return CONFIG.VITE_STACKS_EXPLORER + "/txid/" + txid + "?chain=" + CONFIG.VITE_NETWORK;
 }
 function fmtSatoshiToBitcoin(amountSats) {
   return Math.round(amountSats) / btcPrecision;

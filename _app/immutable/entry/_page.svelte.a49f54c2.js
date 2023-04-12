@@ -1,7 +1,7 @@
-import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, G as validate_store, H as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, u as attr_dev, g as insert_hydration_dev, J as append_hydration_dev, L as listen_dev, M as prevent_default, A as set_data_dev, I as noop, N as run_all } from "../chunks/index.0c92228d.js";
-import { g as goto } from "../chunks/navigation.a0c58531.js";
-import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { e as explorerTxUrl } from "../chunks/utils.d534dad3.js";
+import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, U as validate_store, V as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, u as attr_dev, g as insert_hydration_dev, O as append_hydration_dev, W as listen_dev, X as prevent_default, A as set_data_dev, _ as noop, Y as run_all } from "../chunks/index.1d91065c.js";
+import { C as CONFIG, s as sbtcConfig } from "../chunks/hmac.447cb554.js";
+import { g as goto } from "../chunks/navigation.d9254f90.js";
+import { e as explorerTxUrl } from "../chunks/utils.1ded2fdd.js";
 const _page_svelte_svelte_type_style_lang = "";
 const file = "src/routes/+page.svelte";
 function create_fragment(ctx) {
@@ -188,7 +188,7 @@ function create_fragment(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(div0, file, 16, 3, 547);
+      add_location(div0, file, 17, 3, 576);
       attr_dev(
         a,
         "href",
@@ -197,44 +197,44 @@ function create_fragment(ctx) {
       );
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file, 17, 18, 640);
-      add_location(div1, file, 17, 3, 625);
+      add_location(a, file, 18, 18, 669);
+      add_location(div1, file, 18, 3, 654);
       attr_dev(div2, "class", "text-small text-center mb-5 text-center text-white");
-      add_location(div2, file, 15, 2, 479);
+      add_location(div2, file, 16, 2, 508);
       attr_dev(span0, "class", "strokeme-info");
-      add_location(span0, file, 23, 38, 892);
+      add_location(span0, file, 24, 38, 921);
       attr_dev(h10, "class", "mt-5 text-info s-y_bCXRrkrYfP");
-      add_location(h10, file, 23, 6, 860);
+      add_location(h10, file, 24, 6, 889);
       attr_dev(h20, "class", "text-info mb-5");
-      add_location(h20, file, 24, 6, 943);
+      add_location(h20, file, 25, 6, 972);
       attr_dev(button0, "class", "w-50 btn btn-outline-info");
-      add_location(button0, file, 26, 7, 1015);
+      add_location(button0, file, 27, 7, 1044);
       attr_dev(div3, "class", "");
-      add_location(div3, file, 25, 6, 993);
+      add_location(div3, file, 26, 6, 1022);
       attr_dev(div4, "class", "card-sm text-center s-y_bCXRrkrYfP");
-      add_location(div4, file, 22, 5, 820);
+      add_location(div4, file, 23, 5, 849);
       attr_dev(div5, "class", "col-md-6 col-sm-12 mb-4");
-      add_location(div5, file, 21, 4, 777);
+      add_location(div5, file, 22, 4, 806);
       attr_dev(span1, "class", "strokeme-warning");
-      add_location(span1, file, 32, 43, 1274);
+      add_location(span1, file, 33, 43, 1303);
       attr_dev(h11, "class", "mt-5 text-warning s-y_bCXRrkrYfP");
-      add_location(h11, file, 32, 6, 1237);
+      add_location(h11, file, 33, 6, 1266);
       attr_dev(h21, "class", "text-warning mb-5");
-      add_location(h21, file, 33, 6, 1328);
+      add_location(h21, file, 34, 6, 1357);
       attr_dev(button1, "class", "w-50 btn btn-outline-warning");
-      add_location(button1, file, 34, 6, 1381);
+      add_location(button1, file, 35, 6, 1410);
       attr_dev(div6, "class", "card-sm text-center s-y_bCXRrkrYfP");
-      add_location(div6, file, 31, 5, 1197);
+      add_location(div6, file, 32, 5, 1226);
       attr_dev(div7, "class", "col-md-6 col-sm-12");
-      add_location(div7, file, 30, 4, 1159);
+      add_location(div7, file, 31, 4, 1188);
       attr_dev(div8, "class", "row");
-      add_location(div8, file, 20, 3, 755);
+      add_location(div8, file, 21, 3, 784);
       attr_dev(div9, "class", "");
-      add_location(div9, file, 19, 2, 737);
+      add_location(div9, file, 20, 2, 766);
       attr_dev(div10, "class", "m-4");
-      add_location(div10, file, 14, 1, 459);
+      add_location(div10, file, 15, 1, 488);
       attr_dev(section, "class", "bg-dark");
-      add_location(section, file, 13, 0, 432);
+      add_location(section, file, 14, 0, 461);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, section, anchor);
@@ -321,7 +321,7 @@ function instance($$self, $$props, $$invalidate) {
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(0, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Page", slots, []);
-  const sbtcContract = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant";
+  const sbtcContract = CONFIG.VITE_SBTC_CONTRACT_ID;
   const sbtcContractUrl = explorerTxUrl(sbtcContract);
   const togglePeg = (pegin) => {
     const conf = $sbtcConfig;
@@ -337,6 +337,7 @@ function instance($$self, $$props, $$invalidate) {
   const click_handler = () => togglePeg(true);
   const click_handler_1 = () => togglePeg(false);
   $$self.$capture_state = () => ({
+    CONFIG,
     goto,
     sbtcConfig,
     explorerTxUrl,

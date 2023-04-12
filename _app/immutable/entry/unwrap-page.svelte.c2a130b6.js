@@ -1,9 +1,9 @@
-import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, G as validate_store, H as component_subscribe, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, w as set_style, g as insert_hydration_dev, J as append_hydration_dev, V as set_input_value, E as mount_component, a6 as action_destroyer, L as listen_dev, A as set_data_dev, W as to_number, k as transition_in, h as transition_out, F as destroy_component, N as run_all, M as prevent_default, I as noop, o as onMount, e as empty, B as group_outros, j as check_outros } from "../chunks/index.0c92228d.js";
-import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { F as FeeDisplay, P as PegTransaction, a as assert, c as concatByteArrays, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, d as PEGOUT_OPCODE, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.eb966c4e.js";
-import { T as TEST_NETWORK, N as NETWORK, h as hex, p as p2wpkh, b as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, R as RawTx, c as explorerAddressUrl, d as explorerBtcAddressUrl } from "../chunks/utils.d534dad3.js";
-import { e as utils, f as getPublicKey, h as schnorr, a as addresses, i as signMessage } from "../chunks/stacks_connect.543fae53.js";
-import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from "../chunks/bridge_api.d7e0bd88.js";
+import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, w as set_style, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, E as mount_component, a6 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, X as prevent_default, _ as noop, o as onMount, e as empty, B as group_outros, j as check_outros } from "../chunks/index.1d91065c.js";
+import { s as sbtcConfig, C as CONFIG } from "../chunks/hmac.447cb554.js";
+import { F as FeeDisplay, P as PegTransaction, a as assert, c as concatByteArrays, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, d as PEGOUT_OPCODE, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.683efda3.js";
+import { T as TEST_NETWORK, N as NETWORK, h as hex, p as p2wpkh, b as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, R as RawTx, c as explorerAddressUrl, d as explorerBtcAddressUrl } from "../chunks/utils.1ded2fdd.js";
+import { e as utils, h as getPublicKey, i as schnorr, a as addresses, j as signMessage } from "../chunks/stacks_connect.857de9b7.js";
+import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from "../chunks/bridge_api.65cdfd29.js";
 const file$2 = "src/lib/components/unwrapper/PegOutAmount.svelte";
 function create_if_block_1$2(ctx) {
   let div;
@@ -901,14 +901,14 @@ function create_else_block_1(ctx) {
     },
     h: function hydrate() {
       attr_dev(p0, "class", "text-white");
-      add_location(p0, file$1, 145, 2, 5105);
+      add_location(p0, file$1, 146, 2, 5134);
       attr_dev(span0, "class", "mt-5 text-warning");
-      add_location(span0, file$1, 148, 2, 5289);
+      add_location(span0, file$1, 149, 2, 5318);
       attr_dev(span1, "class", "nav-item");
-      add_location(span1, file$1, 146, 5, 5163);
-      add_location(p1, file$1, 146, 2, 5160);
+      add_location(span1, file$1, 147, 5, 5192);
+      add_location(p1, file$1, 147, 2, 5189);
       attr_dev(div, "class", "lobby bg-dark");
-      add_location(div, file$1, 144, 0, 5075);
+      add_location(div, file$1, 145, 0, 5104);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -933,7 +933,7 @@ function create_else_block_1(ctx) {
     block,
     id: create_else_block_1.name,
     type: "else",
-    source: "(144:0) {:else}",
+    source: "(145:0) {:else}",
     ctx
   });
   return block;
@@ -1002,7 +1002,7 @@ function create_if_block$1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 121, 2, 4161);
+      add_location(div, file$1, 122, 2, 4190);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1089,7 +1089,7 @@ function create_if_block$1(ctx) {
     block,
     id: create_if_block$1.name,
     type: "if",
-    source: "(121:0) {#if ready}",
+    source: "(122:0) {#if ready}",
     ctx
   });
   return block;
@@ -1240,7 +1240,7 @@ function create_else_block$1(ctx) {
     block,
     id: create_else_block$1.name,
     type: "else",
-    source: "(128:2) {:else}",
+    source: "(129:2) {:else}",
     ctx
   });
   return block;
@@ -1300,14 +1300,14 @@ function create_if_block_2$1(ctx) {
         /*$sbtcConfig*/
         ctx[1].balance.address
       ));
-      add_location(a0, file$1, 124, 51, 4382);
+      add_location(a0, file$1, 125, 51, 4411);
       attr_dev(p0, "class", "mb-4");
-      add_location(p0, file$1, 124, 4, 4335);
+      add_location(p0, file$1, 125, 4, 4364);
       attr_dev(a1, "href", "/wrap");
-      add_location(a1, file$1, 125, 7, 4485);
-      add_location(p1, file$1, 125, 4, 4482);
+      add_location(a1, file$1, 126, 7, 4514);
+      add_location(p1, file$1, 126, 4, 4511);
       attr_dev(div, "class", "text-center text-warning my-5");
-      add_location(div, file$1, 123, 2, 4287);
+      add_location(div, file$1, 124, 2, 4316);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1344,7 +1344,7 @@ function create_if_block_2$1(ctx) {
     block,
     id: create_if_block_2$1.name,
     type: "if",
-    source: "(123:2) {#if $sbtcConfig.balance.balance <= 0}",
+    source: "(124:2) {#if $sbtcConfig.balance.balance <= 0}",
     ctx
   });
   return block;
@@ -1380,7 +1380,7 @@ function create_if_block_5(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 129, 2, 4568);
+      add_location(div, file$1, 130, 2, 4597);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1408,7 +1408,7 @@ function create_if_block_5(ctx) {
     block,
     id: create_if_block_5.name,
     type: "if",
-    source: "(129:2) {#if showStxAddress}",
+    source: "(130:2) {#if showStxAddress}",
     ctx
   });
   return block;
@@ -1444,7 +1444,7 @@ function create_if_block_4(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 132, 2, 4691);
+      add_location(div, file$1, 133, 2, 4720);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1479,7 +1479,7 @@ function create_if_block_4(ctx) {
     block,
     id: create_if_block_4.name,
     type: "if",
-    source: "(132:2) {#if showAmount}",
+    source: "(133:2) {#if showAmount}",
     ctx
   });
   return block;
@@ -1515,11 +1515,11 @@ function create_if_block_3(ctx) {
     h: function hydrate() {
       attr_dev(button, "class", "btn btn-outline-info w-100");
       attr_dev(button, "type", "button");
-      add_location(button, file$1, 137, 6, 4851);
+      add_location(button, file$1, 138, 6, 4880);
       attr_dev(div0, "class", "col");
-      add_location(div0, file$1, 136, 4, 4827);
+      add_location(div0, file$1, 137, 4, 4856);
       attr_dev(div1, "class", "row s-DXQTMplg7quh");
-      add_location(div1, file$1, 135, 2, 4805);
+      add_location(div1, file$1, 136, 2, 4834);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div1, anchor);
@@ -1552,7 +1552,7 @@ function create_if_block_3(ctx) {
     block,
     id: create_if_block_3.name,
     type: "if",
-    source: "(135:2) {#if showButton}",
+    source: "(136:2) {#if showButton}",
     ctx
   });
   return block;
@@ -1582,7 +1582,7 @@ function create_if_block_1$1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "text-danger");
-      add_location(div, file$1, 142, 19, 5017);
+      add_location(div, file$1, 143, 19, 5046);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1606,7 +1606,7 @@ function create_if_block_1$1(ctx) {
     block,
     id: create_if_block_1$1.name,
     type: "if",
-    source: "(143:2) {#if errorReason}",
+    source: "(144:2) {#if errorReason}",
     ctx
   });
   return block;
@@ -1694,7 +1694,7 @@ function instance$1($$self, $$props, $$invalidate) {
     info: "sBTC will be burned from this account",
     currentAddress: poTx.pegInData.stacksAddress
   };
-  const network = "mainnet";
+  const network = CONFIG.VITE_NETWORK;
   const dispatch = createEventDispatcher();
   let ready = true;
   let errorReason;
@@ -1776,6 +1776,7 @@ function instance$1($$self, $$props, $$invalidate) {
       $$invalidate(13, poTx = $$props2.poTx);
   };
   $$self.$capture_state = () => ({
+    CONFIG,
     onMount,
     sbtcConfig,
     Principal,

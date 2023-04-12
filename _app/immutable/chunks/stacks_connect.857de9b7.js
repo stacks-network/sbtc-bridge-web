@@ -1,5 +1,5 @@
-import { u as utils$1, a as sha256$3, h as hmac$2, s as sbtcConfig } from "./hmac.1e7e1fcb.js";
-import { d as fetchUserSbtcBalance } from "./bridge_api.d7e0bd88.js";
+import { u as utils$1, b as sha256$3, h as hmac$2, C as CONFIG, s as sbtcConfig } from "./hmac.447cb554.js";
+import { d as fetchUserSbtcBalance } from "./bridge_api.65cdfd29.js";
 import { _ as __vitePreload } from "./preload-helper.f8376bb0.js";
 var commonjsGlobal = typeof globalThis !== "undefined" ? globalThis : typeof window !== "undefined" ? window : typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : {};
 function getDefaultExportFromCjs(x) {
@@ -1383,6 +1383,7 @@ function createFetchFn(...args) {
 }
 const HIRO_MAINNET_DEFAULT = "https://stacks-node-api.mainnet.stacks.co";
 const HIRO_TESTNET_DEFAULT = "https://stacks-node-api.testnet.stacks.co";
+const HIRO_MOCKNET_DEFAULT = "http://localhost:3999";
 const StacksNetworks = ["mainnet", "testnet"];
 class StacksNetwork {
   constructor(networkConfig) {
@@ -1477,6 +1478,16 @@ class StacksTestnet extends StacksNetwork {
   constructor(opts) {
     super({
       url: (opts == null ? void 0 : opts.url) ?? HIRO_TESTNET_DEFAULT,
+      fetchFn: opts == null ? void 0 : opts.fetchFn
+    });
+    this.version = TransactionVersion$1.Testnet;
+    this.chainId = ChainID$1.Testnet;
+  }
+}
+class StacksMocknet extends StacksNetwork {
+  constructor(opts) {
+    super({
+      url: (opts == null ? void 0 : opts.url) ?? HIRO_MOCKNET_DEFAULT,
       fetchFn: opts == null ? void 0 : opts.fetchFn
     });
     this.version = TransactionVersion$1.Testnet;
@@ -9711,7 +9722,7 @@ const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
       case "connect-modal":
         return __vitePreload(() => import(
           /* webpackMode: "lazy" */
-          "./connect-modal.entry.13b6ed58.js"
+          "./connect-modal.entry.e2b50388.js"
         ), true ? [] : void 0, import.meta.url).then(processMod, consoleError);
     }
   }
@@ -9826,8 +9837,14 @@ var showConnect = function showConnect2(authOptions) {
 const appConfig = new AppConfig(["store_write", "publish_data"]);
 const userSession = new UserSession({ appConfig });
 function getStacksNetwork() {
+  const network = CONFIG.VITE_NETWORK;
   let stxNetwork;
-  stxNetwork = new StacksMainnet();
+  if (network === "testnet")
+    stxNetwork = new StacksTestnet();
+  else if (network === "mainnet")
+    stxNetwork = new StacksMainnet();
+  else
+    stxNetwork = new StacksMocknet();
   return stxNetwork;
 }
 function decodeStacksAddress(stxAddress) {
@@ -9859,7 +9876,7 @@ async function fetchSbtcBalance() {
 }
 function addresses() {
   const userData = userSession.loadUserData();
-  const network = "mainnet";
+  const network = CONFIG.VITE_NETWORK;
   const addr = network === "testnet" ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
   const cardinal = network === "testnet" ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
   const ordinal = network === "testnet" ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
@@ -9910,10 +9927,11 @@ function signMessage(callback, script) {
   });
 }
 export {
-  hexToBytes$1 as A,
-  registerInstance as B,
-  h as C,
-  getElement as D,
+  getDefaultExportFromCjs as A,
+  hexToBytes$1 as B,
+  registerInstance as C,
+  h as D,
+  getElement as E,
   PostConditionMode as P,
   StacksTestnet as S,
   _asyncToGenerator as _,
@@ -9922,25 +9940,25 @@ export {
   uintCV as c,
   bufferCVFromString as d,
   utils as e,
-  getPublicKey$1 as f,
+  fetchSbtcBalance as f,
   getStacksNetwork as g,
-  schnorr as h,
-  signMessage as i,
-  decodeStacksAddress as j,
-  _regeneratorRuntime as k,
+  getPublicKey$1 as h,
+  schnorr as i,
+  signMessage as j,
+  decodeStacksAddress as k,
   logUserOut as l,
-  _extends as m,
-  getUserSession as n,
+  _regeneratorRuntime as m,
+  _extends as n,
   openContractCall as o,
   principalCV as p,
-  getStacksProvider as q,
-  lib as r,
+  getUserSession as q,
+  getStacksProvider as r,
   stringAsciiCV as s,
   tupleCV as t,
   userSession as u,
-  _objectWithoutPropertiesLoose as v,
-  hasAppPrivateKey as w,
-  getKeys as x,
-  commonjsGlobal as y,
-  getDefaultExportFromCjs as z
+  lib as v,
+  _objectWithoutPropertiesLoose as w,
+  hasAppPrivateKey as x,
+  getKeys as y,
+  commonjsGlobal as z
 };

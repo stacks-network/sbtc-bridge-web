@@ -1,9 +1,9 @@
-import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, g as insert_hydration_dev, J as append_hydration_dev, V as set_input_value, E as mount_component, a6 as action_destroyer, L as listen_dev, A as set_data_dev, W as to_number, k as transition_in, h as transition_out, F as destroy_component, N as run_all, M as prevent_default, I as noop, G as validate_store, H as component_subscribe, o as onMount, P as globals, e as empty, B as group_outros, j as check_outros } from "../chunks/index.0c92228d.js";
-import { s as sbtcConfig } from "../chunks/hmac.1e7e1fcb.js";
-import { F as FeeDisplay, P as PegTransaction, a as assert, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, h as PEGIN_OPCODE, c as concatByteArrays, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.eb966c4e.js";
-import { T as TEST_NETWORK, N as NETWORK, p as p2wpkh, h as hex, b as Transaction, s as secp256k1, R as RawTx, S as Script, d as explorerBtcAddressUrl } from "../chunks/utils.d534dad3.js";
-import { e as utils, f as getPublicKey, h as schnorr, j as decodeStacksAddress, a as addresses } from "../chunks/stacks_connect.543fae53.js";
-import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from "../chunks/bridge_api.d7e0bd88.js";
+import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, E as mount_component, a6 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, X as prevent_default, _ as noop, U as validate_store, V as component_subscribe, o as onMount, a0 as globals, e as empty, B as group_outros, j as check_outros } from "../chunks/index.1d91065c.js";
+import { s as sbtcConfig, C as CONFIG } from "../chunks/hmac.447cb554.js";
+import { F as FeeDisplay, P as PegTransaction, a as assert, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, h as PEGIN_OPCODE, c as concatByteArrays, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.683efda3.js";
+import { T as TEST_NETWORK, N as NETWORK, p as p2wpkh, h as hex, b as Transaction, s as secp256k1, R as RawTx, S as Script, d as explorerBtcAddressUrl } from "../chunks/utils.1ded2fdd.js";
+import { e as utils, h as getPublicKey, i as schnorr, k as decodeStacksAddress, a as addresses } from "../chunks/stacks_connect.857de9b7.js";
+import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from "../chunks/bridge_api.65cdfd29.js";
 const file$2 = "src/lib/components/wrapper/PegInAmount.svelte";
 function create_if_block_1$2(ctx) {
   let span;
@@ -808,7 +808,7 @@ function create_if_block$1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 122, 2, 4365);
+      add_location(div, file$1, 123, 2, 4394);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -954,7 +954,7 @@ function create_if_block$1(ctx) {
     block,
     id: create_if_block$1.name,
     type: "if",
-    source: "(122:0) {#if inited}",
+    source: "(123:0) {#if inited}",
     ctx
   });
   return block;
@@ -990,7 +990,7 @@ function create_if_block_4(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 124, 2, 4473);
+      add_location(div, file$1, 125, 2, 4502);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1018,7 +1018,7 @@ function create_if_block_4(ctx) {
     block,
     id: create_if_block_4.name,
     type: "if",
-    source: "(124:2) {#if showStxAddress}",
+    source: "(125:2) {#if showStxAddress}",
     ctx
   });
   return block;
@@ -1080,7 +1080,7 @@ function create_if_block_3(ctx) {
     block,
     id: create_if_block_3.name,
     type: "if",
-    source: "(127:2) {#if showAmount}",
+    source: "(128:2) {#if showAmount}",
     ctx
   });
   return block;
@@ -1116,7 +1116,7 @@ function create_key_block(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 128, 2, 4619);
+      add_location(div, file$1, 129, 2, 4648);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1144,7 +1144,7 @@ function create_key_block(ctx) {
     block,
     id: create_key_block.name,
     type: "key",
-    source: "(128:2) {#key componentKey3}",
+    source: "(129:2) {#key componentKey3}",
     ctx
   });
   return block;
@@ -1164,7 +1164,7 @@ function create_if_block_2$1(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "text-danger");
-      add_location(div, file$1, 131, 19, 4749);
+      add_location(div, file$1, 132, 19, 4778);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1186,7 +1186,7 @@ function create_if_block_2$1(ctx) {
     block,
     id: create_if_block_2$1.name,
     type: "if",
-    source: "(132:2) {#if errorReason}",
+    source: "(133:2) {#if errorReason}",
     ctx
   });
   return block;
@@ -1222,11 +1222,11 @@ function create_if_block_1$1(ctx) {
     h: function hydrate() {
       attr_dev(button, "class", "btn btn-outline-info w-100");
       attr_dev(button, "type", "button");
-      add_location(button, file$1, 135, 6, 4872);
+      add_location(button, file$1, 136, 6, 4901);
       attr_dev(div0, "class", "col");
-      add_location(div0, file$1, 134, 4, 4848);
+      add_location(div0, file$1, 135, 4, 4877);
       attr_dev(div1, "class", "row s-3u3nVvJxVO6Z");
-      add_location(div1, file$1, 133, 2, 4826);
+      add_location(div1, file$1, 134, 2, 4855);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div1, anchor);
@@ -1259,7 +1259,7 @@ function create_if_block_1$1(ctx) {
     block,
     id: create_if_block_1$1.name,
     type: "if",
-    source: "(133:2) {#if showButton}",
+    source: "(134:2) {#if showButton}",
     ctx
   });
   return block;
@@ -1376,7 +1376,7 @@ function instance$1($$self, $$props, $$invalidate) {
       dust: piTx.dust
     };
   };
-  const network = "mainnet";
+  const network = CONFIG.VITE_NETWORK;
   console.log("piTx:", piTx);
   const dispatch = createEventDispatcher();
   let ready = true;
@@ -1460,6 +1460,7 @@ function instance$1($$self, $$props, $$invalidate) {
       $$invalidate(13, piTx = $$props2.piTx);
   };
   $$self.$capture_state = () => ({
+    CONFIG,
     onMount,
     sbtcConfig,
     Principal,

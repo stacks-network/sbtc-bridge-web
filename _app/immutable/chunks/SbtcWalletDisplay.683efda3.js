@@ -4,11 +4,11 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, Q as create_slot, X as assign, Y as compute_rest_props, v as validate_slots, Z as exclude_internal_props, _ as svg_element, $ as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, a0 as set_svg_attributes, a1 as toggle_class, g as insert_hydration_dev, J as append_hydration_dev, R as update_slot_base, T as get_all_dirty_from_scope, U as get_slot_changes, a2 as get_spread_update, k as transition_in, h as transition_out, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, z as claim_text, f as claim_space, V as set_input_value, L as listen_dev, A as set_data_dev, I as noop, N as run_all, M as prevent_default, e as empty, o as onMount, a3 as validate_each_argument, a4 as destroy_each, m as binding_callbacks, G as validate_store, H as component_subscribe, B as group_outros, j as check_outros, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a7 as prop_dev, K as src_url_equal, P as globals } from "./index.0c92228d.js";
-import { _ as _asyncToGenerator, k as _regeneratorRuntime, m as _extends, S as StacksTestnet, n as getUserSession, q as getStacksProvider, r as lib, v as _objectWithoutPropertiesLoose, w as hasAppPrivateKey, x as getKeys, a as addresses, y as commonjsGlobal, z as getDefaultExportFromCjs, e as utils, f as getPublicKey, h as schnorr, j as decodeStacksAddress, t as tupleCV, s as stringAsciiCV, c as uintCV, A as hexToBytes } from "./stacks_connect.543fae53.js";
-import { i as isSupported, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl, T as TEST_NETWORK, N as NETWORK, h as hex, d as explorerBtcAddressUrl, g as base64, j as btc, b as Transaction } from "./utils.d534dad3.js";
-import { s as sbtcConfig } from "./hmac.1e7e1fcb.js";
-import { s as sendRawTxDirectMempool } from "./bridge_api.d7e0bd88.js";
+import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, z as claim_text, f as claim_space, a1 as set_input_value, W as listen_dev, A as set_data_dev, _ as noop, Y as run_all, X as prevent_default, e as empty, o as onMount, a3 as validate_each_argument, a4 as destroy_each, m as binding_callbacks, U as validate_store, V as component_subscribe, B as group_outros, j as check_outros, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a7 as prop_dev, Z as src_url_equal, a0 as globals } from "./index.1d91065c.js";
+import { C as CONFIG, s as sbtcConfig } from "./hmac.447cb554.js";
+import { _ as _asyncToGenerator, m as _regeneratorRuntime, n as _extends, S as StacksTestnet, q as getUserSession, r as getStacksProvider, v as lib, w as _objectWithoutPropertiesLoose, x as hasAppPrivateKey, y as getKeys, a as addresses, z as commonjsGlobal, A as getDefaultExportFromCjs, e as utils, h as getPublicKey, i as schnorr, k as decodeStacksAddress, t as tupleCV, s as stringAsciiCV, c as uintCV, B as hexToBytes } from "./stacks_connect.857de9b7.js";
+import { i as isSupported, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl, N as NETWORK, T as TEST_NETWORK, h as hex, d as explorerBtcAddressUrl, g as base64, j as btc, b as Transaction } from "./utils.1ded2fdd.js";
+import { s as sendRawTxDirectMempool } from "./bridge_api.65cdfd29.js";
 var _excluded = ["allowedSighash", "hex", "signAtIndex", "userSession"];
 function signPayload(_x, _x2) {
   return _signPayload.apply(this, arguments);
@@ -31,10 +31,10 @@ function _signPayload() {
   return _signPayload.apply(this, arguments);
 }
 function getDefaultPsbtRequestOptions(options) {
-  var network = options.network || new StacksTestnet();
+  var network2 = options.network || new StacksTestnet();
   var userSession = getUserSession(options.userSession);
   var defaults = _extends({}, options, {
-    network,
+    network: network2,
     userSession
   });
   return _extends({}, defaults);
@@ -647,8 +647,8 @@ function create_if_block_1$6(ctx) {
     h: function hydrate() {
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "");
-      add_location(a, file$b, 33, 11, 1511);
-      add_location(div, file$b, 33, 6, 1506);
+      add_location(a, file$b, 34, 11, 1540);
+      add_location(div, file$b, 34, 6, 1535);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -674,7 +674,7 @@ function create_if_block_1$6(ctx) {
     block,
     id: create_if_block_1$6.name,
     type: "if",
-    source: "(33:6) {#if stxAddress !== addresses().stxAddress}",
+    source: "(34:6) {#if stxAddress !== addresses().stxAddress}",
     ctx
   });
   return block;
@@ -704,7 +704,7 @@ function create_if_block$8(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "text-warning");
-      add_location(div, file$b, 36, 56, 1718);
+      add_location(div, file$b, 37, 56, 1747);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -728,7 +728,7 @@ function create_if_block$8(ctx) {
     block,
     id: create_if_block$8.name,
     type: "if",
-    source: "(37:4) {#if errored && stxAddress && stxAddress.length > 0}",
+    source: "(38:4) {#if errored && stxAddress && stxAddress.length > 0}",
     ctx
   });
   return block;
@@ -840,29 +840,29 @@ function create_fragment$b(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(span0, file$b, 26, 6, 883);
+      add_location(span0, file$b, 27, 6, 912);
       attr_dev(span1, "class", "pointer text-info");
       attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
       attr_dev(span1, "data-bs-placement", "top");
       attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
       attr_dev(span1, "title", "Your Stacks address. The equivalent amount of sBTC will be sent to this wallet");
-      add_location(span1, file$b, 27, 6, 924);
+      add_location(span1, file$b, 28, 6, 953);
       attr_dev(label, "for", "transact-path");
       attr_dev(label, "class", "d-flex justify-content-between");
-      add_location(label, file$b, 25, 4, 810);
+      add_location(label, file$b, 26, 4, 839);
       attr_dev(input, "type", "text");
       attr_dev(input, "id", "from-address");
       attr_dev(input, "class", "form-control form-inline");
       attr_dev(input, "autocomplete", "off");
-      add_location(input, file$b, 29, 4, 1160);
+      add_location(input, file$b, 30, 4, 1189);
       attr_dev(div0, "class", "text-small text-white");
-      add_location(div0, file$b, 31, 6, 1388);
+      add_location(div0, file$b, 32, 6, 1417);
       attr_dev(div1, "class", "d-flex justify-content-between text-small text-info");
-      add_location(div1, file$b, 30, 4, 1316);
+      add_location(div1, file$b, 31, 4, 1345);
       attr_dev(div2, "class", "col");
-      add_location(div2, file$b, 24, 2, 788);
+      add_location(div2, file$b, 25, 2, 817);
       attr_dev(div3, "class", "row");
-      add_location(div3, file$b, 23, 0, 768);
+      add_location(div3, file$b, 24, 0, 797);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div3, anchor);
@@ -989,10 +989,10 @@ function instance$b($$self, $$props, $$invalidate) {
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Principal", slots, []);
   let { principalData } = $$props;
-  const network = "mainnet";
+  const network2 = CONFIG.VITE_NETWORK;
   const dispatch = createEventDispatcher();
   let stxAddress = principalData.currentAddress;
-  const mainReason = "Please enter a valid stacks blockchain " + network + " address";
+  const mainReason = "Please enter a valid stacks blockchain " + network2 + " address";
   let reason = mainReason;
   let errored = false;
   const changeStxAddress = async () => {
@@ -1030,10 +1030,11 @@ function instance$b($$self, $$props, $$invalidate) {
       $$invalidate(0, principalData = $$props2.principalData);
   };
   $$self.$capture_state = () => ({
+    CONFIG,
     createEventDispatcher,
     addresses,
     principalData,
-    network,
+    network: network2,
     dispatch,
     stxAddress,
     mainReason,
@@ -3057,35 +3058,27 @@ var shams$1 = function hasSymbols() {
   }
   return true;
 };
-var hasSymbols$1 = shams$1;
+var hasSymbols$2 = shams$1;
 var shams = function hasToStringTagShams() {
-  return hasSymbols$1() && !!Symbol.toStringTag;
+  return hasSymbols$2() && !!Symbol.toStringTag;
 };
-var hasSymbols2;
-var hasRequiredHasSymbols;
-function requireHasSymbols() {
-  if (hasRequiredHasSymbols)
-    return hasSymbols2;
-  hasRequiredHasSymbols = 1;
-  var origSymbol = typeof Symbol !== "undefined" && Symbol;
-  var hasSymbolSham = shams$1;
-  hasSymbols2 = function hasNativeSymbols() {
-    if (typeof origSymbol !== "function") {
-      return false;
-    }
-    if (typeof Symbol !== "function") {
-      return false;
-    }
-    if (typeof origSymbol("foo") !== "symbol") {
-      return false;
-    }
-    if (typeof Symbol("bar") !== "symbol") {
-      return false;
-    }
-    return hasSymbolSham();
-  };
-  return hasSymbols2;
-}
+var origSymbol = typeof Symbol !== "undefined" && Symbol;
+var hasSymbolSham = shams$1;
+var hasSymbols$1 = function hasNativeSymbols() {
+  if (typeof origSymbol !== "function") {
+    return false;
+  }
+  if (typeof Symbol !== "function") {
+    return false;
+  }
+  if (typeof origSymbol("foo") !== "symbol") {
+    return false;
+  }
+  if (typeof Symbol("bar") !== "symbol") {
+    return false;
+  }
+  return hasSymbolSham();
+};
 var implementation$3;
 var hasRequiredImplementation$3;
 function requireImplementation$3() {
@@ -3096,7 +3089,7 @@ function requireImplementation$3() {
   var slice = Array.prototype.slice;
   var toStr2 = Object.prototype.toString;
   var funcType = "[object Function]";
-  implementation$3 = function bind(that) {
+  implementation$3 = function bind2(that) {
     var target = this;
     if (typeof target !== "function" || toStr2.call(target) !== funcType) {
       throw new TypeError(ERROR_MESSAGE + target);
@@ -3147,320 +3140,304 @@ function requireFunctionBind() {
   functionBind = Function.prototype.bind || implementation2;
   return functionBind;
 }
-var src;
-var hasRequiredSrc;
-function requireSrc() {
-  if (hasRequiredSrc)
-    return src;
-  hasRequiredSrc = 1;
-  var bind = requireFunctionBind();
-  src = bind.call(Function.call, Object.prototype.hasOwnProperty);
-  return src;
-}
-var getIntrinsic;
-var hasRequiredGetIntrinsic;
-function requireGetIntrinsic() {
-  if (hasRequiredGetIntrinsic)
-    return getIntrinsic;
-  hasRequiredGetIntrinsic = 1;
-  var undefined$1;
-  var $SyntaxError = SyntaxError;
-  var $Function = Function;
-  var $TypeError = TypeError;
-  var getEvalledConstructor = function(expressionSyntax) {
-    try {
-      return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
-    } catch (e) {
-    }
-  };
-  var $gOPD2 = Object.getOwnPropertyDescriptor;
-  if ($gOPD2) {
-    try {
-      $gOPD2({}, "");
-    } catch (e) {
-      $gOPD2 = null;
-    }
-  }
-  var throwTypeError = function() {
-    throw new $TypeError();
-  };
-  var ThrowTypeError = $gOPD2 ? function() {
-    try {
-      arguments.callee;
-      return throwTypeError;
-    } catch (calleeThrows) {
-      try {
-        return $gOPD2(arguments, "callee").get;
-      } catch (gOPDthrows) {
-        return throwTypeError;
-      }
-    }
-  }() : throwTypeError;
-  var hasSymbols3 = requireHasSymbols()();
-  var getProto2 = Object.getPrototypeOf || function(x) {
-    return x.__proto__;
-  };
-  var needsEval = {};
-  var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto2(Uint8Array);
-  var INTRINSICS = {
-    "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
-    "%Array%": Array,
-    "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
-    "%ArrayIteratorPrototype%": hasSymbols3 ? getProto2([][Symbol.iterator]()) : undefined$1,
-    "%AsyncFromSyncIteratorPrototype%": undefined$1,
-    "%AsyncFunction%": needsEval,
-    "%AsyncGenerator%": needsEval,
-    "%AsyncGeneratorFunction%": needsEval,
-    "%AsyncIteratorPrototype%": needsEval,
-    "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
-    "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
-    "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
-    "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
-    "%Boolean%": Boolean,
-    "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
-    "%Date%": Date,
-    "%decodeURI%": decodeURI,
-    "%decodeURIComponent%": decodeURIComponent,
-    "%encodeURI%": encodeURI,
-    "%encodeURIComponent%": encodeURIComponent,
-    "%Error%": Error,
-    "%eval%": eval,
-    // eslint-disable-line no-eval
-    "%EvalError%": EvalError,
-    "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
-    "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
-    "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
-    "%Function%": $Function,
-    "%GeneratorFunction%": needsEval,
-    "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
-    "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
-    "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
-    "%isFinite%": isFinite,
-    "%isNaN%": isNaN,
-    "%IteratorPrototype%": hasSymbols3 ? getProto2(getProto2([][Symbol.iterator]())) : undefined$1,
-    "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
-    "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
-    "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Map())[Symbol.iterator]()),
-    "%Math%": Math,
-    "%Number%": Number,
-    "%Object%": Object,
-    "%parseFloat%": parseFloat,
-    "%parseInt%": parseInt,
-    "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
-    "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
-    "%RangeError%": RangeError,
-    "%ReferenceError%": ReferenceError,
-    "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
-    "%RegExp%": RegExp,
-    "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
-    "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols3 ? undefined$1 : getProto2((/* @__PURE__ */ new Set())[Symbol.iterator]()),
-    "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
-    "%String%": String,
-    "%StringIteratorPrototype%": hasSymbols3 ? getProto2(""[Symbol.iterator]()) : undefined$1,
-    "%Symbol%": hasSymbols3 ? Symbol : undefined$1,
-    "%SyntaxError%": $SyntaxError,
-    "%ThrowTypeError%": ThrowTypeError,
-    "%TypedArray%": TypedArray,
-    "%TypeError%": $TypeError,
-    "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
-    "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
-    "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
-    "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
-    "%URIError%": URIError,
-    "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
-    "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
-    "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
-  };
+var bind$1 = requireFunctionBind();
+var src = bind$1.call(Function.call, Object.prototype.hasOwnProperty);
+var undefined$1;
+var $SyntaxError = SyntaxError;
+var $Function = Function;
+var $TypeError = TypeError;
+var getEvalledConstructor = function(expressionSyntax) {
   try {
-    null.error;
+    return $Function('"use strict"; return (' + expressionSyntax + ").constructor;")();
   } catch (e) {
-    var errorProto = getProto2(getProto2(e));
-    INTRINSICS["%Error.prototype%"] = errorProto;
   }
-  var doEval = function doEval2(name) {
-    var value;
-    if (name === "%AsyncFunction%") {
-      value = getEvalledConstructor("async function () {}");
-    } else if (name === "%GeneratorFunction%") {
-      value = getEvalledConstructor("function* () {}");
-    } else if (name === "%AsyncGeneratorFunction%") {
-      value = getEvalledConstructor("async function* () {}");
-    } else if (name === "%AsyncGenerator%") {
-      var fn = doEval2("%AsyncGeneratorFunction%");
-      if (fn) {
-        value = fn.prototype;
-      }
-    } else if (name === "%AsyncIteratorPrototype%") {
-      var gen = doEval2("%AsyncGenerator%");
-      if (gen) {
-        value = getProto2(gen.prototype);
-      }
+};
+var $gOPD$1 = Object.getOwnPropertyDescriptor;
+if ($gOPD$1) {
+  try {
+    $gOPD$1({}, "");
+  } catch (e) {
+    $gOPD$1 = null;
+  }
+}
+var throwTypeError = function() {
+  throw new $TypeError();
+};
+var ThrowTypeError = $gOPD$1 ? function() {
+  try {
+    arguments.callee;
+    return throwTypeError;
+  } catch (calleeThrows) {
+    try {
+      return $gOPD$1(arguments, "callee").get;
+    } catch (gOPDthrows) {
+      return throwTypeError;
     }
-    INTRINSICS[name] = value;
-    return value;
-  };
-  var LEGACY_ALIASES = {
-    "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
-    "%ArrayPrototype%": ["Array", "prototype"],
-    "%ArrayProto_entries%": ["Array", "prototype", "entries"],
-    "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
-    "%ArrayProto_keys%": ["Array", "prototype", "keys"],
-    "%ArrayProto_values%": ["Array", "prototype", "values"],
-    "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
-    "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
-    "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
-    "%BooleanPrototype%": ["Boolean", "prototype"],
-    "%DataViewPrototype%": ["DataView", "prototype"],
-    "%DatePrototype%": ["Date", "prototype"],
-    "%ErrorPrototype%": ["Error", "prototype"],
-    "%EvalErrorPrototype%": ["EvalError", "prototype"],
-    "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
-    "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
-    "%FunctionPrototype%": ["Function", "prototype"],
-    "%Generator%": ["GeneratorFunction", "prototype"],
-    "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
-    "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
-    "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
-    "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
-    "%JSONParse%": ["JSON", "parse"],
-    "%JSONStringify%": ["JSON", "stringify"],
-    "%MapPrototype%": ["Map", "prototype"],
-    "%NumberPrototype%": ["Number", "prototype"],
-    "%ObjectPrototype%": ["Object", "prototype"],
-    "%ObjProto_toString%": ["Object", "prototype", "toString"],
-    "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
-    "%PromisePrototype%": ["Promise", "prototype"],
-    "%PromiseProto_then%": ["Promise", "prototype", "then"],
-    "%Promise_all%": ["Promise", "all"],
-    "%Promise_reject%": ["Promise", "reject"],
-    "%Promise_resolve%": ["Promise", "resolve"],
-    "%RangeErrorPrototype%": ["RangeError", "prototype"],
-    "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
-    "%RegExpPrototype%": ["RegExp", "prototype"],
-    "%SetPrototype%": ["Set", "prototype"],
-    "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
-    "%StringPrototype%": ["String", "prototype"],
-    "%SymbolPrototype%": ["Symbol", "prototype"],
-    "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
-    "%TypedArrayPrototype%": ["TypedArray", "prototype"],
-    "%TypeErrorPrototype%": ["TypeError", "prototype"],
-    "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
-    "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
-    "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
-    "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
-    "%URIErrorPrototype%": ["URIError", "prototype"],
-    "%WeakMapPrototype%": ["WeakMap", "prototype"],
-    "%WeakSetPrototype%": ["WeakSet", "prototype"]
-  };
-  var bind = requireFunctionBind();
-  var hasOwn = requireSrc();
-  var $concat = bind.call(Function.call, Array.prototype.concat);
-  var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
-  var $replace = bind.call(Function.call, String.prototype.replace);
-  var $strSlice = bind.call(Function.call, String.prototype.slice);
-  var $exec = bind.call(Function.call, RegExp.prototype.exec);
-  var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
-  var reEscapeChar = /\\(\\)?/g;
-  var stringToPath = function stringToPath2(string) {
-    var first = $strSlice(string, 0, 1);
-    var last = $strSlice(string, -1);
-    if (first === "%" && last !== "%") {
-      throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
-    } else if (last === "%" && first !== "%") {
-      throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+  }
+}() : throwTypeError;
+var hasSymbols2 = hasSymbols$1();
+var getProto$1 = Object.getPrototypeOf || function(x) {
+  return x.__proto__;
+};
+var needsEval = {};
+var TypedArray = typeof Uint8Array === "undefined" ? undefined$1 : getProto$1(Uint8Array);
+var INTRINSICS = {
+  "%AggregateError%": typeof AggregateError === "undefined" ? undefined$1 : AggregateError,
+  "%Array%": Array,
+  "%ArrayBuffer%": typeof ArrayBuffer === "undefined" ? undefined$1 : ArrayBuffer,
+  "%ArrayIteratorPrototype%": hasSymbols2 ? getProto$1([][Symbol.iterator]()) : undefined$1,
+  "%AsyncFromSyncIteratorPrototype%": undefined$1,
+  "%AsyncFunction%": needsEval,
+  "%AsyncGenerator%": needsEval,
+  "%AsyncGeneratorFunction%": needsEval,
+  "%AsyncIteratorPrototype%": needsEval,
+  "%Atomics%": typeof Atomics === "undefined" ? undefined$1 : Atomics,
+  "%BigInt%": typeof BigInt === "undefined" ? undefined$1 : BigInt,
+  "%BigInt64Array%": typeof BigInt64Array === "undefined" ? undefined$1 : BigInt64Array,
+  "%BigUint64Array%": typeof BigUint64Array === "undefined" ? undefined$1 : BigUint64Array,
+  "%Boolean%": Boolean,
+  "%DataView%": typeof DataView === "undefined" ? undefined$1 : DataView,
+  "%Date%": Date,
+  "%decodeURI%": decodeURI,
+  "%decodeURIComponent%": decodeURIComponent,
+  "%encodeURI%": encodeURI,
+  "%encodeURIComponent%": encodeURIComponent,
+  "%Error%": Error,
+  "%eval%": eval,
+  // eslint-disable-line no-eval
+  "%EvalError%": EvalError,
+  "%Float32Array%": typeof Float32Array === "undefined" ? undefined$1 : Float32Array,
+  "%Float64Array%": typeof Float64Array === "undefined" ? undefined$1 : Float64Array,
+  "%FinalizationRegistry%": typeof FinalizationRegistry === "undefined" ? undefined$1 : FinalizationRegistry,
+  "%Function%": $Function,
+  "%GeneratorFunction%": needsEval,
+  "%Int8Array%": typeof Int8Array === "undefined" ? undefined$1 : Int8Array,
+  "%Int16Array%": typeof Int16Array === "undefined" ? undefined$1 : Int16Array,
+  "%Int32Array%": typeof Int32Array === "undefined" ? undefined$1 : Int32Array,
+  "%isFinite%": isFinite,
+  "%isNaN%": isNaN,
+  "%IteratorPrototype%": hasSymbols2 ? getProto$1(getProto$1([][Symbol.iterator]())) : undefined$1,
+  "%JSON%": typeof JSON === "object" ? JSON : undefined$1,
+  "%Map%": typeof Map === "undefined" ? undefined$1 : Map,
+  "%MapIteratorPrototype%": typeof Map === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Map())[Symbol.iterator]()),
+  "%Math%": Math,
+  "%Number%": Number,
+  "%Object%": Object,
+  "%parseFloat%": parseFloat,
+  "%parseInt%": parseInt,
+  "%Promise%": typeof Promise === "undefined" ? undefined$1 : Promise,
+  "%Proxy%": typeof Proxy === "undefined" ? undefined$1 : Proxy,
+  "%RangeError%": RangeError,
+  "%ReferenceError%": ReferenceError,
+  "%Reflect%": typeof Reflect === "undefined" ? undefined$1 : Reflect,
+  "%RegExp%": RegExp,
+  "%Set%": typeof Set === "undefined" ? undefined$1 : Set,
+  "%SetIteratorPrototype%": typeof Set === "undefined" || !hasSymbols2 ? undefined$1 : getProto$1((/* @__PURE__ */ new Set())[Symbol.iterator]()),
+  "%SharedArrayBuffer%": typeof SharedArrayBuffer === "undefined" ? undefined$1 : SharedArrayBuffer,
+  "%String%": String,
+  "%StringIteratorPrototype%": hasSymbols2 ? getProto$1(""[Symbol.iterator]()) : undefined$1,
+  "%Symbol%": hasSymbols2 ? Symbol : undefined$1,
+  "%SyntaxError%": $SyntaxError,
+  "%ThrowTypeError%": ThrowTypeError,
+  "%TypedArray%": TypedArray,
+  "%TypeError%": $TypeError,
+  "%Uint8Array%": typeof Uint8Array === "undefined" ? undefined$1 : Uint8Array,
+  "%Uint8ClampedArray%": typeof Uint8ClampedArray === "undefined" ? undefined$1 : Uint8ClampedArray,
+  "%Uint16Array%": typeof Uint16Array === "undefined" ? undefined$1 : Uint16Array,
+  "%Uint32Array%": typeof Uint32Array === "undefined" ? undefined$1 : Uint32Array,
+  "%URIError%": URIError,
+  "%WeakMap%": typeof WeakMap === "undefined" ? undefined$1 : WeakMap,
+  "%WeakRef%": typeof WeakRef === "undefined" ? undefined$1 : WeakRef,
+  "%WeakSet%": typeof WeakSet === "undefined" ? undefined$1 : WeakSet
+};
+try {
+  null.error;
+} catch (e) {
+  var errorProto = getProto$1(getProto$1(e));
+  INTRINSICS["%Error.prototype%"] = errorProto;
+}
+var doEval = function doEval2(name) {
+  var value;
+  if (name === "%AsyncFunction%") {
+    value = getEvalledConstructor("async function () {}");
+  } else if (name === "%GeneratorFunction%") {
+    value = getEvalledConstructor("function* () {}");
+  } else if (name === "%AsyncGeneratorFunction%") {
+    value = getEvalledConstructor("async function* () {}");
+  } else if (name === "%AsyncGenerator%") {
+    var fn = doEval2("%AsyncGeneratorFunction%");
+    if (fn) {
+      value = fn.prototype;
     }
-    var result = [];
-    $replace(string, rePropName, function(match, number, quote, subString) {
-      result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
-    });
-    return result;
-  };
-  var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
-    var intrinsicName = name;
-    var alias;
-    if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
-      alias = LEGACY_ALIASES[intrinsicName];
-      intrinsicName = "%" + alias[0] + "%";
+  } else if (name === "%AsyncIteratorPrototype%") {
+    var gen = doEval2("%AsyncGenerator%");
+    if (gen) {
+      value = getProto$1(gen.prototype);
     }
-    if (hasOwn(INTRINSICS, intrinsicName)) {
-      var value = INTRINSICS[intrinsicName];
-      if (value === needsEval) {
-        value = doEval(intrinsicName);
-      }
-      if (typeof value === "undefined" && !allowMissing) {
-        throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
-      }
-      return {
-        alias,
-        name: intrinsicName,
-        value
-      };
+  }
+  INTRINSICS[name] = value;
+  return value;
+};
+var LEGACY_ALIASES = {
+  "%ArrayBufferPrototype%": ["ArrayBuffer", "prototype"],
+  "%ArrayPrototype%": ["Array", "prototype"],
+  "%ArrayProto_entries%": ["Array", "prototype", "entries"],
+  "%ArrayProto_forEach%": ["Array", "prototype", "forEach"],
+  "%ArrayProto_keys%": ["Array", "prototype", "keys"],
+  "%ArrayProto_values%": ["Array", "prototype", "values"],
+  "%AsyncFunctionPrototype%": ["AsyncFunction", "prototype"],
+  "%AsyncGenerator%": ["AsyncGeneratorFunction", "prototype"],
+  "%AsyncGeneratorPrototype%": ["AsyncGeneratorFunction", "prototype", "prototype"],
+  "%BooleanPrototype%": ["Boolean", "prototype"],
+  "%DataViewPrototype%": ["DataView", "prototype"],
+  "%DatePrototype%": ["Date", "prototype"],
+  "%ErrorPrototype%": ["Error", "prototype"],
+  "%EvalErrorPrototype%": ["EvalError", "prototype"],
+  "%Float32ArrayPrototype%": ["Float32Array", "prototype"],
+  "%Float64ArrayPrototype%": ["Float64Array", "prototype"],
+  "%FunctionPrototype%": ["Function", "prototype"],
+  "%Generator%": ["GeneratorFunction", "prototype"],
+  "%GeneratorPrototype%": ["GeneratorFunction", "prototype", "prototype"],
+  "%Int8ArrayPrototype%": ["Int8Array", "prototype"],
+  "%Int16ArrayPrototype%": ["Int16Array", "prototype"],
+  "%Int32ArrayPrototype%": ["Int32Array", "prototype"],
+  "%JSONParse%": ["JSON", "parse"],
+  "%JSONStringify%": ["JSON", "stringify"],
+  "%MapPrototype%": ["Map", "prototype"],
+  "%NumberPrototype%": ["Number", "prototype"],
+  "%ObjectPrototype%": ["Object", "prototype"],
+  "%ObjProto_toString%": ["Object", "prototype", "toString"],
+  "%ObjProto_valueOf%": ["Object", "prototype", "valueOf"],
+  "%PromisePrototype%": ["Promise", "prototype"],
+  "%PromiseProto_then%": ["Promise", "prototype", "then"],
+  "%Promise_all%": ["Promise", "all"],
+  "%Promise_reject%": ["Promise", "reject"],
+  "%Promise_resolve%": ["Promise", "resolve"],
+  "%RangeErrorPrototype%": ["RangeError", "prototype"],
+  "%ReferenceErrorPrototype%": ["ReferenceError", "prototype"],
+  "%RegExpPrototype%": ["RegExp", "prototype"],
+  "%SetPrototype%": ["Set", "prototype"],
+  "%SharedArrayBufferPrototype%": ["SharedArrayBuffer", "prototype"],
+  "%StringPrototype%": ["String", "prototype"],
+  "%SymbolPrototype%": ["Symbol", "prototype"],
+  "%SyntaxErrorPrototype%": ["SyntaxError", "prototype"],
+  "%TypedArrayPrototype%": ["TypedArray", "prototype"],
+  "%TypeErrorPrototype%": ["TypeError", "prototype"],
+  "%Uint8ArrayPrototype%": ["Uint8Array", "prototype"],
+  "%Uint8ClampedArrayPrototype%": ["Uint8ClampedArray", "prototype"],
+  "%Uint16ArrayPrototype%": ["Uint16Array", "prototype"],
+  "%Uint32ArrayPrototype%": ["Uint32Array", "prototype"],
+  "%URIErrorPrototype%": ["URIError", "prototype"],
+  "%WeakMapPrototype%": ["WeakMap", "prototype"],
+  "%WeakSetPrototype%": ["WeakSet", "prototype"]
+};
+var bind = requireFunctionBind();
+var hasOwn = src;
+var $concat = bind.call(Function.call, Array.prototype.concat);
+var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
+var $replace = bind.call(Function.call, String.prototype.replace);
+var $strSlice = bind.call(Function.call, String.prototype.slice);
+var $exec = bind.call(Function.call, RegExp.prototype.exec);
+var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
+var reEscapeChar = /\\(\\)?/g;
+var stringToPath = function stringToPath2(string) {
+  var first = $strSlice(string, 0, 1);
+  var last = $strSlice(string, -1);
+  if (first === "%" && last !== "%") {
+    throw new $SyntaxError("invalid intrinsic syntax, expected closing `%`");
+  } else if (last === "%" && first !== "%") {
+    throw new $SyntaxError("invalid intrinsic syntax, expected opening `%`");
+  }
+  var result = [];
+  $replace(string, rePropName, function(match, number, quote, subString) {
+    result[result.length] = quote ? $replace(subString, reEscapeChar, "$1") : number || match;
+  });
+  return result;
+};
+var getBaseIntrinsic = function getBaseIntrinsic2(name, allowMissing) {
+  var intrinsicName = name;
+  var alias;
+  if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
+    alias = LEGACY_ALIASES[intrinsicName];
+    intrinsicName = "%" + alias[0] + "%";
+  }
+  if (hasOwn(INTRINSICS, intrinsicName)) {
+    var value = INTRINSICS[intrinsicName];
+    if (value === needsEval) {
+      value = doEval(intrinsicName);
     }
-    throw new $SyntaxError("intrinsic " + name + " does not exist!");
-  };
-  getIntrinsic = function GetIntrinsic2(name, allowMissing) {
-    if (typeof name !== "string" || name.length === 0) {
-      throw new $TypeError("intrinsic name must be a non-empty string");
+    if (typeof value === "undefined" && !allowMissing) {
+      throw new $TypeError("intrinsic " + name + " exists, but is not available. Please file an issue!");
     }
-    if (arguments.length > 1 && typeof allowMissing !== "boolean") {
-      throw new $TypeError('"allowMissing" argument must be a boolean');
+    return {
+      alias,
+      name: intrinsicName,
+      value
+    };
+  }
+  throw new $SyntaxError("intrinsic " + name + " does not exist!");
+};
+var getIntrinsic = function GetIntrinsic(name, allowMissing) {
+  if (typeof name !== "string" || name.length === 0) {
+    throw new $TypeError("intrinsic name must be a non-empty string");
+  }
+  if (arguments.length > 1 && typeof allowMissing !== "boolean") {
+    throw new $TypeError('"allowMissing" argument must be a boolean');
+  }
+  if ($exec(/^%?[^%]*%?$/, name) === null) {
+    throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+  }
+  var parts = stringToPath(name);
+  var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
+  var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
+  var intrinsicRealName = intrinsic.name;
+  var value = intrinsic.value;
+  var skipFurtherCaching = false;
+  var alias = intrinsic.alias;
+  if (alias) {
+    intrinsicBaseName = alias[0];
+    $spliceApply(parts, $concat([0, 1], alias));
+  }
+  for (var i = 1, isOwn = true; i < parts.length; i += 1) {
+    var part = parts[i];
+    var first = $strSlice(part, 0, 1);
+    var last = $strSlice(part, -1);
+    if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
+      throw new $SyntaxError("property names with quotes must have matching quotes");
     }
-    if ($exec(/^%?[^%]*%?$/, name) === null) {
-      throw new $SyntaxError("`%` may not be present anywhere but at the beginning and end of the intrinsic name");
+    if (part === "constructor" || !isOwn) {
+      skipFurtherCaching = true;
     }
-    var parts = stringToPath(name);
-    var intrinsicBaseName = parts.length > 0 ? parts[0] : "";
-    var intrinsic = getBaseIntrinsic("%" + intrinsicBaseName + "%", allowMissing);
-    var intrinsicRealName = intrinsic.name;
-    var value = intrinsic.value;
-    var skipFurtherCaching = false;
-    var alias = intrinsic.alias;
-    if (alias) {
-      intrinsicBaseName = alias[0];
-      $spliceApply(parts, $concat([0, 1], alias));
-    }
-    for (var i = 1, isOwn = true; i < parts.length; i += 1) {
-      var part = parts[i];
-      var first = $strSlice(part, 0, 1);
-      var last = $strSlice(part, -1);
-      if ((first === '"' || first === "'" || first === "`" || (last === '"' || last === "'" || last === "`")) && first !== last) {
-        throw new $SyntaxError("property names with quotes must have matching quotes");
-      }
-      if (part === "constructor" || !isOwn) {
-        skipFurtherCaching = true;
-      }
-      intrinsicBaseName += "." + part;
-      intrinsicRealName = "%" + intrinsicBaseName + "%";
-      if (hasOwn(INTRINSICS, intrinsicRealName)) {
-        value = INTRINSICS[intrinsicRealName];
-      } else if (value != null) {
-        if (!(part in value)) {
-          if (!allowMissing) {
-            throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
-          }
-          return void 0;
+    intrinsicBaseName += "." + part;
+    intrinsicRealName = "%" + intrinsicBaseName + "%";
+    if (hasOwn(INTRINSICS, intrinsicRealName)) {
+      value = INTRINSICS[intrinsicRealName];
+    } else if (value != null) {
+      if (!(part in value)) {
+        if (!allowMissing) {
+          throw new $TypeError("base intrinsic for " + name + " exists, but the property is not available.");
         }
-        if ($gOPD2 && i + 1 >= parts.length) {
-          var desc = $gOPD2(value, part);
-          isOwn = !!desc;
-          if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
-            value = desc.get;
-          } else {
-            value = value[part];
-          }
+        return void 0;
+      }
+      if ($gOPD$1 && i + 1 >= parts.length) {
+        var desc = $gOPD$1(value, part);
+        isOwn = !!desc;
+        if (isOwn && "get" in desc && !("originalValue" in desc.get)) {
+          value = desc.get;
         } else {
-          isOwn = hasOwn(value, part);
           value = value[part];
         }
-        if (isOwn && !skipFurtherCaching) {
-          INTRINSICS[intrinsicRealName] = value;
-        }
+      } else {
+        isOwn = hasOwn(value, part);
+        value = value[part];
+      }
+      if (isOwn && !skipFurtherCaching) {
+        INTRINSICS[intrinsicRealName] = value;
       }
     }
-    return value;
-  };
-  return getIntrinsic;
-}
+  }
+  return value;
+};
 var callBindExports = {};
 var callBind$1 = {
   get exports() {
@@ -3476,14 +3453,14 @@ function requireCallBind() {
     return callBindExports;
   hasRequiredCallBind = 1;
   (function(module) {
-    var bind = requireFunctionBind();
-    var GetIntrinsic2 = requireGetIntrinsic();
-    var $apply = GetIntrinsic2("%Function.prototype.apply%");
-    var $call = GetIntrinsic2("%Function.prototype.call%");
-    var $reflectApply = GetIntrinsic2("%Reflect.apply%", true) || bind.call($call, $apply);
-    var $gOPD2 = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
-    var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
-    var $max = GetIntrinsic2("%Math.max%");
+    var bind2 = requireFunctionBind();
+    var GetIntrinsic3 = getIntrinsic;
+    var $apply = GetIntrinsic3("%Function.prototype.apply%");
+    var $call = GetIntrinsic3("%Function.prototype.call%");
+    var $reflectApply = GetIntrinsic3("%Reflect.apply%", true) || bind2.call($call, $apply);
+    var $gOPD2 = GetIntrinsic3("%Object.getOwnPropertyDescriptor%", true);
+    var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
+    var $max = GetIntrinsic3("%Math.max%");
     if ($defineProperty) {
       try {
         $defineProperty({}, "a", { value: 1 });
@@ -3492,7 +3469,7 @@ function requireCallBind() {
       }
     }
     module.exports = function callBind2(originalFunction) {
-      var func = $reflectApply(bind, $call, arguments);
+      var func = $reflectApply(bind2, $call, arguments);
       if ($gOPD2 && $defineProperty) {
         var desc = $gOPD2(func, "length");
         if (desc.configurable) {
@@ -3506,7 +3483,7 @@ function requireCallBind() {
       return func;
     };
     var applyBind = function applyBind2() {
-      return $reflectApply(bind, $apply, arguments);
+      return $reflectApply(bind2, $apply, arguments);
     };
     if ($defineProperty) {
       $defineProperty(module.exports, "apply", { value: applyBind });
@@ -3516,7 +3493,7 @@ function requireCallBind() {
   })(callBind$1);
   return callBindExports;
 }
-var GetIntrinsic$1 = requireGetIntrinsic();
+var GetIntrinsic$1 = getIntrinsic;
 var callBind = requireCallBind();
 var $indexOf$1 = callBind(GetIntrinsic$1("String.prototype.indexOf"));
 var callBound$3 = function callBoundIntrinsic(name, allowMissing) {
@@ -3765,8 +3742,8 @@ var availableTypedArrays$2 = function availableTypedArrays() {
   }
   return out;
 };
-var GetIntrinsic = requireGetIntrinsic();
-var $gOPD = GetIntrinsic("%Object.getOwnPropertyDescriptor%", true);
+var GetIntrinsic2 = getIntrinsic;
+var $gOPD = GetIntrinsic2("%Object.getOwnPropertyDescriptor%", true);
 if ($gOPD) {
   try {
     $gOPD([], "length");
@@ -5599,8 +5576,8 @@ function requireHasPropertyDescriptors() {
   if (hasRequiredHasPropertyDescriptors)
     return hasPropertyDescriptors_1;
   hasRequiredHasPropertyDescriptors = 1;
-  var GetIntrinsic2 = requireGetIntrinsic();
-  var $defineProperty = GetIntrinsic2("%Object.defineProperty%", true);
+  var GetIntrinsic3 = getIntrinsic;
+  var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
   var hasPropertyDescriptors = function hasPropertyDescriptors2() {
     if ($defineProperty) {
       try {
@@ -6825,7 +6802,7 @@ const _PegTransaction = class {
   constructor() {
     __publicField(this, "unconfirmedUtxos", false);
     __publicField(this, "requiredConfirmed", 6);
-    __publicField(this, "net");
+    __publicField(this, "net", CONFIG.VITE_NETWORK === "testnet" ? NETWORK : TEST_NETWORK);
     __publicField(this, "ready", false);
     __publicField(this, "fromBtcAddress");
     __publicField(this, "pegInData", {
@@ -6883,10 +6860,10 @@ const _PegTransaction = class {
       throw new Error("please remove white space / special characters");
     }
     const decoded = decodeStacksAddress(stacksAddress.split(".")[0]);
-    if (this.net === TEST_NETWORK && decoded[0] !== 26) {
+    if ((CONFIG.VITE_NETWORK === "testnet" || CONFIG.VITE_NETWORK === "devnet") && decoded[0] !== 26) {
       throw new Error("Please enter a valid stacks blockchain testnet address");
     }
-    if (this.net === NETWORK && decoded[0] !== 22) {
+    if (CONFIG.VITE_NETWORK === "mainnet" && decoded[0] !== 22) {
       throw new Error("Please enter a valid stacks blockchain mainnet address");
     }
     this.pegInData.stacksAddress = stacksAddress;
@@ -6919,12 +6896,18 @@ __publicField(PegTransaction, "hydrate", (o) => {
   me.ready = o.ready;
   return me;
 });
+const network = CONFIG.VITE_NETWORK;
+({
+  name: CONFIG.VITE_PUBLIC_APP_NAME,
+  version: CONFIG.VITE_PUBLIC_APP_VERSION,
+  "chain-id": network === "mainnet" ? 1 : 2147483648
+  /* Testnet */
+});
 tupleCV({
-  name: stringAsciiCV("sBTC Bridge"),
-  version: stringAsciiCV("1.0.0"),
+  name: stringAsciiCV(CONFIG.VITE_PUBLIC_APP_NAME),
+  version: stringAsciiCV(CONFIG.VITE_PUBLIC_APP_VERSION),
   "chain-id": uintCV(
-    1
-    /* Mainnet */
+    network === "mainnet" ? 1 : 2147483648
     /* Testnet */
   )
 });
@@ -7604,7 +7587,7 @@ function create_each_block_1(ctx) {
   });
   return block;
 }
-function create_if_block_4$2(ctx) {
+function create_if_block_4$1(ctx) {
   let t0;
   let t1_value = (
     /*i*/
@@ -7633,14 +7616,14 @@ function create_if_block_4$2(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_4$2.name,
+    id: create_if_block_4$1.name,
     type: "if",
     source: "(65:27) {#if typeof output.amount === 'number'}",
     ctx
   });
   return block;
 }
-function create_if_block_3$2(ctx) {
+function create_if_block_3$1(ctx) {
   let span;
   let t_value = (
     /*output*/
@@ -7681,7 +7664,7 @@ function create_if_block_3$2(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_3$2.name,
+    id: create_if_block_3$1.name,
     type: "if",
     source: "(67:10) {#if output.address}",
     ctx
@@ -7796,10 +7779,10 @@ function create_each_block(ctx) {
   let div2;
   let t3;
   let if_block0 = typeof /*output*/
-  ctx[12].amount === "number" && create_if_block_4$2(ctx);
+  ctx[12].amount === "number" && create_if_block_4$1(ctx);
   let if_block1 = (
     /*output*/
-    ctx[12].address && create_if_block_3$2(ctx)
+    ctx[12].address && create_if_block_3$1(ctx)
   );
   let if_block2 = (
     /*output*/
@@ -7890,7 +7873,7 @@ function create_each_block(ctx) {
         if (if_block0)
           ;
         else {
-          if_block0 = create_if_block_4$2(ctx2);
+          if_block0 = create_if_block_4$1(ctx2);
           if_block0.c();
           if_block0.m(div0, null);
         }
@@ -7905,7 +7888,7 @@ function create_each_block(ctx) {
         if (if_block1) {
           if_block1.p(ctx2, dirty);
         } else {
-          if_block1 = create_if_block_3$2(ctx2);
+          if_block1 = create_if_block_3$1(ctx2);
           if_block1.c();
           if_block1.m(div1, t1);
         }
@@ -8667,7 +8650,7 @@ function create_if_block$4(ctx) {
     },
     h: function hydrate() {
       attr_dev(p, "class", "text-small");
-      add_location(p, file$6, 19, 4, 895);
+      add_location(p, file$6, 20, 4, 924);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, p, anchor);
@@ -8682,7 +8665,7 @@ function create_if_block$4(ctx) {
     block,
     id: create_if_block$4.name,
     type: "if",
-    source: "(19:4) {#if network === 'testnet'}",
+    source: "(20:4) {#if network === 'testnet'}",
     ctx
   });
   return block;
@@ -8874,9 +8857,9 @@ function create_fragment$6(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(h40, file$6, 14, 4, 594);
-      add_location(p0, file$6, 15, 4, 614);
-      add_location(p1, file$6, 16, 4, 675);
+      add_location(h40, file$6, 15, 4, 623);
+      add_location(p0, file$6, 16, 4, 643);
+      add_location(p1, file$6, 17, 4, 704);
       attr_dev(
         a,
         "href",
@@ -8885,48 +8868,48 @@ function create_fragment$6(ctx) {
       );
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file$6, 17, 53, 782);
-      add_location(p2, file$6, 17, 4, 733);
+      add_location(a, file$6, 18, 53, 811);
+      add_location(p2, file$6, 18, 4, 762);
       attr_dev(div0, "class", "my-4");
-      add_location(div0, file$6, 13, 2, 571);
-      add_location(h41, file$6, 23, 4, 1045);
-      add_location(p3, file$6, 24, 4, 1084);
+      add_location(div0, file$6, 14, 2, 600);
+      add_location(h41, file$6, 24, 4, 1074);
+      add_location(p3, file$6, 25, 4, 1113);
       if (!src_url_equal(img0.src, img0_src_value = electrum1))
         attr_dev(img0, "src", img0_src_value);
       attr_dev(img0, "alt", "night time");
       attr_dev(img0, "class", "s-VY_8YC2zOSYf");
-      add_location(img0, file$6, 25, 4, 1143);
+      add_location(img0, file$6, 26, 4, 1172);
       attr_dev(div1, "class", "slide");
-      add_location(div1, file$6, 22, 2, 1021);
+      add_location(div1, file$6, 23, 2, 1050);
       if (!src_url_equal(img1.src, img1_src_value = electrum2))
         attr_dev(img1, "src", img1_src_value);
       attr_dev(img1, "alt", "night time");
       attr_dev(img1, "class", "s-VY_8YC2zOSYf");
-      add_location(img1, file$6, 28, 4, 1214);
+      add_location(img1, file$6, 29, 4, 1243);
       attr_dev(div2, "class", "");
-      add_location(div2, file$6, 27, 2, 1195);
-      add_location(h42, file$6, 31, 4, 1290);
+      add_location(div2, file$6, 28, 2, 1224);
+      add_location(h42, file$6, 32, 4, 1319);
       if (!src_url_equal(img2.src, img2_src_value = electrum2))
         attr_dev(img2, "src", img2_src_value);
       attr_dev(img2, "alt", "night time");
       attr_dev(img2, "class", "s-VY_8YC2zOSYf");
-      add_location(img2, file$6, 32, 4, 1328);
+      add_location(img2, file$6, 33, 4, 1357);
       attr_dev(div3, "class", "slide");
-      add_location(div3, file$6, 30, 2, 1266);
-      add_location(h43, file$6, 35, 4, 1404);
+      add_location(div3, file$6, 31, 2, 1295);
+      add_location(h43, file$6, 36, 4, 1433);
       attr_dev(span, "class", "text-warning");
-      add_location(span, file$6, 36, 16, 1459);
+      add_location(span, file$6, 37, 16, 1488);
       attr_dev(p4, "class", "");
-      add_location(p4, file$6, 36, 4, 1447);
+      add_location(p4, file$6, 37, 4, 1476);
       if (!src_url_equal(img3.src, img3_src_value = electrum3))
         attr_dev(img3, "src", img3_src_value);
       attr_dev(img3, "alt", "night time");
       attr_dev(img3, "class", "s-VY_8YC2zOSYf");
-      add_location(img3, file$6, 37, 4, 1575);
+      add_location(img3, file$6, 38, 4, 1604);
       attr_dev(div4, "class", "slide");
-      add_location(div4, file$6, 34, 2, 1380);
+      add_location(div4, file$6, 35, 2, 1409);
       attr_dev(div5, "class", "");
-      add_location(div5, file$6, 12, 0, 554);
+      add_location(div5, file$6, 13, 0, 583);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div5, anchor);
@@ -9002,7 +8985,7 @@ function instance$6($$self, $$props, $$invalidate) {
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(2, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Electrum", slots, []);
-  const network = "mainnet";
+  const network2 = CONFIG.VITE_NETWORK;
   const from = $sbtcConfig.pegIn ? (_a = $sbtcConfig == null ? void 0 : $sbtcConfig.pegInTransaction) == null ? void 0 : _a.fromBtcAddress : (_b = $sbtcConfig == null ? void 0 : $sbtcConfig.pegOutTransaction) == null ? void 0 : _b.fromBtcAddress;
   const getExplorerUrl = () => {
     return explorerBtcAddressUrl(from);
@@ -9013,17 +8996,18 @@ function instance$6($$self, $$props, $$invalidate) {
       console.warn(`<Electrum> was created with unknown prop '${key}'`);
   });
   $$self.$capture_state = () => ({
+    CONFIG,
     electrum1,
     electrum2,
     electrum3,
     explorerBtcAddressUrl,
     sbtcConfig,
-    network,
+    network: network2,
     from,
     getExplorerUrl,
     $sbtcConfig
   });
-  return [network, getExplorerUrl];
+  return [network2, getExplorerUrl];
 }
 class Electrum extends SvelteComponentDev {
   constructor(options) {
@@ -9061,7 +9045,7 @@ function create_if_block$3(ctx) {
     },
     h: function hydrate() {
       attr_dev(p, "class", "text-small");
-      add_location(p, file$5, 20, 4, 969);
+      add_location(p, file$5, 21, 4, 998);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, p, anchor);
@@ -9076,7 +9060,7 @@ function create_if_block$3(ctx) {
     block,
     id: create_if_block$3.name,
     type: "if",
-    source: "(20:4) {#if network === 'testnet'}",
+    source: "(21:4) {#if network === 'testnet'}",
     ctx
   });
   return block;
@@ -9290,9 +9274,9 @@ function create_fragment$5(ctx) {
       this.h();
     },
     h: function hydrate() {
-      add_location(h40, file$5, 15, 4, 677);
-      add_location(p0, file$5, 16, 4, 697);
-      add_location(p1, file$5, 17, 4, 758);
+      add_location(h40, file$5, 16, 4, 706);
+      add_location(p0, file$5, 17, 4, 726);
+      add_location(p1, file$5, 18, 4, 787);
       attr_dev(
         a,
         "href",
@@ -9301,50 +9285,50 @@ function create_fragment$5(ctx) {
       );
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file$5, 18, 53, 856);
-      add_location(p2, file$5, 18, 4, 807);
+      add_location(a, file$5, 19, 53, 885);
+      add_location(p2, file$5, 19, 4, 836);
       attr_dev(div0, "class", "my-4");
-      add_location(div0, file$5, 14, 2, 654);
-      add_location(h41, file$5, 24, 4, 1260);
-      add_location(p3, file$5, 25, 4, 1299);
-      add_location(p4, file$5, 26, 4, 1340);
+      add_location(div0, file$5, 15, 2, 683);
+      add_location(h41, file$5, 25, 4, 1289);
+      add_location(p3, file$5, 26, 4, 1328);
+      add_location(p4, file$5, 27, 4, 1369);
       if (!src_url_equal(img0.src, img0_src_value = bitcoincore1))
         attr_dev(img0, "src", img0_src_value);
       attr_dev(img0, "alt", "night time");
       attr_dev(img0, "class", "s-8LcgRHRQ5WJL");
-      add_location(img0, file$5, 27, 4, 1430);
+      add_location(img0, file$5, 28, 4, 1459);
       attr_dev(div1, "class", "slide");
-      add_location(div1, file$5, 23, 2, 1236);
-      add_location(h42, file$5, 30, 4, 1509);
+      add_location(div1, file$5, 24, 2, 1265);
+      add_location(h42, file$5, 31, 4, 1538);
       if (!src_url_equal(img1.src, img1_src_value = bitcoincore2))
         attr_dev(img1, "src", img1_src_value);
       attr_dev(img1, "alt", "night time");
       attr_dev(img1, "class", "s-8LcgRHRQ5WJL");
-      add_location(img1, file$5, 31, 4, 1547);
+      add_location(img1, file$5, 32, 4, 1576);
       attr_dev(div2, "class", "slide");
-      add_location(div2, file$5, 29, 2, 1485);
-      add_location(h43, file$5, 34, 4, 1626);
+      add_location(div2, file$5, 30, 2, 1514);
+      add_location(h43, file$5, 35, 4, 1655);
       attr_dev(span, "class", "text-warning");
-      add_location(span, file$5, 35, 16, 1681);
+      add_location(span, file$5, 36, 16, 1710);
       attr_dev(p5, "class", "");
-      add_location(p5, file$5, 35, 4, 1669);
+      add_location(p5, file$5, 36, 4, 1698);
       if (!src_url_equal(img2.src, img2_src_value = bitcoincore3))
         attr_dev(img2, "src", img2_src_value);
       attr_dev(img2, "alt", "night time");
       attr_dev(img2, "class", "s-8LcgRHRQ5WJL");
-      add_location(img2, file$5, 36, 4, 1797);
+      add_location(img2, file$5, 37, 4, 1826);
       attr_dev(div3, "class", "slide");
-      add_location(div3, file$5, 33, 2, 1602);
-      add_location(p6, file$5, 39, 4, 1876);
+      add_location(div3, file$5, 34, 2, 1631);
+      add_location(p6, file$5, 40, 4, 1905);
       if (!src_url_equal(img3.src, img3_src_value = bitcoincore4))
         attr_dev(img3, "src", img3_src_value);
       attr_dev(img3, "alt", "night time");
       attr_dev(img3, "class", "s-8LcgRHRQ5WJL");
-      add_location(img3, file$5, 40, 4, 1931);
+      add_location(img3, file$5, 41, 4, 1960);
       attr_dev(div4, "class", "slide");
-      add_location(div4, file$5, 38, 2, 1852);
+      add_location(div4, file$5, 39, 2, 1881);
       attr_dev(div5, "class", "");
-      add_location(div5, file$5, 13, 0, 637);
+      add_location(div5, file$5, 14, 0, 666);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div5, anchor);
@@ -9426,7 +9410,7 @@ function instance$5($$self, $$props, $$invalidate) {
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(2, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("BitcoinCore", slots, []);
-  const network = "mainnet";
+  const network2 = CONFIG.VITE_NETWORK;
   const from = $sbtcConfig.pegIn ? (_a = $sbtcConfig == null ? void 0 : $sbtcConfig.pegInTransaction) == null ? void 0 : _a.fromBtcAddress : (_b = $sbtcConfig == null ? void 0 : $sbtcConfig.pegOutTransaction) == null ? void 0 : _b.fromBtcAddress;
   const getExplorerUrl = () => {
     return explorerBtcAddressUrl(from);
@@ -9437,18 +9421,19 @@ function instance$5($$self, $$props, $$invalidate) {
       console.warn(`<BitcoinCore> was created with unknown prop '${key}'`);
   });
   $$self.$capture_state = () => ({
+    CONFIG,
     bitcoincore1,
     bitcoincore2,
     bitcoincore3,
     bitcoincore4,
     explorerBtcAddressUrl,
     sbtcConfig,
-    network,
+    network: network2,
     from,
     getExplorerUrl,
     $sbtcConfig
   });
-  return [network, getExplorerUrl];
+  return [network2, getExplorerUrl];
 }
 class BitcoinCore extends SvelteComponentDev {
   constructor(options) {
@@ -9682,7 +9667,7 @@ function create_if_block_5(ctx) {
   });
   return block;
 }
-function create_if_block_4$1(ctx) {
+function create_if_block_4(ctx) {
   let button;
   let t;
   let button_class_value;
@@ -9723,14 +9708,14 @@ function create_if_block_4$1(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_4$1.name,
+    id: create_if_block_4.name,
     type: "if",
     source: "(12:6) {#if wallet === 2}",
     ctx
   });
   return block;
 }
-function create_if_block_3$1(ctx) {
+function create_if_block_3(ctx) {
   let div;
   let bitcoincore;
   let current;
@@ -9783,7 +9768,7 @@ function create_if_block_3$1(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_3$1.name,
+    id: create_if_block_3.name,
     type: "if",
     source: "(19:6) {#if wallet === 1}",
     ctx
@@ -9973,11 +9958,11 @@ function create_fragment$3(ctx) {
   );
   let if_block1 = (
     /*wallet*/
-    ctx[0] === 2 && create_if_block_4$1(ctx)
+    ctx[0] === 2 && create_if_block_4(ctx)
   );
   let if_block2 = (
     /*wallet*/
-    ctx[0] === 1 && create_if_block_3$1(ctx)
+    ctx[0] === 1 && create_if_block_3(ctx)
   );
   let if_block3 = (
     /*wallet*/
@@ -10106,7 +10091,7 @@ function create_fragment$3(ctx) {
         if (if_block1) {
           if_block1.p(ctx2, dirty);
         } else {
-          if_block1 = create_if_block_4$1(ctx2);
+          if_block1 = create_if_block_4(ctx2);
           if_block1.c();
           if_block1.m(div0, null);
         }
@@ -10124,7 +10109,7 @@ function create_fragment$3(ctx) {
             transition_in(if_block2, 1);
           }
         } else {
-          if_block2 = create_if_block_3$1(ctx2);
+          if_block2 = create_if_block_3(ctx2);
           if_block2.c();
           transition_in(if_block2, 1);
           if_block2.m(div1, t2);
@@ -10279,7 +10264,7 @@ class WalletHelp extends SvelteComponentDev {
 }
 const { console: console_1$1 } = globals;
 const file$2 = "src/lib/components/common/SignTransaction.svelte";
-function create_if_block_4(ctx) {
+function create_if_block_2(ctx) {
   let t0;
   let t1;
   let t2;
@@ -10326,245 +10311,9 @@ function create_if_block_4(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_4.name,
-    type: "if",
-    source: "(82:24) {#if wallet}",
-    ctx
-  });
-  return block;
-}
-function create_if_block_2(ctx) {
-  let div1;
-  let div0;
-  let ul1;
-  let li2;
-  let span;
-  let t0;
-  let t1;
-  let ul0;
-  let li0;
-  let a0;
-  let t2;
-  let t3;
-  let li1;
-  let a1;
-  let t4;
-  let mounted;
-  let dispose;
-  let if_block = (
-    /*opMechanism*/
-    ctx[3] && create_if_block_3(ctx)
-  );
-  const block = {
-    c: function create() {
-      div1 = element("div");
-      div0 = element("div");
-      ul1 = element("ul");
-      li2 = element("li");
-      span = element("span");
-      t0 = text("2. Select Mechanism: ");
-      if (if_block)
-        if_block.c();
-      t1 = space();
-      ul0 = element("ul");
-      li0 = element("li");
-      a0 = element("a");
-      t2 = text("OP Return");
-      t3 = space();
-      li1 = element("li");
-      a1 = element("a");
-      t4 = text("OP Drop");
-      this.h();
-    },
-    l: function claim(nodes) {
-      div1 = claim_element(nodes, "DIV", { class: true });
-      var div1_nodes = children(div1);
-      div0 = claim_element(div1_nodes, "DIV", {});
-      var div0_nodes = children(div0);
-      ul1 = claim_element(div0_nodes, "UL", { class: true });
-      var ul1_nodes = children(ul1);
-      li2 = claim_element(ul1_nodes, "LI", { class: true });
-      var li2_nodes = children(li2);
-      span = claim_element(li2_nodes, "SPAN", {
-        class: true,
-        id: true,
-        role: true,
-        "data-bs-toggle": true,
-        "aria-expanded": true
-      });
-      var span_nodes = children(span);
-      t0 = claim_text(span_nodes, "2. Select Mechanism: ");
-      if (if_block)
-        if_block.l(span_nodes);
-      span_nodes.forEach(detach_dev);
-      t1 = claim_space(li2_nodes);
-      ul0 = claim_element(li2_nodes, "UL", { class: true, "aria-labelledby": true });
-      var ul0_nodes = children(ul0);
-      li0 = claim_element(ul0_nodes, "LI", {});
-      var li0_nodes = children(li0);
-      a0 = claim_element(li0_nodes, "A", { class: true, href: true });
-      var a0_nodes = children(a0);
-      t2 = claim_text(a0_nodes, "OP Return");
-      a0_nodes.forEach(detach_dev);
-      li0_nodes.forEach(detach_dev);
-      t3 = claim_space(ul0_nodes);
-      li1 = claim_element(ul0_nodes, "LI", {});
-      var li1_nodes = children(li1);
-      a1 = claim_element(li1_nodes, "A", { class: true, href: true });
-      var a1_nodes = children(a1);
-      t4 = claim_text(a1_nodes, "OP Drop");
-      a1_nodes.forEach(detach_dev);
-      li1_nodes.forEach(detach_dev);
-      ul0_nodes.forEach(detach_dev);
-      li2_nodes.forEach(detach_dev);
-      ul1_nodes.forEach(detach_dev);
-      div0_nodes.forEach(detach_dev);
-      div1_nodes.forEach(detach_dev);
-      this.h();
-    },
-    h: function hydrate() {
-      attr_dev(span, "class", "nav-link dropdown-toggle ");
-      attr_dev(span, "id", "navbarDropdown");
-      attr_dev(span, "role", "button");
-      attr_dev(span, "data-bs-toggle", "dropdown");
-      attr_dev(span, "aria-expanded", "false");
-      add_location(span, file$2, 96, 5, 3055);
-      attr_dev(a0, "class", "dropdown-item");
-      attr_dev(a0, "href", "/");
-      add_location(a0, file$2, 100, 10, 3351);
-      add_location(li0, file$2, 100, 6, 3347);
-      attr_dev(a1, "class", "dropdown-item");
-      attr_dev(a1, "href", "/");
-      add_location(a1, file$2, 101, 10, 3474);
-      add_location(li1, file$2, 101, 6, 3470);
-      attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
-      attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-      add_location(ul0, file$2, 99, 5, 3261);
-      attr_dev(li2, "class", "nav-item dropdown");
-      add_location(li2, file$2, 95, 4, 3019);
-      attr_dev(ul1, "class", "navbar-nav");
-      add_location(ul1, file$2, 94, 3, 2991);
-      add_location(div0, file$2, 93, 4, 2982);
-      attr_dev(div1, "class", "my-3 d-flex justify-content-start");
-      add_location(div1, file$2, 92, 2, 2930);
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, div1, anchor);
-      append_hydration_dev(div1, div0);
-      append_hydration_dev(div0, ul1);
-      append_hydration_dev(ul1, li2);
-      append_hydration_dev(li2, span);
-      append_hydration_dev(span, t0);
-      if (if_block)
-        if_block.m(span, null);
-      append_hydration_dev(li2, t1);
-      append_hydration_dev(li2, ul0);
-      append_hydration_dev(ul0, li0);
-      append_hydration_dev(li0, a0);
-      append_hydration_dev(a0, t2);
-      append_hydration_dev(ul0, t3);
-      append_hydration_dev(ul0, li1);
-      append_hydration_dev(li1, a1);
-      append_hydration_dev(a1, t4);
-      if (!mounted) {
-        dispose = [
-          listen_dev(a0, "click", prevent_default(
-            /*click_handler_2*/
-            ctx[12]
-          ), false, true, false, false),
-          listen_dev(a1, "click", prevent_default(
-            /*click_handler_3*/
-            ctx[13]
-          ), false, true, false, false)
-        ];
-        mounted = true;
-      }
-    },
-    p: function update(ctx2, dirty) {
-      if (
-        /*opMechanism*/
-        ctx2[3]
-      ) {
-        if (if_block) {
-          if_block.p(ctx2, dirty);
-        } else {
-          if_block = create_if_block_3(ctx2);
-          if_block.c();
-          if_block.m(span, null);
-        }
-      } else if (if_block) {
-        if_block.d(1);
-        if_block = null;
-      }
-    },
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(div1);
-      if (if_block)
-        if_block.d();
-      mounted = false;
-      run_all(dispose);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(92:2) {#if wallet}",
-    ctx
-  });
-  return block;
-}
-function create_if_block_3(ctx) {
-  let t0;
-  let t1;
-  let t2;
-  const block = {
-    c: function create() {
-      t0 = text("(");
-      t1 = text(
-        /*opMechanism*/
-        ctx[3]
-      );
-      t2 = text(")");
-    },
-    l: function claim(nodes) {
-      t0 = claim_text(nodes, "(");
-      t1 = claim_text(
-        nodes,
-        /*opMechanism*/
-        ctx[3]
-      );
-      t2 = claim_text(nodes, ")");
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, t0, anchor);
-      insert_hydration_dev(target, t1, anchor);
-      insert_hydration_dev(target, t2, anchor);
-    },
-    p: function update(ctx2, dirty) {
-      if (dirty & /*opMechanism*/
-      8)
-        set_data_dev(
-          t1,
-          /*opMechanism*/
-          ctx2[3]
-        );
-    },
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(t0);
-      if (detaching)
-        detach_dev(t1);
-      if (detaching)
-        detach_dev(t2);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
-    id: create_if_block_3.name,
-    type: "if",
-    source: "(98:27) {#if opMechanism}",
+    source: "(82:24) {#if wallet}",
     ctx
   });
   return block;
@@ -10617,14 +10366,14 @@ function create_if_block_1$1(ctx) {
       attr_dev(span, "role", "button");
       attr_dev(span, "data-bs-toggle", "dropdown");
       attr_dev(span, "aria-expanded", "false");
-      add_location(span, file$2, 113, 5, 3798);
+      add_location(span, file$2, 115, 5, 3813);
       attr_dev(li, "class", "nav-item dropdown");
-      add_location(li, file$2, 112, 4, 3762);
+      add_location(li, file$2, 114, 4, 3777);
       attr_dev(ul, "class", "navbar-nav");
-      add_location(ul, file$2, 111, 3, 3734);
-      add_location(div0, file$2, 110, 4, 3725);
+      add_location(ul, file$2, 113, 3, 3749);
+      add_location(div0, file$2, 112, 4, 3740);
       attr_dev(div1, "class", "my-3 d-flex justify-content-start");
-      add_location(div1, file$2, 109, 2, 3673);
+      add_location(div1, file$2, 111, 2, 3688);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div1, anchor);
@@ -10643,7 +10392,7 @@ function create_if_block_1$1(ctx) {
     block,
     id: create_if_block_1$1.name,
     type: "if",
-    source: "(109:2) {#if wallet && opMechanism}",
+    source: "(111:2) {#if wallet}",
     ctx
   });
   return block;
@@ -10654,7 +10403,7 @@ function create_if_block$1(ctx) {
   wallethelp = new WalletHelp({
     props: { wallet: (
       /*getWalletId*/
-      ctx[6]()
+      ctx[5]()
     ) },
     $$inline: true
   });
@@ -10672,9 +10421,9 @@ function create_if_block$1(ctx) {
     p: function update(ctx2, dirty) {
       const wallethelp_changes = {};
       if (dirty & /*getWalletId*/
-      64)
+      32)
         wallethelp_changes.wallet = /*getWalletId*/
-        ctx2[6]();
+        ctx2[5]();
       wallethelp.$set(wallethelp_changes);
     },
     i: function intro(local) {
@@ -10695,7 +10444,7 @@ function create_if_block$1(ctx) {
     block,
     id: create_if_block$1.name,
     type: "if",
-    source: "(124:0) {#if copied}",
+    source: "(126:0) {#if copied}",
     ctx
   });
   return block;
@@ -10728,10 +10477,9 @@ function create_fragment$2(ctx) {
   let t8;
   let t9;
   let t10;
-  let t11;
   let input;
-  let t12;
-  let if_block3_anchor;
+  let t11;
+  let if_block2_anchor;
   let current;
   let mounted;
   let dispose;
@@ -10747,7 +10495,7 @@ function create_fragment$2(ctx) {
       ),
       currentTx: (
         /*currentTx*/
-        ctx[5]
+        ctx[4]
       )
     },
     $$inline: true
@@ -10755,24 +10503,19 @@ function create_fragment$2(ctx) {
   peginfo.$on(
     "update_transaction",
     /*updateTransaction*/
-    ctx[9]
+    ctx[7]
   );
   let if_block0 = (
     /*wallet*/
-    ctx[2] && create_if_block_4(ctx)
+    ctx[2] && create_if_block_2(ctx)
   );
   let if_block1 = (
     /*wallet*/
-    ctx[2] && create_if_block_2(ctx)
+    ctx[2] && create_if_block_1$1(ctx)
   );
   let if_block2 = (
-    /*wallet*/
-    ctx[2] && /*opMechanism*/
-    ctx[3] && create_if_block_1$1(ctx)
-  );
-  let if_block3 = (
     /*copied*/
-    ctx[4] && create_if_block$1(ctx)
+    ctx[3] && create_if_block$1(ctx)
   );
   const block = {
     c: function create() {
@@ -10807,14 +10550,11 @@ function create_fragment$2(ctx) {
       if (if_block1)
         if_block1.c();
       t10 = space();
+      input = element("input");
+      t11 = space();
       if (if_block2)
         if_block2.c();
-      t11 = space();
-      input = element("input");
-      t12 = space();
-      if (if_block3)
-        if_block3.c();
-      if_block3_anchor = empty();
+      if_block2_anchor = empty();
       this.h();
     },
     l: function claim(nodes) {
@@ -10883,52 +10623,49 @@ function create_fragment$2(ctx) {
       if (if_block1)
         if_block1.l(section1_nodes);
       t10 = claim_space(section1_nodes);
-      if (if_block2)
-        if_block2.l(section1_nodes);
-      t11 = claim_space(section1_nodes);
       input = claim_element(section1_nodes, "INPUT", { style: true });
       section1_nodes.forEach(detach_dev);
-      t12 = claim_space(nodes);
-      if (if_block3)
-        if_block3.l(nodes);
-      if_block3_anchor = empty();
+      t11 = claim_space(nodes);
+      if (if_block2)
+        if_block2.l(nodes);
+      if_block2_anchor = empty();
       this.h();
     },
     h: function hydrate() {
       attr_dev(div0, "id", "clipboard");
-      add_location(div0, file$2, 66, 0, 1943);
-      add_location(h2, file$2, 69, 4, 2044);
+      add_location(div0, file$2, 66, 0, 1960);
+      add_location(h2, file$2, 69, 4, 2061);
       attr_dev(div1, "class", "d-flex justify-content-between");
-      add_location(div1, file$2, 68, 2, 1995);
+      add_location(div1, file$2, 68, 2, 2012);
       attr_dev(section0, "class", "mb-3");
-      add_location(section0, file$2, 67, 0, 1970);
+      add_location(section0, file$2, 67, 0, 1987);
       attr_dev(span, "class", "nav-link dropdown-toggle ");
       attr_dev(span, "id", "navbarDropdown");
       attr_dev(span, "role", "button");
       attr_dev(span, "data-bs-toggle", "dropdown");
       attr_dev(span, "aria-expanded", "false");
-      add_location(span, file$2, 80, 5, 2344);
+      add_location(span, file$2, 80, 5, 2361);
       attr_dev(a0, "class", "dropdown-item");
       attr_dev(a0, "href", "/");
-      add_location(a0, file$2, 84, 10, 2627);
-      add_location(li0, file$2, 84, 6, 2623);
+      add_location(a0, file$2, 84, 10, 2644);
+      add_location(li0, file$2, 84, 6, 2640);
       attr_dev(a1, "class", "dropdown-item");
       attr_dev(a1, "href", "/");
-      add_location(a1, file$2, 85, 10, 2754);
-      add_location(li1, file$2, 85, 6, 2750);
+      add_location(a1, file$2, 85, 10, 2771);
+      add_location(li1, file$2, 85, 6, 2767);
       attr_dev(ul0, "class", "dropdown-menu dropdown-menu-start");
       attr_dev(ul0, "aria-labelledby", "navbarDropdown");
-      add_location(ul0, file$2, 83, 5, 2537);
+      add_location(ul0, file$2, 83, 5, 2554);
       attr_dev(li2, "class", "nav-item dropdown");
-      add_location(li2, file$2, 79, 4, 2308);
+      add_location(li2, file$2, 79, 4, 2325);
       attr_dev(ul1, "class", "navbar-nav");
-      add_location(ul1, file$2, 78, 3, 2280);
-      add_location(div2, file$2, 77, 4, 2271);
+      add_location(ul1, file$2, 78, 3, 2297);
+      add_location(div2, file$2, 77, 4, 2288);
       attr_dev(div3, "class", "my-3 d-flex justify-content-start");
-      add_location(div3, file$2, 76, 2, 2219);
+      add_location(div3, file$2, 76, 2, 2236);
       set_style(input, "visibility", "hidden");
-      add_location(input, file$2, 121, 2, 4022);
-      add_location(section1, file$2, 75, 0, 2207);
+      add_location(input, file$2, 123, 2, 4037);
+      add_location(section1, file$2, 75, 0, 2224);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div0, anchor);
@@ -10962,35 +10699,32 @@ function create_fragment$2(ctx) {
       if (if_block1)
         if_block1.m(section1, null);
       append_hydration_dev(section1, t10);
-      if (if_block2)
-        if_block2.m(section1, null);
-      append_hydration_dev(section1, t11);
       append_hydration_dev(section1, input);
       set_input_value(
         input,
         /*currentTx*/
-        ctx[5]
+        ctx[4]
       );
-      insert_hydration_dev(target, t12, anchor);
-      if (if_block3)
-        if_block3.m(target, anchor);
-      insert_hydration_dev(target, if_block3_anchor, anchor);
+      insert_hydration_dev(target, t11, anchor);
+      if (if_block2)
+        if_block2.m(target, anchor);
+      insert_hydration_dev(target, if_block2_anchor, anchor);
       current = true;
       if (!mounted) {
         dispose = [
           listen_dev(a0, "click", prevent_default(
             /*click_handler*/
-            ctx[10]
+            ctx[8]
           ), false, true, false, false),
           listen_dev(a1, "click", prevent_default(
             /*click_handler_1*/
-            ctx[11]
+            ctx[9]
           ), false, true, false, false),
           listen_dev(
             input,
             "input",
             /*input_input_handler*/
-            ctx[14]
+            ctx[10]
           )
         ];
         mounted = true;
@@ -11007,9 +10741,9 @@ function create_fragment$2(ctx) {
         peginfo_changes.sigData = /*sigData*/
         ctx2[0];
       if (dirty & /*currentTx*/
-      32)
+      16)
         peginfo_changes.currentTx = /*currentTx*/
-        ctx2[5];
+        ctx2[4];
       peginfo.$set(peginfo_changes);
       if (
         /*wallet*/
@@ -11018,7 +10752,7 @@ function create_fragment$2(ctx) {
         if (if_block0) {
           if_block0.p(ctx2, dirty);
         } else {
-          if_block0 = create_if_block_4(ctx2);
+          if_block0 = create_if_block_2(ctx2);
           if_block0.c();
           if_block0.m(span, null);
         }
@@ -11030,10 +10764,10 @@ function create_fragment$2(ctx) {
         /*wallet*/
         ctx2[2]
       ) {
-        if (if_block1) {
-          if_block1.p(ctx2, dirty);
-        } else {
-          if_block1 = create_if_block_2(ctx2);
+        if (if_block1)
+          ;
+        else {
+          if_block1 = create_if_block_1$1(ctx2);
           if_block1.c();
           if_block1.m(section1, t10);
         }
@@ -11041,51 +10775,35 @@ function create_fragment$2(ctx) {
         if_block1.d(1);
         if_block1 = null;
       }
-      if (
-        /*wallet*/
-        ctx2[2] && /*opMechanism*/
-        ctx2[3]
-      ) {
-        if (if_block2)
-          ;
-        else {
-          if_block2 = create_if_block_1$1(ctx2);
-          if_block2.c();
-          if_block2.m(section1, t11);
-        }
-      } else if (if_block2) {
-        if_block2.d(1);
-        if_block2 = null;
-      }
       if (dirty & /*currentTx*/
-      32 && input.value !== /*currentTx*/
-      ctx2[5]) {
+      16 && input.value !== /*currentTx*/
+      ctx2[4]) {
         set_input_value(
           input,
           /*currentTx*/
-          ctx2[5]
+          ctx2[4]
         );
       }
       if (
         /*copied*/
-        ctx2[4]
+        ctx2[3]
       ) {
-        if (if_block3) {
-          if_block3.p(ctx2, dirty);
+        if (if_block2) {
+          if_block2.p(ctx2, dirty);
           if (dirty & /*copied*/
-          16) {
-            transition_in(if_block3, 1);
+          8) {
+            transition_in(if_block2, 1);
           }
         } else {
-          if_block3 = create_if_block$1(ctx2);
-          if_block3.c();
-          transition_in(if_block3, 1);
-          if_block3.m(if_block3_anchor.parentNode, if_block3_anchor);
+          if_block2 = create_if_block$1(ctx2);
+          if_block2.c();
+          transition_in(if_block2, 1);
+          if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
         }
-      } else if (if_block3) {
+      } else if (if_block2) {
         group_outros();
-        transition_out(if_block3, 1, 1, () => {
-          if_block3 = null;
+        transition_out(if_block2, 1, 1, () => {
+          if_block2 = null;
         });
         check_outros();
       }
@@ -11094,12 +10812,12 @@ function create_fragment$2(ctx) {
       if (current)
         return;
       transition_in(peginfo.$$.fragment, local);
-      transition_in(if_block3);
+      transition_in(if_block2);
       current = true;
     },
     o: function outro(local) {
       transition_out(peginfo.$$.fragment, local);
-      transition_out(if_block3);
+      transition_out(if_block2);
       current = false;
     },
     d: function destroy(detaching) {
@@ -11120,14 +10838,12 @@ function create_fragment$2(ctx) {
         if_block0.d();
       if (if_block1)
         if_block1.d();
+      if (detaching)
+        detach_dev(t11);
       if (if_block2)
-        if_block2.d();
+        if_block2.d(detaching);
       if (detaching)
-        detach_dev(t12);
-      if (if_block3)
-        if_block3.d(detaching);
-      if (detaching)
-        detach_dev(if_block3_anchor);
+        detach_dev(if_block2_anchor);
       mounted = false;
       run_all(dispose);
     }
@@ -11147,7 +10863,7 @@ function instance$2($$self, $$props, $$invalidate) {
   validate_slots("SignTransaction", slots, []);
   const dispatch = createEventDispatcher();
   let wallet;
-  let opMechanism;
+  let opMechanism = "return";
   let { sigData } = $$props;
   let { pegInfo } = $$props;
   let showTx = false;
@@ -11155,22 +10871,16 @@ function instance$2($$self, $$props, $$invalidate) {
   let copied = false;
   let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
   const setCurrent = () => {
-    if (opMechanism === "return") {
-      const psbt = sigData.txs.opReturn.toPSBT();
-      wallet === "Bitcoin Core" ? $$invalidate(5, currentTx = base64.encode(psbt)) : $$invalidate(5, currentTx = hex.encode(psbt));
-    } else if (opMechanism === "drop") {
-      const psbt = sigData.txs.opDrop.toPSBT();
-      wallet === "Bitcoin Core" ? $$invalidate(5, currentTx = base64.encode(psbt)) : $$invalidate(5, currentTx = hex.encode(psbt));
-    }
+    const psbt = sigData.txs.opReturn.toPSBT();
+    wallet === "Bitcoin Core" ? $$invalidate(4, currentTx = base64.encode(psbt)) : $$invalidate(4, currentTx = hex.encode(psbt));
   };
   const updateWallet = (newWallet) => {
-    $$invalidate(4, copied = false);
-    $$invalidate(3, opMechanism = void 0);
+    $$invalidate(3, copied = false);
     $$invalidate(2, wallet = newWallet);
     setCurrent();
   };
   const updateOpMechanism = (newOpMechanism) => {
-    $$invalidate(3, opMechanism = newOpMechanism);
+    opMechanism = newOpMechanism;
     setCurrent();
     copy();
   };
@@ -11183,7 +10893,7 @@ function instance$2($$self, $$props, $$invalidate) {
       props: { name: currentTx }
     });
     app.$destroy();
-    $$invalidate(4, copied = true);
+    $$invalidate(3, copied = true);
   };
   onMount(async () => {
     try {
@@ -11209,11 +10919,9 @@ function instance$2($$self, $$props, $$invalidate) {
   });
   const click_handler = () => updateWallet("Bitcoin Core");
   const click_handler_1 = () => updateWallet("Electrum");
-  const click_handler_2 = () => updateOpMechanism("return");
-  const click_handler_3 = () => updateOpMechanism("drop");
   function input_input_handler() {
     currentTx = this.value;
-    $$invalidate(5, currentTx);
+    $$invalidate(4, currentTx);
   }
   $$self.$$set = ($$props2) => {
     if ("sigData" in $$props2)
@@ -11249,7 +10957,7 @@ function instance$2($$self, $$props, $$invalidate) {
     if ("wallet" in $$props2)
       $$invalidate(2, wallet = $$props2.wallet);
     if ("opMechanism" in $$props2)
-      $$invalidate(3, opMechanism = $$props2.opMechanism);
+      opMechanism = $$props2.opMechanism;
     if ("sigData" in $$props2)
       $$invalidate(0, sigData = $$props2.sigData);
     if ("pegInfo" in $$props2)
@@ -11259,11 +10967,11 @@ function instance$2($$self, $$props, $$invalidate) {
     if ("showHex" in $$props2)
       showHex = $$props2.showHex;
     if ("copied" in $$props2)
-      $$invalidate(4, copied = $$props2.copied);
+      $$invalidate(3, copied = $$props2.copied);
     if ("currentTx" in $$props2)
-      $$invalidate(5, currentTx = $$props2.currentTx);
+      $$invalidate(4, currentTx = $$props2.currentTx);
     if ("getWalletId" in $$props2)
-      $$invalidate(6, getWalletId = $$props2.getWalletId);
+      $$invalidate(5, getWalletId = $$props2.getWalletId);
   };
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
@@ -11271,7 +10979,7 @@ function instance$2($$self, $$props, $$invalidate) {
   $$self.$$.update = () => {
     if ($$self.$$.dirty & /*wallet*/
     4) {
-      $$invalidate(6, getWalletId = () => {
+      $$invalidate(5, getWalletId = () => {
         if (wallet === "Bitcoin Core")
           return 1;
         else if (wallet === "Electrum")
@@ -11284,17 +10992,13 @@ function instance$2($$self, $$props, $$invalidate) {
     sigData,
     pegInfo,
     wallet,
-    opMechanism,
     copied,
     currentTx,
     getWalletId,
     updateWallet,
-    updateOpMechanism,
     updateTransaction,
     click_handler,
     click_handler_1,
-    click_handler_2,
-    click_handler_3,
     input_input_handler
   ];
 }

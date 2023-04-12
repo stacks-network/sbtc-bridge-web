@@ -1,4 +1,5 @@
-import { s as stringAsciiCV, p as principalCV, c as uintCV, o as openContractCall, g as getStacksNetwork, P as PostConditionMode, t as tupleCV, d as bufferCVFromString } from "./stacks_connect.543fae53.js";
+import { C as CONFIG } from "./hmac.447cb554.js";
+import { s as stringAsciiCV, p as principalCV, c as uintCV, o as openContractCall, g as getStacksNetwork, P as PostConditionMode, t as tupleCV, d as bufferCVFromString } from "./stacks_connect.857de9b7.js";
 const coordinators = [
   { stxAddress: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM", btcAddress: "tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e" },
   // devnet + electrum bob
@@ -18,8 +19,8 @@ async function mintTo(amount, stxAddress, btcTxId) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[0],
-    contractName: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[1],
     functionName: "mint!",
     functionArgs,
     onFinish: (data) => {
@@ -39,8 +40,8 @@ async function burnFrom(amount, stxAddress, btcTxId) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Allow,
-    contractAddress: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[0],
-    contractName: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[1],
     functionName: "burn!",
     functionArgs,
     onFinish: (data) => {
@@ -62,8 +63,8 @@ async function setCoordinator(address) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[0],
-    contractName: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[1],
     functionName: "set-coordinator-data",
     functionArgs,
     onFinish: (data) => {
@@ -82,8 +83,8 @@ async function setBtcWallet(address) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[0],
-    contractName: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant".split(".")[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split(".")[1],
     functionName: "set-bitcoin-wallet-address",
     functionArgs,
     onFinish: (data) => {

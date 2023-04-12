@@ -1,5 +1,56 @@
-import { w as writable } from "./index.2660960f.js";
-import { a8 as get_store_value } from "./index.0c92228d.js";
+import { w as writable } from "./index.f40c009d.js";
+import { a8 as get_store_value } from "./index.1d91065c.js";
+const TESTNET_CONFIG = {
+  VITE_PUBLIC_APP_NAME: "sBTC Bridge Testnet",
+  VITE_PUBLIC_APP_VERSION: "1.0.0",
+  VITE_ORIGIN: "https://sbtc.world",
+  VITE_NETWORK: "testnet",
+  VITE_SBTC_WALLET: "tb1q6zlpyrzvzjcrf6dlsctcrh9yl3dwfktsw0nclq",
+  VITE_SBTC_CONTRACT_ID: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant",
+  VITE_BRIDGE_API: "http://localhost:3010/bridge-api/v1",
+  VITE_STACKS_API: "https://api.testnet.hiro.so",
+  VITE_STACKS_EXPLORER: "https://explorer.hiro.so",
+  VITE_BSTREAM_EXPLORER: "https://mempool.space/testnet",
+  VITE_MEMPOOL_EXPLORER: "https://mempool.space/testnet/api",
+  VITE_BLOCKCYPHER_EXPLORER: "https://api.blockcypher.com/v1/btc/test3"
+};
+const MAINNET_CONFIG = {
+  VITE_PUBLIC_APP_NAME: "sBTC Bridge",
+  VITE_PUBLIC_APP_VERSION: "1.0.0",
+  VITE_ORIGIN: "https://sbtc.world",
+  VITE_NETWORK: "mainnet",
+  VITE_SBTC_WALLET: "tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e",
+  VITE_SBTC_CONTRACT_ID: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant",
+  VITE_BRIDGE_API: "https://api.sbtc.world/v1/testnet/bridge-api/v1",
+  VITE_STACKS_API: "https://api.hiro.so",
+  VITE_STACKS_EXPLORER: "https://explorer.hiro.so",
+  VITE_BSTREAM_EXPLORER: "https://mempool.space",
+  VITE_MEMPOOL_EXPLORER: "https://mempool.space/api",
+  VITE_BLOCKCYPHER_EXPLORER: "https://api.blockcypher.com/v1/btc"
+};
+const DEVNET_CONFIG = {
+  VITE_PUBLIC_APP_NAME: "sBTC Bridge Devnet",
+  VITE_PUBLIC_APP_VERSION: "1.0.0",
+  VITE_ORIGIN: "https://sbtc.world",
+  VITE_NETWORK: "testnet",
+  VITE_SBTC_WALLET: "tb1q6zlpyrzvzjcrf6dlsctcrh9yl3dwfktsw0nclq",
+  VITE_SBTC_CONTRACT_ID: "ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha",
+  VITE_BRIDGE_API: "http://localhost:3010/bridge-api/v1",
+  VITE_STACKS_API: "http://localhost:3999",
+  VITE_STACKS_EXPLORER: "http://localhost:8000",
+  VITE_BSTREAM_EXPLORER: "https://mempool.space/testnet",
+  VITE_MEMPOOL_EXPLORER: "https://mempool.space/testnet/api",
+  VITE_BLOCKCYPHER_EXPLORER: "https://api.blockcypher.com/v1/btc/test3"
+};
+let CONFIG = MAINNET_CONFIG;
+function setConfig(search) {
+  if (search.indexOf("testnet") > -1)
+    CONFIG = TESTNET_CONFIG;
+  else if (search.indexOf("devnet") > -1)
+    CONFIG = DEVNET_CONFIG;
+  else
+    CONFIG = MAINNET_CONFIG;
+}
 const crypto = typeof globalThis === "object" && "crypto" in globalThis ? globalThis.crypto : void 0;
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
@@ -562,12 +613,14 @@ const hmac$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProper
   hmac
 }, Symbol.toStringTag, { value: "Module" }));
 export {
+  CONFIG as C,
   SHA2 as S,
-  sha256$1 as a,
-  hmac as b,
-  concatBytes as c,
+  setConfig as a,
+  sha256$1 as b,
+  hmac as c,
   defaultSbtcConfig as d,
-  sha256 as e,
+  concatBytes as e,
+  sha256 as f,
   hmac$1 as h,
   randomBytes as r,
   sbtcConfig as s,
