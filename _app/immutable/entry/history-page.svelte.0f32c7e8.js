@@ -1158,7 +1158,7 @@ function create_fragment$1(ctx) {
       div9 = element("div");
       div8 = element("div");
       a4 = element("a");
-      t8 = text("SBTC Wallet");
+      t8 = text("sBTC Wallet");
       t9 = space();
       div11 = element("div");
       div10 = element("div");
@@ -1223,7 +1223,7 @@ function create_fragment$1(ctx) {
       var div8_nodes = children(div8);
       a4 = claim_element(div8_nodes, "A", { href: true });
       var a4_nodes = children(a4);
-      t8 = claim_text(a4_nodes, "SBTC Wallet");
+      t8 = claim_text(a4_nodes, "sBTC Wallet");
       a4_nodes.forEach(detach_dev);
       div8_nodes.forEach(detach_dev);
       div9_nodes.forEach(detach_dev);
@@ -1508,7 +1508,7 @@ function create_fragment(ctx) {
       div0 = element("div");
       h1 = element("h1");
       span = element("span");
-      t0 = text("SBTC");
+      t0 = text("sBTC");
       t1 = text(" Transaction History");
       t2 = space();
       create_component(pegs.$$.fragment);
@@ -1529,7 +1529,7 @@ function create_fragment(ctx) {
       var h1_nodes = children(h1);
       span = claim_element(h1_nodes, "SPAN", { class: true });
       var span_nodes = children(span);
-      t0 = claim_text(span_nodes, "SBTC");
+      t0 = claim_text(span_nodes, "sBTC");
       span_nodes.forEach(detach_dev);
       t1 = claim_text(h1_nodes, " Transaction History");
       h1_nodes.forEach(detach_dev);

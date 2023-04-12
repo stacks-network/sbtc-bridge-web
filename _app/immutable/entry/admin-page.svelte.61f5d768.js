@@ -862,7 +862,7 @@ function create_fragment$1(ctx) {
       div7 = element("div");
       div6 = element("div");
       div4 = element("div");
-      t6 = text("SBTC Wallet: ");
+      t6 = text("sBTC Wallet: ");
       t7 = text(t7_value);
       t8 = space();
       input1 = element("input");
@@ -911,7 +911,7 @@ function create_fragment$1(ctx) {
       var div6_nodes = children(div6);
       div4 = claim_element(div6_nodes, "DIV", {});
       var div4_nodes = children(div4);
-      t6 = claim_text(div4_nodes, "SBTC Wallet: ");
+      t6 = claim_text(div4_nodes, "sBTC Wallet: ");
       t7 = claim_text(div4_nodes, t7_value);
       div4_nodes.forEach(detach_dev);
       t8 = claim_space(div6_nodes);

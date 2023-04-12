@@ -1,8 +1,8 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.f8376bb0.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, U as validate_store, V as component_subscribe, o as onMount, c as space, p as element, C as create_component, y as text, f as claim_space, q as claim_element, D as claim_component, z as claim_text, E as mount_component, W as listen_dev, X as prevent_default, F as destroy_component, Y as run_all, Z as src_url_equal, _ as noop, w as set_style, $ as onDestroy, t as tick, a0 as globals, e as empty, j as check_outros, B as group_outros } from "../chunks/index.1d91065c.js";
 import { s as sbtcConfig, a as setConfig, C as CONFIG, d as defaultSbtcConfig } from "../chunks/hmac.447cb554.js";
-import { g as goto, b as beforeNavigate } from "../chunks/navigation.d9254f90.js";
-import { p as page } from "../chunks/stores.87e2d8bb.js";
+import { g as goto, b as beforeNavigate } from "../chunks/navigation.a2a0bf0b.js";
+import { p as page } from "../chunks/stores.80a5cd86.js";
 import { a as addresses, l as logUserOut, b as loginStacksJs, f as fetchSbtcBalance, u as userSession } from "../chunks/stacks_connect.857de9b7.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.d6e6a36a.js";
 import { U as UserBalance } from "../chunks/UserBalance.7175a9f2.js";
@@ -267,14 +267,14 @@ function create_else_block$1(ctx) {
       attr_dev(img, "alt", "Connect Wallet / Login");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file$4, 79, 127, 3386);
+      add_location(img, file$4, 79, 127, 3393);
       attr_dev(span0, "class", "px-1");
-      add_location(span0, file$4, 79, 107, 3366);
+      add_location(span0, file$4, 79, 107, 3373);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer px-2");
-      add_location(a, file$4, 79, 31, 3290);
+      add_location(a, file$4, 79, 31, 3297);
       attr_dev(span1, "class", "dropdown-item");
-      add_location(span1, file$4, 79, 3, 3262);
+      add_location(span1, file$4, 79, 3, 3269);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span1, anchor);
@@ -284,8 +284,8 @@ function create_else_block$1(ctx) {
       append_hydration_dev(a, t);
       if (!mounted) {
         dispose = listen_dev(a, "click", prevent_default(
-          /*click_handler_4*/
-          ctx[10]
+          /*click_handler_3*/
+          ctx[9]
         ), false, true, false, false);
         mounted = true;
       }
@@ -350,15 +350,15 @@ function create_if_block_1$1(ctx) {
       attr_dev(img, "alt", "Wallet Connected");
       attr_dev(img, "width", "40");
       attr_dev(img, "height", "auto");
-      add_location(img, file$4, 75, 25, 3131);
+      add_location(img, file$4, 75, 25, 3138);
       attr_dev(span0, "class", "px-2");
-      add_location(span0, file$4, 75, 5, 3111);
+      add_location(span0, file$4, 75, 5, 3118);
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "pointer");
       set_style(a, "vertical-align", "middle");
-      add_location(a, file$4, 74, 4, 3004);
+      add_location(a, file$4, 74, 4, 3011);
       attr_dev(span1, "class", "dropdown-item");
-      add_location(span1, file$4, 73, 3, 2971);
+      add_location(span1, file$4, 73, 3, 2978);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span1, anchor);
@@ -368,8 +368,8 @@ function create_if_block_1$1(ctx) {
       append_hydration_dev(span0, t);
       if (!mounted) {
         dispose = listen_dev(a, "click", prevent_default(
-          /*click_handler_3*/
-          ctx[9]
+          /*click_handler_2*/
+          ctx[8]
         ), false, true, false, false);
         mounted = true;
       }
@@ -422,11 +422,11 @@ function create_if_block$1(ctx) {
       attr_dev(a, "class", "pointer");
       attr_dev(a, "target", "_blank");
       attr_dev(a, "rel", "noreferrer");
-      add_location(a, file$4, 68, 3, 2791);
+      add_location(a, file$4, 68, 3, 2798);
       attr_dev(span, "class", "dropdown-item");
       set_style(span, "position", "relative");
       set_style(span, "top", "2px");
-      add_location(span, file$4, 67, 2, 2721);
+      add_location(span, file$4, 67, 2, 2728);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span, anchor);
@@ -450,7 +450,7 @@ function create_if_block$1(ctx) {
 }
 function create_fragment$4(ctx) {
   let t0;
-  let li5;
+  let li4;
   let span0;
   let person;
   let t1;
@@ -468,10 +468,6 @@ function create_fragment$4(ctx) {
   let t6;
   let t7;
   let li3;
-  let a2;
-  let t8;
-  let t9;
-  let li4;
   let current;
   let mounted;
   let dispose;
@@ -503,7 +499,7 @@ function create_fragment$4(ctx) {
       if (if_block0)
         if_block0.c();
       t0 = space();
-      li5 = element("li");
+      li4 = element("li");
       span0 = element("span");
       create_component(person.$$.fragment);
       t1 = space();
@@ -521,10 +517,6 @@ function create_fragment$4(ctx) {
       t6 = text("Mainnet");
       t7 = space();
       li3 = element("li");
-      a2 = element("a");
-      t8 = text("Devnet");
-      t9 = space();
-      li4 = element("li");
       if_block1.c();
       this.h();
     },
@@ -532,9 +524,9 @@ function create_fragment$4(ctx) {
       if (if_block0)
         if_block0.l(nodes);
       t0 = claim_space(nodes);
-      li5 = claim_element(nodes, "LI", { class: true });
-      var li5_nodes = children(li5);
-      span0 = claim_element(li5_nodes, "SPAN", {
+      li4 = claim_element(nodes, "LI", { class: true });
+      var li4_nodes = children(li4);
+      span0 = claim_element(li4_nodes, "SPAN", {
         class: true,
         id: true,
         role: true,
@@ -544,8 +536,8 @@ function create_fragment$4(ctx) {
       var span0_nodes = children(span0);
       claim_component(person.$$.fragment, span0_nodes);
       span0_nodes.forEach(detach_dev);
-      t1 = claim_space(li5_nodes);
-      ul = claim_element(li5_nodes, "UL", { class: true, "aria-labelledby": true });
+      t1 = claim_space(li4_nodes);
+      ul = claim_element(li4_nodes, "UL", { class: true, "aria-labelledby": true });
       var ul_nodes = children(ul);
       li0 = claim_element(ul_nodes, "LI", { class: true });
       var li0_nodes = children(li0);
@@ -573,18 +565,10 @@ function create_fragment$4(ctx) {
       t7 = claim_space(ul_nodes);
       li3 = claim_element(ul_nodes, "LI", { class: true });
       var li3_nodes = children(li3);
-      a2 = claim_element(li3_nodes, "A", { href: true, class: true });
-      var a2_nodes = children(a2);
-      t8 = claim_text(a2_nodes, "Devnet");
-      a2_nodes.forEach(detach_dev);
+      if_block1.l(li3_nodes);
       li3_nodes.forEach(detach_dev);
-      t9 = claim_space(ul_nodes);
-      li4 = claim_element(ul_nodes, "LI", { class: true });
-      var li4_nodes = children(li4);
-      if_block1.l(li4_nodes);
-      li4_nodes.forEach(detach_dev);
       ul_nodes.forEach(detach_dev);
-      li5_nodes.forEach(detach_dev);
+      li4_nodes.forEach(detach_dev);
       this.h();
     },
     h: function hydrate() {
@@ -608,28 +592,23 @@ function create_fragment$4(ctx) {
       add_location(a1, file$4, 63, 33, 2419);
       attr_dev(li2, "class", "nav-item px-4 mx-4 s-03Bkx-y2PLke");
       add_location(li2, file$4, 63, 2, 2388);
-      attr_dev(a2, "href", "/");
-      attr_dev(a2, "class", "dropdown-item");
-      add_location(a2, file$4, 64, 33, 2560);
-      attr_dev(li3, "class", "nav-item px-4 mx-4 s-03Bkx-y2PLke");
-      add_location(li3, file$4, 64, 2, 2529);
-      attr_dev(li4, "class", "nav-item mt-4 s-03Bkx-y2PLke");
-      add_location(li4, file$4, 65, 2, 2668);
+      attr_dev(li3, "class", "nav-item mt-4 s-03Bkx-y2PLke");
+      add_location(li3, file$4, 65, 2, 2675);
       attr_dev(ul, "class", "dropdown-menu dropdown-menu-end");
       attr_dev(ul, "aria-labelledby", "navbarDropdown");
       add_location(ul, file$4, 60, 1, 2089);
-      attr_dev(li5, "class", "nav-item dropdown s-03Bkx-y2PLke");
-      add_location(li5, file$4, 56, 0, 1879);
+      attr_dev(li4, "class", "nav-item dropdown s-03Bkx-y2PLke");
+      add_location(li4, file$4, 56, 0, 1879);
     },
     m: function mount(target, anchor) {
       if (if_block0)
         if_block0.m(target, anchor);
       insert_hydration_dev(target, t0, anchor);
-      insert_hydration_dev(target, li5, anchor);
-      append_hydration_dev(li5, span0);
+      insert_hydration_dev(target, li4, anchor);
+      append_hydration_dev(li4, span0);
       mount_component(person, span0, null);
-      append_hydration_dev(li5, t1);
-      append_hydration_dev(li5, ul);
+      append_hydration_dev(li4, t1);
+      append_hydration_dev(li4, ul);
       append_hydration_dev(ul, li0);
       append_hydration_dev(li0, span1);
       append_hydration_dev(span1, t2);
@@ -643,11 +622,7 @@ function create_fragment$4(ctx) {
       append_hydration_dev(a1, t6);
       append_hydration_dev(ul, t7);
       append_hydration_dev(ul, li3);
-      append_hydration_dev(li3, a2);
-      append_hydration_dev(a2, t8);
-      append_hydration_dev(ul, t9);
-      append_hydration_dev(ul, li4);
-      if_block1.m(li4, null);
+      if_block1.m(li3, null);
       current = true;
       if (!mounted) {
         dispose = [
@@ -658,10 +633,6 @@ function create_fragment$4(ctx) {
           listen_dev(a1, "click", prevent_default(
             /*click_handler_1*/
             ctx[7]
-          ), false, true, false, false),
-          listen_dev(a2, "click", prevent_default(
-            /*click_handler_2*/
-            ctx[8]
           ), false, true, false, false)
         ];
         mounted = true;
@@ -675,7 +646,7 @@ function create_fragment$4(ctx) {
         if_block1 = current_block_type(ctx2);
         if (if_block1) {
           if_block1.c();
-          if_block1.m(li4, null);
+          if_block1.m(li3, null);
         }
       }
     },
@@ -695,7 +666,7 @@ function create_fragment$4(ctx) {
       if (detaching)
         detach_dev(t0);
       if (detaching)
-        detach_dev(li5);
+        detach_dev(li4);
       destroy_component(person);
       if_block1.d();
       mounted = false;
@@ -759,9 +730,8 @@ function instance$4($$self, $$props, $$invalidate) {
   });
   const click_handler = () => toggleNetwork("testnet");
   const click_handler_1 = () => toggleNetwork("mainnet");
-  const click_handler_2 = () => toggleNetwork("devnet");
-  const click_handler_3 = () => logout();
-  const click_handler_4 = () => doLogin();
+  const click_handler_2 = () => logout();
+  const click_handler_3 = () => doLogin();
   $$self.$capture_state = () => ({
     logUserOut,
     addresses,
@@ -799,8 +769,7 @@ function instance$4($$self, $$props, $$invalidate) {
     click_handler,
     click_handler_1,
     click_handler_2,
-    click_handler_3,
-    click_handler_4
+    click_handler_3
   ];
 }
 class WalletConnectButton extends SvelteComponentDev {
@@ -887,7 +856,7 @@ function create_fragment$3(ctx) {
       ul1 = element("ul");
       li2 = element("li");
       span2 = element("span");
-      t5 = text("SBTC Exchange");
+      t5 = text("sBTC Exchange");
       t6 = space();
       ul0 = element("ul");
       li0 = element("li");
@@ -971,7 +940,7 @@ function create_fragment$3(ctx) {
         "aria-expanded": true
       });
       var span2_nodes = children(span2);
-      t5 = claim_text(span2_nodes, "SBTC Exchange");
+      t5 = claim_text(span2_nodes, "sBTC Exchange");
       span2_nodes.forEach(detach_dev);
       t6 = claim_space(li2_nodes);
       ul0 = claim_element(li2_nodes, "UL", { class: true, "aria-labelledby": true });
@@ -1066,7 +1035,7 @@ function create_fragment$3(ctx) {
       attr_dev(a3, "class", "");
       attr_dev(a3, "href", "/history");
       add_location(a3, file$3, 39, 50, 1968);
-      attr_dev(span3, "title", "Your SBTC Transaction History");
+      attr_dev(span3, "title", "Your sBTC Transaction History");
       add_location(span3, file$3, 39, 6, 1924);
       attr_dev(span4, "class", "pointer nav-link");
       add_location(span4, file$3, 38, 5, 1886);
@@ -2362,7 +2331,7 @@ function create_else_block(ctx) {
     c: function create() {
       div = element("div");
       p0 = element("p");
-      t0 = text("Connect your Hiro web wallet to start wrapping SBTC!");
+      t0 = text("Connect your Hiro web wallet to start wrapping sBTC!");
       t1 = space();
       p1 = element("p");
       span1 = element("span");
@@ -2380,7 +2349,7 @@ function create_else_block(ctx) {
       var div_nodes = children(div);
       p0 = claim_element(div_nodes, "P", { class: true });
       var p0_nodes = children(p0);
-      t0 = claim_text(p0_nodes, "Connect your Hiro web wallet to start wrapping SBTC!");
+      t0 = claim_text(p0_nodes, "Connect your Hiro web wallet to start wrapping sBTC!");
       p0_nodes.forEach(detach_dev);
       t1 = claim_space(div_nodes);
       p1 = claim_element(div_nodes, "P", {});

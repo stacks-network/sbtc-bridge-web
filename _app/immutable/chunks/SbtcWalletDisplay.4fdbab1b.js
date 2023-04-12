@@ -11211,7 +11211,7 @@ function create_if_block(ctx) {
       t2 = text(".");
       t3 = space();
       p1 = element("p");
-      t4 = text("Once confirmed your SBTC will be minted to your Stacks Wallet.");
+      t4 = text("Once confirmed your sBTC will be minted to your Stacks Wallet.");
       this.h();
     },
     l: function claim(nodes) {
@@ -11229,7 +11229,7 @@ function create_if_block(ctx) {
       t3 = claim_space(div_nodes);
       p1 = claim_element(div_nodes, "P", {});
       var p1_nodes = children(p1);
-      t4 = claim_text(p1_nodes, "Once confirmed your SBTC will be minted to your Stacks Wallet.");
+      t4 = claim_text(p1_nodes, "Once confirmed your sBTC will be minted to your Stacks Wallet.");
       p1_nodes.forEach(detach_dev);
       div_nodes.forEach(detach_dev);
       this.h();
@@ -11658,14 +11658,14 @@ function create_fragment(ctx) {
   const block = {
     c: function create() {
       span = element("span");
-      t0 = text("SBTC Wallet: ");
+      t0 = text("sBTC Wallet: ");
       t1 = text(t1_value);
       this.h();
     },
     l: function claim(nodes) {
       span = claim_element(nodes, "SPAN", {});
       var span_nodes = children(span);
-      t0 = claim_text(span_nodes, "SBTC Wallet: ");
+      t0 = claim_text(span_nodes, "sBTC Wallet: ");
       t1 = claim_text(span_nodes, t1_value);
       span_nodes.forEach(detach_dev);
       this.h();

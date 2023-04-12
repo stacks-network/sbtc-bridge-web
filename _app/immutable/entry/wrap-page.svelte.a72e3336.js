@@ -1,65 +1,17 @@
-import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, w as set_style, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, E as mount_component, a6 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, X as prevent_default, _ as noop, o as onMount, e as empty, B as group_outros, j as check_outros } from "../chunks/index.1d91065c.js";
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
+import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, E as mount_component, a6 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, X as prevent_default, _ as noop, U as validate_store, V as component_subscribe, o as onMount, a0 as globals, e as empty, B as group_outros, j as check_outros } from "../chunks/index.1d91065c.js";
 import { s as sbtcConfig, C as CONFIG } from "../chunks/hmac.447cb554.js";
-import { F as FeeDisplay, P as PegTransaction, a as assert, c as concatByteArrays, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, d as PEGOUT_OPCODE, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.683efda3.js";
-import { T as TEST_NETWORK, N as NETWORK, h as hex, p as p2wpkh, b as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, R as RawTx, c as explorerAddressUrl, d as explorerBtcAddressUrl } from "../chunks/utils.1ded2fdd.js";
-import { e as utils, h as getPublicKey, i as schnorr, a as addresses, j as signMessage } from "../chunks/stacks_connect.857de9b7.js";
+import { F as FeeDisplay, P as PegTransaction, a as assert, M as MAGIC_BYTES_TESTNET, b as MAGIC_BYTES_MAINNET, h as PEGIN_OPCODE, c as concatByteArrays, e as Principal, U as UTXOSelection, S as SbtcWalletDisplay, f as SignTransaction, g as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.4fdbab1b.js";
+import { T as TEST_NETWORK, N as NETWORK, p as p2wpkh, h as hex, b as Transaction, s as secp256k1, R as RawTx, S as Script, d as explorerBtcAddressUrl } from "../chunks/utils.1ded2fdd.js";
+import { e as utils, h as getPublicKey, i as schnorr, k as decodeStacksAddress, a as addresses } from "../chunks/stacks_connect.857de9b7.js";
 import { b as fetchUtxoSet, c as fetchCurrentFeeRates } from "../chunks/bridge_api.65cdfd29.js";
-const file$2 = "src/lib/components/unwrapper/PegOutAmount.svelte";
+const file$2 = "src/lib/components/wrapper/PegInAmount.svelte";
 function create_if_block_1$2(ctx) {
-  let div;
-  let t;
-  const block = {
-    c: function create() {
-      div = element("div");
-      t = text(
-        /*reason*/
-        ctx[1]
-      );
-      this.h();
-    },
-    l: function claim(nodes) {
-      div = claim_element(nodes, "DIV", { class: true });
-      var div_nodes = children(div);
-      t = claim_text(
-        div_nodes,
-        /*reason*/
-        ctx[1]
-      );
-      div_nodes.forEach(detach_dev);
-      this.h();
-    },
-    h: function hydrate() {
-      attr_dev(div, "class", "text-danger");
-      add_location(div, file$2, 44, 18, 1970);
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, div, anchor);
-      append_hydration_dev(div, t);
-    },
-    p: function update(ctx2, dirty) {
-      if (dirty & /*reason*/
-      2)
-        set_data_dev(
-          t,
-          /*reason*/
-          ctx2[1]
-        );
-    },
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(div);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
-    id: create_if_block_1$2.name,
-    type: "if",
-    source: "(45:6) {#if reason}",
-    ctx
-  });
-  return block;
-}
-function create_if_block$2(ctx) {
   let span;
   let a;
   let t;
@@ -85,8 +37,8 @@ function create_if_block$2(ctx) {
     h: function hydrate() {
       attr_dev(a, "href", "/");
       attr_dev(a, "class", "");
-      add_location(a, file$2, 47, 38, 2168);
-      add_location(span, file$2, 47, 32, 2162);
+      add_location(a, file$2, 44, 36, 1936);
+      add_location(span, file$2, 44, 30, 1930);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, span, anchor);
@@ -110,17 +62,71 @@ function create_if_block$2(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
+    id: create_if_block_1$2.name,
+    type: "if",
+    source: "(45:6) {#if amtData.change > 0}",
+    ctx
+  });
+  return block;
+}
+function create_if_block$2(ctx) {
+  let div;
+  let t;
+  const block = {
+    c: function create() {
+      div = element("div");
+      t = text(
+        /*errorReason*/
+        ctx[1]
+      );
+      this.h();
+    },
+    l: function claim(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      var div_nodes = children(div);
+      t = claim_text(
+        div_nodes,
+        /*errorReason*/
+        ctx[1]
+      );
+      div_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(div, "class", "text-danger");
+      add_location(div, file$2, 46, 21, 2063);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div, anchor);
+      append_hydration_dev(div, t);
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*errorReason*/
+      2)
+        set_data_dev(
+          t,
+          /*errorReason*/
+          ctx2[1]
+        );
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
     id: create_if_block$2.name,
     type: "if",
-    source: "(48:8) {#if amtData.change > 0}",
+    source: "(47:4) {#if errorReason}",
     ctx
   });
   return block;
 }
 function create_fragment$2(ctx) {
-  let div5;
+  let div3;
   let div2;
-  let label0;
+  let label;
   let span0;
   let t0_value = (
     /*amtData*/
@@ -130,41 +136,29 @@ function create_fragment$2(ctx) {
   let t1;
   let span1;
   let t2;
-  let input0;
+  let input;
   let t3;
-  let t4;
-  let div1;
   let div0;
-  let t5_value = (
+  let t4_value = (
     /*amtData*/
     ctx[0].info + ""
   );
+  let t4;
   let t5;
+  let div1;
   let t6;
   let t7;
-  let div4;
-  let label1;
-  let span2;
-  let t8;
-  let t9;
-  let span3;
-  let t10;
-  let input1;
-  let t11;
-  let div3;
-  let t12;
-  let t13;
   let feedisplay;
   let current;
   let mounted;
   let dispose;
   let if_block0 = (
-    /*reason*/
-    ctx[1] && create_if_block_1$2(ctx)
+    /*amtData*/
+    ctx[0].change > 0 && create_if_block_1$2(ctx)
   );
   let if_block1 = (
-    /*amtData*/
-    ctx[0].change > 0 && create_if_block$2(ctx)
+    /*errorReason*/
+    ctx[1] && create_if_block$2(ctx)
   );
   feedisplay = new FeeDisplay({
     props: {
@@ -186,54 +180,42 @@ function create_fragment$2(ctx) {
   );
   const block = {
     c: function create() {
-      div5 = element("div");
+      div3 = element("div");
       div2 = element("div");
-      label0 = element("label");
+      label = element("label");
       span0 = element("span");
       t0 = text(t0_value);
       t1 = space();
       span1 = element("span");
       t2 = space();
-      input0 = element("input");
+      input = element("input");
       t3 = space();
+      div0 = element("div");
+      t4 = text(t4_value);
+      t5 = space();
+      div1 = element("div");
       if (if_block0)
         if_block0.c();
-      t4 = space();
-      div1 = element("div");
-      div0 = element("div");
-      t5 = text(t5_value);
       t6 = space();
       if (if_block1)
         if_block1.c();
       t7 = space();
-      div4 = element("div");
-      label1 = element("label");
-      span2 = element("span");
-      t8 = text("sBTC Dust Amount");
-      t9 = space();
-      span3 = element("span");
-      t10 = space();
-      input1 = element("input");
-      t11 = space();
-      div3 = element("div");
-      t12 = text("Tiny amount of bitcoin is sent to the sBTC wallet for book keeping purposes");
-      t13 = space();
       create_component(feedisplay.$$.fragment);
       this.h();
     },
     l: function claim(nodes) {
-      div5 = claim_element(nodes, "DIV", { class: true });
-      var div5_nodes = children(div5);
-      div2 = claim_element(div5_nodes, "DIV", { class: true });
+      div3 = claim_element(nodes, "DIV", { class: true });
+      var div3_nodes = children(div3);
+      div2 = claim_element(div3_nodes, "DIV", { class: true });
       var div2_nodes = children(div2);
-      label0 = claim_element(div2_nodes, "LABEL", { for: true, class: true });
-      var label0_nodes = children(label0);
-      span0 = claim_element(label0_nodes, "SPAN", {});
+      label = claim_element(div2_nodes, "LABEL", { for: true, class: true });
+      var label_nodes = children(label);
+      span0 = claim_element(label_nodes, "SPAN", {});
       var span0_nodes = children(span0);
       t0 = claim_text(span0_nodes, t0_value);
       span0_nodes.forEach(detach_dev);
-      t1 = claim_space(label0_nodes);
-      span1 = claim_element(label0_nodes, "SPAN", {
+      t1 = claim_space(label_nodes);
+      span1 = claim_element(label_nodes, "SPAN", {
         class: true,
         "data-bs-toggle": true,
         "data-bs-placement": true,
@@ -241,168 +223,98 @@ function create_fragment$2(ctx) {
         title: true
       });
       children(span1).forEach(detach_dev);
-      label0_nodes.forEach(detach_dev);
+      label_nodes.forEach(detach_dev);
       t2 = claim_space(div2_nodes);
-      input0 = claim_element(div2_nodes, "INPUT", {
+      input = claim_element(div2_nodes, "INPUT", {
         type: true,
         id: true,
         class: true,
         autocomplete: true
       });
       t3 = claim_space(div2_nodes);
-      if (if_block0)
-        if_block0.l(div2_nodes);
-      t4 = claim_space(div2_nodes);
+      div0 = claim_element(div2_nodes, "DIV", { class: true });
+      var div0_nodes = children(div0);
+      t4 = claim_text(div0_nodes, t4_value);
+      div0_nodes.forEach(detach_dev);
+      t5 = claim_space(div2_nodes);
       div1 = claim_element(div2_nodes, "DIV", { class: true });
       var div1_nodes = children(div1);
-      div0 = claim_element(div1_nodes, "DIV", { class: true });
-      var div0_nodes = children(div0);
-      t5 = claim_text(div0_nodes, t5_value);
-      div0_nodes.forEach(detach_dev);
-      t6 = claim_space(div1_nodes);
-      if (if_block1)
-        if_block1.l(div1_nodes);
+      if (if_block0)
+        if_block0.l(div1_nodes);
       div1_nodes.forEach(detach_dev);
+      t6 = claim_space(div2_nodes);
+      if (if_block1)
+        if_block1.l(div2_nodes);
+      t7 = claim_space(div2_nodes);
+      claim_component(feedisplay.$$.fragment, div2_nodes);
       div2_nodes.forEach(detach_dev);
-      t7 = claim_space(div5_nodes);
-      div4 = claim_element(div5_nodes, "DIV", { class: true });
-      var div4_nodes = children(div4);
-      label1 = claim_element(div4_nodes, "LABEL", { for: true, class: true });
-      var label1_nodes = children(label1);
-      span2 = claim_element(label1_nodes, "SPAN", {});
-      var span2_nodes = children(span2);
-      t8 = claim_text(span2_nodes, "sBTC Dust Amount");
-      span2_nodes.forEach(detach_dev);
-      t9 = claim_space(label1_nodes);
-      span3 = claim_element(label1_nodes, "SPAN", {
-        class: true,
-        "data-bs-toggle": true,
-        "data-bs-placement": true,
-        "data-bs-custom-class": true,
-        title: true
-      });
-      children(span3).forEach(detach_dev);
-      label1_nodes.forEach(detach_dev);
-      t10 = claim_space(div4_nodes);
-      input1 = claim_element(div4_nodes, "INPUT", {
-        type: true,
-        id: true,
-        class: true,
-        style: true
-      });
-      t11 = claim_space(div4_nodes);
-      div3 = claim_element(div4_nodes, "DIV", { class: true, title: true });
-      var div3_nodes = children(div3);
-      t12 = claim_text(div3_nodes, "Tiny amount of bitcoin is sent to the sBTC wallet for book keeping purposes");
       div3_nodes.forEach(detach_dev);
-      div4_nodes.forEach(detach_dev);
-      t13 = claim_space(div5_nodes);
-      claim_component(feedisplay.$$.fragment, div5_nodes);
-      div5_nodes.forEach(detach_dev);
       this.h();
     },
     h: function hydrate() {
-      add_location(span0, file$2, 40, 8, 1457);
+      add_location(span0, file$2, 38, 6, 1295);
       attr_dev(span1, "class", "pointer text-info");
       attr_dev(span1, "data-bs-toggle", "tooltip-ftux");
       attr_dev(span1, "data-bs-placement", "top");
       attr_dev(span1, "data-bs-custom-class", "custom-tooltip");
       attr_dev(span1, "title", "The amount of Bitcoin you want to swap for sBTC. The bitcoin is locked in the protocol and you convert your sBTC back to Bitcoin when you peg out.");
-      add_location(span1, file$2, 41, 8, 1494);
-      attr_dev(label0, "for", "transact-path");
-      attr_dev(label0, "class", "d-flex justify-content-between");
-      add_location(label0, file$2, 39, 6, 1382);
-      attr_dev(input0, "type", "number");
-      attr_dev(input0, "id", "from-address");
-      attr_dev(input0, "class", "form-control");
-      attr_dev(input0, "autocomplete", "off");
-      add_location(input0, file$2, 43, 6, 1802);
+      add_location(span1, file$2, 39, 6, 1330);
+      attr_dev(label, "for", "transact-path");
+      attr_dev(label, "class", "d-flex justify-content-between");
+      add_location(label, file$2, 37, 4, 1222);
+      attr_dev(input, "type", "number");
+      attr_dev(input, "id", "from-address");
+      attr_dev(input, "class", "form-control");
+      attr_dev(input, "autocomplete", "off");
+      add_location(input, file$2, 41, 4, 1634);
       attr_dev(div0, "class", "text-small");
-      add_location(div0, file$2, 46, 8, 2085);
-      attr_dev(div1, "class", "text-small d-flex justify-content-between");
-      add_location(div1, file$2, 45, 6, 2021);
+      add_location(div0, file$2, 42, 4, 1788);
+      attr_dev(div1, "class", "text-small d-flex justify-content-end text-info");
+      add_location(div1, file$2, 43, 4, 1837);
       attr_dev(div2, "class", "col-12");
-      add_location(div2, file$2, 38, 4, 1355);
-      add_location(span2, file$2, 53, 8, 2399);
-      attr_dev(span3, "class", "pointer text-info");
-      attr_dev(span3, "data-bs-toggle", "tooltip-ftux");
-      attr_dev(span3, "data-bs-placement", "top");
-      attr_dev(span3, "data-bs-custom-class", "custom-tooltip");
-      attr_dev(span3, "title", "A tiny amount of bitoin is sent to the sBTC to keep track of sBTC transactions.");
-      add_location(span3, file$2, 54, 8, 2437);
-      attr_dev(label1, "for", "transact-path");
-      attr_dev(label1, "class", "d-flex justify-content-between");
-      add_location(label1, file$2, 52, 6, 2324);
-      attr_dev(input1, "type", "number");
-      input1.readOnly = true;
-      attr_dev(input1, "id", "dust");
-      attr_dev(input1, "class", "form-control");
-      set_style(input1, "background", "#999");
-      add_location(input1, file$2, 56, 6, 2678);
-      attr_dev(div3, "class", "text-small");
-      attr_dev(div3, "title", "Required for book keeping.");
-      add_location(div3, file$2, 57, 6, 2798);
-      attr_dev(div4, "class", "mt-5 col-12");
-      add_location(div4, file$2, 51, 4, 2292);
-      attr_dev(div5, "class", "row");
-      add_location(div5, file$2, 37, 2, 1333);
+      add_location(div2, file$2, 36, 2, 1197);
+      attr_dev(div3, "class", "row");
+      add_location(div3, file$2, 35, 0, 1177);
     },
     m: function mount(target, anchor) {
-      insert_hydration_dev(target, div5, anchor);
-      append_hydration_dev(div5, div2);
-      append_hydration_dev(div2, label0);
-      append_hydration_dev(label0, span0);
+      insert_hydration_dev(target, div3, anchor);
+      append_hydration_dev(div3, div2);
+      append_hydration_dev(div2, label);
+      append_hydration_dev(label, span0);
       append_hydration_dev(span0, t0);
-      append_hydration_dev(label0, t1);
-      append_hydration_dev(label0, span1);
+      append_hydration_dev(label, t1);
+      append_hydration_dev(label, span1);
       append_hydration_dev(div2, t2);
-      append_hydration_dev(div2, input0);
+      append_hydration_dev(div2, input);
       set_input_value(
-        input0,
+        input,
         /*pegAmount*/
         ctx[2]
       );
       append_hydration_dev(div2, t3);
-      if (if_block0)
-        if_block0.m(div2, null);
-      append_hydration_dev(div2, t4);
+      append_hydration_dev(div2, div0);
+      append_hydration_dev(div0, t4);
+      append_hydration_dev(div2, t5);
       append_hydration_dev(div2, div1);
-      append_hydration_dev(div1, div0);
-      append_hydration_dev(div0, t5);
-      append_hydration_dev(div1, t6);
+      if (if_block0)
+        if_block0.m(div1, null);
+      append_hydration_dev(div2, t6);
       if (if_block1)
-        if_block1.m(div1, null);
-      append_hydration_dev(div5, t7);
-      append_hydration_dev(div5, div4);
-      append_hydration_dev(div4, label1);
-      append_hydration_dev(label1, span2);
-      append_hydration_dev(span2, t8);
-      append_hydration_dev(label1, t9);
-      append_hydration_dev(label1, span3);
-      append_hydration_dev(div4, t10);
-      append_hydration_dev(div4, input1);
-      set_input_value(
-        input1,
-        /*amtData*/
-        ctx[0].dust
-      );
-      append_hydration_dev(div4, t11);
-      append_hydration_dev(div4, div3);
-      append_hydration_dev(div3, t12);
-      append_hydration_dev(div5, t13);
-      mount_component(feedisplay, div5, null);
+        if_block1.m(div2, null);
+      append_hydration_dev(div2, t7);
+      mount_component(feedisplay, div2, null);
       current = true;
       if (!mounted) {
         dispose = [
-          action_destroyer(init.call(null, input0)),
+          action_destroyer(init.call(null, input)),
           listen_dev(
-            input0,
+            input,
             "input",
-            /*input0_input_handler*/
+            /*input_input_handler*/
             ctx[5]
           ),
           listen_dev(
-            input0,
+            input,
             "input",
             /*input_handler*/
             ctx[6],
@@ -410,12 +322,6 @@ function create_fragment$2(ctx) {
             false,
             false,
             false
-          ),
-          listen_dev(
-            input1,
-            "input",
-            /*input1_input_handler*/
-            ctx[8]
           )
         ];
         mounted = true;
@@ -427,56 +333,47 @@ function create_fragment$2(ctx) {
       ctx2[0].label + ""))
         set_data_dev(t0, t0_value);
       if (dirty & /*pegAmount*/
-      4 && to_number(input0.value) !== /*pegAmount*/
+      4 && to_number(input.value) !== /*pegAmount*/
       ctx2[2]) {
         set_input_value(
-          input0,
+          input,
           /*pegAmount*/
           ctx2[2]
         );
       }
+      if ((!current || dirty & /*amtData*/
+      1) && t4_value !== (t4_value = /*amtData*/
+      ctx2[0].info + ""))
+        set_data_dev(t4, t4_value);
       if (
-        /*reason*/
-        ctx2[1]
+        /*amtData*/
+        ctx2[0].change > 0
       ) {
         if (if_block0) {
           if_block0.p(ctx2, dirty);
         } else {
           if_block0 = create_if_block_1$2(ctx2);
           if_block0.c();
-          if_block0.m(div2, t4);
+          if_block0.m(div1, null);
         }
       } else if (if_block0) {
         if_block0.d(1);
         if_block0 = null;
       }
-      if ((!current || dirty & /*amtData*/
-      1) && t5_value !== (t5_value = /*amtData*/
-      ctx2[0].info + ""))
-        set_data_dev(t5, t5_value);
       if (
-        /*amtData*/
-        ctx2[0].change > 0
+        /*errorReason*/
+        ctx2[1]
       ) {
         if (if_block1) {
           if_block1.p(ctx2, dirty);
         } else {
           if_block1 = create_if_block$2(ctx2);
           if_block1.c();
-          if_block1.m(div1, null);
+          if_block1.m(div2, t7);
         }
       } else if (if_block1) {
         if_block1.d(1);
         if_block1 = null;
-      }
-      if (dirty & /*amtData*/
-      1 && to_number(input1.value) !== /*amtData*/
-      ctx2[0].dust) {
-        set_input_value(
-          input1,
-          /*amtData*/
-          ctx2[0].dust
-        );
       }
       const feedisplay_changes = {};
       if (dirty & /*amtData*/
@@ -501,7 +398,7 @@ function create_fragment$2(ctx) {
     },
     d: function destroy(detaching) {
       if (detaching)
-        detach_dev(div5);
+        detach_dev(div3);
       if (if_block0)
         if_block0.d();
       if (if_block1)
@@ -527,29 +424,21 @@ function instance$2($$self, $$props, $$invalidate) {
   let low;
   let medium;
   let high;
-  let $sbtcConfig;
-  validate_store(sbtcConfig, "sbtcConfig");
-  component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(12, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
-  validate_slots("PegOutAmount", slots, []);
+  validate_slots("PegInAmount", slots, []);
   let { amtData } = $$props;
   const dispatch = createEventDispatcher();
-  let reason;
+  let errorReason;
   let pegAmount = amtData.pegAmount;
   const changePegIn = (maxValue) => {
-    $$invalidate(1, reason = void 0);
+    $$invalidate(1, errorReason = void 0);
     try {
-      if (pegAmount > $sbtcConfig.balance.balance) {
-        $$invalidate(1, reason = "Can't unwrap more sBTC then you own");
-        dispatch("amount_updated", {
-          opCode: "user",
-          error: true,
-          reason: "Can't unwrap more sBTC then you own"
-        });
+      if (pegAmount > amtData.maxCommit) {
+        $$invalidate(1, errorReason = "Can't wrap more btc than available.");
         return;
       }
       if (maxValue) {
-        $$invalidate(2, pegAmount = $sbtcConfig.balance.balance);
+        $$invalidate(2, pegAmount = amtData.maxCommit - amtData.fee);
       }
       const rate = amtData.fees.find((o) => o === amtData.fee);
       dispatch("amount_updated", {
@@ -559,7 +448,7 @@ function instance$2($$self, $$props, $$invalidate) {
         newFeeRate: rate
       });
     } catch (err) {
-      $$invalidate(1, reason = err || "Amount is not valid");
+      $$invalidate(1, errorReason = err || "Amount is not valid");
     }
   };
   const changeRate = (event) => {
@@ -573,49 +462,43 @@ function instance$2($$self, $$props, $$invalidate) {
   };
   $$self.$$.on_mount.push(function() {
     if (amtData === void 0 && !("amtData" in $$props || $$self.$$.bound[$$self.$$.props["amtData"]])) {
-      console.warn("<PegOutAmount> was created without expected prop 'amtData'");
+      console.warn("<PegInAmount> was created without expected prop 'amtData'");
     }
   });
   const writable_props = ["amtData"];
   Object.keys($$props).forEach((key) => {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
-      console.warn(`<PegOutAmount> was created with unknown prop '${key}'`);
+      console.warn(`<PegInAmount> was created with unknown prop '${key}'`);
   });
-  function input0_input_handler() {
+  function input_input_handler() {
     pegAmount = to_number(this.value);
     $$invalidate(2, pegAmount);
   }
   const input_handler = () => changePegIn(false);
   const click_handler = () => changePegIn(true);
-  function input1_input_handler() {
-    amtData.dust = to_number(this.value);
-    $$invalidate(0, amtData);
-  }
   $$self.$$set = ($$props2) => {
     if ("amtData" in $$props2)
       $$invalidate(0, amtData = $$props2.amtData);
   };
   $$self.$capture_state = () => ({
     createEventDispatcher,
-    sbtcConfig,
     FeeDisplay,
     amtData,
     dispatch,
-    reason,
+    errorReason,
     pegAmount,
     changePegIn,
     changeRate,
     init,
     high,
     medium,
-    low,
-    $sbtcConfig
+    low
   });
   $$self.$inject_state = ($$props2) => {
     if ("amtData" in $$props2)
       $$invalidate(0, amtData = $$props2.amtData);
-    if ("reason" in $$props2)
-      $$invalidate(1, reason = $$props2.reason);
+    if ("errorReason" in $$props2)
+      $$invalidate(1, errorReason = $$props2.errorReason);
     if ("pegAmount" in $$props2)
       $$invalidate(2, pegAmount = $$props2.pegAmount);
     if ("high" in $$props2)
@@ -644,32 +527,31 @@ function instance$2($$self, $$props, $$invalidate) {
   };
   return [
     amtData,
-    reason,
+    errorReason,
     pegAmount,
     changePegIn,
     changeRate,
-    input0_input_handler,
+    input_input_handler,
     input_handler,
-    click_handler,
-    input1_input_handler
+    click_handler
   ];
 }
-class PegOutAmount extends SvelteComponentDev {
+class PegInAmount extends SvelteComponentDev {
   constructor(options) {
     super(options);
     init$1(this, options, instance$2, create_fragment$2, safe_not_equal, { amtData: 0 });
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
-      tagName: "PegOutAmount",
+      tagName: "PegInAmount",
       options,
       id: create_fragment$2.name
     });
   }
   get amtData() {
-    throw new Error("<PegOutAmount>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    throw new Error("<PegInAmount>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
   set amtData(value) {
-    throw new Error("<PegOutAmount>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    throw new Error("<PegInAmount>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
 }
 const priv = utils.randomPrivateKey();
@@ -679,22 +561,26 @@ keySetForFeeCalculation.push({
   ecdsaPub: getPublicKey(priv, true),
   schnorrPub: schnorr.getPublicKey(priv)
 });
-const _PegOutTransaction = class extends PegTransaction {
+const _PegInTransaction = class extends PegTransaction {
   constructor() {
     super();
-    this.privKey = hex.decode("0101010101010101010101010101010101010101010101010101010101010101");
-    this.getChange = () => {
-      return this.maxCommit() - this.fee - this.dust;
-    };
-    this.setAmount = (amount) => {
+    __publicField(this, "getChange", () => {
+      return this.maxCommit() - this.pegInData.amount - this.fee;
+    });
+    __publicField(this, "setAmount", (amount) => {
+      if (amount > this.maxCommit() - this.fee) {
+        throw new Error("Amount is more than available " + this.maxCommit() + " less the gas " + this.fee);
+      }
       this.pegInData.amount = amount;
-    };
-    this.calculateFees = () => {
+    });
+    __publicField(this, "calculateFees", () => {
       if (!this.ready)
         throw new Error("Not ready!");
+      const stacksAddress = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN";
       const sbtcWalletAddress = "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss";
       const p2Ret = p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
       assert("wpkh" === p2Ret.type);
+      const privKey = hex.decode("0101010101010101010101010101010101010101010101010101010101010101");
       const tx = new Transaction({ allowUnknowOutput: true });
       for (const utxo of this.addressInfo.utxos) {
         if (this.isUTXOConfirmed(utxo)) {
@@ -704,7 +590,7 @@ const _PegOutTransaction = class extends PegTransaction {
             index: utxo.vout,
             witnessUtxo: {
               amount: 600n,
-              script: p2wpkh(secp256k1.getPublicKey(this.privKey, true)).script
+              script: p2wpkh(secp256k1.getPublicKey(privKey, true)).script
             }
           });
         } else {
@@ -713,11 +599,12 @@ const _PegOutTransaction = class extends PegTransaction {
       }
       if (tx.inputsLength === 0)
         throw new Error("No confirmed UTXOs");
-      const uint8array = new TextEncoder().encode(sbtcWalletAddress);
-      tx.addOutput({ script: Script.encode(["RETURN", uint8array]), amount: 0n });
-      tx.addOutputAddress(sbtcWalletAddress, BigInt(0), this.net);
-      tx.addOutputAddress(this.fromBtcAddress, BigInt(0), this.net);
-      tx.sign(this.privKey);
+      const asmScript = this.getOpDropP2shScript(stacksAddress, sbtcWalletAddress);
+      tx.addOutput({ script: asmScript, amount: BigInt(0) });
+      const changeAmount = Math.floor(0);
+      if (changeAmount > 0)
+        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+      tx.sign(privKey);
       tx.finalize();
       this.scureFee = Number(tx.fee);
       this.fees = [
@@ -732,98 +619,92 @@ const _PegOutTransaction = class extends PegTransaction {
       if (this.pegInData.amount === 0) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    };
-    this.getOutputsForDisplay = () => {
-      const changeAmount = Math.floor(this.maxCommit() - this.dust - this.fee);
-      const addr = new TextEncoder().encode(this.pegInData.stacksAddress || "stx address unknown");
+    });
+    __publicField(this, "getOutputsForDisplay", () => {
+      const changeAmount = this.getChange();
       const outs = [
-        { script: "RETURN " + addr, amount: 0 },
-        { address: this.pegInData.sbtcWalletAddress, amount: this.dust }
+        { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
+        { address: this.pegInData.sbtcWalletAddress, amount: this.pegInData.amount }
       ];
       if (changeAmount > 0)
         outs.push({ address: this.fromBtcAddress, amount: changeAmount });
       outs.push({ address: "pays " + this.fee + " satoshis to miner." });
       return outs;
-    };
-    this.getDataToSign = () => {
-      const view2 = this.amountToUint8(this.pegInData.amount);
-      const script = OutScript.encode(Address(this.net).decode(this.pegInData.sbtcWalletAddress));
-      const data = concatByteArrays([view2, script]);
-      return hex.encode(data);
-    };
-    this.amountToUint8 = (amt) => {
-      const buffer = new ArrayBuffer(9);
-      const view1 = new DataView(buffer);
-      view1.setUint32(0, amt, true);
-      const view2 = new Uint8Array(view1.buffer);
-      return view2;
-    };
-    this.buildTransaction = (signature) => {
+    });
+    __publicField(this, "buildTransaction", (signature) => {
       if (!this.ready)
         throw new Error("Not ready!");
-      if (!signature)
-        throw new Error("Signature of output 2 scriptPubKey is required");
-      return { opReturn: this.buildOpReturn(signature), opDrop: this.buildOpDrop(signature) };
-    };
-    this.addInputs = (tx) => {
+      if (signature)
+        throw new Error("signature only for peg out!");
+      return { opReturn: this.buildOpReturn(), opDrop: this.buildOpDrop() };
+    });
+    __publicField(this, "addInputs", (tx) => {
       for (const utxo of this.addressInfo.utxos) {
         const script = RawTx.decode(hex.decode(utxo.tx.hex));
-        tx.addInput({
-          txid: hex.decode(utxo.txid),
-          index: utxo.vout,
-          witnessUtxo: {
-            script: script.outputs[utxo.vout].script,
-            amount: BigInt(utxo.value)
-          }
-        });
+        if (this.isUTXOConfirmed(utxo)) {
+          tx.addInput({
+            txid: hex.decode(utxo.txid),
+            index: utxo.vout,
+            witnessUtxo: {
+              script: script.outputs[utxo.vout].script,
+              amount: BigInt(utxo.value)
+            }
+          });
+        }
       }
-    };
-    this.buildOpReturn = (signature) => {
-      if (!this.ready)
-        throw new Error("Not ready!");
-      if (!signature)
-        throw new Error("Signature of output 2 scriptPubKey is required");
+    });
+    __publicField(this, "buildOpReturn", () => {
+      if (!this.pegInData.stacksAddress)
+        throw new Error("Stacks address required!");
       const tx = new Transaction({ allowUnknowOutput: true });
       this.addInputs(tx);
-      if (!signature)
-        throw new Error("Signature of the amount and output 2 scriptPubKey is missing.");
-      const data = this.buildData(signature);
+      const data = this.buildData(this.pegInData.stacksAddress);
       tx.addOutput({ script: Script.encode(["RETURN", data]), amount: 0n });
-      tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
-      if (this.getChange() > 0)
-        tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+      tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
+      const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+      if (changeAmount > 0)
+        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
       return tx;
-    };
-    this.buildOpDrop = (signature) => {
-      if (!signature)
-        throw new Error("Signature of the amount and output 2 scriptPubKey is missing.");
+    });
+    __publicField(this, "buildData", (sigOrPrin) => {
+      const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
+      const opCodeBuf = hex.decode(PEGIN_OPCODE);
+      const addr = decodeStacksAddress(sigOrPrin.split(".")[0]);
+      const addr0Buf = hex.decode(addr[0].toString(16));
+      const addr1Buf = hex.decode(addr[1]);
+      let data;
+      if (sigOrPrin.indexOf(".") > -1) {
+        const cnameBuf = new TextEncoder().encode(sigOrPrin.split(".")[1]);
+        data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf, cnameBuf]);
+        console.log(sigOrPrin.split(".")[1]);
+      } else {
+        data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf]);
+      }
+      return data;
+    });
+    __publicField(this, "buildOpDrop", () => {
+      if (!this.pegInData.stacksAddress)
+        throw new Error("Stacks address required!");
       const tx = new Transaction({ allowUnknowOutput: true });
       this.addInputs(tx);
-      const asmScript = this.getOpDropP2shScript(signature);
-      tx.addOutput({ script: asmScript, amount: BigInt(this.dust) });
-      if (this.getChange() > 0)
-        tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+      const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress);
+      tx.addOutput({ script: asmScript, amount: BigInt(this.pegInData.amount) });
+      const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+      if (changeAmount > 0)
+        tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
       return tx;
-    };
-    this.buildData = (sigOrPrin) => {
-      const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
-      const opCodeBuf = hex.decode(PEGOUT_OPCODE);
-      const view2 = this.amountToUint8(this.pegInData.amount);
-      const sigBuf = hex.decode(sigOrPrin);
-      const data = concatByteArrays([magicBuf, opCodeBuf, view2, sigBuf]);
-      return data;
-    };
+    });
   }
-  getOpDropP2shScript(signature) {
-    const script = OutScript.encode(Address(this.net).decode(this.pegInData.sbtcWalletAddress));
-    const data = this.buildData(signature);
-    const asmScript = Script.encode([data, "DROP", "DUP", "HASH160", script, "EQUALVERIFY", "CHECKSIG"]);
+  getOpDropP2shScript(stacksAddress, sbtcWalletAddress) {
+    const data = this.buildData(stacksAddress);
+    const uint8array = new TextEncoder().encode(sbtcWalletAddress);
+    const asmScript = Script.encode([data, "DROP", "DUP", "HASH160", uint8array, "EQUALVERIFY", "CHECKSIG"]);
     return asmScript;
   }
 };
-let PegOutTransaction = _PegOutTransaction;
-PegOutTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) => {
-  const me = new _PegOutTransaction();
+let PegInTransaction = _PegInTransaction;
+__publicField(PegInTransaction, "create", async (network, fromBtcAddress, sbtcWalletAddress) => {
+  const me = new _PegInTransaction();
   me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
   me.fromBtcAddress = fromBtcAddress;
   me.pegInData = {
@@ -836,9 +717,9 @@ PegOutTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) =>
   me.feeInfo = btcFeeRates.feeInfo;
   me.ready = true;
   return me;
-};
-PegOutTransaction.hydrate = (o) => {
-  const me = new _PegOutTransaction();
+});
+__publicField(PegInTransaction, "hydrate", (o) => {
+  const me = new _PegInTransaction();
   me.net = o.net;
   if (!o.fromBtcAddress)
     throw new Error("No address - use create instead!");
@@ -851,106 +732,23 @@ PegOutTransaction.hydrate = (o) => {
   me.scureFee = o.scureFee;
   me.ready = o.ready;
   return me;
-};
+});
 const BuildTransaction_svelte_svelte_type_style_lang = "";
-const file$1 = "src/lib/components/unwrapper/BuildTransaction.svelte";
-function create_else_block_1(ctx) {
-  let div;
-  let p0;
-  let t0;
-  let t1;
-  let p1;
-  let span1;
-  let t2;
-  let span0;
-  let t3;
-  const block = {
-    c: function create() {
-      div = element("div");
-      p0 = element("p");
-      t0 = text("Problem Connecting to APIs");
-      t1 = space();
-      p1 = element("p");
-      span1 = element("span");
-      t2 = text("Status: Bridge API currently experiencing connectivity problems.\n    We are already working on this.\n  ");
-      span0 = element("span");
-      t3 = text("Please report this to the core engineering team!");
-      this.h();
-    },
-    l: function claim(nodes) {
-      div = claim_element(nodes, "DIV", { class: true });
-      var div_nodes = children(div);
-      p0 = claim_element(div_nodes, "P", { class: true });
-      var p0_nodes = children(p0);
-      t0 = claim_text(p0_nodes, "Problem Connecting to APIs");
-      p0_nodes.forEach(detach_dev);
-      t1 = claim_space(div_nodes);
-      p1 = claim_element(div_nodes, "P", {});
-      var p1_nodes = children(p1);
-      span1 = claim_element(p1_nodes, "SPAN", { class: true });
-      var span1_nodes = children(span1);
-      t2 = claim_text(span1_nodes, "Status: Bridge API currently experiencing connectivity problems.\n    We are already working on this.\n  ");
-      span0 = claim_element(span1_nodes, "SPAN", { class: true });
-      var span0_nodes = children(span0);
-      t3 = claim_text(span0_nodes, "Please report this to the core engineering team!");
-      span0_nodes.forEach(detach_dev);
-      span1_nodes.forEach(detach_dev);
-      p1_nodes.forEach(detach_dev);
-      div_nodes.forEach(detach_dev);
-      this.h();
-    },
-    h: function hydrate() {
-      attr_dev(p0, "class", "text-white");
-      add_location(p0, file$1, 146, 2, 5134);
-      attr_dev(span0, "class", "mt-5 text-warning");
-      add_location(span0, file$1, 149, 2, 5318);
-      attr_dev(span1, "class", "nav-item");
-      add_location(span1, file$1, 147, 5, 5192);
-      add_location(p1, file$1, 147, 2, 5189);
-      attr_dev(div, "class", "lobby bg-dark");
-      add_location(div, file$1, 145, 0, 5104);
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, div, anchor);
-      append_hydration_dev(div, p0);
-      append_hydration_dev(p0, t0);
-      append_hydration_dev(div, t1);
-      append_hydration_dev(div, p1);
-      append_hydration_dev(p1, span1);
-      append_hydration_dev(span1, t2);
-      append_hydration_dev(span1, span0);
-      append_hydration_dev(span0, t3);
-    },
-    p: noop,
-    i: noop,
-    o: noop,
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(div);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
-    id: create_else_block_1.name,
-    type: "else",
-    source: "(145:0) {:else}",
-    ctx
-  });
-  return block;
-}
+const { console: console_1 } = globals;
+const file$1 = "src/lib/components/wrapper/BuildTransaction.svelte";
 function create_if_block$1(ctx) {
   let div;
   let utxoselection;
   let t0;
-  let current_block_type_index;
-  let if_block0;
   let t1;
-  let if_block1_anchor;
+  let t2;
+  let t3;
+  let if_block3_anchor;
   let current;
   utxoselection = new UTXOSelection({
     props: { utxoData: (
       /*utxoData*/
-      ctx[5]
+      ctx[6]
     ) },
     $$inline: true
   });
@@ -959,32 +757,39 @@ function create_if_block$1(ctx) {
     /*utxoUpdated*/
     ctx[12]
   );
-  const if_block_creators = [create_if_block_2$1, create_else_block$1];
-  const if_blocks = [];
-  function select_block_type_1(ctx2, dirty) {
-    if (
-      /*$sbtcConfig*/
-      ctx2[1].balance.balance <= 0
-    )
-      return 0;
-    return 1;
-  }
-  current_block_type_index = select_block_type_1(ctx);
-  if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  let if_block0 = (
+    /*showStxAddress*/
+    ctx[5] && create_if_block_4(ctx)
+  );
   let if_block1 = (
+    /*showAmount*/
+    ctx[4] && create_if_block_3(ctx)
+  );
+  let if_block2 = (
     /*errorReason*/
-    ctx[0] && create_if_block_1$1(ctx)
+    ctx[0] && create_if_block_2$1(ctx)
+  );
+  let if_block3 = (
+    /*showButton*/
+    ctx[3] && create_if_block_1$1(ctx)
   );
   const block = {
     c: function create() {
       div = element("div");
       create_component(utxoselection.$$.fragment);
       t0 = space();
-      if_block0.c();
+      if (if_block0)
+        if_block0.c();
       t1 = space();
       if (if_block1)
         if_block1.c();
-      if_block1_anchor = empty();
+      t2 = space();
+      if (if_block2)
+        if_block2.c();
+      t3 = space();
+      if (if_block3)
+        if_block3.c();
+      if_block3_anchor = empty();
       this.h();
     },
     l: function claim(nodes) {
@@ -993,175 +798,64 @@ function create_if_block$1(ctx) {
       claim_component(utxoselection.$$.fragment, div_nodes);
       div_nodes.forEach(detach_dev);
       t0 = claim_space(nodes);
-      if_block0.l(nodes);
+      if (if_block0)
+        if_block0.l(nodes);
       t1 = claim_space(nodes);
       if (if_block1)
         if_block1.l(nodes);
-      if_block1_anchor = empty();
+      t2 = claim_space(nodes);
+      if (if_block2)
+        if_block2.l(nodes);
+      t3 = claim_space(nodes);
+      if (if_block3)
+        if_block3.l(nodes);
+      if_block3_anchor = empty();
       this.h();
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 122, 2, 4190);
+      add_location(div, file$1, 123, 2, 4394);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
       mount_component(utxoselection, div, null);
       insert_hydration_dev(target, t0, anchor);
-      if_blocks[current_block_type_index].m(target, anchor);
+      if (if_block0)
+        if_block0.m(target, anchor);
       insert_hydration_dev(target, t1, anchor);
       if (if_block1)
         if_block1.m(target, anchor);
-      insert_hydration_dev(target, if_block1_anchor, anchor);
+      insert_hydration_dev(target, t2, anchor);
+      if (if_block2)
+        if_block2.m(target, anchor);
+      insert_hydration_dev(target, t3, anchor);
+      if (if_block3)
+        if_block3.m(target, anchor);
+      insert_hydration_dev(target, if_block3_anchor, anchor);
       current = true;
     },
     p: function update(ctx2, dirty) {
       const utxoselection_changes = {};
       if (dirty & /*utxoData*/
-      32)
+      64)
         utxoselection_changes.utxoData = /*utxoData*/
-        ctx2[5];
+        ctx2[6];
       utxoselection.$set(utxoselection_changes);
-      let previous_block_index = current_block_type_index;
-      current_block_type_index = select_block_type_1(ctx2);
-      if (current_block_type_index === previous_block_index) {
-        if_blocks[current_block_type_index].p(ctx2, dirty);
-      } else {
-        group_outros();
-        transition_out(if_blocks[previous_block_index], 1, 1, () => {
-          if_blocks[previous_block_index] = null;
-        });
-        check_outros();
-        if_block0 = if_blocks[current_block_type_index];
-        if (!if_block0) {
-          if_block0 = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx2);
-          if_block0.c();
-        } else {
-          if_block0.p(ctx2, dirty);
-        }
-        transition_in(if_block0, 1);
-        if_block0.m(t1.parentNode, t1);
-      }
-      if (
-        /*errorReason*/
-        ctx2[0]
-      ) {
-        if (if_block1) {
-          if_block1.p(ctx2, dirty);
-        } else {
-          if_block1 = create_if_block_1$1(ctx2);
-          if_block1.c();
-          if_block1.m(if_block1_anchor.parentNode, if_block1_anchor);
-        }
-      } else if (if_block1) {
-        if_block1.d(1);
-        if_block1 = null;
-      }
-    },
-    i: function intro(local) {
-      if (current)
-        return;
-      transition_in(utxoselection.$$.fragment, local);
-      transition_in(if_block0);
-      current = true;
-    },
-    o: function outro(local) {
-      transition_out(utxoselection.$$.fragment, local);
-      transition_out(if_block0);
-      current = false;
-    },
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(div);
-      destroy_component(utxoselection);
-      if (detaching)
-        detach_dev(t0);
-      if_blocks[current_block_type_index].d(detaching);
-      if (detaching)
-        detach_dev(t1);
-      if (if_block1)
-        if_block1.d(detaching);
-      if (detaching)
-        detach_dev(if_block1_anchor);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
-    id: create_if_block$1.name,
-    type: "if",
-    source: "(122:0) {#if ready}",
-    ctx
-  });
-  return block;
-}
-function create_else_block$1(ctx) {
-  let t0;
-  let t1;
-  let if_block2_anchor;
-  let current;
-  let if_block0 = (
-    /*showStxAddress*/
-    ctx[4] && create_if_block_5(ctx)
-  );
-  let if_block1 = (
-    /*showAmount*/
-    ctx[3] && create_if_block_4(ctx)
-  );
-  let if_block2 = (
-    /*showButton*/
-    ctx[2] && create_if_block_3(ctx)
-  );
-  const block = {
-    c: function create() {
-      if (if_block0)
-        if_block0.c();
-      t0 = space();
-      if (if_block1)
-        if_block1.c();
-      t1 = space();
-      if (if_block2)
-        if_block2.c();
-      if_block2_anchor = empty();
-    },
-    l: function claim(nodes) {
-      if (if_block0)
-        if_block0.l(nodes);
-      t0 = claim_space(nodes);
-      if (if_block1)
-        if_block1.l(nodes);
-      t1 = claim_space(nodes);
-      if (if_block2)
-        if_block2.l(nodes);
-      if_block2_anchor = empty();
-    },
-    m: function mount(target, anchor) {
-      if (if_block0)
-        if_block0.m(target, anchor);
-      insert_hydration_dev(target, t0, anchor);
-      if (if_block1)
-        if_block1.m(target, anchor);
-      insert_hydration_dev(target, t1, anchor);
-      if (if_block2)
-        if_block2.m(target, anchor);
-      insert_hydration_dev(target, if_block2_anchor, anchor);
-      current = true;
-    },
-    p: function update(ctx2, dirty) {
       if (
         /*showStxAddress*/
-        ctx2[4]
+        ctx2[5]
       ) {
         if (if_block0) {
           if_block0.p(ctx2, dirty);
           if (dirty & /*showStxAddress*/
-          16) {
+          32) {
             transition_in(if_block0, 1);
           }
         } else {
-          if_block0 = create_if_block_5(ctx2);
+          if_block0 = create_if_block_4(ctx2);
           if_block0.c();
           transition_in(if_block0, 1);
-          if_block0.m(t0.parentNode, t0);
+          if_block0.m(t1.parentNode, t1);
         }
       } else if (if_block0) {
         group_outros();
@@ -1172,19 +866,19 @@ function create_else_block$1(ctx) {
       }
       if (
         /*showAmount*/
-        ctx2[3]
+        ctx2[4]
       ) {
         if (if_block1) {
           if_block1.p(ctx2, dirty);
           if (dirty & /*showAmount*/
-          8) {
+          16) {
             transition_in(if_block1, 1);
           }
         } else {
-          if_block1 = create_if_block_4(ctx2);
+          if_block1 = create_if_block_3(ctx2);
           if_block1.c();
           transition_in(if_block1, 1);
-          if_block1.m(t1.parentNode, t1);
+          if_block1.m(t2.parentNode, t2);
         }
       } else if (if_block1) {
         group_outros();
@@ -1194,162 +888,84 @@ function create_else_block$1(ctx) {
         check_outros();
       }
       if (
-        /*showButton*/
-        ctx2[2]
+        /*errorReason*/
+        ctx2[0]
       ) {
         if (if_block2) {
           if_block2.p(ctx2, dirty);
         } else {
-          if_block2 = create_if_block_3(ctx2);
+          if_block2 = create_if_block_2$1(ctx2);
           if_block2.c();
-          if_block2.m(if_block2_anchor.parentNode, if_block2_anchor);
+          if_block2.m(t3.parentNode, t3);
         }
       } else if (if_block2) {
         if_block2.d(1);
         if_block2 = null;
       }
+      if (
+        /*showButton*/
+        ctx2[3]
+      ) {
+        if (if_block3) {
+          if_block3.p(ctx2, dirty);
+        } else {
+          if_block3 = create_if_block_1$1(ctx2);
+          if_block3.c();
+          if_block3.m(if_block3_anchor.parentNode, if_block3_anchor);
+        }
+      } else if (if_block3) {
+        if_block3.d(1);
+        if_block3 = null;
+      }
     },
     i: function intro(local) {
       if (current)
         return;
+      transition_in(utxoselection.$$.fragment, local);
       transition_in(if_block0);
       transition_in(if_block1);
       current = true;
     },
     o: function outro(local) {
+      transition_out(utxoselection.$$.fragment, local);
       transition_out(if_block0);
       transition_out(if_block1);
       current = false;
     },
     d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div);
+      destroy_component(utxoselection);
+      if (detaching)
+        detach_dev(t0);
       if (if_block0)
         if_block0.d(detaching);
       if (detaching)
-        detach_dev(t0);
+        detach_dev(t1);
       if (if_block1)
         if_block1.d(detaching);
       if (detaching)
-        detach_dev(t1);
+        detach_dev(t2);
       if (if_block2)
         if_block2.d(detaching);
       if (detaching)
-        detach_dev(if_block2_anchor);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
-    id: create_else_block$1.name,
-    type: "else",
-    source: "(129:2) {:else}",
-    ctx
-  });
-  return block;
-}
-function create_if_block_2$1(ctx) {
-  let div;
-  let p0;
-  let t0;
-  let a0;
-  let t1_value = (
-    /*$sbtcConfig*/
-    ctx[1].balance.address + ""
-  );
-  let t1;
-  let a0_href_value;
-  let t2;
-  let p1;
-  let a1;
-  let t3;
-  const block = {
-    c: function create() {
-      div = element("div");
-      p0 = element("p");
-      t0 = text("No SBTC to unwrap for account: ");
-      a0 = element("a");
-      t1 = text(t1_value);
-      t2 = space();
-      p1 = element("p");
-      a1 = element("a");
-      t3 = text("Get sBTC here!");
-      this.h();
-    },
-    l: function claim(nodes) {
-      div = claim_element(nodes, "DIV", { class: true });
-      var div_nodes = children(div);
-      p0 = claim_element(div_nodes, "P", { class: true });
-      var p0_nodes = children(p0);
-      t0 = claim_text(p0_nodes, "No SBTC to unwrap for account: ");
-      a0 = claim_element(p0_nodes, "A", { href: true });
-      var a0_nodes = children(a0);
-      t1 = claim_text(a0_nodes, t1_value);
-      a0_nodes.forEach(detach_dev);
-      p0_nodes.forEach(detach_dev);
-      t2 = claim_space(div_nodes);
-      p1 = claim_element(div_nodes, "P", {});
-      var p1_nodes = children(p1);
-      a1 = claim_element(p1_nodes, "A", { href: true });
-      var a1_nodes = children(a1);
-      t3 = claim_text(a1_nodes, "Get sBTC here!");
-      a1_nodes.forEach(detach_dev);
-      p1_nodes.forEach(detach_dev);
-      div_nodes.forEach(detach_dev);
-      this.h();
-    },
-    h: function hydrate() {
-      attr_dev(a0, "href", a0_href_value = explorerAddressUrl(
-        /*$sbtcConfig*/
-        ctx[1].balance.address
-      ));
-      add_location(a0, file$1, 125, 51, 4411);
-      attr_dev(p0, "class", "mb-4");
-      add_location(p0, file$1, 125, 4, 4364);
-      attr_dev(a1, "href", "/wrap");
-      add_location(a1, file$1, 126, 7, 4514);
-      add_location(p1, file$1, 126, 4, 4511);
-      attr_dev(div, "class", "text-center text-warning my-5");
-      add_location(div, file$1, 124, 2, 4316);
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, div, anchor);
-      append_hydration_dev(div, p0);
-      append_hydration_dev(p0, t0);
-      append_hydration_dev(p0, a0);
-      append_hydration_dev(a0, t1);
-      append_hydration_dev(div, t2);
-      append_hydration_dev(div, p1);
-      append_hydration_dev(p1, a1);
-      append_hydration_dev(a1, t3);
-    },
-    p: function update(ctx2, dirty) {
-      if (dirty & /*$sbtcConfig*/
-      2 && t1_value !== (t1_value = /*$sbtcConfig*/
-      ctx2[1].balance.address + ""))
-        set_data_dev(t1, t1_value);
-      if (dirty & /*$sbtcConfig*/
-      2 && a0_href_value !== (a0_href_value = explorerAddressUrl(
-        /*$sbtcConfig*/
-        ctx2[1].balance.address
-      ))) {
-        attr_dev(a0, "href", a0_href_value);
-      }
-    },
-    i: noop,
-    o: noop,
-    d: function destroy(detaching) {
+        detach_dev(t3);
+      if (if_block3)
+        if_block3.d(detaching);
       if (detaching)
-        detach_dev(div);
+        detach_dev(if_block3_anchor);
     }
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_2$1.name,
+    id: create_if_block$1.name,
     type: "if",
-    source: "(124:2) {#if $sbtcConfig.balance.balance <= 0}",
+    source: "(123:0) {#if inited}",
     ctx
   });
   return block;
 }
-function create_if_block_5(ctx) {
+function create_if_block_4(ctx) {
   let div;
   let principal;
   let current;
@@ -1380,7 +996,7 @@ function create_if_block_5(ctx) {
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 130, 2, 4597);
+      add_location(div, file$1, 125, 2, 4502);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
@@ -1406,25 +1022,87 @@ function create_if_block_5(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_5.name,
+    id: create_if_block_4.name,
     type: "if",
-    source: "(130:2) {#if showStxAddress}",
+    source: "(125:2) {#if showStxAddress}",
     ctx
   });
   return block;
 }
-function create_if_block_4(ctx) {
-  let div;
-  let pegoutamount;
+function create_if_block_3(ctx) {
+  let previous_key = (
+    /*componentKey3*/
+    ctx[1]
+  );
+  let key_block_anchor;
   let current;
-  pegoutamount = new PegOutAmount({
+  let key_block = create_key_block(ctx);
+  const block = {
+    c: function create() {
+      key_block.c();
+      key_block_anchor = empty();
+    },
+    l: function claim(nodes) {
+      key_block.l(nodes);
+      key_block_anchor = empty();
+    },
+    m: function mount(target, anchor) {
+      key_block.m(target, anchor);
+      insert_hydration_dev(target, key_block_anchor, anchor);
+      current = true;
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*componentKey3*/
+      2 && safe_not_equal(previous_key, previous_key = /*componentKey3*/
+      ctx2[1])) {
+        group_outros();
+        transition_out(key_block, 1, 1, noop);
+        check_outros();
+        key_block = create_key_block(ctx2);
+        key_block.c();
+        transition_in(key_block, 1);
+        key_block.m(key_block_anchor.parentNode, key_block_anchor);
+      } else {
+        key_block.p(ctx2, dirty);
+      }
+    },
+    i: function intro(local) {
+      if (current)
+        return;
+      transition_in(key_block);
+      current = true;
+    },
+    o: function outro(local) {
+      transition_out(key_block);
+      current = false;
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(key_block_anchor);
+      key_block.d(detaching);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_if_block_3.name,
+    type: "if",
+    source: "(128:2) {#if showAmount}",
+    ctx
+  });
+  return block;
+}
+function create_key_block(ctx) {
+  let div;
+  let peginamount;
+  let current;
+  peginamount = new PegInAmount({
     props: { amtData: (
       /*amtData*/
-      ctx[6]
+      ctx[8]()
     ) },
     $$inline: true
   });
-  pegoutamount.$on(
+  peginamount.$on(
     "amount_updated",
     /*amountUpdated*/
     ctx[10]
@@ -1432,59 +1110,94 @@ function create_if_block_4(ctx) {
   const block = {
     c: function create() {
       div = element("div");
-      create_component(pegoutamount.$$.fragment);
+      create_component(peginamount.$$.fragment);
       this.h();
     },
     l: function claim(nodes) {
       div = claim_element(nodes, "DIV", { class: true });
       var div_nodes = children(div);
-      claim_component(pegoutamount.$$.fragment, div_nodes);
+      claim_component(peginamount.$$.fragment, div_nodes);
       div_nodes.forEach(detach_dev);
       this.h();
     },
     h: function hydrate() {
       attr_dev(div, "class", "mb-4");
-      add_location(div, file$1, 133, 2, 4720);
+      add_location(div, file$1, 129, 2, 4648);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div, anchor);
-      mount_component(pegoutamount, div, null);
+      mount_component(peginamount, div, null);
       current = true;
     },
-    p: function update(ctx2, dirty) {
-      const pegoutamount_changes = {};
-      if (dirty & /*amtData*/
-      64)
-        pegoutamount_changes.amtData = /*amtData*/
-        ctx2[6];
-      pegoutamount.$set(pegoutamount_changes);
-    },
+    p: noop,
     i: function intro(local) {
       if (current)
         return;
-      transition_in(pegoutamount.$$.fragment, local);
+      transition_in(peginamount.$$.fragment, local);
       current = true;
     },
     o: function outro(local) {
-      transition_out(pegoutamount.$$.fragment, local);
+      transition_out(peginamount.$$.fragment, local);
       current = false;
     },
     d: function destroy(detaching) {
       if (detaching)
         detach_dev(div);
-      destroy_component(pegoutamount);
+      destroy_component(peginamount);
     }
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_4.name,
-    type: "if",
-    source: "(133:2) {#if showAmount}",
+    id: create_key_block.name,
+    type: "key",
+    source: "(129:2) {#key componentKey3}",
     ctx
   });
   return block;
 }
-function create_if_block_3(ctx) {
+function create_if_block_2$1(ctx) {
+  let div;
+  const block = {
+    c: function create() {
+      div = element("div");
+      this.h();
+    },
+    l: function claim(nodes) {
+      div = claim_element(nodes, "DIV", { class: true });
+      var div_nodes = children(div);
+      div_nodes.forEach(detach_dev);
+      this.h();
+    },
+    h: function hydrate() {
+      attr_dev(div, "class", "text-danger");
+      add_location(div, file$1, 132, 19, 4778);
+    },
+    m: function mount(target, anchor) {
+      insert_hydration_dev(target, div, anchor);
+      div.innerHTML = /*errorReason*/
+      ctx[0];
+    },
+    p: function update(ctx2, dirty) {
+      if (dirty & /*errorReason*/
+      1)
+        div.innerHTML = /*errorReason*/
+        ctx2[0];
+    },
+    d: function destroy(detaching) {
+      if (detaching)
+        detach_dev(div);
+    }
+  };
+  dispatch_dev("SvelteRegisterBlock", {
+    block,
+    id: create_if_block_2$1.name,
+    type: "if",
+    source: "(133:2) {#if errorReason}",
+    ctx
+  });
+  return block;
+}
+function create_if_block_1$1(ctx) {
   let div1;
   let div0;
   let button;
@@ -1515,11 +1228,11 @@ function create_if_block_3(ctx) {
     h: function hydrate() {
       attr_dev(button, "class", "btn btn-outline-info w-100");
       attr_dev(button, "type", "button");
-      add_location(button, file$1, 138, 6, 4880);
+      add_location(button, file$1, 136, 6, 4901);
       attr_dev(div0, "class", "col");
-      add_location(div0, file$1, 137, 4, 4856);
-      attr_dev(div1, "class", "row s-DXQTMplg7quh");
-      add_location(div1, file$1, 136, 2, 4834);
+      add_location(div0, file$1, 135, 4, 4877);
+      attr_dev(div1, "class", "row s-3u3nVvJxVO6Z");
+      add_location(div1, file$1, 134, 2, 4855);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, div1, anchor);
@@ -1550,100 +1263,61 @@ function create_if_block_3(ctx) {
   };
   dispatch_dev("SvelteRegisterBlock", {
     block,
-    id: create_if_block_3.name,
-    type: "if",
-    source: "(136:2) {#if showButton}",
-    ctx
-  });
-  return block;
-}
-function create_if_block_1$1(ctx) {
-  let div;
-  let t;
-  const block = {
-    c: function create() {
-      div = element("div");
-      t = text(
-        /*errorReason*/
-        ctx[0]
-      );
-      this.h();
-    },
-    l: function claim(nodes) {
-      div = claim_element(nodes, "DIV", { class: true });
-      var div_nodes = children(div);
-      t = claim_text(
-        div_nodes,
-        /*errorReason*/
-        ctx[0]
-      );
-      div_nodes.forEach(detach_dev);
-      this.h();
-    },
-    h: function hydrate() {
-      attr_dev(div, "class", "text-danger");
-      add_location(div, file$1, 143, 19, 5046);
-    },
-    m: function mount(target, anchor) {
-      insert_hydration_dev(target, div, anchor);
-      append_hydration_dev(div, t);
-    },
-    p: function update(ctx2, dirty) {
-      if (dirty & /*errorReason*/
-      1)
-        set_data_dev(
-          t,
-          /*errorReason*/
-          ctx2[0]
-        );
-    },
-    d: function destroy(detaching) {
-      if (detaching)
-        detach_dev(div);
-    }
-  };
-  dispatch_dev("SvelteRegisterBlock", {
-    block,
     id: create_if_block_1$1.name,
     type: "if",
-    source: "(144:2) {#if errorReason}",
+    source: "(134:2) {#if showButton}",
     ctx
   });
   return block;
 }
 function create_fragment$1(ctx) {
-  let current_block_type_index;
-  let if_block;
   let if_block_anchor;
   let current;
-  const if_block_creators = [create_if_block$1, create_else_block_1];
-  const if_blocks = [];
-  function select_block_type(ctx2, dirty) {
-    if (
-      /*ready*/
-      ctx2[8]
-    )
-      return 0;
-    return 1;
-  }
-  current_block_type_index = select_block_type(ctx);
-  if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
+  let if_block = (
+    /*inited*/
+    ctx[2] && create_if_block$1(ctx)
+  );
   const block = {
     c: function create() {
-      if_block.c();
+      if (if_block)
+        if_block.c();
       if_block_anchor = empty();
     },
     l: function claim(nodes) {
-      if_block.l(nodes);
+      if (if_block)
+        if_block.l(nodes);
       if_block_anchor = empty();
     },
     m: function mount(target, anchor) {
-      if_blocks[current_block_type_index].m(target, anchor);
+      if (if_block)
+        if_block.m(target, anchor);
       insert_hydration_dev(target, if_block_anchor, anchor);
       current = true;
     },
     p: function update(ctx2, [dirty]) {
-      if_block.p(ctx2, dirty);
+      if (
+        /*inited*/
+        ctx2[2]
+      ) {
+        if (if_block) {
+          if_block.p(ctx2, dirty);
+          if (dirty & /*inited*/
+          4) {
+            transition_in(if_block, 1);
+          }
+        } else {
+          if_block = create_if_block$1(ctx2);
+          if_block.c();
+          transition_in(if_block, 1);
+          if_block.m(if_block_anchor.parentNode, if_block_anchor);
+        }
+      } else if (if_block) {
+        group_outros();
+        transition_out(if_block, 1, 1, () => {
+          if_block = null;
+        });
+        check_outros();
+      }
     },
     i: function intro(local) {
       if (current)
@@ -1656,7 +1330,8 @@ function create_fragment$1(ctx) {
       current = false;
     },
     d: function destroy(detaching) {
-      if_blocks[current_block_type_index].d(detaching);
+      if (if_block)
+        if_block.d(detaching);
       if (detaching)
         detach_dev(if_block_anchor);
     }
@@ -1671,63 +1346,82 @@ function create_fragment$1(ctx) {
   return block;
 }
 function instance$1($$self, $$props, $$invalidate) {
-  let amtData;
   let utxoData;
   let showStxAddress;
   let showAmount;
   let showButton;
   let $sbtcConfig;
   validate_store(sbtcConfig, "sbtcConfig");
-  component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(1, $sbtcConfig = $$value));
+  component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(17, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("BuildTransaction", slots, []);
-  let { poTx } = $$props;
-  if (!poTx.fromBtcAddress)
-    poTx.fromBtcAddress = addresses().cardinal;
+  let { piTx } = $$props;
+  if (!piTx.fromBtcAddress)
+    piTx.fromBtcAddress = addresses().cardinal;
+  let componentKey3 = 0;
   const getExplorerUrl = () => {
-    return explorerBtcAddressUrl(poTx.fromBtcAddress);
+    return explorerBtcAddressUrl(piTx.fromBtcAddress);
   };
-  if (!poTx.pegInData.stacksAddress && addresses().stxAddress)
-    poTx.pegInData.stacksAddress = addresses().stxAddress;
+  if (!piTx.pegInData.stacksAddress && addresses().stxAddress)
+    piTx.pegInData.stacksAddress = addresses().stxAddress;
   const principalData = {
-    label: "Stacks Contract or Account Address",
-    info: "sBTC will be burned from this account",
-    currentAddress: poTx.pegInData.stacksAddress
+    label: "Stacks Address (Account or Contract)",
+    info: "sBTC will be minted to this account or contract",
+    currentAddress: piTx.pegInData.stacksAddress
+  };
+  const amtData = () => {
+    return {
+      pegIn: true,
+      label: "Amount (Satoshis)",
+      info: "The amount to wrap cannot exceed your balance less some satoshi to pay gas fees",
+      pegAmount: piTx.pegInData.amount ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee,
+      maxCommit: piTx.maxCommit(),
+      change: piTx.getChange(),
+      fee: piTx.fee,
+      fees: piTx.fees,
+      dust: piTx.dust
+    };
   };
   const network = CONFIG.VITE_NETWORK;
+  console.log("piTx:", piTx);
   const dispatch = createEventDispatcher();
   let ready = true;
   let errorReason;
   let stxAddressOk = true;
-  let amountOk = true;
+  let amountOk = false;
   const updateConfig = () => {
+    var _a;
     const conf = $sbtcConfig;
-    conf.pegOutTransaction = poTx;
+    conf.pegInTransaction = piTx;
     sbtcConfig.update(() => conf);
-    $$invalidate(15, amountOk = poTx.pegInData.amount > 0);
+    $$invalidate(15, amountOk = ((_a = piTx.pegInData) == null ? void 0 : _a.amount) > 0);
   };
   const requestSignature = () => {
-    const script = poTx.getDataToSign();
-    signMessage(requestSignatureCB, script);
-  };
-  const requestSignatureCB = async (sigData, message) => {
-    const conf = $sbtcConfig;
-    conf.sigData = sigData;
-    sbtcConfig.update(() => conf);
     dispatch("request_signature");
   };
   const amountUpdated = (event) => {
+    $$invalidate(0, errorReason = void 0);
     $$invalidate(15, amountOk = !event.detail.error);
-    if (amountOk) {
-      poTx.setFeeRate(event.detail.newFeeRate);
-      poTx.setAmount(event.detail.newAmount);
-      updateConfig();
+    if (event.detail.opCode === "user") {
+      try {
+        piTx.setAmount(event.detail.newAmount);
+      } catch (err) {
+        $$invalidate(0, errorReason = err);
+        piTx.setAmount(piTx.maxCommit() - piTx.fee);
+      }
+    } else if (event.detail.opCode === "prio") {
+      piTx.setFeeRate(event.detail.newFeeRate);
+      if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee)
+        piTx.setAmount(piTx.maxCommit() - piTx.fee);
     }
+    updateConfig();
+    $$invalidate(1, componentKey3++, componentKey3);
   };
   const principalUpdated = (event) => {
+    $$invalidate(0, errorReason = void 0);
     $$invalidate(14, stxAddressOk = !event.detail.error);
     if (stxAddressOk) {
-      poTx.setStacksAddress(event.detail.currentAddress);
+      piTx.setStacksAddress(event.detail.currentAddress);
       updateConfig();
     }
   };
@@ -1736,62 +1430,57 @@ function instance$1($$self, $$props, $$invalidate) {
     const data = event.detail;
     if (data.opCode === "address-change") {
       try {
-        const p0 = poTx == null ? void 0 : poTx.pegInData;
-        $$invalidate(13, poTx = await PegOutTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress));
-        poTx.calculateFees();
-        if (p0.amount > 0 && p0.amount < poTx.maxCommit())
-          poTx.setAmount(p0.amount);
+        const p0 = piTx.pegInData;
+        $$invalidate(13, piTx = await PegInTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress));
+        piTx.calculateFees();
+        if (p0.amount > 0 && p0.amount < piTx.maxCommit())
+          piTx.setAmount(p0.amount);
         updateConfig();
       } catch (err) {
-        if (err.message !== "No inputs signed")
-          $$invalidate(0, errorReason = err.message);
-        else {
-          if (err.message === "No confirmed UTXOs")
-            ;
-          $$invalidate(0, errorReason = "Please fix above errors and try again.");
-        }
+        $$invalidate(0, errorReason = "Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=" + getExplorerUrl() + ' target="_blank">btc explorer</a>');
       }
     }
   };
+  let inited = false;
   onMount(async () => {
-    if (!poTx.pegInData.stacksAddress)
+    if (!piTx.pegInData.stacksAddress)
       $$invalidate(14, stxAddressOk = false);
-    if (poTx.pegInData.amount > 0)
+    if (piTx.pegInData.amount > 0)
       $$invalidate(15, amountOk = true);
     updateConfig();
+    $$invalidate(2, inited = true);
   });
   $$self.$$.on_mount.push(function() {
-    if (poTx === void 0 && !("poTx" in $$props || $$self.$$.bound[$$self.$$.props["poTx"]])) {
-      console.warn("<BuildTransaction> was created without expected prop 'poTx'");
+    if (piTx === void 0 && !("piTx" in $$props || $$self.$$.bound[$$self.$$.props["piTx"]])) {
+      console_1.warn("<BuildTransaction> was created without expected prop 'piTx'");
     }
   });
-  const writable_props = ["poTx"];
+  const writable_props = ["piTx"];
   Object.keys($$props).forEach((key) => {
     if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$" && key !== "slot")
-      console.warn(`<BuildTransaction> was created with unknown prop '${key}'`);
+      console_1.warn(`<BuildTransaction> was created with unknown prop '${key}'`);
   });
   const click_handler = () => requestSignature();
   $$self.$$set = ($$props2) => {
-    if ("poTx" in $$props2)
-      $$invalidate(13, poTx = $$props2.poTx);
+    if ("piTx" in $$props2)
+      $$invalidate(13, piTx = $$props2.piTx);
   };
   $$self.$capture_state = () => ({
     CONFIG,
     onMount,
     sbtcConfig,
     Principal,
-    PegOutAmount,
+    PegInAmount,
     UTXOSelection,
     createEventDispatcher,
-    PegOutTransaction,
-    explorerAddressUrl,
+    PegInTransaction,
     addresses,
-    signMessage,
-    hex,
     explorerBtcAddressUrl,
-    poTx,
+    piTx,
+    componentKey3,
     getExplorerUrl,
     principalData,
+    amtData,
     network,
     dispatch,
     ready,
@@ -1800,97 +1489,84 @@ function instance$1($$self, $$props, $$invalidate) {
     amountOk,
     updateConfig,
     requestSignature,
-    requestSignatureCB,
     amountUpdated,
     principalUpdated,
     utxoUpdated,
+    inited,
     showButton,
     showAmount,
     showStxAddress,
     utxoData,
-    amtData,
     $sbtcConfig
   });
   $$self.$inject_state = ($$props2) => {
-    if ("poTx" in $$props2)
-      $$invalidate(13, poTx = $$props2.poTx);
+    if ("piTx" in $$props2)
+      $$invalidate(13, piTx = $$props2.piTx);
+    if ("componentKey3" in $$props2)
+      $$invalidate(1, componentKey3 = $$props2.componentKey3);
     if ("ready" in $$props2)
-      $$invalidate(8, ready = $$props2.ready);
+      ready = $$props2.ready;
     if ("errorReason" in $$props2)
       $$invalidate(0, errorReason = $$props2.errorReason);
     if ("stxAddressOk" in $$props2)
       $$invalidate(14, stxAddressOk = $$props2.stxAddressOk);
     if ("amountOk" in $$props2)
       $$invalidate(15, amountOk = $$props2.amountOk);
+    if ("inited" in $$props2)
+      $$invalidate(2, inited = $$props2.inited);
     if ("showButton" in $$props2)
-      $$invalidate(2, showButton = $$props2.showButton);
+      $$invalidate(3, showButton = $$props2.showButton);
     if ("showAmount" in $$props2)
-      $$invalidate(3, showAmount = $$props2.showAmount);
+      $$invalidate(4, showAmount = $$props2.showAmount);
     if ("showStxAddress" in $$props2)
-      $$invalidate(4, showStxAddress = $$props2.showStxAddress);
+      $$invalidate(5, showStxAddress = $$props2.showStxAddress);
     if ("utxoData" in $$props2)
-      $$invalidate(5, utxoData = $$props2.utxoData);
-    if ("amtData" in $$props2)
-      $$invalidate(6, amtData = $$props2.amtData);
+      $$invalidate(6, utxoData = $$props2.utxoData);
   };
   if ($$props && "$$inject" in $$props) {
     $$self.$inject_state($$props.$$inject);
   }
   $$self.$$.update = () => {
-    if ($$self.$$.dirty & /*poTx, $sbtcConfig*/
-    8194) {
-      $$invalidate(6, amtData = {
-        pegIn: false,
-        label: "Amount (SBTC)",
-        info: "The amount to unwrap cannot exceed your sBTC balance",
-        pegAmount: poTx.pegInData.amount > 0 ? poTx.pegInData.amount : $sbtcConfig.balance.balance,
-        maxCommit: poTx.maxCommit(),
-        change: poTx.getChange(),
-        fee: poTx.fee,
-        fees: poTx.fees,
-        dust: poTx.dust
-      });
-    }
-    if ($$self.$$.dirty & /*poTx*/
+    if ($$self.$$.dirty & /*piTx*/
     8192) {
-      $$invalidate(5, utxoData = {
+      $$invalidate(6, utxoData = {
         label: "Your Bitcoin Address",
-        info: "Your sBTC will be burned and the equivalent bitcoin then sent to this address",
-        utxos: poTx.addressInfo.utxos,
-        maxCommit: poTx.ready ? poTx.maxCommit() : 0,
-        fromBtcAddress: poTx.ready ? poTx.fromBtcAddress : addresses().cardinal,
-        numbInputs: poTx.ready ? poTx.addressInfo.utxos.length : 0,
+        info: "You'll send bitcoin from here to the sBTC wallet",
+        utxos: piTx.addressInfo.utxos,
+        maxCommit: piTx.ready ? piTx.maxCommit() : 0,
+        fromBtcAddress: piTx.fromBtcAddress,
+        numbInputs: piTx.ready ? piTx.addressInfo.utxos.length : 0,
         network
       });
     }
-    if ($$self.$$.dirty & /*poTx, errorReason*/
+    if ($$self.$$.dirty & /*piTx, errorReason*/
     8193) {
-      $$invalidate(4, showStxAddress = poTx.ready && !errorReason);
+      $$invalidate(5, showStxAddress = piTx.ready && !errorReason);
     }
-    if ($$self.$$.dirty & /*poTx, stxAddressOk, errorReason*/
+    if ($$self.$$.dirty & /*piTx, stxAddressOk, errorReason*/
     24577) {
-      $$invalidate(3, showAmount = poTx.ready && stxAddressOk && !errorReason);
+      $$invalidate(4, showAmount = piTx.ready && stxAddressOk && !errorReason);
     }
-    if ($$self.$$.dirty & /*poTx, amountOk, errorReason*/
+    if ($$self.$$.dirty & /*piTx, amountOk, errorReason*/
     40961) {
-      $$invalidate(2, showButton = poTx.ready && amountOk && !errorReason);
+      $$invalidate(3, showButton = piTx.ready && amountOk && !errorReason);
     }
   };
   return [
     errorReason,
-    $sbtcConfig,
+    componentKey3,
+    inited,
     showButton,
     showAmount,
     showStxAddress,
     utxoData,
-    amtData,
     principalData,
-    ready,
+    amtData,
     requestSignature,
     amountUpdated,
     principalUpdated,
     utxoUpdated,
-    poTx,
+    piTx,
     stxAddressOk,
     amountOk,
     click_handler
@@ -1899,7 +1575,7 @@ function instance$1($$self, $$props, $$invalidate) {
 class BuildTransaction extends SvelteComponentDev {
   constructor(options) {
     super(options);
-    init$1(this, options, instance$1, create_fragment$1, safe_not_equal, { poTx: 13 });
+    init$1(this, options, instance$1, create_fragment$1, safe_not_equal, { piTx: 13 });
     dispatch_dev("SvelteRegisterComponent", {
       component: this,
       tagName: "BuildTransaction",
@@ -1907,15 +1583,15 @@ class BuildTransaction extends SvelteComponentDev {
       id: create_fragment$1.name
     });
   }
-  get poTx() {
+  get piTx() {
     throw new Error("<BuildTransaction>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
-  set poTx(value) {
+  set piTx(value) {
     throw new Error("<BuildTransaction>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
   }
 }
 const _page_svelte_svelte_type_style_lang = "";
-const file = "src/routes/unwrap/+page.svelte";
+const file = "src/routes/wrap/+page.svelte";
 function create_else_block(ctx) {
   let t;
   let if_block1_anchor;
@@ -2033,7 +1709,7 @@ function create_else_block(ctx) {
     block,
     id: create_else_block.name,
     type: "else",
-    source: "(44:7) {:else}",
+    source: "(42:6) {:else}",
     ctx
   });
   return block;
@@ -2042,8 +1718,8 @@ function create_if_block(ctx) {
   let buildtransaction;
   let current;
   buildtransaction = new BuildTransaction({
-    props: { poTx: (
-      /*poTx*/
+    props: { piTx: (
+      /*piTx*/
       ctx[0]
     ) },
     $$inline: true
@@ -2066,9 +1742,9 @@ function create_if_block(ctx) {
     },
     p: function update(ctx2, dirty) {
       const buildtransaction_changes = {};
-      if (dirty & /*poTx*/
+      if (dirty & /*piTx*/
       1)
-        buildtransaction_changes.poTx = /*poTx*/
+        buildtransaction_changes.piTx = /*piTx*/
         ctx2[0];
       buildtransaction.$set(buildtransaction_changes);
     },
@@ -2090,7 +1766,7 @@ function create_if_block(ctx) {
     block,
     id: create_if_block.name,
     type: "if",
-    source: "(42:7) {#if view === 'build_tx_view'}",
+    source: "(40:6) {#if view === 'build_tx_view'}",
     ctx
   });
   return block;
@@ -2105,7 +1781,7 @@ function create_if_block_2(ctx) {
         ctx[1]
       ),
       pegInfo: JSON.parse(JSON.stringify(
-        /*poTx*/
+        /*piTx*/
         ctx[0]
       ))
     },
@@ -2133,10 +1809,10 @@ function create_if_block_2(ctx) {
       2)
         signtransaction_changes.sigData = /*sigData*/
         ctx2[1];
-      if (dirty & /*poTx*/
+      if (dirty & /*piTx*/
       1)
         signtransaction_changes.pegInfo = JSON.parse(JSON.stringify(
-          /*poTx*/
+          /*piTx*/
           ctx2[0]
         ));
       signtransaction.$set(signtransaction_changes);
@@ -2159,7 +1835,7 @@ function create_if_block_2(ctx) {
     block,
     id: create_if_block_2.name,
     type: "if",
-    source: "(45:8) {#if sigData && !sigData.webWallet}",
+    source: "(43:7) {#if sigData && !sigData.webWallet}",
     ctx
   });
   return block;
@@ -2174,7 +1850,7 @@ function create_if_block_1(ctx) {
         ctx[1]
       ),
       pegInfo: JSON.parse(JSON.stringify(
-        /*poTx*/
+        /*piTx*/
         ctx[0]
       ))
     },
@@ -2202,10 +1878,10 @@ function create_if_block_1(ctx) {
       2)
         signtransactionweb_changes.sigData = /*sigData*/
         ctx2[1];
-      if (dirty & /*poTx*/
+      if (dirty & /*piTx*/
       1)
         signtransactionweb_changes.pegInfo = JSON.parse(JSON.stringify(
-          /*poTx*/
+          /*piTx*/
           ctx2[0]
         ));
       signtransactionweb.$set(signtransactionweb_changes);
@@ -2228,7 +1904,7 @@ function create_if_block_1(ctx) {
     block,
     id: create_if_block_1.name,
     type: "if",
-    source: "(48:6) {#if sigData && sigData.webWallet}",
+    source: "(46:7) {#if sigData && sigData.webWallet}",
     ctx
   });
   return block;
@@ -2273,12 +1949,12 @@ function create_fragment(ctx) {
       div5 = element("div");
       div4 = element("div");
       h1 = element("h1");
-      t0 = text("Unwrap ");
+      t0 = text("Wrap ");
       span = element("span");
-      t1 = text("sBTC");
+      t1 = text("BTC");
       t2 = space();
       h2 = element("h2");
-      t3 = text("sBTC to BTC");
+      t3 = text("BTC to sBTC");
       t4 = space();
       div0 = element("div");
       create_component(sbtcwalletdisplay.$$.fragment);
@@ -2298,16 +1974,16 @@ function create_fragment(ctx) {
       var div4_nodes = children(div4);
       h1 = claim_element(div4_nodes, "H1", { class: true });
       var h1_nodes = children(h1);
-      t0 = claim_text(h1_nodes, "Unwrap ");
+      t0 = claim_text(h1_nodes, "Wrap ");
       span = claim_element(h1_nodes, "SPAN", { class: true });
       var span_nodes = children(span);
-      t1 = claim_text(span_nodes, "sBTC");
+      t1 = claim_text(span_nodes, "BTC");
       span_nodes.forEach(detach_dev);
       h1_nodes.forEach(detach_dev);
       t2 = claim_space(div4_nodes);
       h2 = claim_element(div4_nodes, "H2", { class: true });
       var h2_nodes = children(h2);
-      t3 = claim_text(h2_nodes, "sBTC to BTC");
+      t3 = claim_text(h2_nodes, "BTC to sBTC");
       h2_nodes.forEach(detach_dev);
       t4 = claim_space(div4_nodes);
       div0 = claim_element(div4_nodes, "DIV", { class: true });
@@ -2331,25 +2007,25 @@ function create_fragment(ctx) {
       this.h();
     },
     h: function hydrate() {
-      attr_dev(span, "class", "strokeme-warning");
-      add_location(span, file, 33, 35, 1446);
-      attr_dev(h1, "class", "text-warning s-sCjUEJHBVR8B");
-      add_location(h1, file, 33, 3, 1414);
-      attr_dev(h2, "class", "text-warning mb-3");
-      add_location(h2, file, 34, 3, 1497);
+      attr_dev(span, "class", "strokeme-info");
+      add_location(span, file, 31, 30, 1363);
+      attr_dev(h1, "class", "text-info s-RlVVnrAOzilK");
+      add_location(h1, file, 31, 3, 1336);
+      attr_dev(h2, "class", "text-info mb-3");
+      add_location(h2, file, 32, 3, 1410);
       attr_dev(div0, "class", "my-3 d-flex justify-content-between text-white");
-      add_location(div0, file, 35, 3, 1547);
-      add_location(div1, file, 40, 5, 1730);
+      add_location(div0, file, 33, 3, 1457);
+      add_location(div1, file, 38, 5, 1640);
       attr_dev(div2, "class", "card border p-4");
-      add_location(div2, file, 39, 4, 1695);
+      add_location(div2, file, 37, 4, 1605);
       attr_dev(div3, "class", "d-flex justify-content-center");
-      add_location(div3, file, 38, 3, 1647);
+      add_location(div3, file, 36, 3, 1557);
       attr_dev(div4, "class", "card-width");
-      add_location(div4, file, 32, 2, 1386);
+      add_location(div4, file, 30, 2, 1308);
       attr_dev(div5, "class", "my-4 p-4");
-      add_location(div5, file, 31, 1, 1361);
-      attr_dev(section, "class", "bg-dark s-sCjUEJHBVR8B");
-      add_location(section, file, 30, 0, 1334);
+      add_location(div5, file, 29, 1, 1283);
+      attr_dev(section, "class", "bg-dark s-RlVVnrAOzilK");
+      add_location(section, file, 28, 0, 1256);
     },
     m: function mount(target, anchor) {
       insert_hydration_dev(target, section, anchor);
@@ -2429,20 +2105,18 @@ function instance($$self, $$props, $$invalidate) {
   component_subscribe($$self, sbtcConfig, ($$value) => $$invalidate(5, $sbtcConfig = $$value));
   let { $$slots: slots = {}, $$scope } = $$props;
   validate_slots("Page", slots, []);
-  let poTx = $sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
+  let piTx = $sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
   let sigData;
   const openSigView = () => {
-    $$invalidate(0, poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction));
-    if (!poTx.pegInData.stacksAddress)
-      poTx.setStacksAddress(addresses().stxAddress);
-    const signature = $sbtcConfig.sigData.signature;
-    const txs = poTx.buildTransaction(signature);
+    $$invalidate(0, piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction));
+    if (!piTx.pegInData.stacksAddress)
+      piTx.setStacksAddress(addresses().stxAddress);
     $$invalidate(1, sigData = {
-      pegin: false,
-      webWallet: poTx.fromBtcAddress === addresses().cardinal,
-      txs,
-      outputsForDisplay: poTx.getOutputsForDisplay(),
-      inputsForDisplay: poTx.addressInfo.utxos
+      pegin: true,
+      webWallet: piTx.fromBtcAddress === addresses().cardinal,
+      txs: piTx == null ? void 0 : piTx.buildTransaction(void 0),
+      outputsForDisplay: piTx == null ? void 0 : piTx.getOutputsForDisplay(),
+      inputsForDisplay: piTx == null ? void 0 : piTx.addressInfo.utxos
     });
     $$invalidate(2, view = "sign_tx_view");
   };
@@ -2458,11 +2132,11 @@ function instance($$self, $$props, $$invalidate) {
     BuildTransaction,
     SignTransaction,
     SignTransactionWeb,
-    SbtcWalletDisplay,
     sbtcConfig,
-    PegOutTransaction,
+    PegInTransaction,
+    SbtcWalletDisplay,
     addresses,
-    poTx,
+    piTx,
     sigData,
     openSigView,
     updateTransaction,
@@ -2470,8 +2144,8 @@ function instance($$self, $$props, $$invalidate) {
     $sbtcConfig
   });
   $$self.$inject_state = ($$props2) => {
-    if ("poTx" in $$props2)
-      $$invalidate(0, poTx = $$props2.poTx);
+    if ("piTx" in $$props2)
+      $$invalidate(0, piTx = $$props2.piTx);
     if ("sigData" in $$props2)
       $$invalidate(1, sigData = $$props2.sigData);
     if ("view" in $$props2)
@@ -2481,7 +2155,7 @@ function instance($$self, $$props, $$invalidate) {
     $$self.$inject_state($$props.$$inject);
   }
   $$invalidate(2, view = "build_tx_view");
-  return [poTx, sigData, view, openSigView, updateTransaction];
+  return [piTx, sigData, view, openSigView, updateTransaction];
 }
 class Page extends SvelteComponentDev {
   constructor(options) {

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-SBTC-Bridge supports trustless swaps of BTC to/from sBTC,
+sBTC-Bridge supports trustless swaps of BTC to/from sBTC,
 a [SIP-010](https://github.com/stacksgov/sips/blob/main/sips/sip-010/sip-010-fungible-token-standard.md) compliant fungible token on the Stacks Blockchain that can be used in
 defi protocols, nft marketplace, dao governance and many more applications.
 
