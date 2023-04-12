@@ -18,7 +18,7 @@ setConfig($page.url.search);
 const search = $page.url.search;
 beforeNavigate((nav) => {
   const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-	if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet')) {
+	if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet') > -1) {
     nav.cancel();
     goto(next + '?net=testnet')
   }
@@ -49,7 +49,11 @@ const initApplication = async () => {
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
-  data = JSON.parse(await fetchSbtcData());
+  try {
+    data = JSON.parse(await fetchSbtcData());
+  } catch(err) {
+    data = {}
+  }
   bootstrap = (await import('bootstrap'));
   try {
     await tick();

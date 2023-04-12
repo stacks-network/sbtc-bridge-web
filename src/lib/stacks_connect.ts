@@ -52,7 +52,7 @@ type AddressObject = {
 	stxAddress: string; cardinal: string; ordinal: string;
 }
 
-async function fetchSbtcBalance () {
+export async function fetchSbtcBalance () {
 	const adrds:AddressObject = addresses();
 	const result = await fetchUserSbtcBalance(adrds.stxAddress);
 	sbtcConfig.update((conf:SbtcConfig) => {

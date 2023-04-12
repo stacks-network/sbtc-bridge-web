@@ -48,8 +48,8 @@ const DEVNET_CONFIG = {
 export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(search:string) {
-	if (search.indexOf('net=testnet') > -1) CONFIG = TESTNET_CONFIG;
-	else if (search.indexOf('net=devnet') > -1) CONFIG = DEVNET_CONFIG;
+	if (search.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
+	else if (search.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
 	else CONFIG = MAINNET_CONFIG
     if (import.meta.env.MODE === 'linode-staging') {
         CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
