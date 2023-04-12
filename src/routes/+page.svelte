@@ -1,10 +1,11 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { goto } from "$app/navigation";
 import { sbtcConfig } from '$stores/stores';
 import { explorerTxUrl } from '$lib/utils'
 import type { SbtcConfig } from '$types/sbtc_config';
 
-const sbtcContract = import.meta.env.VITE_SBTC_CONTRACT_ID;
+const sbtcContract = CONFIG.VITE_SBTC_CONTRACT_ID;
 const sbtcContractUrl = explorerTxUrl(sbtcContract);
 
 const togglePeg = (pegin:boolean) => {

@@ -1,4 +1,5 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
@@ -39,7 +40,7 @@ const amtData = () => {
   }
 }
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 $: utxoData = {
   label: 'Your Bitcoin Address',
   info: 'You\'ll send bitcoin from here to the sBTC wallet',

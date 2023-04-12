@@ -1,6 +1,9 @@
 <script lang="ts">
+import { setConfig } from '$lib/config';
 import "../app.scss";
 import { tick, onMount, onDestroy } from 'svelte';
+import { beforeNavigate, goto } from "$app/navigation";
+import { page } from "$app/stores";
 import Header from "$lib/header/Header.svelte";
 import Footer from "$lib/header/Footer.svelte";
 import { sbtcConfig } from '$stores/stores'
@@ -8,12 +11,22 @@ import type { SbtcConfig } from '$types/sbtc_config'
 import { loginStacksJs, userSession } from '$lib/stacks_connect'
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { defaultSbtcConfig } from '$lib/sbtc';
+import { fetchSbtcData } from "$lib/bridge_api";
 
-// data - imported from layout.ts
+console.log('process.env: ', import.meta.env);
+setConfig($page.url.search);
+const search = $page.url.search;
+beforeNavigate((nav) => {
+  const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
+	if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet')) {
+    nav.cancel();
+    goto(next + '?net=testnet')
+  }
+})
+
 
 export let data:any;
-const unsubscribe = sbtcConfig.subscribe((conf) => {
-});
+const unsubscribe = sbtcConfig.subscribe((conf) => {});
 onDestroy(unsubscribe);
 //setUpMicroStacks();
 //setUpStacksJs();
@@ -30,15 +43,16 @@ const initApplication = async () => {
   if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
   }
-  conf.sbtcContractData = data.sbtcContractData;
+  conf.sbtcContractData = data;
   sbtcConfig.update(() => conf);
 }
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
-  await tick();
+  data = JSON.parse(await fetchSbtcData());
   bootstrap = (await import('bootstrap'));
   try {
+    await tick();
     await initApplication();
     inited = true;
   } catch (err) {

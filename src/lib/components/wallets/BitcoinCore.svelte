@@ -1,4 +1,5 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import bitcoincore1 from '$lib/assets/wallets/bitcoincore1.png';
 import bitcoincore2 from '$lib/assets/wallets/bitcoincore2.png';
 import bitcoincore3 from '$lib/assets/wallets/bitcoincore3.png';
@@ -6,7 +7,7 @@ import bitcoincore4 from '$lib/assets/wallets/bitcoincore4.png';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import { sbtcConfig } from '$stores/stores';
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(from!)
