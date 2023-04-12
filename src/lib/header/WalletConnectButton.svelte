@@ -66,7 +66,7 @@ onMount(async () => {
 		<li class="nav-item"><span class="dropdown-item">Toggle Network</span></li>
 		<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('testnet')}>Testnet</a></li>
 		<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('mainnet')}>Mainnet</a></li>
-		<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('devnet')}>Devnet</a></li>
+		<!--<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('devnet')}>Devnet</a></li>-->
 		<li class="nav-item mt-4">
 		{#if webWalletNeeded}
 		<span class="dropdown-item" style="position: relative; top: 2px;">

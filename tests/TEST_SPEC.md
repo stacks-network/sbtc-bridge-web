@@ -23,7 +23,7 @@ Run electrum in testnet mode, e.g.
 /Applications/Electrum.app/Contents/MacOS/run_electrum --testnet
 ```
 
-### Run the SBTC-Bridge
+### Run the sBTC-Bridge
 
 See README for instructions. After the setup login into the application
 as `accounts.deployer` from Devnet settings.
@@ -62,7 +62,7 @@ clarinet integrate
 
 #### 1 BTC Peg In
 
-SBTC Wallet: `tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e`
+sBTC Wallet: `tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e`
 From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
 Stacks Address: `ST2ST2H80NP5C9SPR4ENJ1Z9CDM9PKAJVPYWPQZ50`
 Peg In Amount: 0.07251634
@@ -78,7 +78,7 @@ TC1_TXID=5e2b695b9557e2bbaeddf764c7cc7c3ec19f78ecd69c99ece9d8a49cbc1abe65
 #### 2 BTC Peg In
 
 From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
-SBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
+sBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
 Stacks Address: `ST2ST2H80NP5C9SPR4ENJ1Z9CDM9PKAJVPYWPQZ50` (Balance before 0.05995887 sBTC)
 Peg In Amount: 50000
 
@@ -92,14 +92,14 @@ TC1_TXID=c8047ec3fd2890cf4caa5f8cdcdbf7d3ecb7c0d0732ecd3518766e9eb79a1a9c
 #### 3 BTC Peg Out
 
 From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
-SBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
+sBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
 Stacks Address: `ST2ST2H80NP5C9SPR4ENJ1Z9CDM9PKAJVPYWPQZ50` (Balance before 0.05995887 sBTC)
 Peg Out Amount: 5530688 (see op_return vout 0)
 Peg Out Dust: 500
 Peg Out Change: 5537161
 
-Question: SBTC Wallet is a Bitcoin-QT v 19.1 wallet. Even though this tx is broadcast and confirmed the wallet
-does not seem to read the UTXO. Note the OP_RETURN is at index 0 and the SBTC Wallet UTXO
+Question: sBTC Wallet is a Bitcoin-QT v 19.1 wallet. Even though this tx is broadcast and confirmed the wallet
+does not seem to read the UTXO. Note the OP_RETURN is at index 0 and the sBTC Wallet UTXO
 is index 1.
 
 Update 1: the tx only has 3 confirmations - maybe this is why.
@@ -111,15 +111,15 @@ TXID=0e1474207bb7787b4557c9f365b3cba3aa3737b61729110070569f24fcce51ee
 #### 4 BTC Peg Out
 
 From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
-SBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
+sBTC Wallet: `2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb`
 Stacks Address: `ST2ST2H80NP5C9SPR4ENJ1Z9CDM9PKAJVPYWPQZ50` (Balance before 0.05578706 sBTC)
 Peg Out Amount: 35000 (see op_return vout 0)
 Peg Out Stx Address: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM (see op_return vout 0)
 Peg Out Dust: 500 (0.000005)
 Peg Out Change: tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5	     0.05517706
 
-Question: SBTC Wallet is a Bitcoin-QT v 19.1 wallet. Even though this tx is broadcast and confirmed the wallet
-does not seem to read the UTXO. Note the OP_RETURN is at index 0 and the SBTC Wallet UTXO
+Question: sBTC Wallet is a Bitcoin-QT v 19.1 wallet. Even though this tx is broadcast and confirmed the wallet
+does not seem to read the UTXO. Note the OP_RETURN is at index 0 and the sBTC Wallet UTXO
 is index 1.
 
 Update 1: the tx only has 3 confirmations - maybe this is why.
@@ -131,7 +131,7 @@ TXID=523700c7597e94e91f2879f55a125e8379b37408512a67b48c69b31d9915f879
 ##### 4.1 Peg Out 23/Feb
 
 From BTC Wallet: `tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5`
-SBTC Wallet: `tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss`
+sBTC Wallet: `tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss`
 Stacks Address: `ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5` (Balance before 0.05578706 sBTC)
 Peg Out Amount: 35000 (see op_return vout 0)
 Peg Out Stx Address: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM (see op_return vout 0)

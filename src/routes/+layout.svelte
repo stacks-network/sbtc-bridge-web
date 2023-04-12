@@ -81,7 +81,7 @@ onMount(async () => {
 </div>
 {:else}
 <div class="lobby bg-dark">
-  <p class="text-white">Connect your Hiro web wallet to start wrapping SBTC!</p>
+  <p class="text-white">Connect your Hiro web wallet to start wrapping sBTC!</p>
   <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
   <p class="mt-5 text-warning">Currently in Alpha Testing!</p>
 </div>

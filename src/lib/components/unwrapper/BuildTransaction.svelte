@@ -29,7 +29,7 @@ const principalData = {
 }
 $: amtData = {
   pegIn: false,
-  label: 'Amount (SBTC)',
+  label: 'Amount (sBTC)',
   info: 'The amount to unwrap cannot exceed your sBTC balance',
   pegAmount: (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance,
   maxCommit: poTx.maxCommit(),
@@ -134,7 +134,7 @@ onMount(async () => {
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
-    <p class="mb-4">No SBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
+    <p class="mb-4">No sBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
     <p><a href="/wrap">Get sBTC here!</a></p>
   </div>
   {:else}

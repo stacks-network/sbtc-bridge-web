@@ -34,7 +34,7 @@ const updateTransaction = () => {
 <section class="bg-dark">
 	<div class="my-4 p-4">
 		<div class="card-width">
-			<h1 class="text-info">Wrap <span class="strokeme-info">sBTC</span></h1>
+			<h1 class="text-info">Wrap <span class="strokeme-info">BTC</span></h1>
 			<h2 class="text-info mb-3">BTC to sBTC</h2>
 			<div class="my-3 d-flex justify-content-between text-white">
 				<SbtcWalletDisplay />

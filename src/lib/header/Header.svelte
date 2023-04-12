@@ -32,7 +32,7 @@ const network = CONFIG.VITE_NETWORK;
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						SBTC Exchange
+						sBTC Exchange
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(true)}>Wrap BTC</a></li>
@@ -41,7 +41,7 @@ const network = CONFIG.VITE_NETWORK;
 				</li>
 				<li class="badge nav-item">
 					<span class="pointer nav-link">
-						<span title="Your SBTC Transaction History"><a class="" href="/history">History</a></span>
+						<span title="Your sBTC Transaction History"><a class="" href="/history">History</a></span>
 					</span>
 				</li>
 				<WalletConnectButton/>

@@ -101,7 +101,7 @@ onMount(async () => {
   <div class="my-5 text-center text-warning">
     <p>Your transaction has been sent to the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.
     </p>
-    <p>Once confirmed your SBTC will be minted to your Stacks Wallet. 
+    <p>Once confirmed your sBTC will be minted to your Stacks Wallet. 
     </p>
   </div>
   {:else}

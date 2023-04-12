@@ -8,7 +8,7 @@ import Pegs from '$lib/components/history/Pegs.svelte';
 		<div class="card-width">
 			<div class="row">
 				<div class="d-flex justify-content-between">
-				  <h1 class="pointer text-white"><span class="strokeme-white">SBTC</span> Transaction History</h1>
+				  <h1 class="pointer text-white"><span class="strokeme-white">sBTC</span> Transaction History</h1>
 				</div>
 			</div>
 			<Pegs />
