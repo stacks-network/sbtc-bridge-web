@@ -52,7 +52,7 @@
 		"vitest-fetch-mock": "^0.2.1"
 	},
 	"dependencies": {
-		"@noble/secp256k1": "^1.7.1",
+		"@noble/secp256k1": "^2.0.0",
 		"@scure/base": "^1.1.1",
 		"@scure/bip32": "^1.1.0",
 		"@scure/btc-signer": "^0.5.1",
