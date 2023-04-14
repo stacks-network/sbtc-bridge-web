@@ -4,8 +4,6 @@
 	"type": "module",
 	"author": "Mike Cohen",
 	"scripts": {
-		"docker": "docker build -t sbtc-bridge-web . && docker run -p 8080:8080 sbtc-bridge-web",
-		"start": "node server.js",
 		"dev": "vite dev --port=8080 --mode linode-staging",
 		"build-linode": "vite build --mode linode-staging",
 		"build-stag": "vite build --mode staging",
@@ -68,7 +66,6 @@
 		"c32check": "^2.0.0",
 		"ecpair": "^2.1.0",
 		"events": "^3.3.0",
-		"express": "^4.18.2",
 		"gh-pages": "^5.0.0",
 		"popper": "^1.0.1",
 		"postcss": "^8.4.14",
