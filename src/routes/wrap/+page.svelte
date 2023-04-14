@@ -19,7 +19,7 @@ const openSigView = () => {
 	sigData = {
 		pegin: true,
 		webWallet: piTx.fromBtcAddress === addresses().cardinal,
-		txs: piTx?.buildTransaction(undefined),
+		opReturnTx: piTx?.buildOpReturnTransaction(),
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}

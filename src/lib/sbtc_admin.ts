@@ -1,6 +1,7 @@
 /**
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
+import { CONFIG } from '$lib/config';
 import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
@@ -30,8 +31,8 @@ export async function mintTo(amount:number, stxAddress: string, btcTxId: string)
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
     functionName: 'mint!',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -53,8 +54,8 @@ export async function burnFrom(amount:number, stxAddress: string, btcTxId: strin
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Allow,
-    contractAddress: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
     functionName: 'burn!',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -79,8 +80,8 @@ export async function setCoordinator(address:string) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
     functionName: 'set-coordinator-data',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -100,8 +101,8 @@ export async function setBtcWallet(address:string) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
+    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
     functionName: 'set-bitcoin-wallet-address',
     functionArgs: functionArgs,
     onFinish: (data: any) => {

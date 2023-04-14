@@ -12,7 +12,9 @@ import type { PeginRequestI } from '$types/pegin_request';
 
 export interface PegOutTransactionI extends PegTransactionI {
 
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: PeginRequestI|btc.Transaction };
+	buildTransaction: (signature:string) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
+	buildOpDropTransaction: (signature:string) => btc.Transaction|PeginRequestI;
+	buildOpReturnTransaction: (signature:string) => btc.Transaction;
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -90,7 +92,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 
 		// random addresses for calculating the fee.
 		if (!this.ready) throw new Error('Not ready!');
-		const stacksAddress = 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN';
 		const sbtcWalletAddress = 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7';
 
 		// prepare random signer
@@ -163,7 +164,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return view2;
 	}
 
-	buildTransaction = (signature:string|undefined) => {
+	buildTransaction = (signature:string) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		//console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
@@ -184,7 +185,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		}
 	}
 
-	private buildOpReturnTransaction = (signature:string|undefined) => {
+	buildOpReturnTransaction = (signature:string) => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
@@ -198,7 +199,7 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return tx;
 	}
 
-	private buildOpDropTransaction = (signature:string|undefined) => {
+	buildOpDropTransaction = (signature:string) => {
 		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		this.addInputs(tx);

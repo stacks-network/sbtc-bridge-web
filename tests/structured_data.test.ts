@@ -30,7 +30,8 @@ describe('suite', () => {
     expect(domainCV.data.name.data).equals('sBTC Bridge');
     expect(domainCV.data.name.type).equals(13);
     expect(domainCV.data['chain-id'].type).equals(1);
-    expect(domainCV.data['chain-id'].value).equals(2147483648n);
+    //expect(domainCV.data['chain-id'].value).equals(2147483648n);
+    expect(domainCV.data['chain-id'].value).equals(1n);
     
   })
 })

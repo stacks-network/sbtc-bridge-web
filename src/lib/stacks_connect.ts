@@ -1,4 +1,5 @@
 
+import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores.js'
 import { fetchUserSbtcBalance } from '$lib/bridge_api'
@@ -26,7 +27,7 @@ export function isAllowed(address:string) {
 }
 
 export function getStacksNetwork() {
-	const network = import.meta.env.VITE_NETWORK;
+	const network = CONFIG.VITE_NETWORK;
 	let stxNetwork:StacksMainnet|StacksTestnet;
 	if (network === 'testnet') stxNetwork = new StacksTestnet();
 	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
@@ -51,7 +52,7 @@ type AddressObject = {
 	stxAddress: string; cardinal: string; ordinal: string;
 }
 
-async function fetchSbtcBalance () {
+export async function fetchSbtcBalance () {
 	const adrds:AddressObject = addresses();
 	const result = await fetchUserSbtcBalance(adrds.stxAddress);
 	sbtcConfig.update((conf:SbtcConfig) => {
@@ -76,7 +77,7 @@ async function fetchSbtcBalance () {
 
 export function addresses():AddressObject {
 	const userData = userSession.loadUserData();
-	const network = import.meta.env.VITE_NETWORK;
+	const network = CONFIG.VITE_NETWORK;
 	//let something = hashP2WPKH(payload.public_keys[0])
 	const addr = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 	const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;

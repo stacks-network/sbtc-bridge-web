@@ -33,7 +33,6 @@ scroll(0,0);
         background-color: #fff;
         color: black;
         top: -250px;
-        bottom: 0px;
         left: 0;
         right: 0;
         padding: 30px;
@@ -41,5 +40,6 @@ scroll(0,0);
     }
     .sv-modal {
         padding-bottom: 40px;
+        min-height: 80%;
     }
 </style>

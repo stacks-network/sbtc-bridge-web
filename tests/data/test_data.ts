@@ -9,8 +9,8 @@ export const DEPLOYER_PK = {
     "index": 0
 }
 
-export const sbtcConfig:SbtcConfig = {
-	fromBtcAddress: 'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5',
+export const sbtcConfig = {
+	sbtcConfigfromBtcAddress: 'tb1q8ctqpxhcl3ld4snum9uw7kgver5vzyjqfy5pa5',
 	sbtcContractData: {
 		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss',
 	},

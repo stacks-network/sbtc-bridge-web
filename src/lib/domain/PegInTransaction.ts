@@ -1,3 +1,4 @@
+import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
@@ -12,7 +13,8 @@ import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from './PegTra
 import { concatByteArrays } from '$lib/structured-data.js'
 export interface PegInTransactionI extends PegTransactionI {
 
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction|undefined, opDrop: PeginRequestI };
+	buildOpDropTransaction: () => PeginRequestI;
+	buildOpReturnTransaction: () => btc.Transaction;
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -23,7 +25,7 @@ export interface PegInTransactionI extends PegTransactionI {
 //const pubkey2 = 'deec29b36f0829c98748cf1c3271497ece61e9aa5148242b23378f39d9fb854f'
 
 const priv = secp.utils.randomPrivateKey()
-const isMini = import.meta.env.VITE_SBTC_MINI;
+const isMini = CONFIG.VITE_SBTC_MINI;
 type KeySet = {
 	priv: Uint8Array,
 	ecdsaPub: Uint8Array,
@@ -41,13 +43,13 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		super();
 	}
  
-	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string):Promise<PegInTransactionI> => {
+	public static create = async (network:string, fromBtcAddress:string, sbtcWalletAddress:string, stacksAddress:string|undefined):Promise<PegInTransactionI> => {
 		const me = new PegInTransaction();
 		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		me.fromBtcAddress = fromBtcAddress;
 		me.pegInData = {
 			amount: 0,
-			stacksAddress: undefined,
+			stacksAddress,
 			sbtcWalletAddress
 		}
 		// utxos have to come from a hosted indexer or external service
@@ -118,8 +120,6 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		// random addresses for calculating the fee.
 		if (!this.ready) throw new Error('Not ready!');
 		const stacksAddress = 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN';
-		const sbtcWalletAddress = 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7';
-
 		// prepare random signer
 		const p2Ret = btc.p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
 		assert('wpkh' === p2Ret.type);
@@ -142,8 +142,9 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 			}
 	  	}
 		if (tx.inputsLength === 0) throw new Error('No confirmed UTXOs')
-		const asmScript = this.getOpDropP2shScript(stacksAddress, sbtcWalletAddress)
-		tx.addOutput({ script: asmScript, amount: BigInt(0) });
+		const data = this.buildData(stacksAddress);
+		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
+		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
 		const changeAmount = Math.floor(0);
 		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
 
@@ -180,19 +181,20 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return { opReturn: this.buildOpReturnTransaction(), opDrop: this.buildOpDropTransaction() };
 	}
 
-	private buildOpDropTransaction = ():PeginRequestI => {
+	buildOpDropTransaction = ():PeginRequestI => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
-		const tx = new btc.Transaction({ allowUnknowOutput: true, lockTime: 0 });
-		this.addInputs(tx);
+		//const tx = new btc.Transaction({ allowUnknowOutput: true, lockTime: 0 });
+		//this.addInputs(tx);
 		//const asmScript = this.getOpDropP2shScript(this.pegInData.stacksAddress, this.pegInData.sbtcWalletAddress)
 		const request = this.getCSVWitnessScript();
 		//tx.addOutput({ script: request.timeBasedPegin.script, amount: BigInt(this.pegInData.amount) });
 		//const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
 		//if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+		request.status = 1;
 		return request;
 	}
 
-	private buildOpReturnTransaction = () => {
+	buildOpReturnTransaction = () => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		this.addInputs(tx);
@@ -380,7 +382,6 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		const addr = decodeStacksAddress(sigOrPrin.split('.')[0]);
 		const addr0Buf = hex.decode(addr[0].toString(16));
 		const addr1Buf = hex.decode(addr[1]);
-
 		let data:Uint8Array;
 		if (sigOrPrin.indexOf('.') > -1) {
 			const cnameBuf = new TextEncoder().encode(sigOrPrin.split('.')[1]);

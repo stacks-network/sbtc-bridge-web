@@ -5,20 +5,21 @@ import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import QrCode from "svelte-qrcode"
 import { fmtSatoshiToBitcoin } from '$lib/utils'
+import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
+import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 
-export let peginRequest:any;
-export let amount:number;
+export let piTx:PegInTransactionI;
+const peginRequest = piTx?.buildOpDropTransaction();
 
 const paymentUri = () => {
-  let uri = 'bitcoin:' + peginRequest.timeBasedPegin.address
-  uri += '?amount=' + fmtSatoshiToBitcoin(amount)
+  let uri = 'bitcoin:' + peginRequest.timeBasedPegin!.address
+  uri += '?amount=' + fmtSatoshiToBitcoin(piTx.pegInData.amount)
   uri += '&label=' + encodeURI('Wrap BTC to mint sBTC on Stacks')
   return uri
 }
-
 onMount(async () => {
   try {
-    if (peginRequest.timeBasedPegin.script.length > 0) await savePaymentRequest(peginRequest)
+    if (peginRequest.timeBasedPegin!.script.length > 0) await savePaymentRequest(peginRequest)
   } catch (err) {}
   const conf:SbtcConfig = $sbtcConfig;
   conf.peginRequestState = 0;
@@ -41,20 +42,19 @@ onMount(async () => {
 
 <div class="row text-center mt-5">
     <div class="col-12">
-      <span>Amount: {fmtSatoshiToBitcoin(amount)}</span>
+      <span>Amount: {fmtSatoshiToBitcoin(piTx.pegInData.amount)}</span>
     </div>
 </div>
 
-<div class="row text-center mb-5 pb-5 my-3 text-small">
+<div class="row text-center my-3 text-small">
   <div class="col-12">
     <span>{paymentUri()}</span>
   </div>
 </div>
-<div class="row text-center mb-5 pb-5 my-3 text-small">
+<div class="row my-3 text-small">
   <div class="col-12">
-    <span>.</span>
+    <DebugPeginInfo tx={piTx} {peginRequest}/>
   </div>
 </div>
-
 <style>
 </style>

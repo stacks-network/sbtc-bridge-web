@@ -1,9 +1,10 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores';
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import SignTransaction from '$lib/components/common/SignTransaction.svelte';
-import Transactions from "$lib/components/reclaim/Transactions.svelte";
+import Transactions from "$lib/components/reclaim/ReclaimForm.svelte";
 import type { ReclaimTransactionI } from '$lib/domain/ReclaimTransaction';
 import { addresses } from '$lib/stacks_connect'
 import type { SigData } from '$types/sig_data';
@@ -17,9 +18,9 @@ import { truncate, explorerBtcTxUrl, explorerTxUrl } from '$lib/utils'
 if (!$sbtcConfig.peginRequest) 	goto('/listReclaims');
 const peginRequest:PeginRequestI = $sbtcConfig.peginRequest;
 
-let prTx:ReclaimTransactionI = ($sbtcConfig.reclaimTransaction && $sbtcConfig.reclaimTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.reclaimTransaction) : new ReclaimTransaction();
+let prTx:ReclaimTransactionI = new ReclaimTransaction();
 let inited = false;
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 
 $: view = 'build_tx_view';
 const openSigView = () => {

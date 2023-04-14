@@ -1,10 +1,11 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { goto } from "$app/navigation";
 import { sbtcConfig } from '$stores/stores';
 import { explorerTxUrl } from '$lib/utils'
 import type { SbtcConfig } from '$types/sbtc_config';
 
-const sbtcContract = import.meta.env.VITE_SBTC_CONTRACT_ID;
+const sbtcContract = CONFIG.VITE_SBTC_CONTRACT_ID;
 const sbtcContractUrl = explorerTxUrl(sbtcContract);
 
 const togglePeg = (pegin:boolean) => {
@@ -26,7 +27,7 @@ const togglePeg = (pegin:boolean) => {
 			<div class="row">
 				<div class="col-md-6 col-sm-12 mb-4">
 					<div class="card-sm text-center">
-						<h1 class="mt-5 text-info">Wrap <span class="strokeme-info">sBTC</span></h1>
+						<h1 class="mt-5 text-info">Wrap <span class="strokeme-info">BTC</span></h1>
 						<h2 class="text-info mb-5">BTC to sBTC</h2>
 						<div class="">
 							<button on:click|preventDefault={() => togglePeg(true)} class="w-50 btn btn-outline-info">Wrap</button>

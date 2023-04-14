@@ -1,5 +1,5 @@
 <script lang="ts">
-//import { onDestroy } from 'svelte';
+import { CONFIG } from '$lib/config';
 import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
@@ -13,7 +13,7 @@ const togglePeg = (pegin:boolean) => {
 	sbtcConfig.set(conf);
 	(pegin) ? goto('/wrap') : goto('/unwrap');
 }
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 
 </script>
 <nav class="navbar navbar-expand-md transparent">

@@ -2,10 +2,11 @@
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
-import { hex, base64 } from '@scure/base';
+import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
 import type { ReclaimTransactionI } from '$lib/domain/ReclaimTransaction';
 import { addresses } from '$lib/stacks_connect'
 import { openPsbtRequestPopup } from '@stacks/connect'
+import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectMempool } from '$lib/bridge_api';
@@ -68,18 +69,6 @@ const copy = () => {
   });
   app.$destroy();
   copied = true;
-}
-
-$: decodedScript = () => {
-  if (!prTx.pegInData.requestData.timeBasedPegin.witnessScript) return ''
-  const script = btc.OutScript.decode(hex.decode(prTx.pegInData.requestData.timeBasedPegin.witnessScript))
-  if (script.type === 'ms' || script.type === 'tr_ms' || script.type === 'tr_ns') return script.type + ':' + script.pubkeys;
-  if (script.type === 'wsh') return script.type + ':' + script.hash;
-  if (script.type === 'wpkh') return script.type + ':' + script.hash;
-  if (script.type === 'pkh') return script.type + ':' + script.hash;
-  if (script.type === 'tr') return script.type + ':' + script.pubkey;
-  if (script.type === 'unknown') return script.type + ':' + script.script;
-  else return script.type + ':' + script;
 }
 
 const formats = ['Reclaim Bitcoin Core', 'Reclaim Electrum', 'Signer Bitcoin Core', 'Signer Electrum']
@@ -153,27 +142,7 @@ onMount(async () => {
     <div class="col-12">Sign with <a href="/" on:click|preventDefault={() => signWithWebWallet()}>web wallet</a></div>
   </div>
   {/if}
-
-  <div class="text-small mt-5">
-    <div class="row">
-      <div class="col-12"><a href="/" on:click|preventDefault={() => showDetails = !showDetails}>Show details</a></div>
-    </div>
-    {#if showDetails}
-    <div class="row">
-      <div class="col-2">From</div><div class="col-10">{prTx.fromBtcAddress}</div>
-      <div class="col-2">Txid</div><div class="col-10">{prTx.pegInData.requestData.btcTxid}</div>
-      <div class="col-2">Amount</div><div class="col-10">{prTx.pegInData.amount}</div>
-      <div class="col-2">Stacks Address</div><div class="col-10">{prTx.pegInData.requestData.stacksAddress}</div>
-      <div class="col-2">SBTC Wallet</div><div class="col-10">{prTx.pegInData.requestData.sbtcWalletAddress}</div>
-      <div class="col-2">Pegin Status</div><div class="col-10">{prTx.pegInData.requestData.status}</div>
-      <div class="col-2">Script Hash</div><div class="col-10">{prTx.pegInData.requestData.timeBasedPegin.script}</div>
-      <div class="col-2">Payment Type</div><div class="col-10">{prTx.pegInData.requestData.timeBasedPegin.paymentType}</div>
-      <div class="col-2">Witness Script</div><div class="col-10">{prTx.pegInData.requestData.timeBasedPegin.witnessScript}</div>
-      
-      <div class="col-2">Decoded Script</div><div class="col-10">{decodedScript()}</div>
-    </div>
-    {/if}
-  </div>
+  <DebugPeginInfo tx={prTx} peginRequest={undefined}/>
 
 
   <input bind:value={currentTx} style="visibility:hidden;" />

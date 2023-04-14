@@ -14,7 +14,7 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 const dispatch = createEventDispatcher();
 export let sigData:SigData;
 export let pegInfo:any;
-let currentTx = hex.encode(sigData.txs.opDrop.toPSBT(2));
+let currentTx = hex.encode(sigData.opReturnTx.toPSBT(2));
 let errorReason: string|undefined;
 let successReason: string|undefined;
 
@@ -56,6 +56,7 @@ const btnClass = (bb:boolean) => {
 let resp:any;
 let broadcasted:boolean;
 const broadcastTransaction = async (psbtHex:string) => {
+  let errMessage = undefined;
   try {
     const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
     try {
@@ -69,15 +70,15 @@ const broadcastTransaction = async (psbtHex:string) => {
     currentTx = txHex;
     errorReason = undefined;
     resp = await sendRawTxDirectMempool(txHex);
-    console.log(resp);
-    if (!resp || resp.error) {
+    if (resp && resp.error) {
+      errMessage = resp.error;
       broadcasted = false;
-      errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+      errorReason = resp.error + ' Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
     } else {
       broadcasted = true;
     }
   } catch (err:any) {
-    errorReason = err.message + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+    errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
 

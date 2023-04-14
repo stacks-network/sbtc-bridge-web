@@ -125,27 +125,34 @@ cd package
 npm publish
 ```
 
+## Production Deployment
+`Dockerfile` is used to build the application and then serve.
+Deployment 1 Current setup
+- Merge PR to gcp branch.
+- Then Google Cloud Build will trigger a build because it'w watching the gcp branch.
+- Then Google Cloud Run will deploy the app which will serve the app on https://sbtc.world
+- Has two builds one for mainnet and one for testnet.
 
-Scratch
+Runtime network selection by Mike
+- sbtc.world?net=mainnet&api=https://sbtc-api
+- on the get request, we use mainnet to fetch a json object which has all other params
+- config = configs[query_net]
+- config['api'] = query_api
+- VITE_STACKS_EXPLORER = config['VITE_STACKS_EXPLORER'] = config.VITE_STACKS_EXPLORER = config.vite_stacks_explorer
+- deployment dimension: production and staging
+- /v1 -> ?version=v1 -> if (config.version== v1) -> config else
+- version dimension: v1 v2 
+- net dimension: mainnet and testnet 
+- api dimension:
 
-I'm trying to create a custom script that has some arbitrary data followed by a multisig address paying to one of two public keys, where; pubkey1 is user defined (either ecdsa or schnorr derived) and pubkey2 is taproot (segwit v1).
+Deployment 3 for Igor
+- Run local build script to build pages and copy to GCP bucket.
+- Pages will be served statically from GCP bucket.
+- Has one build for any net.
 
-The script is should end up something like;
+Deployment 4 for Sergey
+- Add to GitHub Actions (prod) and CloudFlare (devel): Run local build script to build pages and copy to GCP bucket.
+- Pages will be served statically from GCP bucket
+- Has one build for any net.
 
-```
-pmnt = btc.p2tr_ms(1, [hex.decode(pubkey1), hex.decode(pubkey2)])
-or
-pmnt = btc.p2ms(1, [hex.decode(pubkey1), hex.decode(pubkey2)])
-```
-
-with the multi-sig wrapped in a custom script via a p2wsh address (or p2tr address?) e.g.
-
-```
-const wsh2 = {
-    type: 'wsh',
-    script: btc.Script.encode([<data>, 'DROP', pmnt.script])
-}
-const script = btc.p2wsh(wsh2, this.net);
-```
-
-My question is whether this is feasible and which combinations of pubkeys and multi sig payments are currently possible with scure btc signer ?
+- Nirvana :)

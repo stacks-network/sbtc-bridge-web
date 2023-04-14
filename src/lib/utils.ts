@@ -1,9 +1,10 @@
+import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from '$lib/domain/PegTransaction'
 import { c32address } from 'c32check';
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -17,7 +18,7 @@ const formatter = new Intl.NumberFormat('en-US', {
 const btcPrecision = 100000000
 
 export function isSupported(address:string) {
-  const network = import.meta.env.VITE_NETWORK;
+  const network = CONFIG.VITE_NETWORK;
   const msg = 'Please enter a valid ' + network + ' bitcoin address.'
   if (!address || address.length < 10) {
     throw new Error(msg);
@@ -52,17 +53,18 @@ export function getNet(network:string) {
   if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
 }
 export function explorerAddressUrl(addr:string) {
-	return import.meta.env.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + import.meta.env.VITE_NETWORK;
+	return CONFIG.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + CONFIG.VITE_NETWORK;
 }
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
-	return import.meta.env.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
+	return CONFIG.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
 }
+
 export function explorerBtcAddressUrl(address:string) {
-	return import.meta.env.VITE_BSTREAM_EXPLORER + '/address/' + address;
+	return CONFIG.VITE_BSTREAM_EXPLORER + '/address/' + address;
 }
 export function explorerTxUrl(txid:string) {
-	return import.meta.env.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + import.meta.env.VITE_NETWORK;
+	return CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + CONFIG.VITE_NETWORK;
 }
 
 export function fmtSatoshiToBitcoin(amountSats:number) {

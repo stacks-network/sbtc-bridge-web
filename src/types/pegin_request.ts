@@ -1,11 +1,12 @@
 export type PeginRequestI = {
   status: number;
 	updated?: number;
+  tries?: number;
   btcTxid?: string;
   fromBtcAddress: string;
   stacksAddress: string;
   sbtcWalletAddress: string;
-  timeBasedPegin: PeginScriptI;
+  timeBasedPegin?: PeginScriptI;
   vout?: VoutI;
 }
 export type PeginScriptI = {
