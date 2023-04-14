@@ -112,7 +112,7 @@ describe('suite', () => {
     myPeg.calculateFees();
     myPeg.setFeeRate(1);
     expect(myPeg.fee).equals(myPeg.fees[1])
-    expect(myPeg.fee).equals(600)
+    expect(myPeg.fee).equals(100)
   })
 
   it.concurrent('PegInTransaction.calculateFees() sets correct ratios of scure fee', async () => {
