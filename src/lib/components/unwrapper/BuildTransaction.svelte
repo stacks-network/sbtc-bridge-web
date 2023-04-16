@@ -1,4 +1,5 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { onMount } from 'svelte';
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
@@ -28,7 +29,7 @@ const principalData = {
 }
 $: amtData = {
   pegIn: false,
-  label: 'Amount (SBTC)',
+  label: 'Amount (sBTC)',
   info: 'The amount to unwrap cannot exceed your sBTC balance',
   pegAmount: (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance,
   maxCommit: poTx.maxCommit(),
@@ -37,7 +38,7 @@ $: amtData = {
   fees: poTx.fees,
   dust: poTx.dust
 }
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 $: utxoData = {
   label: 'Your Bitcoin Address',
   info: 'Your sBTC will be burned and the equivalent bitcoin then sent to this address',
@@ -133,7 +134,7 @@ onMount(async () => {
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
-    <p class="mb-4">No SBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
+    <p class="mb-4">No sBTC to unwrap for account: <a href={explorerAddressUrl($sbtcConfig.balance.address)}>{$sbtcConfig.balance.address}</a></p>
     <p><a href="/wrap">Get sBTC here!</a></p>
   </div>
   {:else}

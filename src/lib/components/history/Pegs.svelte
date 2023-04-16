@@ -52,7 +52,7 @@ onMount(async () => {
       <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('event')}>From</a></div>
     </div>
     <div class="col-2">
-      <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>SBTC Wallet</a></div>
+      <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>sBTC Wallet</a></div>
     </div>
     <div class="col-2">
       <div class="filter pointer"><a href="/" on:click|preventDefault={() => reorder('dst')}>Txs</a></div>

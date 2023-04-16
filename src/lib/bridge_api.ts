@@ -1,12 +1,22 @@
+import type { PeginRequestI } from '$types/pegin_request';
+import { CONFIG } from '$lib/config';
+
+function addNetSelector (path:string) {
+  if (CONFIG.VITE_NETWORK === 'testnet') return (path.indexOf('?') > -1) ?  path += '&net=testnet' : path += '?net=testnet'
+  else if (CONFIG.VITE_NETWORK === 'devnet') return  (path.indexOf('?') > -1) ?  path += '&net=devnet' : path += '?net=devnet'
+  else return (path.indexOf('?') > -1) ?  path += '&net=mainnet' : path += '?net=mainnet';
+}
+
 export async function sendRawTxDirectMempool(hex:string) {
-  const url = import.meta.env.VITE_MEMPOOL_EXPLORER + '/tx';
+  //const url = CONFIG.VITE_MEMPOOL_EXPLORER + '/tx';
+  const url = CONFIG.VITE_BLOCKCYPHER_EXPLORER + '/txs/push';
   console.log('sendRawTx:mempoolUrl: ', url)
   const response = await fetch(url, {
     method: 'POST',
     //headers: { 'Content-Type': 'application/json' },
-    body: hex
+    body: JSON.stringify({tx: hex})
   });
-  if (response.status !== 200) throw new Error('Mempool error: ' + response.status + ' : ' + response.statusText);
+  //if (response.status !== 200) throw new Error('Mempool error: ' + response.status + ' : ' + response.statusText);
   try {
     return await response.json();
   } catch (err) {
@@ -21,7 +31,7 @@ export async function sendRawTxDirectMempool(hex:string) {
 }
 
 export async function sendRawTransaction(tx: { hex: string; }) {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc/tx/sendrawtx';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sendrawtx');
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -38,8 +48,75 @@ export async function sendRawTransaction(tx: { hex: string; }) {
   }
 }
 
+export async function fetchBurnBlockCount() {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/blocks/count';
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const txs = await response.json();
+  return txs;
+}
+
+export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/wallet/walletprocesspsbt';
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(psbt)
+  });
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const signedPsbt = await response.json();
+  return signedPsbt;
+}
+
+export async function savePaymentRequest(peginRequest:PeginRequestI) {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/payments/request';
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(peginRequest)
+  });
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const signedPsbt = await response.json();
+  return signedPsbt;
+}
+export async function fetchMyWrapTransactions(stxAddress:string):Promise<Array<PeginRequestI>> {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/payments/address/' + stxAddress;
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const pegins = await response.json();
+  return pegins;
+}
+
 export async function fetchCurrentFeeRates() {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc/blocks/fee-estimate';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/fee-estimate');
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const txs = await response.json();
+  return txs;
+}
+
+export async function fetchTransaction(txid:string) {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid;
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const txs = await response.json();
+  return txs;
+}
+
+export async function fetchAddressTransactions(address:string) {
+  const path = CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/txs';
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -49,7 +126,7 @@ export async function fetchCurrentFeeRates() {
 }
 
 export async function fetchUtxoSet(address:string) {
-  const path = import.meta.env.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos?verbose=true';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos?verbose=true');
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -60,7 +137,7 @@ export async function fetchUtxoSet(address:string) {
 
 export async function fetchSbtcEvents() {
   try {
-    const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/events/0';
+    const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/events/0');
     const response = await fetch(path);
     const result = await response.json();
     return result;
@@ -70,14 +147,14 @@ export async function fetchSbtcEvents() {
 }
 
 export async function fetchSbtcWalletAddress() {
-  const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/wallet-address';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/wallet-address');
   const response = await fetch(path);
   const result = await response.text();
   return result;
 }
 
 export async function fetchSbtcData() {
-  const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/data';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/data');
   const response = await fetch(path);
   const result = await response.text();
   return result;
@@ -85,7 +162,7 @@ export async function fetchSbtcData() {
 
 export async function fetchUserSbtcBalance(stxAddress:string) {
   try {
-    const path = import.meta.env.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance';
+    const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance');
     const response = await fetch(path);
     const result = await response.json();
     return (result);

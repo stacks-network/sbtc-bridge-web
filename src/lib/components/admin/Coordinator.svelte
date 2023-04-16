@@ -1,4 +1,5 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { setCoordinator, setBtcWallet, coordinators, mintTo } from "$lib/sbtc_admin.js";
 import MintTokens from './MintTokens.svelte'
 import BurnTokens from './BurnTokens.svelte'
@@ -6,12 +7,12 @@ import { sbtcConfig } from '$stores/stores'
 
 //const contractCall = openContractCall();
 
-let coordinator:string = import.meta.env.VITE_SBTC_CONTRACT_ID.split('.')[0];
+let coordinator:string = CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0];
 if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
   coordinator = $sbtcConfig.sbtcContractData.coordinator.addr.value;
 }
 
-let sbtcWallet:string = import.meta.env.VITE_SBTC_WALLET;
+let sbtcWallet:string = CONFIG.VITE_SBTC_WALLET;
 if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
   sbtcWallet = $sbtcConfig.sbtcContractData.sbtcWalletAddress;
 }
@@ -35,7 +36,7 @@ const wallet = async () => {
   </div>
   <div class="row">
     <div class="col">
-      <div>SBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
+      <div>sBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
       <input type="text" id="sbtcWallet" class="form-control" bind:value={sbtcWallet}/>
       <div class="col"><button class="btn btn-outline-light" on:click={() => wallet()}>Set BTC Wallet</button></div>
     </div>

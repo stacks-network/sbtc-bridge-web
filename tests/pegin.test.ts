@@ -112,7 +112,7 @@ describe('suite', () => {
     myPeg.calculateFees();
     myPeg.setFeeRate(1);
     expect(myPeg.fee).equals(myPeg.fees[1])
-    expect(myPeg.fee).equals(600)
+    expect(myPeg.fee).equals(100)
   })
 
   it.concurrent('PegInTransaction.calculateFees() sets correct ratios of scure fee', async () => {
@@ -214,7 +214,7 @@ describe('suite', () => {
   it.concurrent('PegInTransaction.buildTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     const tx = myPeg.buildTransaction(undefined);
-    expect(tx.opReturn.toPSBT());
+    expect(tx.opReturn.toPSBT(2));
   })
 
   it.concurrent('PegInTransaction.encodeAddress() check bitcoin address encoding', async () => {

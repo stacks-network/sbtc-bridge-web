@@ -18,7 +18,7 @@ export const pegout1:any = {
     "fromBtcAddress": "tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq",
     "pegInData": {
         "stacksAddress": "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN",
-        "sbtcWalletAddress": "tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss",
+        "sbtcWalletAddress": "tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7",
         "amount": 221122
     },
     "addressInfo": {

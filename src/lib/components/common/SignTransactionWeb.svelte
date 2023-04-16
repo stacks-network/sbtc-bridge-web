@@ -14,7 +14,7 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 const dispatch = createEventDispatcher();
 export let sigData:SigData;
 export let pegInfo:any;
-let currentTx = hex.encode(sigData.txs.opReturn.toPSBT());
+let currentTx = hex.encode(sigData.opReturnTx.toPSBT(2));
 let errorReason: string|undefined;
 let successReason: string|undefined;
 
@@ -56,11 +56,13 @@ const btnClass = (bb:boolean) => {
 let resp:any;
 let broadcasted:boolean;
 const broadcastTransaction = async (psbtHex:string) => {
+  let errMessage = undefined;
   try {
     const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
     try {
       tx.finalize();
     } catch (err) {
+      console.log('finalize error: ', err)
       errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
       return;
     }
@@ -68,15 +70,15 @@ const broadcastTransaction = async (psbtHex:string) => {
     currentTx = txHex;
     errorReason = undefined;
     resp = await sendRawTxDirectMempool(txHex);
-    console.log(resp);
-    if (!resp || resp.error) {
+    if (resp && resp.error) {
+      errMessage = resp.error;
       broadcasted = false;
-      errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+      errorReason = resp.error + ' Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
     } else {
       broadcasted = true;
     }
   } catch (err:any) {
-    errorReason = err.message + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+    errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
 
@@ -101,7 +103,7 @@ onMount(async () => {
   <div class="my-5 text-center text-warning">
     <p>Your transaction has been sent to the <a href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.
     </p>
-    <p>Once confirmed your SBTC will be minted to your Stacks Wallet. 
+    <p>Once confirmed your sBTC will be minted to your Stacks Wallet. 
     </p>
   </div>
   {:else}
