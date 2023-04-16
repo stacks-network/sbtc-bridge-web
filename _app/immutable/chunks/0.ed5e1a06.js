@@ -1,5 +1,5 @@
 import { _ } from "./_layout.79f5dc64.js";
-import { default as default2 } from "../entry/_layout.svelte.61332a09.js";
+import { default as default2 } from "../entry/_layout.svelte.c30b9717.js";
 export {
   default2 as component,
   _ as universal
