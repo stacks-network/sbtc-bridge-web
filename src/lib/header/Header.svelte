@@ -1,5 +1,5 @@
 <script lang="ts">
-//import { onDestroy } from 'svelte';
+import { CONFIG } from '$lib/config';
 import WalletConnectButton from './WalletConnectButton.svelte'
 import logoWhite from '$lib/assets/logo-white.jpeg';
 import { sbtcConfig } from '$stores/stores';
@@ -13,7 +13,7 @@ const togglePeg = (pegin:boolean) => {
 	sbtcConfig.set(conf);
 	(pegin) ? goto('/wrap') : goto('/unwrap');
 }
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 
 </script>
 <nav class="navbar navbar-expand-md transparent">
@@ -32,16 +32,17 @@ const network = import.meta.env.VITE_NETWORK;
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						SBTC Exchange
+						sBTC Exchange
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(true)}>Wrap BTC</a></li>
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(false)}>Unwrap sBTC</a></li>
+						<li><a class="dropdown-item" href="/listReclaims">Reclaim BTC</a></li>
 					</ul>
 				</li>
 				<li class="badge nav-item">
 					<span class="pointer nav-link">
-						<span title="Your SBTC Transaction History"><a class="" href="/history">History</a></span>
+						<span title="Your sBTC Transaction History"><a class="" href="/history">History</a></span>
 					</span>
 				</li>
 				<WalletConnectButton/>

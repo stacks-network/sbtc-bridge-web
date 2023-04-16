@@ -1,11 +1,12 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import electrum1 from '$lib/assets/wallets/electrum1.png';
 import electrum2 from '$lib/assets/wallets/electrum2.png';
 import electrum3 from '$lib/assets/wallets/electrum3.png';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import { sbtcConfig } from '$stores/stores';
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(from!)

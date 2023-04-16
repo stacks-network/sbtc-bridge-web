@@ -42,7 +42,7 @@ describe('suite', () => {
   it.concurrent('PegOutTransaction.hydrate() returns pegin builder in state not ready', async () => {
     const piTx:PegOutTransaction = await PegOutTransaction.hydrate(pegout1);
     expect(piTx.fromBtcAddress).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
-    expect(piTx.pegInData.sbtcWalletAddress).equals('tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss');
+    expect(piTx.pegInData.sbtcWalletAddress).equals('tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7');
     expect(piTx.pegInData.stacksAddress).equals('ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN');
     expect(piTx.pegInData.amount).equals(221122);
     expect(piTx.addressInfo.address).equals('tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq');
@@ -202,7 +202,7 @@ describe('suite', () => {
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
     const tx = myPeg.buildTransaction(hex.encode(sig));
-    expect(tx.opReturn.toPSBT());
+    expect(tx.opReturn.toPSBT(2));
   })
 
   it.concurrent('PegOutTransaction.getDataToSign() ensure signature can be passed to builder.', async () => {

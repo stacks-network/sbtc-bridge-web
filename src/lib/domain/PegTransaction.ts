@@ -2,8 +2,13 @@ import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { decodeStacksAddress } from "$lib/stacks_connect";
+import type { PeginRequestI } from '$types/pegin_request';
+import { CONFIG } from '$lib/config';
 
-type PegInData = {
+export type PegInData = {
+	requestData?: PeginRequestI;
+	confirmations?: number;
+	burnHeight?: number;
 	stacksAddress?: string;
 	sbtcWalletAddress: string;
 	amount: number,
@@ -32,7 +37,6 @@ export interface PegTransactionI {
 	dust: number;
 
 	buildData: (sigOrPrin:string) => Uint8Array;
-	buildTransaction: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 	calculateFees: () => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
@@ -43,6 +47,7 @@ export interface PegTransactionI {
 	getOutputsForDisplay: () => Array<any>;
 	getDataToSign: () => string;
 	getInputsForDisplay: () => Array<any>;
+	getWitnessScript?: () => any;
 }
 
 const priv = secp.utils.randomPrivateKey()
@@ -62,12 +67,12 @@ export default class PegTransaction implements PegTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
 	unconfirmedUtxos = false;
 	requiredConfirmed = 6;
-	net:any;
+	net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.NETWORK : btc.TEST_NETWORK;
 	ready = false;
 	fromBtcAddress!: string;
 	pegInData: PegInData = {
 		stacksAddress: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN', // default for testing
-		sbtcWalletAddress: 'tb1qasu5x7dllnejmx0dtd5j42quk4q03dl56caqss', // default for testing
+		sbtcWalletAddress: 'tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7', // default for testing
 		amount: 0	
 	};
 	addressInfo: any = {};
@@ -96,7 +101,6 @@ export default class PegTransaction implements PegTransactionI {
 	 * This gives us the max amount they can peg as the sum of utxo amounts.
 	 * @param fromBtcAddress
 	 * @returns 
-	 */
 	public static hydrate = (o:PegTransactionI) => {
 		const me = new PegTransaction();
 		me.net = o.net;
@@ -108,6 +112,7 @@ export default class PegTransaction implements PegTransactionI {
 		me.ready = o.ready;
 		return me;
 	};
+	 */
  
 	setPegInData = (pegInData:PegInData) => {
 		this.pegInData = pegInData;
@@ -125,7 +130,7 @@ export default class PegTransaction implements PegTransactionI {
 	};
  
 	isUTXOConfirmed = (utxo:any) => {
-		return utxo.tx.confirmations > 3;
+		return utxo.tx.confirmations >= 0;
 	};
  
 	//setAmount = (amount:number) => void;
@@ -137,10 +142,10 @@ export default class PegTransaction implements PegTransactionI {
 			throw new Error('please remove white space / special characters');
 		}
 		const decoded = decodeStacksAddress(stacksAddress.split('.')[0]);
-		if (this.net === btc.TEST_NETWORK && decoded[0] !== 26) {
+		if ((CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') && decoded[0] !== 26) {
 		  throw new Error('Please enter a valid stacks blockchain testnet address');
 		}
-		if (this.net === btc.NETWORK && decoded[0] !== 22) {
+		if (CONFIG.VITE_NETWORK === 'mainnet' && decoded[0] !== 22) {
 			throw new Error('Please enter a valid stacks blockchain mainnet address');
 		}
 		this.pegInData.stacksAddress = stacksAddress;
@@ -157,11 +162,6 @@ export default class PegTransaction implements PegTransactionI {
 	  	}
 		return inputs;
 	}
-
-	/**
-	 * Overridden by super classes
-	 */
-	buildTransaction!: (signature:string|undefined) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
 
 	buildData!: (sigOrPrin:string) => Uint8Array;
 

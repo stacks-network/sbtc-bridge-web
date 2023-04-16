@@ -1,3 +1,4 @@
+import { CONFIG } from '$lib/config';
 import { sha256 } from "@noble/hashes/sha256";
 import { verifyMessageSignature } from "@stacks/encryption";
 import { tupleCV, bufferCV, uintCV, stringAsciiCV, serializeCV, type ClarityValue } from "@stacks/transactions";
@@ -6,7 +7,7 @@ import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect'
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { getStacksNetwork } from '$lib/stacks_connect'
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 const prefix = Uint8Array.from([0x53, 0x49, 0x50, 0x30, 0x31, 0x38]); // SIP018
 const enum ChainID {
     Testnet = 2147483648,
@@ -24,14 +25,14 @@ export type Message = {
 };
 
 export const domain = {
-	name: import.meta.env.VITE_PUBLIC_APP_NAME,
-	version: import.meta.env.VITE_PUBLIC_APP_VERSION,
+	name: CONFIG.VITE_PUBLIC_APP_NAME,
+	version: CONFIG.VITE_PUBLIC_APP_VERSION,
 	'chain-id': network === "mainnet" ? ChainID.Mainnet : ChainID.Testnet,
 };
 
 export const domainCV = tupleCV({
-	name: stringAsciiCV(import.meta.env.VITE_PUBLIC_APP_NAME),
-	version: stringAsciiCV(import.meta.env.VITE_PUBLIC_APP_VERSION),
+	name: stringAsciiCV(CONFIG.VITE_PUBLIC_APP_NAME),
+	version: stringAsciiCV(CONFIG.VITE_PUBLIC_APP_VERSION),
 	'chain-id': uintCV(network === "mainnet" ? ChainID.Mainnet : ChainID.Testnet),
 })
 

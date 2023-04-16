@@ -48,11 +48,13 @@ function init(el:any) {
     </label>
     <input use:init type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegAmount}  on:input={() => changePegIn(false)}/>
     <div class="text-small">{amtData.info}</div>
+    <!--
     <div class="text-small d-flex justify-content-end  text-info">
       {#if amtData.change > 0}<span><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>set max</a></span>{/if}
     </div>
     {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
     <FeeDisplay {amtData} currentPeg={pegAmount} on:fee_rate_updated={changeRate}/>
+    -->
   </div>
 </div>
 

@@ -1,10 +1,11 @@
 <script lang="ts">
+import { CONFIG } from '$lib/config';
 import { createEventDispatcher } from "svelte";
 import { addresses } from '$lib/stacks_connect'
 
 export let principalData:{ label:string, info:string, currentAddress:string|undefined };
 
-const network = import.meta.env.VITE_NETWORK;
+const network = CONFIG.VITE_NETWORK;
 const dispatch = createEventDispatcher();
 let stxAddress:string|undefined = principalData.currentAddress;
 const mainReason = 'Please enter a valid stacks blockchain ' + network + ' address';
