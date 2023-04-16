@@ -13,6 +13,7 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import { addresses } from '$lib/stacks_connect'
 import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
+import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
 
 export let piTx:PegInTransactionI;
 if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
@@ -101,13 +102,14 @@ const utxoUpdated = async (event:any) => {
     try {
       const p0 = piTx.pegInData;
       const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
+      piTx.fromBtcAddress = data.bitcoinAddress;
       piTx = await PegInTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
       piTx.calculateFees();
       piTx.setStacksAddress(stacksAddress);
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      if (!$sbtcConfig.userSettings.useOpDrop) errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
       //if (err.message !== 'No inputs signed') errorReason = err.message;
       //else errorReason = 'Please fix above errors and try again.'
     }
@@ -150,8 +152,18 @@ onMount(async () => {
 
 </script>
 <Modal {showModal} showClose={true} on:click={closeModal} on:close_modal={closeModal}>
-  <div slot="title"></div>
   <div class="mb-4"><ScriptHashAddress {piTx}/></div>
+  <div slot="title"></div>
+  <div slot="close">
+    <div class="text-center"><button class="btn btn-outline-info" on:click={closeModal}>CLOSE</button></div>
+  </div>
+  <div slot="debug">
+    <div class="row my-3 text-small">
+      <div class="col-12">
+        <DebugPeginInfo tx={piTx} peginRequest={piTx.getOpDropPeginRequest('op_drop', 'any')}/>
+      </div>
+    </div>    
+  </div>
 </Modal>
 
 {#if inited}

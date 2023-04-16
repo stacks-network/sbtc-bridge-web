@@ -1,7 +1,11 @@
 export type PeginRequestI = {
   status: number;
 	updated?: number;
+  amount: number;
   tries?: number;
+  mode: string,
+  requestType:string;
+  wallet: string,
   btcTxid?: string;
   fromBtcAddress: string;
   stacksAddress: string;

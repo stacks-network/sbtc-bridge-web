@@ -9,7 +9,7 @@ import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcBalance, SbtcConfig } from '$types/sbtc_config';
 import { loginStacksJs, fetchSbtcBalance } from '$lib/stacks_connect'
-	import { CONFIG } from '$lib/config';
+import { CONFIG } from '$lib/config';
 
 const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
@@ -21,6 +21,11 @@ const logout = () => {
 }
 const doLogin = async () => {
 	await loginStacksJs();
+}
+
+const style4 = (net:string) => {
+	if (net === CONFIG.VITE_NETWORK) return 'border-bottom: 1pt solid #428bca';
+	else return '';
 }
 
 const toggleNetwork = async (net:string) => {
@@ -62,13 +67,18 @@ onMount(async () => {
 	<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 		<Person width={25} height={25}/>
 	</span>
-	<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-		<li class="nav-item"><span class="dropdown-item">Toggle Network</span></li>
-		<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('testnet')}>Testnet</a></li>
-		<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('mainnet')}>Mainnet</a></li>
+	<ul class="dropdown-menu dropdown-menu-end border" aria-labelledby="navbarDropdown">
+		<li class="nav-item"><span class="dropdown-item"><a href="/" on:click|preventDefault={() => addresses()} class="dropdown-item">Network</a></span></li>
+		<li class="nav-item px-5 text-small text-warning"><a href="/" class="dropdown-item text-warning" on:click|preventDefault={() => toggleNetwork('testnet')}><span  style={style4('testnet')}>Testnet</span></a></li>
+		<li class="nav-item px-5 text-small text-warning"><a href="/" class="dropdown-item text-warning" on:click|preventDefault={() => toggleNetwork('mainnet')}><span  style={style4('mainnet')}>Mainnet</span></a></li>
 		<li class="nav-item"><span class="dropdown-item"><a href="/settings" class="dropdown-item">Settings</a></span></li>
 		<!--<li class="nav-item px-4 mx-4"><a href="/" class="dropdown-item" on:click|preventDefault={() => toggleNetwork('devnet')}>Devnet</a></li>-->
-		<li class="nav-item mt-4">
+		{#if $sbtcConfig.loggedIn}
+		<li class="nav-item"><span class="dropdown-item"><a href="/" on:click|preventDefault={() => addresses()} class="dropdown-item">Addresses</a></span></li>
+		<li class="nav-item px-4 text-small text-warning"><span class="text-small">{addresses().stxAddress}</span></li>
+		<li class="nav-item px-4 text-small text-warning"><span class="text-small">{addresses().cardinal}</span></li>
+		{/if}
+		<li class="nav-item mt-4 py-4">
 		{#if webWalletNeeded}
 		<span class="dropdown-item" style="position: relative; top: 2px;">
 			<a href="https://wallet.hiro.so/wallet/install-web" class="pointer" target="_blank" rel="noreferrer">
@@ -77,8 +87,8 @@ onMount(async () => {
 		</span>
 		{:else if $sbtcConfig.loggedIn}
 			<span class="dropdown-item">
-				<a href="/" class="pointer" style="vertical-align: middle;" on:click|preventDefault={() => logout()}>
-					<span  class="px-2"><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /> disconnect</span>
+				<a href="/" class="dropdown-item pointer" style="vertical-align: middle;" on:click|preventDefault={() => logout()}>
+					<span  class=""><img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" /> disconnect</span>
 				</a>
 			</span>
 		{:else}
@@ -90,8 +100,11 @@ onMount(async () => {
 
 
 <style>
+.border {
+border: 1pt solid #fff;
+}
+
 .nav-item {
-	text-transform: lowercase;
 	font-weight: 700;
 	font-size: 1.0rem;
 }

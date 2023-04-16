@@ -7,22 +7,14 @@ import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { addresses } from '$lib/stacks_connect'
-import type { SigData } from '$types/sig_data';
 
 let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 
 $: view = 'build_tx_view';
-let sigData: SigData;
+let webWallet = true;
 const openSigView = () => {
+	webWallet = piTx.fromBtcAddress === addresses().cardinal,
 	piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);
-	if (!piTx.pegInData.stacksAddress) piTx.setStacksAddress(addresses().stxAddress);
-	sigData = {
-		pegin: true,
-		webWallet: piTx.fromBtcAddress === addresses().cardinal,
-		opReturnTx: piTx?.buildOpReturnTransaction(),
-		outputsForDisplay: piTx?.getOutputsForDisplay(),
-		inputsForDisplay: piTx?.addressInfo.utxos
-	}
   	view = 'sign_tx_view';
 }
 const updateTransaction = () => {
@@ -45,11 +37,11 @@ const updateTransaction = () => {
 						{#if view === 'build_tx_view'}
 							<BuildTransaction {piTx} on:request_signature={openSigView}/>
 						{:else}
-							{#if sigData && !sigData.webWallet}
-								<SignTransaction {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
+							{#if !webWallet}
+								<SignTransaction {piTx} on:update_transaction={updateTransaction}/>
 							{/if}
-							{#if sigData && sigData.webWallet}
-								<SignTransactionWeb {sigData} pegInfo={JSON.parse(JSON.stringify(piTx))} on:update_transaction={updateTransaction}/>
+							{#if webWallet}
+								<SignTransactionWeb {piTx} on:update_transaction={updateTransaction}/>
 							{/if}
 						{/if}
 					</div>

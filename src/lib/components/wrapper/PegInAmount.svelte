@@ -11,7 +11,7 @@ let pegAmount:number = amtData.pegAmount;
 const changePegIn = (maxValue:boolean) => {
   errorReason = undefined;
   try {
-    if (pegAmount > amtData.maxCommit) {
+    if (amtData.maxCommit > 0 && pegAmount > amtData.maxCommit) {
       errorReason = 'Can\'t wrap more btc than available.';
       return;
     }

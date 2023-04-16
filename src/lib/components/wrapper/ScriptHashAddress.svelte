@@ -5,11 +5,10 @@ import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import QrCode from "svelte-qrcode"
 import { fmtSatoshiToBitcoin } from '$lib/utils'
-import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 
 export let piTx:PegInTransactionI;
-const peginRequest = piTx?.buildOpDropTransaction();
+const peginRequest = piTx?.getOpDropPeginRequest('op_drop', 'any');
 
 const paymentUri = () => {
   let uri = 'bitcoin:' + peginRequest.timeBasedPegin!.address
@@ -24,7 +23,6 @@ onMount(async () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.peginRequestState = 0;
   sbtcConfig.update(() => conf);
-
 })
 </script>
 
@@ -49,11 +47,6 @@ onMount(async () => {
 <div class="row text-center my-3 text-small">
   <div class="col-12">
     <span>{paymentUri()}</span>
-  </div>
-</div>
-<div class="row my-3 text-small">
-  <div class="col-12">
-    <DebugPeginInfo tx={piTx} {peginRequest}/>
   </div>
 </div>
 <style>
