@@ -16,4 +16,5 @@ COPY . .
 RUN npm run build
 
 FROM scratch AS export-stage
+WORKDIR /
 COPY --from=build /repo/build .
