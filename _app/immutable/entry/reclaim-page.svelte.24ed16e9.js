@@ -6,7 +6,7 @@ import { C as CopyClipboard, o as openPsbtRequestPopup, S as SignTransaction } f
 import { D as DebugPeginInfo } from "../chunks/DebugPeginInfo.001cdc54.js";
 import { b as base64, h as hex, c as btc, T as Transaction, C as COMMS_ERROR, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl } from "../chunks/utils.7d5a9605.js";
 import { R as ReclaimTransaction } from "../chunks/ReclaimTransaction.1fdc97f3.js";
-import { g as goto } from "../chunks/navigation.4bf2e28d.js";
+import { g as goto } from "../chunks/navigation.678f4d74.js";
 const { console: console_1 } = globals;
 const file$1 = "src/lib/components/reclaim/ReclaimForm.svelte";
 function create_if_block$1(ctx) {
