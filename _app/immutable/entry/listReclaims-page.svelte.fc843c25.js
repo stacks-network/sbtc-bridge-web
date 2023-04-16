@@ -4,7 +4,7 @@ import { P as PegInTransaction } from "../chunks/PegInTransaction.5807a3a2.js";
 import { j as fetchMyWrapTransactions, a as addresses } from "../chunks/stacks_connect.185d0304.js";
 import { C as COMMS_ERROR } from "../chunks/utils.7d5a9605.js";
 import { R as ReclaimTransaction } from "../chunks/ReclaimTransaction.1fdc97f3.js";
-import { g as goto } from "../chunks/navigation.c0b183a9.js";
+import { g as goto } from "../chunks/navigation.c8a3565f.js";
 const _page_svelte_svelte_type_style_lang = "";
 const file = "src/routes/listReclaims/+page.svelte";
 function get_each_context(ctx, list, i) {

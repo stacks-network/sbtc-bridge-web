@@ -1,5 +1,5 @@
 import { S as SvelteComponentDev, i as init, d as dispatch_dev, s as safe_not_equal, U as validate_store, V as component_subscribe, v as validate_slots, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, g as insert_hydration_dev, O as append_hydration_dev, A as set_data_dev, _ as noop } from "../chunks/index.d5e223f8.js";
-import { p as page } from "../chunks/stores.4ff5bd59.js";
+import { p as page } from "../chunks/stores.2b2a3394.js";
 const file = "node_modules/@sveltejs/kit/src/runtime/components/error.svelte";
 function create_fragment(ctx) {
   var _a;
