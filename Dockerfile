@@ -1,7 +1,7 @@
 # Use an official Node.js runtime as a parent image
-FROM node:19-alpine
+FROM node:19 as build
 
-WORKDIR /build
+WORKDIR /repo
 
 # Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
@@ -14,3 +14,6 @@ COPY . .
 
 # Build the application using Vite
 RUN npm run build
+
+FROM scratch AS export-stage
+COPY --from=build /repo/build .
