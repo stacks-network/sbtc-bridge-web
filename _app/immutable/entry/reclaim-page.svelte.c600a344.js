@@ -10,7 +10,7 @@ import { s as sbtcConfig } from "../chunks/stores.d1299e51.js";
 import { D as DebugPeginInfo, P as PegInTransaction } from "../chunks/DebugPeginInfo.8ff87a10.js";
 import { C as CopyClipboard, o as openPsbtRequestPopup, a as assert, c as concatByteArrays, S as SignTransaction } from "../chunks/SignTransaction.ee353781.js";
 import { c as base64, h as hex, d as btc, T as Transaction, g as TEST_NETWORK, N as NETWORK, p as p2wpkh, s as secp256k1, R as RawTx, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, C as COMMS_ERROR, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl } from "../chunks/utils.6d974ea3.js";
-import { g as goto } from "../chunks/navigation.a09b8124.js";
+import { g as goto } from "../chunks/navigation.27ea4c63.js";
 const { console: console_1 } = globals;
 const file$1 = "src/lib/components/reclaim/ReclaimForm.svelte";
 function create_if_block$1(ctx) {
