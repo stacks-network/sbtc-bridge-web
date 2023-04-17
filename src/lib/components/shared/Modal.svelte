@@ -17,10 +17,9 @@ scroll(0,0);
     <div class="sv-modal">
         <slot name="title"></slot>
         <slot></slot>
+        <slot name="close"></slot>
+        <slot name="debug"></slot>
     </div>
-    {#if showClose}
-        <div class="text-center"><button class="btn btn-outline-info" on:click={closeModal}>CLOSE</button></div>
-    {/if}
 </div>
 {/if}
 

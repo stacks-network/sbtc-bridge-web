@@ -177,32 +177,34 @@ describe('suite', () => {
     expect(outputs[2].amount).equals(myPeg.maxCommit() - myPeg.fee - myPeg.dust)
   })
 
-  it.concurrent('PegOutTransaction.buildTransaction() throws if signature is not passed', async () => {
+  it.concurrent('PegOutTransaction.buildOpReturnTransaction() throws if signature is not passed', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     try {
-      const tx = myPeg.buildTransaction(undefined);
+      const tx = myPeg.buildOpReturnTransaction();
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message).equals('Signature of output 2 scriptPubKey is required');
     }
   })
 
-  it.concurrent('PegOutTransaction.buildTransaction() returns transaction object', async () => {
+  it.concurrent('PegOutTransaction.buildOpReturnTransaction() returns transaction object', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     //const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
-    const tx = myPeg.buildTransaction(hex.encode(sig));
-    expect(tx.opReturn.version).equals(2);
-    expect(tx.opReturn.hasWitnesses).equals(false)
+    myPeg.setSignature(hex.encode(sig))
+    const tx = myPeg.buildOpReturnTransaction();
+    expect(tx.version).equals(2);
+    expect(tx.hasWitnesses).equals(false)
   })
 
-  it.concurrent('PegOutTransaction.buildTransaction() ensure PSBT can be estracted form tx', async () => {
+  it.concurrent('PegOutTransaction.buildOpReturnTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     const privKey = secp.utils.randomPrivateKey()
     const sig = await secp.sign(sha256('message'), privKey);
-    const tx = myPeg.buildTransaction(hex.encode(sig));
-    expect(tx.opReturn.toPSBT(2));
+    myPeg.setSignature(hex.encode(sig))
+    const tx = myPeg.buildOpReturnTransaction();
+    expect(tx.toPSBT(2));
   })
 
   it.concurrent('PegOutTransaction.getDataToSign() ensure signature can be passed to builder.', async () => {
@@ -211,7 +213,8 @@ describe('suite', () => {
     const script = myPeg.getDataToSign();
     const privKey = secp.utils.randomPrivateKey();
     const sig = await secp.sign(sha256(script), privKey);
-    const tx = myPeg.buildTransaction(hex.encode(sig));
+    myPeg.setSignature(hex.encode(sig))
+    const tx = myPeg.buildOpReturnTransaction();
     const verified = secp.verify(sig, sha256(script), secp.getPublicKey(privKey, true));
     expect(verified).equals(true);
   })

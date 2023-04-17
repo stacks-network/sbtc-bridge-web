@@ -9,7 +9,7 @@ function addNetSelector (path:string) {
 
 export async function sendRawTxDirectMempool(hex:string) {
   //const url = CONFIG.VITE_MEMPOOL_EXPLORER + '/tx';
-  const url = CONFIG.VITE_BLOCKCYPHER_EXPLORER + '/txs/push';
+  const url = addNetSelector(CONFIG.VITE_BLOCKCYPHER_EXPLORER + '/txs/push');
   console.log('sendRawTx:mempoolUrl: ', url)
   const response = await fetch(url, {
     method: 'POST',
@@ -49,7 +49,7 @@ export async function sendRawTransaction(tx: { hex: string; }) {
 }
 
 export async function fetchBurnBlockCount() {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/blocks/count';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/count');
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -59,7 +59,7 @@ export async function fetchBurnBlockCount() {
 }
 
 export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/wallet/walletprocesspsbt';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/walletprocesspsbt');
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -73,7 +73,7 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
 }
 
 export async function savePaymentRequest(peginRequest:PeginRequestI) {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/payments/request';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/payments/request');
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,7 @@ export async function savePaymentRequest(peginRequest:PeginRequestI) {
   return signedPsbt;
 }
 export async function fetchMyWrapTransactions(stxAddress:string):Promise<Array<PeginRequestI>> {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/payments/address/' + stxAddress;
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/payments/address/' + stxAddress);
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -106,7 +106,7 @@ export async function fetchCurrentFeeRates() {
 }
 
 export async function fetchTransaction(txid:string) {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid;
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid);
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
@@ -116,7 +116,7 @@ export async function fetchTransaction(txid:string) {
 }
 
 export async function fetchAddressTransactions(address:string) {
-  const path = CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/txs';
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/txs');
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');

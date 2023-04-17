@@ -11,10 +11,10 @@ import { concatByteArrays } from '$lib/structured-data.js'
 import type { PeginRequestI } from '$types/pegin_request';
 
 export interface PegOutTransactionI extends PegTransactionI {
-
-	buildTransaction: (signature:string) => { opReturn: btc.Transaction, opDrop: btc.Transaction };
-	buildOpDropTransaction: (signature:string) => btc.Transaction|PeginRequestI;
-	buildOpReturnTransaction: (signature:string) => btc.Transaction;
+	signature: string|undefined;
+	setSignature: (signature:string) => void;
+	getOpDropPeginRequest: (mode:string, wallet:string) => PeginRequestI;
+	buildOpReturnTransaction: () => btc.Transaction;
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -38,6 +38,7 @@ keySetForFeeCalculation.push({
 export default class PegOutTransaction extends PegTransaction implements PegOutTransactionI {
 
 	privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
+	signature = '';
 
 	public constructor() {
 		super();
@@ -86,6 +87,10 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		//	throw new Error('Amount is more than available ' + this.maxCommit() + ' less the gas ' + this.fee);
 		//}
 		this.pegInData.amount = amount;
+	}
+
+	setSignature = (signature:string) => {
+		this.signature = signature;
 	}
 
 	calculateFees = ():void => {
@@ -164,13 +169,6 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return view2;
 	}
 
-	buildTransaction = (signature:string) => {
-		if (!this.ready) throw new Error('Not ready!');
-		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
-		//console.log('buildTransaction:signature: ', signature.length + ' : ' + signature)
-		return { opReturn: this.buildOpReturnTransaction(signature), opDrop: this.buildOpDropTransaction(signature) };
-	}
-
 	private addInputs = (tx:btc.Transaction) => {
 		for (const utxo of this.addressInfo.utxos) {
 			const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
@@ -185,13 +183,13 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		}
 	}
 
-	buildOpReturnTransaction = (signature:string) => {
+	buildOpReturnTransaction = () => {
 		if (!this.ready) throw new Error('Not ready!');
-		if (!signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		if (!this.signature) throw new Error('Signature of output 2 scriptPubKey is required');
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
 		this.addInputs(tx);
-		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
-		const data = this.buildData(signature)
+		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
+		const data = this.buildData(this.signature)
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
 		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
@@ -199,14 +197,18 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		return tx;
 	}
 
-	buildOpDropTransaction = (signature:string) => {
-		if (!signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
-		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		this.addInputs(tx);
-		const asmScript = this.getOpDropP2shScript(signature);
-		tx.addOutput({ script: asmScript, amount: BigInt(this.dust) });
-		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
-		return tx;
+	getOpDropPeginRequest = (mode:string, wallet:string):PeginRequestI => {
+		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+		return {
+			fromBtcAddress: this.fromBtcAddress,
+			status: 1,
+			amount: this.pegInData.amount,
+			requestType: 'unwrap',
+			mode: 'op_return',
+			wallet: 'any',
+			stacksAddress: this.pegInData.stacksAddress,
+			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
+		};
 	}
 
 	private getOpDropP2shScript(signature:string) {
