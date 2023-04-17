@@ -72,4 +72,8 @@ onMount(async () => {
 </section>
 
 <style>
+section {
+	min-height: 90vh;
+}
+
 </style>
