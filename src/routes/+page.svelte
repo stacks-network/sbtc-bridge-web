@@ -47,6 +47,9 @@ const togglePeg = (pegin:boolean) => {
 </section>
 
 <style>
+section {
+	min-height: 90vh;
+}
 .card-sm {
 	min-width: 40vw;
 	min-height: 400px;

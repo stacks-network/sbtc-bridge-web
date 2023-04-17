@@ -13,6 +13,7 @@ export const defaultSbtcConfig:SbtcConfig = {
   pegInTransaction: undefined,
   pegOutTransaction: undefined,
   userSettings: {
-    useOpDrop: true
+    useOpDrop: true,
+    debugMode: false
   }
 }
