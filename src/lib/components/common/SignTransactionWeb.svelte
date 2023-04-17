@@ -10,13 +10,16 @@ import { sendRawTxDirectMempool } from '$lib/bridge_api';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import { sbtcConfig } from '$stores/stores';
 import { explorerBtcAddressUrl } from "$lib/utils";
+import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
+import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
+import { savePaymentRequest } from '$lib/bridge_api';
+
+export let piTx: PegInTransactionI|PegOutTransactionI;
 
 const dispatch = createEventDispatcher();
-export let sigData:SigData;
-export let pegInfo:any;
-let currentTx = hex.encode(sigData.opReturnTx.toPSBT(2));
+let sigData:SigData;
+let currentTx:string;
 let errorReason: string|undefined;
-let successReason: string|undefined;
 
 const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
@@ -75,6 +78,10 @@ const broadcastTransaction = async (psbtHex:string) => {
       broadcasted = false;
       errorReason = resp.error + ' Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
     } else {
+      if ($sbtcConfig.pegIn) {
+        const peginRequest = piTx.getOpDropPeginRequest('op_return', 'web')
+        await savePaymentRequest(peginRequest)
+      }
       broadcasted = true;
     }
   } catch (err:any) {
@@ -83,7 +90,13 @@ const broadcastTransaction = async (psbtHex:string) => {
 }
 
 onMount(async () => {
-  //requestSignPsbt();
+	sigData = {
+    webWallet: true,
+		pegin: $sbtcConfig.pegIn,
+		outputsForDisplay: piTx?.getOutputsForDisplay(),
+		inputsForDisplay: piTx?.addressInfo.utxos
+	}
+  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT(2));
 })
 </script>
 
@@ -92,7 +105,7 @@ onMount(async () => {
     <h2>Step 2: Sign with Hiro Web Wallet</h2>
   </div>
 </section>
-<PegInfo {pegInfo} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
+<PegInfo {piTx} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 <section>
   {#if errorReason}
   <div class="my-5 text-center text-danger">

@@ -13,19 +13,13 @@ let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegO
 
 $: view = 'build_tx_view';
 
-let sigData: SigData;
+let webWallet = true;
 const openSigView = () => {
+	webWallet = poTx.fromBtcAddress === addresses().cardinal,
+
 	poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
 	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses().stxAddress);
-	const signature = $sbtcConfig.sigData.signature;
-	const txs = poTx!.buildTransaction(signature);
-	sigData = {
-		pegin: false,
-		webWallet: poTx.fromBtcAddress === addresses().cardinal,
-		opReturnTx,
-		outputsForDisplay: poTx!.getOutputsForDisplay(),
-		inputsForDisplay: poTx!.addressInfo.utxos
-	}
+	poTx.setSignature($sbtcConfig.sigData.signature);
   	view = 'sign_tx_view';
 }
 
@@ -49,11 +43,11 @@ const updateTransaction = () => {
 					  {#if view === 'build_tx_view'}
 					  <BuildTransaction {poTx} on:request_signature={openSigView}/>
 					  {:else}
-					  	{#if sigData && !sigData.webWallet}
-					  		<SignTransaction {sigData} pegInfo={JSON.parse(JSON.stringify(poTx))} on:update_transaction={updateTransaction}/>
+					  	{#if !webWallet}
+					  		<SignTransaction piTx={poTx} on:update_transaction={updateTransaction}/>
 						{/if}
-						{#if sigData && sigData.webWallet}
-							<SignTransactionWeb {sigData} pegInfo={JSON.parse(JSON.stringify(poTx))} on:update_transaction={updateTransaction}/>
+						{#if webWallet}
+							<SignTransactionWeb piTx={poTx} on:update_transaction={updateTransaction}/>
 						{/if}
 					  {/if}
 					</div>

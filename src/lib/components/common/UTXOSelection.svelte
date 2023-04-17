@@ -39,7 +39,7 @@ const configureUTXOs = async (force:boolean) => {
     isSupported(bitcoinAddress!);
   } catch (err:any) {
     bitcoinAddress = undefined;
-    errorReason = 'Insufficient balance - please use a different bitcoin address';
+    errorReason = 'Unsupported bitcoin address';
     return;
   }
   //if (utxoData.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
@@ -48,7 +48,7 @@ const configureUTXOs = async (force:boolean) => {
   try {
     await dispatch('utxo_updated', { errored: false, opCode: 'address-change', bitcoinAddress});
   } catch(err:any) {
-    errorReason = 'Insufficient balance - please use a different bitcoin address';
+    //errorReason = 'Insufficient balance - please use a different bitcoin address';
     return;
   }
 }
@@ -68,7 +68,7 @@ onMount(async () => {
     </label>
     <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
     <div class="text-small">{utxoData.info}</div>
-    {#if utxoData.numbInputs > 0}
+    {#if $sbtcConfig.userSettings.useOpDrop || utxoData.numbInputs > 0}
     <div class="text-small d-flex justify-content-between  text-info">
       <div class="" title={utxoData.numbInputs + ' unspent inputs with total value: ' + utxoData.maxCommit}>BTC Balance {utxoData.maxCommit} Sats.</div>
       {#if showDebugInfo}

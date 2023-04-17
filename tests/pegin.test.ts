@@ -4,11 +4,11 @@ import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import assert, { fail } from 'assert';
+import { fail } from 'assert';
 import { pegin1 } from './data/data_pegin_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from '../src/lib/domain/PegTransaction'
-import { c32encode, c32decode, c32address, c32addressDecode, c32checkEncode } from 'c32check';
+import { c32address } from 'c32check';
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -192,29 +192,29 @@ describe('suite', () => {
     expect(outputs[2].amount).equals(100)
   })
 
-  it.concurrent('PegInTransaction.buildTransaction() throws if signature is passed', async () => {
+  it.concurrent('PegInTransaction.buildOpReturnTransaction() throws if signature is passed', async () => {
     const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
     const sig = await secp.sign(sha256('message'), privKey);
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     try {
-      const tx = myPeg.buildTransaction(hex.encode(sig));
+      const tx = myPeg.buildOpReturnTransaction();
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message);
     }
   })
 
-  it.concurrent('PegInTransaction.buildTransaction() returns transaction object', async () => {
+  it.concurrent('PegInTransaction.buildOpReturnTransaction() returns transaction object', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    const tx = myPeg.buildTransaction(undefined);
-    expect(tx.opReturn.version).equals(2)
-    expect(tx.opReturn.hasWitnesses).equals(false)
+    const tx = myPeg.buildOpReturnTransaction();
+    expect(tx.version).equals(2)
+    expect(tx.hasWitnesses).equals(false)
   })
 
-  it.concurrent('PegInTransaction.buildTransaction() ensure PSBT can be estracted form tx', async () => {
+  it.concurrent('PegInTransaction.buildOpReturnTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    const tx = myPeg.buildTransaction(undefined);
-    expect(tx.opReturn.toPSBT(2));
+    const tx = myPeg.buildOpReturnTransaction();
+    expect(tx.toPSBT(2));
   })
 
   it.concurrent('PegInTransaction.encodeAddress() check bitcoin address encoding', async () => {

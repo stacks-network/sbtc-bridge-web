@@ -6,19 +6,24 @@ import PegInfo from '$lib/components/common/PegInfo.svelte';
 import WalletHelp from '$lib/components/wallets/WalletHelp.svelte';
 import { hex, base64 } from '@scure/base';
 import type { SigData } from '$types/sig_data';
+import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
+import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
+import { sbtcConfig } from '$stores/stores';
+import { savePaymentRequest } from '$lib/bridge_api';
+
+export let piTx:PegInTransactionI|PegOutTransactionI;
 
 const dispatch = createEventDispatcher();
 let wallet:string;
-let opMechanism:string = 'return';
+let errorReason:string|undefined;
 
-export let sigData:SigData;
-export let pegInfo:any;
+let sigData:SigData;
 let copied = false;
 
-let currentTx = hex.encode(sigData.opReturnTx.toPSBT(2));
+let currentTx:string;
 
 const setCurrent = () => {
-  const psbt = sigData.opReturnTx.toPSBT(2);
+  const psbt = piTx?.buildOpReturnTransaction().toPSBT(2);
   (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
 /**
   if (opMechanism === 'return') {
@@ -30,17 +35,20 @@ const setCurrent = () => {
   }*/
 }
 
-const updateWallet = (newWallet:string) => {
+const updateWallet = async (newWallet:string) => {
   copied = false;
   //opMechanism = undefined;
   wallet = newWallet;
   setCurrent();
-}
-
-const updateOpMechanism = (newOpMechanism:string) => {
-  opMechanism = newOpMechanism;
-  setCurrent();
   copy();
+  if ($sbtcConfig.pegIn) {
+    try {
+      const peginRequest = piTx.getOpDropPeginRequest('op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum')
+      await savePaymentRequest(peginRequest)
+    } catch (err) {
+      errorReason = 'Unable to save pegin data.'
+    }
+  }
 }
 
 $: getWalletId = () => {
@@ -63,13 +71,13 @@ const copy = () => {
 }
 
 onMount(async () => {
-  try {
-    if (sigData.webWallet) {
-      console.log('Using web wallet psbt request')
-    }
-  } catch(err:any) {
-    dispatch('update_transaction', { success: false, reason: err.message });
-  }
+	sigData = {
+    webWallet: false,
+		pegin: $sbtcConfig.pegIn,
+		outputsForDisplay: piTx?.getOutputsForDisplay(),
+		inputsForDisplay: piTx?.addressInfo.utxos
+	}
+  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT(2));
 })
 </script>
 
@@ -79,7 +87,7 @@ onMount(async () => {
     <h2>Step 2: Sign & Broadcast</h2>
   </div>
 </section>
-<PegInfo {pegInfo} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
+<PegInfo {piTx} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 
 <!-- Select Wallet -->
 <section>
@@ -98,36 +106,22 @@ onMount(async () => {
 			</ul>
     </div>
   </div>
-  <!--
   {#if wallet}
   <div class="my-3 d-flex justify-content-start">
     <div>
 			<ul class="navbar-nav">
 				<li class="nav-item dropdown">
 					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						2. Select Mechanism: {#if opMechanism}({opMechanism}){/if}
+						2. Follow the Instructions Below
 					</span>
-					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateOpMechanism('return')}>OP Return</a></li>
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateOpMechanism('drop')}>OP Drop</a></li>
-					</ul>
 				</li>
 			</ul>
     </div>
   </div>
   {/if}
-  -->
-  {#if wallet}
-  <div class="my-3 d-flex justify-content-start">
-    <div>
-			<ul class="navbar-nav">
-				<li class="nav-item dropdown">
-					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						3. Follow the Instructions Below
-					</span>
-				</li>
-			</ul>
-    </div>
+  {#if $sbtcConfig.userSettings.debugMode && errorReason}
+  <div class="my-3 text-warning">
+    <div>{errorReason}</div>
   </div>
   {/if}
   <input bind:value={currentTx} style="visibility:hidden;" />
