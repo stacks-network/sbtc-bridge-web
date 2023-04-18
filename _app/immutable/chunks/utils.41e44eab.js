@@ -4,7 +4,7 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-import { M as hmac, N as concatBytes$2, O as randomBytes, Q as sha256, R as wrapConstructor, T as SHA2, n as utils, q as getPublicKey, r as schnorr$1, C as CONFIG, y as decodeStacksAddress } from "./stacks_connect.860997d2.js";
+import { M as hmac, N as concatBytes$2, O as randomBytes, Q as sha256, R as wrapConstructor, T as SHA2, n as utils, q as getPublicKey, r as schnorr$1, C as CONFIG, y as decodeStacksAddress } from "./stacks_connect.fd09cc29.js";
 /*! scure-base - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 function assertNumber(n) {
   if (!Number.isSafeInteger(n))

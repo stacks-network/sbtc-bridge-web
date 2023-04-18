@@ -4,9 +4,9 @@ var __publicField = (obj, key, value) => {
   __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
   return value;
 };
-import { n as utils, q as getPublicKey, r as schnorr, C as CONFIG, v as fetchUtxoSet, x as fetchCurrentFeeRates, y as decodeStacksAddress } from "./stacks_connect.860997d2.js";
-import { j as PegTransaction, g as TEST_NETWORK, N as NETWORK, A as Address, p as p2wpkh, h as hex, T as Transaction, s as secp256k1, S as Script, O as OutScript, R as RawTx, m as p2tr, n as p2wsh, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, c as base64, d as btc } from "./utils.6d974ea3.js";
-import { a as assert, c as concatByteArrays } from "./SignTransaction.ee353781.js";
+import { n as utils, q as getPublicKey, r as schnorr, C as CONFIG, v as fetchUtxoSet, x as fetchCurrentFeeRates, y as decodeStacksAddress } from "./stacks_connect.fd09cc29.js";
+import { j as PegTransaction, g as TEST_NETWORK, N as NETWORK, A as Address, p as p2wpkh, h as hex, T as Transaction, s as secp256k1, S as Script, O as OutScript, R as RawTx, m as p2tr, n as p2wsh, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, c as base64, d as btc } from "./utils.41e44eab.js";
+import { a as assert, c as concatByteArrays } from "./SignTransaction.a6eceb81.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, e as empty, g as insert_hydration_dev, Z as noop, l as detach_dev, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, f as claim_space, u as attr_dev, x as add_location, O as append_hydration_dev, W as listen_dev, X as prevent_default, A as set_data_dev } from "./index.605ac338.js";
 import { s as sbtcConfig } from "./stores.d1299e51.js";
 const priv = utils.randomPrivateKey();

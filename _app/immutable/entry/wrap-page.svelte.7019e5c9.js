@@ -1,10 +1,10 @@
 import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, x as add_location, u as attr_dev, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, a7 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, Z as noop, Y as run_all, o as onMount, _ as src_url_equal, U as validate_store, V as component_subscribe, C as create_component, D as claim_component, E as mount_component, k as transition_in, h as transition_out, F as destroy_component, G as create_slot, e as empty, B as group_outros, j as check_outros, a8 as bubble, a9 as self, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, a0 as globals } from "../chunks/index.605ac338.js";
-import { A as commonjsGlobal, B as savePaymentRequest, a as addresses, C as CONFIG } from "../chunks/stacks_connect.860997d2.js";
+import { A as commonjsGlobal, B as savePaymentRequest, a as addresses, C as CONFIG } from "../chunks/stacks_connect.fd09cc29.js";
 import { s as sbtcConfig } from "../chunks/stores.d1299e51.js";
-import { F as FeeDisplay, P as Principal, U as UTXOSelection, S as SbtcWalletDisplay, a as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.428155b2.js";
-import { f as fmtSatoshiToBitcoin, b as explorerBtcAddressUrl } from "../chunks/utils.6d974ea3.js";
-import { P as PegInTransaction, D as DebugPeginInfo } from "../chunks/DebugPeginInfo.8ff87a10.js";
-import { S as SignTransaction } from "../chunks/SignTransaction.ee353781.js";
+import { F as FeeDisplay, P as Principal, U as UTXOSelection, S as SbtcWalletDisplay, a as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.279f16a6.js";
+import { f as fmtSatoshiToBitcoin, b as explorerBtcAddressUrl } from "../chunks/utils.41e44eab.js";
+import { P as PegInTransaction, D as DebugPeginInfo } from "../chunks/DebugPeginInfo.7ba9cc13.js";
+import { S as SignTransaction } from "../chunks/SignTransaction.a6eceb81.js";
 const file$5 = "src/lib/components/wrapper/PegInAmount.svelte";
 function create_fragment$5(ctx) {
   let div2;

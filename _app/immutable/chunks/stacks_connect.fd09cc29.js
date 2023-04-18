@@ -1067,7 +1067,7 @@ async function fetchUserSbtcBalance(stxAddress) {
     const result = await response.json();
     return result;
   } catch (err) {
-    return 0;
+    return { balance: 0 };
   }
 }
 (function() {
@@ -10385,7 +10385,7 @@ const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
       case "connect-modal":
         return __vitePreload(() => import(
           /* webpackMode: "lazy" */
-          "./connect-modal.entry.d1e11b33.js"
+          "./connect-modal.entry.92fe189d.js"
         ), true ? [] : void 0, import.meta.url).then(processMod, consoleError);
     }
   }
