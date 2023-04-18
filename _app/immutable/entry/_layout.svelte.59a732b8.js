@@ -1,8 +1,8 @@
 import { _ as __vitePreload } from "../chunks/preload-helper.f8376bb0.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, U as validate_store, V as component_subscribe, o as onMount, c as space, p as element, C as create_component, y as text, f as claim_space, q as claim_element, D as claim_component, z as claim_text, E as mount_component, W as listen_dev, X as prevent_default, F as destroy_component, Y as run_all, Z as noop, _ as src_url_equal, w as set_style, $ as onDestroy, t as tick, a0 as globals, e as empty, j as check_outros, A as set_data_dev, B as group_outros } from "../chunks/index.605ac338.js";
 import { a as addresses, l as logUserOut, s as setConfig, b as loginStacksJs, f as fetchSbtcBalance, C as CONFIG, c as fetchSbtcData, u as userSession } from "../chunks/stacks_connect.fd09cc29.js";
-import { g as goto, b as beforeNavigate } from "../chunks/navigation.49c5b5dc.js";
-import { p as page } from "../chunks/stores.e7804b4d.js";
+import { g as goto, b as beforeNavigate } from "../chunks/navigation.675ec77f.js";
+import { p as page } from "../chunks/stores.6d27093b.js";
 import { s as stx_eco_wallet_on, a as stx_eco_wallet_off } from "../chunks/stx_eco_wallet_off.86fb394e.js";
 import { i as isCoordinator } from "../chunks/sbtc_admin.9e9f16b1.js";
 import { s as sbtcConfig, d as defaultSbtcConfig } from "../chunks/stores.d1299e51.js";

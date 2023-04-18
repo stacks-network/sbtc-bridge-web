@@ -1,7 +1,7 @@
 var _a, _b;
 import { w as writable } from "./index.88c4ce8e.js";
-const base = ((_a = globalThis.__sveltekit_1nf01oz) == null ? void 0 : _a.base) ?? "";
-((_b = globalThis.__sveltekit_1nf01oz) == null ? void 0 : _b.assets) ?? base;
+const base = ((_a = globalThis.__sveltekit_7kzodb) == null ? void 0 : _a.base) ?? "";
+((_b = globalThis.__sveltekit_7kzodb) == null ? void 0 : _b.assets) ?? base;
 const SNAPSHOT_KEY = "sveltekit:snapshot";
 const SCROLL_KEY = "sveltekit:scroll";
 const INDEX_KEY = "sveltekit:index";
