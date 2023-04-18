@@ -1,4 +1,4 @@
-import { j as client } from "./singletons.c0f82e58.js";
+import { j as client } from "./singletons.bbdb1146.js";
 client.disable_scroll_handling;
 const goto = client.goto;
 client.invalidate;
