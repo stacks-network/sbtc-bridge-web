@@ -167,6 +167,6 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
     const result = await response.json();
     return (result);
   } catch (err) {
-    return 0;
+    return { balance: 0 };
   }
 }
