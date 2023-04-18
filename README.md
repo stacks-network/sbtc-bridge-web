@@ -126,8 +126,36 @@ npm publish
 ```
 
 ## Production Deployment
+
+# Setup CORS policy for Google Storage Bucket using gcloud:
+gsutil cors set gcp-cors.json gs://sbtc-bridge-web
+# Verify
+gcloud storage buckets describe gs://sbtc-bridge-web --format="default(cors)"
+
+docker build --file Dockerfile --progress=plain --output build .
+
+VERSION="$(date +%s)-$(git rev-parse --short HEAD)"
+BUCKET="gs://sbtc-bridge-web/$VERSION"
+
+# Copy over old version
+gcloud storage rm --recursive "gs://sbtc-bridge-web/**"
+gcloud storage cp --recursive build/* "gs://sbtc-bridge-web/"
+
+# Copy new version
+gcloud storage cp --recursive build/* "$BUCKET/"
+
+# Set the correct Cache-Control metadata for the new version:
+gsutil -m setmeta -h "Cache-Control:public, max-age=3600" "$BUCKET/**"
+
+# Use gcloud to update the load balancer bucket location
+
+# replace path
+gcloud compute url-maps edit sbtc-bridge-web-load-balancer --global 
+
+# gcloud compute url-maps invalidate-cdn-cache sbtc-bridge-web-load-balancer --path "/*" --global
+
+# Removing old versions
+# gcloud storage rm --recursive "gs://sbtc-bridge-web/$PREV_VERSION/"
 ```
-DOCKER_BUILDKIT=1 docker build --file Dockerfile --progress=plain --output build .
-gcloud storage rm --recursive gs://sbtc-bridge-web/**
-gcloud storage cp --recursive build/* gs://sbtc-bridge-web/
+gsutil -m rm -r gs://[BUCKET_NAME]/versions/[OLD_VERSION_NUMBER]
 ```
