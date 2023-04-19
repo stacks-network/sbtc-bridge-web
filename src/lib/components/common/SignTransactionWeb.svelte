@@ -13,7 +13,6 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { savePaymentRequest } from '$lib/bridge_api';
-	import { userInfo } from 'os';
 
 export let piTx: PegInTransactionI|PegOutTransactionI;
 
