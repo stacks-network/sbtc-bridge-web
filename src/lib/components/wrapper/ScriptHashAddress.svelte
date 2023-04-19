@@ -9,6 +9,7 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 
 export let piTx:PegInTransactionI;
 const peginRequest = piTx?.getOpDropPeginRequest('op_drop', 'any');
+let errorReason:string|undefined;
 
 const paymentUri = () => {
   let uri = 'bitcoin:' + peginRequest.timeBasedPegin!.address
@@ -19,10 +20,12 @@ const paymentUri = () => {
 onMount(async () => {
   try {
     if (peginRequest.timeBasedPegin!.script.length > 0) await savePaymentRequest(peginRequest)
-  } catch (err) {}
-  const conf:SbtcConfig = $sbtcConfig;
-  conf.peginRequestState = 0;
-  sbtcConfig.update(() => conf);
+    const conf:SbtcConfig = $sbtcConfig;
+    conf.peginRequestState = 0;
+    sbtcConfig.update(() => conf);
+  } catch (err) {
+    errorReason = 'Request already being processed with these details - change the amount to send another request.'
+  }
 })
 </script>
 
@@ -32,6 +35,7 @@ onMount(async () => {
   </div>
 </div>
 
+{#if !errorReason}
 <div class="row text-center text-warning">
     <div class="col-12">
       <QrCode value={paymentUri()} padding={'40px'} color={'#fff'} background={'#4786cd'} size={300} />
@@ -49,5 +53,12 @@ onMount(async () => {
     <span>{paymentUri()}</span>
   </div>
 </div>
+{:else}
+<div class="row text-center mt-5">
+  <div class="col-12 text-danger mb-5">{errorReason}</div>
+</div>
+{/if}
+
+
 <style>
 </style>

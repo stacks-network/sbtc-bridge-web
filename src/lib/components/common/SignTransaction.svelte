@@ -46,7 +46,7 @@ const updateWallet = async (newWallet:string) => {
       const peginRequest = piTx.getOpDropPeginRequest('op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum')
       await savePaymentRequest(peginRequest)
     } catch (err) {
-      errorReason = 'Unable to save pegin data.'
+      errorReason = 'Request already being processed with these details - change the amount to send another request.'
     }
   }
 }
@@ -89,42 +89,45 @@ onMount(async () => {
 </section>
 <PegInfo {piTx} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 
-<!-- Select Wallet -->
 <section>
-  <div class="my-3 d-flex justify-content-start">
-    <div>
-			<ul class="navbar-nav">
-				<li class="nav-item dropdown">
-					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						1. Select Wallet: {#if wallet}({wallet}){/if}
-					</span>
-					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateWallet('Bitcoin Core')}>Bitcoin Core</a></li>
-						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateWallet('Electrum')}>Electrum</a></li>
-					</ul>
-				</li>
-			</ul>
-    </div>
+  <!-- Select Wallet -->
+{#if !errorReason}
+<div class="my-3 d-flex justify-content-start">
+  <div>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          1. Select Wallet: {#if wallet}({wallet}){/if}
+        </span>
+        <ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+          <li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateWallet('Bitcoin Core')}>Bitcoin Core</a></li>
+          <li><a class="dropdown-item" href="/" on:click|preventDefault={() => updateWallet('Electrum')}>Electrum</a></li>
+        </ul>
+      </li>
+    </ul>
   </div>
-  {#if wallet}
-  <div class="my-3 d-flex justify-content-start">
-    <div>
-			<ul class="navbar-nav">
-				<li class="nav-item dropdown">
-					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-						2. Follow the Instructions Below
-					</span>
-				</li>
-			</ul>
-    </div>
+</div>
+{#if wallet}
+<div class="my-3 d-flex justify-content-start">
+  <div>
+    <ul class="navbar-nav">
+      <li class="nav-item dropdown">
+        <span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          2. Follow the Instructions Below
+        </span>
+      </li>
+    </ul>
   </div>
-  {/if}
-  {#if $sbtcConfig.userSettings.debugMode && errorReason}
-  <div class="my-3 text-warning">
-    <div>{errorReason}</div>
-  </div>
-  {/if}
-  <input bind:value={currentTx} style="visibility:hidden;" />
+</div>
+{/if}
+
+{:else}
+<div class="row text-center my-5">
+  <div class="col-12 text-danger mb-5">{errorReason}</div>
+</div>
+{/if}
+  
+<input bind:value={currentTx} style="visibility:hidden;" />
 </section>
 {#if copied}
 <WalletHelp wallet={getWalletId()} />
