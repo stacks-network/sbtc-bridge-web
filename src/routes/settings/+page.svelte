@@ -54,9 +54,9 @@ const toggleMechanism = (arg:string) => {
 				</div>
 				<div class="col-7">
 					{#if $sbtcConfig.userSettings?.debugMode}
-					Debug Mode Off - advanced info not shown
-					{:else}
 					Debug Mode On - advanced info provided
+					{:else}
+					Debug Mode Off - advanced info not shown
 					{/if}
 				</div>
 			</div>

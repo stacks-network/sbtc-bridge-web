@@ -13,6 +13,7 @@ import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
+import { fetchSbtcBalance } from "$lib/stacks_connect";
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);
@@ -52,6 +53,7 @@ let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => a
 onMount(async () => {
   try {
     data = JSON.parse(await fetchSbtcData());
+    await fetchSbtcBalance();
   } catch(err) {
     data = {}
   }
