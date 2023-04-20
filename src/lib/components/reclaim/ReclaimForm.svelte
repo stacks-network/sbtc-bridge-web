@@ -50,7 +50,7 @@ const broadcastTransaction = async (psbtHex:string) => {
     currentTx = txHex;
     errorReason = undefined;
     resp = await sendRawTxDirectMempool(txHex);
-    console.log(resp);
+    console.log('sendRawTxDirectMempool: ', resp);
     if (!resp || resp.error) {
       broadcasted = false;
       errorReason = 'Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'

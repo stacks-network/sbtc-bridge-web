@@ -22,7 +22,7 @@ const MAINNET_CONFIG = {
     VITE_SBTC_MINI: false,
     VITE_SBTC_WALLET: 'tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e',
     VITE_SBTC_CONTRACT_ID: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant',
-    VITE_BRIDGE_API: 'https://api.sbtc.world/v1/testnet/bridge-api/v1',
+    VITE_BRIDGE_API: 'https://api.sbtc.world/bridge-api/v1',
     VITE_STACKS_API: 'https://api.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',

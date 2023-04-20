@@ -21,9 +21,8 @@ let sigData:SigData;
 let currentTx:string;
 let errorReason: string|undefined;
 
-const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
 const getExplorerUrl = () => {
-  return explorerBtcAddressUrl(from!)
+  return explorerBtcAddressUrl(piTx.pegInData.sbtcWalletAddress)
 }
 
 export async function requestSignPsbt() {
@@ -73,6 +72,7 @@ const broadcastTransaction = async (psbtHex:string) => {
     currentTx = txHex;
     errorReason = undefined;
     resp = await sendRawTxDirectMempool(txHex);
+    console.log('sendRawTxDirectMempool: ', resp);
     if (resp && resp.error) {
       errMessage = resp.error;
       broadcasted = false;
@@ -85,7 +85,8 @@ const broadcastTransaction = async (psbtHex:string) => {
       broadcasted = true;
     }
   } catch (err:any) {
-    errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+    errorReason = 'Request already being processed with these details - change the amount to send another request.'
+    //errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
 
@@ -96,7 +97,7 @@ onMount(async () => {
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
-  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT(2));
+  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
 })
 </script>
 
@@ -120,9 +121,16 @@ onMount(async () => {
     </p>
   </div>
   {:else}
+  {#if !errorReason}
   <div class="d-flex justify-content-center my-5">
     <button class={btnClass(false)} on:click={() => requestSignPsbt()}>Sign & Broadcast</button>
     <button class={btnClass(true)} on:click={() => updateTransaction()}>Back</button>
+  </div>
+  {/if}
+  {/if}
+  {#if $sbtcConfig.userSettings.debugMode && resp}
+  <div class="my-5 text-center text-warning">
+    <p>Response: {resp}</p>
   </div>
   {/if}
 </section>

@@ -91,7 +91,7 @@ export function addresses():AddressObject {
 
 export const appDetails = {
 	name: 'sBTC Client',
-	icon: '/img/logo.png',
+	icon: '/img/logo-white.jpeg',
 }
 export async function loginStacksJs() {
 	try {

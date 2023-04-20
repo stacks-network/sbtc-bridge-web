@@ -2,9 +2,12 @@ import type { PeginRequestI } from '$types/pegin_request';
 import { CONFIG } from '$lib/config';
 
 function addNetSelector (path:string) {
-  if (CONFIG.VITE_NETWORK === 'testnet') return (path.indexOf('?') > -1) ?  path += '&net=testnet' : path += '?net=testnet'
-  else if (CONFIG.VITE_NETWORK === 'devnet') return  (path.indexOf('?') > -1) ?  path += '&net=devnet' : path += '?net=devnet'
-  else return (path.indexOf('?') > -1) ?  path += '&net=mainnet' : path += '?net=mainnet';
+  if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
+    return path.replace('bridge-api', 'bridge-api/testnet');
+  }
+  else {
+    return path.replace('bridge-api', 'bridge-api/mainnet');
+  }
 }
 
 export async function sendRawTxDirectMempool(hex:string) {
