@@ -1,10 +1,16 @@
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, v as validate_slots, a5 as createEventDispatcher, o as onMount, a0 as globals, p as element, c as space, y as text, C as create_component, q as claim_element, r as children, l as detach_dev, f as claim_space, z as claim_text, D as claim_component, u as attr_dev, x as add_location, w as set_style, g as insert_hydration_dev, O as append_hydration_dev, E as mount_component, a1 as set_input_value, W as listen_dev, X as prevent_default, A as set_data_dev, a6 as prop_dev, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, Z as noop, U as validate_store, V as component_subscribe, j as check_outros, e as empty, B as group_outros } from "../chunks/index.605ac338.js";
 import { a as addresses, k as hexToBytes, m as sendRawTxDirectMempool, n as utils, q as getPublicKey, r as schnorr, v as fetchUtxoSet, w as fetchTransaction, x as fetchCurrentFeeRates, y as decodeStacksAddress, C as CONFIG } from "../chunks/stacks_connect.b652bb6f.js";
 import { s as sbtcConfig } from "../chunks/stores.d1299e51.js";
-import { D as DebugPeginInfo, P as PegInTransaction } from "../chunks/DebugPeginInfo.7d325b6a.js";
-import { C as CopyClipboard, o as openPsbtRequestPopup, a as assert, c as concatByteArrays, S as SignTransaction } from "../chunks/SignTransaction.64230de4.js";
-import { c as base64, h as hex, d as btc, T as Transaction, g as TEST_NETWORK, N as NETWORK, p as p2wpkh, s as secp256k1, R as RawTx, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, C as COMMS_ERROR, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl } from "../chunks/utils.121fbef1.js";
-import { g as goto } from "../chunks/navigation.98d8fb93.js";
+import { D as DebugPeginInfo, P as PegInTransaction } from "../chunks/DebugPeginInfo.d3698cbe.js";
+import { C as CopyClipboard, o as openPsbtRequestPopup, a as assert, c as concatByteArrays, S as SignTransaction } from "../chunks/SignTransaction.14398a82.js";
+import { c as base64, h as hex, d as btc, T as Transaction, g as TEST_NETWORK, N as NETWORK, p as p2wpkh, s as secp256k1, R as RawTx, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, C as COMMS_ERROR, t as truncate, a as explorerBtcTxUrl, e as explorerTxUrl } from "../chunks/utils.ca1c10e0.js";
+import { g as goto } from "../chunks/navigation.2510a99c.js";
 const { console: console_1 } = globals;
 const file$1 = "src/lib/components/reclaim/ReclaimForm.svelte";
 function create_if_block$1(ctx) {
@@ -764,30 +770,33 @@ keySetForFeeCalculation.push({
 });
 const _ReclaimTransaction = class {
   constructor() {
-    this.unconfirmedUtxos = false;
-    this.requiredConfirmed = 6;
-    this.ready = false;
-    this.pegInData = {
+    __publicField(this, "unconfirmedUtxos", false);
+    __publicField(this, "requiredConfirmed", 6);
+    __publicField(this, "net");
+    __publicField(this, "ready", false);
+    __publicField(this, "fromBtcAddress");
+    __publicField(this, "reclaimTx");
+    __publicField(this, "pegInData", {
       stacksAddress: "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN",
       // default for testing
       sbtcWalletAddress: "tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7",
       // default for testing
       amount: 0
-    };
-    this.addressInfo = {};
-    this.fees = [2e4, 35e3, 5e4];
-    this.fee = 0;
-    this.scureFee = 0;
-    this.dust = 500;
-    this.feeInfo = { low_fee_per_kb: 2e4, medium_fee_per_kb: 2e4, high_fee_per_kb: 2e4 };
-    this.getInputsForDisplay = () => {
+    });
+    __publicField(this, "addressInfo", {});
+    __publicField(this, "fees", [2e4, 35e3, 5e4]);
+    __publicField(this, "fee", 0);
+    __publicField(this, "scureFee", 0);
+    __publicField(this, "dust", 500);
+    __publicField(this, "feeInfo", { low_fee_per_kb: 2e4, medium_fee_per_kb: 2e4, high_fee_per_kb: 2e4 });
+    __publicField(this, "getInputsForDisplay", () => {
       const inputs = [];
       for (const utxo of this.addressInfo.utxos) {
         inputs.push({ txid: hex.decode(utxo.txid), index: utxo.vout });
       }
       return inputs;
-    };
-    this.getOutputsForDisplay = () => {
+    });
+    __publicField(this, "getOutputsForDisplay", () => {
       const changeAmount = this.getChange();
       const outs = [
         { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
@@ -797,26 +806,26 @@ const _ReclaimTransaction = class {
         outs.push({ address: this.fromBtcAddress, amount: changeAmount });
       outs.push({ address: "pays " + this.fee + " satoshis to miner." });
       return outs;
-    };
-    this.setAmount = (amount) => {
+    });
+    __publicField(this, "setAmount", (amount) => {
       console.log(amount);
-    };
-    this.getChange = () => {
+    });
+    __publicField(this, "getChange", () => {
       return this.maxCommit() - this.pegInData.amount - this.fee;
-    };
-    this.setPegInData = (pegInData) => {
+    });
+    __publicField(this, "setPegInData", (pegInData) => {
       this.pegInData = pegInData;
-    };
-    this.setFeeRate = (rate) => {
+    });
+    __publicField(this, "setFeeRate", (rate) => {
       this.fee = rate >= 0 && rate < 3 ? this.fees[rate] : this.fees[1];
       if (this.pegInData.amount + this.fee > this.maxCommit()) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    };
-    this.isUTXOConfirmed = (utxo) => {
+    });
+    __publicField(this, "isUTXOConfirmed", (utxo) => {
       return utxo.tx.confirmations >= 0;
-    };
-    this.calculateFees = () => {
+    });
+    __publicField(this, "calculateFees", () => {
       if (!this.ready)
         throw new Error("Not ready!");
       const p2Ret = p2wpkh(keySetForFeeCalculation[0].ecdsaPub);
@@ -858,8 +867,8 @@ const _ReclaimTransaction = class {
       if (this.pegInData.amount === 0) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    };
-    this.buildSignerTransaction = () => {
+    });
+    __publicField(this, "buildSignerTransaction", () => {
       var _a, _b, _c;
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address required!");
@@ -883,8 +892,8 @@ const _ReclaimTransaction = class {
       tx.addInput(nextI);
       tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount - this.fee), this.net);
       return tx;
-    };
-    this.buildReclaimTransaction = () => {
+    });
+    __publicField(this, "buildReclaimTransaction", () => {
       var _a, _b;
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address required!");
@@ -898,8 +907,15 @@ const _ReclaimTransaction = class {
       this.addInputs(tx, btcTxid, witnessScript);
       tx.addOutputAddress(this.fromBtcAddress, BigInt(this.maxCommit() - this.fee), this.net);
       return tx;
-    };
-    this.addInputs = (tx, btcTxid, witnessScript) => {
+    });
+    /**
+     * The input we want to spend is not in our UTXO set.
+     * Instead its the first output of the reclaimTx transaction.
+     * This output either pays to the stackers or to the original user
+     * depending on time locks.
+     * @param tx 
+     */
+    __publicField(this, "addInputs", (tx, btcTxid, witnessScript) => {
       const script = RawTx.decode(hex.decode(this.reclaimTx.hex));
       const output = script.outputs[0];
       const nextI = {
@@ -924,8 +940,56 @@ const _ReclaimTransaction = class {
           }
         });
       }
-    };
-    this.buildData = (sigOrPrin) => {
+    });
+    /**
+    	1. https://medium.com/summa-technology/bitcoins-time-locks-27e0c362d7a1
+    	 	# Anyone can spend, so long as 256 blocks have passed since input_1's previous output.
+    		# Note that a separate transaction can be created to spend these coins.
+    		# The alternate path would specify a lock_time of at least 506321.
+    		# The script allows either an absolute or relative time lock, whichever is shorter.
+    		tx_3:
+    		lock_time: 0
+    		input_1:
+    			sequence_no: 0x00000100
+    			scriptsig:
+    			OP_FALSE
+    			script:
+    			OP_IF
+    				506321 OP_CHECKLOCKTIMEVERIFY
+    			OP_ELSE
+    				0x00000100 OP_CHECKSEQUENCEVERIFY
+    			OP_ENDIF
+    			OP_DROP
+    
+    	2. https://github.com/bitcoin/bips/blob/master/bip-0112.mediawiki
+    	 	IF
+            	2 <Alice's pubkey> <Bob's pubkey> <Escrow's pubkey> 3 CHECKMULTISIG
+    		ELSE
+    			"30d" CHECKSEQUENCEVERIFY DROP
+    			<Alice's pubkey> CHECKSIG
+    		ENDIF
+    	3. see also scure.lockTime https://github.com/paulmillr/scure-btc-signer/blob/d762e4bf994821c3e1b79fe99ee1c7576e323fbf/index.ts#L1755
+    	private getOpDropP2shScript(stacksAddress:string, sbtcWalletAddress:string) {
+    		const data = this.buildData(stacksAddress);
+    		const walletUint8 = new TextEncoder().encode(sbtcWalletAddress);
+    		let asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', walletUint8, 'EQUALVERIFY', 'CHECKSIG'])
+    		if (isMini) {
+    			asmScript = btc.Script.encode([
+    				'IF', 
+    				data, 'DROP', 'DUP', 'HASH160', walletUint8, 'EQUALVERIFY', 'CHECKSIG',
+    				'ELSE', 
+    				144, 'CHECKSEQUENCEVERIFY', 'DROP',
+    				btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)),
+    				'CHECKSIG',
+    				'ENDIF'
+    			])
+    		}
+    		return asmScript;
+    	}
+    	*/
+    // code as data
+    // one of two multisig
+    __publicField(this, "buildData", (sigOrPrin) => {
       const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
       const opCodeBuf = hex.decode(PEGIN_OPCODE);
       const addr = decodeStacksAddress(sigOrPrin.split(".")[0]);
@@ -940,7 +1004,7 @@ const _ReclaimTransaction = class {
         data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf]);
       }
       return data;
-    };
+    });
   }
   maxCommit() {
     var _a, _b;
@@ -967,8 +1031,8 @@ const _ReclaimTransaction = class {
   }
 };
 let ReclaimTransaction = _ReclaimTransaction;
-ReclaimTransaction.FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
-ReclaimTransaction.create = async (network, btcTxid, fromBtcAddress, sbtcWalletAddress) => {
+__publicField(ReclaimTransaction, "FORMAT", /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/);
+__publicField(ReclaimTransaction, "create", async (network, btcTxid, fromBtcAddress, sbtcWalletAddress) => {
   const me = new _ReclaimTransaction();
   me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
   me.fromBtcAddress = fromBtcAddress;
@@ -983,8 +1047,8 @@ ReclaimTransaction.create = async (network, btcTxid, fromBtcAddress, sbtcWalletA
   me.feeInfo = btcFeeRates.feeInfo;
   me.ready = true;
   return me;
-};
-ReclaimTransaction.hydrate = (o) => {
+});
+__publicField(ReclaimTransaction, "hydrate", (o) => {
   const me = new _ReclaimTransaction();
   me.net = o.net;
   if (!o.fromBtcAddress)
@@ -998,7 +1062,7 @@ ReclaimTransaction.hydrate = (o) => {
   me.scureFee = o.scureFee;
   me.ready = o.ready;
   return me;
-};
+});
 const _page_svelte_svelte_type_style_lang = "";
 const file = "src/routes/reclaim/+page.svelte";
 function create_if_block_1(ctx) {

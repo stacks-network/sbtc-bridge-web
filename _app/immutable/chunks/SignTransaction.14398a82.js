@@ -1,7 +1,7 @@
 import { _ as _asyncToGenerator, D as _regeneratorRuntime, E as _extends, S as StacksTestnet, F as getUserSession, G as getStacksProvider, H as lib, I as _objectWithoutPropertiesLoose, J as hasAppPrivateKey, K as getKeys, A as commonjsGlobal, L as getDefaultExportFromCjs, t as tupleCV, d as stringAsciiCV, e as uintCV, C as CONFIG, a as addresses, B as savePaymentRequest } from "./stacks_connect.b652bb6f.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, G as create_slot, H as assign, I as compute_rest_props, v as validate_slots, J as exclude_internal_props, K as svg_element, L as claim_svg_element, r as children, l as detach_dev, u as attr_dev, x as add_location, M as set_svg_attributes, N as toggle_class, g as insert_hydration_dev, O as append_hydration_dev, P as update_slot_base, Q as get_all_dirty_from_scope, R as get_slot_changes, T as get_spread_update, k as transition_in, h as transition_out, o as onMount, p as element, q as claim_element, a1 as set_input_value, W as listen_dev, Z as noop, m as binding_callbacks, U as validate_store, V as component_subscribe, a5 as createEventDispatcher, y as text, c as space, z as claim_text, f as claim_space, X as prevent_default, A as set_data_dev, B as group_outros, j as check_outros, Y as run_all, a3 as validate_each_argument, C as create_component, D as claim_component, E as mount_component, F as destroy_component, w as set_style, a6 as prop_dev, a4 as destroy_each, _ as src_url_equal, e as empty } from "./index.605ac338.js";
 import { s as sbtcConfig } from "./stores.d1299e51.js";
-import { b as explorerBtcAddressUrl, h as hex, c as base64 } from "./utils.121fbef1.js";
+import { b as explorerBtcAddressUrl, h as hex, c as base64 } from "./utils.ca1c10e0.js";
 var _excluded = ["allowedSighash", "hex", "signAtIndex", "userSession"];
 function signPayload(_x, _x2) {
   return _signPayload.apply(this, arguments);
@@ -691,68 +691,52 @@ var hasSymbols$1 = function hasNativeSymbols() {
   }
   return hasSymbolSham();
 };
-var implementation$3;
-var hasRequiredImplementation$3;
-function requireImplementation$3() {
-  if (hasRequiredImplementation$3)
-    return implementation$3;
-  hasRequiredImplementation$3 = 1;
-  var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
-  var slice = Array.prototype.slice;
-  var toStr2 = Object.prototype.toString;
-  var funcType = "[object Function]";
-  implementation$3 = function bind2(that) {
-    var target = this;
-    if (typeof target !== "function" || toStr2.call(target) !== funcType) {
-      throw new TypeError(ERROR_MESSAGE + target);
-    }
-    var args = slice.call(arguments, 1);
-    var bound;
-    var binder = function() {
-      if (this instanceof bound) {
-        var result = target.apply(
-          this,
-          args.concat(slice.call(arguments))
-        );
-        if (Object(result) === result) {
-          return result;
-        }
-        return this;
-      } else {
-        return target.apply(
-          that,
-          args.concat(slice.call(arguments))
-        );
+var ERROR_MESSAGE = "Function.prototype.bind called on incompatible ";
+var slice = Array.prototype.slice;
+var toStr$3 = Object.prototype.toString;
+var funcType = "[object Function]";
+var implementation$4 = function bind(that) {
+  var target = this;
+  if (typeof target !== "function" || toStr$3.call(target) !== funcType) {
+    throw new TypeError(ERROR_MESSAGE + target);
+  }
+  var args = slice.call(arguments, 1);
+  var bound;
+  var binder = function() {
+    if (this instanceof bound) {
+      var result = target.apply(
+        this,
+        args.concat(slice.call(arguments))
+      );
+      if (Object(result) === result) {
+        return result;
       }
-    };
-    var boundLength = Math.max(0, target.length - args.length);
-    var boundArgs = [];
-    for (var i = 0; i < boundLength; i++) {
-      boundArgs.push("$" + i);
+      return this;
+    } else {
+      return target.apply(
+        that,
+        args.concat(slice.call(arguments))
+      );
     }
-    bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder);
-    if (target.prototype) {
-      var Empty = function Empty2() {
-      };
-      Empty.prototype = target.prototype;
-      bound.prototype = new Empty();
-      Empty.prototype = null;
-    }
-    return bound;
   };
-  return implementation$3;
-}
-var functionBind;
-var hasRequiredFunctionBind;
-function requireFunctionBind() {
-  if (hasRequiredFunctionBind)
-    return functionBind;
-  hasRequiredFunctionBind = 1;
-  var implementation2 = requireImplementation$3();
-  functionBind = Function.prototype.bind || implementation2;
-  return functionBind;
-}
-var bind$1 = requireFunctionBind();
+  var boundLength = Math.max(0, target.length - args.length);
+  var boundArgs = [];
+  for (var i = 0; i < boundLength; i++) {
+    boundArgs.push("$" + i);
+  }
+  bound = Function("binder", "return function (" + boundArgs.join(",") + "){ return binder.apply(this,arguments); }")(binder);
+  if (target.prototype) {
+    var Empty = function Empty2() {
+    };
+    Empty.prototype = target.prototype;
+    bound.prototype = new Empty();
+    Empty.prototype = null;
+  }
+  return bound;
+};
+var implementation$3 = implementation$4;
+var functionBind = Function.prototype.bind || implementation$3;
+var bind$1 = functionBind;
 var src = bind$1.call(Function.call, Object.prototype.hasOwnProperty);
 var undefined$1;
 var $SyntaxError = SyntaxError;
@@ -943,13 +927,13 @@ var LEGACY_ALIASES = {
   "%WeakMapPrototype%": ["WeakMap", "prototype"],
   "%WeakSetPrototype%": ["WeakSet", "prototype"]
 };
-var bind = requireFunctionBind();
+var bind2 = functionBind;
 var hasOwn = src;
-var $concat = bind.call(Function.call, Array.prototype.concat);
-var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
-var $replace = bind.call(Function.call, String.prototype.replace);
-var $strSlice = bind.call(Function.call, String.prototype.slice);
-var $exec = bind.call(Function.call, RegExp.prototype.exec);
+var $concat = bind2.call(Function.call, Array.prototype.concat);
+var $spliceApply = bind2.call(Function.apply, Array.prototype.splice);
+var $replace = bind2.call(Function.call, String.prototype.replace);
+var $strSlice = bind2.call(Function.call, String.prototype.slice);
+var $exec = bind2.call(Function.call, RegExp.prototype.exec);
 var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
 var reEscapeChar = /\\(\\)?/g;
 var stringToPath = function stringToPath2(string) {
@@ -1059,54 +1043,47 @@ var callBind$1 = {
     callBindExports = v;
   }
 };
-var hasRequiredCallBind;
-function requireCallBind() {
-  if (hasRequiredCallBind)
-    return callBindExports;
-  hasRequiredCallBind = 1;
-  (function(module) {
-    var bind2 = requireFunctionBind();
-    var GetIntrinsic3 = getIntrinsic;
-    var $apply = GetIntrinsic3("%Function.prototype.apply%");
-    var $call = GetIntrinsic3("%Function.prototype.call%");
-    var $reflectApply = GetIntrinsic3("%Reflect.apply%", true) || bind2.call($call, $apply);
-    var $gOPD2 = GetIntrinsic3("%Object.getOwnPropertyDescriptor%", true);
-    var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
-    var $max = GetIntrinsic3("%Math.max%");
-    if ($defineProperty) {
-      try {
-        $defineProperty({}, "a", { value: 1 });
-      } catch (e) {
-        $defineProperty = null;
+(function(module) {
+  var bind3 = functionBind;
+  var GetIntrinsic3 = getIntrinsic;
+  var $apply = GetIntrinsic3("%Function.prototype.apply%");
+  var $call = GetIntrinsic3("%Function.prototype.call%");
+  var $reflectApply = GetIntrinsic3("%Reflect.apply%", true) || bind3.call($call, $apply);
+  var $gOPD2 = GetIntrinsic3("%Object.getOwnPropertyDescriptor%", true);
+  var $defineProperty = GetIntrinsic3("%Object.defineProperty%", true);
+  var $max = GetIntrinsic3("%Math.max%");
+  if ($defineProperty) {
+    try {
+      $defineProperty({}, "a", { value: 1 });
+    } catch (e) {
+      $defineProperty = null;
+    }
+  }
+  module.exports = function callBind2(originalFunction) {
+    var func = $reflectApply(bind3, $call, arguments);
+    if ($gOPD2 && $defineProperty) {
+      var desc = $gOPD2(func, "length");
+      if (desc.configurable) {
+        $defineProperty(
+          func,
+          "length",
+          { value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
+        );
       }
     }
-    module.exports = function callBind2(originalFunction) {
-      var func = $reflectApply(bind2, $call, arguments);
-      if ($gOPD2 && $defineProperty) {
-        var desc = $gOPD2(func, "length");
-        if (desc.configurable) {
-          $defineProperty(
-            func,
-            "length",
-            { value: 1 + $max(0, originalFunction.length - (arguments.length - 1)) }
-          );
-        }
-      }
-      return func;
-    };
-    var applyBind = function applyBind2() {
-      return $reflectApply(bind2, $apply, arguments);
-    };
-    if ($defineProperty) {
-      $defineProperty(module.exports, "apply", { value: applyBind });
-    } else {
-      module.exports.apply = applyBind;
-    }
-  })(callBind$1);
-  return callBindExports;
-}
+    return func;
+  };
+  var applyBind = function applyBind2() {
+    return $reflectApply(bind3, $apply, arguments);
+  };
+  if ($defineProperty) {
+    $defineProperty(module.exports, "apply", { value: applyBind });
+  } else {
+    module.exports.apply = applyBind;
+  }
+})(callBind$1);
 var GetIntrinsic$1 = getIntrinsic;
-var callBind = requireCallBind();
+var callBind = callBindExports;
 var $indexOf$1 = callBind(GetIntrinsic$1("String.prototype.indexOf"));
 var callBound$3 = function callBoundIntrinsic(name, allowMissing) {
   var intrinsic = GetIntrinsic$1(name, !!allowMissing);
@@ -3153,7 +3130,7 @@ function requireObjectKeys() {
   if (hasRequiredObjectKeys)
     return objectKeys;
   hasRequiredObjectKeys = 1;
-  var slice = Array.prototype.slice;
+  var slice2 = Array.prototype.slice;
   var isArgs = requireIsArguments();
   var origKeys = Object.keys;
   var keysShim = origKeys ? function keys(o) {
@@ -3169,7 +3146,7 @@ function requireObjectKeys() {
       if (!keysWorksWithArguments) {
         Object.keys = function keys(object) {
           if (isArgs(object)) {
-            return originalKeys(slice.call(object));
+            return originalKeys(slice2.call(object));
           }
           return originalKeys(object);
         };
@@ -3326,7 +3303,7 @@ function requireObjectIs() {
     return objectIs;
   hasRequiredObjectIs = 1;
   var define = requireDefineProperties();
-  var callBind2 = requireCallBind();
+  var callBind2 = callBindExports;
   var implementation2 = requireImplementation$1();
   var getPolyfill = requirePolyfill$1();
   var shim2 = requireShim$1();
@@ -3390,7 +3367,7 @@ function requireIsNan() {
   if (hasRequiredIsNan)
     return isNan;
   hasRequiredIsNan = 1;
-  var callBind2 = requireCallBind();
+  var callBind2 = callBindExports;
   var define = requireDefineProperties();
   var implementation2 = requireImplementation();
   var getPolyfill = requirePolyfill();

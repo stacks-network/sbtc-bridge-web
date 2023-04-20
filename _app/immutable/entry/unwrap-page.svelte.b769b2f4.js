@@ -1,9 +1,15 @@
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
 import { S as SvelteComponentDev, i as init$1, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, a5 as createEventDispatcher, p as element, y as text, c as space, C as create_component, q as claim_element, r as children, z as claim_text, l as detach_dev, f as claim_space, D as claim_component, x as add_location, u as attr_dev, w as set_style, g as insert_hydration_dev, O as append_hydration_dev, a1 as set_input_value, E as mount_component, a7 as action_destroyer, W as listen_dev, A as set_data_dev, a2 as to_number, k as transition_in, h as transition_out, F as destroy_component, Y as run_all, X as prevent_default, Z as noop, o as onMount, e as empty, B as group_outros, j as check_outros } from "../chunks/index.605ac338.js";
 import { n as utils, q as getPublicKey, r as schnorr, v as fetchUtxoSet, x as fetchCurrentFeeRates, a as addresses, C as CONFIG, z as signMessage } from "../chunks/stacks_connect.b652bb6f.js";
 import { s as sbtcConfig } from "../chunks/stores.d1299e51.js";
-import { F as FeeDisplay, P as Principal, U as UTXOSelection, S as SbtcWalletDisplay, a as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.ad4e8b5c.js";
-import { g as TEST_NETWORK, N as NETWORK, j as PegTransaction, h as hex, p as p2wpkh, T as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, R as RawTx, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, k as PEGOUT_OPCODE, l as explorerAddressUrl, b as explorerBtcAddressUrl } from "../chunks/utils.121fbef1.js";
-import { a as assert, c as concatByteArrays, S as SignTransaction } from "../chunks/SignTransaction.64230de4.js";
+import { F as FeeDisplay, P as Principal, U as UTXOSelection, S as SbtcWalletDisplay, a as SignTransactionWeb } from "../chunks/SbtcWalletDisplay.f573cde0.js";
+import { j as PegTransaction, h as hex, g as TEST_NETWORK, N as NETWORK, p as p2wpkh, T as Transaction, s as secp256k1, S as Script, O as OutScript, A as Address, R as RawTx, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, k as PEGOUT_OPCODE, l as explorerAddressUrl, b as explorerBtcAddressUrl } from "../chunks/utils.ca1c10e0.js";
+import { a as assert, c as concatByteArrays, S as SignTransaction } from "../chunks/SignTransaction.14398a82.js";
 const file$2 = "src/lib/components/unwrapper/PegOutAmount.svelte";
 function create_if_block_1$2(ctx) {
   let div;
@@ -682,18 +688,18 @@ keySetForFeeCalculation.push({
 const _PegOutTransaction = class extends PegTransaction {
   constructor() {
     super();
-    this.privKey = hex.decode("0101010101010101010101010101010101010101010101010101010101010101");
-    this.signature = "";
-    this.getChange = () => {
+    __publicField(this, "privKey", hex.decode("0101010101010101010101010101010101010101010101010101010101010101"));
+    __publicField(this, "signature", "");
+    __publicField(this, "getChange", () => {
       return this.maxCommit() - this.fee - this.dust;
-    };
-    this.setAmount = (amount) => {
+    });
+    __publicField(this, "setAmount", (amount) => {
       this.pegInData.amount = amount;
-    };
-    this.setSignature = (signature) => {
+    });
+    __publicField(this, "setSignature", (signature) => {
       this.signature = signature;
-    };
-    this.calculateFees = () => {
+    });
+    __publicField(this, "calculateFees", () => {
       if (!this.ready)
         throw new Error("Not ready!");
       const sbtcWalletAddress = "tb1pmmkznvm0pq5unp6geuwryu2f0m8xr6d229yzg2erx78nnk0ms48sk9s6q7";
@@ -736,8 +742,8 @@ const _PegOutTransaction = class extends PegTransaction {
       if (this.pegInData.amount === 0) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    };
-    this.getOutputsForDisplay = () => {
+    });
+    __publicField(this, "getOutputsForDisplay", () => {
       const changeAmount = Math.floor(this.maxCommit() - this.dust - this.fee);
       const addr = new TextEncoder().encode(this.pegInData.stacksAddress || "stx address unknown");
       const outs = [
@@ -748,21 +754,21 @@ const _PegOutTransaction = class extends PegTransaction {
         outs.push({ address: this.fromBtcAddress, amount: changeAmount });
       outs.push({ address: "pays " + this.fee + " satoshis to miner." });
       return outs;
-    };
-    this.getDataToSign = () => {
+    });
+    __publicField(this, "getDataToSign", () => {
       const view2 = this.amountToUint8(this.pegInData.amount);
       const script = OutScript.encode(Address(this.net).decode(this.pegInData.sbtcWalletAddress));
       const data = concatByteArrays([view2, script]);
       return hex.encode(data);
-    };
-    this.amountToUint8 = (amt) => {
+    });
+    __publicField(this, "amountToUint8", (amt) => {
       const buffer = new ArrayBuffer(9);
       const view1 = new DataView(buffer);
       view1.setUint32(0, amt, true);
       const view2 = new Uint8Array(view1.buffer);
       return view2;
-    };
-    this.addInputs = (tx) => {
+    });
+    __publicField(this, "addInputs", (tx) => {
       for (const utxo of this.addressInfo.utxos) {
         const script = RawTx.decode(hex.decode(utxo.tx.hex));
         tx.addInput({
@@ -774,8 +780,8 @@ const _PegOutTransaction = class extends PegTransaction {
           }
         });
       }
-    };
-    this.buildOpReturnTransaction = () => {
+    });
+    __publicField(this, "buildOpReturnTransaction", () => {
       if (!this.ready)
         throw new Error("Not ready!");
       if (!this.signature)
@@ -790,8 +796,8 @@ const _PegOutTransaction = class extends PegTransaction {
       if (this.getChange() > 0)
         tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
       return tx;
-    };
-    this.getOpDropPeginRequest = (mode, wallet) => {
+    });
+    __publicField(this, "getOpDropPeginRequest", (mode, wallet) => {
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address is required");
       return {
@@ -804,15 +810,15 @@ const _PegOutTransaction = class extends PegTransaction {
         stacksAddress: this.pegInData.stacksAddress,
         sbtcWalletAddress: this.pegInData.sbtcWalletAddress
       };
-    };
-    this.buildData = (sigOrPrin) => {
+    });
+    __publicField(this, "buildData", (sigOrPrin) => {
       const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
       const opCodeBuf = hex.decode(PEGOUT_OPCODE);
       const view2 = this.amountToUint8(this.pegInData.amount);
       const sigBuf = hex.decode(sigOrPrin);
       const data = concatByteArrays([magicBuf, opCodeBuf, view2, sigBuf]);
       return data;
-    };
+    });
   }
   getOpDropP2shScript(signature) {
     const script = OutScript.encode(Address(this.net).decode(this.pegInData.sbtcWalletAddress));
@@ -822,7 +828,7 @@ const _PegOutTransaction = class extends PegTransaction {
   }
 };
 let PegOutTransaction = _PegOutTransaction;
-PegOutTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) => {
+__publicField(PegOutTransaction, "create", async (network, fromBtcAddress, sbtcWalletAddress) => {
   const me = new _PegOutTransaction();
   me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
   me.fromBtcAddress = fromBtcAddress;
@@ -836,8 +842,8 @@ PegOutTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress) =>
   me.feeInfo = btcFeeRates.feeInfo;
   me.ready = true;
   return me;
-};
-PegOutTransaction.hydrate = (o) => {
+});
+__publicField(PegOutTransaction, "hydrate", (o) => {
   const me = new _PegOutTransaction();
   me.net = o.net;
   if (!o.fromBtcAddress)
@@ -851,7 +857,7 @@ PegOutTransaction.hydrate = (o) => {
   me.scureFee = o.scureFee;
   me.ready = o.ready;
   return me;
-};
+});
 const BuildTransaction_svelte_svelte_type_style_lang = "";
 const file$1 = "src/lib/components/unwrapper/BuildTransaction.svelte";
 function create_else_block_1(ctx) {

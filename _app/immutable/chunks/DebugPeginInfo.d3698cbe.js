@@ -1,6 +1,12 @@
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => {
+  __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+  return value;
+};
 import { n as utils, q as getPublicKey, r as schnorr, C as CONFIG, v as fetchUtxoSet, x as fetchCurrentFeeRates, y as decodeStacksAddress } from "./stacks_connect.b652bb6f.js";
-import { g as TEST_NETWORK, N as NETWORK, A as Address, j as PegTransaction, p as p2wpkh, h as hex, T as Transaction, s as secp256k1, S as Script, O as OutScript, R as RawTx, m as p2wsh, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, n as p2tr, c as base64, d as btc } from "./utils.121fbef1.js";
-import { a as assert, c as concatByteArrays } from "./SignTransaction.64230de4.js";
+import { j as PegTransaction, g as TEST_NETWORK, N as NETWORK, A as Address, p as p2wpkh, h as hex, T as Transaction, s as secp256k1, S as Script, O as OutScript, R as RawTx, m as p2tr, n as p2wsh, M as MAGIC_BYTES_TESTNET, i as MAGIC_BYTES_MAINNET, P as PEGIN_OPCODE, c as base64, d as btc } from "./utils.ca1c10e0.js";
+import { a as assert, c as concatByteArrays } from "./SignTransaction.14398a82.js";
 import { S as SvelteComponentDev, i as init, s as safe_not_equal, d as dispatch_dev, U as validate_store, V as component_subscribe, v as validate_slots, e as empty, g as insert_hydration_dev, Z as noop, l as detach_dev, p as element, y as text, c as space, q as claim_element, r as children, z as claim_text, f as claim_space, u as attr_dev, x as add_location, O as append_hydration_dev, W as listen_dev, X as prevent_default, A as set_data_dev } from "./index.605ac338.js";
 import { s as sbtcConfig } from "./stores.d1299e51.js";
 const priv = utils.randomPrivateKey();
@@ -14,15 +20,15 @@ keySetForFeeCalculation.push({
 const _PegInTransaction = class extends PegTransaction {
   constructor() {
     super();
-    this.getChange = () => {
+    __publicField(this, "getChange", () => {
       return this.maxCommit() - this.pegInData.amount - this.fee;
-    };
-    this.setAmount = (amount) => {
+    });
+    __publicField(this, "setAmount", (amount) => {
       if (amount > this.maxCommit() - this.fee)
         ;
       this.pegInData.amount = amount;
-    };
-    this.calculateFees = () => {
+    });
+    __publicField(this, "calculateFees", () => {
       if (!this.ready)
         throw new Error("Not ready!");
       const stacksAddress = "ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN";
@@ -70,8 +76,8 @@ const _PegInTransaction = class extends PegTransaction {
       if (this.pegInData.amount === 0) {
         this.pegInData.amount = this.maxCommit() - this.fee;
       }
-    };
-    this.getOutputsForDisplay = () => {
+    });
+    __publicField(this, "getOutputsForDisplay", () => {
       const changeAmount = this.getChange();
       const outs = [
         { script: "RETURN " + this.pegInData.stacksAddress, amount: 0 },
@@ -81,8 +87,8 @@ const _PegInTransaction = class extends PegTransaction {
         outs.push({ address: this.fromBtcAddress, amount: changeAmount });
       outs.push({ address: "pays " + this.fee + " satoshis to miner." });
       return outs;
-    };
-    this.buildOpReturnTransaction = () => {
+    });
+    __publicField(this, "buildOpReturnTransaction", () => {
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address required!");
       const tx = new Transaction({ allowUnknowOutput: true });
@@ -109,8 +115,8 @@ const _PegInTransaction = class extends PegTransaction {
       if (changeAmount > 0)
         tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
       return tx;
-    };
-    this.addInputs = (tx) => {
+    });
+    __publicField(this, "addInputs", (tx) => {
       for (const utxo of this.addressInfo.utxos) {
         const script = RawTx.decode(hex.decode(utxo.tx.hex));
         if (this.isUTXOConfirmed(utxo)) {
@@ -125,8 +131,8 @@ const _PegInTransaction = class extends PegTransaction {
           tx.addInput(nextI);
         }
       }
-    };
-    this.getOpDropPeginRequest = (mode, wallet) => {
+    });
+    __publicField(this, "getOpDropPeginRequest", (mode, wallet) => {
       if (!this.pegInData.stacksAddress)
         throw new Error("Stacks address is required");
       const data = this.buildData(this.pegInData.stacksAddress);
@@ -156,8 +162,22 @@ const _PegInTransaction = class extends PegTransaction {
         };
       }
       return req;
-    };
-    this.buildData = (sigOrPrin) => {
+    });
+    /**
+    getOpReturnPeginRequest = (wallet:string):PeginRequestI => {
+    	if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+    	return {
+    		fromBtcAddress: this.fromBtcAddress,
+    		status: 1,
+    		mode: 'op_return',
+    		requestType: 'wrap',
+    		wallet,
+    		stacksAddress: this.pegInData.stacksAddress,
+    		sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
+    	};
+    }
+    	*/
+    __publicField(this, "buildData", (sigOrPrin) => {
       const magicBuf = this.net === TEST_NETWORK ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
       const opCodeBuf = hex.decode(PEGIN_OPCODE);
       const addr = decodeStacksAddress(sigOrPrin.split(".")[0]);
@@ -172,7 +192,7 @@ const _PegInTransaction = class extends PegTransaction {
         data = concatByteArrays([magicBuf, opCodeBuf, addr0Buf, addr1Buf]);
       }
       return data;
-    };
+    });
   }
   /**
   	1. https://medium.com/summa-technology/bitcoins-time-locks-27e0c362d7a1
@@ -289,7 +309,7 @@ const _PegInTransaction = class extends PegTransaction {
   }
 };
 let PegInTransaction = _PegInTransaction;
-PegInTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress, stacksAddress) => {
+__publicField(PegInTransaction, "create", async (network, fromBtcAddress, sbtcWalletAddress, stacksAddress) => {
   const me = new _PegInTransaction();
   me.net = network === "testnet" ? TEST_NETWORK : NETWORK;
   me.fromBtcAddress = fromBtcAddress;
@@ -307,8 +327,8 @@ PegInTransaction.create = async (network, fromBtcAddress, sbtcWalletAddress, sta
   me.feeInfo = btcFeeRates.feeInfo;
   me.ready = true;
   return me;
-};
-PegInTransaction.hydrate = (o) => {
+});
+__publicField(PegInTransaction, "hydrate", (o) => {
   const me = new _PegInTransaction();
   me.net = o.net;
   if (!o.fromBtcAddress)
@@ -322,7 +342,7 @@ PegInTransaction.hydrate = (o) => {
   me.scureFee = o.scureFee;
   me.ready = o.ready;
   return me;
-};
+});
 const file = "src/lib/components/common/DebugPeginInfo.svelte";
 function create_if_block(ctx) {
   let div2;
