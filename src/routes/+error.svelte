@@ -3,7 +3,7 @@
 </script>
 
 <section class="bg-dark text-white text-center pt-5">
-    <h1>Unable to find that one!</h1>
+    <h1>Unable to find that request!</h1>
     {#if $page?.error}
         <div class="mt-4 border-y-2">
             {#if $page?.status}
