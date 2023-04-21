@@ -2,11 +2,11 @@
 import BuildTransaction from '$lib/components/unwrapper/BuildTransaction.svelte';
 import SignTransaction from '$lib/components/common/SignTransaction.svelte';
 import SignTransactionWeb from '$lib/components/common/SignTransactionWeb.svelte';
-import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { sbtcConfig } from '$stores/stores'
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
-import type { SigData } from '$types/sig_data';
+import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
+import { CONFIG } from '$lib/config';
 import { addresses } from '$lib/stacks_connect'
 
 let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
@@ -34,6 +34,11 @@ const updateTransaction = () => {
 		<div class="card-width">
 			<h1 class="text-warning">Unwrap <span class="strokeme-warning">sBTC</span></h1>
 			<h2 class="text-warning mb-3">sBTC to BTC</h2>
+			{#if !$sbtcConfig.sbtcContractData.sbtcWalletAddress}
+			<div class="my-3 d-flex justify-content-between text-white">
+				No wallet currently connect to {CONFIG.VITE_NETWORK} - try a different network by clicking the account dropdown in the header.
+			</div>
+			{:else}
 			<div class="my-3 d-flex justify-content-between text-white">
 				<SbtcWalletDisplay />
 			</div>
@@ -53,6 +58,7 @@ const updateTransaction = () => {
 					</div>
 				</div>
 			</div>
+			{/if}
 		</div>
 	</div>
 </section>

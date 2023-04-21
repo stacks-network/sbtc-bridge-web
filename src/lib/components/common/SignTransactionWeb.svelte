@@ -97,7 +97,11 @@ onMount(async () => {
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
-  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
+  if ($sbtcConfig.userSettings.useOpDrop) {
+    currentTx = hex.encode(piTx?.buildOpDropTransaction().toPSBT());
+  } else {
+    currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
+  }
 })
 </script>
 
