@@ -15,6 +15,7 @@ export interface PegOutTransactionI extends PegTransactionI {
 	setSignature: (signature:string) => void;
 	getOpDropPeginRequest: (mode:string, wallet:string) => PeginRequestI;
 	buildOpReturnTransaction: () => btc.Transaction;
+	buildOpDropTransaction: () => btc.Transaction;
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -195,6 +196,57 @@ export default class PegOutTransaction extends PegTransaction implements PegOutT
 		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
 
 		return tx;
+	}
+
+	buildOpDropTransaction = () => {
+		if (!this.ready) throw new Error('Not ready!');
+		if (!this.signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		this.addInputs(tx);
+		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
+		const data = this.buildData(this.signature)
+		const csvScript = this.getCSVScript(data);
+		if (!csvScript ) throw new Error('script required!');
+		this.getOpDropPeginRequest('op_drop', 'any')
+		tx.addOutput({ script: csvScript.script, amount: BigInt(this.dust) });
+		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+		return tx;
+	}
+
+	private getCSVScript (data:Uint8Array):{type:string, script:Uint8Array} {
+		//const pubkey1 = this.addressInfo.pubkey
+		const addrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		if (addrScript.type === 'wpkh') {
+			return {
+				type: 'wsh',
+				script: btc.Script.encode([data, 'DROP', btc.p2wpkh(addrScript.hash).script])
+			}
+		} else if (addrScript.type === 'tr') {
+			return {
+				type: 'tr',
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
+				script: btc.Script.encode([data, 'DROP', btc.p2tr(addrScript.pubkey).script])
+			}
+		} else {
+			const asmScript = btc.Script.encode([data, 'DROP', 
+				'IF', 
+				btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)),
+				'ELSE', 
+				144, 'CHECKSEQUENCEVERIFY', 'DROP',
+				btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)),
+				'CHECKSIG',
+				'ENDIF'
+			])
+			return {
+				type: 'tr',
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
+				script: btc.p2tr(asmScript).script
+			}
+		}
 	}
 
 	getOpDropPeginRequest = (mode:string, wallet:string):PeginRequestI => {
