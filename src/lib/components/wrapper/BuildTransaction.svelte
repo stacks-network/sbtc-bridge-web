@@ -121,11 +121,12 @@ $: showAmount = piTx.ready && stxAddressOk && !errorReason;
 $: showButton = piTx.ready && amountOk && !errorReason;
 
 let showModal:boolean;
-const nextStep = () => {
-  if ($sbtcConfig.userSettings.useOpDrop) {
+const nextStep = (wallet:number) => {
+  // 1: stacks web wallet, 2: any wallet
+  if (wallet === 2 && $sbtcConfig.userSettings.useOpDrop) {
     showModal = !showModal;
   } else {
-    dispatch('request_signature');
+    dispatch('request_signature', { wallet });
   }
 }
 const closeModal = () => {
@@ -179,8 +180,11 @@ onMount(async () => {
   {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
-    <div class="col">
-      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep()}>CONTINUE</button>
+    <div class="col-6">
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(1)}>Stacks Web Wallet</button>
+    </div>
+    <div class="col-6">
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(2)}>Other Wallet</button>
     </div>
   </div>
   {/if}

@@ -15,6 +15,7 @@ export interface PegInTransactionI extends PegTransactionI {
 
 	getOpDropPeginRequest: (mode:string, wallet:string) => PeginRequestI;
 	buildOpReturnTransaction: () => btc.Transaction;
+	buildOpDropTransaction: () => btc.Transaction;
 	buildData: (sigOrPrin:string) => Uint8Array;
 	calculateFees: () => void;
 	getChange: () => number;
@@ -202,6 +203,22 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 		return tx;
 	}
 
+	buildOpDropTransaction = () => {
+		if (!this.pegInData.stacksAddress) throw new Error('buildOpDropTransaction: Stacks address required!');
+		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		this.addInputs(tx);
+		// create a set of inputs corresponding to the utxo set
+		const data = this.buildData(this.pegInData.stacksAddress);
+		const csvScript = this.getCSVScript(data)
+		if (!csvScript ) throw new Error('buildOpDropTransaction: script required!');
+		const peginReqest = this.getOpDropPeginRequest('op_drop', 'any')
+		if (!peginReqest.timeBasedPegin || !peginReqest.timeBasedPegin.address ) throw new Error('buildOpDropTransaction: address required!');
+		tx.addOutputAddress(peginReqest.timeBasedPegin.address, BigInt(this.pegInData.amount), this.net );
+		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+		return tx;
+	}
+
 	private addInputs = (tx:btc.Transaction) => {
 		
 		for (const utxo of this.addressInfo.utxos) {
@@ -319,7 +336,7 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 	}
 	 */
 
-	private getCSVScript (data:Uint8Array) {
+	private getCSVScript (data:Uint8Array):{type:string, script:Uint8Array} {
 		//const pubkey1 = this.addressInfo.pubkey
 		const addrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
 		if (addrScript.type === 'wpkh') {
@@ -328,13 +345,29 @@ export default class PegInTransaction extends PegTransaction implements PegInTra
 				script: btc.Script.encode([data, 'DROP', btc.p2wpkh(addrScript.hash).script])
 			}
 		} else if (addrScript.type === 'tr') {
-			
 			return {
 				type: 'tr',
 				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
 				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
 				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
 				script: btc.Script.encode([data, 'DROP', btc.p2tr(addrScript.pubkey).script])
+			}
+		} else {
+			const asmScript = btc.Script.encode([data, 'DROP', 
+				'IF', 
+				btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)),
+				'ELSE', 
+				144, 'CHECKSEQUENCEVERIFY', 'DROP',
+				btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)),
+				'CHECKSIG',
+				'ENDIF'
+			])
+			return {
+				type: 'tr',
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
+				script: btc.p2tr(asmScript).script
 			}
 		}
 	}

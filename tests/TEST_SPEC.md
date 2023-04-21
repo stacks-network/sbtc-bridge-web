@@ -13,7 +13,7 @@ This document describes testing in devnet on the developer machine.
 The following assumes;
 
 1. Docker desktop already running
-2. Hiro web wallet installed
+2. Stacks web wallet installed
 
 ### Bitcoin Wallet
 
