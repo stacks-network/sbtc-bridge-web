@@ -1,13 +1,7 @@
 <script>
-import { createEventDispatcher } from "svelte";
 
 export let showModal = false;
-export let showClose = false;
-const dispatch = createEventDispatcher();
 
-const closeModal = () => {
-    dispatch('close_modal');
-}
 scroll(0,0);
 </script>
 
