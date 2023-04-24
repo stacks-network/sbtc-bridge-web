@@ -24,9 +24,12 @@ const network = CONFIG.VITE_NETWORK;
 		<a class="navbar-brand" href="/">
 			<img width="40px" height="40px" class="nav-logo" src={logoWhite} alt="CityCoins Test" />
 		</a>
-		<div class="nav-item text-white">
+		<div class="nav-item">
 			<UserBalance showAddress={false} />
-			<div class={(isStaging()) ? 'bg-warning text-black' : 'bg-white text-black'}><span class="text-center px-2 nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{network}</span></div>
+			<div class="bg-white bg-white text-black text-center px-2 nav-link">{network}</div>
+			{#if isStaging()}
+			<div class="bg-warning text-black text-center px-2 nav-link">staging</div>
+			{/if}
 		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
