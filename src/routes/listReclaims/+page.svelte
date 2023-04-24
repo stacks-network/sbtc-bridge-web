@@ -75,7 +75,7 @@ onMount(async () => {
 							<div class="col-2">
 								<a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.timeBasedPegin?.address)}</a>
 							</div>
-							<div class="col-2">{#if pegin.status === 1}?{:else}{pegin.amount}{/if}</div>
+							<div class="col-2">{#if pegin.status === 1}{pegin.amount}{:else}{pegin.amount}{/if}</div>
 							<div class="col-4">
 								<a href={explorerBtcTxUrl(pegin.btcTxid)} target="_blank" rel="noreferrer">{truncate(pegin.btcTxid)}</a>
 							</div>
