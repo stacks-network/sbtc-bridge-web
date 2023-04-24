@@ -7,13 +7,15 @@ import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { addresses } from '$lib/stacks_connect'
+import { CONFIG } from '$lib/config';
 
 let piTx:PegInTransactionI = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 
 $: view = 'build_tx_view';
 let webWallet = true;
-const openSigView = () => {
-	webWallet = piTx.fromBtcAddress === addresses().cardinal,
+const openSigView = (e:any) => {
+	const wallet = e.detail.wallet
+	webWallet = wallet === 1; // piTx.fromBtcAddress === addresses().cardinal,
 	piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);
   	view = 'sign_tx_view';
 }
@@ -28,6 +30,11 @@ const updateTransaction = () => {
 		<div class="card-width">
 			<h1 class="text-info">Wrap <span class="strokeme-info">BTC</span></h1>
 			<h2 class="mb-3">BTC to sBTC</h2>
+			{#if !$sbtcConfig.sbtcContractData.sbtcWalletAddress}
+			<div class="my-3 d-flex justify-content-between text-white">
+				No wallet currently connect to {CONFIG.VITE_NETWORK} - try a different network by clicking the account dropdown in the header.
+			</div>
+			{:else}
 			<div class="my-3 d-flex justify-content-between text-white">
 				<SbtcWalletDisplay />
 			</div>
@@ -47,6 +54,7 @@ const updateTransaction = () => {
 					</div>
 				</div>
 			</div>
+			{/if}
 		</div>
 	</div>
 </section>

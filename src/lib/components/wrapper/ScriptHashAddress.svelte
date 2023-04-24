@@ -24,7 +24,7 @@ onMount(async () => {
     conf.peginRequestState = 0;
     sbtcConfig.update(() => conf);
   } catch (err) {
-    errorReason = 'Request already being processed with these details - change the amount to send another request.'
+    //errorReason = 'Request already being processed with these details - change the amount to send another request.'
   }
 })
 </script>
@@ -35,25 +35,27 @@ onMount(async () => {
   </div>
 </div>
 
-{#if !errorReason}
 <div class="row text-center text-warning">
     <div class="col-12">
       <QrCode value={paymentUri()} padding={'40px'} color={'#fff'} background={'#4786cd'} size={300} />
+      <div class="row text-center my-3 text-small">
+        <div class="col-12">
+          <span>{paymentUri()}</span>
+        </div>
+      </div>
     </div>
 </div>
 
 <div class="row text-center mt-5">
-    <div class="col-12">
-      <span>Amount: {fmtSatoshiToBitcoin(piTx.pegInData.amount)}</span>
-    </div>
-</div>
-
-<div class="row text-center my-3 text-small">
   <div class="col-12">
-    <span>{paymentUri()}</span>
+    <span>Amount: {fmtSatoshiToBitcoin(piTx.pegInData.amount)}</span>
+  </div>
+  <div class="col-12">
+    <span>Address: {peginRequest.timeBasedPegin?.address}</span>
   </div>
 </div>
-{:else}
+
+{#if errorReason}
 <div class="row text-center mt-5">
   <div class="col-12 text-danger mb-5">{errorReason}</div>
 </div>

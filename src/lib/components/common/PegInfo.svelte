@@ -33,7 +33,7 @@ const updateTransaction = () => {
   </div>
   <div class="row">
     <div class="col-4">Wallet</div>
-    <div class="col-8">{(webWallet) ? 'Hiro Web Wallet' : 'Other Wallet'}</div>
+    <div class="col-8">{(webWallet) ? 'Stacks Web Wallet' : 'Other Wallet'}</div>
   </div>
   <div class="row">
     <div class="col-4">Stacks Address</div>
