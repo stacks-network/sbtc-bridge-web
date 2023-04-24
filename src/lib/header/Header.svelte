@@ -7,6 +7,9 @@ import type { SbtcConfig } from '$types/sbtc_config';
 import { goto } from "$app/navigation";
 import UserBalance from '$lib/components/common/UserBalance.svelte'
 
+const isStaging = () => {
+	return location.hostname.indexOf('staging') > -1 || location.hostname.indexOf('localhost') > -1;
+}
 const togglePeg = (pegin:boolean) => {
 	const conf:SbtcConfig = $sbtcConfig;
 	conf.pegIn = pegin;
@@ -23,7 +26,7 @@ const network = CONFIG.VITE_NETWORK;
 		</a>
 		<div class="nav-item text-white">
 			<UserBalance showAddress={false} />
-			<span class="text-center px-2 bg-white text-black nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{network}</span>
+			<div class={(isStaging()) ? 'bg-warning text-black' : 'bg-white text-black'}><span class="text-center px-2 nav-link" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">{network}</span></div>
 		</div>
 		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
