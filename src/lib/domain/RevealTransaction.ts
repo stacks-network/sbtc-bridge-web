@@ -1,10 +1,10 @@
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI, UtxoI } from '../../types/pegin_request'
 import { hex } from '@scure/base';
-import { approxTxFees } from './tx_helper'
-import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
 import { toStorable } from '$lib/utils'
-export default class ReclaimTransaction {
+import type { PeginRequestI, UtxoI } from '../../types/pegin_request'
+import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
+
+export default class RevealTransaction {
 	tx:any;
 	addressInfo:any;
 	btcFeeRates:any;
@@ -13,14 +13,12 @@ export default class ReclaimTransaction {
 	feeInfo:any;
 	fee = 500;
 	net:any;
-	fees: Array<number> = [];
-	scureFee = 0;
 
 	public constructor(commitTx:PeginRequestI) {
 		(commitTx.sbtcWalletAddress.startsWith('tb')) ? this.net = btc.TEST_NETWORK : this.net = btc.NETWORK;
 		this.commitTx = commitTx;
 	}
- 
+
 	fetchUtxos = async ():Promise<boolean> => {
 		this.addressInfo = await fetchUtxoSet(this.commitTx.fromBtcAddress);
 		this.transaction = await fetchTransaction(this.commitTx.btcTxid as string);
@@ -28,21 +26,6 @@ export default class ReclaimTransaction {
 		this.feeInfo = btcFeeRates.feeInfo;
 		return true;
 	};
-
-	setAmount = (amount:number) => {
-		// overridden
-		console.log(amount);
-	};
-
-	calculateFees = ():void => {
-		this.scureFee = approxTxFees(this.addressInfo.utxos, this.commitTx.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
-		this.fees = [
-			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			this.scureFee * 1.2, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
-		]
-		this.fee = this.fees[1];
-	}
 
 	buildTransaction = ():btc.Transaction => {
 		//const txHex = await fetchTransaction(commitTx.btcTxid as string);
@@ -74,21 +57,21 @@ export default class ReclaimTransaction {
 			const nextI:btc.TransactionInput = {
 				txid: hex.decode(this.commitTx.btcTxid),
 				index: 0,
-				sighashType: btc.SignatureHash.ALL,
+				//sighashType: btc.SignatureHash.ALL,
 				//nonWitnessUtxo: (txHex),
 				//tapBip32Derivation: script.leaves[0], //[script.leaves],
 				//tapBip32Derivation: [script.tapInternalKey as Uint8Array, {
 				//	hashes: script.leaves[0].hash,
 				//}],
-				tapInternalKey: (script.tapInternalKey as Uint8Array),
-				tapLeafScript: script.tapLeafScript,
+				//tapInternalKey: (script.tapInternalKey as Uint8Array),
+				//tapLeafScript: script.tapLeafScript,
 				// [{
 				//		//version: script.tapLeafScript[0][0].version as number,
 				//		internalKey: script.tapLeafScript[0][0].internalKey as Uint8Array,
 				//		merklePath: script.tapLeafScript[0][0].merklePath,
 				//	
 				//}, script.tapLeafScript[0][1]],
-				tapMerkleRoot: (script.tapMerkleRoot as Uint8Array),
+				//tapMerkleRoot: (script.tapMerkleRoot as Uint8Array),
 				
 				//witnessScript: (script.leaves[1].script as Uint8Array),
 				//witnessUtxo: {
@@ -100,8 +83,11 @@ export default class ReclaimTransaction {
 			this.tx.addInput(nextI);
 		}
 
-		const feeUtxo = this.addInputForFee();
-		const amount = this.commitTx.amount + feeUtxo?.value - this.fee;
+		let amount = this.commitTx.amount - this.fee
+		if (this.addressInfo.utxos.length > 0) {
+			const feeUtxo = this.addInputForFee();
+			amount = this.commitTx.amount + feeUtxo?.value - this.fee;
+		}
 		this.tx.addOutputAddress(this.commitTx.sbtcWalletAddress, BigInt(amount), this.net);
 		//this.tx.finalize();
 

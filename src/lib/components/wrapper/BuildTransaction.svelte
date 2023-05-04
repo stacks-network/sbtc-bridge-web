@@ -10,10 +10,11 @@ import UTXOSelection from "$lib/components/common/UTXOSelection.svelte";
 import { createEventDispatcher } from "svelte";
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { addresses } from '$lib/stacks_connect'
+import { addresses } from '$lib/stacks_connect';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
 import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
+import type { PeginRequestI } from '$types/pegin_request';
 
 export let piTx:PegInTransactionI;
 if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
@@ -39,7 +40,6 @@ const amtData = () => {
     change: piTx.getChange(),
     fee: piTx.fee,
     fees: piTx.fees,
-    dust: piTx.dust
   }
 }
 
@@ -60,6 +60,7 @@ const dispatch = createEventDispatcher();
 let errorReason:string|undefined;
 let stxAddressOk = true;
 let amountOk = false;
+let peginRequest:PeginRequestI;
 
 const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
@@ -103,7 +104,7 @@ const utxoUpdated = async (event:any) => {
       const p0 = piTx.pegInData;
       const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
       piTx.fromBtcAddress = data.bitcoinAddress;
-      piTx = await PegInTransaction.create(network, data.bitcoinAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
+      piTx = await PegInTransaction.create(network, data.bitcoinAddress, addresses().ordinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
       piTx.calculateFees();
       piTx.setStacksAddress(stacksAddress);
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
@@ -123,10 +124,10 @@ $: showButton = piTx.ready && amountOk && !errorReason;
 let showModal:boolean;
 const nextStep = (wallet:number) => {
   // 1: stacks web wallet, 2: any wallet
-  if (wallet === 2 && $sbtcConfig.userSettings.useOpDrop) {
-    showModal = !showModal;
-  } else {
+  if (wallet === 1) {
     dispatch('request_signature', { wallet });
+  } else {
+    showModal = !showModal;
   }
 }
 const closeModal = () => {
@@ -144,7 +145,9 @@ onMount(async () => {
   const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
   if (piTx.pegInData.amount! > 0) amountOk = true;
   updateConfig();
-  if (!piTx.ready) piTx = await PegInTransaction.create(network, piTx.fromBtcAddress, piTx.pegInData.sbtcWalletAddress, stacksAddress);
+  if (!piTx.ready) piTx = await PegInTransaction.create(network, piTx.fromBtcAddress, addresses().ordinal, piTx.pegInData.sbtcWalletAddress, stacksAddress);
+  piTx.reclaimBtcAddress = addresses().ordinal;
+  peginRequest = piTx.getOpDropPeginRequest();
   inited = true;
   document.addEventListener('keydown', closeOnEscape);
   //document.addEventListener('click', closeOnEscape);
@@ -152,7 +155,8 @@ onMount(async () => {
 
 
 </script>
-<Modal {showModal} showClose={true} on:click={closeModal} on:close_modal={closeModal}>
+{#if showModal}
+<Modal {showModal} on:click={closeModal} on:close_modal={closeModal}>
   <div class="mb-4"><ScriptHashAddress {piTx}/></div>
   <div slot="title"></div>
   <div slot="close">
@@ -161,12 +165,12 @@ onMount(async () => {
   <div slot="debug">
     <div class="row my-3 text-small">
       <div class="col-12">
-        <DebugPeginInfo tx={piTx} peginRequest={piTx.getOpDropPeginRequest('op_drop', 'any')}/>
+        <DebugPeginInfo tx={piTx}/>
       </div>
     </div>    
   </div>
 </Modal>
-
+{/if}
 {#if inited}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if showStxAddress}

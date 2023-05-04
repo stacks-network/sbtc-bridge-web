@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
-import { hex } from '@scure/base';
+import { hex, base64 } from '@scure/base';
 import type { SigData } from '$types/sig_data';
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
@@ -9,10 +9,10 @@ import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectMempool } from '$lib/bridge_api';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import { sbtcConfig } from '$stores/stores';
-import { explorerBtcAddressUrl } from "$lib/utils";
+import { explorerBtcAddressUrl, keySetForFeeCalculation } from "$lib/utils";
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
-import { savePaymentRequest } from '$lib/bridge_api';
+import { savePeginCommit } from '$lib/bridge_api';
 
 export let piTx: PegInTransactionI|PegOutTransactionI;
 
@@ -73,23 +73,25 @@ const broadcastTransaction = async (psbtHex:string) => {
     errorReason = undefined;
     resp = await sendRawTxDirectMempool(txHex);
     console.log('sendRawTxDirectMempool: ', resp);
-    if (resp && resp.error) {
+    if (resp && resp.tx) {
+      const peginRequest = piTx.getOpDropPeginRequest()
+      try {
+        await savePeginCommit(peginRequest)
+      } catch (err) {
+        // duplicate.. ok to ignore
+      }
+      broadcasted = true;
+    } else if (resp && resp.error) {
       errMessage = resp.error;
       broadcasted = false;
       errorReason = resp.error + ' Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
-    } else {
-      if ($sbtcConfig.pegIn) {
-        const peginRequest = piTx.getOpDropPeginRequest('op_return', 'web')
-        await savePaymentRequest(peginRequest)
-      }
-      broadcasted = true;
     }
   } catch (err:any) {
+    console.log('Broadcast error: ', err)
     errorReason = 'Request already being processed with these details - change the amount to send another request.'
     //errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
-
 onMount(async () => {
 	sigData = {
     webWallet: true,
@@ -98,7 +100,9 @@ onMount(async () => {
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
   if ($sbtcConfig.userSettings.useOpDrop) {
-    currentTx = hex.encode(piTx?.buildOpDropTransaction().toPSBT());
+    //testSignReveal(opDrop);
+    const tx = piTx?.buildOpDropTransaction();
+    currentTx = hex.encode(tx.toPSBT());
   } else {
     currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
   }
@@ -110,7 +114,7 @@ onMount(async () => {
     <h2>Step 2: Sign with Hiro Web Wallet</h2>
   </div>
 </section>
-<PegInfo {piTx} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
+<PegInfo fromBtcAddress={piTx.fromBtcAddress} stacksAddress={piTx.pegInData.stacksAddress} amount={piTx.pegInData.amount} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 <section>
   {#if errorReason}
   <div class="my-5 text-center text-danger">

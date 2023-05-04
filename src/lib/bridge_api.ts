@@ -10,6 +10,14 @@ function addNetSelector (path:string) {
   }
 }
 
+async function extractResponse(response:any) {
+  try {
+    return await response.json();
+  } catch(err) {
+    return await response.text();
+  }
+}
+
 export async function sendRawTxDirectMempool(hex:string) {
   //const url = CONFIG.VITE_MEMPOOL_EXPLORER + '/tx';
   const url = addNetSelector(CONFIG.VITE_BLOCKCYPHER_EXPLORER + '/txs/push');
@@ -44,11 +52,7 @@ export async function sendRawTransaction(tx: { hex: string; }) {
   if (response.status !== 200) {
     throw new Error('Bitcoin tx send error.');
   }
-  try {
-    return await response.text();
-  } catch (err) {
-    return await response.json();
-  }
+  return await extractResponse(response);
 }
 
 export async function fetchBurnBlockCount() {
@@ -57,7 +61,7 @@ export async function fetchBurnBlockCount() {
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const txs = await response.json();
+  const txs = await extractResponse(response);
   return txs;
 }
 
@@ -71,12 +75,12 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const signedPsbt = await response.json();
+  const signedPsbt = await extractResponse(response);
   return signedPsbt;
 }
 
-export async function savePaymentRequest(peginRequest:PeginRequestI) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/payments/request');
+export async function savePeginCommit(peginRequest:PeginRequestI) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
   const response = await fetch(path, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -85,16 +89,36 @@ export async function savePaymentRequest(peginRequest:PeginRequestI) {
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const signedPsbt = await response.json();
+  const signedPsbt = await extractResponse(response);
   return signedPsbt;
 }
-export async function fetchMyWrapTransactions(stxAddress:string):Promise<Array<PeginRequestI>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/payments/address/' + stxAddress);
+export async function fetchPeginById(_id:string):Promise<Array<PeginRequestI>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins/' + _id);
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Commit not found.');
+  }
+  const pegin = await extractResponse(response);
+  return pegin;
+}
+
+export async function doPeginScan():Promise<Array<PeginRequestI>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegin-scan');
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Unable to scan.');
+  }
+  const pegins = await extractResponse(response);
+  return pegins;
+}
+
+export async function fetchPeginsByStacksAddress(stxAddress:string):Promise<Array<PeginRequestI>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins/search/' + stxAddress);
   const response = await fetch(path);
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const pegins = await response.json();
+  const pegins = await extractResponse(response);
   return pegins;
 }
 
@@ -102,7 +126,13 @@ export async function fetchCurrentFeeRates() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/fee-estimate');
   const response = await fetch(path);
   if (response.status !== 200) {
-    throw new Error('Bitcoin address not known - is the network correct?');
+    return {
+        feeInfo: {
+          low_fee_per_kb: 19226,
+          medium_fee_per_kb: 29679,
+          high_fee_per_kb: 44424
+        }
+    }
   }
   const txs = await response.json();
   return txs;
@@ -112,10 +142,18 @@ export async function fetchTransaction(txid:string) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid);
   const response = await fetch(path);
   if (response.status !== 200) {
-    throw new Error('Bitcoin address not known - is the network correct?');
+    throw new Error('Bitcoin tx not known - is the network correct?');
   }
-  const txs = await response.json();
-  return txs;
+  return await extractResponse(response);
+}
+
+export async function fetchTransactionHex(txid:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid + '/hex');
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin hex not known - is the network correct?');
+  }
+  return await extractResponse(response);
 }
 
 export async function fetchAddressTransactions(address:string) {
@@ -124,8 +162,7 @@ export async function fetchAddressTransactions(address:string) {
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const txs = await response.json();
-  return txs;
+  return await extractResponse(response);
 }
 
 export async function fetchUtxoSet(address:string) {
@@ -134,16 +171,14 @@ export async function fetchUtxoSet(address:string) {
   if (response.status !== 200) {
     throw new Error('Bitcoin address not known - is the network correct?');
   }
-  const txs = await response.json();
-  return txs;
+  return await extractResponse(response);
 }
 
 export async function fetchSbtcEvents() {
   try {
     const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/events/0');
     const response = await fetch(path);
-    const result = await response.json();
-    return result;
+    return await extractResponse(response);
   } catch (err) {
     return [];
   }
@@ -152,23 +187,24 @@ export async function fetchSbtcEvents() {
 export async function fetchSbtcWalletAddress() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/wallet-address');
   const response = await fetch(path);
-  const result = await response.text();
-  return result;
+  return await extractResponse(response);
 }
 
 export async function fetchSbtcData() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/data');
-  const response = await fetch(path);
-  const result = await response.text();
-  return result;
+  try {
+    const response = await fetch(path);
+    return await extractResponse(response);
+  } catch(err) {
+    return {}
+  }
 }
 
 export async function fetchUserSbtcBalance(stxAddress:string) {
   try {
     const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance');
     const response = await fetch(path);
-    const result = await response.json();
-    return (result);
+    return await extractResponse(response);
   } catch (err) {
     return { balance: 0 };
   }
