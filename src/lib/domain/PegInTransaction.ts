@@ -191,7 +191,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * Pays to key path logged in users ordinal address for reclaim and 1 script path;
 	 * 1. the sbtc wallet address with the drop data
 	 */
-	getOpDropPeginRequest = ():PeginRequestI => {
+	getOpDropPeginRequest2 = ():PeginRequestI => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
 		const data = this.buildData(this.pegInData.stacksAddress, true);
 
@@ -227,7 +227,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * 1. the logged in users ordinal address
 	 * 2. the sbtc wallet address with the drop data
 	 */
-	getOpDropPeginRequest2 = ():PeginRequestI => {
+	getOpDropPeginRequest = ():PeginRequestI => {
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
 		const data = this.buildData(this.pegInData.stacksAddress, true);
 
@@ -238,11 +238,11 @@ export default class PegInTransaction implements PegInTransactionI {
 		const reclaimAddr = btc.Address(this.net).decode(reclaimPK)
 		if (reclaimAddr.type !== 'tr') throw new Error('No pubkey for address: ' + reclaimPK)
 
-		const tscript =  [
+		const scripts =  [
 			{ script: btc.Script.encode([data, 'DROP', sbtcWalletAddrScript.pubkey]) }, 
 			{ script: btc.Script.encode([reclaimAddr.pubkey]) }
 		]
-		const script = btc.p2tr(undefined, tscript, this.net, true);
+		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, this.net, true);
 		const req:PeginRequestI = {
 			fromBtcAddress: this.fromBtcAddress,
 			status: 1,
