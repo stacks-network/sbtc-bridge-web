@@ -11,7 +11,6 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { explorerAddressUrl } from "$lib/utils";
 import { addresses, signMessage } from '$lib/stacks_connect'
-import { hex } from '@scure/base';
 import { explorerBtcAddressUrl } from "$lib/utils";
 
 export let poTx:PegOutTransactionI;

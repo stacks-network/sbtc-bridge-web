@@ -3,16 +3,21 @@ import { onMount } from 'svelte';
 import { addresses } from '$lib/stacks_connect'
 import { COMMS_ERROR } from '$lib/utils.js'
 import { truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
-import { fetchMyWrapTransactions } from '$lib/bridge_api'
+import { fetchPeginsByStacksAddress } from '$lib/bridge_api'
 import type { PeginRequestI } from '$types/pegin_request';
 import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { CONFIG } from '$lib/config';
-import { sbtcConfig } from '$stores/stores'
+import { sbtcConfig } from '$stores/stores';
+import { goto } from '$app/navigation'
 
 // fetch/hydrate data from local storage 
 let inited = false;
 let peginRequests:Array<PeginRequestI>
 let errorReason:string|undefined;
+
+const getReclaimUrl = (pegin:any) => {
+	goto('/reclaim/' + pegin._id)
+}
 
 const getStatus = (status:number) => {
 	if (status === 1) {
@@ -25,8 +30,8 @@ const getStatus = (status:number) => {
 }
 
 const getTo = (pegin:PeginRequestI):string => {
-	if (pegin && pegin.timeBasedPegin && pegin.timeBasedPegin.address) {
-		return pegin.timeBasedPegin.address;
+	if (pegin && pegin.commitTxScript && pegin.commitTxScript.address) {
+		return pegin.commitTxScript.address;
 	} else {
 		return 'unknown';
 	}
@@ -34,7 +39,7 @@ const getTo = (pegin:PeginRequestI):string => {
 
 onMount(async () => {
 	try {
-		peginRequests = await fetchMyWrapTransactions(addresses().stxAddress)
+		peginRequests = await fetchPeginsByStacksAddress(addresses().stxAddress)
 		if (peginRequests!.length > 0) inited = true;
 	} catch (err) {
 		errorReason = COMMS_ERROR;
@@ -68,12 +73,14 @@ onMount(async () => {
 					</div>
 					{#each peginRequests as pegin}
 						<div class="row text-white">
-							<div class="col-2">{getStatus(pegin.status)}</div>
+							<div class="col-2">
+								<a href="/" on:click|preventDefault={() => getReclaimUrl(pegin)}>{getStatus(pegin.status)}</a>
+							</div>
 							<div class="col-2">
 								<a href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress)}</a>
 							</div>
 							<div class="col-2">
-								<a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.timeBasedPegin?.address)}</a>
+								<a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a>
 							</div>
 							<div class="col-2">{#if pegin.status === 1}{pegin.amount}{:else}{pegin.amount}{/if}</div>
 							<div class="col-4">

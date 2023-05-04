@@ -3,14 +3,14 @@ import { addresses } from '$lib/stacks_connect'
 import { createEventDispatcher } from "svelte";
 import { ArrowUp, ArrowDown, CheckCircle } from "svelte-bootstrap-icons";
 import { sbtcConfig } from '$stores/stores';
-import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 
 const dispatch = createEventDispatcher();
-export let piTx: PegInTransactionI|PegOutTransactionI;
+export let fromBtcAddress:string;
+export let stacksAddress:string|undefined;
+export let amount:number;
 export let sigData:any;
-export let currentTx:any;
-const webWallet = piTx.fromBtcAddress === addresses().cardinal;
+export let currentTx:string;
+const webWallet = fromBtcAddress === addresses().cardinal;
 let showTx = false;
 let showHex = false;
 
@@ -29,7 +29,7 @@ const updateTransaction = () => {
   </div>
   <div class="row">
     <div class="col-4">From</div>
-    <div class="col-8">{piTx.fromBtcAddress}</div>
+    <div class="col-8">{fromBtcAddress}</div>
   </div>
   <div class="row">
     <div class="col-4">Wallet</div>
@@ -37,11 +37,11 @@ const updateTransaction = () => {
   </div>
   <div class="row">
     <div class="col-4">Stacks Address</div>
-    <div class="col-8">{piTx.pegInData.stacksAddress}</div>
+    <div class="col-8">{stacksAddress}</div>
   </div>
   <div class="row">
     <div class="col-4">Amount</div>
-    <div class="col-8">{piTx.pegInData.amount}</div>
+    <div class="col-8">{amount}</div>
   </div>
   <div class="row">
     <div class="col-4">Details</div>
@@ -55,7 +55,7 @@ const updateTransaction = () => {
   </div>
   <div class="row">
     <div class="col-12">
-      {#if showTx}
+      {#if showTx && sigData}
       <section class="mb-4">
         <h4>Transaction Inputs</h4>
       {#each sigData.inputsForDisplay as input}

@@ -18,7 +18,8 @@ export default defineConfig({
   test: {
     deps: {
       inline: [
-        "@stacks/connect"
+        "@stacks/connect",
+        "stacks_connect"
       ]
     },
     //environment: 'jsdom',

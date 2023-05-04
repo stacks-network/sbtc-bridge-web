@@ -1,6 +1,5 @@
 <script lang="ts">
 import { createEventDispatcher } from "svelte";
-import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 
 export let amtData:{pegIn:boolean, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
 

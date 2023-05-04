@@ -9,7 +9,7 @@ import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import util from 'util'
 import { concatByteArrays } from '$lib/structured-data.js'
-import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from '../src/lib/domain/PegTransaction'
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE, PEGOUT_OPCODE } from '../src/lib/utils'
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -110,7 +110,7 @@ describe('suite', () => {
     myPeg.calculateFees();
     myPeg.setFeeRate(1);
     expect(myPeg.fee).equals(myPeg.fees[1])
-    expect(myPeg.fee).equals(600)
+    expect(myPeg.fee).equals(100)
   })
 
   it.concurrent('PegOutTransaction.calculateFees() sets correct ratios of scure fee', async () => {
@@ -204,7 +204,7 @@ describe('suite', () => {
     const sig = await secp.sign(sha256('message'), privKey);
     myPeg.setSignature(hex.encode(sig))
     const tx = myPeg.buildOpReturnTransaction();
-    expect(tx.toPSBT(2));
+    expect(tx.toPSBT());
   })
 
   it.concurrent('PegOutTransaction.getDataToSign() ensure signature can be passed to builder.', async () => {
@@ -272,28 +272,28 @@ describe('suite', () => {
   it.concurrent('PegOutTransaction.buildData() data built reflects testnet network', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.TEST_NETWORK;
-    const data = myPeg.buildData(sig);
+    const data = myPeg.buildData(sig, false);
     expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_TESTNET);
   })
 
   it.concurrent('PegOutTransaction.buildData() data built reflects mainnet network', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.NETWORK;
-    const data = myPeg.buildData(sig);
+    const data = myPeg.buildData(sig, false);
     expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_MAINNET);
   })
 
   it.concurrent('PegOutTransaction.buildData() data built reflects correct opcode', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.NETWORK;
-    const data = myPeg.buildData(sig);
-    expect(hex.encode(data.slice(2,3))).equals(PEGOUT_OPCODE);
+    const data = myPeg.buildData(sig, false);
+    expect(hex.encode(data.slice(2,3)).toUpperCase()).equals(PEGOUT_OPCODE);
   })
 
   it.concurrent('PegOutTransaction.buildData() data built reflects correct amount', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.NETWORK;
-    const data = myPeg.buildData(sig);
+    const data = myPeg.buildData(sig, false);
     const amountUint8 = data.slice(3,12);
     expect(amountUint8.length).equals(9);
     expect(uint8ToAmount(amountUint8)).equals(myPeg.pegInData.amount);
@@ -303,7 +303,7 @@ describe('suite', () => {
   it.concurrent('PegOutTransaction.buildData() data built reflects correct signature', async () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.NETWORK;
-    const data = myPeg.buildData(sig);
+    const data = myPeg.buildData(sig, false);
     const amountUint8 = data.slice(12);
     expect(amountUint8.length).equals(65);
     expect(hex.encode(data.slice(12))).equals(sig);

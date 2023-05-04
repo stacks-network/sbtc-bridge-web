@@ -49,7 +49,11 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 }
 
 type AddressObject = {
-	stxAddress: string; cardinal: string; ordinal: string;
+	stxAddress: string;
+	cardinal: string;
+	ordinal: string;
+	btcPubkeySegwit0: string;
+	btcPubkeySegwit1: string;
 }
 
 export async function fetchSbtcBalance () {
@@ -76,6 +80,7 @@ export async function fetchSbtcBalance () {
 }
 
 export function addresses():AddressObject {
+	if (!userSession) return {} as AddressObject;
 	const userData = userSession.loadUserData();
 	const network = CONFIG.VITE_NETWORK;
 	//let something = hashP2WPKH(payload.public_keys[0])
@@ -85,7 +90,9 @@ export function addresses():AddressObject {
 	return {
 		stxAddress: addr,
 		cardinal,
-		ordinal
+		ordinal,
+		btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
+		btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr
 	};
 }
 

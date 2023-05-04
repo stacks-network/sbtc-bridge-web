@@ -15,5 +15,21 @@ export const defaultSbtcConfig:SbtcConfig = {
   userSettings: {
     useOpDrop: true,
     debugMode: false
+  },
+  peginRequest: {
+    _id: undefined,
+    status: 0,
+    tries: undefined,
+    updated: undefined,
+    amount: 0,
+    mode: '',
+    requestType: '',
+    wallet: undefined,
+    btcTxid: undefined,
+    fromBtcAddress: '',
+    stacksAddress: '',
+    sbtcWalletAddress: '',
+    commitTxScript: undefined,
+    vout: undefined
   }
 }

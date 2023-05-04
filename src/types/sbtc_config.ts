@@ -12,6 +12,8 @@ export type SbtcBalance = {
   balance:number;
 };
 export type SbtcConfig = {
+  sbtcWalletAddressInfo?: any;
+  btcFeeRates?: any;
   loggedIn: boolean;
   reclaimTransaction?:ReclaimTransactionI;
   pegInTransaction?:PegInTransactionI;
@@ -20,7 +22,6 @@ export type SbtcConfig = {
   stxAddress?: string;
   sigData:any;
   pegIn:boolean;
-  peginRequestState:number;
   peginRequest:PeginRequestI;
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataI;
