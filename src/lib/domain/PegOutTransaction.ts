@@ -4,11 +4,10 @@ import assert from 'assert';
 import { secp256k1 } from '@noble/curves/secp256k1';
 import type { PeginRequestI, PegInData } from '$types/pegin_request';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
-import { PEGOUT_OPCODE } from '$lib/utils'
+import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { approxTxFees, buildDataOut, amountToUint8 } from './tx_helper'
 import { concatByteArrays } from '$lib/structured-data.js'
 import { CONFIG } from '$lib/config';
-import { decodeStacksAddress } from "$lib/stacks_connect";
 
 export interface PegOutTransactionI {
 	signature: string|undefined;
@@ -101,8 +100,8 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	public static hydrate = (o:PegOutTransactionI) => {
 		const me = new PegOutTransaction();
 		me.net = o.net;
-		if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
-		me.fromBtcAddress = o.fromBtcAddress;
+		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
+		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
 		me.pegInData = o.pegInData;
 		me.addressInfo = o.addressInfo;
 		me.feeInfo = o.feeInfo;

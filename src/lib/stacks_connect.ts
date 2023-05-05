@@ -81,19 +81,23 @@ export async function fetchSbtcBalance () {
 
 export function addresses():AddressObject {
 	if (!userSession) return {} as AddressObject;
-	const userData = userSession.loadUserData();
-	const network = CONFIG.VITE_NETWORK;
-	//let something = hashP2WPKH(payload.public_keys[0])
-	const addr = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
-	const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
-	const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
-	return {
-		stxAddress: addr,
-		cardinal,
-		ordinal,
-		btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
-		btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr
-	};
+	try {
+		const userData = userSession.loadUserData();
+		const network = CONFIG.VITE_NETWORK;
+		//let something = hashP2WPKH(payload.public_keys[0])
+		const addr = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
+		const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
+		return {
+			stxAddress: addr,
+			cardinal,
+			ordinal,
+			btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
+			btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr
+		};
+	} catch(err) {
+		return {} as AddressObject
+	}
 }
 
 export const appDetails = {

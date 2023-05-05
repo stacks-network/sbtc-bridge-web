@@ -54,6 +54,7 @@ const initApplication = async () => {
     if (!$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
     if (!$sbtcConfig.btcFeeRates) $sbtcConfig.btcFeeRates = await fetchCurrentFeeRates();
   }
+  conf.loggedIn = false;
   if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
   }

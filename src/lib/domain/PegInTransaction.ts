@@ -3,7 +3,7 @@ import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import type { PeginRequestI, PegInData } from '$types/pegin_request';
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
-import { decodeStacksAddress } from '$lib/stacks_connect'
+import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { toStorable } from "$lib/utils";
 import { approxTxFees, buildDataIn } from './tx_helper'
 export interface PegInTransactionI {
@@ -98,8 +98,8 @@ export default class PegInTransaction implements PegInTransactionI {
 	public static hydrate = (o:PegInTransactionI) => {
 		const me = new PegInTransaction();
 		me.net = o.net;
-		if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
-		me.fromBtcAddress = o.fromBtcAddress;
+		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
+		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
 		me.reclaimBtcAddress = o.reclaimBtcAddress;
 		me.pegInData = o.pegInData;
 		me.pegInData.sbtcWalletAddress = o.pegInData.sbtcWalletAddress; //'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq'
@@ -131,7 +131,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * Build the tx with the stacks data in an spendable output behind an op_drop
 	 */
 	buildOpDropTransaction = () => {
-		if (!this.pegInData.stacksAddress) throw new Error('buildOpDropTransaction: Stacks address required!');
+		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
 		this.addInputs(tx);
 		const peginReqest = this.getOpDropPeginRequest()
@@ -192,7 +192,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * 1. the sbtc wallet address with the drop data
 	 */
 	getOpDropPeginRequest2 = ():PeginRequestI => {
-		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const data = this.buildData(this.pegInData.stacksAddress, true);
 
 		const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
@@ -228,7 +228,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * 2. the sbtc wallet address with the drop data
 	 */
 	getOpDropPeginRequest = ():PeginRequestI => {
-		if (!this.pegInData.stacksAddress) throw new Error('Stacks address is required')
+		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const data = this.buildData(this.pegInData.stacksAddress, true);
 
 		const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
