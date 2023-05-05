@@ -1,8 +1,12 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from '$lib/domain/PegTransaction'
 import { c32address } from 'c32check';
+export const MAGIC_BYTES_TESTNET = '5432';
+export const MAGIC_BYTES_MAINNET = '5832';
+export const PEGIN_OPCODE = '3C';
+export const PEGOUT_OPCODE = '3E';
+import * as secp from '@noble/secp256k1';
 
 const network = CONFIG.VITE_NETWORK;
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
@@ -16,6 +20,10 @@ const formatter = new Intl.NumberFormat('en-US', {
 })
 
 const btcPrecision = 100000000
+
+export function bitcoinToSats(amountBtc:number) {
+  return  Math.round(amountBtc * btcPrecision)
+}
 
 export function isSupported(address:string) {
   const network = CONFIG.VITE_NETWORK;
@@ -47,10 +55,11 @@ export function isSupported(address:string) {
   return valid;
 }
 
-export function getNet(network:string) {
-  if (network === 'litecoin') return { pubKeyHash: 0x30, scriptHash: 0x32 };
-  if (network === 'testnet') return { bech32: 'tb', pubKeyHash: 0x6f, scriptHash: 0xc4 };
-  if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+export function getNet() {
+  return (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK
+  //if (network === 'litecoin') return { pubKeyHash: 0x30, scriptHash: 0x32 };
+  //if (network === 'testnet') return { bech32: 'tb', pubKeyHash: 0x6f, scriptHash: 0xc4 };
+  //if (network === 'regtest') return { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4 };
 }
 export function explorerAddressUrl(addr:string) {
 	return CONFIG.VITE_STACKS_EXPLORER + '/address/' + addr + '?chain=' + CONFIG.VITE_NETWORK;
@@ -137,3 +146,198 @@ function recoverSbtcWalletAddress(scriptPubKey:string) {
 
   return sbtcWallet;
 }
+
+export function getSbtcWallet(outputs:Array<any>) {
+  let sbtcWallet;
+  if (outputs[0].scriptPubKey.type.toLowerCase() === 'nulldata') {
+    sbtcWallet = outputs[1].scriptPubKey.address;
+  } else {
+    const scriptHex = outputs[0].scriptPubKey.asm.split(' ')[6];
+    const encscript = btc.OutScript.decode(hex.decode(scriptHex));
+    sbtcWallet = btc.Address(getNet()).encode(encscript);  
+  }
+  return sbtcWallet;
+}
+
+export function getPegInAmountSats(outputs:Array<any>) {
+  let amountSats = 0;
+  if (outputs[0].scriptPubKey.type.toLowerCase() === 'nulldata') {
+    amountSats = bitcoinToSats(outputs[1].value);
+  } else {
+    amountSats = bitcoinToSats(outputs[0].value);
+  }
+  return amountSats;
+}
+
+export function getWitnessData(output0:any) {
+  let d1;
+  let opType;
+  let realMagic;
+  let opcode;
+  if (output0.scriptPubKey.type.toLowerCase() === 'nonstandard') {
+    d1 = Buffer.from(output0.scriptPubKey.asm.split(' ')[1], 'hex');
+    opType = 'drop';
+  } else {
+    d1 = Buffer.from(output0.scriptPubKey.asm.split(' ')[1], 'hex');
+    opType = 'return';
+  }
+  const magic = d1.subarray(0,2);
+  const magicExpected = (CONFIG.VITE_NETWORK === 'testnet') ? MAGIC_BYTES_TESTNET : MAGIC_BYTES_MAINNET;
+  if (magic.toString('hex') === magicExpected) {
+    realMagic = magic.toString('hex');
+    opcode = d1.subarray(2,3).toString('hex');
+  } else {
+    opcode = d1.subarray(0,1).toString('hex');
+  }
+  return {
+    d1,
+    opType,
+    magic,
+    opcode
+  }
+}
+
+const priv = secp.utils.randomPrivateKey()
+type KeySet = {
+	priv: Uint8Array,
+	ecdsaPub: Uint8Array,
+	schnorrPub: Uint8Array
+}
+export const keySetForFeeCalculation = {
+  priv,
+  ecdsaPub: secp.getPublicKey(priv, true),
+  schnorrPub: secp.getPublicKey(priv, false)
+}
+ 
+export function parseOutputs(output0:any, sbtcWalletAddress:string, amountSats: number) {
+  const parsed = {
+    pegType: 'pegin',
+    compression: 0,
+    sbtcWallet: sbtcWalletAddress,
+  } as parsedDataType;
+  const witnessData = getWitnessData(output0);
+  const d1 = witnessData.d1;
+  const opcode = witnessData.opcode;
+  const index = (witnessData.magic) ? 2 : 0;
+
+  if (opcode.toUpperCase() === '3C') {
+    const addr0 = parseInt(d1.subarray(index + 1, index + 2).toString('hex'), 16);
+    const addr1 = d1.subarray(index + 2, index + 22).toString('hex');
+    parsed.stxAddress = c32address(addr0, addr1);
+    parsed.cname = d1.subarray(index + 22, index + 56).toString('utf8');
+    parsed.amountSats = amountSats;
+    parsed.revealFee = d1.subarray(index + 56, index + 84).readUInt32LE();
+    //TODO MJC: better way to do this ?
+    if (parsed.cname.startsWith('\x00\x00\x00\x00\x00')) parsed.cname = undefined;
+  } else if (opcode.toUpperCase() === '3E') {
+    parsed.pegType = 'pegout';
+    parsed.dustAmount = bitcoinToSats(output0.value);
+    parsed.amountSats = d1.subarray(index + 1, index + 10).readUInt32LE();
+    parsed.signature = d1.subarray(index + 10, index + 75).toString('hex');
+    parsed.compression = (output0.scriptPubKey.type === 'nulldata') ? 0 : 1;
+    //const dataToSign = getDataToSign(parsed.amountSats, parsed.sbtcWallet);
+    //const msgHash = hashMessage(dataToSign.toString('hex'));
+    //const stxAddress = getStacksAddressFromSignature(msgHash, parsed.signature, parsed.compression);
+    //parsed.stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? stxAddress.tp2pkh : stxAddress.mp2pkh;
+  } else { 
+    throw new Error('Wrong opcode : expected: 3A or 3C :  receved: ' + opcode)
+  }
+  return parsed;
+}
+type parsedDataType = {
+  pegType: string;
+  opType: string;
+  stxAddress?: string;
+  cname?: string|undefined;
+  sbtcWallet: string;
+  signature: string;
+  compression: number,
+  amountSats: number;
+  dustAmount: number;
+  burnBlockHeight: number;
+  revealFee: number;
+};
+
+function getDataToSign(amount:number, sbtcWalletAddress:string):Buffer {
+	//console.log('getDataToSign:amount ', amount);
+	//console.log('getDataToSign:sbtcWalletAddress ', sbtcWalletAddress);
+	const amtBuf = Buffer.alloc(9);
+	amtBuf.writeUInt32LE(amount, 0);
+	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+	const script = btc.OutScript.encode(btc.Address(net).decode(sbtcWalletAddress))
+	//console.log('decodePegOutOutputs ', util.inspect(Buffer.from(script).toString('hex'), false, null, true /* enable colors */));
+	const scriptBuf = Buffer.from(script);
+	//console.log('getDataToSign:amtBuf ', amtBuf.toString('hex'));
+	//console.log('getDataToSign:scriptBuf ', scriptBuf.toString('hex'));
+	const data = Buffer.concat([amtBuf, scriptBuf]);
+	return data;
+}
+
+export function fromStorable(script:any) {
+  if (typeof script.tweakedPubkey === 'string') return script
+  return codifyScript(script, true)
+}
+
+export function toStorable(script:any) {
+  //const copied = JSON.parse(JSON.stringify(script));
+  return codifyScript(script, false)
+}
+
+function codifyScript(script:any, asString:boolean) {
+  return {
+    address: script.address,
+    script: codify(script.script, asString),
+    paymentType: (script.type) ? script.type : script.paymentType,
+    witnessScript: codify(script.witnessScript, asString),
+    redeemScript: codify(script.redeemScript, asString),
+    leaves: (script.leaves) ? codifyLeaves(script.leaves, asString) : undefined,
+    tapInternalKey: codify(script.tapInternalKey, asString),
+    tapLeafScript: (script.tapLeafScript) ? codifyTapLeafScript(script.tapLeafScript, asString) : undefined,
+    tapMerkleRoot: codify(script.tapMerkleRoot, asString),
+    tweakedPubkey: codify(script.tweakedPubkey, asString),
+  }
+
+}
+
+function codifyTapLeafScript(tapLeafScript:any, asString:boolean) {
+  if (tapLeafScript[0]) {
+    const level0 = tapLeafScript[0]
+    if (level0[0]) tapLeafScript[0][0].internalKey = codify(tapLeafScript[0][0].internalKey, asString)
+    if (level0[0]) tapLeafScript[0][0].merklePath[0] = codify(tapLeafScript[0][0].merklePath[0], asString)
+    if (level0[1]) tapLeafScript[0][1] = codify(tapLeafScript[0][1], asString)
+  }
+  if (tapLeafScript[1]) {
+    const level1 = tapLeafScript[1]
+    if (level1[0]) tapLeafScript[1][0].internalKey = codify(tapLeafScript[1][0].internalKey, asString)
+    if (level1[0]) tapLeafScript[1][0].merklePath[0] = codify(tapLeafScript[1][0].merklePath[0], asString)
+    if (level1[1]) tapLeafScript[1][1] = codify(tapLeafScript[1][1], asString)
+  }
+  return tapLeafScript;
+}
+
+function codify (arg:unknown, asString:boolean) {
+  if (!arg) return;
+  if (typeof arg === 'string') {
+    return hex.decode(arg)
+  } else {
+    return hex.encode(arg as Uint8Array)
+  }
+}
+function codifyLeaves(leaves:any, asString:boolean) {
+  if (leaves[0]) {
+    const level1 = leaves[0]
+    if (level1.controlBlock) leaves[0].controlBlock = codify(leaves[0].controlBlock, asString)
+    if (level1.hash) leaves[0].hash = codify(leaves[0].hash, asString)
+    if (level1.script) leaves[0].script = codify(leaves[0].script, asString)
+    if (level1.path && level1.path[0]) leaves[0].path[0] = codify(leaves[0].path[0], asString)
+  }
+  if (leaves[1]) {
+    const level1 = leaves[1]
+    if (level1.controlBlock) leaves[1].controlBlock = codify(leaves[1].controlBlock, asString)
+    if (level1.hash) leaves[1].hash = codify(leaves[1].hash, asString)
+    if (level1.script) leaves[1].script = codify(leaves[1].script, asString)
+    if (level1.path && level1.path[0]) leaves[1].path[0] = codify(leaves[1].path[0], asString)
+  }
+  return leaves;
+}
+

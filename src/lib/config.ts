@@ -3,7 +3,6 @@ const TESTNET_CONFIG = {
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_ORIGIN: 'https://sbtc.world',
     VITE_NETWORK: 'testnet',
-    VITE_SBTC_MINI: false,
     VITE_SBTC_WALLET: 'tb1q6zlpyrzvzjcrf6dlsctcrh9yl3dwfktsw0nclq',
     VITE_SBTC_CONTRACT_ID: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant',
     VITE_BRIDGE_API: 'https://testnet.stx.eco/bridge-api/v1',
@@ -19,7 +18,6 @@ const MAINNET_CONFIG = {
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_ORIGIN: 'https://sbtc.world',
     VITE_NETWORK: 'mainnet',
-    VITE_SBTC_MINI: false,
     VITE_SBTC_WALLET: 'tb1q6ue638m4t5knwxl4kwhwyuffttlp0ffee3zn3e',
     VITE_SBTC_CONTRACT_ID: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant',
     //VITE_BRIDGE_API: 'https://api.sbtc.world/bridge-api/v1',
@@ -36,7 +34,6 @@ const DEVNET_CONFIG = {
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_ORIGIN: 'https://sbtc.world',
     VITE_NETWORK: 'testnet',
-    VITE_SBTC_MINI: false,
     VITE_SBTC_WALLET: 'tb1q6zlpyrzvzjcrf6dlsctcrh9yl3dwfktsw0nclq',
     VITE_SBTC_CONTRACT_ID: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sbtc-alpha',
     VITE_BRIDGE_API: 'http://localhost:3010/bridge-api/v1',
@@ -50,11 +47,18 @@ const DEVNET_CONFIG = {
 export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(search:string) {
+    //console.log('setConfig: ' + search);
+    //console.log('import.meta.env.MODE: ' + import.meta.env.MODE);
 	if (search.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
 	else if (search.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
 	else CONFIG = MAINNET_CONFIG
     if (import.meta.env.MODE === 'linode-staging') {
         CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
+    } else if (import.meta.env.MODE === 'development') {
+        CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
+        // toggle depending on location / ip address etc
+        // CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1'
     }
+    //console.log('CONFIG.VITE_BRIDGE_API: ' + CONFIG.VITE_BRIDGE_API);
 }
 

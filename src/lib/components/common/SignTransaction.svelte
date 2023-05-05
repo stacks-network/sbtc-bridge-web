@@ -9,7 +9,7 @@ import type { SigData } from '$types/sig_data';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { sbtcConfig } from '$stores/stores';
-import { savePaymentRequest } from '$lib/bridge_api';
+import { savePeginCommit } from '$lib/bridge_api';
 
 export let piTx:PegInTransactionI|PegOutTransactionI;
 
@@ -23,7 +23,7 @@ let copied = false;
 let currentTx:string;
 
 const setCurrent = () => {
-  const psbt = piTx?.buildOpReturnTransaction().toPSBT(2);
+  const psbt = piTx?.buildOpReturnTransaction().toPSBT();
   (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
 /**
   if (opMechanism === 'return') {
@@ -43,8 +43,9 @@ const updateWallet = async (newWallet:string) => {
   copy();
   if ($sbtcConfig.pegIn) {
     try {
-      const peginRequest = piTx.getOpDropPeginRequest('op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum')
-      await savePaymentRequest(peginRequest)
+      const peginRequest = piTx.getOpDropPeginRequest()
+      //'op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum'
+      await savePeginCommit(peginRequest)
     } catch (err) {
       errorReason = 'Request already being processed with these details - change the amount to send another request.'
     }
@@ -77,7 +78,7 @@ onMount(async () => {
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
-  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT(2));
+  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
 })
 </script>
 
@@ -87,7 +88,7 @@ onMount(async () => {
     <h2>Step 2: Sign & Broadcast</h2>
   </div>
 </section>
-<PegInfo {piTx} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
+<PegInfo fromBtcAddress={piTx.fromBtcAddress} stacksAddress={piTx.pegInData.stacksAddress} amount={piTx.pegInData.amount} {sigData} {currentTx} on:update_transaction={updateTransaction}/>
 
 <section>
   <!-- Select Wallet -->

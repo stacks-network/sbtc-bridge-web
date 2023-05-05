@@ -14,6 +14,8 @@ import { defaultSbtcConfig } from '$lib/sbtc';
 import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
 import { fetchSbtcBalance } from "$lib/stacks_connect";
+import { fetchUtxoSet, fetchCurrentFeeRates } from "$lib/bridge_api";
+import type { SbtcContractDataI } from '$types/sbtc_contract_data';
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);
@@ -26,7 +28,7 @@ beforeNavigate((nav) => {
   }
 })
 
-export let data:any;
+export let data:SbtcContractDataI;
 const unsubscribe = sbtcConfig.subscribe((conf) => {});
 onDestroy(unsubscribe);
 //setUpMicroStacks();
@@ -40,32 +42,37 @@ const doLogin = async () => {
 }
 
 const initApplication = async () => {
+  try {
+    data = await fetchSbtcData();
+  } catch (err) {
+    data = {} as SbtcContractDataI
+  }
+  await fetchSbtcBalance();
   let conf = defaultSbtcConfig as SbtcConfig;
-  if ($sbtcConfig) conf = $sbtcConfig;
+  if ($sbtcConfig) {
+    conf = $sbtcConfig;
+    if (!$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
+    if (!$sbtcConfig.btcFeeRates) $sbtcConfig.btcFeeRates = await fetchCurrentFeeRates();
+  }
   if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
   }
   conf.sbtcContractData = data;
+  //conf.sbtcContractData.sbtcWalletAddress = 'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq'
   sbtcConfig.update(() => conf);
 }
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
-  try {
-    data = JSON.parse(await fetchSbtcData());
-    await fetchSbtcBalance();
-  } catch(err) {
-    data = {}
-  }
   bootstrap = (await import('bootstrap'));
   try {
     await tick();
     await initApplication();
-    inited = true;
   } catch (err) {
     errorReason = COMMS_ERROR
     console.log(err)
   }
+  inited = true;
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

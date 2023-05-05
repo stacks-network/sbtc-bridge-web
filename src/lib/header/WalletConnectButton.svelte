@@ -77,6 +77,7 @@ onMount(async () => {
 		<li class="nav-item"><span class="dropdown-item"><a href="/" on:click|preventDefault={() => addresses()} class="dropdown-item">Addresses</a></span></li>
 		<li class="nav-item px-4 text-small text-warning"><span class="text-small">{addresses().stxAddress}</span></li>
 		<li class="nav-item px-4 text-small text-warning"><span class="text-small">{addresses().cardinal}</span></li>
+		<li class="nav-item px-4 text-small text-warning"><span class="text-small">{addresses().ordinal}</span></li>
 		{/if}
 		<li class="nav-item mt-4 py-4">
 		{#if webWalletNeeded}
