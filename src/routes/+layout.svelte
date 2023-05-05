@@ -44,10 +44,10 @@ const doLogin = async () => {
 const initApplication = async () => {
   try {
     data = await fetchSbtcData();
+    if (!data) data = defaultSbtcConfig.sbtcContractData;
   } catch (err) {
-    data = {} as SbtcContractDataI
+    data = defaultSbtcConfig.sbtcContractData;
   }
-  await fetchSbtcBalance();
   let conf = defaultSbtcConfig as SbtcConfig;
   if ($sbtcConfig) {
     conf = $sbtcConfig;
@@ -57,6 +57,7 @@ const initApplication = async () => {
   conf.loggedIn = false;
   if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
+    await fetchSbtcBalance();
   }
   conf.sbtcContractData = data;
   //conf.sbtcContractData.sbtcWalletAddress = 'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq'
@@ -65,10 +66,10 @@ const initApplication = async () => {
 
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
+  await initApplication();
   bootstrap = (await import('bootstrap'));
   try {
     await tick();
-    await initApplication();
   } catch (err) {
     errorReason = COMMS_ERROR
     console.log(err)
