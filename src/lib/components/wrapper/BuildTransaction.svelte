@@ -145,7 +145,7 @@ onMount(async () => {
   const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
   if (piTx.pegInData.amount! > 0) amountOk = true;
   updateConfig();
-  if (!piTx.ready) piTx = await PegInTransaction.create(network, piTx.fromBtcAddress, addresses().ordinal, piTx.pegInData.sbtcWalletAddress, stacksAddress);
+  if (!piTx.ready) piTx = await PegInTransaction.create(network, $sbtcConfig.peginRequest.fromBtcAddress, addresses().ordinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
   piTx.reclaimBtcAddress = addresses().ordinal;
   peginRequest = piTx.getOpDropPeginRequest();
   inited = true;
