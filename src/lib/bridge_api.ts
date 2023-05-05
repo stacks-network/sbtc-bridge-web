@@ -14,7 +14,11 @@ async function extractResponse(response:any) {
   try {
     return await response.json();
   } catch(err) {
-    return await response.text();
+    try {
+      return await response.text();
+    } catch(err) {
+      console.log('error fetching response.. ', err)
+    }
   }
 }
 
