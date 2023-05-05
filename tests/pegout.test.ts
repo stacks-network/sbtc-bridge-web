@@ -21,7 +21,7 @@ const keySetForFeeCalculation: KeySet[] = []
 keySetForFeeCalculation.push({
   priv,
   ecdsaPub: secp.getPublicKey(priv, true),
-  schnorrPub: secp.schnorr.getPublicKey(priv)
+  schnorrPub: secp.getPublicKey(priv, false)
 })
 
 describe('suite', () => {
@@ -191,7 +191,7 @@ describe('suite', () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     //const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
     const privKey = secp.utils.randomPrivateKey()
-    const sig = await secp.sign(sha256('message'), privKey);
+    const sig = await secp.sign(sha256('message'), hex.encode(privKey));
     myPeg.setSignature(hex.encode(sig))
     const tx = myPeg.buildOpReturnTransaction();
     expect(tx.version).equals(2);

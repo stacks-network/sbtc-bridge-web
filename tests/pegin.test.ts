@@ -24,7 +24,7 @@ const keySetForFeeCalculation: KeySet[] = []
 keySetForFeeCalculation.push({
   priv,
   ecdsaPub: secp.getPublicKey(priv, true),
-  schnorrPub: secp.schnorr.getPublicKey(priv)
+  schnorrPub: secp.getPublicKey(priv, false)
 })
 
 describe('suite', () => {

@@ -206,7 +206,7 @@ type KeySet = {
 export const keySetForFeeCalculation = {
   priv,
   ecdsaPub: secp.getPublicKey(priv, true),
-  schnorrPub: secp.schnorr.getPublicKey(priv)
+  schnorrPub: secp.getPublicKey(priv, false)
 }
  
 export function parseOutputs(output0:any, sbtcWalletAddress:string, amountSats: number) {
