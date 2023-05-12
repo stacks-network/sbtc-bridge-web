@@ -43,7 +43,7 @@ const updateWallet = async (newWallet:string) => {
   copy();
   if ($sbtcConfig.pegIn) {
     try {
-      const peginRequest = piTx.getOpDropPeginRequest()
+      const peginRequest = piTx.getOpDropPeginRequest(undefined)
       //'op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum'
       await savePeginCommit(peginRequest)
     } catch (err) {
