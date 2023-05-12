@@ -7,9 +7,8 @@ import Pegs from '$lib/components/history/Pegs.svelte';
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<div class="row">
-				<div class="d-flex justify-content-between">
 				  <h1 class="pointer text-white"><span class="strokeme-white">sBTC</span> Transaction History</h1>
-				</div>
+				  <p>Fully processed deposits and withdrawals seen by the smart contracts</p>
 			</div>
 			<Pegs />
 		</div>

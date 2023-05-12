@@ -116,11 +116,23 @@ export async function doPeginScan():Promise<Array<PeginRequestI>> {
   return pegins;
 }
 
+export async function fetchPegins():Promise<Array<PeginRequestI>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    console.log('Request failed to url: ' + path);
+    return [];
+  }
+  const pegins = await extractResponse(response);
+  return pegins;
+}
+
 export async function fetchPeginsByStacksAddress(stxAddress:string):Promise<Array<PeginRequestI>> {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins/search/' + stxAddress);
   const response = await fetch(path);
   if (response.status !== 200) {
-    throw new Error('Bitcoin address not known - is the network correct?');
+    console.log('Request failed to url: ' + path);
+    return [];
   }
   const pegins = await extractResponse(response);
   return pegins;
@@ -145,9 +157,9 @@ export async function fetchCurrentFeeRates() {
 export async function fetchTransaction(txid:string) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid);
   const response = await fetch(path);
-  if (response.status !== 200) {
-    throw new Error('Bitcoin tx not known - is the network correct?');
-  }
+  //if (response.status !== 200) {
+  // throw new Error('Bitcoin tx not known - is the network correct?');
+  //}
   return await extractResponse(response);
 }
 

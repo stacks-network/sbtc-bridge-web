@@ -197,8 +197,8 @@ describe('suite', () => {
   })
 
   it.concurrent('PegInTransaction.buildOpReturnTransaction() throws if signature is passed', async () => {
-    const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
-    const sig = await secp.sign(sha256('message'), privKey);
+    const privKey = ('0101010101010101010101010101010101010101010101010101010101010101');
+    const sig = await secp.signAsync(sha256('message'), privKey, {lowS:false});
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     try {
       const tx = myPeg.buildOpReturnTransaction();

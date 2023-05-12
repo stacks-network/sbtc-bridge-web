@@ -1,7 +1,6 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import RevealTransaction from '$lib/domain/RevealTransaction';
-import ReclaimTransaction from '$lib/domain/ReclaimTransaction';
+import ReclaimOrRevealTransaction from '$lib/domain/ReclaimOrRevealTransaction';
 import { goto } from "$app/navigation";
 import { hexToBytes } from "@stacks/common";
 import { sbtcConfig } from '$stores/stores'
@@ -12,11 +11,12 @@ import { openPsbtRequestPopup } from '@stacks/connect'
 import type { PeginRequestI } from '$types/pegin_request';
 import WshCommit from '$lib/components/reclaim/WshCommit.svelte';
 import TrCommit from '$lib/components/reclaim/TrCommit.svelte';
+import { toStorable } from '$lib/utils'
 
 // fetch/hydrate data from local storage
 export let data:any;
-export let revealTx:RevealTransaction;
-export let reclaimTx:ReclaimTransaction;
+export let revealTx:ReclaimOrRevealTransaction;
+export let reclaimTx:ReclaimOrRevealTransaction;
 
 let peginRequest:PeginRequestI = data;
 let inited = false;
@@ -29,11 +29,35 @@ const scan = () => {
 }
 
 const b64Reveal = () => {
-	return base64.encode(revealBtcTx.toPSBT());
+	try {
+		return base64.encode(revealBtcTx.toPSBT());
+	} catch (err:any) {
+		return err.message
+	}
 }
 
 const b64Reclaim = () => {
-	return base64.encode(reclaimBtcTx.toPSBT());
+	try {
+		return base64.encode(reclaimBtcTx.toPSBT());
+	} catch (err:any) {
+		return err.message
+	}
+}
+
+const rawReveal = () => {
+	try {
+		return hex.encode(revealBtcTx.toBytes());
+	} catch (err:any) {
+		return err.message
+	}
+}
+
+const rawReclaim = () => {
+	try {
+		return hex.encode(reclaimBtcTx.toBytes());
+	} catch (err:any) {
+		return err.message
+	}
 }
 
 const openBackView = () => {
@@ -90,7 +114,6 @@ const broadcastTransaction = async (psbtHex:string) => {
 		errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
 		return;
 	}
-	const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
 }
 
 onMount(async () => {
@@ -98,18 +121,24 @@ onMount(async () => {
 		goto('/listReclaims');
 		return;
 	}
-    revealTx = new RevealTransaction(peginRequest);
-	await revealTx.fetchUtxos();
-    reclaimTx = new ReclaimTransaction(peginRequest)
-	await reclaimTx.fetchUtxos();
-	try { 
-		revealBtcTx = revealTx.buildTransaction();
-	} catch(err) { 
-		console.error('Creating transaction failed: ', err)
+	if (typeof peginRequest.commitTxScript.tapLeafScript[0][0].internalKey === 'string') {
+		const script = toStorable(peginRequest.commitTxScript)
+		peginRequest.commitTxScript = script;
 	}
-	try { 
-		reclaimBtcTx = reclaimTx.buildTransaction();
-	} catch(err) { 
+    revealTx = new ReclaimOrRevealTransaction(peginRequest)
+    reclaimTx = new ReclaimOrRevealTransaction(peginRequest)
+
+	await revealTx.fetchUtxos(false);
+	await reclaimTx.fetchUtxos(true);
+	if (revealTx.transaction.vout.length > 1) {
+		peginRequest.senderAddress = revealTx.transaction.vout[1].scriptPubKey.address
+	}
+	try {
+		if (revealTx.commitTx.btcTxid) {
+			revealBtcTx = revealTx.buildTransaction(false);
+			reclaimBtcTx = reclaimTx.buildTransaction(true);
+		}
+	} catch(err) {
 		console.error('Creating transaction failed: ', err)
 	}
 	inited = true;
@@ -160,16 +189,26 @@ onMount(async () => {
 	{#if revealBtcTx}
 	<div class="row my-4">
 		<div class="col">
-			<h2>Reveal Tx (Base 64)</h2>
+			<h2>Reveal PSBT (Base 64)</h2>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reveal()}</textarea>
 		</div>
 	</div>
-	{/if}
-	{#if reclaimBtcTx}
+	<div class="row my-4">
+		<div class="col">
+			<h2>Reveal Tx (Raw Hex)</h2>
+			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReveal()}</textarea>
+		</div>
+	</div>
 	<div class="row my-4">
 		<div class="col">
 			<h2>Reclaim Tx (Base 64)</h2>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reclaim()}</textarea>
+		</div>
+	</div>
+	<div class="row my-4">
+		<div class="col">
+			<h2>Reclaim Tx (Raw Hex)</h2>
+			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReclaim()}</textarea>
 		</div>
 	</div>
 	{/if}

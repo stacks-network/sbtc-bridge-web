@@ -1,12 +1,11 @@
 import { beforeAll, beforeEach, expect, describe, it, vi } from 'vitest'
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import { hex, base64 } from '@scure/base';
-import RevealTransaction from '$lib/domain/RevealTransaction';
+import { hex } from '@scure/base';
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import { CONFIG, setConfig } from '$lib/config';
-import { btcFeeRates, sbtcWalletAddressInfo, utxos_nrsp, utxos_pqe8, commitTx, txHex, btcCorePartial } from './reveal.data';
+import { utxos_nrsp, commitTx } from './reveal.data';
 import { MAGIC_BYTES_TESTNET, PEGIN_OPCODE } from '../src/lib/utils'
 import { c32address } from 'c32check';
 import { fail } from 'assert'
@@ -86,7 +85,7 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp\/utxo.*$/, () => {
       return JSON.stringify(utxos_nrsp);
     });
-    const commitTx:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp', 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G');
+    const commitTx:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G');
     expect(commitTx.addressInfo.ischange).equals(utxos_nrsp.ischange)
     expect(commitTx.addressInfo.utxos.length).equals(utxos_nrsp.utxos.length)
     expect(commitTx.addressInfo.utxos[0].value).equals(utxos_nrsp.utxos[0].value)
@@ -102,7 +101,7 @@ describe('suite', () => {
 
     //const mock = vi.fn().mockImplementation(addresses)
 
-    const pegin:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, commitTx.fromBtcAddress, 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', commitTx.sbtcWalletAddress, commitTx.stacksAddress);
+    const pegin:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', commitTx.sbtcWalletAddress, commitTx.stacksAddress);
     
     //expect(mock).toHaveBeenCalledTimes(1)
 
@@ -132,12 +131,12 @@ describe('suite', () => {
   })
 
   /**
-  it.concurrent('RevealTransaction.constructor() creates tx object in correct state.', async () => {
+  it.concurrent('ReclaimOrRevealTransaction.constructor() creates tx object in correct state.', async () => {
     fetchMock.mockIf(/^.*tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd\/utxo.*$/, () => {
       // sbtc taproot wallet
       return JSON.stringify(utxos_pqe8);
     });
-    const revealTx = new RevealTransaction(commitTx);
+    const revealTx = new ReclaimOrRevealTransaction(commitTx);
     revealTx.fetchUtxos();
     revealTx.addressInfo = sbtcWalletAddressInfo
     expect(revealTx.addressInfo.utxos.length).equals(1)

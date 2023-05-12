@@ -67,14 +67,15 @@ const initApplication = async () => {
 let bootstrap: { Tooltip: new (arg0: any) => any; Dropdown: new (arg0: any) => any; };
 onMount(async () => {
   try {
-    await initApplication();
     bootstrap = (await import('bootstrap'));
+    await initApplication();
     await tick();
   } catch (err) {
     errorReason = COMMS_ERROR
     console.log(err)
   }
   inited = true;
+  await tick();
   setTimeout(function () {
     const tooltipTriggerList = window.document.querySelectorAll('[data-bs-toggle="tooltip"]');
     if (tooltipTriggerList) [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));

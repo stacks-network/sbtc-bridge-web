@@ -8,6 +8,7 @@ export type PeginRequestI = {
   requestType:string;
   wallet?: string,
   btcTxid?: string;
+  senderAddress?: string;
   fromBtcAddress: string;
   stacksAddress: string;
   sbtcWalletAddress: string;
@@ -59,5 +60,14 @@ export type PegInData = {
 	sbtcWalletAddress: string;
 	amount: number,
 	revealFee: number;
+};
+
+export type TestKeysI = {
+  reveal: string;
+  revealPub: Uint8Array;
+  revealPrv: string;
+  reclaim: string;
+  reclaimPub: Uint8Array;
+  reclaimPrv: string;
 };
 
