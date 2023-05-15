@@ -9,11 +9,13 @@ const toggleMechanism = (arg:string) => {
 	if (typeof conf.userSettings === 'undefined') {
 		conf.userSettings = {
 			useOpDrop: false,
-			debugMode: false
+			debugMode: false,
+			testAddresses: false
 		}
 	}
 	if (arg === 'txmode') conf.userSettings.useOpDrop = !conf.userSettings.useOpDrop;
 	if (arg === 'debug') conf.userSettings.debugMode = !conf.userSettings.debugMode;
+	if (arg === 'testAddresses') conf.userSettings.testAddresses = !conf.userSettings.testAddresses;
 	sbtcConfig.update(() => conf);
 }
 </script>
@@ -57,6 +59,25 @@ const toggleMechanism = (arg:string) => {
 					Debug Mode On - advanced info provided
 					{:else}
 					Debug Mode Off - advanced info not shown
+					{/if}
+				</div>
+			</div>
+			<div class="row my-3">
+				<div class="col-3">Test Addresses</div>
+				<div class="col-1">
+					<a href="/" class="text-white pointer" style="vertical-align: middle;" on:click|preventDefault={() => toggleMechanism('testAddresses')}>
+						{#if $sbtcConfig.userSettings?.testAddresses}
+						<img src={stx_eco_wallet_on} alt="Wallet Connected" width="40" height="auto" />
+						{:else}
+						<img src={stx_eco_wallet_off} alt="Wallet Connected" width="40" height="auto" />
+						{/if}
+					</a>
+				</div>
+				<div class="col-7">
+					{#if $sbtcConfig.userSettings?.testAddresses}
+					test addresses Mode On
+					{:else}
+					test addresses Mode Off
 					{/if}
 				</div>
 			</div>

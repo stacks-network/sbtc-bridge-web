@@ -43,13 +43,16 @@ const network = CONFIG.VITE_NETWORK;
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(true)}>Wrap BTC</a></li>
 						<li><a class="dropdown-item" href="/" on:click|preventDefault={() => togglePeg(false)}>Unwrap sBTC</a></li>
-						<li><a class="dropdown-item" href="/listReclaims">My Wraps</a></li>
 					</ul>
 				</li>
-				<li class="badge nav-item">
-					<span class="pointer nav-link">
-						<span title="Your sBTC Transaction History"><a class="" href="/history">History</a></span>
+				<li class="nav-item dropdown">
+					<span class="nav-link dropdown-toggle " id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+						sBTC History
 					</span>
+					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+						<li><a class="dropdown-item" href="/history">Conversions</a></li>
+						<li><a class="dropdown-item" href="/listReclaims">Deposits</a></li>
+					</ul>
 				</li>
 				<WalletConnectButton/>
 			</ul>

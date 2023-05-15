@@ -52,7 +52,11 @@ onMount(() => {
   <div class="col-md-10 col-sm-12">{element.value}</div>
   {/each}
   -->
+  <div class="col-md-2 col-sm-12 text-info">Sender Address</div><div class="col-md-10 col-sm-12">{peginRequest.senderAddress}</div>
+  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12">{peginRequest.commitTxScript?.address}</div>
   <div class="col-md-2 col-sm-12 text-info">Reclaim Address</div><div class="col-md-10 col-sm-12">{peginRequest.fromBtcAddress}</div>
+  <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{peginRequest.sbtcWalletAddress}</div>
+  <div class="col-md-2 col-sm-12 text-info">Stacks Address</div><div class="col-md-10 col-sm-12">{peginRequest.stacksAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Tx Id</div>
   <div class="col-md-10 col-sm-12">
     <a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.btcTxid)}</a>

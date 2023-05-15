@@ -49,7 +49,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
 	unconfirmedUtxos = false;
 	requiredConfirmed = 6;
-	net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.NETWORK : btc.TEST_NETWORK;
+	net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	ready = false;
 	fromBtcAddress!: string;
 	pegInData: PegInData = {} as PegInData;

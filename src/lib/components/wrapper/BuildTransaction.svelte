@@ -15,16 +15,18 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
 import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
 import type { PeginRequestI } from '$types/pegin_request';
+import { getTestAddresses } from '$lib/domain/tx_helper'
+import { hex } from '@scure/base';
 
 export let piTx:PegInTransactionI;
-if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().cardinal;
+//if (!piTx.fromBtcAddress) piTx.fromBtcAddress = addresses().ordinal;
 let componentKey3 = 0;
 
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(piTx.fromBtcAddress)
 }
 
-if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
+//if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Address (Account or Contract)',
   info: 'sBTC will be minted to this account or contract',
@@ -40,6 +42,7 @@ const amtData = () => {
     change: piTx.getChange(),
     fee: piTx.fee,
     fees: piTx.fees,
+    dust: 500
   }
 }
 
@@ -96,17 +99,28 @@ const principalUpdated = (event:any) => {
   }
 }
 
+const commitAddresses = () => {
+  const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
+  let fromBtcAddress = $sbtcConfig.peginRequest.fromBtcAddress || addresses().ordinal;
+  let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
+  if ($sbtcConfig.userSettings.testAddresses) {
+    const testAddrs = getTestAddresses();
+    fromBtcAddress = testAddrs.reclaim as string;
+    sbtcWalletAddress = testAddrs.reveal as string;
+  }
+  return { reveal: sbtcWalletAddress, reclaim: fromBtcAddress, stacksAddress }
+}
+
 const utxoUpdated = async (event:any) => {
   errorReason = undefined;
   const data:any = event.detail;
   if (data.opCode === 'address-change') {
     try {
       const p0 = piTx.pegInData;
-      const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
       piTx.fromBtcAddress = data.bitcoinAddress;
-      piTx = await PegInTransaction.create(network, data.bitcoinAddress, addresses().ordinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
+      piTx = await PegInTransaction.create(network, commitAddresses().reclaim, commitAddresses().reveal, commitAddresses().stacksAddress);
       piTx.calculateFees();
-      piTx.setStacksAddress(stacksAddress);
+      //piTx.setStacksAddress(commitAddresses().stacksAddress);
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
@@ -142,12 +156,12 @@ const closeOnEscape = (e:any) => {
 
 let inited = false;
 onMount(async () => {
-  const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
   if (piTx.pegInData.amount! > 0) amountOk = true;
   updateConfig();
-  if (!piTx.ready) piTx = await PegInTransaction.create(network, $sbtcConfig.peginRequest.fromBtcAddress, addresses().ordinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress, stacksAddress);
-  piTx.reclaimBtcAddress = addresses().ordinal;
-  peginRequest = piTx.getOpDropPeginRequest();
+  piTx = await PegInTransaction.create(network, commitAddresses().reclaim, commitAddresses().reveal, commitAddresses().stacksAddress);
+  //piTx.reclaimBtcAddress = addresses().ordinal;
+  const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses() : undefined;
+  peginRequest = piTx.getOpDropPeginRequest(arg1);
   inited = true;
   document.addEventListener('keydown', closeOnEscape);
   //document.addEventListener('click', closeOnEscape);

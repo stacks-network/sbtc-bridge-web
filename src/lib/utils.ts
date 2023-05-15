@@ -2,11 +2,12 @@ import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import { c32address } from 'c32check';
+import * as secp from '@noble/secp256k1';
+
 export const MAGIC_BYTES_TESTNET = '5432';
 export const MAGIC_BYTES_MAINNET = '5832';
 export const PEGIN_OPCODE = '3C';
 export const PEGOUT_OPCODE = '3E';
-import * as secp from '@noble/secp256k1';
 
 const network = CONFIG.VITE_NETWORK;
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
@@ -20,6 +21,13 @@ const formatter = new Intl.NumberFormat('en-US', {
 })
 
 const btcPrecision = 100000000
+
+export function tsToDate(updated:number|undefined) {
+  let d = new Date();
+  if (updated) d = new Date(updated);
+  return d.toLocaleDateString('en-US');
+  //return d.getHours() + ':' + d.getMinutes() + ' ' + d.getDate() + "/" + d.getMonth() + 1 + "/" + d.getFullYear();
+}
 
 export function bitcoinToSats(amountBtc:number) {
   return  Math.round(amountBtc * btcPrecision)

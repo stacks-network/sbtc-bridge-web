@@ -190,9 +190,9 @@ describe('suite', () => {
   it.concurrent('PegOutTransaction.buildOpReturnTransaction() returns transaction object', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     //const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
-    const privKey = secp.utils.randomPrivateKey()
-    const sig = await secp.sign(sha256('message'), hex.encode(privKey));
-    myPeg.setSignature(hex.encode(sig))
+    const privKey = hex.encode(secp.utils.randomPrivateKey())
+    const sig = await secp.signAsync(sha256('message'), privKey);
+    myPeg.setSignature((sig.toCompactHex()))
     const tx = myPeg.buildOpReturnTransaction();
     expect(tx.version).equals(2);
     expect(tx.hasWitnesses).equals(false)
@@ -200,9 +200,9 @@ describe('suite', () => {
 
   it.concurrent('PegOutTransaction.buildOpReturnTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
-    const privKey = secp.utils.randomPrivateKey()
-    const sig = await secp.sign(sha256('message'), privKey);
-    myPeg.setSignature(hex.encode(sig))
+    const privKey = hex.encode(secp.utils.randomPrivateKey())
+    const sig = await secp.signAsync(sha256('message'), privKey);
+    myPeg.setSignature(sig.toCompactHex())
     const tx = myPeg.buildOpReturnTransaction();
     expect(tx.toPSBT());
   })
@@ -211,9 +211,9 @@ describe('suite', () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.pegInData.amount = 2500;
     const script = myPeg.getDataToSign();
-    const privKey = secp.utils.randomPrivateKey();
-    const sig = await secp.sign(sha256(script), privKey);
-    myPeg.setSignature(hex.encode(sig))
+    const privKey = hex.encode(secp.utils.randomPrivateKey())
+    const sig = await secp.signAsync(sha256(script), privKey);
+    myPeg.setSignature(sig.toCompactHex())
     const tx = myPeg.buildOpReturnTransaction();
     const verified = secp.verify(sig, sha256(script), secp.getPublicKey(privKey, true));
     expect(verified).equals(true);
