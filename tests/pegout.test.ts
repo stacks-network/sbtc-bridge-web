@@ -240,7 +240,7 @@ describe('suite', () => {
     //console.log('data1' + data1);
     //console.log('data1' + data1.subarray(0,9));
     const dataview = new DataView(hex.decode(myPeg.getDataToSign()).buffer);
-    const pegOutAmount = dataview.getUint32(0, true); // second parameter truethy == want little endian
+    const pegOutAmount = dataview.getUint32(0); // second parameter truethy == want little endian
 
     //const pegOutAmount = hex.encode(array32);
     expect(pegOutAmount).equals(myPeg.pegInData.amount);
@@ -316,12 +316,12 @@ describe('suite', () => {
 const amountToUint8 = (amt:number):Uint8Array => {
   const buffer = new ArrayBuffer(9);
   const view1 = new DataView(buffer);
-  view1.setUint32(0, amt, true); // Put 42 in slot 12
+  view1.setUint32(0, amt, false); // Put 42 in slot 12
   const view2 = new Uint8Array(view1.buffer);
   return view2;
 }
 
 const uint8ToAmount = (amt:Uint8Array):number => {
 
-  return new DataView(amt.buffer).getUint32(0, true) // For little endian
+  return new DataView(amt.buffer).getUint32(0, false) // For little endian
 }

@@ -253,16 +253,16 @@ describe('suite', () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     myPeg.net = btc.NETWORK;
     const data = myPeg.buildData(addrM, false);
-    const addr0Buf = hex.encode(data.slice(3,4));
-    expect(parseInt(addr0Buf, 16)).equals(22);
+    expect(parseInt(hex.encode(data.slice(3,4)), 16)).equals(5);
+    expect(parseInt(hex.encode(data.slice(4,5)), 16)).equals(22);
   })
 
   it.concurrent('PegInTransaction.buildData() data built stacks testnet address', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     myPeg.net = btc.TEST_NETWORK;
     const data = myPeg.buildData(addr, false);
-    const addr0Buf = hex.encode(data.slice(3,4));    
-    expect(parseInt(addr0Buf, 16)).equals(26);
+    expect(parseInt(hex.encode(data.slice(3,4)), 16)).equals(5);
+    expect(parseInt(hex.encode(data.slice(4,5)), 16)).equals(26);
   })
 
   it.concurrent('PegInTransaction.buildData() can recover full stacks testnet from data built', async () => {
@@ -270,8 +270,11 @@ describe('suite', () => {
     myPeg.net = btc.TEST_NETWORK;
     const data = myPeg.buildData(addr, false);
 
-    const addr0Buf = hex.encode(data.slice(3,4));    
-    const addr1Buf = hex.encode(data.slice(4, 24));
+    expect(parseInt(hex.encode(data.slice(3,4)), 16)).equals(5);
+    expect(parseInt(hex.encode(data.slice(4,5)), 16)).equals(26);
+
+    const addr0Buf = hex.encode(data.slice(4,5));    
+    const addr1Buf = hex.encode(data.slice(5, 25));
     const address = c32address(parseInt(addr0Buf, 16), addr1Buf)    
     expect(address).equals(addr);
   })
@@ -280,8 +283,8 @@ describe('suite', () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     myPeg.net = btc.NETWORK;
     const data = myPeg.buildData(addrM, false);
-    const addr0Buf = hex.encode(data.slice(3,4));    
-    const addr1Buf = hex.encode(data.slice(4, 24));
+    const addr0Buf = hex.encode(data.slice(4,5));    
+    const addr1Buf = hex.encode(data.slice(5, 25));
     const address = c32address(parseInt(addr0Buf, 16), addr1Buf)    
     expect(address).equals(addrM);
   })
