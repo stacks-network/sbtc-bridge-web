@@ -182,10 +182,10 @@ export default class ReclaimOrRevealTransaction {
 
 		try {
 			const testAddrs = getTestAddresses();	
-			if (reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
+			if (testAddrs.reclaimPrv && reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
 				this.tx.sign(hex.decode(testAddrs.reclaimPrv));
 				this.tx.finalize();
-			} else if (!reclaim && this.commitTx.sbtcWalletAddress && testAddrs.reveal) {
+			} else if (testAddrs.revealPrv && !reclaim && this.commitTx.sbtcWalletAddress && testAddrs.reveal) {
 				this.tx.sign(hex.decode(testAddrs.revealPrv));
 				this.tx.finalize();
 			}

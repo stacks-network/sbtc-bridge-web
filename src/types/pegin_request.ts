@@ -10,6 +10,8 @@ export type PeginRequestI = {
   btcTxid?: string;
   senderAddress?: string;
   fromBtcAddress: string;
+  revealPub: string;
+  reclaimPub: string;
   stacksAddress: string;
   sbtcWalletAddress: string;
   commitTxScript?: PeginScriptI;
@@ -62,12 +64,14 @@ export type PegInData = {
 	revealFee: number;
 };
 
-export type TestKeysI = {
+export type CommitKeysI = {
+  fromBtcAddress: string;
   reveal: string;
-  revealPub: Uint8Array;
-  revealPrv: string;
+  revealPub: string;
+  revealPrv?: string;
   reclaim: string;
-  reclaimPub: Uint8Array;
-  reclaimPrv: string;
+  reclaimPub: string;
+  reclaimPrv?: string;
+  stacksAddress: string;
 };
 

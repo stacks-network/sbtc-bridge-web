@@ -261,8 +261,8 @@ describe('suite', () => {
     //console.log('amtBuf: ' + (hex.encode(amt)))
     //console.log('data: ' + hex.encode(data))
   
-    //const pegOutAmount = amtBuf.readUInt32LE();
-    //const pegOutAmount1 = data.subarray(2,11).readUInt32LE();
+    //const pegOutAmount = amtBuf.readUInt32BE();
+    //const pegOutAmount1 = data.subarray(2,11).readUInt32BE();
     //console.log('decodePegOutOutputs:amtB1 ', util.inspect(hex.encode(amt), false, null, true /* enable colors */));
     //console.log('decodePegOutOutputs:amtBuf3 ', util.inspect(pegOutAmount, false, null, true /* enable colors */));
     //console.log('decodePegOutOutputs:amtBuf4 ', util.inspect(pegOutAmount1, false, null, true /* enable colors */));

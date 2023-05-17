@@ -51,7 +51,7 @@ const network = CONFIG.VITE_NETWORK;
 					</span>
 					<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
 						<li><a class="dropdown-item" href="/history">Conversions</a></li>
-						<li><a class="dropdown-item" href="/listReclaims">Deposits</a></li>
+						<li><a class="dropdown-item" href="/reclaims">Deposits</a></li>
 					</ul>
 				</li>
 				<WalletConnectButton/>

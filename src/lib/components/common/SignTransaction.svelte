@@ -37,7 +37,6 @@ const setCurrent = () => {
 
 const updateWallet = async (newWallet:string) => {
   copied = false;
-  //opMechanism = undefined;
   wallet = newWallet;
   setCurrent();
   copy();

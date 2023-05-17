@@ -10,6 +10,14 @@ import { MAGIC_BYTES_TESTNET, PEGIN_OPCODE } from '../src/lib/utils'
 import { c32address } from 'c32check';
 import { fail } from 'assert'
 
+const testCommitKeys = {
+		reveal: 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8',
+		revealPub: '264bd0d3bd80ea2da383b0a2a29f53d258e05904d2279f5f223053b987a3fd56',
+		reclaim: 'tb1psz58gxdxfdyqzur04r2vmgyau7mz5xmg52ns7hg8df7dpu0mlc3sz0wtkj',
+		reclaimPub: '03836fbba6f27143d042c040331e1554ea1def354e6e3d58bdedb669f4a2dd68aa',
+		stacksAddress: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G'
+}
+
 function addresses() {
   return {
     "stxAddress": "ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5",
@@ -85,7 +93,8 @@ describe('suite', () => {
     fetchMock.mockIf(/^.*tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp\/utxo.*$/, () => {
       return JSON.stringify(utxos_nrsp);
     });
-    const commitTx:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G');
+
+    const commitTx:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, testCommitKeys);
     expect(commitTx.addressInfo.ischange).equals(utxos_nrsp.ischange)
     expect(commitTx.addressInfo.utxos.length).equals(utxos_nrsp.utxos.length)
     expect(commitTx.addressInfo.utxos[0].value).equals(utxos_nrsp.utxos[0].value)
@@ -101,7 +110,7 @@ describe('suite', () => {
 
     //const mock = vi.fn().mockImplementation(addresses)
 
-    const pegin:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd', commitTx.sbtcWalletAddress, commitTx.stacksAddress);
+    const pegin:PegInTransactionI = await PegInTransaction.create(CONFIG.VITE_NETWORK, testCommitKeys);
     
     //expect(mock).toHaveBeenCalledTimes(1)
 
