@@ -227,7 +227,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	getDataToSign = () => {
-		const view2 = amountToUint8(this.pegInData.amount);
+		const view2 = amountToUint8(this.pegInData.amount, 9);
 		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
 		const data = concatByteArrays([view2, script])
 		return hex.encode(data);

@@ -9,16 +9,15 @@ import * as btc from '@scure/btc-signer';
 import { doPeginScan } from '$lib/bridge_api';
 import { openPsbtRequestPopup } from '@stacks/connect'
 import type { PeginRequestI } from '$types/pegin_request';
-import WshCommit from '$lib/components/reclaim/WshCommit.svelte';
 import TrCommit from '$lib/components/reclaim/TrCommit.svelte';
 import { toStorable } from '$lib/utils'
 
 // fetch/hydrate data from local storage
 export let data:any;
-export let revealTx:ReclaimOrRevealTransaction;
-export let reclaimTx:ReclaimOrRevealTransaction;
-
 let peginRequest:PeginRequestI = data;
+let revealTx:ReclaimOrRevealTransaction;
+let reclaimTx:ReclaimOrRevealTransaction;
+
 let inited = false;
 let errorReason:string|undefined;
 let reclaimBtcTx:btc.Transaction;
@@ -107,7 +106,7 @@ const broadcastTransaction = async (psbtHex:string) => {
 	console.log('hex: ' + hex.encode(psbt));
 	console.log('base64: ' + base64.encode(psbt));
 	try {
-		tx.finalize();
+		//tx.finalize();
 		console.log('finalized: ', tx);
 	} catch (err) {
 		console.log('finalize error: ', err)
@@ -130,7 +129,7 @@ onMount(async () => {
 
 	await revealTx.fetchUtxos(false);
 	await reclaimTx.fetchUtxos(true);
-	if (revealTx.transaction.vout.length > 1) {
+	if (revealTx.transaction && revealTx.transaction.vout && revealTx.transaction.vout.length > 1) {
 		peginRequest.senderAddress = revealTx.transaction.vout[1].scriptPubKey.address
 	}
 	try {
@@ -150,14 +149,10 @@ onMount(async () => {
 	{#if inited}
 			<div class="row">
 				<div class="col">
-					<h1>Pegin Request</h1>
+					<h1>sBTC Deposit</h1>
 				</div>
 			</div>
-			{#if peginRequest.commitTxScript?.paymentType === 'wsh'}
-			<WshCommit {peginRequest}/>
-			{:else}
 			<TrCommit {peginRequest}/>
-			{/if}
 			{#if peginRequest.status === 2}
 			<div class="row my-5">
 				{#if $sbtcConfig.userSettings.debugMode}
@@ -169,7 +164,8 @@ onMount(async () => {
 					<button class="btn btn-outline-info w-100" type="button" on:click={() => signReclaim()}>Sign Reclaim</button>
 				</div>
 			</div>
-			{:else}
+			{/if}
+			{#if peginRequest.status < 3}
 			<div class="row my-5">
 				<div class="col">
 					Waiting for commit tx to be broadcast - <a href="/" on:click|preventDefault={() => scan()}>click to scan</a>

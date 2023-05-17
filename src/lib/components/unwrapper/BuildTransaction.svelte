@@ -11,49 +11,42 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { explorerAddressUrl } from "$lib/utils";
 import { addresses, signMessage } from '$lib/stacks_connect'
-import { explorerBtcAddressUrl } from "$lib/utils";
+import type { PegInData } from '$types/pegin_request';
 
-export let poTx:PegOutTransactionI;
-if (!poTx.fromBtcAddress) poTx.fromBtcAddress = addresses().cardinal;
+let poTx:PegOutTransactionI;
+const dispatch = createEventDispatcher();
+let errorReason:string|undefined;
+let stxAddressOk = false;
+let amountOk = false;
+let inited = false;
 
-const getExplorerUrl = () => {
-  return explorerBtcAddressUrl(poTx.fromBtcAddress)
-}
-
-if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress
 const principalData = {
   label: 'Stacks Contract or Account Address',
   info: 'sBTC will be burned from this account',
-  currentAddress: poTx.pegInData.stacksAddress,
+  currentAddress: '',
 }
+
 $: amtData = {
   pegIn: false,
   label: 'Amount (sBTC)',
   info: 'The amount to unwrap cannot exceed your sBTC balance',
-  pegAmount: (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance,
-  maxCommit: poTx.maxCommit(),
-  change: poTx.getChange(),
-  fee: poTx.fee,
-  fees: poTx.fees,
-  dust: poTx.dust
+  pegAmount: 0,
+  maxCommit: 0,
+  change: 0,
+  fee: 0,
+  fees: [0, 0, 0],
+  dust: 0
 }
 const network = CONFIG.VITE_NETWORK;
 $: utxoData = {
   label: 'Your Bitcoin Address',
   info: 'Your sBTC will be burned and the equivalent bitcoin then sent to this address',
-  utxos: poTx.addressInfo.utxos,
-  maxCommit: (poTx.ready) ? poTx.maxCommit() : 0,
-  fromBtcAddress: (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal,
-  numbInputs: (poTx.ready) ? poTx.addressInfo.utxos.length : 0,
+  utxos: [],
+  maxCommit: 0,
+  fromBtcAddress: '',
+  numbInputs: 0,
   network
 }
-
-const dispatch = createEventDispatcher();
-let ready = true;
-
-let errorReason:string|undefined;
-let stxAddressOk = true;
-let amountOk = true;
 
 const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
@@ -72,7 +65,7 @@ const requestSignatureCB = async (sigData:any, message:Uint8Array) => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
-  dispatch('request_signature');
+  dispatch('request_signature', { poTx });
 }
 
 const amountUpdated = (event:any) => {
@@ -116,20 +109,47 @@ const utxoUpdated = async (event:any) => {
   }
 }
 
-$: showStxAddress = poTx.ready && !errorReason;
-$: showAmount = poTx.ready && stxAddressOk && !errorReason;
-$: showButton = poTx.ready && amountOk && !errorReason;
+$: showStxAddress = !errorReason;
+$: showAmount = stxAddressOk && !errorReason;
+$: showButton = amountOk && !errorReason;
 
 onMount(async () => {
-  if (!poTx.pegInData.stacksAddress) stxAddressOk = false;
-  if (poTx.pegInData.amount! > 0) amountOk = true;
+  if ($sbtcConfig.pegOutTransaction) {
+    poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction);
+  } else {
+    poTx = await PegOutTransaction.create(network, addresses().cardinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
+  }
+  if (!poTx.pegInData) poTx.pegInData = {} as PegInData;
+  if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress;
+  if (poTx.pegInData.stacksAddress) stxAddressOk = true;
+  if (poTx.pegInData.amount > 0) amountOk = true;
+  
+  principalData.currentAddress = poTx.pegInData.stacksAddress as string;
+
+  amtData.pegAmount = (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance;
+  amtData.maxCommit = poTx.maxCommit();
+  amtData.change = poTx.getChange();
+  amtData.fee = poTx.fee;
+  amtData.fees = poTx.fees;
+  amtData.dust = poTx.dust;
+
+  utxoData.utxos = poTx.addressInfo.utxos;
+  utxoData.maxCommit = (poTx.ready) ? poTx.maxCommit() : 0;
+  utxoData.fromBtcAddress = (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal;
+  utxoData.numbInputs = (poTx.ready) ? poTx.addressInfo.utxos.length : 0;
+
+  showStxAddress = poTx.ready && !errorReason;
+  showAmount = poTx.ready && stxAddressOk && !errorReason;
+  showButton = poTx.ready && amountOk && !errorReason;
+
   updateConfig();
+
+  inited = true;
 })
 
 
-</script>  
-
-{#if ready}
+</script>
+{#if inited}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
   {#if $sbtcConfig.balance.balance <= 0}
   <div class="text-center text-warning my-5">
@@ -154,13 +174,12 @@ onMount(async () => {
   {#if errorReason}<div class="text-danger">{errorReason}</div>{/if}
 {:else}
 <div class="lobby bg-dark">
-  <p class="text-white">Problem Connecting to APIs</p>
-  <p><span class="nav-item">Status: Bridge API currently experiencing connectivity problems.
+  <p class="text-white">Connecting to APIs</p>
+  <p><span class="nav-item">Status: Slow Bridge API connectivity.
     We are already working on this.
   <span class="mt-5 text-warning">Please report this to the core engineering team!</span></p>
 </div>
 {/if}
-
 
 <style>
 .row {

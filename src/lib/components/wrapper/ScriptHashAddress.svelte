@@ -9,8 +9,7 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import { getTestAddresses } from '$lib/domain/tx_helper'
 
 export let piTx:PegInTransactionI;
-const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses() : undefined;
-const peginRequest = piTx?.getOpDropPeginRequest(arg1);
+const peginRequest = piTx?.getOpDropPeginRequest();
 let errorReason:string|undefined;
 
 const paymentUri = () => {
