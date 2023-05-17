@@ -6,7 +6,8 @@ import type { PeginRequestI } from '$types/pegin_request';
 import { getTestAddresses } from '$lib/domain/tx_helper'
 
 export let tx:any;
-let peginRequest:PeginRequestI = tx.getOpDropPeginRequest();
+const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses() : undefined;
+let peginRequest:PeginRequestI = tx.getOpDropPeginRequest(arg1);
 
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 let showDetails = false;
