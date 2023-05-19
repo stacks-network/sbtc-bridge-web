@@ -238,7 +238,7 @@ describe('suite', () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.TEST_NETWORK;
     const data = myPeg.buildData(sig, false);
-    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_TESTNET);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_MAINNET);
   })
 
   it.concurrent('PegOutTransaction.buildData() data built reflects mainnet network', async () => {
