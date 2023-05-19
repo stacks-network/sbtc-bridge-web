@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
-import type { SigData } from '$types/sig_data';
+import type { SigData } from 'sbtc-bridge-lib/src/index' 
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";

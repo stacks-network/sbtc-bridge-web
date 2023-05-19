@@ -5,7 +5,7 @@ import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import WalletHelp from '$lib/components/wallets/WalletHelp.svelte';
 import { hex, base64 } from '@scure/base';
-import type { SigData } from '$types/sig_data';
+import type { SigData } from 'sbtc-bridge-lib/src/index' 
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { sbtcConfig } from '$stores/stores';
@@ -25,25 +25,16 @@ let currentTx:string;
 const setCurrent = () => {
   const psbt = piTx?.buildOpReturnTransaction().toPSBT();
   (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
-/**
-  if (opMechanism === 'return') {
-    const psbt = sigData.opReturnTx.toPSBT(2);
-    (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
-  } else if (opMechanism === 'drop') {
-    const psbt = sigData.opReturnTx.toPSBT(2);
-    (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
-  }*/
 }
 
 const updateWallet = async (newWallet:string) => {
   copied = false;
-  //opMechanism = undefined;
   wallet = newWallet;
   setCurrent();
   copy();
   if ($sbtcConfig.pegIn) {
     try {
-      const peginRequest = piTx.getOpDropPeginRequest(undefined)
+      const peginRequest = piTx.getOpDropPeginRequest()
       //'op_return', (wallet === 'Bitcoin Core') ? 'bitcoin_core' : 'electrum'
       await savePeginCommit(peginRequest)
     } catch (err) {

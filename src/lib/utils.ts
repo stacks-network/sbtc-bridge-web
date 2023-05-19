@@ -1,15 +1,8 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import { c32address } from 'c32check';
 import * as secp from '@noble/secp256k1';
 
-export const MAGIC_BYTES_TESTNET = '5432';
-export const MAGIC_BYTES_MAINNET = '5832';
-export const PEGIN_OPCODE = '3C';
-export const PEGOUT_OPCODE = '3E';
-
-const network = CONFIG.VITE_NETWORK;
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 
 const formatter = new Intl.NumberFormat('en-US', {
@@ -88,16 +81,6 @@ export function fmtSatoshiToBitcoin(amountSats:number) {
   return  Math.round(amountSats) / btcPrecision
 }
 
-export function hexToAscii(input:string) {
-  const buf = Buffer.from(input, "hex");
-  return buf.toString("ascii");
-}
-
-export function hexToUTF8(input:string) {
-  const buf = Buffer.from(input, "hex");
-  return buf.toString("utf8");
-}
-
 export function fmtAmount(amount:number, currency:string) {
   if (currency === 'stx') {
     return formatter.format(amount).replace('$', '') // &#931;
@@ -115,170 +98,12 @@ export function truncate(stringy?:string, amount?:number) {
   return stringy.substring(0, amount) + '..' + stringy.substring(stringy.length - amount);
 }
 
-export function recoverPegInData(peginData:string) {
-  const d1 = hex.decode(peginData.split(' ')[2]);
-  const magic = hex.encode(d1.subarray(0,2));
-  const opcode = hex.encode(d1.subarray(2,3));
-  const addr0 = parseInt(hex.encode(d1.subarray(3,4)), 16);
-  const addr1 = hex.encode(d1.subarray(4,24));
-  const stacksAddress = c32address(addr0, addr1);
-
-  const magicExpected = (network === 'testnet') ? MAGIC_BYTES_TESTNET : MAGIC_BYTES_MAINNET;
-  
-  if (magic !== magicExpected) 
-    throw new Error('Wrong magic : expected: ' +  magicExpected + '  received: ' + magic)
-
-  if (opcode.toUpperCase() !== PEGIN_OPCODE) 
-    throw new Error('Wrong magic : expected: ' +  PEGIN_OPCODE + '  received: ' + opcode)
-
-  return {
-    magic,
-    opcode,
-    stacksAddress,
-    fromBtcAddress: recoverFromBtcAddress(peginData),
-    sbtcWalletAddress: recoverSbtcWalletAddress(peginData),
-  };
-}
-
-function recoverFromBtcAddress(script:string) {
-  const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-  const encscript = btc.OutScript.decode(hex.decode(script.split(' ')[16]));
-  const fromWallet = btc.Address(net).encode(encscript);
-
-  return fromWallet;
-}
-function recoverSbtcWalletAddress(scriptPubKey:string) {
-  const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-  const encscript = btc.OutScript.decode(hex.decode(scriptPubKey.split(' ')[7]));
-  const sbtcWallet = btc.Address(net).encode(encscript);
-
-  return sbtcWallet;
-}
-
-export function getSbtcWallet(outputs:Array<any>) {
-  let sbtcWallet;
-  if (outputs[0].scriptPubKey.type.toLowerCase() === 'nulldata') {
-    sbtcWallet = outputs[1].scriptPubKey.address;
-  } else {
-    const scriptHex = outputs[0].scriptPubKey.asm.split(' ')[6];
-    const encscript = btc.OutScript.decode(hex.decode(scriptHex));
-    sbtcWallet = btc.Address(getNet()).encode(encscript);  
-  }
-  return sbtcWallet;
-}
-
-export function getPegInAmountSats(outputs:Array<any>) {
-  let amountSats = 0;
-  if (outputs[0].scriptPubKey.type.toLowerCase() === 'nulldata') {
-    amountSats = bitcoinToSats(outputs[1].value);
-  } else {
-    amountSats = bitcoinToSats(outputs[0].value);
-  }
-  return amountSats;
-}
-
-export function getWitnessData(output0:any) {
-  let d1;
-  let opType;
-  let realMagic;
-  let opcode;
-  if (output0.scriptPubKey.type.toLowerCase() === 'nonstandard') {
-    d1 = Buffer.from(output0.scriptPubKey.asm.split(' ')[1], 'hex');
-    opType = 'drop';
-  } else {
-    d1 = Buffer.from(output0.scriptPubKey.asm.split(' ')[1], 'hex');
-    opType = 'return';
-  }
-  const magic = d1.subarray(0,2);
-  const magicExpected = (CONFIG.VITE_NETWORK === 'testnet') ? MAGIC_BYTES_TESTNET : MAGIC_BYTES_MAINNET;
-  if (magic.toString('hex') === magicExpected) {
-    realMagic = magic.toString('hex');
-    opcode = d1.subarray(2,3).toString('hex');
-  } else {
-    opcode = d1.subarray(0,1).toString('hex');
-  }
-  return {
-    d1,
-    opType,
-    magic,
-    opcode
-  }
-}
 
 const priv = secp.utils.randomPrivateKey()
-type KeySet = {
-	priv: Uint8Array,
-	ecdsaPub: Uint8Array,
-	schnorrPub: Uint8Array
-}
 export const keySetForFeeCalculation = {
   priv,
   ecdsaPub: secp.getPublicKey(priv, true),
   schnorrPub: secp.getPublicKey(priv, false)
-}
- 
-export function parseOutputs(output0:any, sbtcWalletAddress:string, amountSats: number) {
-  const parsed = {
-    pegType: 'pegin',
-    compression: 0,
-    sbtcWallet: sbtcWalletAddress,
-  } as parsedDataType;
-  const witnessData = getWitnessData(output0);
-  const d1 = witnessData.d1;
-  const opcode = witnessData.opcode;
-  const index = (witnessData.magic) ? 2 : 0;
-
-  if (opcode.toUpperCase() === '3C') {
-    const addr0 = parseInt(d1.subarray(index + 1, index + 2).toString('hex'), 16);
-    const addr1 = d1.subarray(index + 2, index + 22).toString('hex');
-    parsed.stxAddress = c32address(addr0, addr1);
-    parsed.cname = d1.subarray(index + 22, index + 56).toString('utf8');
-    parsed.amountSats = amountSats;
-    parsed.revealFee = d1.subarray(index + 56, index + 84).readUInt32LE();
-    //TODO MJC: better way to do this ?
-    if (parsed.cname.startsWith('\x00\x00\x00\x00\x00')) parsed.cname = undefined;
-  } else if (opcode.toUpperCase() === '3E') {
-    parsed.pegType = 'pegout';
-    parsed.dustAmount = bitcoinToSats(output0.value);
-    parsed.amountSats = d1.subarray(index + 1, index + 10).readUInt32LE();
-    parsed.signature = d1.subarray(index + 10, index + 75).toString('hex');
-    parsed.compression = (output0.scriptPubKey.type === 'nulldata') ? 0 : 1;
-    //const dataToSign = getDataToSign(parsed.amountSats, parsed.sbtcWallet);
-    //const msgHash = hashMessage(dataToSign.toString('hex'));
-    //const stxAddress = getStacksAddressFromSignature(msgHash, parsed.signature, parsed.compression);
-    //parsed.stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? stxAddress.tp2pkh : stxAddress.mp2pkh;
-  } else { 
-    throw new Error('Wrong opcode : expected: 3A or 3C :  receved: ' + opcode)
-  }
-  return parsed;
-}
-type parsedDataType = {
-  pegType: string;
-  opType: string;
-  stxAddress?: string;
-  cname?: string|undefined;
-  sbtcWallet: string;
-  signature: string;
-  compression: number,
-  amountSats: number;
-  dustAmount: number;
-  burnBlockHeight: number;
-  revealFee: number;
-};
-
-function getDataToSign(amount:number, sbtcWalletAddress:string):Buffer {
-	//console.log('getDataToSign:amount ', amount);
-	//console.log('getDataToSign:sbtcWalletAddress ', sbtcWalletAddress);
-	const amtBuf = Buffer.alloc(9);
-	amtBuf.writeUInt32LE(amount, 0);
-	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const script = btc.OutScript.encode(btc.Address(net).decode(sbtcWalletAddress))
-	//console.log('decodePegOutOutputs ', util.inspect(Buffer.from(script).toString('hex'), false, null, true /* enable colors */));
-	const scriptBuf = Buffer.from(script);
-	//console.log('getDataToSign:amtBuf ', amtBuf.toString('hex'));
-	//console.log('getDataToSign:scriptBuf ', scriptBuf.toString('hex'));
-	const data = Buffer.concat([amtBuf, scriptBuf]);
-	return data;
 }
 
 export function fromStorable(script:any) {

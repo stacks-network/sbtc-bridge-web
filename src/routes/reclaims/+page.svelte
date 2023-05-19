@@ -3,9 +3,8 @@ import { onMount } from 'svelte';
 import { addresses } from '$lib/stacks_connect'
 import { COMMS_ERROR } from '$lib/utils.js'
 import { tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
-import { fetchPeginsByStacksAddress } from '$lib/bridge_api'
-import type { PeginRequestI } from '$types/pegin_request';
-import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
+import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
 import { goto } from '$app/navigation'
@@ -14,12 +13,22 @@ import { goto } from '$app/navigation'
 let inited = false;
 let peginRequests:Array<PeginRequestI>
 let errorReason:string|undefined;
+let myDepositsFilter:boolean;
 
 const getReclaimUrl = (pegin:any) => {
-	goto('/reclaim/' + pegin._id)
+	goto('/reclaims/reclaim/' + pegin._id)
 }
 
-const getStatus = (status:number) => {
+const fetchDeposits = async (mine:boolean) => {
+	myDepositsFilter = mine;
+	if (myDepositsFilter) {
+		peginRequests = await fetchPeginsByStacksAddress(addresses().stxAddress)
+	} else {
+		peginRequests = await fetchPegins()
+	}
+}
+
+const fetchByStatus = (status:number) => {
 	if (status === 1) {
 		return 'not seen';
 	} if (status === 2) {
@@ -39,8 +48,8 @@ const getTo = (pegin:PeginRequestI):string => {
 
 onMount(async () => {
 	try {
-		peginRequests = await fetchPeginsByStacksAddress(addresses().stxAddress)
-		if (peginRequests!.length > 0) inited = true;
+		await fetchDeposits(true);
+		inited = true;
 	} catch (err) {
 		errorReason = COMMS_ERROR;
 	}
@@ -52,8 +61,23 @@ onMount(async () => {
 		<div class="card-width">
 			<div class="row">
 				<h1 class="pointer text-white"><span class="strokeme-white">sBTC</span> Transaction History</h1>
-				<p>Pending deposits - transactions awaiting confirmation.
-				</p>
+				<div class="d-flex justify-content-between">
+					<div>Filter deposits:</div>
+					<div>
+					{#if myDepositsFilter}
+						<span><a href="/" on:click|preventDefault={() => fetchDeposits(false)}>all deposits</a></span>
+					{:else}
+						<span><a href="/" on:click|preventDefault={() => fetchDeposits(true)}>my deposits</a></span>
+					{/if}
+						<ul class="dropdown-menu dropdown-menu-start" aria-labelledby="navbarDropdown">
+							<li><a class="dropdown-item" href="/" on:click|preventDefault={() => fetchByStatus(0)}>Any</a></li>
+							<li><a class="dropdown-item" href="/" on:click|preventDefault={() => fetchByStatus(1)}>Pending</a></li>
+							<li><a class="dropdown-item" href="/" on:click|preventDefault={() => fetchByStatus(2)}>Paid</a></li>
+							<li><a class="dropdown-item" href="/" on:click|preventDefault={() => fetchByStatus(3)}>Revealed</a></li>
+							<li><a class="dropdown-item" href="/" on:click|preventDefault={() => fetchByStatus(4)}>Reclaimed</a></li>
+						</ul>
+					</div>
+				</div>
 			</div>
 			{#if !$sbtcConfig.sbtcContractData.sbtcWalletAddress}
 			<div class="my-3 d-flex justify-content-between text-white">

@@ -9,15 +9,17 @@ import SbtcWalletDisplay from '$lib/components/common/SbtcWalletDisplay.svelte';
 import { CONFIG } from '$lib/config';
 import { addresses } from '$lib/stacks_connect'
 
-let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
+//let poTx:PegOutTransactionI = ($sbtcConfig.pegOutTransaction && $sbtcConfig.pegOutTransaction.ready) ? PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction) : new PegOutTransaction();
 
 $: view = 'build_tx_view';
-
+let poTx:PegOutTransactionI;
 let webWallet = true;
-const openSigView = () => {
-	webWallet = poTx.fromBtcAddress === addresses().cardinal,
 
-	poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
+const openSigView = (e:any) => {
+	poTx = e.detail.poTx
+	webWallet = poTx.fromBtcAddress === addresses().cardinal;
+
+	//poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
 	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses().stxAddress);
 	poTx.setSignature($sbtcConfig.sigData.signature);
   	view = 'sign_tx_view';
@@ -46,7 +48,7 @@ const updateTransaction = () => {
 				<div class="card border p-4">
 					<div>
 					  {#if view === 'build_tx_view'}
-					  <BuildTransaction {poTx} on:request_signature={openSigView}/>
+					  <BuildTransaction on:request_signature={openSigView}/>
 					  {:else}
 					  	{#if !webWallet}
 					  		<SignTransaction piTx={poTx} on:update_transaction={updateTransaction}/>

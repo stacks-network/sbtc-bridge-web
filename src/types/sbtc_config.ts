@@ -1,15 +1,9 @@
 import type { PegInTransactionI } from "$lib/domain/PegInTransaction";
 import type { PegOutTransactionI } from "$lib/domain/PegOutTransaction";
-import type { PeginRequestI } from '$types/pegin_request';
-import type { SbtcUserSettingI } from '$types/sbtc_user_settings';
-import type { SbtcContractDataI } from '$types/sbtc_contract_data';
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
+import type { SbtcBalance } from 'sbtc-bridge-lib/src/index' 
 
-export type SbtcBalance = {
-	cardinal?: string;
-	ordinal?: string;
-  address:string;
-  balance:number;
-};
 export type SbtcConfig = {
   sbtcWalletAddressInfo?: any;
   btcFeeRates?: any;
@@ -24,3 +18,9 @@ export type SbtcConfig = {
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataI;
 };
+
+export type SbtcUserSettingI = {
+  useOpDrop: boolean;
+  debugMode: boolean;
+  testAddresses: boolean;
+}

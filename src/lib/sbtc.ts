@@ -2,7 +2,7 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import type { SbtcConfig } from '$types/sbtc_config';
-import type { SbtcContractDataI } from '$types/sbtc_contract_data';
+import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
 
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
@@ -14,7 +14,8 @@ export const defaultSbtcConfig:SbtcConfig = {
   pegOutTransaction: undefined,
   userSettings: {
     useOpDrop: true,
-    debugMode: false
+    debugMode: false,
+    testAddresses: false
   },
   peginRequest: {
     _id: undefined,

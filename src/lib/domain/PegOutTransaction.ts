@@ -1,11 +1,11 @@
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import type { PeginRequestI, PegInData } from '$types/pegin_request';
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
-import { approxTxFees, buildDataOut, amountToUint8 } from './tx_helper'
-import { concatByteArrays } from '$lib/structured-data.js'
 import { CONFIG } from '$lib/config';
+import { buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib/src/index' 
+import type { PegInData } from 'sbtc-bridge-lib/src/index' 
 
 export interface PegOutTransactionI {
 	signature: string|undefined;
@@ -150,7 +150,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 * magic bytes not needed in commit tx.
 	 */
 	buildData = (sigOrPrin:string, opDrop:boolean):Uint8Array => {
-		return buildDataOut(this.net, this.pegInData.amount, sigOrPrin, opDrop)
+		return buildWithdrawalPayload(this.net, this.pegInData.amount, sigOrPrin, opDrop)
 	}
 
 	getChange = () => {
@@ -227,9 +227,10 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	getDataToSign = () => {
-		const view2 = amountToUint8(this.pegInData.amount);
-		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		const data = concatByteArrays([view2, script])
+		const data = getDataToSign(CONFIG.VITE_NETWORK, this.pegInData.amount, this.pegInData.sbtcWalletAddress)
+		//const view2 = amountToUint8(this.pegInData.amount, 9);
+		//const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
+		//const data = concatByteArrays([view2, script])
 		return hex.encode(data);
 	}
 
@@ -238,6 +239,8 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		return {
 			fromBtcAddress: this.fromBtcAddress,
 			status: 1,
+			revealPub: '',
+			reclaimPub: '',
 			amount: this.pegInData.amount,
 			requestType: 'unwrap',
 			mode: 'op_return',
@@ -253,7 +256,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 * @returns
 	 */
 	calculateFees = ():void => {
-		this.scureFee = approxTxFees(this.addressInfo.utxos, this.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
+		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
 		this.fees = [
 			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
 			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),

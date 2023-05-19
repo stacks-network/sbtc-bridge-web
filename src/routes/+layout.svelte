@@ -15,7 +15,7 @@ import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
 import { fetchSbtcBalance } from "$lib/stacks_connect";
 import { fetchUtxoSet, fetchCurrentFeeRates } from "$lib/bridge_api";
-import type { SbtcContractDataI } from '$types/sbtc_contract_data';
+import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);
@@ -27,6 +27,10 @@ beforeNavigate((nav) => {
     goto(next + '?net=testnet')
   }
 })
+
+const reachOut = () => {
+  goto('https://tmurl.net/sbtc')
+}
 
 export let data:SbtcContractDataI;
 const unsubscribe = sbtcConfig.subscribe((conf) => {});
@@ -98,6 +102,7 @@ onMount(async () => {
       <p class="text-white">Connect to a Stacks Web Wallet to start Wrapping!</p>
       <p><span class="nav-item"><a href="/" class="pointer px-2" on:click|preventDefault={doLogin} ><span  class="px-1"><img src={stx_eco_wallet_off} alt="Connect Wallet / Login" width="40" height="auto"/></span> connect</a></span></p>
       <p class="mt-5 text-warning">sBTC Alpha Testing!</p>
+      <a href="https://tmurl.net/sbtc" target="_blank" class="btn btn-info rounded mt-5 text-warning" style="border-radius: 20px!important;">Get Involved?</a>
     </div>
   {/if}
 {:else}
