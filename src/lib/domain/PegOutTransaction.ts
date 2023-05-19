@@ -3,9 +3,8 @@ import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
-import { concatByteArrays } from '$lib/structured-data.js'
 import { CONFIG } from '$lib/config';
-import { buildWithdrawalPayload, approxTxFees, amountToUint8 } from 'sbtc-bridge-lib/src/index' 
+import { buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib/src/index' 
 import type { PegInData } from 'sbtc-bridge-lib/src/index' 
 
 export interface PegOutTransactionI {
@@ -228,9 +227,10 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	getDataToSign = () => {
-		const view2 = amountToUint8(this.pegInData.amount, 9);
-		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		const data = concatByteArrays([view2, script])
+		const data = getDataToSign(CONFIG.VITE_NETWORK, this.pegInData.amount, this.pegInData.sbtcWalletAddress)
+		//const view2 = amountToUint8(this.pegInData.amount, 9);
+		//const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
+		//const data = concatByteArrays([view2, script])
 		return hex.encode(data);
 	}
 

@@ -63,7 +63,7 @@ let stacksOrg = 'https://stacks.org'
       <a href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank" rel="noreferrer">Discord</a>
     </div>
     <div class="demo-div mt-3">
-      <a href="https://tmurl.net/sbtc" target="_blank" class="btn btn-info rounded" style="border-radius: 20px!important;">Get Involved?</a>
+      <a href="https://tmurl.net/sbtc" target="_blank" class="btn btn-info rounded mt-5 text-warning" style="border-radius: 20px!important;">Get Involved?</a>
     </div>
   </div>
   <div class="col-md-2 col-sm-12 ">
