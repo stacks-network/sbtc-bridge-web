@@ -33,6 +33,7 @@ let inited = false;
 $: showStxAddress = !errorReason;
 $: showAmount = stxAddressOk && !errorReason;
 $: showButton = piTx && piTx.pegInData.amount > 0 && !errorReason;
+$: webWalletPayment = piTx && piTx.maxCommit() >= piTx.pegInData.amount;
 
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(piTx.fromBtcAddress)
@@ -232,11 +233,13 @@ onMount(async () => {
   {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
+    {#if webWalletPayment}
     <div class="col-6">
       <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(1)}>Stacks Web Wallet</button>
     </div>
+    {/if}
     <div class="col-6">
-      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(2)}>Other Wallet</button>
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(2)}>Show Invoice</button>
     </div>
   </div>
   {/if}

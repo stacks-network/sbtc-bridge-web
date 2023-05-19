@@ -172,7 +172,7 @@ export default class PegInTransaction implements PegInTransactionI {
 
 	maxCommit() {
 		if (!this.ready) return 0;
-		if (!this.addressInfo.utxos || this.addressInfo.utxos.length === 0) return this.pegInData.amount;
+		if (!this.addressInfo.utxos || this.addressInfo.utxos.length === 0) return 0; //this.pegInData.amount;
 		const summ = this.addressInfo?.utxos?.map((item:{value:number}) => item.value).reduce((prev:number, curr:number) => prev + curr, 0);
 		return summ || 0;
 	}
