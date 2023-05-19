@@ -6,6 +6,7 @@ import { hexToBytes, bytesToHex } from "@stacks/common";
 import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { getStacksNetwork } from '$lib/stacks_connect'
+import type { Message } from 'sbtc-bridge-lib/src/index' 
 
 const network = CONFIG.VITE_NETWORK;
 const prefix = Uint8Array.from([0x53, 0x49, 0x50, 0x30, 0x31, 0x38]); // SIP018
@@ -17,11 +18,6 @@ const enum ChainID {
 export type SignatureData = {
 	signature: Uint8Array,
 	public_key: Uint8Array,
-};
-
-export type Message = {
-	script: Uint8Array,
-	signature?: Uint8Array | string
 };
 
 export const domain = {
@@ -109,18 +105,3 @@ export function verifyStructuredDataSignature(message: Message, public_key: Uint
 		publicKey: bytesToHex(public_key)
 	});
 }
-
-/**
-export function getStacksAddressFromSignature(message:string, signature:string) {
-	const msgHash = hashMessage(message)
-	let pubkey:Uint8Array|string = recoverPublicKey(msgHash, signature, 1, true);
-	pubkey = bytesToHex(pubkey);
-	const addresses = {
-		tp2pkh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2PKH),
-		tp2sh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.testnetP2SH),
-		mp2pkh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.mainnetP2PKH),
-		mp2sh: publicKeyToStxAddress(pubkey, StacksNetworkVersion.mainnetP2SH),
-	}
-	return addresses;
-}
- */

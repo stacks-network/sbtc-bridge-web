@@ -1,10 +1,11 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { hex } from '@scure/base';
-import type { PeginRequestI } from '$types/pegin_request';
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import * as btc from '@scure/btc-signer';
-import { recoverAddress, recoverPegInData } from '$lib/domain/tx_helper'
 import { explorerBtcTxUrl,  } from '$lib/utils'
+import { CONFIG } from '$lib/config';
+import { addressFromPubkey, parseDepositPayload } from 'sbtc-bridge-lib/src/index' 
 
 export let peginRequest:PeginRequestI;
 let stacksData:any;
@@ -18,7 +19,7 @@ onMount(() => {
     const reclaimScript = btc.Script.decode(peginRequest.commitTxScript?.leaves[1].script);
     for (let part of reclaimScript) {
       if (typeof part === 'object') {
-        reclaimString += recoverAddress(part) + ' ';
+        reclaimString += addressFromPubkey(CONFIG.VITE_NETWORK, part) + ' ';
       } else {
         reclaimString += part + ' ';
       }
@@ -30,7 +31,7 @@ onMount(() => {
         revealString += '<stacks_data> ';
       } else {
         if (typeof part === 'object') {
-          revealString += recoverAddress(part) + ' ';
+          revealString += addressFromPubkey(CONFIG.VITE_NETWORK, part) + ' ';
         } else {
           revealString += part + ' ';
         }
@@ -38,7 +39,7 @@ onMount(() => {
       count++;
     }
     
-    stacksData = recoverPegInData(revealScript[0].valueOf() as Uint8Array);
+    stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array);
     /**
     const d1U = stacksData;
     d3 = hex.encode(stacksData);

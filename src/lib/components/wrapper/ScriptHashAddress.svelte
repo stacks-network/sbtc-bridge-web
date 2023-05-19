@@ -6,11 +6,12 @@ import type { SbtcConfig } from '$types/sbtc_config';
 import QrCode from "svelte-qrcode"
 import { fmtSatoshiToBitcoin } from '$lib/utils'
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { getTestAddresses } from '$lib/domain/tx_helper'
+import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
+import { CONFIG } from '$lib/config';
 
 export let piTx:PegInTransactionI;
-const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses() : undefined;
-const peginRequest = piTx?.getOpDropPeginRequest(arg1);
+const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses(CONFIG.VITE_NETWORK) : undefined;
+const peginRequest = piTx?.getOpDropPeginRequest();
 let errorReason:string|undefined;
 
 const paymentUri = () => {

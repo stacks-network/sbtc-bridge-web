@@ -7,7 +7,7 @@ import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Person } from "svelte-bootstrap-icons";
 import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
-import type { SbtcBalance, SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig } from '$types/sbtc_config';
 import { loginStacksJs, fetchSbtcBalance } from '$lib/stacks_connect'
 import { CONFIG } from '$lib/config';
 

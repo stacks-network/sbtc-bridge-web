@@ -14,9 +14,10 @@ import { addresses } from '$lib/stacks_connect';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
 import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
-import type { CommitKeysI, PegInData, PeginRequestI } from '$types/pegin_request';
-import { getTestAddresses, sbtcWallets } from '$lib/domain/tx_helper'
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { hex } from '@scure/base';
+import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib/src/index' 
+import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib/src/index' 
 
 let piTx:PegInTransactionI;
 let componentKey3 = 0;
@@ -109,7 +110,7 @@ const commitAddresses = ():CommitKeysI => {
   if (!sbtcWallet) throw new Error('No sBTC Wallet found for address: ' + sbtcWalletAddress)
   let testAddrs;
   if ($sbtcConfig.userSettings.testAddresses) {
-    testAddrs = getTestAddresses();
+    testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);
     fromBtcAddress = testAddrs.reclaim as string;
     sbtcWalletAddress = testAddrs.reveal as string;
   }

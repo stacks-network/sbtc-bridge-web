@@ -113,6 +113,9 @@ describe('suite', () => {
   it.concurrent('PegInTransaction.calculateFees() resets the current rate', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     myPeg.setFeeRate(0);
+    console.log('change=' + myPeg.fromBtcAddress)
+    console.log('dest=' + myPeg.pegInData.sbtcWalletAddress)
+    console.log('myPeg=', myPeg)
     myPeg.calculateFees();
     myPeg.setFeeRate(1);
     expect(myPeg.fee).equals(myPeg.fees[1])

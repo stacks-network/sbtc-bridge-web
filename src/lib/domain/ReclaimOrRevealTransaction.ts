@@ -1,11 +1,12 @@
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI, UtxoI } from '../../types/pegin_request'
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { hex } from '@scure/base';
-import { approxTxFees } from './tx_helper'
-import { toStorable } from '$lib/utils'
+import { approxTxFees } from 'sbtc-bridge-lib/src/index' 
 import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
 import * as P from 'micro-packed';
-import { getTestAddresses } from '$lib/domain/tx_helper'
+import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
+import type { UTXO } from 'sbtc-bridge-lib/src/index' 
+import { CONFIG } from '$lib/config';
 
 export default class ReclaimOrRevealTransaction {
 	tx:any;
@@ -42,7 +43,7 @@ export default class ReclaimOrRevealTransaction {
 	};
 
 	calculateFees = ():void => {
-		this.scureFee = approxTxFees(this.addressInfo.utxos, this.commitTx.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
+		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.commitTx.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
 		this.fees = [
 			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
 			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
@@ -181,7 +182,7 @@ export default class ReclaimOrRevealTransaction {
 		this.tx.addOutputAddress(outAddr, BigInt(amount), this.net);
 
 		try {
-			const testAddrs = getTestAddresses();	
+			const testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);	
 			if (testAddrs.reclaimPrv && reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
 				this.tx.sign(hex.decode(testAddrs.reclaimPrv));
 				this.tx.finalize();
@@ -198,7 +199,7 @@ export default class ReclaimOrRevealTransaction {
 	}
 
 	private addInputForFee = () => {
-		const feeUtxo = this.addressInfo.utxos.find((utxo:UtxoI) => utxo.value > this.fee)
+		const feeUtxo = this.addressInfo.utxos.find((utxo:UTXO) => utxo.value > this.fee)
 		const script = btc.RawTx.decode(hex.decode(feeUtxo.tx.hex))
 		this.tx.addInput({
 			txid: hex.decode(feeUtxo.txid),

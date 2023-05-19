@@ -10,6 +10,7 @@ import { sha256 } from '@noble/hashes/sha256';
 import util from 'util'
 import { concatByteArrays } from '$lib/structured-data.js'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE, PEGOUT_OPCODE } from '../src/lib/utils'
+import { uint8ToAmount, amountToUint8 } from 'sbtc-bridge-lib/src/index' 
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -224,7 +225,7 @@ describe('suite', () => {
     myPeg.pegInData.amount = 2500;
     myPeg.pegInData.sbtcWalletAddress = 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8';
     const data1 = myPeg.getDataToSign();
-    const amtBuf = amountToUint8(2500);
+    const amtBuf = amountToUint8(2500, 9);
 
     //const script = btc.OutScript.encode(btc.Address(btc.TEST_NETWORK).decode('tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8'))
     //const amt2 = hex.decode(data1).slice(0,9);
@@ -253,7 +254,7 @@ describe('suite', () => {
     //view.setUint32(0, 2500); // Max unsigned 32-bit integer
 		//amtBuf.writeUInt32LE(2500, 0);
     //const amt = new Uint8Array(view.buffer)
-    const amt = amountToUint8(2500)
+    const amt = amountToUint8(2500, 9)
 		const data = concatByteArrays([b1, amt])
     expect(data.length).equals(b1.length + amt.length)
 
@@ -312,16 +313,3 @@ describe('suite', () => {
 
 
 })
-
-const amountToUint8 = (amt:number):Uint8Array => {
-  const buffer = new ArrayBuffer(9);
-  const view1 = new DataView(buffer);
-  view1.setUint32(0, amt, false); // Put 42 in slot 12
-  const view2 = new Uint8Array(view1.buffer);
-  return view2;
-}
-
-const uint8ToAmount = (amt:Uint8Array):number => {
-
-  return new DataView(amt.buffer).getUint32(0, false) // For little endian
-}
