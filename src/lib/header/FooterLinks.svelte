@@ -31,6 +31,7 @@ let stacksOrg = 'https://stacks.org'
       <a href="https://github.com/Clarity-Innovation-Lab/ecosystem-dao" target="_blank" rel="noreferrer">Ecosystem DAO</a>
     </div>
   </div>
+  <!--
   <div class="col-md-2 col-sm-6 hideme">
     <p>Videos</p>
     <div class="demo-div">
@@ -43,18 +44,7 @@ let stacksOrg = 'https://stacks.org'
       <a target="_blank" href="https://www.youtube.com/watch?v=NG081fD-PoI" rel="noreferrer">PoX</a>
     </div>
   </div>
-  <div class="col-md-2 col-sm-6 hideme">
-    <p>Contact</p>
-    <div class="demo-div">
-      <a href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank" rel="noreferrer">Discord</a>
-    </div>
-    <div class="demo-div">
-      <a href="mailto:mike@claritylab.dev" target="_blank" rel="noreferrer">Enquiries</a>
-    </div>
-    <div class="demo-div">
-      <a href="https://mobile.twitter.com/radicleart" target="_blank" rel="noreferrer">Twitter</a>
-    </div>
-  </div>
+  -->
   <div class="col-md-2 col-sm-6 hideme">
     <p>Partners</p>
     <div class="demo-div">
@@ -65,6 +55,15 @@ let stacksOrg = 'https://stacks.org'
     </div>
     <div class="demo-div">
       <a class="" href="https://www.trustmachines.co/" target="_blank" rel="noreferrer">Trust Machines</a>
+    </div>
+  </div>
+  <div class="col-md-2 col-sm-6 hideme">
+    <p>Contact</p>
+    <div class="demo-div">
+      <a href="https://discord.com/channels/621759717756370964/971037457661444156" target="_blank" rel="noreferrer">Discord</a>
+    </div>
+    <div class="demo-div mt-3">
+      <a href="https://tmurl.net/sbtc" target="_blank" class="btn btn-info rounded mt-5 text-warning" style="border-radius: 20px!important;">Get Involved?</a>
     </div>
   </div>
   <div class="col-md-2 col-sm-12 ">

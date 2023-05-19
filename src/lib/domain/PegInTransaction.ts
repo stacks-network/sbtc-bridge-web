@@ -1,11 +1,13 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import type { CommitKeysI, PeginRequestI, PegInData } from '$types/pegin_request';
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { toStorable } from "$lib/utils";
-import { approxTxFees, buildDataIn } from './tx_helper'
+import { buildDepositPayload, approxTxFees } from 'sbtc-bridge-lib/src/index' 
+import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib/src/index' 
+
 export interface PegInTransactionI {
 	unconfirmedUtxos:boolean;
 	net:any;
@@ -150,7 +152,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * magic bytes not needed in commit tx.
 	 */
 	buildData = (sigOrPrin:string, opDrop:boolean):Uint8Array => {
-		return buildDataIn(this.net, this.pegInData.revealFee || this.fee, sigOrPrin, opDrop);
+		return buildDepositPayload(this.net, this.pegInData.revealFee || this.fee, sigOrPrin, opDrop, undefined);
 	}
 
 	getChange = () => {
@@ -313,7 +315,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * @returns
 	 */
 	calculateFees = ():void => {
-		this.scureFee = approxTxFees(this.addressInfo.utxos, this.fromBtcAddress, this.pegInData.sbtcWalletAddress);
+		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, this.pegInData.sbtcWalletAddress);
 		this.fees = [
 			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
 			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),

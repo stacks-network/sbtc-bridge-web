@@ -11,7 +11,9 @@ import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { explorerAddressUrl } from "$lib/utils";
 import { addresses, signMessage } from '$lib/stacks_connect'
-import type { PegInData } from '$types/pegin_request';
+import type { PegInData } from 'sbtc-bridge-lib/src/index' 
+import { getStacksAddressFromSignature, getStacksSimpleHashOfDataToSign } from 'sbtc-bridge-lib/src/index' 
+import { hex } from '@scure/base';
 
 let poTx:PegOutTransactionI;
 const dispatch = createEventDispatcher();
@@ -65,6 +67,11 @@ const requestSignatureCB = async (sigData:any, message:Uint8Array) => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.sigData = sigData;
   sbtcConfig.update(() => conf);
+
+
+  const hashedM = getStacksSimpleHashOfDataToSign(CONFIG.VITE_NETWORK, poTx.pegInData.amount, poTx.pegInData.sbtcWalletAddress)
+  const addr = getStacksAddressFromSignature(hex.decode(hashedM), sigData.signature, 0)
+  console.log('requestSignatureCB: ', addr)
   dispatch('request_signature', { poTx });
 }
 

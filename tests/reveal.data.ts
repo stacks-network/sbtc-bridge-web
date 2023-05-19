@@ -1,4 +1,4 @@
-import type { PeginRequestI } from '../src/types/pegin_request'
+import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
 
 export const utxos_pqe8 = {
   "address": "tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8",

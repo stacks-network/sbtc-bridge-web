@@ -1,7 +1,7 @@
 import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
 import util from 'util'
 import { domain, domainCV } from '../src/lib/structured-data'
-import type { Message } from '../src/lib/structured-data'
+import type { Message } from 'sbtc-bridge-lib/src/index' 
 
 describe('suite', () => {
   beforeAll(async () => {
