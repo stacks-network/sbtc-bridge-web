@@ -172,6 +172,7 @@ export default class PegInTransaction implements PegInTransactionI {
 
 	maxCommit() {
 		if (!this.ready) return 0;
+		if (!this.addressInfo.utxos || this.addressInfo.utxos.length === 0) return this.pegInData.amount;
 		const summ = this.addressInfo?.utxos?.map((item:{value:number}) => item.value).reduce((prev:number, curr:number) => prev + curr, 0);
 		return summ || 0;
 	}
@@ -315,15 +316,24 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * @returns
 	 */
 	calculateFees = ():void => {
-		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, this.pegInData.sbtcWalletAddress);
+		try {
+			this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, this.pegInData.sbtcWalletAddress);
+		} catch(err) {
+			// no utxos..
+			this.scureFee = 4000;
+		}
 		this.fees = [
 			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
 			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
 			this.scureFee * 1.2, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
 		]
 		this.fee = this.fees[1];
-		if (this.pegInData.amount === 0) {
-			this.pegInData.amount = this.maxCommit() - this.fee;
+		if (this.maxCommit() === 0) {
+			this.pegInData.amount = 2 * this.fee;
+		} else {
+			if (this.pegInData.amount === 0) {
+				this.pegInData.amount = this.maxCommit() - this.fee;
+			}
 		}
 	}
 		

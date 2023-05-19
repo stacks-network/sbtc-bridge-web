@@ -139,7 +139,13 @@ const utxoUpdated = async (event:any) => {
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      if (!$sbtcConfig.userSettings.useOpDrop) errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      console.log(err)
+      if ($sbtcConfig.userSettings.useOpDrop) {
+        piTx.setAmount(0)
+        updateConfig();
+      } else {
+        errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      }
       //if (err.message !== 'No inputs signed') errorReason = err.message;
       //else errorReason = 'Please fix above errors and try again.'
     }
