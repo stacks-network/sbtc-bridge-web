@@ -10,13 +10,13 @@ let pegAmount:number = amtData.pegAmount;
 const changePegIn = (maxValue:boolean) => {
   errorReason = undefined;
   try {
-    if (amtData.maxCommit > 0 && pegAmount > amtData.maxCommit) {
-      errorReason = 'Can\'t wrap more btc than available.';
-      return;
-    }
-    if (maxValue) {
-      pegAmount = amtData.maxCommit - amtData.fee;
-    }
+    //if (amtData.maxCommit > 0 && pegAmount > amtData.maxCommit) {
+      //errorReason = 'Can\'t wrap more btc than available.';
+      //return;
+    //}
+    //if (maxValue) {
+    //  pegAmount = amtData.maxCommit - amtData.fee;
+    //}
     const rate = amtData.fees.find((o) => o === amtData.fee);
     dispatch('amount_updated', { opCode:'user', error: false, newAmount: pegAmount, newFeeRate: rate });
   } catch(err:any) {

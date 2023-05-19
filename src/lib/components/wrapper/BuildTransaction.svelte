@@ -33,6 +33,7 @@ let inited = false;
 $: showStxAddress = !errorReason;
 $: showAmount = stxAddressOk && !errorReason;
 $: showButton = piTx && piTx.pegInData.amount > 0 && !errorReason;
+$: webWalletPayment = piTx && piTx.maxCommit() >= piTx.pegInData.amount;
 
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(piTx.fromBtcAddress)
@@ -139,7 +140,13 @@ const utxoUpdated = async (event:any) => {
       if (p0.amount > 0 && p0.amount < piTx.maxCommit()) piTx.setAmount(p0.amount);
       updateConfig();
     } catch (err:any) {
-      if (!$sbtcConfig.userSettings.useOpDrop) errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      console.log(err)
+      if ($sbtcConfig.userSettings.useOpDrop) {
+        piTx.setAmount(0)
+        updateConfig();
+      } else {
+        errorReason = 'Your address either has no balance or there are unconfirmed transactions. You can paste another address or check this address here <a href=' + getExplorerUrl() + ' target="_blank">btc explorer</a>'
+      }
       //if (err.message !== 'No inputs signed') errorReason = err.message;
       //else errorReason = 'Please fix above errors and try again.'
     }
@@ -226,11 +233,13 @@ onMount(async () => {
   {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if showButton}
   <div class="row">
+    {#if webWalletPayment}
     <div class="col-6">
       <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(1)}>Stacks Web Wallet</button>
     </div>
+    {/if}
     <div class="col-6">
-      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(2)}>Other Wallet</button>
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(2)}>Show Invoice</button>
     </div>
   </div>
   {/if}
