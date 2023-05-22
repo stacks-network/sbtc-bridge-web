@@ -1,11 +1,11 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { hex } from '@scure/base';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import * as btc from '@scure/btc-signer';
 import { explorerBtcTxUrl,  } from '$lib/utils'
 import { CONFIG } from '$lib/config';
-import { addressFromPubkey, parseDepositPayload } from 'sbtc-bridge-lib/src/index' 
+import { addressFromPubkey, parseDepositPayload } from 'sbtc-bridge-lib' 
 
 export let peginRequest:PeginRequestI;
 let stacksData:any;

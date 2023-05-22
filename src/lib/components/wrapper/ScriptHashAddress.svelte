@@ -6,7 +6,7 @@ import type { SbtcConfig } from '$types/sbtc_config';
 import QrCode from "svelte-qrcode"
 import { fmtSatoshiToBitcoin } from '$lib/utils'
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
+import { getTestAddresses } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export let piTx:PegInTransactionI;

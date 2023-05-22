@@ -15,7 +15,7 @@ import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
 import { fetchSbtcBalance } from "$lib/stacks_connect";
 import { fetchUtxoSet, fetchCurrentFeeRates } from "$lib/bridge_api";
-import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
+import type { SbtcContractDataI } from 'sbtc-bridge-lib';
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);

@@ -8,7 +8,7 @@ import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
 import { doPeginScan } from '$lib/bridge_api';
 import { openPsbtRequestPopup } from '@stacks/connect'
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import TrCommit from '$lib/components/reclaim/TrCommit.svelte';
 import { toStorable } from '$lib/utils'
 

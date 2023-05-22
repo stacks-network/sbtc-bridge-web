@@ -1,11 +1,11 @@
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { hex } from '@scure/base';
-import { approxTxFees } from 'sbtc-bridge-lib/src/index' 
+import { approxTxFees } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
 import * as P from 'micro-packed';
-import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
-import type { UTXO } from 'sbtc-bridge-lib/src/index' 
+import { getTestAddresses } from 'sbtc-bridge-lib' 
+import type { UTXO } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export default class ReclaimOrRevealTransaction {

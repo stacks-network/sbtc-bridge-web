@@ -14,10 +14,10 @@ import { addresses } from '$lib/stacks_connect';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
 import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { hex } from '@scure/base';
-import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib/src/index' 
-import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib/src/index' 
+import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib' 
+import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
 
 let piTx:PegInTransactionI;
 let componentKey3 = 0;

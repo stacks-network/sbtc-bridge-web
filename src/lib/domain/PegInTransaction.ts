@@ -1,12 +1,12 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { toStorable } from "$lib/utils";
-import { buildDepositPayload, approxTxFees } from 'sbtc-bridge-lib/src/index' 
-import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib/src/index' 
+import { buildDepositPayload, approxTxFees } from 'sbtc-bridge-lib' 
+import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
 
 export interface PegInTransactionI {
 	unconfirmedUtxos:boolean;

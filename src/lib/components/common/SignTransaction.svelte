@@ -5,7 +5,7 @@ import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 import PegInfo from '$lib/components/common/PegInfo.svelte';
 import WalletHelp from '$lib/components/wallets/WalletHelp.svelte';
 import { hex, base64 } from '@scure/base';
-import type { SigData } from 'sbtc-bridge-lib/src/index' 
+import type { SigData } from 'sbtc-bridge-lib' 
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { sbtcConfig } from '$stores/stores';
