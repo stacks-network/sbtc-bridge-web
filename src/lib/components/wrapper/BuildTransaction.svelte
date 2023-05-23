@@ -104,7 +104,7 @@ const principalUpdated = (event:any) => {
 
 const commitAddresses = ():CommitKeysI => {
 
-  const stacksAddress = (piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
+  const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
   let fromBtcAddress = $sbtcConfig.peginRequest.fromBtcAddress || addresses().ordinal;
   let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
   const sbtcWallet = sbtcWallets.find((o) => o.sbtcAddress === sbtcWalletAddress);
