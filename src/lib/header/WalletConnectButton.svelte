@@ -36,11 +36,11 @@ const toggleNetwork = async (net:string) => {
 	sbtcConfig.update((conf:SbtcConfig) => {
 		conf.stxAddress = addresses().stxAddress;
 		if (conf.pegInTransaction) {
-			conf.pegInTransaction.fromBtcAddress = addresses().cardinal;
+			conf.pegInTransaction.fromBtcAddress = addresses().ordinal;
 			if (conf.pegInTransaction.pegInData) conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
 		}
 		if (conf.pegOutTransaction) {
-			conf.pegOutTransaction.fromBtcAddress = addresses().cardinal;
+			conf.pegOutTransaction.fromBtcAddress = addresses().ordinal;
 		}
 		return conf;
 	});

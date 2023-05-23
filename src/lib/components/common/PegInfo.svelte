@@ -10,7 +10,7 @@ export let stacksAddress:string|undefined;
 export let amount:number;
 export let sigData:any;
 export let currentTx:string;
-const webWallet = fromBtcAddress === addresses().cardinal;
+const webWallet = fromBtcAddress === addresses().ordinal;
 let showTx = false;
 let showHex = false;
 

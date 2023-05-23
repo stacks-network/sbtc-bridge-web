@@ -99,7 +99,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		const me = new PegOutTransaction();
 		me.net = o.net;
 		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
-		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
+		me.fromBtcAddress = o.fromBtcAddress || addresses().ordinal;
 		me.pegInData = o.pegInData;
 		me.addressInfo = o.addressInfo;
 		me.feeInfo = o.feeInfo;

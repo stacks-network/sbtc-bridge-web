@@ -24,12 +24,12 @@ let showUtxos:boolean;
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 
 const useWebWallet = async () => {
-  bitcoinAddress = addresses().cardinal;
+  bitcoinAddress = addresses().ordinal;
   configureUTXOs(true);
 }
 
 const isWebWallet = async () => {
-  return (utxoData.fromBtcAddress === addresses().cardinal);
+  return (utxoData.fromBtcAddress === addresses().ordinal);
 }
 
 const configureUTXOs = async (force:boolean) => {

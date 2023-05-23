@@ -124,7 +124,7 @@ onMount(async () => {
   if ($sbtcConfig.pegOutTransaction) {
     poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction);
   } else {
-    poTx = await PegOutTransaction.create(network, addresses().cardinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
+    poTx = await PegOutTransaction.create(network, addresses().ordinal, $sbtcConfig.sbtcContractData.sbtcWalletAddress);
   }
   if (!poTx.pegInData) poTx.pegInData = {} as PegInData;
   if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress;
@@ -142,7 +142,7 @@ onMount(async () => {
 
   utxoData.utxos = poTx.addressInfo.utxos;
   utxoData.maxCommit = (poTx.ready) ? poTx.maxCommit() : 0;
-  utxoData.fromBtcAddress = (poTx.ready) ? poTx.fromBtcAddress : addresses().cardinal;
+  utxoData.fromBtcAddress = (poTx.ready) ? poTx.fromBtcAddress : addresses().ordinal;
   utxoData.numbInputs = (poTx.ready) ? poTx.addressInfo.utxos.length : 0;
 
   showStxAddress = poTx.ready && !errorReason;

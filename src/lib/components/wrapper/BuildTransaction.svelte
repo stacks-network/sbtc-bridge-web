@@ -105,7 +105,7 @@ const principalUpdated = (event:any) => {
 const commitAddresses = ():CommitKeysI => {
 
   const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
-  let fromBtcAddress = $sbtcConfig.peginRequest.fromBtcAddress || addresses().ordinal;
+  let fromBtcAddress = addresses().ordinal; //$sbtcConfig.peginRequest.fromBtcAddress || addresses().ordinal;
   let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
   const sbtcWallet = sbtcWallets.find((o) => o.sbtcAddress === sbtcWalletAddress);
   if (!sbtcWallet) throw new Error('No sBTC Wallet found for address: ' + sbtcWalletAddress)
@@ -185,7 +185,7 @@ onMount(async () => {
 
   utxoData.utxos = piTx.addressInfo.utxos;
   utxoData.maxCommit = (piTx.ready) ? piTx.maxCommit() : 0;
-  utxoData.fromBtcAddress = (piTx.ready) ? piTx.fromBtcAddress : addresses().cardinal;
+  utxoData.fromBtcAddress = (piTx.ready) ? piTx.fromBtcAddress : addresses().ordinal;
   utxoData.numbInputs = (piTx.ready) ? piTx.addressInfo.utxos.length : 0;
 
   showStxAddress = piTx.ready && !errorReason;
