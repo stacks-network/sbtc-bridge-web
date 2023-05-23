@@ -28,6 +28,13 @@ const scan = () => {
 	doPeginScan();
 }
 
+const encode = (val:Uint8Array|undefined) => {
+	if (typeof val === 'object') {
+		return hex.encode(val)
+	}
+	else return val
+}
+
 const b64Reveal = () => {
 	try {
 		return base64.encode(revealBtcTx.toPSBT());
@@ -102,6 +109,8 @@ const signReveal = async () => {
 
 const broadcastTransaction = async (psbtHex:string) => {
 	const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
+	tx.finalizeIdx(0);
+	console.log('tx: ' + hex.encode(tx.toBytes()));
 	const psbt = tx.toPSBT();
 	//const psbtBytes = hex.encode(revealTx.tx.toBytes());
 	console.log('hex: ' + hex.encode(psbt));
@@ -135,8 +144,8 @@ onMount(async () => {
 	}
 	try {
 		if (revealTx.commitTx.btcTxId) {
-			revealBtcTx = revealTx.buildTransaction(false);
-			reclaimBtcTx = reclaimTx.buildTransaction(true);
+			revealBtcTx = revealTx.buildTransaction(false, $sbtcConfig.userSettings.testAddresses);
+			reclaimBtcTx = reclaimTx.buildTransaction(true, $sbtcConfig.userSettings.testAddresses);
 		}
 	} catch(err) {
 		console.error('Creating transaction failed: ', err)
@@ -166,7 +175,7 @@ onMount(async () => {
 				</div>
 			</div>
 			{/if}
-			{#if peginRequest.status === 2}
+			{#if peginRequest.status === 1}
 			<div class="row my-5">
 				<div class="col">
 					Waiting for commit tx to be broadcast - <a href="/" on:click|preventDefault={() => scan()}>click to scan</a>
@@ -186,25 +195,44 @@ onMount(async () => {
 	{#if peginRequest.status === 2 && revealBtcTx}
 	<div class="row my-4">
 		<div class="col">
-			<h2>Reveal PSBT (Base 64)</h2>
+			<h3>Reveal PSBT (Base 64)</h3>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reveal()}</textarea>
 		</div>
 	</div>
 	<div class="row my-4">
 		<div class="col">
-			<h2>Reveal Tx (Raw Hex)</h2>
+			<h3>Reveal Tx (Raw Hex)</h3>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReveal()}</textarea>
 		</div>
 	</div>
 	<div class="row my-4">
+		<h3>Inputs</h3>
+		{#each Array(revealBtcTx.inputsLength) as _, index (index)}
+		<div class="col-12">
+			<div>{encode(revealBtcTx.getInput(index).txid)}:{revealBtcTx.getInput(index).index}</div>
+		</div>
+		{/each}
+	</div>
+	<div class="row my-4">
+		<h3>Outputs</h3>
+		{#each Array(revealBtcTx.outputsLength) as _, index (index)}
+		<div class="col-10">
+			<div>{encode(revealBtcTx.getOutput(index).script)}</div>
+		</div>
+		<div class="col-2">
+				<div>{revealBtcTx.getOutput(index).amount}</div>
+		</div>
+		{/each}
+	</div>
+	<div class="row my-4">
 		<div class="col">
-			<h2>Reclaim Tx (Base 64)</h2>
+			<h3>Reclaim Tx (Base 64)</h3>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reclaim()}</textarea>
 		</div>
 	</div>
 	<div class="row my-4">
 		<div class="col">
-			<h2>Reclaim Tx (Raw Hex)</h2>
+			<h3>Reclaim Tx (Raw Hex)</h3>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReclaim()}</textarea>
 		</div>
 	</div>

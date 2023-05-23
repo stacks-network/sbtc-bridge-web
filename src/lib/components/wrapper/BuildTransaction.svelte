@@ -18,6 +18,7 @@ import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib' 
 import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
+import * as btc from '@scure/btc-signer';
 
 let piTx:PegInTransactionI;
 let componentKey3 = 0;
@@ -103,9 +104,9 @@ const principalUpdated = (event:any) => {
 }
 
 const commitAddresses = ():CommitKeysI => {
-
-  const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addresses().stxAddress;
-  let fromBtcAddress = addresses().ordinal; //$sbtcConfig.peginRequest.fromBtcAddress || addresses().ordinal;
+  const addrs = addresses()
+  const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addrs.stxAddress;
+  let fromBtcAddress = addrs.ordinal; //$sbtcConfig.peginRequest.fromBtcAddress || addrs.ordinal;
   let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
   const sbtcWallet = sbtcWallets.find((o) => o.sbtcAddress === sbtcWalletAddress);
   if (!sbtcWallet) throw new Error('No sBTC Wallet found for address: ' + sbtcWalletAddress)
@@ -115,14 +116,20 @@ const commitAddresses = ():CommitKeysI => {
     fromBtcAddress = testAddrs.reclaim as string;
     sbtcWalletAddress = testAddrs.reveal as string;
   }
-  const xyWebWalletPubKey = hex.decode(addresses().btcPubkeySegwit1);
-  const xOnlyPubKey = xyWebWalletPubKey.subarray(1);
+  const xyWebWalletPubKey = hex.decode(addrs.btcPubkeySegwit1);
+  let xOnlyPubKey = hex.encode(xyWebWalletPubKey.subarray(1));
+  //const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+  //const outTr = { type: 'tr', pubkey: hex.decode(addrs.btcPubkeySegwit1) }
+  //const addrO = btc.Address(net).encode(outTr);
+  //const addrScript = btc.Address(net).decode(addrs.ordinal);
+  //if (addrScript.type !== 'tr') throw new Error('Expecting taproot address')
+  //const xOnlyPubKey = hex.encode(addrScript.pubkey)
   return {
     fromBtcAddress,
     reveal: sbtcWalletAddress,
     revealPub: (testAddrs) ? testAddrs.revealPub : sbtcWallet.pubKey,
     reclaim: (testAddrs) ? testAddrs.reclaim as string : fromBtcAddress,
-    reclaimPub: (testAddrs) ? testAddrs.reclaimPub : hex.encode(xOnlyPubKey),
+    reclaimPub: (testAddrs) ? testAddrs.reclaimPub : xOnlyPubKey,
     stacksAddress
   }
 }

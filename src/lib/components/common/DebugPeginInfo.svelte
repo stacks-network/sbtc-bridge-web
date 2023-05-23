@@ -7,8 +7,7 @@ import { getTestAddresses } from 'sbtc-bridge-lib'
 import { CONFIG } from '$lib/config';
 
 export let tx:any;
-const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses(CONFIG.VITE_NETWORK) : undefined;
-let peginRequest:PeginRequestI = tx.getOpDropPeginRequest(arg1);
+let peginRequest:PeginRequestI = tx.getOpDropPeginRequest();
 
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 let showDetails = false;

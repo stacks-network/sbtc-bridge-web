@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
 import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import * as btc from '@scure/btc-signer';
-import { explorerBtcTxUrl } from '$lib/utils'
+import { explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { CONFIG } from '$lib/config';
 import { addressFromPubkey, parseDepositPayload } from 'sbtc-bridge-lib' 
 
@@ -38,9 +38,8 @@ onMount(() => {
       }
       count++;
     }
-    if (peginRequest.vout && peginRequest.vout.value) {
-      stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array, peginRequest.vout.value);
-    }
+    const amt = (peginRequest.vout && peginRequest.vout.value) ? peginRequest.vout.value : peginRequest.amount;
+    stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array, amt);
     /**
     const d1U = stacksData;
     d3 = hex.encode(stacksData);
@@ -68,15 +67,20 @@ onMount(() => {
   <div class="col-md-10 col-sm-12">{element.value}</div>
   {/each}
   -->
+  {#if peginRequest.btcTxId}
   <div class="col-md-2 col-sm-12 text-info">Sender Address</div><div class="col-md-10 col-sm-12">{peginRequest.senderAddress}</div>
-  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.btcTxId)} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a></div>
+  <div class="col-md-2 col-sm-12 text-info">Tx Id</div><div class="col-md-10 col-sm-12">{peginRequest.btcTxId}</div>
+  <div class="col-md-2 col-sm-12 text-info">Amount</div><div class="col-md-10 col-sm-12">{peginRequest.vout?.value}</div>
+  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12">
+    <a href={explorerBtcTxUrl(peginRequest.btcTxId)} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a>
+  </div>
+  {:else}
+  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12">
+    <a href={explorerBtcAddressUrl(peginRequest.commitTxScript?.address || '')} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a>
+  </div>
+  {/if}
   <div class="col-md-2 col-sm-12 text-info">Reclaim Address</div><div class="col-md-10 col-sm-12">{peginRequest.fromBtcAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{peginRequest.sbtcWalletAddress}</div>
-  <div class="col-md-2 col-sm-12 text-info">Tx Id</div>
-  <div class="col-md-10 col-sm-12">
-    
-  </div>
-  <div class="col-md-2 col-sm-12 text-info">Amount</div><div class="col-md-10 col-sm-12">{peginRequest.vout?.value}</div>
   <div class="col-md-2 col-sm-12 text-info">Reclaim Script</div><div class="col-md-10 col-sm-12">{reclaimString}</div>
   <div class="col-md-2 col-sm-12 text-info">Reveal Script</div><div class="col-md-10 col-sm-12">{revealString}</div>
   <div class="col-12 text-info"></div>

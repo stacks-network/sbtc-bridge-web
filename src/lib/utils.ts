@@ -34,14 +34,15 @@ export function isSupported(address:string) {
   }
   const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
   const obj = btc.Address(net).decode(address);
-
+  if (obj.type !== 'tr') throw new Error(msg)
+  return true;
+  /**
   if (obj.type === 'pk') {
     throw new Error('Legacy addresses are not supported in the current version. ' + msg);
   }
   if (obj.type === 'ms' || obj.type === 'tr_ms') {
     throw new Error('Multisig addresses are not supported in the current version. ' + msg);
   }
-  let valid = false;
   if (obj.type === 'pkh' || obj.type === 'sh') {
     // classis non segwit
     valid = true;
@@ -54,6 +55,7 @@ export function isSupported(address:string) {
     throw new Error('Addresses is neither a classic (p2pkh/p2sh) or segwit (p2wpkh/p2wsh) or taproot address. ' + msg);
   }
   return valid;
+   */
 }
 
 export function getNet() {

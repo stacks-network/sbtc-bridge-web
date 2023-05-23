@@ -74,7 +74,7 @@ const broadcastTransaction = async (psbtHex:string) => {
     resp = await sendRawTxDirectMempool(txHex);
     console.log('sendRawTxDirectMempool: ', resp);
     if (resp && resp.tx) {
-      const peginRequest = piTx.getOpDropPeginRequest(undefined)
+      const peginRequest = piTx.getOpDropPeginRequest()
       try {
         await savePeginCommit(peginRequest)
       } catch (err) {
