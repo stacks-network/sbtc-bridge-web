@@ -57,7 +57,7 @@ export function setConfig(search:string) {
     } else if (import.meta.env.MODE === 'development') {
         CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
         // toggle depending on location / ip address etc
-        // CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1'
+        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1'
     }
     //console.log('CONFIG.VITE_BRIDGE_API: ' + CONFIG.VITE_BRIDGE_API);
 }

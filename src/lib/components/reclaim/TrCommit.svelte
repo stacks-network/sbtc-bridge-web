@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
 import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import * as btc from '@scure/btc-signer';
-import { explorerBtcTxUrl,  } from '$lib/utils'
+import { explorerBtcTxUrl } from '$lib/utils'
 import { CONFIG } from '$lib/config';
 import { addressFromPubkey, parseDepositPayload } from 'sbtc-bridge-lib' 
 
@@ -38,8 +38,9 @@ onMount(() => {
       }
       count++;
     }
-    
-    stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array);
+    if (peginRequest.vout && peginRequest.vout.value) {
+      stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array, peginRequest.vout.value);
+    }
     /**
     const d1U = stacksData;
     d3 = hex.encode(stacksData);
@@ -68,7 +69,7 @@ onMount(() => {
   {/each}
   -->
   <div class="col-md-2 col-sm-12 text-info">Sender Address</div><div class="col-md-10 col-sm-12">{peginRequest.senderAddress}</div>
-  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a></div>
+  <div class="col-md-2 col-sm-12 text-info">Commit Address</div><div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.btcTxId)} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a></div>
   <div class="col-md-2 col-sm-12 text-info">Reclaim Address</div><div class="col-md-10 col-sm-12">{peginRequest.fromBtcAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{peginRequest.sbtcWalletAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Tx Id</div>
@@ -80,11 +81,15 @@ onMount(() => {
   <div class="col-md-2 col-sm-12 text-info">Reveal Script</div><div class="col-md-10 col-sm-12">{revealString}</div>
   <div class="col-12 text-info"></div>
   <div class="col-md-2 col-sm-12 text-info"></div><div class="col-md-10 col-sm-12">&lt;stacks_data&gt;</div>
+  {#if stacksData}
   <div class="col-md-2 col-sm-12 text-info">Op Code</div><div class="col-md-10 col-sm-12">{stacksData.opcode}</div>
   <div class="col-md-2 col-sm-12 text-info">Address</div><div class="col-md-10 col-sm-12">{stacksData.stacksAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Contract Name</div><div class="col-md-10 col-sm-12">{stacksData.cname || 'n/a'}</div>
   <div class="col-md-2 col-sm-12 text-info">Memo</div><div class="col-md-10 col-sm-12">{stacksData.memo || 'n/a'}</div>
   <div class="col-md-2 col-sm-12 text-info">Reveal Fee</div><div class="col-md-10 col-sm-12">{stacksData.revealFee}</div>
+  {:else}
+  <div class="col-md-2 col-sm-12 text-info"></div><div class="col-md-10 col-sm-12">Unavailable (old version)</div>
+  {/if}
   <!--
   <div class="col-md-2 col-sm-12 text-info">Stacks addr</div><div class="col-md-10 col-sm-12">{stacksAddress}</div>
   <div class="col-md-2 col-sm-12 text-info">Stacks contract</div><div class="col-md-10 col-sm-12">{cnameBuf}</div>

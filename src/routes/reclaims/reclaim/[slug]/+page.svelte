@@ -11,6 +11,7 @@ import { openPsbtRequestPopup } from '@stacks/connect'
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import TrCommit from '$lib/components/reclaim/TrCommit.svelte';
 import { toStorable } from '$lib/utils'
+import { explorerBtcTxUrl } from '$lib/utils'
 
 // fetch/hydrate data from local storage
 export let data:any;
@@ -116,7 +117,7 @@ const broadcastTransaction = async (psbtHex:string) => {
 }
 
 onMount(async () => {
-	if (!peginRequest || !peginRequest.commitTxScript) {
+	if (!peginRequest || !peginRequest.commitTxScript || !peginRequest.commitTxScript.tapLeafScript) {
 		goto('/listReclaims');
 		return;
 	}
@@ -133,7 +134,7 @@ onMount(async () => {
 		peginRequest.senderAddress = revealTx.transaction.vout[1].scriptPubKey.address
 	}
 	try {
-		if (revealTx.commitTx.btcTxid) {
+		if (revealTx.commitTx.btcTxId) {
 			revealBtcTx = revealTx.buildTransaction(false);
 			reclaimBtcTx = reclaimTx.buildTransaction(true);
 		}
@@ -165,7 +166,7 @@ onMount(async () => {
 				</div>
 			</div>
 			{/if}
-			{#if peginRequest.status < 3}
+			{#if peginRequest.status === 2}
 			<div class="row my-5">
 				<div class="col">
 					Waiting for commit tx to be broadcast - <a href="/" on:click|preventDefault={() => scan()}>click to scan</a>
@@ -182,7 +183,7 @@ onMount(async () => {
 		<div class="my-3 d-flex justify-content-between">{@html errorReason}</div>
 	</div>
 	{/if}
-	{#if revealBtcTx}
+	{#if peginRequest.status === 2 && revealBtcTx}
 	<div class="row my-4">
 		<div class="col">
 			<h2>Reveal PSBT (Base 64)</h2>
@@ -206,6 +207,12 @@ onMount(async () => {
 			<h2>Reclaim Tx (Raw Hex)</h2>
 			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReclaim()}</textarea>
 		</div>
+	</div>
+	{/if}
+	{#if peginRequest.reveal}
+	<div class="row my-4">
+		<div class="col-md-2 col-sm-12">Revealed</div>
+		<div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.reveal.btcTxId)} target="_blank" rel="noreferrer">{(peginRequest.reveal.btcTxId)}</a></div>
 	</div>
 	{/if}
 </div>

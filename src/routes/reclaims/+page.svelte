@@ -108,8 +108,8 @@ onMount(async () => {
 							</div>
 							<div class="col-2">{#if pegin.status === 1}{pegin.amount}{:else}{pegin.amount}{/if}</div>
 							<div class="col-4">
-								{#if !pegin.btcTxid}pending{:else}
-								<a href={explorerBtcTxUrl(pegin.btcTxid)} target="_blank" rel="noreferrer">{truncate(pegin.btcTxid, 6)}</a>
+								{#if !pegin.btcTxId}pending{:else}
+								<a href={explorerBtcTxUrl(pegin.btcTxId)} target="_blank" rel="noreferrer">{truncate(pegin.btcTxId, 6)}</a>
 								{/if}
 							</div>
 						</div>
