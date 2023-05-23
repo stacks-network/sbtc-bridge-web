@@ -71,7 +71,7 @@
 		"postcss-cli": "^10.0.0",
 		"process": "^0.11.10",
 		"readable-stream": "^4.3.0",
-		"sbtc-bridge-lib": "^1.0.7",
+		"sbtc-bridge-lib": "^1.0.9",
 		"svelte-bootstrap-icons": "^2.3.1",
 		"svelte-json-tree": "^1.0.0",
 		"svelte-local-storage-store": "^0.4.0",
