@@ -87,7 +87,7 @@ const broadcastTransaction = async (psbtHex:string) => {
 
 onMount(async () => {
 	if (!peginRequest || !peginRequest.commitTxScript || !peginRequest.commitTxScript.tapLeafScript) {
-		goto('/listReclaims');
+		goto('/reclaims');
 		return;
 	}
 	if (typeof peginRequest.commitTxScript.tapLeafScript[0][0].internalKey === 'string') {
