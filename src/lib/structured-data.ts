@@ -6,7 +6,7 @@ import { hexToBytes, bytesToHex } from "@stacks/common";
 import type { SignatureData as MicroStacksSignatureData } from '@stacks/connect';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { getStacksNetwork } from '$lib/stacks_connect'
-import type { Message } from 'sbtc-bridge-lib/src/index' 
+import type { Message } from 'sbtc-bridge-lib' 
 
 const network = CONFIG.VITE_NETWORK;
 const prefix = Uint8Array.from([0x53, 0x49, 0x50, 0x30, 0x31, 0x38]); // SIP018

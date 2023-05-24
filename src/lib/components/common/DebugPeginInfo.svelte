@@ -2,13 +2,12 @@
 import { sbtcConfig } from '$stores/stores';
 import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
-import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import { getTestAddresses } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export let tx:any;
-const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses(CONFIG.VITE_NETWORK) : undefined;
-let peginRequest:PeginRequestI = tx.getOpDropPeginRequest(arg1);
+let peginRequest:PeginRequestI = tx.getOpDropPeginRequest();
 
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 let showDetails = false;

@@ -8,8 +8,8 @@ import { fail } from 'assert';
 import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { concatByteArrays } from '$lib/structured-data.js'
-import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from 'sbtc-bridge-lib/src/index'
-import { uint8ToAmount, amountToUint8, parseWithdrawalPayload } from 'sbtc-bridge-lib/src/index' 
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from 'sbtc-bridge-lib'
+import { uint8ToAmount, amountToUint8, parseWithdrawalPayload } from 'sbtc-bridge-lib' 
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {

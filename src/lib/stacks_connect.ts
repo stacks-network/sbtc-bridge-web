@@ -62,11 +62,11 @@ export async function fetchSbtcBalance () {
 	sbtcConfig.update((conf:SbtcConfig) => {
 		if (conf.pegInTransaction) {
 			conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
-			conf.pegInTransaction.fromBtcAddress = adrds.cardinal;
+			conf.pegInTransaction.fromBtcAddress = adrds.ordinal;
 		}
 		if (conf.pegOutTransaction) {
 			conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
-			conf.pegOutTransaction.fromBtcAddress = adrds.cardinal;
+			conf.pegOutTransaction.fromBtcAddress = adrds.ordinal;
 		}
 
 		conf.loggedIn = true;

@@ -1,8 +1,8 @@
 import type { PegInTransactionI } from "$lib/domain/PegInTransaction";
 import type { PegOutTransactionI } from "$lib/domain/PegOutTransaction";
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
-import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
-import type { SbtcBalance } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { SbtcContractDataI } from 'sbtc-bridge-lib';
+import type { SbtcBalance } from 'sbtc-bridge-lib' 
 
 export type SbtcConfig = {
   sbtcWalletAddressInfo?: any;

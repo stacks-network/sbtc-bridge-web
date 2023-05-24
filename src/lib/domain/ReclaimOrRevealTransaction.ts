@@ -1,11 +1,11 @@
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { hex } from '@scure/base';
-import { approxTxFees } from 'sbtc-bridge-lib/src/index' 
+import { approxTxFees } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
 import * as P from 'micro-packed';
-import { getTestAddresses } from 'sbtc-bridge-lib/src/index' 
-import type { UTXO } from 'sbtc-bridge-lib/src/index' 
+import { getTestAddresses } from 'sbtc-bridge-lib' 
+import type { UTXO } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export default class ReclaimOrRevealTransaction {
@@ -52,7 +52,7 @@ export default class ReclaimOrRevealTransaction {
 		this.fee = this.fees[1];
 	}
 
-	buildTransaction = (reclaim:boolean):btc.Transaction => {
+	buildTransaction = (reclaim:boolean, useTestAddresses:boolean):btc.Transaction => {
 		this.tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
 		const script = this.commitTx.commitTxScript //toStorable(this.commitTx.commitTxScript)
 		if (!this.commitTx || !script) throw new Error('Incorrect data passed')
@@ -172,26 +172,26 @@ export default class ReclaimOrRevealTransaction {
 		let outAddr = this.commitTx.sbtcWalletAddress;
 		if (reclaim) outAddr = this.addressInfo.address;
 
-		let amount;
-		if (this.addressInfo.utxos.length > 0) {
+		let amount = this.commitTx.amount - this.fee;
+		if (this.addressInfo.utxos.length === -1) { // never
 			const feeUtxo = this.addInputForFee();
 			amount = this.commitTx.amount + feeUtxo?.value - this.fee;
-		} else {
-			amount = this.commitTx.amount - this.fee
 		}
 		this.tx.addOutputAddress(outAddr, BigInt(amount), this.net);
 
-		try {
-			const testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);	
-			if (testAddrs.reclaimPrv && reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
-				this.tx.sign(hex.decode(testAddrs.reclaimPrv));
-				this.tx.finalize();
-			} else if (testAddrs.revealPrv && !reclaim && this.commitTx.sbtcWalletAddress && testAddrs.reveal) {
-				this.tx.sign(hex.decode(testAddrs.revealPrv));
-				this.tx.finalize();
+		if (useTestAddresses) {
+			try {
+				const testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);	
+				if (testAddrs.reclaimPrv && reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
+					this.tx.sign(hex.decode(testAddrs.reclaimPrv));
+					this.tx.finalize();
+				} else if (testAddrs.revealPrv && !reclaim && this.commitTx.sbtcWalletAddress && testAddrs.reveal) {
+					this.tx.sign(hex.decode(testAddrs.revealPrv));
+					this.tx.finalize();
+				}
+			} catch(err) {
+				console.log(err)
 			}
-		} catch(err) {
-			console.log(err)
 		}
 		const txBytes = hex.encode(this.tx.toBytes());
 		console.log('rawTransaction: ' + txBytes);

@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
-import type { SigData } from 'sbtc-bridge-lib/src/index' 
+import type { SigData } from 'sbtc-bridge-lib' 
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
@@ -74,7 +74,7 @@ const broadcastTransaction = async (psbtHex:string) => {
     resp = await sendRawTxDirectMempool(txHex);
     console.log('sendRawTxDirectMempool: ', resp);
     if (resp && resp.tx) {
-      const peginRequest = piTx.getOpDropPeginRequest(undefined)
+      const peginRequest = piTx.getOpDropPeginRequest()
       try {
         await savePeginCommit(peginRequest)
       } catch (err) {

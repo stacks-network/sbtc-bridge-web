@@ -2,7 +2,7 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import type { SbtcConfig } from '$types/sbtc_config';
-import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
+import type { SbtcContractDataI } from 'sbtc-bridge-lib';
 
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,

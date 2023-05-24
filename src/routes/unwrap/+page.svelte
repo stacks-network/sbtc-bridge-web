@@ -17,7 +17,7 @@ let webWallet = true;
 
 const openSigView = (e:any) => {
 	poTx = e.detail.poTx
-	webWallet = poTx.fromBtcAddress === addresses().cardinal;
+	webWallet = poTx.fromBtcAddress === addresses().ordinal;
 
 	//poTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction!);
 	if (!poTx.pegInData.stacksAddress) poTx.setStacksAddress(addresses().stxAddress);

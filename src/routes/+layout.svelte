@@ -1,5 +1,5 @@
 <script lang="ts">
-import { setConfig } from '$lib/config';
+import { CONFIG, setConfig } from '$lib/config';
 import "../app.scss";
 import { tick, onMount, onDestroy } from 'svelte';
 import { beforeNavigate, goto } from "$app/navigation";
@@ -15,7 +15,7 @@ import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
 import { fetchSbtcBalance } from "$lib/stacks_connect";
 import { fetchUtxoSet, fetchCurrentFeeRates } from "$lib/bridge_api";
-import type { SbtcContractDataI } from 'sbtc-bridge-lib/src/index';
+import type { SbtcContractDataI } from 'sbtc-bridge-lib';
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);
@@ -55,7 +55,11 @@ const initApplication = async () => {
   let conf = defaultSbtcConfig as SbtcConfig;
   if ($sbtcConfig) {
     conf = $sbtcConfig;
-    if (!$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
+    if (CONFIG.VITE_NETWORK === 'mainnet' && !$sbtcConfig.sbtcContractData.sbtcWalletAddress.startsWith('bc')) {
+      data.sbtcWalletAddress = '';
+    } else {
+      if (!$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
+    }
     if (!$sbtcConfig.btcFeeRates) $sbtcConfig.btcFeeRates = await fetchCurrentFeeRates();
   }
   conf.loggedIn = false;

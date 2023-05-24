@@ -1,5 +1,5 @@
 import { CONFIG } from '$lib/config';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {

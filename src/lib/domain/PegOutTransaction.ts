@@ -1,11 +1,11 @@
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { CONFIG } from '$lib/config';
-import { buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib/src/index' 
-import type { PegInData } from 'sbtc-bridge-lib/src/index' 
+import { buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib' 
+import type { PegInData } from 'sbtc-bridge-lib' 
 
 export interface PegOutTransactionI {
 	signature: string|undefined;
@@ -99,7 +99,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		const me = new PegOutTransaction();
 		me.net = o.net;
 		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
-		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
+		me.fromBtcAddress = o.fromBtcAddress || addresses().ordinal;
 		me.pegInData = o.pegInData;
 		me.addressInfo = o.addressInfo;
 		me.feeInfo = o.feeInfo;

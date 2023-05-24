@@ -22,7 +22,7 @@ let errorReason:string|undefined;
 let showUtxos:boolean;
 
 const hiroWallet = async () => {
-  bitcoinAddress = addresses().cardinal;
+  bitcoinAddress = addresses().ordinal;
   configureUTXOs(true);
 }
 

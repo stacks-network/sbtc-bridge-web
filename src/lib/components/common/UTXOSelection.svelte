@@ -24,22 +24,22 @@ let showUtxos:boolean;
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 
 const useWebWallet = async () => {
-  bitcoinAddress = addresses().cardinal;
+  bitcoinAddress = addresses().ordinal;
   configureUTXOs(true);
 }
 
 const isWebWallet = async () => {
-  return (utxoData.fromBtcAddress === addresses().cardinal);
+  return (bitcoinAddress === addresses().ordinal);
 }
 
 const configureUTXOs = async (force:boolean) => {
   errorReason = undefined;
   if (!bitcoinAddress) return;
   try {
-    isSupported(bitcoinAddress!);
+    isSupported(bitcoinAddress);
   } catch (err:any) {
-    bitcoinAddress = undefined;
-    errorReason = 'Unsupported bitcoin address';
+    //bitcoinAddress = addresses().ordinal;
+    errorReason = 'Unsupported bitcoin address - the reclaim feature currently requires a taproot (segwit v1) bitcoin addresses.';
     return;
   }
   //if (utxoData.fromBtcAddress === bitcoinAddress && $sbtcConfig.utxos) {
@@ -67,13 +67,14 @@ onMount(async () => {
       <span class="pointer text-info" data-bs-toggle="tooltip-ftux" data-bs-placement="top" data-bs-custom-class="custom-tooltip" title="Your bitcoin address. Funds you send from this wallet will be exchanged for sBTC"></span>
     </label>
     <input type="text" id="from-address" class="form-control" autocomplete="off" bind:value={bitcoinAddress} on:input={() => configureUTXOs(false)} />
-    <div class="text-small">{utxoData.info}</div>
+    <div class="d-flex justify-content-between">
+      <div class="text-small">{utxoData.info}</div>
+    </div>
     {#if $sbtcConfig.userSettings.useOpDrop || utxoData.numbInputs > 0}
     <div class="text-small d-flex justify-content-between  text-info">
       <div class="" title={utxoData.numbInputs + ' unspent inputs with total value: ' + utxoData.maxCommit}>BTC Balance {utxoData.maxCommit} Sats.</div>
       {#if showDebugInfo}
       <div>
-        {#if !isWebWallet}<a href="/" class="text-white px-3 border-right" on:click|preventDefault={() => useWebWallet()}>web wallet address</a>{/if}
         <a href="/" class="text-white px-3 border-right" on:click|preventDefault={() => configureUTXOs(true)}>reload utxos</a>
         <a href="/" class="text-white ps-3 " on:click|preventDefault={() => showUtxos = !showUtxos}>show details</a>
       </div>
@@ -82,10 +83,14 @@ onMount(async () => {
     {:else}
       <div><span class="text-warning">Insufficient balance - please use a different bitcoin address</span></div>
     {/if}
-    {#if showDebugInfo}
     {#if bitcoinAddress && errorReason}
-      <div><span class="text-warning">{errorReason}</span></div>
+      <div>
+        <div class="text-warning">{errorReason}
+          <a href="/" class="text-underline text-warning" style="text-transform: uppercase" on:click|preventDefault={() => useWebWallet()}>reset address to your web wallet ordinal (taproot) address</a>
+        </div>
+      </div>
     {/if}
+    {#if showDebugInfo}
     {#if showUtxos}
     <div class="mt-3 mb-4 mx-0 border p-3">
       <h6>UTXOs</h6>

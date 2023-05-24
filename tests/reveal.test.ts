@@ -4,7 +4,7 @@ import * as secp from '@noble/secp256k1';
 import { hex } from '@scure/base';
 import { setConfig } from '$lib/config';
 import { commitTx } from './reveal.data';
-import { MAGIC_BYTES_TESTNET, PEGIN_OPCODE } from 'sbtc-bridge-lib/src/index'
+import { MAGIC_BYTES_TESTNET, PEGIN_OPCODE } from 'sbtc-bridge-lib'
 import { c32address } from 'c32check';
 
 const priv = secp.utils.randomPrivateKey()
@@ -140,7 +140,7 @@ describe('suite', () => {
     });
     revealTx.fee = 5000
 
-    const tx = await revealTx.buildTransaction();
+    const tx = await revealTx.buildTransaction(false, true);
     //expect(tx.inputsLength).equals(2)
     expect(tx.outputsLength).equals(1)
  

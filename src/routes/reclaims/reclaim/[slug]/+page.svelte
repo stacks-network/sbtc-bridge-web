@@ -8,15 +8,17 @@ import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
 import { doPeginScan } from '$lib/bridge_api';
 import { openPsbtRequestPopup } from '@stacks/connect'
-import type { PeginRequestI } from 'sbtc-bridge-lib/src/index' 
+import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import TrCommit from '$lib/components/reclaim/TrCommit.svelte';
 import { toStorable } from '$lib/utils'
+import { explorerBtcTxUrl } from '$lib/utils'
 
 // fetch/hydrate data from local storage
 export let data:any;
 let peginRequest:PeginRequestI = data;
 let revealTx:ReclaimOrRevealTransaction;
 let reclaimTx:ReclaimOrRevealTransaction;
+let signedTx: btc.Transaction;
 
 let inited = false;
 let errorReason:string|undefined;
@@ -27,44 +29,10 @@ const scan = () => {
 	doPeginScan();
 }
 
-const b64Reveal = () => {
-	try {
-		return base64.encode(revealBtcTx.toPSBT());
-	} catch (err:any) {
-		return err.message
-	}
-}
-
-const b64Reclaim = () => {
-	try {
-		return base64.encode(reclaimBtcTx.toPSBT());
-	} catch (err:any) {
-		return err.message
-	}
-}
-
-const rawReveal = () => {
-	try {
-		return hex.encode(revealBtcTx.toBytes());
-	} catch (err:any) {
-		return err.message
-	}
-}
-
-const rawReclaim = () => {
-	try {
-		return hex.encode(reclaimBtcTx.toBytes());
-	} catch (err:any) {
-		return err.message
-	}
-}
-
-const openBackView = () => {
-	goto('/listReclaims');
-}
-
 const signReclaim = async () => {
 	const hexPsbt = hex.encode(reclaimBtcTx.toPSBT());
+	console.log('Reclaim ingoing psbt (hex encoded): ', hexPsbt);
+	console.log('Reclaim ingoing psbt (b64 encoded): ', base64.encode(reclaimBtcTx.toPSBT()));
 	openPsbtRequestPopup({
 		hex: hexPsbt,
 		appDetails: {
@@ -83,6 +51,8 @@ const signReclaim = async () => {
 
 const signReveal = async () => {
 	const hexPsbt = hex.encode(revealBtcTx.toPSBT());
+	console.log('Reveal ingoing psbt (hex encoded): ', hexPsbt);
+	console.log('Reveal ingoing psbt (b64 encoded): ', base64.encode(revealBtcTx.toPSBT()));
 	openPsbtRequestPopup({
 		hex: hexPsbt,
 		appDetails: {
@@ -100,14 +70,14 @@ const signReveal = async () => {
 }
 
 const broadcastTransaction = async (psbtHex:string) => {
-	const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
-	const psbt = tx.toPSBT();
-	//const psbtBytes = hex.encode(revealTx.tx.toBytes());
-	console.log('hex: ' + hex.encode(psbt));
-	console.log('base64: ' + base64.encode(psbt));
+	console.log('psbt (hex encoded): ', psbtHex);
+	console.log('psbt (b64 encoded): ', base64.encode(hex.decode(psbtHex)));
+	signedTx = btc.Transaction.fromPSBT(hex.decode(psbtHex), { allowUnknowInput: true, allowUnknowOutput: true });
+	//const signedTx = btc.Transaction.fromRaw(hex.decode(psbtHex))
+	
 	try {
-		//tx.finalize();
-		console.log('finalized: ', tx);
+		signedTx.finalize();
+		console.log('finalized: ', hex.encode(signedTx.toBytes()));
 	} catch (err) {
 		console.log('finalize error: ', err)
 		errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
@@ -116,8 +86,8 @@ const broadcastTransaction = async (psbtHex:string) => {
 }
 
 onMount(async () => {
-	if (!peginRequest || !peginRequest.commitTxScript) {
-		goto('/listReclaims');
+	if (!peginRequest || !peginRequest.commitTxScript || !peginRequest.commitTxScript.tapLeafScript) {
+		goto('/reclaims');
 		return;
 	}
 	if (typeof peginRequest.commitTxScript.tapLeafScript[0][0].internalKey === 'string') {
@@ -134,8 +104,8 @@ onMount(async () => {
 	}
 	try {
 		if (revealTx.commitTx.btcTxid) {
-			revealBtcTx = revealTx.buildTransaction(false);
-			reclaimBtcTx = reclaimTx.buildTransaction(true);
+			revealBtcTx = revealTx.buildTransaction(false, $sbtcConfig.userSettings.testAddresses);
+			reclaimBtcTx = reclaimTx.buildTransaction(true, $sbtcConfig.userSettings.testAddresses);
 		}
 	} catch(err) {
 		console.error('Creating transaction failed: ', err)
@@ -151,21 +121,41 @@ onMount(async () => {
 				<div class="col">
 					<h1>sBTC Deposit</h1>
 				</div>
+			</div>			
+
+			<TrCommit {peginRequest} {reclaimBtcTx} {revealBtcTx}/>
+			{#if peginRequest.status === 4 && peginRequest.reclaim}
+			<div class="row my-4">
+				<div class="col-md-2 col-sm-12">Reclaimed</div>
+				<div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.reclaim.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.reclaim.btcTxid)}</a></div>
 			</div>
-			<TrCommit {peginRequest}/>
-			{#if peginRequest.status === 2}
+			{:else if peginRequest.status === 3 && peginRequest.reveal}
+			<div class="row my-4">
+				<div class="col-md-2 col-sm-12">Revealed</div>
+				<div class="col-md-10 col-sm-12"><a href={explorerBtcTxUrl(peginRequest.reveal.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.reveal.btcTxid)}</a></div>
+			</div>
+			{:else if peginRequest.status === 2}
 			<div class="row my-5">
+				<div class="col-6">
+					<button class="btn btn-outline-info w-100" type="button" on:click={() => signReclaim()}>Reclaim Deposit</button>
+				</div>
 				{#if $sbtcConfig.userSettings.debugMode}
-				<div class="col">
-					<button class="btn btn-outline-info w-100" type="button" on:click={() => signReveal()}>Sign Reveal</button>
+				<div class="col-6">
+					<button class="btn btn-outline-info w-100" type="button" on:click={() => signReveal()}>Reveal</button>
 				</div>
 				{/if}
+			</div>
+			{#if signedTx}
+			<div class="row">
 				<div class="col">
-					<button class="btn btn-outline-info w-100" type="button" on:click={() => signReclaim()}>Sign Reclaim</button>
+				  <div class="d-flex justify-content-between">
+					<span>Signed Raw Tx</span>
+				  </div>
+				  <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hex.encode(signedTx.toBytes())}</textarea>
 				</div>
 			</div>
 			{/if}
-			{#if peginRequest.status < 3}
+			{:else if peginRequest.status === 1}
 			<div class="row my-5">
 				<div class="col">
 					Waiting for commit tx to be broadcast - <a href="/" on:click|preventDefault={() => scan()}>click to scan</a>
@@ -180,32 +170,6 @@ onMount(async () => {
 	{#if errorReason}
 	<div class="card-width">
 		<div class="my-3 d-flex justify-content-between">{@html errorReason}</div>
-	</div>
-	{/if}
-	{#if revealBtcTx}
-	<div class="row my-4">
-		<div class="col">
-			<h2>Reveal PSBT (Base 64)</h2>
-			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reveal()}</textarea>
-		</div>
-	</div>
-	<div class="row my-4">
-		<div class="col">
-			<h2>Reveal Tx (Raw Hex)</h2>
-			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReveal()}</textarea>
-		</div>
-	</div>
-	<div class="row my-4">
-		<div class="col">
-			<h2>Reclaim Tx (Base 64)</h2>
-			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reclaim()}</textarea>
-		</div>
-	</div>
-	<div class="row my-4">
-		<div class="col">
-			<h2>Reclaim Tx (Raw Hex)</h2>
-			<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReclaim()}</textarea>
-		</div>
 	</div>
 	{/if}
 </div>
