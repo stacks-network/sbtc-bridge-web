@@ -137,7 +137,7 @@ export const commitTx:PeginRequestI = {
     witnessScript: '1854323c1a935113b2b705cc6de6c8a5c5b07a92e0b515ddb6752251201b13a556a9ec7ba01e48c80e18e8268ae8f8d33eb61e3c80a693450ceb77f672'
   },
   updated: 1682279639292,
-  btcTxId: '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533',
+  btcTxid: '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533',
   vout: {
     scriptpubkey: '00209d242d797166ee6bbd5caa4b76accfc791ea6a727193be45f97059fa073e923c',
     scriptpubkey_asm: 'OP_0 OP_PUSHBYTES_32 9d242d797166ee6bbd5caa4b76accfc791ea6a727193be45f97059fa073e923c',
@@ -751,3 +751,87 @@ const addressInfo = {
 }
 
 //cHNidP8BAF4CAAAAASOxQxxrNozqPb/7mQ+xZ99lID4BrWi6LweyqANLEzi9AAAAAAD/////AacXAAAAAAAAIlEggKh0GaZLSAFwb6jUzaCd57YqG2iipw9dB2p80PH7/iMAAAAAAAEBK5sZAAAAAAAAIlEggiio2B1KjRXcaInjdDFqYGeRddZ7bZSzm4FvEIiUYBEBCKcDQI9ikQC8AhhbElUuQhD45iukpKoU00mvi0V64JgtJHlygJ17Uykj/yBIPOtvWq7R6wnHciFLHviwWKXp9XL7P2ciIINvu6bycUPQQsBAMx4VVOod7zVObj1Yve22afSi3WiqrEHAUJKbdMGgSVS3i0tgNel6XgeKWg8o7JbVR7/ums6AOsDp3AWggJx4DhsaOaG2DMX77DrIeaLj88irpBJKbyAgHQAA
+
+
+const hiroPsbt = {
+  "global": {
+    "unsignedTx": {
+      "version": 2,
+      "segwitFlag": false,
+      "inputs": [
+        {
+          "txid": "c693c22a8caf9ca83637ea67c3734e66de6916547f38d0a445008d3a6d8c6416",
+          "index": 0,
+          "finalScriptSig": "",
+          "sequence": 4294967295
+        }
+      ],
+      "outputs": [
+        {
+          "amount": "7508",
+          "script": "512070647801ee86cb36db1ab41f12ed7365545c3cd51839ae6732f5a9f991142747"
+        }
+      ],
+      "lockTime": 0
+    }
+  },
+  "inputs": [
+    {
+      "nonWitnessUtxo": {
+        "version": 2,
+        "segwitFlag": true,
+        "inputs": [
+          {
+            "txid": "bc3cd94ec4a45dad6f81f9ff7914de11be32636dabdeebf7ddffd16cc0fdc68c",
+            "index": 0,
+            "finalScriptSig": "",
+            "sequence": 4294967295
+          }
+        ],
+        "outputs": [
+          {
+            "amount": "8008",
+            "script": "51205e94f6ea8eb7957b06a3869eb8f2aad8dcfe52e6fdf608187825a1d01036c7d1"
+          },
+          {
+            "amount": "367396",
+            "script": "0014ea2e0ac83568ab8c6a2b4e3908914546f3c53cc7"
+          }
+        ],
+        "witnesses": [
+          [
+            "30440220694098941f822a9a65cd889b1be573f5cf1b792e68438fb4b1362b38827f037c022046cd83d3795e84b0a50916be3b80f0c812f3eb89d2234c3dfd1a1b559af859f901",
+            "02c0642636af6947dde337b1ea2bbe9cc142ec426ffac72ff73b7dc7afa99ac912"
+          ]
+        ],
+        "lockTime": 0
+      },
+      "tapLeafScript": [
+        [
+          {
+            "version": 192,
+            "internalKey": "50929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0",
+            "merklePath": [
+              "0d351abcbf3c02fc796116394725b850c9e9440da14150a844e320f470f3e981"
+            ]
+          },
+          "213c051aea4549ffff9845cd298947db226d875f0b8ad8cd000000001388000000007520264bd0d3bd80ea2da383b0a2a29f53d258e05904d2279f5f223053b987a3fd56acc0"
+        ],
+        [
+          {
+            "version": 192,
+            "internalKey": "50929b74c1a04954b78b4b6035e97a5e078a5a0f28ec96d547bfee9ace803ac0",
+            "merklePath": [
+              "ab123dbf6a724c5cbd7144962bd17befb4d8f7d81ed83ddef2f9b90a84897cc6"
+            ]
+          },
+          "2036f903d2602d826f18d57f396fcdc3d6ee251162a418b99d0a55df5b50992028acc0"
+        ]
+      ],
+      "tapMerkleRoot": "be2ba230418e78cb508f1f434789f303f2fe3cda012206b270b4c91bba3b35c7"
+    }
+  ],
+  "outputs": [
+    {}
+  ]
+}

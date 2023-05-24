@@ -4,15 +4,15 @@ import { sbtcConfig } from '$stores/stores'
 
 let pegOutAmount:number|undefined = $sbtcConfig?.pegOutTransaction?.pegInData.amount;
 let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
-let btcTxId:string|undefined;
+let btcTxid:string|undefined;
 let error:string|undefined;
 const burn = async () => {
-  if (!stxAddress || !btcTxId) {
+  if (!stxAddress || !btcTxid) {
     error = 'Please enter the amount, stacks address and bitcoin transaction';
     return;
   }
   error = undefined;
-  const res = await burnFrom(pegOutAmount||0, stxAddress, btcTxId);
+  const res = await burnFrom(pegOutAmount||0, stxAddress, btcTxid);
 }
 </script>
 
@@ -24,7 +24,7 @@ const burn = async () => {
       <label for="transact-path">Burn Amount</label>
       <input type="number" id="pegInAmount" class="form-control" bind:value={pegOutAmount}/>
       <label for="transact-path">Bitcoin Tx Id</label>
-      <input type="text" id="btcTxId" class="form-control" bind:value={btcTxId}/>
+      <input type="text" id="btcTxid" class="form-control" bind:value={btcTxid}/>
       <div class="col"><button class="btn btn-outline-light" on:click={() => burn()}>Burn</button></div>
     </div>
 </div>

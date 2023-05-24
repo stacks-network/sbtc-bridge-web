@@ -93,7 +93,8 @@ onMount(async () => {
 						<div class="col-2"><span class="text-info">From</span></div>
 						<div class="col-2"><span class="text-info">To</span></div>
 						<div class="col-2"><span class="text-info">Sats.</span></div>
-						<div class="col-4"><span class="text-info">Txid</span></div>
+						<div class="col-2"><span class="text-info">Txid</span></div>
+						<div class="col-2"><span class="text-info">Status</span></div>
 					</div>
 					{#each peginRequests as pegin}
 						<div class="row text-white">
@@ -107,9 +108,16 @@ onMount(async () => {
 								<a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a>
 							</div>
 							<div class="col-2">{#if pegin.status === 1}{pegin.amount}{:else}{pegin.amount}{/if}</div>
-							<div class="col-4">
-								{#if !pegin.btcTxId}pending{:else}
-								<a href={explorerBtcTxUrl(pegin.btcTxId)} target="_blank" rel="noreferrer">{truncate(pegin.btcTxId, 6)}</a>
+							<div class="col-2">
+								{#if !pegin.btcTxid}-{:else}
+								<a href={explorerBtcTxUrl(pegin.btcTxid)} target="_blank" rel="noreferrer">{truncate(pegin.btcTxid, 6)}</a>
+								{/if}
+							</div>
+							<div class="col-2">
+								{#if pegin.status === 1}pending
+								{:else if pegin.status === 2}committed
+								{:else if pegin.status === 3}reclaimed
+								{:else if pegin.status === 4}revealed
 								{/if}
 							</div>
 						</div>

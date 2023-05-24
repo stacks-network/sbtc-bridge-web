@@ -31,7 +31,7 @@ export default class ReclaimOrRevealTransaction {
 		} else {
 			this.addressInfo = await fetchUtxoSet(this.commitTx.sbtcWalletAddress);
 		}
-		this.transaction = (this.commitTx.btcTxId) ? await fetchTransaction(this.commitTx.btcTxId as string) : undefined;
+		this.transaction = (this.commitTx.btcTxid) ? await fetchTransaction(this.commitTx.btcTxid as string) : undefined;
 		const btcFeeRates = await fetchCurrentFeeRates();
 		this.feeInfo = btcFeeRates.feeInfo;
 		return true;
@@ -56,12 +56,12 @@ export default class ReclaimOrRevealTransaction {
 		this.tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
 		const script = this.commitTx.commitTxScript //toStorable(this.commitTx.commitTxScript)
 		if (!this.commitTx || !script) throw new Error('Incorrect data passed')
-		if (!this.commitTx.btcTxId) this.commitTx.btcTxId = '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533'
+		if (!this.commitTx.btcTxid) this.commitTx.btcTxid = '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533'
 		if (script.paymentType === 'wsh') {
 			if (!script.witnessScript) throw new Error('Incorrect data passed')
 			//const script = btc.RawTx.decode(hex.decode(tx.hex));
 			const nextI:btc.TransactionInput = {
-				txid: hex.decode(this.commitTx.btcTxId),
+				txid: hex.decode(this.commitTx.btcTxid),
 				index: 0,
 				witnessScript: (script.witnessScript as Uint8Array),
 				witnessUtxo: {
@@ -137,7 +137,7 @@ export default class ReclaimOrRevealTransaction {
 			]
 		  
 			const nextI:btc.TransactionInput = {
-				txid: hex.decode(this.commitTx.btcTxId),
+				txid: hex.decode(this.commitTx.btcTxid),
 				index: 0,
 				//sighashType: btc.SignatureHash.ALL,
 				nonWitnessUtxo: (this.transaction.hex),

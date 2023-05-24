@@ -64,7 +64,7 @@ const data = {
       tweakedPubkey: '5bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c'
     },
     updated: 1683714420013,
-    btcTxId: '745a6576e349af9e187709106899a2495f86cd3357f42dc0f3c526a999c25437',
+    btcTxid: '745a6576e349af9e187709106899a2495f86cd3357f42dc0f3c526a999c25437',
     vout: {
       scriptpubkey: '51205bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c',
       scriptpubkey_asm: 'OP_PUSHNUM_1 OP_PUSHBYTES_32 5bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c',

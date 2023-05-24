@@ -18,7 +18,6 @@ import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib' 
 import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
-import * as btc from '@scure/btc-signer';
 
 let piTx:PegInTransactionI;
 let componentKey3 = 0;

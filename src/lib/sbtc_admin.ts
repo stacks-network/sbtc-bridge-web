@@ -22,9 +22,9 @@ export function isCoordinator(address:string) {
 	return coordinators.find((o) => o.stxAddress === address);
 }
 
-export async function mintTo(amount:number, stxAddress: string, btcTxId: string) {
+export async function mintTo(amount:number, stxAddress: string, btcTxid: string) {
   //data {addr: principal, key: (buff 33)}
-  const btcAddressCV = stringAsciiCV(btcTxId);
+  const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
   const functionArgs = [uintCV(amount), stxAddressCV, btcAddressCV]
   await openContractCall({
@@ -45,9 +45,9 @@ export async function mintTo(amount:number, stxAddress: string, btcTxId: string)
   });
 }
 
-export async function burnFrom(amount:number, stxAddress: string, btcTxId: string) {
+export async function burnFrom(amount:number, stxAddress: string, btcTxid: string) {
   //data {addr: principal, key: (buff 33)}
-  const btcAddressCV = stringAsciiCV(btcTxId);
+  const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
   const functionArgs = [uintCV(amount), stxAddressCV, btcAddressCV]
   await openContractCall({

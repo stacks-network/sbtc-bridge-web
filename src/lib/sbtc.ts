@@ -26,7 +26,7 @@ export const defaultSbtcConfig:SbtcConfig = {
     mode: '',
     requestType: '',
     wallet: undefined,
-    btcTxId: undefined,
+    btcTxid: undefined,
     fromBtcAddress: '',
     stacksAddress: '',
     sbtcWalletAddress: '',

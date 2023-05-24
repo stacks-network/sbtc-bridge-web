@@ -35,7 +35,7 @@ $: decodedScript = () => {
     <div class="col-2">From</div><div class="col-10">{tx.fromBtcAddress}</div>
     <div class="col-2">Amount</div><div class="col-10">{tx.pegInData.amount}</div>
     {#if peginRequest}
-    <div class="col-2">Txid</div><div class="col-10">{peginRequest.btcTxId}</div>
+    <div class="col-2">Txid</div><div class="col-10">{peginRequest.btcTxid}</div>
     <div class="col-2">Stacks Address</div><div class="col-10">{peginRequest.stacksAddress}</div>
     <div class="col-2">SBTC Wallet</div><div class="col-10">{peginRequest.sbtcWalletAddress}</div>
     <div class="col-2">Pegin Status</div><div class="col-10">{peginRequest.status}</div>
