@@ -9,6 +9,8 @@ import { pegin1 } from './data/data_pegin_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from 'sbtc-bridge-lib'
 import { c32address } from 'c32check';
+import { schnorr } from '@noble/curves/secp256k1';
+
 
 const addr = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5'
 const addrM = 'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F'
@@ -33,6 +35,13 @@ describe('suite', () => {
 
   beforeEach(async () => {
     // cant fetch mock here as only first mock is recognised
+  })
+
+  it.concurrent('Create random schnorr keys', async () => {
+    const privSchnorr = schnorr.utils.randomPrivateKey();
+    const pubSchnorr = schnorr.getPublicKey(privSchnorr);
+    console.log('privSchnorr: ' + hex.encode(privSchnorr));
+    console.log('pubSchnorr: ' + hex.encode(pubSchnorr));
   })
 
   it.concurrent('PegInTransaction.constructor() returns pegin builder in state not ready', async () => {

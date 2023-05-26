@@ -13,6 +13,7 @@ export let piTx:PegInTransactionI;
 const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses(CONFIG.VITE_NETWORK) : undefined;
 const peginRequest = piTx?.getOpDropPeginRequest();
 let errorReason:string|undefined;
+let savedPegin:any;
 
 const paymentUri = () => {
   let uri = 'bitcoin:' + peginRequest.commitTxScript!.address
@@ -23,8 +24,9 @@ const paymentUri = () => {
 onMount(async () => {
   try {
     if (peginRequest && peginRequest.commitTxScript && peginRequest.commitTxScript.script && peginRequest.commitTxScript.script.length > 0) 
-      await savePeginCommit(peginRequest)
+    savedPegin = await savePeginCommit(peginRequest)
     const conf:SbtcConfig = $sbtcConfig;
+    conf.pegInMongoId = savedPegin._id
     sbtcConfig.update(() => conf);
   } catch (err) {
     //errorReason = 'Request already being processed with these details - change the amount to send another request.'

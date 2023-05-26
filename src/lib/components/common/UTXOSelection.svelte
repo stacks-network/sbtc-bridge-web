@@ -24,12 +24,12 @@ let showUtxos:boolean;
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 
 const useWebWallet = async () => {
-  bitcoinAddress = addresses().ordinal;
+  bitcoinAddress = addresses().cardinal;
   configureUTXOs(true);
 }
 
 const isWebWallet = async () => {
-  return (bitcoinAddress === addresses().ordinal);
+  return (bitcoinAddress === addresses().cardinal);
 }
 
 const configureUTXOs = async (force:boolean) => {
@@ -38,7 +38,7 @@ const configureUTXOs = async (force:boolean) => {
   try {
     isSupported(bitcoinAddress);
   } catch (err:any) {
-    //bitcoinAddress = addresses().ordinal;
+    //bitcoinAddress = addresses().cardinal;
     errorReason = 'Unsupported bitcoin address - the reclaim feature currently requires a taproot (segwit v1) bitcoin addresses.';
     return;
   }
@@ -86,7 +86,7 @@ onMount(async () => {
     {#if bitcoinAddress && errorReason}
       <div>
         <div class="text-warning">{errorReason}
-          <a href="/" class="text-underline text-warning" style="text-transform: uppercase" on:click|preventDefault={() => useWebWallet()}>reset address to your web wallet ordinal (taproot) address</a>
+          <a href="/" class="text-underline text-warning" style="text-transform: uppercase" on:click|preventDefault={() => useWebWallet()}>reset address to your web wallet cardinal (taproot) address</a>
         </div>
       </div>
     {/if}

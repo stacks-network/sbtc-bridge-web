@@ -140,7 +140,7 @@ describe('suite', () => {
     });
     revealTx.fee = 5000
 
-    const tx = await revealTx.buildTransaction(false, true);
+    const tx = await revealTx.buildTransaction(false);
     //expect(tx.inputsLength).equals(2)
     expect(tx.outputsLength).equals(1)
  

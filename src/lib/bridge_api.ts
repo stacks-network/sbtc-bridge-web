@@ -1,11 +1,10 @@
 import { CONFIG } from '$lib/config';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI, WrappedPSBT } from 'sbtc-bridge-lib' 
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
-  }
-  else {
+  } else {
     return path.replace('bridge-api', 'bridge-api/mainnet');
   }
 }
@@ -57,6 +56,58 @@ export async function sendRawTransaction(tx: { hex: string; }) {
     throw new Error('Bitcoin tx send error.');
   }
   return await extractResponse(response);
+}
+
+export async function fetchKeys() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/keys');
+  const response = await fetch(path);
+  if (response.status !== 200) {
+    throw new Error('Bitcoin address not known - is the network correct?');
+  }
+  const res = await extractResponse(response);
+  return res;
+}
+
+export async function signAndBroadcast(wrappedPsbt:WrappedPSBT) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/signAndBroadcast');
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(wrappedPsbt)
+  });
+  let res:any;
+  try {
+    res = await response.json();
+  } catch (err) {
+    try {
+      console.log(err)
+      res = await response.text();
+    } catch (err1) {
+      console.log(err1)
+    }
+  }
+  return res;
+}
+
+export async function sign(wrappedPsbt:WrappedPSBT) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sign');
+  const response = await fetch(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(wrappedPsbt)
+  });
+  let res:any;
+  try {
+    res = await response.json();
+  } catch (err) {
+    try {
+      console.log(err)
+      res = await response.text();
+    } catch (err1) {
+      console.log(err1)
+    }
+  }
+  return res;
 }
 
 export async function fetchBurnBlockCount() {

@@ -121,12 +121,15 @@ export const utxos_nrsp = {
 export const commitTx:PeginRequestI = {
   _id: "64458cd71f66c6ef1074c5bb",
   fromBtcAddress: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+  revealPub: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+  reclaimPub: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
   status: 2,
   tries: 0,
   mode: 'op_drop_tr',
   amount: 202020,
   requestType: 'wrap',
   wallet: 'any',
+  originator: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
   stacksAddress: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
   sbtcWalletAddress: 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd',
   commitTxScript: {

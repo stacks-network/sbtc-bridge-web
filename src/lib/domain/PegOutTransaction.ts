@@ -150,7 +150,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 * magic bytes not needed in commit tx.
 	 */
 	buildData = (sigOrPrin:string, opDrop:boolean):Uint8Array => {
-		return buildWithdrawalPayload(this.net, this.pegInData.amount, sigOrPrin, opDrop)
+		return buildWithdrawalPayload(this.net, this.pegInData.amount, hex.decode(sigOrPrin), opDrop)
 	}
 
 	getChange = () => {
@@ -239,12 +239,11 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		return {
 			fromBtcAddress: this.fromBtcAddress,
 			status: 1,
-			revealPub: '',
-			reclaimPub: '',
 			amount: this.pegInData.amount,
 			requestType: 'unwrap',
 			mode: 'op_return',
 			wallet: 'any',
+			originator: this.pegInData.stacksAddress,
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
 		};

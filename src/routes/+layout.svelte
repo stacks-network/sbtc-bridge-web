@@ -14,8 +14,8 @@ import { defaultSbtcConfig } from '$lib/sbtc';
 import { COMMS_ERROR } from '$lib/utils.js'
 import { fetchSbtcData } from "$lib/bridge_api";
 import { fetchSbtcBalance } from "$lib/stacks_connect";
-import { fetchUtxoSet, fetchCurrentFeeRates } from "$lib/bridge_api";
-import type { SbtcContractDataI } from 'sbtc-bridge-lib';
+import { fetchUtxoSet, fetchCurrentFeeRates, fetchKeys } from "$lib/bridge_api";
+import type { SbtcContractDataI, KeySet } from 'sbtc-bridge-lib';
 
 console.log('process.env: ', import.meta.env);
 setConfig($page.url.search);
@@ -67,8 +67,9 @@ const initApplication = async () => {
     conf.loggedIn = true;
     await fetchSbtcBalance();
   }
+  const keys:KeySet = await fetchKeys();
+  conf.keys = keys;
   conf.sbtcContractData = data;
-  //conf.sbtcContractData.sbtcWalletAddress = 'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq'
   sbtcConfig.update(() => conf);
 }
 
