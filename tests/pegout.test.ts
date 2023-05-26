@@ -9,7 +9,7 @@ import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { concatByteArrays } from '$lib/structured-data.js'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from 'sbtc-bridge-lib'
-import { uint8ToAmount, amountToUint8, parseWithdrawalPayload } from 'sbtc-bridge-lib' 
+import { uint8ToAmount, amountToUint8 } from 'sbtc-bridge-lib' 
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -238,7 +238,7 @@ describe('suite', () => {
     const myPeg:PegOutTransactionI = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     myPeg.net = btc.TEST_NETWORK;
     const data = myPeg.buildData(sig, false);
-    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_MAINNET);
+    expect(hex.encode(data.slice(0,2))).equals(MAGIC_BYTES_TESTNET);
   })
 
   it.concurrent('PegOutTransaction.buildData() data built reflects mainnet network', async () => {
