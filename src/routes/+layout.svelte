@@ -92,7 +92,7 @@ onMount(async () => {
 })
 </script>
 
-<section class="backg">
+<section class="backg1">
 {#if inited}
   {#if $sbtcConfig && $sbtcConfig.loggedIn}
     <div class="app">
