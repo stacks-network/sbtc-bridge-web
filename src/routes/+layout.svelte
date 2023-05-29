@@ -131,7 +131,7 @@ onMount(async () => {
   margin: auto;
   width: 100%;
   height: 100%;
-  border: 3px solid #4786cd;
+  border: 0px solid #4786cd;
   padding-top: 200px;
 }
 </style>
