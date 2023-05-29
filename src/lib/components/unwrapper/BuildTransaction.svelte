@@ -196,8 +196,8 @@ onMount(async () => {
   if (!poTx.pegInData) poTx.pegInData = {} as PegInData;
   if (!poTx.pegInData.stacksAddress && addresses().stxAddress) poTx.pegInData.stacksAddress = addresses().stxAddress;
   if (poTx.pegInData.stacksAddress) stxAddressOk = true;
-  if (poTx.pegInData.amount > 0) amountOk = true;
   poTx.pegInData.amount = (poTx.pegInData.amount > 0) ? poTx.pegInData.amount : $sbtcConfig.balance.balance;
+  if (poTx.pegInData.amount > 0) amountOk = true;
   
   principalData.currentAddress = poTx.pegInData.stacksAddress as string;
 
