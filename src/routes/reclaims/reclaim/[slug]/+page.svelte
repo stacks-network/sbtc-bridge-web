@@ -92,7 +92,7 @@ $: signedTx = wrappedPsbt.signedPsbt;
 
 onMount(async () => {
 	if (!peginRequest || !peginRequest.commitTxScript || !peginRequest.commitTxScript.tapLeafScript) {
-		goto('/reclaims');
+		goto('/deposits');
 		return;
 	}
 	if (typeof peginRequest.commitTxScript.tapLeafScript[0][0].internalKey === 'string') {

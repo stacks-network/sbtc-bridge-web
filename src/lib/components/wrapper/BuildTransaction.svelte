@@ -29,12 +29,12 @@ let amountOk = false;
 let peginRequest:PeginRequestI;
 let showModal:boolean;
 let inited = false;
-let custodialReclaim = true;
+let custodialReclaim = false;
 let allowPayWithWebWallet = false;
 
-$: showStxAddress = !errorReason;
-$: showAmount = stxAddressOk && !errorReason;
-$: showButton = piTx && piTx.pegInData.amount > 0 && !errorReason;
+$: showStxAddress = true; //!errorReason;
+$: showAmount = true; //stxAddressOk && !errorReason;
+$: showButton = true; //piTx && !errorReason;
 $: webWalletPayment = allowPayWithWebWallet && piTx && piTx.maxCommit() >= piTx.pegInData.amount;
 
 const getExplorerUrl = () => {
@@ -50,8 +50,8 @@ const amtData = () => {
   return {
     pegIn: true,
     label: 'Amount (Satoshis)',
-    info: 'The amount to wrap cannot exceed your balance less some satoshi to pay gas fees',
-    pegAmount: (piTx.pegInData.amount) ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee,
+    info: '',
+    pegAmount: piTx.pegInData.amount,
     maxCommit: piTx.maxCommit(),
     change: piTx.getChange(),
     fee: piTx.fee,
@@ -74,7 +74,7 @@ const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.pegInTransaction = piTx;
   sbtcConfig.update(() => conf);
-  amountOk = piTx.pegInData?.amount > 0;
+  //amountOk = piTx.pegInData?.amount > 0;
 }
 
 const amountUpdated = (event:any) => {
@@ -89,7 +89,7 @@ const amountUpdated = (event:any) => {
     }
   } else if (event.detail.opCode === 'prio') {
     piTx.setFeeRate(event.detail.newFeeRate)
-    if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee) piTx.setAmount(piTx.maxCommit() - piTx.fee)
+    //if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee) piTx.setAmount(piTx.maxCommit() - piTx.fee)
   }
   updateConfig();
   componentKey3++;
@@ -160,6 +160,16 @@ const utxoUpdated = async (event:any) => {
 
 const nextStep = (wallet:number) => {
   // 1: stacks web wallet, 2: any wallet
+  errorReason = undefined;
+  if (piTx.pegInData.amount === 0) {
+    errorReason = 'Please enter the amount you want to deposit?'
+    return
+  }
+  if (!stxAddressOk) {
+    errorReason = 'Please enter a valid Stacks Address?'
+    return
+  }
+  
   if (wallet === 1) {
     dispatch('request_signature', { wallet, piTx });
   } else {
@@ -167,7 +177,7 @@ const nextStep = (wallet:number) => {
   }
 }
 const nextModal = () => {
-  goto('/reclaims');
+  goto('/deposits');
 }
 const closeModal = () => {
   showModal = false;
@@ -188,6 +198,8 @@ onMount(async () => {
   if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress;
   if (piTx.pegInData.stacksAddress) stxAddressOk = true;
   if (piTx.pegInData.amount > 0) amountOk = true;
+  piTx.pegInData.amount = (piTx.pegInData.amount > 0) ? piTx.pegInData.amount : 0;
+  // (piTx.pegInData.amount) ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee
 
   principalData.currentAddress = piTx.pegInData.stacksAddress as string;
 
@@ -196,9 +208,6 @@ onMount(async () => {
   utxoData.fromBtcAddress = (piTx.ready) ? piTx.fromBtcAddress : addresses().ordinal;
   utxoData.numbInputs = (piTx.ready) ? piTx.addressInfo.utxos.length : 0;
 
-  showStxAddress = piTx.ready && !errorReason;
-  showAmount = piTx.ready && stxAddressOk && !errorReason;
-  showButton = piTx.ready && amountOk && !errorReason;
   try {
     peginRequest = piTx.getOpDropPeginRequest();
   } catch (err) {
@@ -243,7 +252,7 @@ onMount(async () => {
   {/if}
   {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
   {#if custodialReclaim}
-  <div class="mb-4 text-small">Note: Reclaims (if necessary) will be sent to the address you send the deposit from</div>
+  <div class="mb-4 text-small">Note: refunds will be sent to the address you send the deposit from</div>
   {/if}
 
   {#if showButton}

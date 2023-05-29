@@ -3,7 +3,7 @@ import Pegs from '$lib/components/history/Pegs.svelte';
 
 </script>
 
-<section class="bg-dark">
+<section class=" bg-dark">
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<div class="row">

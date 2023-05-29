@@ -1,5 +1,5 @@
 <script lang="ts">
-import { CONFIG, setConfig } from '$lib/config';
+import { setConfig } from '$lib/config';
 import "../app.scss";
 import { tick, onMount, onDestroy } from 'svelte';
 import { beforeNavigate, goto } from "$app/navigation";
@@ -55,20 +55,17 @@ const initApplication = async () => {
   let conf = defaultSbtcConfig as SbtcConfig;
   if ($sbtcConfig) {
     conf = $sbtcConfig;
-    if (CONFIG.VITE_NETWORK === 'mainnet' && !$sbtcConfig.sbtcContractData.sbtcWalletAddress.startsWith('bc')) {
-      data.sbtcWalletAddress = '';
-    } else {
-      if (!$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
-    }
+    $sbtcConfig.sbtcContractData = data
+    if ($sbtcConfig.sbtcContractData.sbtcWalletAddress && !$sbtcConfig.sbtcWalletAddressInfo) $sbtcConfig.sbtcWalletAddressInfo = await fetchUtxoSet(data.sbtcWalletAddress);
     if (!$sbtcConfig.btcFeeRates) $sbtcConfig.btcFeeRates = await fetchCurrentFeeRates();
   }
+  const keys:KeySet = await fetchKeys();
+  conf.keys = keys;
   conf.loggedIn = false;
   if (userSession.isUserSignedIn()) {
     conf.loggedIn = true;
     await fetchSbtcBalance();
   }
-  const keys:KeySet = await fetchKeys();
-  conf.keys = keys;
   conf.sbtcContractData = data;
   sbtcConfig.update(() => conf);
 }
@@ -95,6 +92,7 @@ onMount(async () => {
 })
 </script>
 
+<section class="backg">
 {#if inited}
   {#if $sbtcConfig && $sbtcConfig.loggedIn}
     <div class="app">
@@ -118,8 +116,11 @@ onMount(async () => {
     <div class="my-3 d-flex justify-content-between text-white">{errorReason}</div>
   </div>
 {/if}
-
+</section>
 <style>
+.backg {
+  background-image: url("$lib/assets/0_2 1.png");
+}
 .app {
   display: flex;
   flex-direction: column;

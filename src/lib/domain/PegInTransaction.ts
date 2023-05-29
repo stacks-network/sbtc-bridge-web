@@ -261,7 +261,7 @@ export default class PegInTransaction implements PegInTransactionI {
 			tries: 0,
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
-			requestType: 'wrap',
+			requestType: 'deposit',
 			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], this.net, true)',
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,

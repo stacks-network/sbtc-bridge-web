@@ -80,12 +80,10 @@ let stacksOrg = 'https://stacks.org'
 
 <style>
 a {
-  font-family: Gilroy-Light;
   color: #EDEDED;
   font-size: 1.0rem;
 }
 p {
-  font-family: Gilroy-Light;
   font-size: 1.3rem;
   color: #fff;
   text-transform: lowercase;

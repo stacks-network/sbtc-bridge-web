@@ -4,7 +4,7 @@ import { CONFIG } from '$lib/config';
 
 </script>
 	
-<section class="bg-dark">
+<section class=" bg-dark">
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<h1 class="text-info"><span class="strokeme-info">sBTC</span> Coordinator</h1>

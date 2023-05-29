@@ -3,6 +3,7 @@
  */
 import type { SbtcConfig } from '$types/sbtc_config';
 import type { SbtcContractDataI } from 'sbtc-bridge-lib';
+import type { KeySet } from 'sbtc-bridge-lib' 
 
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
@@ -12,6 +13,7 @@ export const defaultSbtcConfig:SbtcConfig = {
   sbtcContractData: {} as SbtcContractDataI,
   pegInTransaction: undefined,
   pegOutTransaction: undefined,
+  keys: {} as KeySet,
   userSettings: {
     useOpDrop: true,
     debugMode: false,
@@ -19,6 +21,7 @@ export const defaultSbtcConfig:SbtcConfig = {
   },
   peginRequest: {
     _id: undefined,
+    originator: '',
     status: 0,
     tries: undefined,
     updated: undefined,

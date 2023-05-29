@@ -16,7 +16,7 @@ let errorReason:string|undefined;
 let myDepositsFilter:boolean;
 
 const getReclaimUrl = (pegin:any) => {
-	goto('/reclaims/reclaim/' + pegin._id)
+	goto('/deposits/' + pegin._id)
 }
 
 const fetchDeposits = async (mine:boolean) => {
@@ -56,7 +56,7 @@ onMount(async () => {
 })
 
 </script>
-<section class="bg-dark text-white">
+<section class=" bg-dark text-white">
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<div class="row">
