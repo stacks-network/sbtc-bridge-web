@@ -19,7 +19,7 @@ const togglePeg = (pegin:boolean) => {
 const network = CONFIG.VITE_NETWORK;
 
 </script>
-<nav class="navbar navbar-expand-md transparent">
+<nav class="bg-dark navbar navbar-expand-md transparent">
 	<div class="container-fluid mx-5">
 		<a class="navbar-brand" href="/">
 			<img width="40px" height="40px" class="nav-logo" src={logoWhite} alt="CityCoins Test" />

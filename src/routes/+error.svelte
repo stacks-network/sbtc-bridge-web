@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
 </script>
 
-<section class="bg-dark text-white text-center pt-5">
+<section class=" text-white text-center pt-5 bg-dark">
     <h1>Unable to find that request!</h1>
     {#if $page?.error}
         <div class="mt-4 border-y-2">

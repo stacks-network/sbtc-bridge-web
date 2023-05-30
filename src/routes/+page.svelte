@@ -17,7 +17,7 @@ const togglePeg = (pegin:boolean) => {
 
 </script>
 
-<section class="bg-dark">
+<section class=" bg-dark">
 	<div class="m-4">
 		<div class="text-small text-center mb-5 text-center text-white">
 			<div>sBTC Wallet: { $sbtcConfig.sbtcContractData.sbtcWalletAddress || 'not connected on ' + CONFIG.VITE_NETWORK }</div>

@@ -60,21 +60,26 @@ export async function fetchSbtcBalance () {
 	const adrds:AddressObject = addresses();
 	const result = await fetchUserSbtcBalance(adrds.stxAddress);
 	sbtcConfig.update((conf:SbtcConfig) => {
-		if (conf.pegInTransaction) {
-			conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
-			conf.pegInTransaction.fromBtcAddress = adrds.ordinal;
+		try {
+			if (conf.pegInTransaction) {
+				conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
+				conf.pegInTransaction.fromBtcAddress = adrds.cardinal;
+			}
+			if (conf.pegOutTransaction) {
+				conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
+				conf.pegOutTransaction.fromBtcAddress = adrds.cardinal;
+			}
+	
+			conf.loggedIn = true;
+			conf.balance = result
+			conf.balance.address = adrds.stxAddress;
+			conf.balance.cardinal = adrds.cardinal;
+			conf.balance.ordinal = adrds.ordinal;
+			conf.loggedIn = true;
+	
+		} catch (err:any) {
+			console.log(err.message)
 		}
-		if (conf.pegOutTransaction) {
-			conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
-			conf.pegOutTransaction.fromBtcAddress = adrds.ordinal;
-		}
-
-		conf.loggedIn = true;
-		conf.balance = result
-		conf.balance.address = adrds.stxAddress;
-		conf.balance.cardinal = adrds.cardinal;
-		conf.balance.ordinal = adrds.ordinal;
-		conf.loggedIn = true;
 		return conf;
 	});
 }
@@ -125,9 +130,6 @@ export async function loginStacksJs() {
 	}
 }
 
-export function logUserOut() {
-	return userSession.signUserOut();
-}
 export function signMessage(callback:any, script:string) {
 	openSignatureRequestPopup({
 		message: script,
@@ -139,4 +141,8 @@ export function signMessage(callback:any, script:string) {
 		  callback(value, script);
 		},
 	});
+}
+
+export function logUserOut() {
+	return userSession.signUserOut();
 }

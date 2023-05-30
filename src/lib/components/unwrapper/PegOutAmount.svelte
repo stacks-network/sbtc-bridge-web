@@ -4,7 +4,8 @@
   import FeeDisplay from "$lib/components/common/FeeDisplay.svelte";
 
   export let amtData:{pegIn:boolean, label:string,info:string,pegAmount:number, maxCommit:number, change:number, fees:Array<number>, fee:number, dust:number};
-  
+  let allowPayWithWebWallet = false;
+
   const dispatch = createEventDispatcher();
   let reason:string|undefined;
   let pegAmount:number = amtData.pegAmount;
@@ -50,12 +51,16 @@
       </label>
       <input use:init type="number" id="from-address" class="form-control" autocomplete="off" bind:value={pegAmount}  on:input={() => changePegIn(false)}/>
       {#if reason}<div class="text-danger">{reason}</div>{/if}
+
+      {#if allowPayWithWebWallet}
       <div class="text-small d-flex justify-content-between">
         <div class="text-small">{amtData.info}</div>
         {#if amtData.change > 0}<span><a href="/" class="" on:click|preventDefault={() => changePegIn(true)}>set max</a></span>{/if}
       </div>
+      {/if}
     </div>
 
+    {#if allowPayWithWebWallet}
     <div class="mt-5 col-12">
       <label for="transact-path" class="d-flex justify-content-between">
         <span>sBTC Dust Amount</span>
@@ -65,6 +70,7 @@
       <div class="text-small" title="Required for book keeping.">Tiny amount of bitcoin is sent to the sBTC wallet for book keeping purposes</div>
     </div>
     <FeeDisplay {amtData} currentPeg={pegAmount} on:fee_rate_updated={changeRate}/>
+    {/if}
   </div>
   
   <style>

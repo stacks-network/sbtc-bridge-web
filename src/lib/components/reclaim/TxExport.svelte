@@ -1,9 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { hex, base64 } from '@scure/base';
-import { addressFromPubkey } from 'sbtc-bridge-lib' 
 import type { Transaction } from '@scure/btc-signer' 
-import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 
 export let btcTx:Transaction;
@@ -22,9 +20,9 @@ const pubKeyFromTapLeafScript = () => {
   const tapLeafScripts = btcTx.getInput(0).tapLeafScript;
   if (!tapLeafScripts) return;
   let cb:Uint8Array;
-  if (txtype === 'reveal') { 
+  if (txtype === 'reveal') {
     cb = tapLeafScripts[0][1]
-  } else { 
+  } else {
     cb = tapLeafScripts[1][1]
   }
   cb = cb.subarray(0, cb.length - 1); // strip out the last byte of control block
@@ -41,7 +39,6 @@ const pubKeyFromTapLeafScript = () => {
 const localAddressFromPubkey = () => {
   const pubkey:any = pubKeyFromTapLeafScript()
   if (!pubkey || typeof pubkey !== 'object') return;
-  //const address = addressFromPubkey(CONFIG.VITE_NETWORK, pubkey)
 	return hex.encode(pubkey)
 }
 
@@ -78,15 +75,15 @@ onMount(() => {
   <div class="row">
     {#each Array(btcTx.outputsLength) as _, index (index)}
     <div class="col-12">
-      <div>Sends {btcTx.getOutput(index).amount} sats to {localAddressFromPubkey()}</div>
+      <div>To public key: {localAddressFromPubkey()}</div>
     </div>
     {/each}
   </div>
   {#if !showHex}
-  <div class="row">
+  <div class="mt-5 row">
     <div class="col">
       <div class="d-flex justify-content-between">
-        <p>{txtype} PSBT (Base 64)</p>
+        <p>PSBT (Base 64)</p>
         <span class="pointer" on:keydown on:click={() => showHex = !showHex}>{#if showHex}Show Base 64{:else}Show Hex{/if}</span>
       </div>
       <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{b64Reveal()}</textarea>
@@ -96,7 +93,7 @@ onMount(() => {
   <div class="row">
     <div class="col">
       <div class="d-flex justify-content-between">
-        <p>{txtype} PSBT (Hex)</p>
+        <p>PSBT (Hex)</p>
         <span class="pointer" on:keydown on:click={() => showHex = !showHex}>{#if showHex}Show Base 64{:else}Show Hex{/if}</span>
       </div>
       <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{rawReveal()}</textarea>

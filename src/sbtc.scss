@@ -6,16 +6,8 @@
 @import '@fontsource/fira-mono';
 
 @font-face {
-  font-family: "Akrobat-Thin";
-  src: url("/fonts/Akrobat-Thin.otf") format("truetype");
-}
-@font-face {
-  font-family: "Gilroy-ExtraBold";
-  src: url("/fonts/Gilroy-ExtraBold.otf") format("truetype");
-}
-@font-face {
-  font-family: "Gilroy-Light";
-  src: url("/fonts/Gilroy-Light.otf") format("truetype");
+  font-family: "Circular-Std-Font";
+  src: url("/fonts/Circular Std Font.otf") format("truetype");
 }
 
 :root{
@@ -27,7 +19,7 @@
 }
 
 body, html {
-  font-family: Gilroy-Light;
+  font-family: Circular-Std-Font;
   height: 100%;
   font-size: 1.0rem;
 }
@@ -52,12 +44,10 @@ a:hover {
 }
 
 h1 {
-  font-family: Gilroy-ExtraBold;
   line-height: 3.3rem;
   font-size: 3.3rem;
 }
 h2 {
-  font-family: Gilroy-Light;
   line-height: 2.4rem;
   font-size: 2.0rem;
 }
@@ -90,13 +80,11 @@ button:focus:not(:focus-visible) {
 }
 
 .footer {
-  font-family: Gilroy-ExtraBold;
   border-top: 1pt solid #fff;
   background-color: #262626;
   min-width: 100vw;
 }
 .copywright {
-  font-family: Akrobat-Thin;
   text-transform: uppercase;
   font-size: 1.3rem;
   line-height: 2em;
@@ -183,12 +171,10 @@ input, textarea {
   -webkit-text-stroke-color: #dd216e;
 }
 .strapline-bold {
-  font-family: Gilroy-ExtraBold;
   color: #ededed;
   font-size: 1.0rem;
 }
 .strapline {
-  font-family: Gilroy-Light;
   color: #ededed;
   font-size: 1.0rem;
 }
@@ -266,7 +252,6 @@ input, textarea {
   .hideme { display: none; }  /* show it on small screens */
 }
 .text-akrobat-thin {
-  font-family: Akrobat-Thin;
   text-transform: uppercase;
   font-size: 1.1rem;
   line-height: 2em;
@@ -386,7 +371,6 @@ nav a {
   font-size: 0.8rem;
 	padding: 0 0px;
   margin: 5px;
-	font-family: Gilroy-Light;
 }
 .nav-item > a:hover {
   color: #4786cd;
@@ -403,7 +387,6 @@ a.dropdown-item {
 	padding: 5px 5px;
 }
 .nav {
-	font-family: Gilroy-ExtraBold;
 }
 /* end nav styles */
 

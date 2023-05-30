@@ -5,19 +5,19 @@ import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import QrCode from "svelte-qrcode"
 import { fmtSatoshiToBitcoin } from '$lib/utils'
-import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
+import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { getTestAddresses } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
-export let piTx:PegInTransactionI;
+export let poTx:PegOutTransactionI;
 const arg1 =  ($sbtcConfig.userSettings.testAddresses) ? getTestAddresses(CONFIG.VITE_NETWORK) : undefined;
-const peginRequest = piTx?.getOpDropPeginRequest();
+const peginRequest = poTx?.getOpDropPeginRequest();
 let errorReason:string|undefined;
 let savedPegin:any;
 
 const paymentUri = () => {
   let uri = 'bitcoin:' + peginRequest.commitTxScript!.address
-  uri += '?amount=' + fmtSatoshiToBitcoin(piTx.pegInData.amount)
+  uri += '?amount=' + fmtSatoshiToBitcoin(poTx.pegInData.amount)
   uri += '&label=' + encodeURI('Wrap BTC to mint sBTC on Stacks')
   return uri
 }
@@ -55,7 +55,7 @@ onMount(async () => {
 
 <div class="row text-small text-bold mt-5">
   <div class="col-12">
-    <span>Amount: {fmtSatoshiToBitcoin(piTx.pegInData.amount)}</span>
+    <span>Amount: {fmtSatoshiToBitcoin(poTx.pegInData.amount)}</span>
   </div>
   <div class="col-12">
     <span>Address: {peginRequest.commitTxScript?.address}</span>

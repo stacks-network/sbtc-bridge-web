@@ -1,6 +1,7 @@
 <script lang="ts">
 import { CONFIG } from '$lib/config';
 import { onMount } from 'svelte';
+import { goto } from "$app/navigation";
 import { sbtcConfig } from '$stores/stores'
 import type { SbtcConfig } from '$types/sbtc_config';
 import Principal from "../common/Principal.svelte";
@@ -14,10 +15,9 @@ import { addresses } from '$lib/stacks_connect';
 import { explorerBtcAddressUrl } from "$lib/utils";
 import Modal from '$lib/components/shared/Modal.svelte';
 import DebugPeginInfo from '$lib/components/common/DebugPeginInfo.svelte';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { hex } from '@scure/base';
 import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib' 
-import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI, PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
 
 let piTx:PegInTransactionI;
 let componentKey3 = 0;
@@ -29,11 +29,13 @@ let amountOk = false;
 let peginRequest:PeginRequestI;
 let showModal:boolean;
 let inited = false;
+let custodialReclaim = false;
+let allowPayWithWebWallet = false;
 
-$: showStxAddress = !errorReason;
-$: showAmount = stxAddressOk && !errorReason;
-$: showButton = piTx && piTx.pegInData.amount > 0 && !errorReason;
-$: webWalletPayment = piTx && piTx.maxCommit() >= piTx.pegInData.amount;
+$: showStxAddress = true; //!errorReason;
+$: showAmount = true; //stxAddressOk && !errorReason;
+$: showButton = true; //piTx && !errorReason;
+$: webWalletPayment = allowPayWithWebWallet && piTx && piTx.maxCommit() >= piTx.pegInData.amount;
 
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(piTx.fromBtcAddress)
@@ -48,8 +50,8 @@ const amtData = () => {
   return {
     pegIn: true,
     label: 'Amount (Satoshis)',
-    info: 'The amount to wrap cannot exceed your balance less some satoshi to pay gas fees',
-    pegAmount: (piTx.pegInData.amount) ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee,
+    info: '',
+    pegAmount: piTx.pegInData.amount,
     maxCommit: piTx.maxCommit(),
     change: piTx.getChange(),
     fee: piTx.fee,
@@ -72,7 +74,7 @@ const updateConfig = () => {
   const conf:SbtcConfig = $sbtcConfig;
   conf.pegInTransaction = piTx;
   sbtcConfig.update(() => conf);
-  amountOk = piTx.pegInData?.amount > 0;
+  //amountOk = piTx.pegInData?.amount > 0;
 }
 
 const amountUpdated = (event:any) => {
@@ -87,7 +89,7 @@ const amountUpdated = (event:any) => {
     }
   } else if (event.detail.opCode === 'prio') {
     piTx.setFeeRate(event.detail.newFeeRate)
-    if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee) piTx.setAmount(piTx.maxCommit() - piTx.fee)
+    //if (piTx.pegInData.amount > piTx.maxCommit() - piTx.fee) piTx.setAmount(piTx.maxCommit() - piTx.fee)
   }
   updateConfig();
   componentKey3++;
@@ -105,15 +107,13 @@ const principalUpdated = (event:any) => {
 const commitAddresses = ():CommitKeysI => {
   const addrs = addresses()
   const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addrs.stxAddress;
-  let fromBtcAddress = addrs.ordinal; //$sbtcConfig.peginRequest.fromBtcAddress || addrs.ordinal;
+  let fromBtcAddress = addrs.cardinal; //$sbtcConfig.peginRequest.fromBtcAddress || addrs.ordinal;
   let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
   const sbtcWallet = sbtcWallets.find((o) => o.sbtcAddress === sbtcWalletAddress);
   if (!sbtcWallet) throw new Error('No sBTC Wallet found for address: ' + sbtcWalletAddress)
   let testAddrs;
   if ($sbtcConfig.userSettings.testAddresses) {
     testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);
-    fromBtcAddress = testAddrs.reclaim as string;
-    sbtcWalletAddress = testAddrs.reveal as string;
   }
   const xyWebWalletPubKey = hex.decode(addrs.btcPubkeySegwit1);
   let xOnlyPubKey = hex.encode(xyWebWalletPubKey.subarray(1));
@@ -125,10 +125,9 @@ const commitAddresses = ():CommitKeysI => {
   //const xOnlyPubKey = hex.encode(addrScript.pubkey)
   return {
     fromBtcAddress,
-    reveal: sbtcWalletAddress,
-    revealPub: (testAddrs) ? testAddrs.revealPub : sbtcWallet.pubKey,
-    reclaim: (testAddrs) ? testAddrs.reclaim as string : fromBtcAddress,
-    reclaimPub: (testAddrs) ? testAddrs.reclaimPub : xOnlyPubKey,
+    sbtcWalletAddress,
+    revealPub: $sbtcConfig.keys.deposits.revealPubKey, //(testAddrs) ? testAddrs.revealPub : sbtcWallet.pubKey,
+    reclaimPub: $sbtcConfig.keys.deposits.reclaimPubKey,
     stacksAddress
   }
 }
@@ -161,11 +160,24 @@ const utxoUpdated = async (event:any) => {
 
 const nextStep = (wallet:number) => {
   // 1: stacks web wallet, 2: any wallet
+  errorReason = undefined;
+  if (piTx.pegInData.amount === 0) {
+    errorReason = 'Please enter the amount you want to deposit?'
+    return
+  }
+  if (!stxAddressOk) {
+    errorReason = 'Please enter a valid Stacks Address?'
+    return
+  }
+  
   if (wallet === 1) {
     dispatch('request_signature', { wallet, piTx });
   } else {
     showModal = !showModal;
   }
+}
+const nextModal = () => {
+  goto('/deposits');
 }
 const closeModal = () => {
   showModal = false;
@@ -186,6 +198,8 @@ onMount(async () => {
   if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress;
   if (piTx.pegInData.stacksAddress) stxAddressOk = true;
   if (piTx.pegInData.amount > 0) amountOk = true;
+  piTx.pegInData.amount = (piTx.pegInData.amount > 0) ? piTx.pegInData.amount : 0;
+  // (piTx.pegInData.amount) ? piTx.pegInData.amount : piTx.maxCommit() - piTx.fee
 
   principalData.currentAddress = piTx.pegInData.stacksAddress as string;
 
@@ -194,9 +208,6 @@ onMount(async () => {
   utxoData.fromBtcAddress = (piTx.ready) ? piTx.fromBtcAddress : addresses().ordinal;
   utxoData.numbInputs = (piTx.ready) ? piTx.addressInfo.utxos.length : 0;
 
-  showStxAddress = piTx.ready && !errorReason;
-  showAmount = piTx.ready && stxAddressOk && !errorReason;
-  showButton = piTx.ready && amountOk && !errorReason;
   try {
     peginRequest = piTx.getOpDropPeginRequest();
   } catch (err) {
@@ -214,8 +225,9 @@ onMount(async () => {
 <Modal {showModal} on:click={closeModal} on:close_modal={closeModal}>
   <div class="mb-4"><ScriptHashAddress {piTx}/></div>
   <div slot="title"></div>
-  <div slot="close">
+  <div slot="close" class="d-flex justify-content-around">
     <div class="text-center"><button class="btn btn-outline-info" on:click={closeModal}>CLOSE</button></div>
+    <div class="text-center"><button class="btn btn-outline-info" on:click={nextModal}>NEXT</button></div>
   </div>
   <div slot="debug">
     <div class="row my-3 text-small">
@@ -227,7 +239,9 @@ onMount(async () => {
 </Modal>
 {/if}
 {#if inited}
+  {#if allowPayWithWebWallet}
   <div class="mb-4"><UTXOSelection {utxoData} on:utxo_updated={utxoUpdated} /></div>
+  {/if}
   {#if showStxAddress}
   <div class="mb-4"><Principal {principalData} on:principal_updated={principalUpdated} /></div>
   {/if}
@@ -237,11 +251,15 @@ onMount(async () => {
   {/key}
   {/if}
   {#if errorReason}<div class="text-danger">{@html errorReason}</div>{/if}
+  {#if custodialReclaim}
+  <div class="mb-4 text-small">Note: refunds will be sent to the address you send the deposit from</div>
+  {/if}
+
   {#if showButton}
   <div class="row">
     {#if webWalletPayment}
     <div class="col-6">
-      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(1)}>Stacks Web Wallet</button>
+      <button class="btn btn-outline-info w-100" type="button" on:click={() => nextStep(1)}>Web Wallet</button>
     </div>
     {/if}
     <div class="col-6">

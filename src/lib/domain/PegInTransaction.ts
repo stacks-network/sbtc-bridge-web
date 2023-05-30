@@ -4,8 +4,7 @@ import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
-import { toStorable } from "$lib/utils";
-import { buildDepositPayload, approxTxFees } from 'sbtc-bridge-lib' 
+import { toStorable, buildDepositPayload, approxTxFees } from 'sbtc-bridge-lib' 
 import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
 
 export interface PegInTransactionI {
@@ -83,7 +82,7 @@ export default class PegInTransaction implements PegInTransactionI {
 		me.pegInData = {
 			amount: 0,
 			stacksAddress: commitKeys.stacksAddress,
-			sbtcWalletAddress: commitKeys.reveal,
+			sbtcWalletAddress: commitKeys.sbtcWalletAddress,
 			revealFee: 5000
 		}
 		// utxos have to come from a hosted indexer or external service
@@ -103,7 +102,7 @@ export default class PegInTransaction implements PegInTransactionI {
 		const me = new PegInTransaction();
 		me.net = o.net;
 		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
-		me.fromBtcAddress = o.fromBtcAddress || addresses().ordinal;
+		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
 		me.commitKeys = o.commitKeys;
 		me.pegInData = o.pegInData;
 		me.pegInData.sbtcWalletAddress = o.pegInData.sbtcWalletAddress; //'tb1q4zfnhnvfjupe66m4x8sg5d03cja75vfmn27xyq'
@@ -214,6 +213,7 @@ export default class PegInTransaction implements PegInTransactionI {
 			amount: this.pegInData.amount,
 			wallet: 'btc.p2tr(reclaimAddr.pubkey, { script: Script.encode([data, \'DROP\', sbtcWalletAddr.pubkey]) }, this.net, true)',
 			requestType: 'wrap',
+			originator: this.pegInData.stacksAddress,
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
 			revealPub: '',
@@ -253,6 +253,7 @@ export default class PegInTransaction implements PegInTransactionI {
 		]
 		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, this.net, true);
 		const req:PeginRequestI = {
+			originator: this.pegInData.stacksAddress,
 			fromBtcAddress: this.fromBtcAddress,
 			revealPub: this.commitKeys.revealPub,
 			reclaimPub: this.commitKeys.reclaimPub,
@@ -260,7 +261,7 @@ export default class PegInTransaction implements PegInTransactionI {
 			tries: 0,
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
-			requestType: 'wrap',
+			requestType: 'deposit',
 			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], this.net, true)',
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,

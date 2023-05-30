@@ -1,15 +1,14 @@
 import * as btc from '@scure/btc-signer';
+import type {Transaction } from '@scure/btc-signer';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { hex } from '@scure/base';
 import { approxTxFees } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchCurrentFeeRates, fetchTransaction } from "../bridge_api";
 import * as P from 'micro-packed';
-import { getTestAddresses } from 'sbtc-bridge-lib' 
 import type { UTXO } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export default class ReclaimOrRevealTransaction {
-	tx:any;
 	addressInfo:any;
 	btcFeeRates:any;
 	commitTx:PeginRequestI;
@@ -52,8 +51,8 @@ export default class ReclaimOrRevealTransaction {
 		this.fee = this.fees[1];
 	}
 
-	buildTransaction = (reclaim:boolean, useTestAddresses:boolean):btc.Transaction => {
-		this.tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
+	buildTransaction = (reclaim:boolean):btc.Transaction => {
+		const tx:Transaction = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
 		const script = this.commitTx.commitTxScript //toStorable(this.commitTx.commitTxScript)
 		if (!this.commitTx || !script) throw new Error('Incorrect data passed')
 		if (!this.commitTx.btcTxid) this.commitTx.btcTxid = '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533'
@@ -70,7 +69,7 @@ export default class ReclaimOrRevealTransaction {
 				}
 			}
 			console.log('nextI: ', nextI)
-			this.tx.addInput(nextI);
+			tx.addInput(nextI);
 		} else if (script.paymentType === 'tr') {
 			if (!this.commitTx.commitTxScript) throw new Error('Incorrect data passed')
 			if (!this.commitTx.commitTxScript.address) throw new Error('Incorrect data passed')
@@ -78,8 +77,8 @@ export default class ReclaimOrRevealTransaction {
 			if (!script.tapInternalKey) throw new Error('Incorrect data passed')
 			const sbtcWalletAddrScript = btc.Address(this.net).decode(this.commitTx.sbtcWalletAddress)
 			if (sbtcWalletAddrScript.type !== 'tr') throw new Error('Taproot required')
-			const fromBtcAddressScript = btc.Address(this.net).decode(this.commitTx.fromBtcAddress);
-			if (fromBtcAddressScript.type !== 'tr') throw new Error('Taproot required')
+			//const fromBtcAddressScript = btc.Address(this.net).decode(this.commitTx.fromBtcAddress);
+			//if (fromBtcAddressScript.type !== 'tr') throw new Error('Taproot required')
 
 			const commitAddressScript = btc.Address(this.net).decode(this.commitTx.commitTxScript.address);
 			if (commitAddressScript.type !== 'tr') throw new Error('Taproot required')
@@ -98,6 +97,7 @@ export default class ReclaimOrRevealTransaction {
 			//[Uint8Array, { hashes: Uint8Array[]; der: { path: number[]; fingerprint: number; }; }][]
 			// sparrow master fp: 6bd2008b
 			// core master fp: 760ce8cf
+			/**
 			let scriptIndex = 0;
 			let tapInternalKey = sbtcWalletAddrScript.pubkey;
 			if (reclaim) {
@@ -135,6 +135,7 @@ export default class ReclaimOrRevealTransaction {
 					hashes: [ script.leaves[scriptIndex].hash ]
 				}]
 			]
+			 */
 		  
 			const nextI:btc.TransactionInput = {
 				txid: hex.decode(this.commitTx.btcTxid),
@@ -152,7 +153,6 @@ export default class ReclaimOrRevealTransaction {
 				//		merklePath: script.tapLeafScript[0][0].merklePath,
 				//	
 				//}, script.tapLeafScript[0][1]],
-				
 				//witnessScript: (script.leaves[1].script as Uint8Array),
 				//witnessUtxo: {
 				//	script: (script.leaves[1].script as Uint8Array), //(this.pegInData.requestData.commitTxScript.witnessScript),
@@ -166,42 +166,46 @@ export default class ReclaimOrRevealTransaction {
 				tapMerkleRoot: script.tapMerkleRoot as Uint8Array
 			}
 			console.log('nextI: ', nextI)
-			this.tx.addInput(nextI);
+			tx.addInput(nextI);
 		}
 
 		let outAddr = this.commitTx.sbtcWalletAddress;
-		if (reclaim) outAddr = this.addressInfo.address;
+		if (reclaim) outAddr = this.commitTx.senderAddress || this.commitTx.fromBtcAddress;
 
-		let amount = this.commitTx.amount - this.fee;
+		const amount = this.commitTx.amount - this.fee;
+		/**
 		if (this.addressInfo.utxos.length === -1) { // never
-			const feeUtxo = this.addInputForFee();
+			const feeUtxo = this.addInputForFee(tx);
 			amount = this.commitTx.amount + feeUtxo?.value - this.fee;
 		}
-		this.tx.addOutputAddress(outAddr, BigInt(amount), this.net);
+		 */
+		tx.addOutputAddress(outAddr, BigInt(amount), this.net);
 
-		if (useTestAddresses) {
+		/**
+		 */
+		if (CONFIG.VITE_NETWORK === 'testnet') {
 			try {
-				const testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);	
-				if (testAddrs.reclaimPrv && reclaim && this.commitTx.fromBtcAddress && testAddrs.reclaim) {
-					this.tx.sign(hex.decode(testAddrs.reclaimPrv));
-					this.tx.finalize();
-				} else if (testAddrs.revealPrv && !reclaim && this.commitTx.sbtcWalletAddress && testAddrs.reveal) {
-					this.tx.sign(hex.decode(testAddrs.revealPrv));
-					this.tx.finalize();
+				//const testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);	
+				if (reclaim) {
+					tx.sign(hex.decode('eb80b7f63eb74a215b6947b479e154a83cf429691dceab272c405b1614efb98c'));
+					tx.finalize();
+				} else {
+					tx.sign(hex.decode('93a7e5ecde5eccc4fd858dfcf7d92011eade103600de0e8122d6fc5ffedf962d'));
+					tx.finalize();
 				}
 			} catch(err) {
 				console.log(err)
 			}
 		}
-		const txBytes = hex.encode(this.tx.toBytes());
+		const txBytes = hex.encode(tx.toBytes());
 		console.log('rawTransaction: ' + txBytes);
-		return this.tx;
+		return tx;
 	}
 
-	private addInputForFee = () => {
+	private addInputForFee = (tx:Transaction) => {
 		const feeUtxo = this.addressInfo.utxos.find((utxo:UTXO) => utxo.value > this.fee)
 		const script = btc.RawTx.decode(hex.decode(feeUtxo.tx.hex))
-		this.tx.addInput({
+		tx.addInput({
 			txid: hex.decode(feeUtxo.txid),
 			index: feeUtxo.vout,
 			witnessUtxo: {
