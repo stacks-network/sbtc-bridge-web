@@ -24,7 +24,7 @@ const updateTransaction = () => {
 
 </script>
 
-<section class=" bg-dark">
+<section class=" bg-secton">
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<h1 class="text-info">Wrap <span class="strokeme-info">BTC</span></h1>

@@ -119,7 +119,7 @@ onMount(async () => {
 })
 </script>
 
-<section class=" bg-dark text-white">
+<section class=" bg-secton text-white">
 	<div class="container my-5 p-5">
 	{#if inited}
 			<div class="row">

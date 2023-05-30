@@ -5,17 +5,19 @@ import { setConfig } from '$lib/config';
 import stx_eco_wallet_on from '$lib/assets/png-assets/stx_eco_wallet_on.png';
 import stx_eco_wallet_off from '$lib/assets/png-assets/stx_eco_wallet_off.png';
 import { Person } from "svelte-bootstrap-icons";
-import { isCoordinator } from '$lib/sbtc_admin.js'
 import { sbtcConfig } from '$stores/stores'
+import type { SbtcBalance } from 'sbtc-bridge-lib' 
 import type { SbtcConfig } from '$types/sbtc_config';
 import { loginStacksJs, fetchSbtcBalance } from '$lib/stacks_connect'
 import { CONFIG } from '$lib/config';
 
-const coordinator = isCoordinator(addresses().stxAddress)
 const logout = () => {
 	logUserOut();
 	sbtcConfig.update((conf:SbtcConfig) => {
 		conf.loggedIn = false;
+		conf.pegInTransaction = undefined;
+		conf.pegOutTransaction = undefined;
+		conf.balance = {} as SbtcBalance;
 		return conf;
 	});
 }
@@ -56,13 +58,6 @@ onMount(async () => {
 
 </script>
 
-{#if coordinator}
-<li class="nav-item mb-1">
-	<span class="nav-link">
-	<a href="/admin" class="pointer px-2">Admin</a> 
-</span>
-</li>
-{/if}
 <li class="nav-item dropdown">
 	<span class="nav-link dropdown-toggle text-white" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 		<Person width={25} height={25}/>

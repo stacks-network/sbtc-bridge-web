@@ -20,7 +20,7 @@ const toggleMechanism = (arg:string) => {
 }
 </script>
 
-<section class=" bg-dark text-white">
+<section class=" bg-secton text-white">
 	<div class="my-4 p-4">
 		<div class="card-width">
 			<h1 class="pointer text-white"><span class="strokeme-white">sBTC</span> Settings</h1>
