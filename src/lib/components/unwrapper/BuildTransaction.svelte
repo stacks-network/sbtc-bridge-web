@@ -67,11 +67,8 @@ const updateConfig = () => {
 const fee = 4444;
 const requestSignature = () => {
   errorReason = undefined;
-  if (poTx.pegInData.amount === 0 || poTx.pegInData.amount >= $sbtcConfig.balance.balance) {
-    errorReason = 'Amount must be more than 0 and less then your current sBTC balance';
-    return;
-  } else if (poTx.pegInData.amount >= ($sbtcConfig.balance.balance - fee)) {
-    errorReason = 'Please allow at least ' + fee + ' satoshis to pay for tx fees';
+  if (poTx.pegInData.amount === 0 || poTx.pegInData.amount > ($sbtcConfig.balance.balance - fee)) {
+    errorReason = 'Amount must be more than 0 and less then your current sBTC balance less a tx fee (' + fee + ') satoshis';
     return;
   }
   if (!stxAddressOk) {
