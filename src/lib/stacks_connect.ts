@@ -1,12 +1,13 @@
 
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
-import { sbtcConfig } from '$stores/stores.js'
-import { fetchUserSbtcBalance } from '$lib/bridge_api'
+import { sbtcConfig } from '$stores/stores'
+import { fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
-import { AppConfig, UserSession, showConnect } from '@stacks/connect';
+import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import type { AddressObject } from 'sbtc-bridge-lib' 
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -48,18 +49,25 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
-type AddressObject = {
-	stxAddress: string;
-	cardinal: string;
-	ordinal: string;
-	btcPubkeySegwit0: string;
-	btcPubkeySegwit1: string;
-}
-
 export async function fetchSbtcBalance () {
 	const adrds:AddressObject = addresses();
-	const result = await fetchUserSbtcBalance(adrds.stxAddress);
-	sbtcConfig.update((conf:SbtcConfig) => {
+	let result:AddressObject;
+	try {
+		result = await fetchUserBalances(adrds);
+		try {
+			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[CONFIG.VITE_SBTC_CONTRACT_ID + '::sbtc'].balance)
+		} catch (err) {
+			// for testing..
+			try { result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens['ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant::sbtc'].balance) }
+			catch (err) { result.sBTCBalance = 0 }
+		}
+
+	} catch(err) {
+		result = adrds;
+		console.log('Network down...');
+	}
+	//const result = await fetchUserSbtcBalance(adrds.stxAddress);
+	await sbtcConfig.update((conf:SbtcConfig) => {
 		try {
 			if (conf.pegInTransaction) {
 				conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
@@ -69,12 +77,7 @@ export async function fetchSbtcBalance () {
 				conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
 				conf.pegOutTransaction.fromBtcAddress = adrds.cardinal;
 			}
-	
-			conf.loggedIn = true;
-			conf.balance = result
-			conf.balance.address = adrds.stxAddress;
-			conf.balance.cardinal = adrds.cardinal;
-			conf.balance.ordinal = adrds.ordinal;
+			conf.addressObject = result;
 			conf.loggedIn = true;
 	
 		} catch (err:any) {
@@ -82,6 +85,7 @@ export async function fetchSbtcBalance () {
 		}
 		return conf;
 	});
+	return true;
 }
 
 export function addresses():AddressObject {
@@ -90,15 +94,17 @@ export function addresses():AddressObject {
 		const userData = userSession.loadUserData();
 		const network = CONFIG.VITE_NETWORK;
 		//let something = hashP2WPKH(payload.public_keys[0])
-		const addr = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		const stxAddress = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 		const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
 		const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
 		return {
-			stxAddress: addr,
+			stxAddress,
 			cardinal,
 			ordinal,
 			btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
-			btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr
+			btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
+			sBTCBalance: 0,
+			stxBalance: 0
 		};
 	} catch(err) {
 		return {} as AddressObject
@@ -106,27 +112,68 @@ export function addresses():AddressObject {
 }
 
 export const appDetails = {
-	name: 'sBTC Client',
-	icon: '/img/logo-white.jpeg',
+	name: 'sBTC Bridge',
+	icon: window.location.origin + '/img/icon_sbtc.png',
 }
-export async function loginStacksJs() {
+
+export function makeFlash(el1:HTMLElement|null) {
+	let count = 0;
+	if (!el1) return;
+	el1.classList.add("flasherize-button");
+    const ticker = setInterval(function () {
+		count++;
+		if ((count % 2) === 0) {
+			el1.classList.add("flasherize-button");
+		}
+		else {
+			el1.classList.remove("flasherize-button");
+		}
+		if (count === 2) {
+			el1.classList.remove("flasherize-button");
+			clearInterval(ticker)
+		}
+	  }, 2000)
+}
+
+export function isLegal(routeId:string):boolean {
+	if (userSession.isUserSignedIn()) return true;
+	if (routeId.startsWith('http')) {
+		if (routeId.indexOf('/deposit') > -1 || routeId.indexOf('/withdraw') > -1 || routeId.indexOf('/admin') > -1 || routeId.indexOf('/transactions') > -1) {
+			return false;
+		}
+	} else if (['/deposit', '/withdraw', '/admin', '/transactions'].includes(routeId)) {
+		return false;
+	}
+	return true;
+}
+
+export function loggedIn():boolean {
+	return userSession.isUserSignedIn()
+}
+
+export async function loginStacksJs(callback:any):Promise<any> {
 	try {
+		const provider = getStacksProvider()
+		console.log('provider: ', provider)
 		if (!userSession.isUserSignedIn()) {
 			showConnect({
 				userSession,
 				appDetails,
 				onFinish: async () => {
 					await fetchSbtcBalance();
+					callback(true);
 				},
 				onCancel: () => {
-					// handle if user closed connection prompt
+					callback(false);
 				},
 			});
 		} else {
-			return await fetchSbtcBalance();
+			await fetchSbtcBalance();
+			callback(true);
 		}
 	} catch (e) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
+		callback(false);
 	}
 }
 
@@ -146,3 +193,45 @@ export function signMessage(callback:any, script:string) {
 export function logUserOut() {
 	return userSession.signUserOut();
 }
+
+const FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
+
+export function verifyStacksPricipal(stacksAddress?:string) {
+	if (!stacksAddress) {
+	  throw new Error('Address not found');
+	} else if (FORMAT.test(stacksAddress)) {
+	  throw new Error('please remove white space / special characters');
+	}
+	try {
+	  const decoded = decodeStacksAddress(stacksAddress.split('.')[0]);
+	  if ((CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') && decoded[0] !== 26) {
+		throw new Error('Please enter a valid stacks blockchain testnet address');
+	  }
+	  if (CONFIG.VITE_NETWORK === 'mainnet' && decoded[0] !== 22) {
+		throw new Error('Please enter a valid stacks blockchain mainnet address');
+	  }
+	  return stacksAddress;
+	  } catch (err:any) {
+		  throw new Error('Invalid stacks principal - please enter a valid ' + CONFIG.VITE_NETWORK + ' account or contract principal.');
+	  }
+}
+  
+  
+export function verifyAmount(amount:number) {
+	if (!amount || amount === 0) {
+		throw new Error('No amount entered');
+	  }
+  	if (amount < 10000) {
+		throw new Error('Amount less than mnimum transaction fee.');
+	  }
+}
+export function verifySBTCAmount(amount:number, balance:number, fee:number) {
+	if (!amount || amount === 0) {
+		throw new Error('No amount entered');
+	}
+	if (amount > (balance - fee)) {
+		throw new Error('No more then balance (less fee of ' + fee + ')');
+	}
+}
+  
+	

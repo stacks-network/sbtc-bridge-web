@@ -1,7 +1,7 @@
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
-import { fetchUtxoSet, fetchCurrentFeeRates } from "../bridge_api";
+import { fetchUtxoSet } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { CONFIG } from '$lib/config';
 import { toStorable, buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib' 
@@ -40,6 +40,7 @@ export interface PegOutTransactionI {
 	getWitnessScript?: () => any;
 	setSignature: (signature:string) => void;
 	getOpDropPeginRequest: () => PeginRequestI;
+	getOpReturnPeginRequest: () => PeginRequestI;
 	buildOpReturnTransaction: () => btc.Transaction;
 	buildOpDropTransaction: () => btc.Transaction;
 }
@@ -76,7 +77,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 * @param sbtcWalletAddress 
 	 * @returns instance of PegOutTransaction
 	 */
-	public static create = async (network:string, commitKeys:CommitKeysI):Promise<PegOutTransactionI> => {
+	public static create = async (network:string, commitKeys:CommitKeysI, btcFeeRates:any):Promise<PegOutTransactionI> => {
 		const me = new PegOutTransaction();
 		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (commitKeys.fromBtcAddress && commitKeys.fromBtcAddress.length > 0) {
@@ -91,7 +92,6 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		}
 		// utxos have to come from a hosted indexer or external service
 		me.addressInfo = await fetchUtxoSet(commitKeys.fromBtcAddress);
-		const btcFeeRates = await fetchCurrentFeeRates();
 		me.feeInfo = btcFeeRates.feeInfo;
 		me.ready = true;
 		return me;
@@ -278,7 +278,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 			tries: 0,
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
-			requestType: 'wrap',
+			requestType: 'withdrawal',
 			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], this.net, true)',
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
@@ -286,6 +286,30 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		req.commitTxScript = toStorable(script)
 		return req;
 	}
+
+	getOpReturnPeginRequest = ():PeginRequestI => {
+		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
+		const data = this.buildData(this.signature, false);
+		console.log('reclaimAddr.pubkey: ' + this.commitKeys.reclaimPub)
+		console.log('revealAddr.pubkey: ' + this.commitKeys.revealPub)
+		
+		const req:PeginRequestI = {
+			originator: this.pegInData.stacksAddress,
+			fromBtcAddress: this.fromBtcAddress,
+			revealPub: this.commitKeys.revealPub,
+			reclaimPub: this.commitKeys.reclaimPub,
+			status: 1,
+			tries: 0,
+			mode: 'op_return',
+			amount: this.pegInData.amount,
+			requestType: 'withdrawal',
+			wallet: hex.encode(data),
+			stacksAddress: this.pegInData.stacksAddress,
+			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
+		}
+		return req;
+	}
+
 	/**
 	 * @deprecated - maybe not needed with op_drop as the users wallet calculates
 	 * the fees. Keep for now in case we switch back to op_return

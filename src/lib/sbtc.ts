@@ -8,7 +8,6 @@ import type { KeySet } from 'sbtc-bridge-lib'
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
   loggedIn: false,
-  balance: { balance: 0, address: '' },
   sigData: undefined,
   sbtcContractData: {} as SbtcContractDataI,
   pegInTransaction: undefined,
@@ -37,3 +36,4 @@ export const defaultSbtcConfig:SbtcConfig = {
     vout: undefined
   }
 }
+

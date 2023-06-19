@@ -1,0 +1,19 @@
+<script lang="ts">
+
+
+</script>
+
+<div class="icon">
+    <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10.3333 1L3.91667 7.41667L1 4.5" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+</div>
+
+<style>
+.icon {
+
+    /* Base/Black */
+
+    border: 0px solid #000000;
+}
+</style>
