@@ -1,6 +1,7 @@
 <script lang="ts">
 import { mintTo } from "$lib/sbtc_admin.js";
 import { sbtcConfig } from '$stores/stores'
+	import Button from "../shared/Button.svelte";
 
 let pegInAmount:number|undefined = $sbtcConfig?.pegInTransaction?.pegInData.amount;
 let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
@@ -20,17 +21,24 @@ const mint = async () => {
     <div class="col">
       {#if error}<p class="text-danger">{error}</p>{/if}
       <label for="transact-path">Mint Address</label>
-      <input type="text" id="stxAddress" class="form-control" bind:value={stxAddress}/>
+      <input type="text" id="stxAddress" class="p-3 rounded-md border" bind:value={stxAddress}/>
       <label for="transact-path">Mint Amount</label>
-      <input type="number" id="pegInAmount" class="form-control" bind:value={pegInAmount}/>
+      <input type="number" id="pegInAmount" class="p-3 rounded-md border" bind:value={pegInAmount}/>
       <label for="transact-path">Bitcoin Tx Id</label>
-      <input type="text" id="btcTxid" class="form-control" bind:value={btcTxid}/>
-      <div class="col"><button class="btn btn-outline-light" on:click={() => mint()}>Mint</button></div>
+      <input type="text" id="btcTxid" class="p-3 rounded-md border" bind:value={btcTxid}/>
+      <div class="py-0">
+        <Button darkScheme={false} label={'Mint'} target={'back'} on:clicked={() => mint()}/>
+      </div>
     </div>
 </div>
 
 <style>
+  input {
+    width: 100%;
+    margin: 10px 0;
+    color: #000;
+  }
   .row {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
   }
 </style>

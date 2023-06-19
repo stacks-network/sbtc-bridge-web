@@ -1,0 +1,112 @@
+@font-face {
+	font-family: 'Circular Std';
+	src:
+		local('CircularStd'),
+		url('/fonts/CircularStd-Light.woff') format('woff'),
+		url('/fonts/CircularStd-Light.woff2') format('woff2');
+	font-weight: 200;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Circular Std';
+	src:
+		local('CircularStd'),
+		url('/fonts/CircularStd-Medium.woff') format('woff'),
+		url('/fonts/CircularStd-Medium.woff2') format('woff2');
+	font-weight: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Circular Std';
+	src:
+		local('CircularStd'),
+		url('/fonts/CircularStd-Black.woff') format('woff'),
+		url('/fonts/CircularStd-Black.woff2') format('woff2');
+	font-weight: 700;
+	font-display: swap;
+}
+
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body, html {
+  height: 100%;
+}
+p {
+	margin-bottom: 20px;
+}
+.background {
+	background-image: url("$lib/assets/bg-lines.png");
+	background-size: cover;
+}
+.background-chev-up {
+    background-image: url("$lib/assets/box-w-chev.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+    background-size: 13rem;
+}
+.background-chev-down {
+    background-image: url("$lib/assets/box-d-chev.png");
+	background-repeat: no-repeat;
+	background-position: 50%;
+    background-size: 13rem;
+}
+.menu-btn {
+	background: linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%);
+	border: 1px solid #DA6137;
+}
+  
+.menu-btn-text {
+	font-family: 'Circular Std';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	letter-spacing: -0.02em;
+	color: #000000;
+}
+.menu-btn-dark {
+	background: #000000;
+	border-radius: 12px;
+	  border: 1px solid #FEDB63;
+}
+.menu-btn-text-dark {
+	font-family: 'Circular Std';
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 20px;
+	/* identical to box height, or 143% */
+  
+	letter-spacing: -0.02em;
+  
+	/* Gradients/Primary/02 */
+  
+	background: linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+  
+.qr-frame {
+	background: linear-gradient(126.12deg, #121212 44.07%, #404040 89.82%);
+	border: 0.3px solid #A5A5A5;
+	box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.4);
+	border-radius: 8px;
+}
+  
+.text-gradient {
+	color: linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%);
+}
+.flasherize-button {
+	border-bottom: 0pt solid #FEDB63!important;
+	color: #FEDB63!important;
+}
+.flasherize-text {
+	color: #fff!important;
+}

@@ -24,14 +24,13 @@ export default class ReclaimOrRevealTransaction {
 		this.commitTx = commitTx;
 	}
  
-	fetchUtxos = async (reclaim:boolean):Promise<boolean> => {
+	fetchUtxos = async (reclaim:boolean, btcFeeRates:any, sbtcWalletAddressInfo:any ):Promise<boolean> => {
 		if (reclaim) {
 			this.addressInfo = await fetchUtxoSet(this.commitTx.fromBtcAddress);
 		} else {
-			this.addressInfo = await fetchUtxoSet(this.commitTx.sbtcWalletAddress);
+			this.addressInfo = sbtcWalletAddressInfo;
 		}
 		this.transaction = (this.commitTx.btcTxid) ? await fetchTransaction(this.commitTx.btcTxid as string) : undefined;
-		const btcFeeRates = await fetchCurrentFeeRates();
 		this.feeInfo = btcFeeRates.feeInfo;
 		return true;
 	};

@@ -4,14 +4,10 @@
 		"paths": {
 			"$lib": ["./src/lib"],
 			"$lib/*": ["./src/lib/*"],
-			//"$components": ["src/components"],
-			//"$components/*": ["src/components/*"],
 			"$stores": ["./src/stores"],
 			"$stores/*": ["./src/stores/*"],
 			"$types": ["./src/types"],
-			"$types/*": ["./src/types/*"],
-			//"$transitions": ["src/transitions"],
-			//"$transitions/*": ["src/transitions/*"],
+			"$types/*": ["./src/types/*"]
 		},
 		"allowJs": true,
 		"checkJs": true,

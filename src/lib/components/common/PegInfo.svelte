@@ -1,7 +1,7 @@
 <script lang="ts">
 import { addresses } from '$lib/stacks_connect'
 import { createEventDispatcher } from "svelte";
-import { ArrowUp, ArrowDown, CheckCircle } from "svelte-bootstrap-icons";
+//import { ArrowUp, ArrowDown, CheckCircle } from "svelte-bootstrap-icons";
 import { sbtcConfig } from '$stores/stores';
 
 const dispatch = createEventDispatcher();
@@ -25,7 +25,7 @@ const updateTransaction = () => {
 
   <div class="row">
     <div class="col-4">Request</div>
-    <div class="col-8">{#if $sbtcConfig.pegIn}Wrap{:else}Unwrap{/if} Bitcoin</div>
+    <div class="col-8">{#if $sbtcConfig.pegIn}Deposit{:else}Withdraw{/if} Bitcoin</div>
   </div>
   <div class="row">
     <div class="col-4">From</div>
@@ -47,8 +47,8 @@ const updateTransaction = () => {
     <div class="col-4">Details</div>
     <div class="col-8">
       <div class="">
-        <span class="mx-1"><a class="text-info" href="/" on:click|preventDefault={() => {showHex = !showHex; showTx = false;}}>{#if showHex}<ArrowUp/>{:else}<ArrowDown/>{/if} show raw tx</a></span>
-        <span class="mx-1 me-4"><a class="text-info"  href="/" on:click|preventDefault={() => {showTx = !showTx; showHex = false;}}>{#if showTx}<ArrowUp/>{:else}<ArrowDown/>{/if} show tx details</a></span>
+        <span class="mx-1"><a class="text-info" href="/" on:click|preventDefault={() => {showHex = !showHex; showTx = false;}}>{#if showHex}^{:else}&lt;{/if} show raw tx</a></span>
+        <span class="mx-1 me-4"><a class="text-info"  href="/" on:click|preventDefault={() => {showTx = !showTx; showHex = false;}}>{#if showTx}^{:else}&lt;{/if} show tx details</a></span>
         <span><a class="text-info"  href="/" on:click|preventDefault={() => updateTransaction()}>back</a></span>
       </div>    
     </div>

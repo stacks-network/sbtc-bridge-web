@@ -9,7 +9,7 @@ import { pegin1 } from './data/data_pegin_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from 'sbtc-bridge-lib'
 import { c32address } from 'c32check';
-import { schnorr } from '@noble/curves/secp256k1';
+import { schnorr } from '@noble/curves/secp256k1'; // ESM and Common.js
 
 
 const addr = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5'
@@ -38,7 +38,10 @@ describe('suite', () => {
   })
 
   it.concurrent('Create random schnorr keys', async () => {
+    //const privSchnorr hex.encode(schnorr.getPublicKey(getConfig().btcSchnorrReclaim))
+    console.log('schnorr.utils.randomPrivateKey: ')
     const privSchnorr = schnorr.utils.randomPrivateKey();
+    console.log('schnorr.utils.randomPrivateKey: ' + privSchnorr)
     const pubSchnorr = schnorr.getPublicKey(privSchnorr);
     console.log('privSchnorr: ' + hex.encode(privSchnorr));
     console.log('pubSchnorr: ' + hex.encode(pubSchnorr));

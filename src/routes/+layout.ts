@@ -4,15 +4,7 @@ export const ssr = false;
 
 /** @type {import('./$types').LayoutLoad} */
 export async function load() {
-    //try {
-        //const sbtcContractData = await fetchSbtcData();
-        //return { 
-        //    sbtcContractData: JSON.parse(sbtcContractData),
-        //};
-    //} catch (err) {
-        //console.log('LayoutLoad Error: ', err);
-        return { 
-            sbtcContractData: 'unknown at present',
-        };
-    //}
+    return { 
+        sbtcContractData: 'unknown at present',
+    };
 }
