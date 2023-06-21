@@ -3,7 +3,7 @@
   import { a_primary } from '$lib/css_utils';
 </script>
 
-<div class="mx-auto flex flex-col justify-center px-6 lg:px-8">
+<div class="mx-auto flex flex-col justify-center px-6 lg:px-8 py-6">
   <div class="max-w-2xl">
     <div class="flex flex-col p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
       <h1 class="text-4xl font-normal">Welcome!</h1>

@@ -38,18 +38,6 @@ body, html {
   height: 100%;
 }
 
-.background-chev-up {
-    background-image: url("$lib/assets/box-w-chev.png");
-	background-repeat: no-repeat;
-	background-position: 50%;
-    background-size: 13rem;
-}
-.background-chev-down {
-    background-image: url("$lib/assets/box-d-chev.png");
-	background-repeat: no-repeat;
-	background-position: 50%;
-    background-size: 13rem;
-}
 .menu-btn {
 	background: linear-gradient(306.12deg, #ED693C 21.1%, #FDC60B 84.08%);
 	border: 1px solid #DA6137;

@@ -56,7 +56,7 @@ let questions = [
 							{/if}
 						</div>
 						{#if !q.hidden}
-							<div id={'answer-' + i} class="text-base font-light mt-6">{@html q.answer}</div>
+							<div id={'answer-' + i} class="sm:max-w-[80%] text-base font-light mt-6">{@html q.answer}</div>
 						{/if}
 					</div>
 				{/each}
