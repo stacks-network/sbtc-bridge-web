@@ -8,18 +8,18 @@
     <div class="flex flex-col p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
       <h1 class="text-4xl font-normal">Welcome!</h1>
       <div class="flex flex-col gap-1">
-        <p>
+        <p class="mb-2">
           The <span class="font-normal">sBTC Bridge</span> is a community led Stacks project. The Bridge
           provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain.
         </p>
-        <p>
+        <p class="mb-2">
           The Bridge provides features to build and track Bitcoin and Stacks transactions: it doesn't take
           custody of your money.
         </p>
-        <p>
+        <p class="mb-2">
           In order to interact with this application, you will need to have a wallet that supports both BTC and STX. <a class={a_primary} href="/wallet">Don't have a wallet?</a>
         </p>
-        <p>
+        <p class="mb-2">
           The Bridge services are free - we do not add any fees. You will however need to allow for payment of
           Bitcoin gas fees. We hope to add support for the Lightning Network in a future release to help
           reduce the overheads even further.
