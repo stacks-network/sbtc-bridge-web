@@ -106,7 +106,7 @@
 				</button>
 			</div>
 		</div>
-		<div class="px-4 py-2 bg-gray-1000 grid grid-cols-2 gap-2 items-center">
+		<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 			<p class="text-sm text-white font-normal">
 				sBTC wallet:
 				<span class="text-sm inline-block font-extralight text-gray-100">{getAddress(false)}</span>
@@ -117,7 +117,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="px-4 py-2 bg-gray-1000 grid grid-cols-2 gap-2 items-center">
+		<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 			<p class="text-sm text-white font-normal">
 				sBTC contract:
 				<span class="text-sm inline-block font-extralight text-gray-100">{getContractAddress()}</span>
@@ -128,7 +128,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="px-4 py-2 bg-gray-1000 grid grid-cols-2 gap-2 items-center">
+		<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 			<p class="text-sm text-white font-normal">
 				Contract owner:
 				<span class="text-sm inline-block font-extralight text-gray-100">{getOwner(false)}</span>
@@ -139,7 +139,7 @@
 				</a>
 			</div>
 		</div>
-		<div class="px-4 py-2 bg-gray-1000 grid grid-cols-2 gap-2 items-center">
+		<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 			<p class="text-sm text-white font-normal">
 				Coordinator:
 				<span class="text-sm inline-block font-extralight text-gray-100">{getCoordinator(false)}</span>
