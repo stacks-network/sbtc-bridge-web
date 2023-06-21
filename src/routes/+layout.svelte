@@ -94,15 +94,14 @@
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
 		<div>
 			{#key componentKey}
-			<Header on:init_application={initApplication}></Header>
+			<Header on:init_application={initApplication} />
 			{/key}
 		</div>
-		<div class="flex min-h-[calc(100vh-180px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
+		<div class="flex min-h-[calc(100vh-160px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
 			<slot></slot>
 		</div>
-		<div class="h-16 w-screen px-20">
-			<Footer></Footer>
-		</div>
+
+		<Footer />
 	</div>
 {/if}
 <svelte:window bind:innerWidth />

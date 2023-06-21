@@ -20,8 +20,8 @@ const start = (pegin:boolean) => {
 <Popover class="w-64 text-sm font-light " title="Withdrawals" triggeredBy="#po-withdrawals">
     Permissionlessly withdraw your Bitcoin at any time - withdrawals take at most 2 weeks to be processed via the current mining cycle - <a href="https://stacks.org/" target="_blank" class={a_primary}>learn more</a>.
 </Popover>
-  
-<div class="mx-auto h-[calc(100vh-280px)] flex flex-col justify-center">
+
+<div class="mx-auto flex flex-col justify-center">
     <div class="mx-auto max-w-2xl">
         <div class="text-black-01 flex flex-col md:flex-row gap-10 ">
             <div class="background-chev-up bg-blue-500 w-96 h-80 cursor-pointer flex rounded-2xl flex-col align-middle" on:keydown on:click={() => start(true)}>
