@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
 import type { SigData } from 'sbtc-bridge-lib' 
-import { openPsbtRequestPopup } from '@stacks/connect'
+import { openPsbtRequestPopup, appDetails } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectBlockCypher } from '$lib/bridge_api';
@@ -53,10 +53,7 @@ export async function requestSignPsbt() {
   console.log(currentTx);
   openPsbtRequestPopup({
     hex: currentTx,
-    appDetails: {
-      name: 'sBTC Bridge',
-      icon: window.location.origin + '/img/icon_sbtc.png',
-    },
+    appDetails: appDetails(),
     onFinish(data:any) {
       broadcastTransaction(data.hex);
     },
