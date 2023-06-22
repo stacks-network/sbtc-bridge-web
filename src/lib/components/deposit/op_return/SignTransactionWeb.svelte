@@ -3,7 +3,7 @@ import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
 import type { SigData } from 'sbtc-bridge-lib' 
-import { openPsbtRequestPopup, appDetails } from '@stacks/connect'
+import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectBlockCypher } from '$lib/bridge_api';
@@ -15,7 +15,7 @@ import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
-import { makeFlash } from "$lib/stacks_connect";
+import { makeFlash, appDetails } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 
 export let piTx: PegInTransactionI|PegOutTransactionI;
