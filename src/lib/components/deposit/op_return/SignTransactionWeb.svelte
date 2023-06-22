@@ -15,7 +15,7 @@ import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
-import { makeFlash } from "$lib/stacks_connect";
+import { makeFlash, appDetails } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 
 export let piTx: PegInTransactionI|PegOutTransactionI;
@@ -53,10 +53,7 @@ export async function requestSignPsbt() {
   console.log(currentTx);
   openPsbtRequestPopup({
     hex: currentTx,
-    appDetails: {
-      name: 'sBTC Bridge',
-      icon: window.location.origin + '/img/icon_sbtc.png',
-    },
+    appDetails: appDetails(),
     onFinish(data:any) {
       broadcastTransaction(data.hex);
     },

@@ -13,7 +13,7 @@
           provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain.
         </p>
         <p class="mb-2">
-          The Bridge provides features to build and track Bitcoin and Stacks transactions: it doesn't take
+          The Bridge interacts with Bitcoin and Stacks Blockchains: it does not take
           custody of your money.
         </p>
         <p class="mb-2">
@@ -32,7 +32,7 @@
           <Icon src="{ArrowSmallRight}" mini class="-mr-0.5 h-5 w-5" aria-hidden="true" />
         </a>
 
-        <a href="/how-it-works" class="inline-flex items-center gap-x-1.5 bg-transparent px-4 py-2 font-normal text-white rounded-xl border border-transparent hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" role="button">
+        <a href="/faq" class="inline-flex items-center gap-x-1.5 bg-transparent px-4 py-2 font-normal text-white rounded-xl border border-transparent hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" role="button">
           Learn more
         </a>
       </div>

@@ -111,9 +111,11 @@ export function addresses():AddressObject {
 	}
 }
 
-export const appDetails = {
-	name: 'sBTC Bridge',
-	icon: window.location.origin + '/img/icon_sbtc.png',
+export function appDetails() {
+	return {
+		name: 'sBTC Bridge',
+		icon: (window) ? window.location.origin + '/img/icon_sbtc.png' : '/img/icon_sbtc.png',
+	}
 }
 
 export function makeFlash(el1:HTMLElement|null) {
@@ -158,7 +160,7 @@ export async function loginStacksJs(callback:any):Promise<any> {
 		if (!userSession.isUserSignedIn()) {
 			showConnect({
 				userSession,
-				appDetails,
+				appDetails: appDetails(),
 				onFinish: async () => {
 					await fetchSbtcBalance();
 					callback(true);
@@ -181,7 +183,7 @@ export function signMessage(callback:any, script:string) {
 	openSignatureRequestPopup({
 		message: script,
 		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
-		appDetails: appDetails,
+		appDetails: appDetails(),
 		onFinish(value) {
 		  console.log('Signature of the message', value.signature);
 		  console.log('Use public key:', value.publicKey);

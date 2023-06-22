@@ -26,6 +26,9 @@ const fetchDeposits = async (mine:boolean) => {
     } else {
         peginRequests = await fetchPegins()
     }
+    // note this end point recovers the status 2 commitments from bitcoin - using the cardinal to find utxo's.
+    //peginRequests = await fetchCommitments($sbtcConfig?.addressObject?.cardinal!, $sbtcConfig?.addressObject?.stxAddress!, $sbtcConfig?.sbtcContractData.sbtcWalletAddress!, 5000)
+
     peginRequests.sort(compare)
 }
 

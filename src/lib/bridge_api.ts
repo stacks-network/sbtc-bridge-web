@@ -1,17 +1,5 @@
 import { CONFIG } from '$lib/config';
 import type { PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
-import { hex, base64 } from '@scure/base';
-import type { Transaction } from '@scure/btc-signer'
-import * as secp from '@noble/secp256k1';
-import * as btc from '@scure/btc-signer';
-//import { toStorable, getStacksAddressFromSignature } from 'sbtc-bridge-lib' 
-import { toStorable } from 'sbtc-bridge-lib' 
-import { verifyMessageSignatureRsv } from '@stacks/encryption';
-import { hashMessage } from '@stacks/encryption';
-import { recoverSignature } from "micro-stacks/connect";
-import { c32address } from 'c32check';
-import { sha256 } from '@noble/hashes/sha256';
-import { ripemd160 } from '@noble/hashes/ripemd160';
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
@@ -146,8 +134,8 @@ export async function savePeginCommit(peginRequest:PeginRequestI):Promise<any> {
   if (response.status !== 200) {
     console.log('Bitcoin address not known - is the network correct?');
   }
-  const signedPsbt = await extractResponse(response);
-  return signedPsbt;
+  const res = await extractResponse(response);
+  return res;
 }
 export async function updatePeginCommit(peginRequest:PeginRequestI):Promise<any> { //<PeginRequestI|{insertedId:string; acknowledged:boolean;}>  {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
@@ -185,6 +173,17 @@ export async function doPeginScan():Promise<Array<PeginRequestI>> {
 
 export async function fetchPegins():Promise<Array<PeginRequestI>> {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
+  const response = await fetchCatchErrors(path);
+  if (response.status !== 200) {
+    console.log('Request failed to url: ' + path);
+    return [];
+  }
+  const pegins = await extractResponse(response);
+  return pegins;
+}
+
+export async function fetchCommitments(btcAddress:string, stxAddress:string, sbtcWalletAddress:string, revealFee:number):Promise<Array<PeginRequestI>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/commit-scan/' + btcAddress + '/' + stxAddress + '/' + sbtcWalletAddress + '/' + revealFee);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
@@ -293,12 +292,8 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
   }
 }
 export async function fetchUserBalances(adrds:AddressObject) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/balances');
-  const response = await fetch(path, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(adrds)
-  });
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/balances/' + adrds.stxAddress + '/' + adrds.cardinal + '/' + adrds.ordinal);
+  const response = await fetch(path);
   if (response.status !== 200) {
     console.log('Bitcoin address not known - is the network correct?');
   }

@@ -20,7 +20,7 @@ export default class ReclaimOrRevealTransaction {
 	scureFee = 0;
 
 	public constructor(commitTx:PeginRequestI) {
-		(commitTx.sbtcWalletAddress.startsWith('tb')) ? this.net = btc.TEST_NETWORK : this.net = btc.NETWORK;
+		(commitTx?.sbtcWalletAddress?.startsWith('tb')) ? this.net = btc.TEST_NETWORK : this.net = btc.NETWORK;
 		this.commitTx = commitTx;
 	}
  

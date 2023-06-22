@@ -7,7 +7,6 @@ import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { fail } from 'assert';
 import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
-import { concatByteArrays } from '$lib/structured-data.js'
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from 'sbtc-bridge-lib'
 import { uint8ToAmount, amountToUint8 } from 'sbtc-bridge-lib' 
 
@@ -219,8 +218,6 @@ describe('suite', () => {
 		//amtBuf.writeUInt32LE(2500, 0);
     //const amt = new Uint8Array(view.buffer)
     const amt = amountToUint8(2500, 9)
-		const data = concatByteArrays([b1, amt])
-    expect(data.length).equals(b1.length + amt.length)
 
 		//const data = Buffer.concat([b1, amtBuf]);
     //console.log('amtBuf: ' + (hex.encode(amt)))
