@@ -14,11 +14,10 @@ export type SbtcConfig = {
   stxAddress?: string;
   sigData:any;
   pegIn:boolean;
-  peginRequest:PeginRequestI;
+  peginRequest?:PeginRequestI;
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataI;
   keys: KeySet;
-  sbtcAddressInfo: any;
   innerWidth:number;
 };
 

@@ -83,6 +83,8 @@
 			await initApplication();
 			//await tick();
 		} catch (err) {
+			let conf = defaultSbtcConfig as SbtcConfig;
+			sbtcConfig.update(() => conf);
 			errorReason = COMMS_ERROR
 			console.log(err)
 		}
@@ -97,7 +99,7 @@
 			<Header on:init_application={initApplication}></Header>
 			{/key}
 		</div>
-		<div class="flex min-h-[calc(100vh-180px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
+		<div class="flex min-h-[calc(100vh-150px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
 			<slot></slot>
 		</div>
 		<div class="h-16 w-screen px-20">

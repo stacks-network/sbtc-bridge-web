@@ -40,8 +40,12 @@ const doSign = async (txtype:string, sigData:any, message:string, tx:Uint8Array)
 		depositId: peginRequest._id
 	}
 	wrappedPsbt = await sign(wrappedPsbt);
-	if (wrappedPsbt.broadcastResult && wrappedPsbt.broadcastResult.failed) {
-		errorMessage = wrappedPsbt.broadcastResult.reason;
+	if (wrappedPsbt.broadcastResult) {
+		if (wrappedPsbt.broadcastResult.failed) {
+			errorMessage = wrappedPsbt.broadcastResult.reason;
+		} else if (wrappedPsbt.broadcastResult.error) {
+			errorMessage = 'Commitment transaction is not yet confirmed.. try again in 60 minutes.' //wrappedPsbt.broadcastResult.error;
+		}
 	}
 	if (typeof wrappedPsbt.signedTransaction === 'string') {
 		console.log('hex: ', wrappedPsbt.signedTransaction)
@@ -120,7 +124,7 @@ onMount(async () => {
 	Thanks for <a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer" class={a_primary}>depositing</a> Bitcoin.
 </p>
 <p class="">
-	Your sBTC will materialise in your Stacks Web Wallet within 24 hours - if not you can use the reclaim button above to get your bitcoin sent back to your Web Wallet.
+	Your sBTC will materialise in your Stacks Web Wallet within 24 hours - if not you can <a href="/" class={a_primary} on:keyup on:click|preventDefault={() => reclaiming = !reclaiming}>reclaim</a> your bitcoin and have it sent back to your Web Wallet.
 	The <a class={a_primary} href="https://stacks.org" target="_blank">Stacks Foundation</a> maintains a list of accredited projects where you can put your sBTC to work.
 </p>
 <p class="">

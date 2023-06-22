@@ -3,7 +3,7 @@
   import { a_primary } from '$lib/css_utils';
 </script>
 
-<div class="mx-auto h-[calc(100vh-280px)] flex flex-col justify-center">
+<div class="mx-auto flex flex-col justify-center">
   <div class="mx-auto max-w-2xl">
     <div class="flex flex-col p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
       <div class="flex flex-col">
