@@ -31,7 +31,7 @@
 	}
 
 	const getNavActiveClass = (item:string) => {
-		if (location.href.indexOf(item) > -1) return ' font-normal text-base text-warning-400 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%]'
+		if (location.href.indexOf(item) > -1) return 'font-normal text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%]'
 		return 'font-normal text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%]'
 	}
 
@@ -44,7 +44,7 @@
 	class="mx-auto flex max-w-7xl items-center !px-6 lg:px-8 !bg-transparent"
 	navDivClass="flex flex-nowrap justify-between md:justify-start items-center flex-1" let:hidden let:toggle fluid={true}>
   <NavBrand href="/">
-	<Brand />
+		<Brand />
   </NavBrand>
 
 	<div class="flex justify-between w-full md:w-auto mt-4 md:mt-0 md:order-2 gap-4">
