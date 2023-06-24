@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, ClipboardDocument } from "svelte-hero-icons"
-	import SBtcIcon from '$lib/components/shared/sBTCIcon.svelte';
+	import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
 	import BitcoinIcon from '$lib/components/shared/BitcoinIcon.svelte';
 	import StacksIcon from '$lib/components/shared/StacksIcon.svelte';
 	import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
@@ -54,12 +54,12 @@
 	</svg>
 </Button>
 <Dropdown
-	frameClass="z-30 rounded-lg !bg-black !border py-2 !border-gray-900"
+	frameClass="z-30 rounded-lg !bg-black !border py-1 !border-gray-900"
 	ulClass="py-1 w-full"
 	placement='bottom-end'>
 	<div slot="header" class="bg-gray-1000 overflow-hidden py-1 text-white">
-		<div class=" divide-y divide-gray-900">
-			<div>
+		<div class="divide-y divide-gray-900">
+			<div class="pb-2">
 				<div class="px-4 py-2 font-normal">Addresses</div>
 				<div class="px-4 py-1 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="icon-stacks" class="flex items-center gap-3 text-sm">
@@ -129,7 +129,7 @@
 				</div>
 				<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
-						<SBtcIcon clazz={'w-5 h-5'}/>
+						<LogoSBTC class={'w-5 h-5'}/>
 
 						<span class="font-bold">sBTC</span>
 					</div>

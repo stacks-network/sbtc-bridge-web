@@ -9,7 +9,7 @@
       <h1 class="text-4xl font-normal">Welcome!</h1>
       <div>
         <p class="mb-2">
-          The <span class="font-normal">sBTC Bridge</span> is a community led Stacks project. The Bridge
+          The <span class="font-normal">sBTC Bridge</span> is a community-led Stacks project. The Bridge
           provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain.
         </p>
         <p class="mb-2">
