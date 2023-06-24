@@ -31,7 +31,7 @@ let questions = [
 	{
 		hidden: true,
 		question: 'Where can I find out more about the sBTC bridge?',
-		answer: 'For more info about the sBTC Bridge, check <a class="text-faq-link" href="/faq">the FAQ page.</a>'
+		answer: 'For more info about the sBTC Bridge, check <a class="text-faq-link" href="/faq">the FAQ page</a>.'
 	}
 ]
 </script>

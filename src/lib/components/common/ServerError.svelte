@@ -29,7 +29,7 @@ const launchApp = () => {
           <p class="mb-2">Temporarily problems connecting to the bridge.</p>
           <p class="mb-2">Please try later.</p>
         {/if}
-        <p class="mb-2">For more info about the sBTC Bridge, check <a class={a_primary} href="/faq">the FAQ page.</a></p>
+        <p class="mb-2">For more info about the sBTC Bridge, check <a class={a_primary} href="/faq">the FAQ page</a>.</p>
       </div>
       <Button darkScheme={false} label={'Back home'} target={'launchApp'} on:clicked={() => launchApp()}/>
     </div>
