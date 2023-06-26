@@ -4,7 +4,7 @@ import { goto } from "$app/navigation";
 import { CONFIG } from '$lib/config';
 import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte';
 import InputTextField from '$lib/components/deposit/InputTextField.svelte';
-import InputNumberField from '$lib/components/deposit/InputNumberField.svelte';
+import BitcoinAmountField from '$lib/components/deposit/BitcoinAmountField.svelte';
 import { sbtcConfig } from '$stores/stores'
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
@@ -17,6 +17,7 @@ import { makeFlash } from "$lib/stacks_connect";
 import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress, doPeginScan } from "$lib/bridge_api";
 import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
 import Button from '$lib/components/shared/Button.svelte';
+import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
 
 const dispatch = createEventDispatcher();
 
@@ -39,7 +40,7 @@ const input1Data = {
 
 const input2Data = {
   field: 'amount',
-  label: 'Amount (satoshis)',
+  label: 'Amount (bitcoin)',
   hint: '',
   resetValue: undefined,
   value: 10000
@@ -90,8 +91,9 @@ const doClicked = async (event:any) => {
   const button = event.detail;
   if (button.target === 'openInvoice') {
     try {
-      verifyAmount(input2Data.value);
-      piTx.pegInData.amount = input2Data.value;
+      const amt = bitcoinToSats(input2Data.value)
+      verifyAmount(amt);
+      piTx.pegInData.amount = amt;
       peginRequest = piTx.getOpDropPeginRequest();
       const conf:SbtcConfig = $sbtcConfig;
       conf.pegInTransaction = piTx;
@@ -100,7 +102,10 @@ const doClicked = async (event:any) => {
       timeLineStatus = 2;
       dispatch('time_line_status_change', { timeLineStatus });
     } catch(err:any) {
-      amountErrored = 'Amount below required threshold'
+      amountErrored = 'Testnet only atm - please use the `settings` menu to switch network'
+      if (CONFIG.VITE_NETWORK === 'testnet') {
+        amountErrored = 'Amount below required threshold'
+      }
       makeFlash(document.getElementById(input2Data.field))
       componentKey++
     }
@@ -199,7 +204,7 @@ const initComponent = async () => {
   piTx.pegInData.amount = (piTx.pegInData.amount > 0) ? piTx.pegInData.amount : 0;
   input1Data.value = piTx.pegInData.stacksAddress || '';
   input1Data.resetValue = input1Data.value;
-  input2Data.value = piTx.pegInData.amount;
+  input2Data.value = satsToBitcoin(piTx.pegInData.amount);
   try {
     peginRequest = piTx.getOpDropPeginRequest();
   } catch (err) {
@@ -252,9 +257,9 @@ onMount(async () => {
   {#if timeLineStatus === 1 || peginRequest.amount === 0}
   {#key componentKey}
   <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
-  <InputNumberField inputData={input2Data} on:updated={fieldUpdated}/>
+  <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
   {#if amountErrored}<div class="text-error-500">{amountErrored}</div>{/if}
-  <div class=""><Button darkScheme={false} label={'Show Invoice / QR code'} target={'openInvoice'} on:clicked={(event) => doClicked(event)}/></div>
+  <div class="mb-5"><Button darkScheme={false} label={'Show Invoice / QR code'} target={'openInvoice'} on:clicked={(event) => doClicked(event)}/></div>
   
   {/key}
   {:else if timeLineStatus === 2}
