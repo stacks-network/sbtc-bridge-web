@@ -6,7 +6,7 @@ import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } 
 import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { goto } from '$app/navigation'
-import ExternalLinkIcon from '$lib/components/shared/ExternalLinkIcon.svelte';
+import { satsToBitcoin } from '$lib/utils'
 import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
 
 // fetch/hydrate data from local storage 
@@ -71,7 +71,7 @@ onMount(async () => {
                 <div class="table-auto">
                     <div class="w-full">
                       <div class="grid grid-cols-4 lg:grid-cols-6 gap-2 flex-nowrap font-semibold justify-evenly content-start">
-                        <div style="white-space: nowrap;">Amount sats</div>
+                        <div style="white-space: nowrap;">Amount btc</div>
                         <div class="hidden lg:flex">Date</div>
                         <div>From</div>
                         <div class="hidden lg:flex">To</div>
@@ -83,7 +83,7 @@ onMount(async () => {
                     {#each peginRequests as pegin}
                     {#if pegin.status >= 0}
                     <div class="w-full grid grid-cols-4 lg:grid-cols-6 gap-2 justify-evenly content-start">
-                        <div>{#if pegin.status === 1}{pegin.amount}{:else}{pegin.amount}{/if}</div>
+                        <div>{#if pegin.status === 1}{satsToBitcoin(pegin.amount)}{:else}{satsToBitcoin(pegin.amount)}{/if}</div>
                         <div class="hidden lg:flex">{tsToDate(pegin.updated)}</div>
                         <div class="flex">
                             <div class="sm:pe-2 md:pe-5"><a class="" href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress)}</a></div>

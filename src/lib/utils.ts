@@ -19,15 +19,27 @@ const formatter = new Intl.NumberFormat('en-US', {
 const btcPrecision = 100000000
 const stxPrecision = 1000000
 
+export function bitcoinToSats(amountBtc:number) {
+  return  Math.round(amountBtc * btcPrecision)
+}
+
+export function fmtSatoshiToBitcoin(amountSats:number) {
+  return  (Math.round(amountSats) / btcPrecision).toFixed(8)
+}
+
+export function satsToBitcoin(amountSats:number):number {
+  return  Number((Math.round(amountSats) / btcPrecision).toFixed(8))
+}
+
+export function fmtMicroToStx(amountStx:number) {
+  return  (Math.round(amountStx) / stxPrecision).toFixed(6)
+}
+
 export function tsToDate(updated:number|undefined) {
   let d = new Date();
   if (updated) d = new Date(updated);
   return d.toLocaleDateString('en-US');
   //return d.getHours() + ':' + d.getMinutes() + ' ' + d.getDate() + "/" + d.getMonth() + 1 + "/" + d.getFullYear();
-}
-
-export function bitcoinToSats(amountBtc:number) {
-  return  Math.round(amountBtc * btcPrecision)
 }
 
 export function isSupported(address:string) {
@@ -81,14 +93,6 @@ export function explorerBtcAddressUrl(address:string) {
 }
 export function explorerTxUrl(txid:string) {
 	return CONFIG.VITE_STACKS_EXPLORER + '/txid/' + txid + '?chain=' + CONFIG.VITE_NETWORK;
-}
-
-export function fmtSatoshiToBitcoin(amountSats:number) {
-  return  (Math.round(amountSats) / btcPrecision).toFixed(8)
-}
-
-export function fmtMicroToStx(amountStx:number) {
-  return  (Math.round(amountStx) / stxPrecision).toFixed(6)
 }
 
 export function bitcoinBalanceFromMempool(addressMempoolObject:AddressMempoolObject|undefined) {

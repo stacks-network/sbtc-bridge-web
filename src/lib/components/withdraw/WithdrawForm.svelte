@@ -5,7 +5,7 @@ import { CONFIG } from '$lib/config';
 import Button from '$lib/components/shared/Button.svelte';
 import WithdrawFormHeader from './WithdrawFormHeader.svelte';
 import InputTextField from '../deposit/InputTextField.svelte';
-import InputNumberField from '../deposit/InputNumberField.svelte';
+import BitcoinAmountField from '../deposit/BitcoinAmountField.svelte';
 import { sbtcConfig } from '$stores/stores'
 import PegOutTransaction from '$lib/domain/PegOutTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
@@ -18,6 +18,7 @@ import { makeFlash } from "$lib/stacks_connect";
 import { fetchPeginById, doPeginScan } from "$lib/bridge_api";
 import Banner from '$lib/components/shared/Banner.svelte';
 import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
+import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
 
 const dispatch = createEventDispatcher();
 
@@ -50,10 +51,10 @@ const input1Data = {
 
 const input2Data = {
   field: 'amount',
-  label: 'Amount (satoshi units)',
+  label: 'Amount (bitcoin)',
   hint: '',
   resetValue: 0,
-  value: 0
+  value: 0.0
 }
 
 const fieldUpdated = async (event:any) => {
@@ -109,8 +110,9 @@ const doClicked = async (event:any) => {
   const button = event.detail;
   if (button.target === 'showInvoice') {
     try {
-      verifySBTCAmount(input2Data.value, $sbtcConfig.addressObject!.sBTCBalance, piTx.fee);
-      piTx.pegInData.amount = input2Data.value;
+      const amt = bitcoinToSats(input2Data.value)
+      verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, piTx.fee);
+      piTx.pegInData.amount = amt;
       const script = piTx.getDataToSign();
       await signMessage(async function(sigData:any, message:Uint8Array) {
         piTx.signature = sigData.signature;
@@ -205,14 +207,14 @@ const initComponent = async () => {
   if (!piTx.pegInData) piTx.pegInData = {} as PegInData;
   if (!piTx.pegInData.stacksAddress && addressObject.stxAddress) piTx.pegInData.stacksAddress = addressObject.stxAddress;
   input0Data.value = input0Data.resetValue = addressObject.cardinal;
-  input0Data.hint = 'Bitcoin will be sent here. Current balance is ' + piTx.maxCommit() + ' sats';
+  input0Data.hint = 'Bitcoin will be sent here. Current balance is ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin';
   input1Data.value = input1Data.resetValue = piTx.pegInData.stacksAddress!;
   if (piTx.pegInData.amount <= 0 || piTx.pegInData.amount > (addressObject.sBTCBalance - piTx.fee)) {
-    piTx.pegInData.amount = input2Data.value = input2Data.resetValue = addressObject.sBTCBalance - piTx.fee;
+    piTx.pegInData.amount = input2Data.resetValue = addressObject.sBTCBalance - piTx.fee;
   }
   if (addressObject.sBTCBalance <= 0) balanceMsg = true
   input2Data.hint = 'sBTC Balance: ' + addressObject.sBTCBalance;
-  input2Data.value = piTx.pegInData.amount;
+  input2Data.value = satsToBitcoin(piTx.pegInData.amount);
   dispatch('time_line_status_change', { timeLineStatus });
 
   const conf:SbtcConfig = $sbtcConfig;
@@ -252,9 +254,9 @@ onMount(async () => {
     {#key componentKey}
       <InputTextField readonly={true} inputData={input0Data} on:updated={fieldUpdated}/>
       <InputTextField readonly={true} inputData={input1Data} on:updated={fieldUpdated}/>
-      <InputNumberField inputData={input2Data} on:updated={fieldUpdated}/>
+      <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
       {#if amountErrored}<div class="text-warning-600">{amountErrored}</div>{/if}
-      <Button darkScheme={false} label={'Sign Message'} target={'showInvoice'} on:clicked={doClicked}/>
+      <div class="mb-5"><Button darkScheme={false} label={'Sign Message'} target={'showInvoice'} on:clicked={doClicked}/></div>
     {/key}
     {:else if timeLineStatus === 2}
     <ScriptHashAddress {peginRequest} on:clicked={doClicked}/>

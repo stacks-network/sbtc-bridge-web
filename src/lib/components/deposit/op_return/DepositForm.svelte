@@ -4,7 +4,7 @@ import { goto } from "$app/navigation";
 import { CONFIG } from '$lib/config';
 import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte';
 import InputTextField from '$lib/components/deposit/InputTextField.svelte';
-import InputNumberField from '$lib/components/deposit/InputNumberField.svelte';
+import BitcoinAmountField from '$lib/components/deposit/BitcoinAmountField.svelte';
 import { sbtcConfig } from '$stores/stores'
 import PegInTransaction from '$lib/domain/PegInTransaction';
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
@@ -20,6 +20,7 @@ import Button from '$lib/components/shared/Button.svelte';
 import Banner from '$lib/components/shared/Banner.svelte';
 import { bitcoinBalanceFromMempool }  from "$lib/utils";
 import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
+import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
 
 const dispatch = createEventDispatcher();
 
@@ -53,7 +54,7 @@ const input1Data = {
 
 const input2Data = {
   field: 'amount',
-  label: 'Amount (satoshis)',
+  label: 'Amount (bitcoin)',
   hint: '',
   resetValue: undefined,
   value: 10000
@@ -101,13 +102,14 @@ const doClicked = async (event:any) => {
   const button = event.detail;
   if (button.target === 'openInvoice') {
     try {
-      verifyAmount(input2Data.value);
-      if (peginRequest && peginRequest._id && input2Data.value !== peginRequest.amount) {
-        peginRequest.amount = piTx.pegInData.amount = input2Data.value
+      const amt = bitcoinToSats(input2Data.value)
+      verifyAmount(amt);
+      if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
+        peginRequest.amount = piTx.pegInData.amount = amt
         const newP = await updatePeginCommit(peginRequest)
         if (newP && newP.status !== 404) peginRequest = newP;
       } else {
-        piTx.pegInData.amount = input2Data.value;
+        piTx.pegInData.amount = amt;
       }
       const conf:SbtcConfig = $sbtcConfig;
       conf.pegInTransaction = piTx;
@@ -199,8 +201,8 @@ const initComponent = async (amt:number) => {
   input0Data.hint = '';
   input1Data.value = piTx.pegInData.stacksAddress || '';
   input1Data.resetValue = input1Data.value;
-  input2Data.value = piTx.pegInData.amount;
-  input2Data.hint = 'Balance: ' + piTx.maxCommit() + ' sats - amount is adjusted for gas fees of ' + piTx.fee + ' sats';
+  input2Data.value = satsToBitcoin(piTx.pegInData.amount);
+  input2Data.hint = 'Balance: ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin - amount is adjusted for gas fees of ' + satsToBitcoin(piTx.fee) + ' bitccoin';
   const conf:SbtcConfig = $sbtcConfig;
   dispatch('time_line_status_change', { timeLineStatus });
   conf.pegInTransaction = piTx;
@@ -235,9 +237,9 @@ onMount(async () => {
     <Banner bannerType={'danger'} message={'Please transfer some BTC to your Web Wallet (above address) to continue or switch tx mode back to op_drop in settings '} />
     {:else}
     <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
-    <InputNumberField inputData={input2Data} on:updated={fieldUpdated}/>
+    <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
     {#if amountErrored}<div class="text-error-500">{amountErrored}</div>{/if}
-    <div class=""><Button darkScheme={false} label={'Continue'} target={'openInvoice'} on:clicked={(event) => doClicked(event)}/></div>
+    <div class="mb-5"><Button darkScheme={false} label={'Continue'} target={'openInvoice'} on:clicked={(event) => doClicked(event)}/></div>
   {/if}
   {/key}
   {:else if timeLineStatus === 2}
