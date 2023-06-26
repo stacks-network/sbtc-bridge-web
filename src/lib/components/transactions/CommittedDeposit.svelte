@@ -136,5 +136,5 @@ onMount(async () => {
 </p>
 <Invoice {peginRequest}/>
 {#if errorMessage}<p class="text-error-500">{errorMessage}</p>{/if}
-<div id="po-sign-reclaim"><Button darkScheme={false} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/></div>
+<div id="po-sign-reclaim" class="mb-5"><Button darkScheme={false} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/></div>
 {/if}
