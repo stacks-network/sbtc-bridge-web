@@ -18,6 +18,5 @@ export const defaultSbtcConfig:SbtcConfig = {
     debugMode: false,
     testAddresses: false
   },
-  innerWidth: 1000
 }
 

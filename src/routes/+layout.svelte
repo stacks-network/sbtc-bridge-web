@@ -16,13 +16,6 @@
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { loginStacksJs } from '$lib/stacks_connect'
 
-let innerWidth = 0
-	$: {
-		const conf = $sbtcConfig;
-		conf.innerWidth = innerWidth;
-		//sbtcConfig.update(() => conf);
-		console.log(`the count is ${$sbtcConfig.innerWidth}`)
-	}
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
 	setConfig($page.url.search);
@@ -104,4 +97,3 @@ let innerWidth = 0
 		<Footer />
 	</div>
 {/if}
-<svelte:window bind:innerWidth />
