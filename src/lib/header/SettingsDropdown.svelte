@@ -87,7 +87,7 @@
 	</span>
 </Button>
 <Dropdown
-	frameClass="z-30 rounded-lg !bg-black !border py-2 !border-gray-900"
+	frameClass="z-30 rounded-lg !bg-black !border py-1 !border-gray-900"
 	ulClass="py-1 w-full"
 	placement='bottom-end'
 >
