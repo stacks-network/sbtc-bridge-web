@@ -16,11 +16,11 @@
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { loginStacksJs } from '$lib/stacks_connect'
 
-	$: innerWidth = 0
+let innerWidth = 0
 	$: {
 		const conf = $sbtcConfig;
 		conf.innerWidth = innerWidth;
-		sbtcConfig.update(() => conf);
+		//sbtcConfig.update(() => conf);
 		console.log(`the count is ${$sbtcConfig.innerWidth}`)
 	}
 	let componentKey = 0;

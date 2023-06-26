@@ -1,5 +1,5 @@
 import { CONFIG } from '$lib/config';
-import type { PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
+import type { BlockchainInfo, PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
@@ -67,6 +67,17 @@ export async function sendRawTransaction(tx: { hex: string; }) {
     console.log('Bitcoin tx send error.');
   }
   return await extractResponse(response);
+}
+
+export async function fetchPoxInfo():Promise<BlockchainInfo|undefined> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/pox/info');
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
 }
 
 export async function fetchKeys() {

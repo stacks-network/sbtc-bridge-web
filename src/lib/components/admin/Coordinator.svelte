@@ -9,20 +9,18 @@ import { sbtcConfig } from '$stores/stores'
 //const contractCall = openContractCall();
 
 let coordinator:string = CONFIG.VITE_SBTC_COORDINATOR //VITE_SBTC_CONTRACT_ID.split('.')[0];
-if ($sbtcConfig.sbtcContractData.sbtcWalletAddress) {
-  coordinator = $sbtcConfig?.sbtcContractData?.coordinator?.addr.value || '';
-}
-
-let sbtcWallet:string = CONFIG.VITE_SBTC_WALLET;
-if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
-  sbtcWallet = $sbtcConfig.sbtcContractData.sbtcWalletAddress;
+let sbtcWalletAddress:string = CONFIG.VITE_SBTC_WALLET;
+if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
+  const s = $sbtcConfig.sbtcContractData
+  coordinator = s.coordinator?.addr?.value || '';
+  sbtcWalletAddress = s.sbtcWalletAddress;
 }
 
 const coordinate = async () => {
   const res = await setCoordinator(coordinator);
 }
 const wallet = async () => {
-  const res = await setBtcWallet(sbtcWallet);
+  const res = await setBtcWallet(sbtcWalletAddress);
 }
 
 </script>
@@ -39,8 +37,8 @@ const wallet = async () => {
   </div>
   <div class="row">
     <div class="col">
-      <div>sBTC Wallet: {$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
-      <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={sbtcWallet}/>
+      <div>sBTC Wallet: {sbtcWalletAddress}</div>
+      <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={sbtcWalletAddress}/>
       <div class="py-0">
         <Button darkScheme={false} label={'Set BTC Wallet'} target={''} on:clicked={() => wallet()}/>
       </div>
