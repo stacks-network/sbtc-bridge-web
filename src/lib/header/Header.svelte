@@ -31,8 +31,8 @@
 	}
 
 	const getNavActiveClass = (item:string) => {
-		if (location.href.indexOf(item) > -1) return 'font-normal text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%]'
-		return 'font-normal text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%]'
+		if (location.href.indexOf(item) > -1) return 'font-normal text-base text-primary-500 !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
+		return 'font-normal text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
 	}
 
 	const doLoginAfter = async (result:boolean) => {
@@ -43,7 +43,7 @@
 <Navbar
 	class="mx-auto flex max-w-7xl items-center !px-6 lg:px-8 !bg-transparent"
 	navDivClass="flex flex-nowrap justify-between md:justify-start items-center flex-1" let:hidden let:toggle fluid={true}>
-  <NavBrand href="/">
+  <NavBrand href="/" class="focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 		<Brand />
   </NavBrand>
 

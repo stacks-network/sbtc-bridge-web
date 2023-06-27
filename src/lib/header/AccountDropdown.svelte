@@ -67,7 +67,7 @@
 						<span>{transformAddress(addresses().stxAddress)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().stxAddress)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().stxAddress)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon on:keyup on:click={(event) => handleClick(event)} src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
@@ -79,7 +79,7 @@
 						<span><span class="font-bold">Cardinal:</span>{' '}{transformAddress(addresses().cardinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
@@ -91,7 +91,7 @@
 						<span><span class="font-bold">Ordinal:</span>{' '}{transformAddress(addresses().ordinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
@@ -135,11 +135,10 @@
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtSatoshiToBitcoin($sbtcConfig?.addressObject?.sBTCBalance || 0.00000000)}
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<DropdownItem defaultClass="px-4 py-2 text-error-500 hover:bg-gray-1000" on:click={() => doLogout()}>Log out</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-error-500 hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => doLogout()}>Log out</DropdownItem>
 </Dropdown>
