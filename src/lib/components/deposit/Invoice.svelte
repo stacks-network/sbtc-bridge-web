@@ -73,11 +73,11 @@
 
 <div id="clipboard"></div>
 
-<div class="flex items-start justify-between rounded-xl border-[0.2px] border-gray-400 p-3 gap-y-8 bg-gray-01">
+<div class="flex justify-between rounded-xl border-[0.2px] border-gray-400 p-3 gap-y-8 bg-gray-01">
   {#if peginRequest.requestType === 'withdrawal'}
     {#if peginRequest.mode === 'op_drop'}
-    <div class="rounded-lg overflow-hidden mr-4">
-      <QrCode value={paymentUri()} padding={'40px'} color={'#000'} background={'#fff'} />
+    <div class="rounded-lg overflow-hidden mr-4 border border-gray-600">
+      <QrCode value={paymentUri()} size={144} color={'#000'} background={'#fff'} />
     </div>
     {/if}
     <div class="w-full flex flex-col gap-y-0 ">
@@ -100,13 +100,13 @@
     </div>
   {:else if peginRequest.requestType === 'deposit'}
     {#if peginRequest.mode === 'op_drop'}
-    <div class="rounded-lg overflow-hidden mr-4">
-      <QrCode value={paymentUri()} padding={'40px'} color={'#000'} background={'#fff'} />
+    <div class="rounded-lg overflow-hidden mr-4 border border-gray-600">
+      <QrCode value={paymentUri()} size={144} color={'#000'} background={'#fff'} />
     </div>
     {/if}
-    <div>
-      <div class="flex items-center justify-between text-white pl-3 pr-2 py-1 gap-x-1 rounded-md border border-gray-800 bg-gray-1000">
-        <p id="address-field" class="text-xs font-medium">{getAddress(false)}</p>
+    <div class="flex-1 flex-1 flex flex-col justify-between">
+      <div class="flex items-center justify-between text-white pl-3 pr-2 py-2 gap-x-1 rounded-md border border-gray-800 bg-gray-1000">
+        <p id="address-field" class="text-sm font-medium">{getAddress(false)}</p>
         <div class="flex items-center gap-2">
           <LinkToExplorer class="-mr-0.5 h-6 w-6 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
 
@@ -115,11 +115,9 @@
           </button>
         </div>
       </div>
-      <div class="flex text-gray-300 text-2xl items-baseline">
-        <div id="amount-field" class="-mt-1 p-0 text-5xl">{fmtSatoshiToBitcoin(amount)}</div>
-      </div>
-      <div class="flex text-gray-300 ">
-        <div class="text-2xl font-extralight -mt-3 -mb-2 text-uppercase">BTC</div>
+      <div class="text-white leading-none">
+        <span class="block font-bold text-6xl">{fmtSatoshiToBitcoin(amount)}</span>
+        <span class="font-light text-3xl">BTC</span>
       </div>
     </div>
   {:else if peginRequest.requestType === 'reclaim'}

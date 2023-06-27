@@ -9,7 +9,7 @@
   })
 </script>
 
-<div class="px-3 py-2.5 sm:rounded-s-lg border-t-[0.2px] border-b-[0.2px] border-l-[0.2px] border-t-gray-900 border-b-gray-900 border-l-gray-900 bg-black-01 shadow-[6px_2px_12px_0px_rgba(0,0,0,0.40)]">
+<div class="px-3 py-2.5 rounded-s-lg border-t-[0.2px] border-b-[0.2px] border-l-[0.2px] border-t-gray-900 border-b-gray-900 border-l-gray-900 bg-black-01 shadow-[6px_2px_12px_0px_rgba(0,0,0,0.40)]">
   {#if reverse}
     <div class="flex items-center gap-2">
       <div class="flex items-center">
