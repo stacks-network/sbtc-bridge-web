@@ -51,7 +51,7 @@ const input1Data = {
 
 const input2Data = {
   field: 'amount',
-  label: 'Amount (bitcoin)',
+  label: 'Amount (sBTC)',
   hint: '',
   resetValue: 0,
   value: 0.0
@@ -213,7 +213,7 @@ const initComponent = async () => {
     piTx.pegInData.amount = input2Data.resetValue = addressObject.sBTCBalance - piTx.fee;
   }
   if (addressObject.sBTCBalance <= 0) balanceMsg = true
-  input2Data.hint = 'sBTC Balance: ' + addressObject.sBTCBalance;
+  input2Data.hint = 'sBTC Balance: ' + satsToBitcoin(addressObject.sBTCBalance);
   input2Data.value = satsToBitcoin(piTx.pegInData.amount);
   dispatch('time_line_status_change', { timeLineStatus });
 
