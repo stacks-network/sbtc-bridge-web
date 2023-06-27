@@ -9,8 +9,8 @@ const TESTNET_CONFIG = {
     VITE_SBTC_WALLET: 'tb1q6zlpyrzvzjcrf6dlsctcrh9yl3dwfktsw0nclq',
     VITE_SBTC_CONTRACT_ID: 'ST306HDPY54T81RZ7A9NGA2F03B8NRGW6Y59ZRZSD.faint-tan-cobra',
     VITE_SBTC_COORDINATOR: 'ST2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADNF2R2AG',
-    VITE_BRIDGE_API: 'https://testnet.stx.eco/bridge-api/v1',
-    VITE_SIGNER_API: 'https://testnet.stx.eco/signer-api/v1',
+    VITE_BRIDGE_API: 'https://bridge.stx.eco/bridge-api/v1',
+    VITE_SIGNER_API: 'https://bridge.stx.eco/signer-api/v1',
     VITE_STACKS_API: 'https://api.testnet.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
@@ -30,8 +30,8 @@ const MAINNET_CONFIG = {
     VITE_SBTC_CONTRACT_ID: 'ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant',
     VITE_SBTC_COORDINATOR: 'ST2BJA4JYFJ7SDMNFJZ9TJ3GB80P9Z80ADNF2R2AG',
     //VITE_BRIDGE_API: 'https://api.sbtc.world/bridge-api/v1',
-    VITE_BRIDGE_API: 'https://testnet.stx.eco/bridge-api/v1',
-    VITE_SIGNER_API: 'https://testnet.stx.eco/signer-api/v1',
+    VITE_BRIDGE_API: 'https://bridge.stx.eco/bridge-api/v1',
+    VITE_SIGNER_API: 'https://bridge.stx.eco/signer-api/v1',
     VITE_STACKS_API: 'https://api.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',
@@ -68,10 +68,10 @@ export function setConfig(search:string) {
 	else if (search.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
 	else CONFIG = MAINNET_CONFIG
     if (import.meta.env.MODE === 'linode-staging') {
-        CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
+        CONFIG.VITE_BRIDGE_API = 'https://bridge.stx.eco/bridge-api/v1'
     } else if (import.meta.env.MODE === 'development') {
-        CONFIG.VITE_BRIDGE_API = 'https://testnet.stx.eco/bridge-api/v1'
-        CONFIG.VITE_SIGNER_API = 'https://testnet.stx.eco/signer-api/v1'
+        CONFIG.VITE_BRIDGE_API = 'https://bridge.stx.eco/bridge-api/v1'
+        CONFIG.VITE_SIGNER_API = 'https://bridge.stx.eco/signer-api/v1'
         CONFIG.VITE_URI_BRIDGE = 'http://localhost:8080'
         CONFIG.VITE_URI_SIGN = 'http://localhost:8081'
         CONFIG.VITE_URI_VOTE = 'http://localhost:8082'
