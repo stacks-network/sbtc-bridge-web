@@ -1,63 +1,75 @@
 <script lang="ts">
-import { createEventDispatcher } from "svelte";
-import IntroFill from '$lib/components/shared/IntroFill.svelte';
-import { onMount } from 'svelte';
+  import { createEventDispatcher } from "svelte";
+  import { onMount } from 'svelte';
+  import { Icon, InformationCircle } from "svelte-hero-icons";
+  import { Tooltip } from 'flowbite-svelte';
 
-const dispatch = createEventDispatcher();
 
-export let inputData:{
-  field: string;
-  label: string;
-  hint: string;
-  value:number;
-  resetValue:number|undefined;
-}
+  const dispatch = createEventDispatcher();
 
-let value:number = inputData.value;
-let reason:string|undefined;
-
-const reset = () => {
-  value = inputData.resetValue || 0;
-}
-
-const updater = async () => {
-  try {
-    inputData.value = value;
-    dispatch('updated', inputData);
-  } catch(err:any) {
-    reason = err.message || 'Error - is the address a valid';
+  export let inputData:{
+    field: string;
+    label: string;
+    hint: string;
+    value: number;
+    resetValue: number|undefined;
   }
-}
-onMount(async () => {
-  reason = undefined;
-})
 
+  let value:number = inputData.value;
+  let reason:string|undefined;
+
+  const reset = () => {
+    value = inputData.resetValue || 0;
+  }
+
+  const updater = async () => {
+    try {
+      inputData.value = value;
+      dispatch('updated', inputData);
+    } catch(err:any) {
+      reason = err.message || 'Error - is the address a valid';
+    }
+  }
+  onMount(async () => {
+    reason = undefined;
+  })
 </script>
 
-<div class="flex flex-col w-full items-center justify-center">
-  <div class="w-full">
-    <div class="text-left">
-      <div class="w-full flex justify-between">
-        <span>{inputData.label}</span>
-        <span class="pointer"><IntroFill/></span>
-      </div>
-      <input id={inputData.field} type='number' class="text-black tracking-wide font-extralight rounded-md p-3 h-12 w-full" bind:value={inputData.value}>
-    </div>
-    <div class="text-xs mt-1 text-left flex items-center justify-between">
-      {#if reason}
-        <div class="text-xs text-error-500 grow">{reason}</div>
-        {:else if inputData.hint}
-        <div class="grid grid-cols-6">
-          <div class="text-hint col-span-5">
-            {inputData.hint}
-          </div>
-          {#if inputData.resetValue}
-          <div class="col-span-1 text-hint text-gray-500">
-            <a href="/" on:click|preventDefault={() => reset()}>reset</a>
-          </div>
-          {/if}
-        </div>
-      {/if}
-    </div>
+<div>
+  <div class="flex items-center justify-between">
+    <label class="inline-flex text-base font-medium mb-1.5" for="">
+      {inputData.label}
+      <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white" aria-hidden="true" id="{inputData.field}-label" />
+    </label>
+
+    {#if reason || inputData.resetValue}
+      <button class="px-3 py-1.5 text-primary-500 text-sm font-medium hover:underline focus:text-primary-400" type="button" on:click={() => reset()}>
+        Reset
+      </button>
+    {/if}
+
+    <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#{inputData.field}-label">
+      Info about amount.
+    </Tooltip>
+  </div>
+
+  <input
+    id={inputData.field}
+    type="number"
+    name=""
+    bind:value={inputData.value}
+    class="text-black font-extralight text-base rounded-md px-4 py-3 mb-2 w-full"
+  />
+
+  <div class="text-xs mt-1 text-left flex items-center justify-between">
+    {#if reason}
+      <p class="text-error-500">
+        {reason}
+      </p>
+    {:else if inputData.hint}
+      <p class="text-gray-200">
+        {inputData.hint}
+      </p>
+    {/if}
   </div>
 </div>

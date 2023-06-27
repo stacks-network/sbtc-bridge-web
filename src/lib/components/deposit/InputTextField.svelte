@@ -1,67 +1,89 @@
 <script lang="ts">
 	import { createEventDispatcher } from "svelte";
-import IntroFill from '$lib/components/shared/IntroFill.svelte';
-import { onMount } from 'svelte';
+  import { Icon, InformationCircle } from "svelte-hero-icons";
+  import { onMount } from 'svelte';
+  import { Tooltip } from 'flowbite-svelte';
 
-const dispatch = createEventDispatcher();
-export let readonly:Boolean;
+  const dispatch = createEventDispatcher();
+  export let readonly:Boolean;
 
-export let inputData:{
-  field: string;
-  label: string;
-  hint: string;
-  value:string;
-  resetValue:string|undefined;
-}
-
-let value:string = inputData.value;
-let reason:string|undefined;
-
-const reset = () => {
-  value = inputData.resetValue || '';
-  reason = undefined
-}
-
-const updater = async () => {
-  try {
-    inputData.value = value;
-    dispatch('updated', inputData);
-  } catch(err:any) {
-    reason = err.message || 'Error - is the address a valid';
+  export let inputData:{
+    field: string;
+    label: string;
+    hint: string;
+    value: string;
+    resetValue: string|undefined;
   }
-}
-onMount(async () => {
-  reason = undefined;
-})
 
+  let value:string = inputData.value;
+  let reason:string|undefined;
+
+  const reset = () => {
+    value = inputData.resetValue || '';
+    reason = undefined
+  }
+
+  const updater = async () => {
+    try {
+      inputData.value = value;
+      dispatch('updated', inputData);
+    } catch(err:any) {
+      reason = err.message || 'Error - is the address a valid';
+    }
+  }
+  onMount(async () => {
+    reason = undefined;
+  })
 </script>
 
-<div class="flex flex-col w-full items-center justify-center">
-  <div class="text-left w-full">
-    <div class="w-full flex justify-between">
-      <span>{inputData.label}</span>
-      <span class="pointer"><IntroFill/></span>
-    </div>
-    {#if readonly}
-    <input id={inputData.field} readonly class="text-black tracking-wide font-extralight rounded-md p-3 h-12 w-full" type='text' bind:value={value} on:input={() => updater()}>
-    {:else}
-    <input class="text-black tracking-wide font-extralight rounded-md p-3 h-12 w-full" type='text' bind:value={value} on:input={() => updater()}>
-    {/if}
-  </div>
-  <div class="text-xs mt-1 text-left flex w-full items-center justify-between">
-    {#if reason}
-    <div class=" text-error-500 grow">
-      {reason}
-    </div>
-    {:else}
-      <div class=" grow">
-      {inputData.hint}
-    </div>
-    {/if}
+<div>
+  <div class="flex items-center justify-between">
+    <label class="inline-flex text-base font-medium mb-1.5" for="">
+      {inputData.label}
+      <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white" aria-hidden="true" id="{inputData.field}-label" />
+    </label>
+
     {#if reason || (inputData.resetValue && inputData.resetValue !== inputData.value)}
-    <div class=" text-gray-500 text-right">
-      <a href="/" on:click|preventDefault={() => reset()}>reset</a>
-    </div>
+      <button class="px-3 py-1.5 text-primary-500 text-sm font-medium hover:underline focus:text-primary-400" type="button" on:click={() => reset()}>
+        Reset
+      </button>
+    {/if}
+
+    <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#{inputData.field}-label">
+      Info about address.
+    </Tooltip>
+  </div>
+  {#if readonly}
+    <input
+      id={inputData.field}
+      readonly
+      class="text-black font-extralight text-base rounded-md px-4 py-3 mb-2 w-full"
+      type="text"
+      name=""
+      bind:value={value}
+      on:input={() => updater()}
+    />
+  {:else}
+    <input
+      id={inputData.field}
+      class="text-black font-extralight text-base rounded-md px-4 py-3 mb-2 w-full"
+      type="text"
+      name=""
+      bind:value={value}
+      on:input={() => updater()}
+    />
+  {/if}
+
+  <div>
+    {#if reason}
+      <p class="text-error-500">
+        {reason}
+      </p>
+    {:else}
+      <p class="text-gray-200">
+        {inputData.hint}
+      </p>
     {/if}
   </div>
 </div>
+

@@ -1,17 +1,17 @@
 <script lang="ts">
-import { goto } from "$app/navigation";
-import { sbtcConfig } from '$stores/stores';
-import type { SbtcConfig } from '$types/sbtc_config'
-import { Tooltip } from 'flowbite-svelte';
-import { a_primary } from '$lib/css_utils';
-import { Icon, InformationCircle } from "svelte-hero-icons"
+  import { goto } from "$app/navigation";
+  import { sbtcConfig } from '$stores/stores';
+  import type { SbtcConfig } from '$types/sbtc_config'
+  import { Tooltip } from 'flowbite-svelte';
+  import { a_primary } from '$lib/css_utils';
+  import { Icon, InformationCircle } from "svelte-hero-icons"
 
-const start = (pegin:boolean) => {
-const conf:SbtcConfig = $sbtcConfig;
-conf.pegIn = pegin;
-sbtcConfig.set(conf);
-(pegin) ? goto('/deposit') : goto('/withdraw');
-}
+  const start = (pegin:boolean) => {
+  const conf:SbtcConfig = $sbtcConfig;
+  conf.pegIn = pegin;
+  sbtcConfig.set(conf);
+  (pegin) ? goto('/deposit') : goto('/withdraw');
+  }
 </script>
 
 <Tooltip class="w-80 !font-extralight !bg-black z-20" triggeredBy="#po-deposits">

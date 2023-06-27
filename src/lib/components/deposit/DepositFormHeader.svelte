@@ -6,9 +6,11 @@
   })
 </script>
 
-<div class="flex w-full items-center flex-wrap relative">
+<div class="flex w-full items-center justify-between flex-wrap mb-10">
   <h2 class="text-4xl font-medium">
     Deposit BTC
   </h2>
-  <SwitchGraphic reverse={false}/>
+  <div class="-mr-10">
+    <SwitchGraphic reverse={false}/>
+  </div>
 </div>

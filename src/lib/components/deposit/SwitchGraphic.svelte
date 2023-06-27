@@ -1,27 +1,38 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-import BitcoinIcon from '../shared/BitcoinIcon.svelte';
-import ArrowRightIcon from '../shared/ArrowRightIcon.svelte';
-import LogoSBTC from '../shared/LogoSBTC.svelte';
+  import { onMount } from 'svelte';
+  import BitcoinIcon from '../shared/BitcoinIcon.svelte';
+  import { Icon, ArrowRight } from 'svelte-hero-icons';
+  import LogoSBTC from '../shared/LogoSBTC.svelte';
 
-export let reverse:boolean;
-onMount(async () => {
-})
-
+  export let reverse:boolean;
+  onMount(async () => {
+  })
 </script>
 
-<div class="p-2 flex align-baseline items-center rounded-none sm:rounded-s-md border-t border-t-gray-900 border-b border-b-gray-900 border-s border-s-gray-900">
-    {#if reverse}
-    <div class="w-14"><LogoSBTC class={'w-10 h-10'}/></div>
-    <div class="w-16 grow text-2xl font-medium">BTC</div>
-    <div class="w-10"><ArrowRightIcon/></div>
-    <div class="w-14"><BitcoinIcon clazz={'w-10 h-10'}/></div>
-    <div class="w-16 grow text-2xl font-medium">sBTC</div>
-    {:else}
-    <div class="w-14"><BitcoinIcon clazz={'w-10 h-10'}/></div>
-    <div class="w-16 grow text-2xl font-medium">BTC</div>
-    <div class="w-10"><ArrowRightIcon/></div>
-    <div class="w-14"><LogoSBTC class={'w-10 h-10'}/></div>
-    <div class="w-16 grow text-2xl font-medium">sBTC</div>
-    {/if}
+<div class="px-3 py-2.5 sm:rounded-s-lg border-t-[0.2px] border-b-[0.2px] border-l-[0.2px] border-t-gray-900 border-b-gray-900 border-l-gray-900 bg-black-01 shadow-[6px_2px_12px_0px_rgba(0,0,0,0.40)]">
+  {#if reverse}
+    <div class="flex items-center gap-2">
+      <div class="flex items-center">
+        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
+        <div class="font-bold">BTC</div>
+      </div>
+      <Icon src="{ArrowRight}" mini class="w-4 h-4 mx-0.5" aria-hidden="true" />
+      <div class="flex items-center">
+        <BitcoinIcon clazz={'w-5 h-5 shrink-0 me-2'}/>
+        <div class="font-bold">sBTC</div>
+      </div>
+    </div>
+  {:else}
+    <div class="flex items-center gap-2">
+      <div class="flex items-center">
+        <BitcoinIcon clazz={'w-5 h-5 shrink-0 me-2'}/>
+        <div class="font-bold">sBTC</div>
+      </div>
+      <Icon src="{ArrowRight}" mini class="w-4 h-4 mx-0.5" aria-hidden="true" />
+      <div class="flex items-center">
+        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
+        <div class="font-bold">BTC</div>
+      </div>
+    </div>
+  {/if}
 </div>

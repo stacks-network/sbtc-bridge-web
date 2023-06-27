@@ -48,7 +48,7 @@
 {:else}
   <div class="max-w-2xl w-full py-16">
     {#if inited}
-    <div class="flex flex-col gap-6">
+    <div class="flex flex-col gap-6 bg-gray-1000 rounded-2xl">
       {#if $sbtcConfig.userSettings?.useOpDrop}
         {#key componentKey}
           <TimeLine {timeLineStatus}/>

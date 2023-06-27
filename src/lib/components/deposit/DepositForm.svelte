@@ -40,7 +40,7 @@
 
   const input2Data = {
     field: 'amount',
-    label: 'Amount (bitcoin)',
+    label: 'Amount (in Bitcoin)',
     hint: '',
     resetValue: undefined,
     value: 10000
@@ -102,9 +102,9 @@
         timeLineStatus = 2;
         dispatch('time_line_status_change', { timeLineStatus });
       } catch(err:any) {
-        amountErrored = 'Testnet only atm - please use the `settings` menu to switch network'
+        amountErrored = 'This application is only for testnet at the moment. Please use the `Settings` menu to switch network.'
         if (CONFIG.VITE_NETWORK === 'testnet') {
-          amountErrored = 'Amount below required threshold'
+          amountErrored = 'Amount below required threshold.'
         }
         makeFlash(document.getElementById(input2Data.field))
         componentKey++
@@ -249,22 +249,29 @@
   })
 </script>
 
-{#if !inited}
-  <div class="text-2xl text-warning-700 px-5">Fetching data... Please wait.</div>
-{:else}
-  <div class="flex flex-col w-full border-[0.5px] border-blue-400 rounded-lg text-sm justify-start p-10">
+
+<div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-2xl p-10 overflow-hidden">
+  {#if !inited}
+    <p class="text-2xl text-white font-medium">Fetching data... Please wait.</p>
+  {:else}
     <DepositFormHeader />
     {#if timeLineStatus === 1 || peginRequest.amount === 0}
       {#key componentKey}
-        <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
-        <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
-
+        <div class="space-y-6">
+          <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
+          <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
+        </div>
         {#if amountErrored}
-          <div class="text-error-500">{amountErrored}</div>
+          <p class="text-error-500">{amountErrored}</p>
         {/if}
 
-        <div>
-          <Button darkScheme={false} label={'Show Invoice / QR code'} target={'openInvoice'} on:clicked={(event) => doClicked(event)}/>
+        <div class="mt-6">
+          <Button
+            darkScheme={false}
+            label={'Show Invoice / QR code'}
+            target={'openInvoice'}
+            on:clicked={(event) => doClicked(event)}
+          />
         </div>
       {/key}
     {:else if timeLineStatus === 2}
@@ -272,5 +279,5 @@
     {:else if timeLineStatus === 3}
       <StatusCheck pegin={peginRequest} on:clicked={doClicked}/>
     {/if}
-  </div>
-{/if}
+  {/if}
+</div>
