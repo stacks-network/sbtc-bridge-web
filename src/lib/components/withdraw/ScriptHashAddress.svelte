@@ -68,12 +68,12 @@
         <div class="grow flex flex-col gap-4 mb-5">
           <div class="flex items-center text-gray-300 p-1 gap-x-1 rounded-md border border-gray-700">
               <div id="address-field" class="grow ">{getAddress(12)}</div>
-              <ArrowUpRight class="-mr-0.5 h-5 w-5 text-white" target={explorerBtcAddressUrl(peginRequest?.commitTxScript?.address || '')} />
-              <FileIcon on:clicked={() => copy('address-field')} class={'-mr-0.5 h-5 w-5 text-white'}/>
+              <LinkToExplorer class="h-5 w-5 text-white" target={explorerBtcAddressUrl(peginRequest?.commitTxScript?.address || '')} />
+              <FileIcon on:clicked={() => copy('address-field')} class={'h-5 w-5 text-white'}/>
           </div>
           <div class="flex text-gray-300 text-2xl items-center">
             <div id="amount-field" class="grow ">{fmtSatoshiToBitcoin(amount)}</div>
-            <FileIcon on:clicked={() => copy('amount-field')} class={'-mr-0.5 h-5 w-5 text-white'}/>
+            <FileIcon on:clicked={() => copy('amount-field')} class={'h-5 w-5 text-white'}/>
           </div>
           <div class="flex text-gray-300 text-2xl">
             <div class="grow ">BITCOIN</div>

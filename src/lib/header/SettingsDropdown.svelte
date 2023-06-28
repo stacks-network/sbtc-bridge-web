@@ -102,7 +102,7 @@
 			<div class="ml-auto">
 				<button class="border border-white bg-black px-3 py-0.5 rounded-xl text-xs inline-flex items-center text-white font-normal gap-1 hover:text-black hover:bg-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:click={() => toggleNetwork()}>
 					Switch
-					<Icon src="{ArrowsRightLeft}" mini class="-mr-0.5 h-4 w-4" aria-hidden="true" />
+					<Icon src="{ArrowsRightLeft}" mini class="h-4 w-4" aria-hidden="true" />
 				</button>
 			</div>
 		</div>
@@ -112,8 +112,8 @@
 				<span class="text-sm inline-block font-extralight text-gray-100">{getAddress(false)}</span>
 			</p>
 			<div class="ml-auto flex items-center">
-				<a title="show in explorer" href={explorerBtcAddressUrl(getAddress(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-					<Icon src="{ArrowUpRight}" mini class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+				<a title="Show in Explorer" href={explorerBtcAddressUrl(getAddress(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+					<Icon src="{ArrowUpRight}" mini class="h-5 w-5 text-white" aria-hidden="true" />
 				</a>
 			</div>
 		</div>
@@ -123,8 +123,8 @@
 				<span class="text-sm inline-block font-extralight text-gray-100">{getContractAddress()}</span>
 			</p>
 			<div class="ml-auto flex items-center">
-				<a title="show in explorer" href={explorerAddressUrl(CONFIG.VITE_SBTC_CONTRACT_ID)} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-					<Icon src="{ArrowUpRight}" mini class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+				<a title="Show in Explorer" href={explorerAddressUrl(CONFIG.VITE_SBTC_CONTRACT_ID)} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+					<Icon src="{ArrowUpRight}" mini class="h-5 w-5 text-white" aria-hidden="true" />
 				</a>
 			</div>
 		</div>
@@ -134,8 +134,8 @@
 				<span class="text-sm inline-block font-extralight text-gray-100">{getOwner(false)}</span>
 			</p>
 			<div class="ml-auto flex items-center">
-				<a title="show in explorer" href={explorerAddressUrl(getOwner(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-					<Icon src="{ArrowUpRight}" mini class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+				<a title="Show in Explorer" href={explorerAddressUrl(getOwner(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+					<Icon src="{ArrowUpRight}" mini class="h-5 w-5 text-white" aria-hidden="true" />
 				</a>
 			</div>
 		</div>
@@ -145,8 +145,8 @@
 				<span class="text-sm inline-block font-extralight text-gray-100">{getCoordinator(false)}</span>
 			</p>
 			<div class="ml-auto flex items-center">
-				<a title="show in explorer" href={explorerAddressUrl(getOwner(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-					<Icon src="{ArrowUpRight}" mini class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+				<a title="Show in Explorer" href={explorerAddressUrl(getOwner(true))} target="_blank" class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+					<Icon src="{ArrowUpRight}" mini class="h-5 w-5 text-white" aria-hidden="true" />
 				</a>
 			</div>
 		</div>

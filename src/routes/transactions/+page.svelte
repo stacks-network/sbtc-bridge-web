@@ -4,12 +4,12 @@ import { addresses } from '$lib/stacks_connect'
 import { COMMS_ERROR } from '$lib/utils.js'
 import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { goto } from '$app/navigation'
 import { satsToBitcoin } from '$lib/utils'
 import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
 
-// fetch/hydrate data from local storage 
+// fetch/hydrate data from local storage
 let inited = false;
 let peginRequests:Array<PeginRequestI>
 let errorReason:string|undefined;
@@ -87,11 +87,11 @@ onMount(async () => {
                         <div class="hidden lg:flex">{tsToDate(pegin.updated)}</div>
                         <div class="flex">
                             <div class="sm:pe-2 md:pe-5"><a class="" href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress)}</a></div>
-                            <div class=""><ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
+                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
                         </div>
                         <div class="hidden lg:flex ">
                             <div class="sm:pe-2 md:pe-5"><a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a></div>
-                            <div class=""><ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
+                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
 
                         </div>
                         <div class="flex">
@@ -105,7 +105,7 @@ onMount(async () => {
                             </div>
                             <div class="text-right">
                                 {#if pegin.status > 1}
-                                <ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcTxUrl(pegin.btcTxid)} />
+                                <ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(pegin.btcTxid)} />
                                 {/if}
                             </div>
                         </div>
