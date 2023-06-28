@@ -2,7 +2,7 @@
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, ClipboardDocument } from "svelte-hero-icons"
 	import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
-	import BitcoinIcon from '$lib/components/shared/BitcoinIcon.svelte';
+	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
 	import StacksIcon from '$lib/components/shared/StacksIcon.svelte';
 	import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 	import { makeFlash } from "$lib/stacks_connect";
@@ -12,6 +12,7 @@
 	import { sbtcConfig } from '$stores/stores'
 	import { fmtSatoshiToBitcoin, fmtMicroToStx, bitcoinBalanceFromMempool } from '$lib/utils'
 	import { addresses } from '$lib/stacks_connect'
+	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
 	const dispatch = createEventDispatcher();
 
 	let copied = false;
@@ -74,7 +75,7 @@
 				</div>
 				<div class="px-4 py-1 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-c-stacks" class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 
 						<span><span class="font-bold">Cardinal:</span>{' '}{transformAddress(addresses().cardinal)}</span>
 					</div>
@@ -86,7 +87,7 @@
 				</div>
 				<div class="px-4 py-1 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-o-stacks" class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 
 						<span><span class="font-bold">Ordinal:</span>{' '}{transformAddress(addresses().ordinal)}</span>
 					</div>
@@ -111,7 +112,7 @@
 
 				<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 						<span class="font-bold">BTC (Cardinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">
@@ -120,7 +121,7 @@
 				</div>
 				<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 						<span class="font-bold">BTC (Ordinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">

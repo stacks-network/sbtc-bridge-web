@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import { Icon, InformationCircle } from "svelte-hero-icons";
   import { Tooltip } from 'flowbite-svelte';
+  import LogoBitcoin from '../shared/LogoBitcoin.svelte';
 
 
   const dispatch = createEventDispatcher();
@@ -53,13 +54,19 @@
     </Tooltip>
   </div>
 
-  <input
-    id={inputData.field}
-    type="number"
-    name=""
-    bind:value={inputData.value}
-    class="text-black font-extralight text-base rounded-md px-4 py-3 mb-2 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
-  />
+  <div class="relative mb-2">
+    <input
+      id={inputData.field}
+      type="number"
+      name=""
+      bind:value={inputData.value}
+      class="text-black font-extralight text-base rounded-md pl-4 pr-20 py-3 w-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
+    />
+    <div class="flex items-center gap-2 absolute right-4 top-1/2 -translate-y-1/2">
+      <LogoBitcoin clazz={'w-6 h-6 shrink-0'}/>
+      <span class="text-sm font-bold text-black">BTC</span>
+    </div>
+  </div>
 
   <div class="text-xs mt-1 text-left flex items-center justify-between">
     {#if reason}
