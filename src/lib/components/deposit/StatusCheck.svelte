@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import Banner from '$lib/components/shared/Banner.svelte';
 import Button from '$lib/components/shared/Button.svelte';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI } from 'sbtc-bridge-lib'
 
 export let pegin:PeginRequestI;
 
@@ -19,9 +19,9 @@ onMount(async () => {
     {#if pegin.requestType === 'deposit'}
     Your sBTC will be deposited soon.
     {:else if pegin.requestType === 'deposit'}
-    Your sBTC will be withdrawn soon. 
+    Your sBTC will be withdrawn soon.
     {/if}
-    Track updates here: <a href="/transactions">transaction history</a>. 
+    Track updates here: <a href="/transactions">transaction history</a>.
   </div>
   {:else if pegin.status === 3}
   <Banner bannerType={'success'} message={'Your Bitcoin transaction has been detected and is being preocessed. '} />
@@ -29,7 +29,7 @@ onMount(async () => {
   <Banner bannerType={'danger'} message={'Deposit has been reclaimed. '} />
   {/if}
   <div class="flex">
-    <Button darkScheme={true} label={'Go back'} target={'back'} on:clicked/>
+    <Button darkScheme={true} label={'Back'} target={'back'} on:clicked/>
     <Button darkScheme={false} label={'Transaction history'} target={'transaction-history'} on:clicked/>
   </div>
 

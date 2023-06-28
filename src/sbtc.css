@@ -75,13 +75,6 @@ body, html {
 	background-clip: text;
 }
 
-.qr-frame {
-	background: linear-gradient(126.12deg, #121212 44.07%, #404040 89.82%);
-	border: 0.3px solid #A5A5A5;
-	box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.4);
-	border-radius: 8px;
-}
-
 .text-gradient {
 	color: linear-gradient(126.12deg, #ED693C 11.8%, #FEDB63 72.43%);
 }

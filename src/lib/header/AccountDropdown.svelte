@@ -2,7 +2,7 @@
 	import { Button, Dropdown, DropdownItem } from 'flowbite-svelte'
 	import { Icon, ClipboardDocument } from "svelte-hero-icons"
 	import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
-	import BitcoinIcon from '$lib/components/shared/BitcoinIcon.svelte';
+	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
 	import StacksIcon from '$lib/components/shared/StacksIcon.svelte';
 	import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 	import { makeFlash } from "$lib/stacks_connect";
@@ -67,31 +67,31 @@
 						<span>{transformAddress(addresses().stxAddress)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().stxAddress)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().stxAddress)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon on:keyup on:click={(event) => handleClick(event)} src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
 				</div>
 				<div class="px-4 py-1 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-c-stacks" class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 
 						<span><span class="font-bold">Cardinal:</span>{' '}{transformAddress(addresses().cardinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
 				</div>
 				<div class="px-4 py-1 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-6 items-center">
 					<div id="bitcoin-o-stacks" class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 
 						<span><span class="font-bold">Ordinal:</span>{' '}{transformAddress(addresses().ordinal)}</span>
 					</div>
 					<div class="ml-auto flex items-center">
-						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
@@ -111,7 +111,7 @@
 
 				<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 						<span class="font-bold">BTC (Cardinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">
@@ -120,7 +120,7 @@
 				</div>
 				<div class="px-4 py-2 bg-gray-1000 grid grid-flow-col auto-cols-auto gap-4 items-center">
 					<div class="flex items-center gap-3 text-sm">
-						<BitcoinIcon clazz={'w-5 h-5'}/>
+						<LogoBitcoin clazz={'w-5 h-5'}/>
 						<span class="font-bold">BTC (Ordinal)</span>
 					</div>
 					<div class="ml-auto flex items-center">
@@ -135,11 +135,10 @@
 					</div>
 					<div class="ml-auto flex items-center">
 						{fmtSatoshiToBitcoin($sbtcConfig?.addressObject?.sBTCBalance || 0.00000000)}
-
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	<DropdownItem defaultClass="px-4 py-2 text-error-500 hover:bg-gray-1000" on:click={() => doLogout()}>Log out</DropdownItem>
+	<DropdownItem defaultClass="px-4 py-2 text-error-500 hover:bg-gray-1000 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500/50" on:click={() => doLogout()}>Log out</DropdownItem>
 </Dropdown>

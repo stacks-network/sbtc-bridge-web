@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
-import type { SigData } from 'sbtc-bridge-lib' 
+import type { SigData } from 'sbtc-bridge-lib'
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
@@ -13,7 +13,7 @@ import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI } from 'sbtc-bridge-lib'
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 import { makeFlash, appDetails } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
@@ -143,7 +143,7 @@ onMount(async () => {
   <Invoice {peginRequest} />
   {#if !broadcasted && !errorReason}
   <div class="mt-8 flex">
-    <Button darkScheme={false} label={'Make changes'} target={'back'} on:clicked={() => updateTransaction()}/>
+    <Button darkScheme={false} label={'Back'} target={'back'} on:clicked={() => updateTransaction()}/>
     <Button darkScheme={true} label={'Sign & broadcast'} target={'sign'} on:clicked={() => requestSignPsbt()}/>
   </div>
   {:else if broadcasted}
