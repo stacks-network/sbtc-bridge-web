@@ -25,13 +25,17 @@
 <div class="mr-3">
   {#if darkScheme}
     <Button
+      type="button"
       on:click={(event) => doClicked(event)}
-      btnClass="inline-flex items-center gap-x-1.5 bg-black-01 px-4 py-2 font-normal text-primary-500 rounded-xl border border-primary-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
+      btnClass="bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
     >
-      {label}
+      <span class="inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
+        <span class="text-transparent bg-clip-text bg-primary-02">{label}</span>
+      </span>
     </Button>
   {:else}
     <Button
+      type="button"
       on:click={(event) => doClicked(event)}
       btnClass="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
     >
