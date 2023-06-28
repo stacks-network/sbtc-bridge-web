@@ -11,9 +11,9 @@
 	let inited = false;
 	let style:string;
 	const dispatch = createEventDispatcher();
-	
+
 	const doLogout = () => {
-		logUserOut(); 
+		logUserOut();
 		sbtcConfig.update((conf:SbtcConfig) => {
 			conf.loggedIn = false;
 			conf.addressObject = undefined;
@@ -34,7 +34,7 @@
 
 	const transformAddress = (address:string) => {
 		if (address) {
-			return truncate(address, 8).toUpperCase()
+			return truncate(address, 8)
 		}
 		return 'not connected'
 	}
@@ -52,9 +52,9 @@
 </script>
 
 {#if inited}
-<div role="tooltip" tabindex="-1" id="account" 
-	class="menu-box rounded border-gray-100 dark:border-gray-700 shadow-md outline-none divide-y divide-gray-100 dark:divide-gray-600" 
-	data-popper-placement="bottom" 
+<div role="tooltip" tabindex="-1" id="account"
+	class="menu-box rounded border-gray-100 dark:border-gray-700 shadow-md outline-none divide-y divide-gray-100 dark:divide-gray-600"
+	data-popper-placement="bottom"
 	{style}>
 	<div class="menu-section my-1">
 		<div class="menu-panel grid grid-cols-6 gap-3">

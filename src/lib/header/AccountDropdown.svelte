@@ -39,7 +39,7 @@
 
 	const transformAddress = (address:string) => {
 		if (address) {
-			return truncate(address, 8).toUpperCase()
+			return truncate(address, 8)
 		}
 		return 'not connected'
 	}

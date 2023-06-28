@@ -37,7 +37,7 @@
   }
   const getAddress = (chars:number) => {
     try {
-        return truncate(peginRequest.commitTxScript?.address, chars).toUpperCase()
+        return truncate(peginRequest.commitTxScript?.address, chars)
       } catch (err) {
         return 'not connected'
       }

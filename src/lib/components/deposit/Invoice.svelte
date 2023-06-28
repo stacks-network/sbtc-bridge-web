@@ -34,7 +34,7 @@
       return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : $sbtcConfig?.addressObject?.cardinal || '';
     }
     try {
-      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10).toUpperCase() : truncate($sbtcConfig?.addressObject?.cardinal, 10).toUpperCase();
+      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate($sbtcConfig?.addressObject?.cardinal, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -45,7 +45,7 @@
       return $sbtcConfig?.addressObject?.cardinal || peginRequest.fromBtcAddress;
     }
     try {
-      return truncate($sbtcConfig?.addressObject?.cardinal, 10).toUpperCase();
+      return truncate($sbtcConfig?.addressObject?.cardinal, 10);
     } catch (err) {
       return 'not connected'
     }
