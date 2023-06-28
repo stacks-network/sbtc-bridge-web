@@ -21,8 +21,8 @@
   Permissionlessly withdraw your Bitcoin at any time. Withdrawals take at most 2 weeks to be processed via the current mining cycle.
 </Tooltip>
 
-<div class="mx-auto flex flex-col justify-center w-full sm:max-w-4xl py-6 px-6 lg:px-8">
-  <div class="sm:grid sm:grid-cols-2 sm:gap-10 space-y-10 sm:space-y-0">
+<div class="mx-auto flex flex-col justify-center w-full sm:max-w-4xl px-6 lg:px-8">
+  <div class="sm:grid sm:grid-cols-2 sm:gap-10 space-y-5 sm:space-y-0">
     <div>
       <div role="button" tabindex="0" class="w-full bg-primary-03 cursor-pointer p-10 md:p-20 rounded-2xl relative" on:keydown on:click={() => start(true)}>
         <div id="po-deposits" class="absolute right-2 top-2">
