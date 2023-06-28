@@ -21,7 +21,7 @@ onMount(async () => {
       <p>Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
     </div>
     <Invoice {peginRequest} />
-    <div class="mt-5 flex">
+    <div class="my-5 flex">
       <Button darkScheme={false} label={'Make changes'} target={'back'} on:clicked />
       <Button darkScheme={true} label={'Check status'} target={'status-check'} on:clicked />
     </div>
