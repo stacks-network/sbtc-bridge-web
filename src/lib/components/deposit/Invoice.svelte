@@ -10,7 +10,6 @@
   import type { PeginRequestI } from 'sbtc-bridge-lib'
   import { truncate, explorerBtcAddressUrl } from '$lib/utils'
   import { sbtcConfig } from '$stores/stores'
-  import { Tooltip } from 'flowbite-svelte'
 
 
   export let peginRequest:PeginRequestI;

@@ -238,7 +238,7 @@
           on:updated={fieldUpdated}
         />
         {#if balanceMsg}
-          <Banner bannerType={'danger'} message={'Please transfer some BTC to your Web Wallet (above address) to continue or switch tx mode back to op_drop in settings '} />
+          <Banner class="mt-3" bannerType={'warning'} message={'Please transfer some BTC to your Web Wallet (the above address) to continue or switch the transaction mode back to "OP_DROP" in the Settings dropdown.'} />
         {:else}
           <InputTextField
             readonly={false}
