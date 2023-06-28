@@ -12,7 +12,6 @@
 	import { sbtcConfig } from '$stores/stores'
 	import { fmtSatoshiToBitcoin, fmtMicroToStx, bitcoinBalanceFromMempool } from '$lib/utils'
 	import { addresses } from '$lib/stacks_connect'
-	import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
 	const dispatch = createEventDispatcher();
 
 	let copied = false;
