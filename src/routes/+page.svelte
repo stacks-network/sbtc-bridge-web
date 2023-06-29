@@ -3,6 +3,12 @@
   import { a_primary } from '$lib/css_utils';
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - Welcome!</title>
+  <meta name="description" content="The sBTC Bridge
+  provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
+</svelte:head>
+
 <div class="mx-auto flex flex-col justify-center px-6 lg:px-8 py-6">
   <div class="max-w-2xl">
     <div class="flex flex-col p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
@@ -24,7 +30,7 @@
           Bitcoin gas fees. We hope to add support for the Lightning Network in a future release to help
           reduce the overheads even further.
         </p>
-        <p class="">For more info about the sBTC Brigde, check <a class={a_primary} href="/faq">the FAQ page</a>.</p>
+        <p>For more info about the sBTC Brigde, check <a class={a_primary} href="/faq">the FAQ page</a>.</p>
       </div>
       <div class="flex items-center gap-2">
         <a href="/start" class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" role="button">
