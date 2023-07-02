@@ -4,12 +4,12 @@ import { addresses } from '$lib/stacks_connect'
 import { COMMS_ERROR } from '$lib/utils.js'
 import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { goto } from '$app/navigation'
 import { satsToBitcoin } from '$lib/utils'
 import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
 
-// fetch/hydrate data from local storage 
+// fetch/hydrate data from local storage
 let inited = false;
 let peginRequests:Array<PeginRequestI>
 let errorReason:string|undefined;
@@ -58,8 +58,12 @@ onMount(async () => {
         errorReason = COMMS_ERROR;
     }
 })
-
 </script>
+
+<svelte:head>
+  <title>sBTC Bridge - Transactions</title>
+  <meta name="description" content="A detailed table of all the transactions going through the sBTC Bridge." />
+</svelte:head>
 
 {#if inited}
 <div class="border border-gray-700 rounded-lg lg:w-3/4 md:w-full sm:w-full sm:mx-5 xs:w-full mx-4 my-20">

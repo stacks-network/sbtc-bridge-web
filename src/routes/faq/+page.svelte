@@ -36,6 +36,11 @@ let questions = [
 ]
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - FAQ</title>
+  <meta name="description" content="Frequently asked questions about the sBTC Bridge." />
+</svelte:head>
+
 <div class="mx-auto flex flex-col justify-center px-6 lg:px-8 py-12 w-full max-w-5xl">
 	<div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
 		<h1 class="text-4xl font-normal">Frequently Asked Questions</h1>

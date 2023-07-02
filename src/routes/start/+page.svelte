@@ -14,6 +14,11 @@
   }
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - Deposit and withdraw</title>
+  <meta name="description" content="Deposit Bitcoin to mint sBTC. Permissionlessly withdraw your Bitcoin at any time." />
+</svelte:head>
+
 <Tooltip class="w-80 !font-extralight !bg-black z-20" triggeredBy="#po-deposits">
   Deposit Bitcoin to mint sBTC. We never take custody of your funds. The Bitcoin is held in a wallet controlled by Stackers and deposits automatically manifest as sBTC.
 </Tooltip>

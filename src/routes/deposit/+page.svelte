@@ -43,6 +43,11 @@
 	})
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - Deposit Bitcoin to mint sBTC</title>
+  <meta name="description" content="Deposit Bitcoin to mint sBTC." />
+</svelte:head>
+
 {#if errored}
 	<ServerError />
 {:else}
