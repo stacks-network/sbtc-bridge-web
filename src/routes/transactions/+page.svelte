@@ -91,11 +91,11 @@ onMount(async () => {
                         <div class="hidden lg:flex">{tsToDate(pegin.updated)}</div>
                         <div class="flex">
                             <div class="sm:pe-2 md:pe-5"><a class="" href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress)}</a></div>
-                            <div class=""><ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
+                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
                         </div>
                         <div class="hidden lg:flex ">
                             <div class="sm:pe-2 md:pe-5"><a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a></div>
-                            <div class=""><ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
+                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
 
                         </div>
                         <div class="flex">
@@ -109,7 +109,7 @@ onMount(async () => {
                             </div>
                             <div class="text-right">
                                 {#if pegin.status > 1}
-                                <ArrowUpRight class="-mr-0.5 h-4 w-4 text-white" target={explorerBtcTxUrl(pegin.btcTxid)} />
+                                <ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(pegin.btcTxid)} />
                                 {/if}
                             </div>
                         </div>

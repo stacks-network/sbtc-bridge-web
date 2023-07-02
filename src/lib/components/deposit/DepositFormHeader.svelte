@@ -11,6 +11,6 @@
     Deposit BTC
   </h2>
   <div class="-mr-10">
-    <SwitchGraphic reverse={false}/>
+    <SwitchGraphic reverse={true}/>
   </div>
 </div>

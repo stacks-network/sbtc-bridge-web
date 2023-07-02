@@ -13,24 +13,24 @@
   {#if reverse}
     <div class="flex items-center gap-2">
       <div class="flex items-center">
-        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
+        <LogoBitcoin clazz={'w-5 h-5 shrink-0 me-2'}/>
         <div class="font-bold">BTC</div>
       </div>
       <Icon src="{ArrowRight}" mini class="w-4 h-4 mx-0.5" aria-hidden="true" />
       <div class="flex items-center">
-        <LogoBitcoin clazz={'w-5 h-5 shrink-0 me-2'}/>
+        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
         <div class="font-bold">sBTC</div>
       </div>
     </div>
   {:else}
     <div class="flex items-center gap-2">
       <div class="flex items-center">
-        <LogoBitcoin clazz={'w-5 h-5 shrink-0 me-2'}/>
+        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
         <div class="font-bold">sBTC</div>
       </div>
       <Icon src="{ArrowRight}" mini class="w-4 h-4 mx-0.5" aria-hidden="true" />
       <div class="flex items-center">
-        <LogoSBTC class={'w-5 h-5 shrink-0 me-2'}/>
+        <LogoBitcoin clazz={'w-5 h-5 shrink-0 me-2'}/>
         <div class="font-bold">BTC</div>
       </div>
     </div>

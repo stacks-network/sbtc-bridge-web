@@ -39,7 +39,7 @@
 
 	const transformAddress = (address:string) => {
 		if (address) {
-			return truncate(address, 8).toUpperCase()
+			return truncate(address, 8)
 		}
 		return 'not connected'
 	}
@@ -68,7 +68,7 @@
 					</div>
 					<div class="ml-auto flex items-center">
 						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().stxAddress)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-							<Icon on:keyup on:click={(event) => handleClick(event)} src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+							<Icon on:keyup on:click={(event) => handleClick(event)} src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
 				</div>
@@ -80,7 +80,7 @@
 					</div>
 					<div class="ml-auto flex items-center">
 						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().cardinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+							<Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
 				</div>
@@ -92,7 +92,7 @@
 					</div>
 					<div class="ml-auto flex items-center">
 						<button on:click|preventDefault={(event) => copy(event, 'icon-stacks', addresses().ordinal)} class="h-8 w-8 rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-							<Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+							<Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
 						</button>
 					</div>
 				</div>

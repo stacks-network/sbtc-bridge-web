@@ -11,6 +11,7 @@
   import { truncate, explorerBtcAddressUrl } from '$lib/utils'
   import { sbtcConfig } from '$stores/stores'
 
+
   export let peginRequest:PeginRequestI;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
   let amount = 0;
@@ -33,7 +34,7 @@
       return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : $sbtcConfig?.addressObject?.cardinal || '';
     }
     try {
-      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10).toUpperCase() : truncate($sbtcConfig?.addressObject?.cardinal, 10).toUpperCase();
+      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate($sbtcConfig?.addressObject?.cardinal, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -44,7 +45,7 @@
       return $sbtcConfig?.addressObject?.cardinal || peginRequest.fromBtcAddress;
     }
     try {
-      return truncate($sbtcConfig?.addressObject?.cardinal, 10).toUpperCase();
+      return truncate($sbtcConfig?.addressObject?.cardinal, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -87,12 +88,12 @@
 
       <div class="flex items-center text-gray-300 px-1 gap-x-2 rounded-md border border-gray-700">
           <div id="address-field" class="grow ">{getAddress(false)}</div>
-          <LinkToExplorer class="-mr-0.5 h-8 w-8 bg-black-01 text-white" target={explorerBtcAddressUrl(getAddress(true))} />
-          <FileIcon on:clicked={() => copy('address-field')} class={'-mr-0.5 h-5 w-5 text-white'}/>
+          <LinkToExplorer class="h-8 w-8 bg-black-01 text-white" target={explorerBtcAddressUrl(getAddress(true))} />
+          <FileIcon on:clicked={() => copy('address-field')} class={'h-5 w-5 text-white'}/>
       </div>
       <div class="flex text-gray-300 text-2xl items-baseline">
         <div id="amount-field" class="-mt-1 p-0 text-5xl">{fmtSatoshiToBitcoin(amount)}</div>
-        <FileIcon on:clicked={() => copy('amount-field')} class={'-mr-0.5 h-5 w-5 text-white'}/>
+        <FileIcon on:clicked={() => copy('amount-field')} class={'h-5 w-5 text-white'}/>
       </div>
       <div class="flex text-gray-300 ">
         <div class="text-2xl font-extralight -mt-3 -mb-2">BTC</div>
@@ -105,13 +106,13 @@
     </div>
     {/if}
     <div class="flex-1 flex-1 flex flex-col justify-between">
-      <div class="flex items-center justify-between text-white pl-3 pr-2 py-2 gap-x-1 rounded-md border border-gray-800 bg-gray-1000">
+      <div class="flex items-center justify-between text-white pl-3 pr-2 py-2 gap-x-1 rounded-md border border-gray-800 bg-gray-1000/75">
         <p id="address-field" class="text-sm font-medium">{getAddress(false)}</p>
         <div class="flex items-center gap-2">
-          <LinkToExplorer class="-mr-0.5 h-6 w-6 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
+          <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
 
-          <button type="button" on:click={() => copy('address-field')} class="-mr-0.5 h-6 w-6 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
-            <Icon src="{ClipboardDocument}" class="-mr-0.5 h-5 w-5 text-white" aria-hidden="true" />
+          <button id="copy-address" type="button" on:click={() => copy('address-field')} class="h-8 w-8 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
+            <Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -124,8 +125,8 @@
     <div class="w-full flex flex-col gap-y-0 ">
       <div class="flex items-center text-gray-300 px-1 gap-x-2 rounded-md border border-gray-700">
           <div id="address-field" class="grow ">{getFromAddress(false)}</div>
-          <LinkToExplorer class="-mr-0.5 h-8 w-8 bg-black-01 text-white" target={explorerBtcAddressUrl(getFromAddress(true))} />
-          <FileIcon on:clicked={() => copy('address-field')} class={'-mr-0.5 h-5 w-5 text-white'}/>
+          <LinkToExplorer class="h-8 w-8 bg-black-01 text-white" target={explorerBtcAddressUrl(getFromAddress(true))} />
+          <FileIcon on:clicked={() => copy('address-field')} class={'h-5 w-5 text-white'}/>
       </div>
       <div class="flex text-gray-300 text-2xl items-baseline">
         <div id="amount-field" class="-mt-1 p-0 text-5xl">{fmtSatoshiToBitcoin(amount)}</div>

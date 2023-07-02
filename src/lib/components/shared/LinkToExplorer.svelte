@@ -6,6 +6,6 @@
   export let target:string;
 </script>
 
-<a title="Show in explorer" href={target} target="_blank" class={clazz} >
+<a title="Show in Explorer" href={target} target="_blank" class={clazz} >
   <Icon src="{ArrowUpRight}" mini class="w-5 h-5" aria-hidden="true" />
 </a>
