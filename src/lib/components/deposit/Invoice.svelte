@@ -107,9 +107,9 @@
     {/if}
     <div class="flex-1 flex-1 flex flex-col justify-between">
       <div class="flex items-center justify-between text-white pl-3 pr-2 py-2 gap-x-1 rounded-md border border-gray-800 bg-gray-1000/75">
-        <p id="address-field" class="text-sm font-medium">{getAddress(false)}</p>
+        <p id="address-field" class="text-xs font-medium">{getAddress(true)}</p>
         <div class="flex items-center gap-2">
-          <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />
+          <!-- <LinkToExplorer class="h-8 w-8 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200" target={explorerBtcAddressUrl(getAddress(true))} />-->
 
           <button id="copy-address" type="button" on:click={() => copy('address-field')} class="h-8 w-8 bg-black text-white rounded-md bg-black flex items-center justify-center border border-transparent hover:border-gray-900 transition duration-200">
             <Icon src="{ClipboardDocument}" class="h-5 w-5 text-white" aria-hidden="true" />
