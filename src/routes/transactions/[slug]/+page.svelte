@@ -85,6 +85,10 @@ onMount(async () => {
 })
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - Transaction details</title>
+  <meta name="description" content="Details of a transaction" />
+</svelte:head>
 
 <div class="mx-auto flex flex-col justify-center">
 	<div class="mx-auto max-w-2xl">

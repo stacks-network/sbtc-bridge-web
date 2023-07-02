@@ -58,8 +58,12 @@ onMount(async () => {
         errorReason = COMMS_ERROR;
     }
 })
-
 </script>
+
+<svelte:head>
+  <title>sBTC Bridge - Transactions</title>
+  <meta name="description" content="A detailed table of all the transactions going through the sBTC Bridge." />
+</svelte:head>
 
 {#if inited}
 <div class="border border-gray-700 rounded-lg lg:w-3/4 md:w-full sm:w-full sm:mx-5 xs:w-full mx-4 my-20">

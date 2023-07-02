@@ -32,6 +32,11 @@
 	})
 </script>
 
+<svelte:head>
+  <title>sBTC Bridge - Withdraw BTC</title>
+  <meta name="description" content="Permissionlessly withdraw your Bitcoin at any time." />
+</svelte:head>
+
 {#if errored}
 	<ServerError />
 {:else}

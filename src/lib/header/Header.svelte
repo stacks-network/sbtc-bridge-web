@@ -85,17 +85,16 @@
 		{#if coordinator}
 			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/admin">Admin</NavLi>
 		{/if}
+
+		<NavLi nonActiveClass="md:hidden"><SettingsDropdown /></NavLi>
+		<NavLi nonActiveClass="md:hidden ml-0 md:ml-2">
+			{#if $sbtcConfig.loggedIn}
+				<AccountDropdown on:init_logout={() => doLogout()}/>
+			{:else}
+				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+					Connect wallet
+				</button>
+			{/if}
+		</NavLi>
 	</NavUl>
 </Navbar>
-
-<div class="md:hidden px-2 sm:px-4 py-2.5 w-full space-y-1.5 max-w-7xl !px-6 lg:px-8">
-	<SettingsDropdown />
-
-	{#if $sbtcConfig.loggedIn}
-		<AccountDropdown on:init_logout={() => doLogout()}/>
-	{:else}
-		<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
-			Connect wallet
-		</button>
-	{/if}
-</div>
