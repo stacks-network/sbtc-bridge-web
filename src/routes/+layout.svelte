@@ -15,6 +15,7 @@
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { loginStacksJs } from '$lib/stacks_connect'
+	import { openWebSocket } from '$lib/sbtc'
 
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
@@ -73,7 +74,8 @@
 
 	onMount(async () => {
 		try {
-			await initApplication();
+			openWebSocket()
+			//await initApplication();
 			//await tick();
 		} catch (err) {
 			errorReason = COMMS_ERROR
