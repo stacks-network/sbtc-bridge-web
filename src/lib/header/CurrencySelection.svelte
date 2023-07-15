@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import { Button, Dropdown, DropdownItem, Toggle, Helper } from 'flowbite-svelte'
 	import { Icon, ArrowsRightLeft, ClipboardDocument, ArrowUpRight } from "svelte-hero-icons"
 
@@ -35,15 +34,6 @@
 		return 'not connected'
 	}
 
-	const toggleSettings = (arg:string) => {
-		const conf:SbtcConfig = $sbtcConfig;
-		if (arg === 'txmode') conf.userSettings.useOpDrop = !conf.userSettings.useOpDrop;
-		if (arg === 'debug') conf.userSettings.debugMode = !conf.userSettings.debugMode;
-		if (arg === 'testAddresses') conf.userSettings.testAddresses = !conf.userSettings.testAddresses;
-		if (arg === 'cryptoFirst') conf.userSettings.currency.cryptoFirst = !conf.userSettings.currency.cryptoFirst;
-		sbtcConfig.update(() => conf);
-	}
-
 	const toggleNetwork = async () => {
 		let net = 'mainnet';
 		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
@@ -64,29 +54,6 @@
 		url.searchParams.set('net', net);
 		location.assign(url.search);
 	}
-
-	onMount(async () => {
-		if (typeof $sbtcConfig.userSettings === 'undefined') {
-			$sbtcConfig.userSettings = {
-				useOpDrop: false,
-				debugMode: false,
-				testAddresses: false,
-				currency: {
-					cryptoFirst: false,
-					myFiatCurrency: 'USD',
-					denomination: 'bitcoin'
-				}
-			}
-		}
-		if (typeof $sbtcConfig.userSettings.currency === 'undefined') {
-			$sbtcConfig.userSettings.currency = {
-				cryptoFirst: false,
-				myFiatCurrency: 'USD',
-				denomination: 'bitcoin'
-			}
-		}
-		sbtcConfig.update(() => $sbtcConfig);
-	})
 </script>
 
 <Button class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
@@ -105,7 +72,7 @@
 	</span>
 </Button>
 <Dropdown
-	class="z-30 rounded-lg !bg-black !border py-1 !border-gray-900"
+	frameClass="z-30 rounded-lg !bg-black !border py-1 !border-gray-900"
 	ulClass="py-1 w-full"
 	placement='bottom-end'
 >
@@ -169,23 +136,5 @@
 			</div>
 		</div>
   </div>
-	<DropdownItem defaultClass="hover:bg-black">
-		<li class="px-4 py-2 hover:bg-gray-900 text-white">
-			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.useOpDrop} on:click={() => toggleSettings('txmode')}><span class="text-white">Transaction mode</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.useOpDrop}Using OP_DROP Mechanism{:else}Using OP_RETURN Mechanism{/if}</Helper>
-		</li>
-		<li class="px-4 py-2 hover:bg-gray-900">
-			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.debugMode} on:click={() => toggleSettings('debug')} ><span class="text-white">Debug mode</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.debugMode}Show advanced info{:else}Hide advanced info{/if}</Helper>
-		</li>
-		<li class="px-4 py-2 hover:bg-gray-900">
-			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.currency?.cryptoFirst} on:click={() => toggleSettings('cryptoFirst')} ><span class="text-white">Crypto First ?</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.currency?.cryptoFirst}Enter amounts in Bitcoin{:else}Enter amounts in standard currency{/if}</Helper>
-		</li>
-		<li class="px-4 py-2 hover:bg-gray-900">
-			<Toggle class=" text-white"><span class="text-white">Change Currency</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{$sbtcConfig.userSettings?.currency?.myFiatCurrency}</Helper>
-		</li>
-	</DropdownItem>
 </Dropdown>
 

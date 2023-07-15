@@ -24,4 +24,9 @@ export type SbtcUserSettingI = {
   useOpDrop: boolean;
   debugMode: boolean;
   testAddresses: boolean;
+  currency: {
+    cryptoFirst: boolean;
+    myFiatCurrency: string;
+    denomination: string;
+  }
 }
