@@ -4,6 +4,26 @@
 import type { SbtcConfig } from '$types/sbtc_config';
 import type { SbtcContractDataI } from 'sbtc-bridge-lib';
 import type { KeySet } from 'sbtc-bridge-lib' 
+import { CONFIG } from '$lib/config';
+import * as btc from '@scure/btc-signer';
+
+export let rates:Array<any>;
+
+export function openWebSocket() {
+			// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+			const socket = new WebSocket(CONFIG.VITE_BRIDGE_WS)
+      socket.binaryType = "arraybuffer";
+
+			// connected
+			socket.addEventListener('open', function(event) {
+				console.log('connected to ws server', event)
+			})
+			socket.addEventListener('message', async function(event) {
+        rates =  JSON.parse(event.data)
+				console.log('message', rates)
+			})
+}
+
 
 export const defaultSbtcConfig:SbtcConfig = {
   pegIn: true,
@@ -16,7 +36,12 @@ export const defaultSbtcConfig:SbtcConfig = {
   userSettings: {
     useOpDrop: true,
     debugMode: false,
-    testAddresses: false
-  },
+    testAddresses: false,
+    currency: {
+      cryptoFirst: false,
+      myFiatCurrency: 'USD',
+      denomination: 'bitcoin'
+    }
+  }
 }
 

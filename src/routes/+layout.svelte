@@ -15,6 +15,8 @@
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { loginStacksJs } from '$lib/stacks_connect'
+	import { openWebSocket } from '$lib/sbtc'
+	import { checkWalletAddress } from '$lib/utils'
 
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
@@ -56,6 +58,7 @@
 		try {
 			data = await fetchSbtcData();
 			if (!data) data = {} as any;
+			checkWalletAddress(data)
 			conf.loggedIn = false;
 			if (userSession.isUserSignedIn()) {
 				conf.loggedIn = true;
@@ -63,6 +66,13 @@
 			}
 		} catch (err) {
 			data = {} as any;
+		}
+		if (!conf.userSettings.currency) {
+			conf.userSettings.currency = {
+				cryptoFirst: false,
+				myFiatCurrency: 'USD',
+				denomination: 'bitcoin'
+			}
 		}
 		conf.sbtcContractData = data.sbtcContractData;
 		conf.keys = data.keys;
@@ -73,6 +83,7 @@
 
 	onMount(async () => {
 		try {
+			//openWebSocket()
 			await initApplication();
 			//await tick();
 		} catch (err) {
