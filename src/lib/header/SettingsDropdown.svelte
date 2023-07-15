@@ -178,6 +178,7 @@
 			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.debugMode} on:click={() => toggleSettings('debug')} ><span class="text-white">Debug mode</span></Toggle>
 			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.debugMode}Show advanced info{:else}Hide advanced info{/if}</Helper>
 		</li>
+		<!--
 		<li class="px-4 py-2 hover:bg-gray-900">
 			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.currency?.cryptoFirst} on:click={() => toggleSettings('cryptoFirst')} ><span class="text-white">Crypto First ?</span></Toggle>
 			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.currency?.cryptoFirst}Enter amounts in Bitcoin{:else}Enter amounts in standard currency{/if}</Helper>
@@ -186,6 +187,7 @@
 			<Toggle class=" text-white"><span class="text-white">Change Currency</span></Toggle>
 			<Helper class="pl-14 !font-extralight text-white">{$sbtcConfig.userSettings?.currency?.myFiatCurrency}</Helper>
 		</li>
+		-->
 	</DropdownItem>
 </Dropdown>
 
