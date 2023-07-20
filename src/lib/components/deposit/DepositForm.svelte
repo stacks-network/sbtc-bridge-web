@@ -41,7 +41,7 @@
   const input2Data = {
     field: 'amount',
     label: 'Amount (in Bitcoin)',
-    hint: '',
+    hint: 'Amount to deposit - must be less than available balance',
     resetValue: undefined,
     value: 10000
   }

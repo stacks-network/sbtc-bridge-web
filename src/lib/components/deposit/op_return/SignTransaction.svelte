@@ -22,15 +22,15 @@ let copied = false;
 
 let currentTx:string;
 
-const setCurrent = () => {
-  const psbt = piTx?.buildOpReturnTransaction().toPSBT();
+const setCurrent = async () => {
+  const psbt = (await piTx?.buildOpReturnTransaction()).toPSBT();
   (wallet === 'Bitcoin Core') ? currentTx = base64.encode(psbt) : currentTx = hex.encode(psbt);
 }
 
 const updateWallet = async (newWallet:string) => {
   copied = false;
   wallet = newWallet;
-  setCurrent();
+  await setCurrent();
   copy();
   if ($sbtcConfig.pegIn) {
     try {
@@ -69,7 +69,7 @@ onMount(async () => {
 		outputsForDisplay: piTx?.getOutputsForDisplay(),
 		inputsForDisplay: piTx?.addressInfo.utxos
 	}
-  currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
+  currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
 })
 </script>
 

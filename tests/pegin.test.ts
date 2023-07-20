@@ -218,7 +218,7 @@ describe('suite', () => {
     const sig = await secp.signAsync(sha256('message'), privKey, {lowS:false});
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
     try {
-      const tx = myPeg.buildOpReturnTransaction();
+      const tx = await myPeg.buildOpReturnTransaction();
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message);
@@ -227,14 +227,14 @@ describe('suite', () => {
 
   it.concurrent('PegInTransaction.buildOpReturnTransaction() returns transaction object', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    const tx = myPeg.buildOpReturnTransaction();
+    const tx = await myPeg.buildOpReturnTransaction();
     expect(tx.version).equals(2)
     expect(tx.hasWitnesses).equals(false)
   })
 
   it.concurrent('PegInTransaction.buildOpReturnTransaction() ensure PSBT can be estracted form tx', async () => {
     const myPeg:PegInTransactionI = await PegInTransaction.hydrate(JSON.parse(JSON.stringify(pegin1)));
-    const tx = myPeg.buildOpReturnTransaction();
+    const tx = await myPeg.buildOpReturnTransaction();
     expect(tx.toPSBT());
   })
 

@@ -107,14 +107,14 @@ describe('suite', () => {
 
     try {
       pegin.fromBtcAddress = 'tb1qp8r7ln235zx6nd8rsdzkgkrxc238p6eecys2m9'
-      const tx:btc.Transaction = pegin.buildOpDropTransaction()
+      const tx:btc.Transaction = await pegin.buildOpDropTransaction()
       fail('No pubkey for address: tb1qp8r7ln235zx6nd8rsdzkgkrxc238p6eecys2m9')
     } catch(err) {
       //
     }
     try {
       pegin.fromBtcAddress = 'tb1psz58gxdxfdyqzur04r2vmgyau7mz5xmg52ns7hg8df7dpu0mlc3sz0wtkj'
-      const tx:btc.Transaction = pegin.buildOpDropTransaction()
+      const tx:btc.Transaction = await pegin.buildOpDropTransaction()
       const res = tx.sign(keySetForFeeCalculation[0].priv)
       expect(res).equals(true)
       fail('No pubkey for address: tb1qp8r7ln235zx6nd8rsdzkgkrxc238p6eecys2m9')

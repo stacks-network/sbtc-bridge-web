@@ -8,7 +8,7 @@ import { fail } from 'assert';
 import { pegout1 } from './data/data_pegout_p2wpkh'
 import { sha256 } from '@noble/hashes/sha256';
 import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGOUT_OPCODE } from 'sbtc-bridge-lib'
-import { uint8ToAmount, amountToUint8 } from 'sbtc-bridge-lib' 
+import { bigUint64ToAmount, amountToBigUint64 } from 'sbtc-bridge-lib' 
 
 const priv = secp.utils.randomPrivateKey()
 type KeySet = {
@@ -183,7 +183,7 @@ describe('suite', () => {
   it.concurrent('PegOutTransaction.buildOpReturnTransaction() throws if signature is not passed', async () => {
     const myPeg:PegOutTransaction = await PegOutTransaction.hydrate(JSON.parse(JSON.stringify(pegout1)));
     try {
-      const tx = myPeg.buildOpReturnTransaction();
+      const tx = await myPeg.buildOpReturnTransaction();
       fail('error expecetd')
     } catch (err:any) {
       expect(err.message).equals('Signature of output 2 scriptPubKey is required');
@@ -196,7 +196,7 @@ describe('suite', () => {
     const privKey = hex.encode(secp.utils.randomPrivateKey())
     const sig = await secp.signAsync(sha256('message'), privKey);
     myPeg.setSignature((sig.toCompactHex()))
-    const tx = myPeg.buildOpReturnTransaction();
+    const tx = await myPeg.buildOpReturnTransaction();
     expect(tx.version).equals(2);
     expect(tx.hasWitnesses).equals(false)
   })
@@ -206,7 +206,7 @@ describe('suite', () => {
     const privKey = hex.encode(secp.utils.randomPrivateKey())
     const sig = await secp.signAsync(sha256('message'), privKey);
     myPeg.setSignature(sig.toCompactHex())
-    const tx = myPeg.buildOpReturnTransaction();
+    const tx = await myPeg.buildOpReturnTransaction();
     expect(tx.toPSBT());
   })
 
@@ -217,7 +217,7 @@ describe('suite', () => {
     //view.setUint32(0, 2500); // Max unsigned 32-bit integer
 		//amtBuf.writeUInt32LE(2500, 0);
     //const amt = new Uint8Array(view.buffer)
-    const amt = amountToUint8(2500, 9)
+    const amt = amountToBigUint64(2500, 9)
 
 		//const data = Buffer.concat([b1, amtBuf]);
     //console.log('amtBuf: ' + (hex.encode(amt)))
@@ -258,8 +258,8 @@ describe('suite', () => {
     const data = myPeg.buildData(sig, false);
     const amountUint8 = data.slice(3,12);
     expect(amountUint8.length).equals(9);
-    expect(uint8ToAmount(amountUint8)).equals(myPeg.pegInData.amount);
-    console.log(uint8ToAmount(amountUint8))
+    expect(bigUint64ToAmount(amountUint8)).equals(myPeg.pegInData.amount);
+    console.log(bigUint64ToAmount(amountUint8))
   })
 
 })

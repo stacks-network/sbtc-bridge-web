@@ -43,6 +43,12 @@ export async function sendRawTxDirectBlockCypher(hex:string) {
   });
   //if (response.status !== 200) console.log('Mempool error: ' + response.status + ' : ' + response.statusText);
   try {
+    if (response.status >= 400) {
+      return {
+        error: 'Error broadcasting',
+        status: response.status
+      }
+    }
     return await response.json();
   } catch (err) {
     try {
@@ -63,10 +69,13 @@ export async function sendRawTransaction(tx: { hex: string; }) {
     body: JSON.stringify(tx)
   });
 
-  if (response.status !== 200) {
-    console.log('Bitcoin tx send error.');
+  if (response.status >= 400) {
+    return {
+      error: 'Error broadcasting',
+      status: response.status
+    }
   }
-  return await extractResponse(response);
+return await extractResponse(response);
 }
 
 export async function fetchKeys() {

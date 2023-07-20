@@ -40,7 +40,7 @@ export default class ReclaimOrRevealTransaction {
 		console.log(amount);
 	};
 
-	calculateFees = ():void => {
+	calculateFees = (method:string, index:number):void => {
 		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.commitTx.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
 		this.fees = [
 			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),

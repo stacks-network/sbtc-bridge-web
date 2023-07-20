@@ -18,9 +18,9 @@
 		const res = await loginStacksJs(doLoginAfter);
 		console.log(res)
 	}
-	const doLogout = () => {
+	const doLogout = async () => {
 		logUserOut();
-		sbtcConfig.update((conf:SbtcConfig) => {
+		await sbtcConfig.update((conf:SbtcConfig) => {
 			conf.loggedIn = false;
 			conf.addressObject = undefined;
 			conf.pegInTransaction = undefined;

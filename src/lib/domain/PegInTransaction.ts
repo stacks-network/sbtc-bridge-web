@@ -4,16 +4,17 @@ import { hex } from '@scure/base';
 import type { PeginRequestI } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
-import { toStorable, buildDepositPayload, approxTxFees, MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from 'sbtc-bridge-lib' 
+import { toStorable, buildDepositPayload, MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET, PEGIN_OPCODE } from 'sbtc-bridge-lib' 
 import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
 import * as P from 'micro-packed';
 import { c32addressDecode } from 'c32check';
+import * as secp from '@noble/secp256k1';
 
 const concat = P.concatBytes;
+const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
 
 export interface PegInTransactionI {
 	unconfirmedUtxos:boolean;
-	net:any;
     ready:boolean;
     fromBtcAddress:string;
     commitKeys:CommitKeysI;
@@ -29,7 +30,7 @@ export interface PegInTransactionI {
 	scureFee:number;
 
 	buildData: (sigOrPrin:string, opDrop:boolean) => Uint8Array;
-	calculateFees: (index:number) => void;
+	calculateFees: (method: string, index:number) => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
 	setStacksAddress: (stacksAddress:string|undefined) => void;
@@ -40,8 +41,8 @@ export interface PegInTransactionI {
 	getInputsForDisplay: () => Array<any>;
 	getOpDropPeginRequest: () => PeginRequestI;
 	getOpReturnPeginRequest: () => PeginRequestI;
-	buildOpReturnTransaction: () => btc.Transaction;
-	buildOpDropTransaction: () => btc.Transaction;
+	buildOpReturnTransaction: () => Promise<btc.Transaction>;
+	buildOpDropTransaction: () => Promise<btc.Transaction>;
 	getWitnessScript?: () => any;
 }
 
@@ -50,7 +51,6 @@ export default class PegInTransaction implements PegInTransactionI {
 	static FORMAT = /[ `!@#$%^&*()_+=[\]{};':"\\|,<>/?~]/;
 	unconfirmedUtxos = false;
 	requiredConfirmed = 6;
-	net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	ready = false;
 	fromBtcAddress!: string;
     commitKeys!:CommitKeysI;
@@ -79,7 +79,6 @@ export default class PegInTransaction implements PegInTransactionI {
 	 */
 	public static create = async (network:string, commitKeys:CommitKeysI, btcFeeRates:any):Promise<PegInTransactionI> => {
 		const me = new PegInTransaction();
-		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (commitKeys.fromBtcAddress && commitKeys.fromBtcAddress.length > 0) {
 			me.fromBtcAddress = commitKeys.fromBtcAddress;
 		}
@@ -104,7 +103,6 @@ export default class PegInTransaction implements PegInTransactionI {
 	 */
 	public static hydrate = (o:PegInTransactionI) => {
 		const me = new PegInTransaction();
-		me.net = o.net;
 		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
 		me.fromBtcAddress = o.fromBtcAddress || addresses().cardinal;
 		me.commitKeys = o.commitKeys;
@@ -122,30 +120,41 @@ export default class PegInTransaction implements PegInTransactionI {
 	/**
 	 * Build the tx with the stacks data in an unspendable op_return output
 	 */
-	buildOpReturnTransaction = () => {
+	buildOpReturnTransaction = async () => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (!this.pegInData.stacksAddress) throw new Error('Stacks address required!');
+		if (!this.addressInfo || !this.addressInfo.utxos) {
+			this.addressInfo = await fetchUtxoSet(this.fromBtcAddress);
+		}
+		this.calculateFees('return', 1)
 		const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
-		this.addInputs(tx);
+		this.addInputs(tx, false);
 		const data = this.buildData(this.pegInData.stacksAddress, false);
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
-		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), this.net);
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), net);
+		const changeAmount = this.inputAmt(tx) - (this.pegInData.amount + this.fee); 
+		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), net);
 		return tx;
 	}
 
 	/**
 	 * Build the tx with the stacks data in an spendable output behind an op_drop
 	 */
-	buildOpDropTransaction = () => {
+	buildOpDropTransaction = async () => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
+		if (!this.addressInfo || !this.addressInfo.utxos) {
+			this.addressInfo = await fetchUtxoSet(this.commitKeys.fromBtcAddress);
+		}
+		this.calculateFees('drop', 1)
 		const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
-		this.addInputs(tx);
+		this.addInputs(tx, false);
 		const peginReqest = this.getOpDropPeginRequest()
 		if (!peginReqest.commitTxScript || !peginReqest.commitTxScript.address ) throw new Error('buildOpDropTransaction: address required!');
-		tx.addOutputAddress(peginReqest.commitTxScript.address, BigInt(this.pegInData.amount), this.net );
-		const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
-		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), this.net);
+		tx.addOutputAddress(peginReqest.commitTxScript.address, BigInt(this.pegInData.amount), net );
+		//const changeAmount = Math.floor(this.maxCommit() - this.pegInData.amount - this.fee);
+		const changeAmount = this.inputAmt(tx) - (this.pegInData.amount + this.fee); 
+		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), net);
 		return tx;
 	}
 
@@ -155,10 +164,11 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * magic bytes not needed in commit tx.
 	 */
 	buildData = (sigOrPrin:string, opDrop:boolean):Uint8Array => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (opDrop) {
-			return buildDepositPayload(this.net, this.pegInData.revealFee || this.fee, sigOrPrin, opDrop, undefined);
+			return buildDepositPayload(net, this.pegInData.revealFee || this.fee, sigOrPrin, opDrop, undefined);
 		}
-		return this.buildDepositPayload(this.net, sigOrPrin);
+		return this.buildDepositPayload(net, sigOrPrin);
 	}
 
 	buildDepositPayload(net:any, address:string):Uint8Array {
@@ -189,7 +199,7 @@ export default class PegInTransaction implements PegInTransactionI {
 	};
  
 	isUTXOConfirmed = (utxo:any) => {
-		return utxo.tx.confirmations >= 0;
+		return utxo.tx.confirmations >= 3;
 	};
 
 	maxCommit() {
@@ -219,21 +229,22 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * 1. the sbtc wallet address with the drop data
 	 */
 	getOpDropPeginRequest2 = ():PeginRequestI => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const data = this.buildData(this.pegInData.stacksAddress, true);
-		const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		const sbtcWalletAddrScript = btc.Address(net).decode(this.pegInData.sbtcWalletAddress)
 		if (sbtcWalletAddrScript.type !== 'tr') throw new Error('Taproot required')
-		const reclaimAddr = btc.Address(this.net).decode(this.fromBtcAddress)
+		const reclaimAddr = btc.Address(net).decode(this.fromBtcAddress)
 		if (reclaimAddr.type !== 'tr') throw new Error('No pubkey for address: ' + this.fromBtcAddress)
 		const tscript = { script: btc.Script.encode([data, 'DROP', sbtcWalletAddrScript.pubkey]) }
-		const script = btc.p2tr(reclaimAddr.pubkey, tscript, this.net, true);
+		const script = btc.p2tr(reclaimAddr.pubkey, tscript, net, true);
 		const req:PeginRequestI = {
 			fromBtcAddress: this.fromBtcAddress,
 			status: 1,
 			tries: 0,
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
-			wallet: 'btc.p2tr(reclaimAddr.pubkey, { script: Script.encode([data, \'DROP\', sbtcWalletAddr.pubkey]) }, this.net, true)',
+			wallet: 'btc.p2tr(reclaimAddr.pubkey, { script: Script.encode([data, \'DROP\', sbtcWalletAddr.pubkey]) }, net, true)',
 			requestType: 'deposit',
 			originator: this.pegInData.stacksAddress,
 			stacksAddress: this.pegInData.stacksAddress,
@@ -255,14 +266,15 @@ export default class PegInTransaction implements PegInTransactionI {
 	 * 2. the sbtc wallet address with the drop data
 	 */
 	getOpDropPeginRequest = ():PeginRequestI => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 
-		//const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		//const sbtcWalletAddrScript = btc.Address(net).decode(this.pegInData.sbtcWalletAddress)
 		//if (sbtcWalletAddrScript.type !== 'tr') throw new Error('Taproot required')
 		//let revealPubK = sbtcWalletAddrScript.pubkey;
 		
 
-		//const reclaimAddr = btc.Address(this.net).decode(this.fromBtcAddress);
+		//const reclaimAddr = btc.Address(net).decode(this.fromBtcAddress);
 		//if (reclaimAddr.type !== 'tr') throw new Error('No pubkey for address: ' + this.fromBtcAddress)
 
 		console.log('reclaimAddr.pubkey: ' + this.commitKeys.reclaimPub)
@@ -273,7 +285,7 @@ export default class PegInTransaction implements PegInTransactionI {
 			{ script: btc.Script.encode([data, 'DROP', hex.decode(this.commitKeys.revealPub), 'CHECKSIG']) },
 			{ script: btc.Script.encode([hex.decode(this.commitKeys.reclaimPub), 'CHECKSIG']) }
 		]
-		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, this.net, true);
+		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, net, true);
 		const req:PeginRequestI = {
 			originator: this.pegInData.stacksAddress,
 			fromBtcAddress: this.fromBtcAddress,
@@ -284,7 +296,7 @@ export default class PegInTransaction implements PegInTransactionI {
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
 			requestType: 'deposit',
-			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], this.net, true)',
+			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], net, true)',
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
 		}
@@ -296,12 +308,12 @@ export default class PegInTransaction implements PegInTransactionI {
 		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const data = this.buildData(this.pegInData.stacksAddress, false);
 
-		//const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		//const sbtcWalletAddrScript = btc.Address(net).decode(this.pegInData.sbtcWalletAddress)
 		//if (sbtcWalletAddrScript.type !== 'tr') throw new Error('Taproot required')
 		//let revealPubK = sbtcWalletAddrScript.pubkey;
 		
 
-		//const reclaimAddr = btc.Address(this.net).decode(this.fromBtcAddress);
+		//const reclaimAddr = btc.Address(net).decode(this.fromBtcAddress);
 		//if (reclaimAddr.type !== 'tr') throw new Error('No pubkey for address: ' + this.fromBtcAddress)
 
 		console.log('reclaimAddr.pubkey: ' + this.commitKeys.reclaimPub)
@@ -366,40 +378,67 @@ export default class PegInTransaction implements PegInTransactionI {
 	}
 
 	/**
-	 * @deprecated - maybe not needed with op_drop as the users wallet calculates
-	 * the fees. Keep for now in case we switch back to op_return
-	 * @returns
+	 * @returns sets the fee value.
 	 */
-	calculateFees = (index:number):void => {
-		try {
-			this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, this.pegInData.sbtcWalletAddress);
-		} catch(err) {
-			// no utxos..
-			this.scureFee = 4000;
+	calculateFees = (method:string, index:number):void => {
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		let vsize = 0;
+		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
+		const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
+		this.addInputs(tx, true);
+		if (method === 'return') {
+			const data = this.buildData(this.pegInData.stacksAddress, false);
+			tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
+			tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.pegInData.amount), net);
+		} else if (method === 'drop') {
+			const peginReqest = this.getOpDropPeginRequest()
+			if (!peginReqest.commitTxScript || !peginReqest.commitTxScript.address ) throw new Error('buildOpDropTransaction: address required!');
+			tx.addOutputAddress(peginReqest.commitTxScript.address, BigInt(this.pegInData.amount), net );
 		}
-		this.fees = [
-			this.scureFee * 8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			this.scureFee * 10, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			this.scureFee * 12, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
-		]
-		this.fee = this.fees[index];
+		const changeAmount = this.inputAmt(tx) - (this.pegInData.amount + this.fee); 
+		if (changeAmount > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(changeAmount), net);
+		tx.sign(privKey);
+		tx.finalize();
+		vsize = tx.vsize;
+		let feeRate = this.feeInfo['low_fee_per_kb']
+		if (index === 0) feeRate = this.feeInfo['medium_fee_per_kb']
+		else if (index === 2) feeRate = this.feeInfo['high_fee_per_kb']
+		this.fee = Math.floor(vsize * feeRate / 1024);
 	}
 		
-	private addInputs = (tx:btc.Transaction) => {
+	private addInputs = (tx:btc.Transaction, feeCalc:boolean) => {
+		const bar = this.fee + this.pegInData.amount;
+		let amt = 0;
 		for (const utxo of this.addressInfo.utxos) {
 			const hexy = (utxo.tx.hex) ? utxo.tx.hex : utxo.tx 
 			const script = btc.RawTx.decode(hex.decode(hexy))
-			if (this.isUTXOConfirmed(utxo)) {
+			if (amt < bar && this.isUTXOConfirmed(utxo)) {
+				amt += utxo.value;
+				let witnessUtxo = {
+					script: script.outputs[utxo.vout].script,
+					amount: BigInt(utxo.value)
+				}
+				if (feeCalc) {
+					witnessUtxo = {
+						amount: BigInt(utxo.value),
+						script: btc.p2wpkh(secp.getPublicKey(privKey, true)).script,
+					}		
+				}
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,
-					witnessUtxo: {
-						script: script.outputs[utxo.vout].script,
-						amount: BigInt(utxo.value)
-					},
+					witnessUtxo
 				}
 				tx.addInput(nextI);
 			}
 		}
+	}
+
+	private inputAmt = (tx:btc.Transaction) => {
+		let amt = 0;
+		for (let idx = 0; idx < tx.inputsLength; idx++) {
+			amt += Number(tx.getInput(idx).witnessUtxo?.amount)
+		}
+		return amt;
 	}
 };
