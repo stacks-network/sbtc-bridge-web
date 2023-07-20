@@ -4,14 +4,16 @@ import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { fetchUtxoSet } from "../bridge_api";
 import { decodeStacksAddress, addresses } from '$lib/stacks_connect'
 import { CONFIG } from '$lib/config';
-import { toStorable, buildWithdrawalPayload, approxTxFees, getDataToSign } from 'sbtc-bridge-lib' 
+import { toStorable, buildWithdrawalPayload, getDataToSign, amountToBigUint64, bigUint64ToAmount } from 'sbtc-bridge-lib' 
 import type { PegInData, CommitKeysI } from 'sbtc-bridge-lib' 
+import * as secp from '@noble/secp256k1';
 
+const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
+const revealFee = 5000;
 export interface PegOutTransactionI {
 	signature: string|undefined;
 	unconfirmedUtxos:boolean;
     commitKeys:CommitKeysI;
-	net:any;
     ready:boolean;
     fromBtcAddress:string;
     addressInfo:any;
@@ -27,7 +29,7 @@ export interface PegOutTransactionI {
 	dust: number;
 
 	buildData: (sigOrPrin:string, opDrop:boolean) => Uint8Array;
-	calculateFees: () => void;
+	calculateFees: (method: string, index:number) => void;
 	maxCommit: () => number;
 	setAmount: (pegInAmount:number) => void;
 	setStacksAddress: (stacksAddress:string|undefined) => void;
@@ -41,8 +43,8 @@ export interface PegOutTransactionI {
 	setSignature: (signature:string) => void;
 	getOpDropPeginRequest: () => PeginRequestI;
 	getOpReturnPeginRequest: () => PeginRequestI;
-	buildOpReturnTransaction: () => btc.Transaction;
-	buildOpDropTransaction: () => btc.Transaction;
+	buildOpReturnTransaction: ()  => Promise<btc.Transaction>;
+	buildOpDropTransaction: () => Promise<btc.Transaction>;
 }
 
 export default class PegOutTransaction implements PegOutTransactionI {
@@ -79,7 +81,6 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 */
 	public static create = async (network:string, commitKeys:CommitKeysI, btcFeeRates:any):Promise<PegOutTransactionI> => {
 		const me = new PegOutTransaction();
-		me.net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		if (commitKeys.fromBtcAddress && commitKeys.fromBtcAddress.length > 0) {
 			me.fromBtcAddress = commitKeys.fromBtcAddress;
 		}
@@ -102,7 +103,6 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	 */
 	public static hydrate = (o:PegOutTransactionI) => {
 		const me = new PegOutTransaction();
-		me.net = o.net;
 		//if (!o.fromBtcAddress) throw new Error('No address - use create instead!');
 		me.fromBtcAddress = o.fromBtcAddress || addresses().ordinal;
 		me.commitKeys = o.commitKeys;
@@ -119,44 +119,68 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		/**
 	 * Build the tx with the stacks data in an unspendable op_return output
 	 */
-	buildOpReturnTransaction = () => {
+	buildOpReturnTransaction = async () => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!this.signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		if (!this.addressInfo || !this.addressInfo.utxos) {
+			this.addressInfo = await fetchUtxoSet(this.fromBtcAddress);
+		}
+		this.calculateFees('return', 1)
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		this.addInputs(tx);
+		this.addInputs(tx, false);
 		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
-		const data = this.buildData(this.signature, true)
+		const data = this.buildData(this.signature, false)
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
-		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), this.net);
-		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
-
+		const change = this.inputAmt(tx) - (this.dust + this.fee);
+		if (change > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(change), net);
+		tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), net);
 		return tx;
+	}
+
+	private inputAmt = (tx:btc.Transaction) => {
+		let amt = 0;
+		for (let idx = 0; idx < tx.inputsLength; idx++) {
+			amt += Number(tx.getInput(idx).witnessUtxo?.amount)
+		}
+		return amt;
 	}
 
 	/**
 	 * Build the tx with the stacks data in an spendable output behind an op_drop
 	 */
-	buildOpDropTransaction = () => {
+	buildOpDropTransaction = async () => {
 		if (!this.ready) throw new Error('Not ready!');
 		if (!this.signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		if (!this.addressInfo || !this.addressInfo.utxos) {
+			this.addressInfo = await fetchUtxoSet(this.commitKeys.fromBtcAddress);
+		}
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		this.calculateFees('drop', 1)
 		const tx = new btc.Transaction({ allowUnknowOutput: true });
-		this.addInputs(tx);
+		this.addInputs(tx, false);
 		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const data = this.buildData(this.signature, true)
 		const csvScript = this.getCSVScript(data);
 		if (!csvScript ) throw new Error('script required!');
 		this.getOpDropPeginRequest()
 		tx.addOutput({ script: csvScript.script, amount: BigInt(this.dust) });
-		if (this.getChange() > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(this.getChange()), this.net);
+		const change = this.inputAmt(tx) - (this.dust + this.fee);
+		if (change > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(change), net);
 		return tx;
 	}
-		
+ 
 	/**
 	 * See https://github.com/Trust-Machines/core-eng/blob/d713861af94061b2a90695e3a5ce20602872dbe7/sbtc-planning/commit-reveal-ops.md
 	 * magic bytes not needed in commit tx.
 	 */
 	buildData = (sigOrPrin:string, opDrop:boolean):Uint8Array => {
-		return buildWithdrawalPayload(this.net, this.pegInData.amount, hex.decode(sigOrPrin), opDrop)
+		const sats = this.pegInData.amount;
+		const amt = amountToBigUint64(this.pegInData.amount, 8)
+		const tamt = bigUint64ToAmount(amt)
+		console.log('Sats (be, buf=1): ' + sats + ' amountToBigUint64:' + hex.encode(amt) + ' bigUint64ToAmount:' + tamt)
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		return buildWithdrawalPayload(net, this.pegInData.amount, hex.decode(sigOrPrin), opDrop)
 	}
 
 	getChange = () => {
@@ -171,7 +195,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	};
 
 	isUTXOConfirmed = (utxo:any) => {
-		return utxo.tx.confirmations >= 0;
+		return utxo.tx.confirmations >= 2;
 	};
  
 	maxCommit() {
@@ -233,13 +257,10 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	getDataToSign = () => {
-		const data = getDataToSign(CONFIG.VITE_NETWORK, this.pegInData.amount, this.pegInData.sbtcWalletAddress)
-		//const view2 = amountToUint8(this.pegInData.amount, 9);
-		//const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))
-		//const data = concatByteArrays([view2, script])
+		const data = getDataToSign(CONFIG.VITE_NETWORK, this.pegInData.amount, this.fromBtcAddress)
 		return hex.encode(data);
 	}
-
+	
 	/**
 	 * Gets the script data for the commit transaction. This includes the address
 	 * the user pays to. This version is mode 2.
@@ -252,23 +273,15 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	getOpDropPeginRequest = ():PeginRequestI => {
 		if (!this.pegInData.stacksAddress) this.pegInData.stacksAddress = addresses().stxAddress
 		const data = this.buildData(this.signature, true);
-
-		//const sbtcWalletAddrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
-		//if (sbtcWalletAddrScript.type !== 'tr') throw new Error('Taproot required')
-		//let revealPubK = sbtcWalletAddrScript.pubkey;
-		
-
-		//const reclaimAddr = btc.Address(this.net).decode(this.fromBtcAddress);
-		//if (reclaimAddr.type !== 'tr') throw new Error('No pubkey for address: ' + this.fromBtcAddress)
-
 		console.log('reclaimAddr.pubkey: ' + this.commitKeys.reclaimPub)
 		console.log('revealAddr.pubkey: ' + this.commitKeys.revealPub)
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 		
 		const scripts =  [
 			{ script: btc.Script.encode([data, 'DROP', hex.decode(this.commitKeys.revealPub), 'CHECKSIG']) },
 			{ script: btc.Script.encode([hex.decode(this.commitKeys.reclaimPub), 'CHECKSIG']) }
 		]
-		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, this.net, true);
+		const script = btc.p2tr(btc.TAPROOT_UNSPENDABLE_KEY, scripts, net, true);
 		const req:PeginRequestI = {
 			originator: this.pegInData.stacksAddress,
 			fromBtcAddress: this.fromBtcAddress,
@@ -279,7 +292,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 			mode: 'op_drop',
 			amount: this.pegInData.amount,
 			requestType: 'withdrawal',
-			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], this.net, true)',
+			wallet: 'p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, \'DROP\', revealPubK, \'CHECKSIG\']) }, { script: Script.encode([reclaimPubKey, \'CHECKSIG\']) }], net, true)',
 			stacksAddress: this.pegInData.stacksAddress,
 			sbtcWalletAddress: this.pegInData.sbtcWalletAddress,
 		}
@@ -311,38 +324,69 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	/**
-	 * @deprecated - maybe not needed with op_drop as the users wallet calculates
-	 * the fees. Keep for now in case we switch back to op_return
-	 * @returns
+	 * @returns sets the fee on this object
 	 */
-	calculateFees = ():void => {
-		this.scureFee = approxTxFees(CONFIG.VITE_NETWORK, this.addressInfo.utxos, this.fromBtcAddress, 'tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8');
-		this.fees = [
-			this.scureFee * 0.8, //Math.floor((this.feeInfo.low_fee_per_kb / 1000) * vsize),
-			this.scureFee * 1.0, //Math.floor((this.feeInfo.medium_fee_per_kb / 1000) * vsize),
-			this.scureFee * 1.2, //Math.floor((this.feeInfo.high_fee_per_kb / 1000) * vsize),
-		]
-		this.fee = this.fees[1];
-		if (this.pegInData.amount === 0) {
-			this.pegInData.amount = this.maxCommit() - this.fee;
+	calculateFees = (method:string, index:number):void => {
+		let vsize = 0;
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		if (!this.ready) throw new Error('Not ready!');
+		if (!this.signature) throw new Error('Signature of output 2 scriptPubKey is required');
+		const tx = new btc.Transaction({ allowUnknowOutput: true });
+		this.addInputs(tx, true);
+		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
+		if (method === 'return') {
+			const data = this.buildData(this.signature, false)
+			tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
+			tx.addOutputAddress(this.pegInData.sbtcWalletAddress, BigInt(this.dust), net);
+		} else if (method === 'drop') {
+			if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
+			const data = this.buildData(this.signature, true)
+			const csvScript = this.getCSVScript(data);
+			if (!csvScript ) throw new Error('script required!');
+			this.getOpDropPeginRequest()
+			tx.addOutput({ script: csvScript.script, amount: BigInt(this.dust) });
+		}
+		const change = this.inputAmt(tx) - (this.dust + this.fee);
+		if (change > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(change), net);
+		tx.sign(privKey);
+		tx.finalize();
+		vsize = tx.vsize;
+		let feeRate = this.feeInfo['low_fee_per_kb']
+		if (index === 0) feeRate = this.feeInfo['medium_fee_per_kb']
+		else if (index === 2) feeRate = this.feeInfo['high_fee_per_kb']
+		this.fee = Math.floor(vsize * feeRate / 1024);
+	}
+
+	private addInputs = (tx:btc.Transaction, feeCalc:boolean) => {
+		const fee = (feeCalc) ? 1000 : this.fee;
+		const bar = fee + this.dust + revealFee;
+		let amt = 0;
+		for (const utxo of this.addressInfo.utxos) {
+			if (amt < bar && this.isUTXOConfirmed(utxo)) {
+				amt += utxo.value;
+				const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
+				let witnessUtxo = {
+					script: script.outputs[utxo.vout].script,
+					amount: BigInt(utxo.value)
+			}
+				if (feeCalc) {
+					witnessUtxo = {
+						amount: BigInt(utxo.value),
+						script: btc.p2wpkh(secp.getPublicKey(privKey, true)).script,
+					}		
+				}
+				tx.addInput({
+					txid: hex.decode(utxo.txid),
+					index: utxo.vout,
+					witnessUtxo
+				});
+			}
 		}
 	}
 
-	private addInputs = (tx:btc.Transaction) => {
-		for (const utxo of this.addressInfo.utxos) {
-			const script = btc.RawTx.decode(hex.decode(utxo.tx.hex))
-			tx.addInput({
-				txid: hex.decode(utxo.txid),
-				index: utxo.vout,
-				witnessUtxo: {
-					script: script.outputs[utxo.vout].script,
-					amount: BigInt(utxo.value)
-				},
-			});
-		}
-	}
 	private getOpDropP2shScript(signature:string) {
-		const script = btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress))	
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		const script = btc.OutScript.encode(btc.Address(net).decode(this.pegInData.sbtcWalletAddress))	
 		const data = this.buildData(signature, true)
 		const asmScript = btc.Script.encode([data, 'DROP', 'DUP', 'HASH160', script, 'EQUALVERIFY', 'CHECKSIG'])
 		//console.log('getOpDropP2shScript:asmScript: ', btc.Script.decode(asmScript))
@@ -350,8 +394,8 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	private getCSVScript (data:Uint8Array):{type:string, script:Uint8Array} {
-		//const pubkey1 = this.addressInfo.pubkey
-		const addrScript = btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)
+		const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		const addrScript = btc.Address(net).decode(this.pegInData.sbtcWalletAddress)
 		if (addrScript.type === 'wpkh') {
 			return {
 				type: 'wsh',
@@ -360,25 +404,25 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		} else if (addrScript.type === 'tr') {
 			return {
 				type: 'tr',
-				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
-				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
 				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
 				script: btc.Script.encode([data, 'DROP', btc.p2tr(addrScript.pubkey).script])
 			}
 		} else {
 			const asmScript = btc.Script.encode([data, 'DROP', 
 				'IF', 
-				btc.OutScript.encode(btc.Address(this.net).decode(this.pegInData.sbtcWalletAddress)),
+				btc.OutScript.encode(btc.Address(net).decode(this.pegInData.sbtcWalletAddress)),
 				'ELSE', 
 				144, 'CHECKSEQUENCEVERIFY', 'DROP',
-				btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)),
+				btc.OutScript.encode(btc.Address(net).decode(this.fromBtcAddress)),
 				'CHECKSIG',
 				'ENDIF'
 			])
 			return {
 				type: 'tr',
-				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG'])
-				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(this.net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
+				//script: btc.Script.encode([data, 'DROP', btc.OutScript.encode(btc.Address(net).decode(this.fromBtcAddress)), 'CHECKSIG'])
+				//script: btc.Script.encode([data, 'DROP', 'IF', 144, 'CHECKSEQUENCEVERIFY', 'DROP', btc.OutScript.encode(btc.Address(net).decode(this.fromBtcAddress)), 'CHECKSIG', 'ELSE', 'DUP', 'HASH160', sbtcWalletUint8, 'EQUALVERIFY', 'CHECKSIG', 'ENDIF'])
 				//script: btc.Script.encode([data, 'DROP', btc.p2tr(hex.decode(pubkey2)).script])
 				script: btc.p2tr(asmScript).script
 			}

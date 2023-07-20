@@ -55,7 +55,7 @@
   const input2Data = {
     field: 'amount',
     label: 'Amount (bitcoin)',
-    hint: '',
+    hint: 'The amount you wish to deposit',
     resetValue: undefined,
     value: 10000
   }
@@ -184,7 +184,6 @@
     const userBalance = $sbtcConfig.addressObject;
     if (!userBalance) throw new Error('Address data is missing ')
     if (!piTx.pegInData.stacksAddress && userBalance.stxAddress) piTx.pegInData.stacksAddress = userBalance.stxAddress;
-    piTx.calculateFees(1);
     if (amt === -1) {
       piTx.pegInData.amount = bitcoinBalanceFromMempool(userBalance?.cardinalInfo) - piTx.fee;
     } else if (amt >= piTx.maxCommit() - piTx.fee) {
@@ -202,7 +201,7 @@
     input1Data.value = piTx.pegInData.stacksAddress || '';
     input1Data.resetValue = input1Data.value;
     input2Data.value = satsToBitcoin(piTx.pegInData.amount);
-    input2Data.hint = 'Balance: ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin - amount is adjusted for gas fees of ' + satsToBitcoin(piTx.fee) + ' bitccoin';
+    input2Data.hint = 'Balance: ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin - please allow for gas fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });
     conf.pegInTransaction = piTx;

@@ -6,7 +6,7 @@ import type { SigData } from 'sbtc-bridge-lib'
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
-import { sendRawTxDirectBlockCypher } from '$lib/bridge_api';
+import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
 import { truncate, explorerBtcAddressUrl, fmtSatoshiToBitcoin, convertOutputsBlockCypher } from "$lib/utils";
 import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
@@ -22,7 +22,6 @@ export let piTx: PegInTransactionI|PegOutTransactionI;
 export let peginRequest:PeginRequestI;
 
 const dispatch = createEventDispatcher();
-let sigData:SigData;
 let currentTx:string;
 let errorReason: string|undefined;
 let cypherResp: any|undefined;
@@ -74,17 +73,23 @@ const broadcastTransaction = async (psbtHex:string) => {
   let errMessage = undefined;
   try {
     const tx = btc.Transaction.fromPSBT(hexToBytes(psbtHex));
+    let txHex;
     try {
       tx.finalize();
-    } catch (err) {
+      txHex = hex.encode(tx.extract());
+      currentTx = txHex;
+    } catch (err:any) {
       console.log('finalize error: ', err)
       errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
+      errorReason += '<br/>' + err.message;
       return;
     }
-    const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
-    currentTx = txHex;
-    errorReason = undefined;
+    //const txHex = tx.hex;
+    //const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
     resp = await sendRawTxDirectBlockCypher(txHex);
+    if (resp && resp.error) {
+      resp = await sendRawTransaction({hex: txHex});
+    }
     console.log('sendRawTxDirectBlockCypher: ', resp);
     if (resp && resp.tx) {
       broadcasted = true;
@@ -102,10 +107,10 @@ const broadcastTransaction = async (psbtHex:string) => {
         console.log('Error saving pegin request', err)
         // duplicate.. ok to ignore
       }
-    } else if (resp && resp.error) {
-      errMessage = resp.error;
+    } else {
+      errMessage = (resp.error);
       broadcasted = false;
-      errorReason = resp.error + ' Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
+      errorReason = 'Unable to broadcast the transaction - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
     }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
@@ -114,19 +119,13 @@ const broadcastTransaction = async (psbtHex:string) => {
   }
 }
 onMount(async () => {
-	sigData = {
-    webWallet: true,
-		pegin: $sbtcConfig.pegIn,
-		outputsForDisplay: piTx?.getOutputsForDisplay(),
-		inputsForDisplay: piTx?.addressInfo.utxos
-	}
   if ($sbtcConfig.userSettings.useOpDrop) {
     //testSignReveal(opDrop);
-    const tx = piTx?.buildOpDropTransaction();
+    const tx = await piTx?.buildOpDropTransaction();
     currentTx = hex.encode(tx.toPSBT());
 
   } else {
-    currentTx = hex.encode(piTx?.buildOpReturnTransaction().toPSBT());
+    currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
   }
   inited = true;
 })
@@ -155,10 +154,12 @@ onMount(async () => {
     <p>Once confirmed your sBTC will be withdrawn from your Stacks Account and your Bitcoin returned. </p>
     {/if}
   </div>
-  <Button darkScheme={false} label={'Start over'} target={'next'} on:clicked={() => updateTransaction()}/>
   {:else if errorReason}
   <div class="">
-    {#if errorReason}<div class="text-warning-400"><p>{errorReason}</p></div>{/if}
+    {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
+  </div>
+  <div class="">
+    <Button darkScheme={false} label={'Start over'} target={'next'} on:clicked={() => updateTransaction()}/>
   </div>
   {/if}
 

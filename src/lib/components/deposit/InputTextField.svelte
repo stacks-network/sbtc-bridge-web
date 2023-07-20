@@ -50,7 +50,7 @@
     {/if}
 
     <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#{inputData.field}-label">
-      Info about address.
+      {inputData.hint}
     </Tooltip>
   </div>
   {#if readonly}
@@ -78,10 +78,6 @@
     {#if reason}
       <p class="text-error-500">
         {reason}
-      </p>
-    {:else}
-      <p class="text-gray-200">
-        {inputData.hint}
       </p>
     {/if}
   </div>

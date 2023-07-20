@@ -111,7 +111,7 @@
     if (button.target === 'showInvoice') {
       try {
         const amt = bitcoinToSats(input2Data.value)
-        verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, piTx.fee);
+        verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, 0);
         piTx.pegInData.amount = amt;
         const script = piTx.getDataToSign();
         await signMessage(async function(sigData:any, message:Uint8Array) {
@@ -197,20 +197,15 @@
    */
   const initComponent = async () => {
     const addressObject = $sbtcConfig.addressObject!;
-    if (!piTx) {
-      if ($sbtcConfig.pegOutTransaction) {
-        piTx = PegOutTransaction.hydrate($sbtcConfig.pegOutTransaction);
-      } else {
-        piTx = await PegOutTransaction.create(network, commitAddresses(), $sbtcConfig.btcFeeRates);
-      }
-    }
+    piTx = await PegOutTransaction.create(network, commitAddresses(), $sbtcConfig.btcFeeRates);
     if (!piTx.pegInData) piTx.pegInData = {} as PegInData;
     if (!piTx.pegInData.stacksAddress && addressObject.stxAddress) piTx.pegInData.stacksAddress = addressObject.stxAddress;
     input0Data.value = input0Data.resetValue = addressObject.cardinal;
     input0Data.hint = 'Bitcoin will be sent here. Current balance is ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin';
     input1Data.value = input1Data.resetValue = piTx.pegInData.stacksAddress!;
+    //piTx.calculateFees(($sbtcConfig.userSettings.useOpDrop) ? 'drop' : 'return', 1)
     if (piTx.pegInData.amount <= 0 || piTx.pegInData.amount > (addressObject.sBTCBalance - piTx.fee)) {
-      piTx.pegInData.amount = input2Data.resetValue = addressObject.sBTCBalance - piTx.fee;
+      piTx.pegInData.amount = input2Data.resetValue = addressObject.sBTCBalance;
     }
     if (addressObject.sBTCBalance <= 0) balanceMsg = true
     input2Data.hint = 'sBTC Balance: ' + satsToBitcoin(addressObject.sBTCBalance);
