@@ -107,10 +107,13 @@ const broadcastTransaction = async (psbtHex:string) => {
         console.log('Error saving pegin request', err)
         // duplicate.. ok to ignore
       }
-    } else {
+    } else if (resp) {
       errMessage = (resp.error);
       broadcasted = false;
       errorReason = 'Unable to broadcast the transaction - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
+    } else {
+      broadcasted = false;
+      errorReason = 'Unknown response from transaction broadcast - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
     }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
