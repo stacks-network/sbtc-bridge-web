@@ -62,7 +62,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	fees: Array<number> = [20000, 35000, 50000];
 	fee = 0;
 	scureFee = 0;
-	dust = 500;
+	dust = 2000;
 	feeInfo: {
 		low_fee_per_kb: number;
 		medium_fee_per_kb: number;
@@ -359,7 +359,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	private addInputs = (tx:btc.Transaction, feeCalc:boolean) => {
-		const fee = (feeCalc) ? 1000 : this.fee;
+		const fee = (feeCalc) ? this.dust : this.fee;
 		const bar = fee + this.dust + revealFee;
 		let amt = 0;
 		for (const utxo of this.addressInfo.utxos) {

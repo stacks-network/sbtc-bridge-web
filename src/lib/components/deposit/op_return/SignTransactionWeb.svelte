@@ -128,7 +128,12 @@ onMount(async () => {
     currentTx = hex.encode(tx.toPSBT());
 
   } else {
-    currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
+    try {
+      currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
+    } catch (err:any) {
+      console.log('Input error: ', err)
+      errorReason = 'Not enough BTC in your wallet currently to cover the withdrawal fees.'
+    }
   }
   inited = true;
 })
@@ -158,7 +163,7 @@ onMount(async () => {
     {/if}
   </div>
   {:else if errorReason}
-  <div class="">
+  <div class="my-5">
     {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
   </div>
   <div class="">

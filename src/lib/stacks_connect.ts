@@ -2,12 +2,13 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchUserBalances } from '$lib/bridge_api'
+import { fetchUserBalances, sign } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
 import type { AddressObject } from 'sbtc-bridge-lib' 
+import { verifyMessageSignature } from '@stacks/encryption';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -179,19 +180,24 @@ export async function loginStacksJs(callback:any):Promise<any> {
 	}
 }
 
-export function signMessage(callback:any, script:string) {
+export function signMessage(callback:any, message:string) {
 	openSignatureRequestPopup({
-		message: script,
+		message,
 		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
 		appDetails: appDetails(),
-		onFinish(value) {
-		  console.log('Signature of the message', value.signature);
-		  console.log('Use public key:', value.publicKey);
-		  callback(value, script);
-		},
+		onFinish({ publicKey, signature }) {
+			let newSig = signature.substring(0, signature.length - 2);
+			const recByte = signature.substring(signature.length - 2);
+			newSig = recByte + newSig
+			const verified1 = verifyMessageSignature({ signature: newSig, message, publicKey });
+			if (!verified1) throw new Error('verifyMessageSignature - signature is not valid')
+			callback({ publicKey, signature: newSig }, message);
+		}
 	});
 }
+/**
 
+*/
 export function logUserOut() {
 	return userSession.signUserOut();
 }
