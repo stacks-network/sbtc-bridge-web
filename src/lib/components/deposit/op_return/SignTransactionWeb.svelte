@@ -107,10 +107,13 @@ const broadcastTransaction = async (psbtHex:string) => {
         console.log('Error saving pegin request', err)
         // duplicate.. ok to ignore
       }
-    } else {
+    } else if (resp) {
       errMessage = (resp.error);
       broadcasted = false;
       errorReason = 'Unable to broadcast the transaction - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
+    } else {
+      broadcasted = false;
+      errorReason = 'Unknown response from transaction broadcast - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
     }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
@@ -125,7 +128,12 @@ onMount(async () => {
     currentTx = hex.encode(tx.toPSBT());
 
   } else {
-    currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
+    try {
+      currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
+    } catch (err:any) {
+      console.log('Input error: ', err)
+      errorReason = 'Not enough BTC in your wallet currently to cover the withdrawal fees.'
+    }
   }
   inited = true;
 })
@@ -155,7 +163,7 @@ onMount(async () => {
     {/if}
   </div>
   {:else if errorReason}
-  <div class="">
+  <div class="my-5">
     {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
   </div>
   <div class="">

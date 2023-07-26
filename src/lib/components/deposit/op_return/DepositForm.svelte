@@ -124,7 +124,7 @@
         timeLineStatus = 2;
         dispatch('time_line_status_change', { timeLineStatus });
       } catch(err:any) {
-        amountErrored = 'Please enter an amount thats more than the minimum threshold of ' + piTx.fee
+        amountErrored = 'Please enter an amount thats more than the minimum threshold'
         makeFlash(document.getElementById(input2Data.field))
       }
     } else if (button.target === 'back') {

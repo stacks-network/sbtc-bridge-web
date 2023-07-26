@@ -62,7 +62,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	fees: Array<number> = [20000, 35000, 50000];
 	fee = 0;
 	scureFee = 0;
-	dust = 500;
+	dust = 2000;
 	feeInfo: {
 		low_fee_per_kb: number;
 		medium_fee_per_kb: number;
@@ -131,6 +131,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		this.addInputs(tx, false);
 		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const data = this.buildData(this.signature, false)
+		console.log('buildOpReturnTransaction: ' + hex.encode(data))
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		const change = this.inputAmt(tx) - (this.dust + this.fee);
 		if (change > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(change), net);
@@ -358,7 +359,7 @@ export default class PegOutTransaction implements PegOutTransactionI {
 	}
 
 	private addInputs = (tx:btc.Transaction, feeCalc:boolean) => {
-		const fee = (feeCalc) ? 1000 : this.fee;
+		const fee = (feeCalc) ? this.dust : this.fee;
 		const bar = fee + this.dust + revealFee;
 		let amt = 0;
 		for (const utxo of this.addressInfo.utxos) {

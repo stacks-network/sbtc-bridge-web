@@ -19,6 +19,9 @@
   import Banner from '$lib/components/shared/Banner.svelte';
   import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
   import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+  import { signMessageDirect, btcAddress, address } from '$lib/stacks_connect_bug';
+  import { verifyMessageSignature, verifyMessageSignatureRsv } from '@stacks/encryption';
+  import { hex } from '@scure/base';
 
   const dispatch = createEventDispatcher();
 
@@ -105,6 +108,38 @@
   }
   */
 
+  const doClickShowInvoice = async () => {
+    //// bug hunt
+    const amt = bitcoinToSats(input2Data.value)
+    verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, 0);
+    piTx.fromBtcAddress = btcAddress;
+    piTx.pegInData.stacksAddress = address;
+    piTx.pegInData.amount = amt;
+    const script = piTx.getDataToSign();
+    console.log('message: ' + script)
+    const noPrefixSignature = signMessageDirect(script);
+    let signature = noPrefixSignature.signature
+    //const sig = signature.substring(0, signature.length - 2)
+    //signature = '00' + sig
+		//let verified1 = verifyMessageSignature({ signature, message: script, publicKey: noPrefixSignature.publicKey });
+		//if (!verified1) verified1 = verifyMessageSignatureRsv({ signature, message: script, publicKey: noPrefixSignature.publicKey })
+      // throw new Error('verifyMessageSignature - signature is not valid')
+
+    piTx.signature = signature;
+    peginRequest = piTx.getOpReturnPeginRequest();
+    ////
+    peginRequest.originator = $sbtcConfig.addressObject!.stxAddress; // retain the sender in case the address in UI changes.
+    const conf:SbtcConfig = $sbtcConfig;
+    conf.sigData = signature;
+    sbtcConfig.update(() => conf);
+    //pegout = piTx.getOpDropPeginRequest();
+    timeLineStatus = 2;
+    if (!$sbtcConfig.userSettings?.useOpDrop) {
+      timeLineStatus = 4;
+    }
+    dispatch('time_line_status_change', { timeLineStatus });
+  }
+
   const doClicked = async (event:any) => {
     amountErrored = undefined;
     const button = event.detail;
@@ -114,6 +149,8 @@
         verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, 0);
         piTx.pegInData.amount = amt;
         const script = piTx.getDataToSign();
+        //const script = hex.encode(new Uint8Array([0xde, 0xad, 0xbe, 0xef]))
+        console.log('HASH: ' + script)
         await signMessage(async function(sigData:any, message:Uint8Array) {
           piTx.signature = sigData.signature;
           try {

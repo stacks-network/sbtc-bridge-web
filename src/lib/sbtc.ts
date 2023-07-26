@@ -34,7 +34,7 @@ export const defaultSbtcConfig:SbtcConfig = {
   pegOutTransaction: undefined,
   keys: {} as KeySet,
   userSettings: {
-    useOpDrop: true,
+    useOpDrop: false,
     debugMode: false,
     testAddresses: false,
     currency: {
