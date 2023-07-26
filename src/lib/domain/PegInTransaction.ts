@@ -168,10 +168,16 @@ export default class PegInTransaction implements PegInTransactionI {
 		if (opDrop) {
 			return buildDepositPayload(net, this.pegInData.revealFee || this.fee, sigOrPrin, opDrop, undefined);
 		}
-		return this.buildDepositPayload(net, sigOrPrin);
+		return this.buildDepositPayloadAlpha(net, sigOrPrin);
 	}
 
-	buildDepositPayload(net:any, address:string):Uint8Array {
+	/**
+	 * sBTC ALPHA code for deposits has different format to Mini. 
+	 * On top of this OP_RETURN is locked to ALPHA but may need to evolve in the future to Mini
+	 * We may need to carry on supporting Alpha - in which case we'll need the opDrop switch
+	 * plus an additional switch for Alpha vs Mini ! 
+	 */
+	buildDepositPayloadAlpha(net:any, address:string):Uint8Array {
 		const magicBuf = (typeof net === 'object' && net.bech32 === 'tb') ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
 		const opCodeBuf = hex.decode(PEGIN_OPCODE);
 		const addr = c32addressDecode(address.split('.')[0])
@@ -183,7 +189,6 @@ export default class PegInTransaction implements PegInTransactionI {
 			const cnameBuf = new TextEncoder().encode(address.split('.')[1]);
 			buf1 = concat(buf1, cnameBuf);
 		}
-				
 		return concat(magicBuf, buf1)
 	}
 	
