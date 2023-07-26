@@ -131,7 +131,6 @@ export default class PegOutTransaction implements PegOutTransactionI {
 		this.addInputs(tx, false);
 		if (!this.signature) throw new Error('Signature of the amount and output 2 scriptPubKey is missing.')
 		const data = this.buildData(this.signature, false)
-		console.log('buildOpReturnTransaction: ' + hex.encode(data))
 		tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: 0n });
 		const change = this.inputAmt(tx) - (this.dust + this.fee);
 		if (change > 0) tx.addOutputAddress(this.fromBtcAddress, BigInt(change), net);
