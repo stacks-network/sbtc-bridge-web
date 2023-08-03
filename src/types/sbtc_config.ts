@@ -1,8 +1,9 @@
 import type { PegInTransactionI } from "$lib/domain/PegInTransaction";
 import type { PegOutTransactionI } from "$lib/domain/PegOutTransaction";
-import type { PeginRequestI, SbtcContractDataI, AddressObject, KeySet } from 'sbtc-bridge-lib' 
+import type { PeginRequestI, SbtcContractDataI, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
 
 export type SbtcConfig = {
+  exchangeRates?: Array<ExchangeRate>;
   sbtcWalletAddressInfo?: any;
   pegInMongoId?: string;
   pegOutMongoId?: string;
@@ -26,7 +27,7 @@ export type SbtcUserSettingI = {
   testAddresses: boolean;
   currency: {
     cryptoFirst: boolean;
-    myFiatCurrency: string;
+    myFiatCurrency: ExchangeRate;
     denomination: string;
   }
 }

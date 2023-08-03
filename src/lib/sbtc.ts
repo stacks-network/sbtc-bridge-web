@@ -39,7 +39,16 @@ export const defaultSbtcConfig:SbtcConfig = {
     testAddresses: false,
     currency: {
       cryptoFirst: false,
-      myFiatCurrency: 'USD',
+      myFiatCurrency: {
+        _id: "nan",
+        currency: "EUR",
+        fifteen: 0,
+        last: 0,
+        buy: 0,
+        sell: 0,
+        symbol: "€",
+        name: "Euro"
+      },
       denomination: 'bitcoin'
     }
   }

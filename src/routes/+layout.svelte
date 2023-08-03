@@ -8,14 +8,14 @@
 	import { setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { tick, onMount, onDestroy } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { sbtcConfig } from '$stores/stores'
 	import type { SbtcContractDataI, KeySet } from 'sbtc-bridge-lib';
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { loginStacksJs } from '$lib/stacks_connect'
-	import { openWebSocket } from '$lib/sbtc'
+	import { fetchExchangeRates } from "$lib/bridge_api"
 	import { checkWalletAddress } from '$lib/utils'
 
 	let componentKey = 0;
@@ -67,13 +67,8 @@
 		} catch (err) {
 			data = {} as any;
 		}
-		if (!conf.userSettings.currency) {
-			conf.userSettings.currency = {
-				cryptoFirst: false,
-				myFiatCurrency: 'USD',
-				denomination: 'bitcoin'
-			}
-		}
+		const exchangeRates = await fetchExchangeRates();
+		conf.exchangeRates = exchangeRates;
 		conf.sbtcContractData = data.sbtcContractData;
 		conf.keys = data.keys;
 		conf.sbtcWalletAddressInfo = data.sbtcWalletAddressInfo;

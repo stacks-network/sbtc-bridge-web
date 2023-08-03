@@ -20,7 +20,7 @@
   import Banner from '$lib/components/shared/Banner.svelte';
   import { bitcoinBalanceFromMempool }  from "$lib/utils";
   import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
-  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+  import { userSatBtc } from '$lib/utils'
 
   const dispatch = createEventDispatcher();
 
@@ -57,7 +57,8 @@
     label: 'Amount (bitcoin)',
     hint: 'The amount you wish to deposit',
     resetValue: undefined,
-    value: 10000
+    valueBtc: 0.000010000,
+    valueSat: 10000
   }
 
   const fieldUpdated = async (event:any) => {
@@ -102,7 +103,7 @@
     const button = event.detail;
     if (button.target === 'openInvoice') {
       try {
-        const amt = bitcoinToSats(input2Data.value)
+        const amt = input2Data.valueSat
         verifyAmount(amt);
         if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
           peginRequest.amount = piTx.pegInData.amount = amt
@@ -200,8 +201,8 @@
     input0Data.hint = '';
     input1Data.value = piTx.pegInData.stacksAddress || '';
     input1Data.resetValue = input1Data.value;
-    input2Data.value = satsToBitcoin(piTx.pegInData.amount);
-    input2Data.hint = 'Balance: ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin - please allow for gas fees';
+    input2Data.valueSat = piTx.pegInData.amount;
+    input2Data.hint = 'Balance: ' + userSatBtc(piTx.maxCommit(), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });
     conf.pegInTransaction = piTx;
@@ -231,27 +232,33 @@
     <DepositFormHeader />
     {#if timeLineStatus === 1}
       {#key componentKey}
+      <div class="mb-5">
         <InputTextField
           readonly={true}
           inputData={input0Data}
           on:updated={fieldUpdated}
         />
-        {#if balanceMsg}
+      </div>
+      {#if balanceMsg}
           <Banner class="mt-3" bannerType={'warning'} message={'Please transfer some BTC to your Web Wallet (the above address) to continue or switch the transaction mode back to "OP_DROP" in the Settings dropdown.'} />
         {:else}
+        <div class="mb-5">
           <InputTextField
             readonly={false}
             inputData={input1Data}
             on:updated={fieldUpdated}
           />
+        </div>
+        <div class="mb-5">
           <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
-          {#if amountErrored}
-            <p class="text-error-500">
+        </div>
+        {#if amountErrored}
+            <p class="text-error-500 pb-5">
               {amountErrored}
             </p>
           {/if}
 
-          <div class="mt-6">
+          <div class="mt-0">
             <Button
               darkScheme={false}
               label={'Continue'}
