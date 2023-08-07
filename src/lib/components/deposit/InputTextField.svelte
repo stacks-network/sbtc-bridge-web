@@ -40,7 +40,9 @@
   <div class="flex items-center justify-between">
     <label class="inline-flex text-base font-medium mb-1.5" for="">
       {inputData.label}
+      {#if inputData.hint}
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="{inputData.field}-label" />
+      {/if}
     </label>
 
     {#if reason || (inputData.resetValue && inputData.resetValue !== inputData.value)}

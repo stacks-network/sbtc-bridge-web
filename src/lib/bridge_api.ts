@@ -1,5 +1,5 @@
 import { CONFIG } from '$lib/config';
-import type { BlockchainInfo, PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
+import type { PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
@@ -224,6 +224,26 @@ export async function fetchCurrentFeeRates() {
           high_fee_per_kb: 44424
         }
     }
+  }
+  const txs = await response.json();
+  return txs;
+}
+
+export async function fetchExchangeRates() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/rates');
+  const response = await fetchCatchErrors(path);
+  if (response.status !== 200) {
+    return [{
+      currency: "USD",
+      fifteen:0,
+      last:0,
+      buy:0,
+      sell:0,
+      symbol:"$",
+      name:"US Dollor",
+      _id:"64c236634b5e0bdea234cb0e"
+    },
+  ]
   }
   const txs = await response.json();
   return txs;

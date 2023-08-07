@@ -18,7 +18,7 @@
   import { fetchPeginById, doPeginScan } from "$lib/bridge_api";
   import Banner from '$lib/components/shared/Banner.svelte';
   import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
-  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+  import { userSatBtc } from '$lib/utils'
   import { signMessageDirect, btcAddress, address } from '$lib/stacks_connect_bug';
   import { verifyMessageSignature, verifyMessageSignatureRsv } from '@stacks/encryption';
   import { hex } from '@scure/base';
@@ -57,7 +57,8 @@
     label: 'Amount (sBTC)',
     hint: '',
     resetValue: 0,
-    value: 0.0
+    valueBtc: 0.0,
+    valueSat: 0
   }
 
   const fieldUpdated = async (event:any) => {
@@ -110,7 +111,7 @@
 
   const doClickShowInvoice = async () => {
     //// bug hunt
-    const amt = bitcoinToSats(input2Data.value)
+    const amt = input2Data.valueSat
     verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, 0);
     piTx.fromBtcAddress = btcAddress;
     piTx.pegInData.stacksAddress = address;
@@ -145,7 +146,7 @@
     const button = event.detail;
     if (button.target === 'showInvoice') {
       try {
-        const amt = bitcoinToSats(input2Data.value)
+        const amt = input2Data.valueSat
         verifySBTCAmount(amt, $sbtcConfig.addressObject!.sBTCBalance, 0);
         piTx.pegInData.amount = amt;
         const script = piTx.getDataToSign();
@@ -238,15 +239,15 @@
     if (!piTx.pegInData) piTx.pegInData = {} as PegInData;
     if (!piTx.pegInData.stacksAddress && addressObject.stxAddress) piTx.pegInData.stacksAddress = addressObject.stxAddress;
     input0Data.value = input0Data.resetValue = addressObject.cardinal;
-    input0Data.hint = 'Bitcoin will be sent here. Current balance is ' + satsToBitcoin(piTx.maxCommit()) + ' bitcoin';
+    input0Data.hint = 'Bitcoin will be sent here. Current balance is ' + userSatBtc(piTx.maxCommit(), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin';
     input1Data.value = input1Data.resetValue = piTx.pegInData.stacksAddress!;
     //piTx.calculateFees(($sbtcConfig.userSettings.useOpDrop) ? 'drop' : 'return', 1)
     if (piTx.pegInData.amount <= 0 || piTx.pegInData.amount > (addressObject.sBTCBalance - piTx.fee)) {
       piTx.pegInData.amount = input2Data.resetValue = addressObject.sBTCBalance;
     }
     if (addressObject.sBTCBalance <= 0) balanceMsg = true
-    input2Data.hint = 'sBTC Balance: ' + satsToBitcoin(addressObject.sBTCBalance);
-    input2Data.value = satsToBitcoin(piTx.pegInData.amount);
+    input2Data.hint = 'sBTC Balance: ' + userSatBtc(addressObject.sBTCBalance, $sbtcConfig.userSettings.currency.denomination);
+    input2Data.valueSat = piTx.pegInData.amount;
     dispatch('time_line_status_change', { timeLineStatus });
 
     const conf:SbtcConfig = $sbtcConfig;
@@ -287,7 +288,7 @@
           <InputTextField readonly={true} inputData={input1Data} on:updated={fieldUpdated}/>
           <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
 
-          {#if amountErrored}<div class="text-warning-600">{amountErrored}</div>{/if}
+          {#if amountErrored}<div class="text-warning-600 py-5">{amountErrored}</div>{/if}
           <div class="mt-6">
             <Button
               darkScheme={false}

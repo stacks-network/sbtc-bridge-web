@@ -52,6 +52,17 @@ export function satsToBitcoin(amountSats:number):number {
   return  Number((Math.round(amountSats) / btcPrecision).toFixed(8))
 }
 
+export function userSatBtc(amount:number, denomination:string):number {
+  if (denomination === 'bitcoin') {
+    if (amount.toString().indexOf('.') === -1) {
+      return  Number((Math.round(amount) / btcPrecision).toFixed(8))
+    }
+    return  amount
+  } else {
+    return  bitcoinToSats(amount)
+  }
+}
+
 export function fmtMicroToStx(amountStx:number) {
   return  (Math.round(amountStx) / stxPrecision).toFixed(6)
 }

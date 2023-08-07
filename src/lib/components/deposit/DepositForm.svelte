@@ -17,7 +17,7 @@
   import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress, doPeginScan } from "$lib/bridge_api";
   import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
   import Button from '$lib/components/shared/Button.svelte';
-  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+  import { userSatBtc } from '$lib/utils'
 
   const dispatch = createEventDispatcher();
 
@@ -43,7 +43,8 @@
     label: 'Amount (in Bitcoin)',
     hint: 'Amount to deposit - must be less than available balance',
     resetValue: undefined,
-    value: 10000
+    valueBtc: 0.000010000,
+    valueSat: 10000
   }
 
   const fieldUpdated = async (event:any) => {
@@ -55,7 +56,7 @@
     } else if (input.field === 'amount') {
       amountErrored = undefined;
       try {
-        piTx.pegInData.amount = input.value;
+        piTx.pegInData.amount = input.valueSat;
         verifyAmount(input.value);
       } catch (err) {
         //input2Data.hint = amountErrored = 'Amount below required threshold'
@@ -91,7 +92,7 @@
     const button = event.detail;
     if (button.target === 'openInvoice') {
       try {
-        const amt = bitcoinToSats(input2Data.value)
+        const amt = input2Data.valueSat
         verifyAmount(amt);
         piTx.pegInData.amount = amt;
         peginRequest = piTx.getOpDropPeginRequest();
@@ -204,7 +205,7 @@
     piTx.pegInData.amount = (piTx.pegInData.amount > 0) ? piTx.pegInData.amount : 0;
     input1Data.value = piTx.pegInData.stacksAddress || '';
     input1Data.resetValue = input1Data.value;
-    input2Data.value = satsToBitcoin(piTx.pegInData.amount);
+    input2Data.valueSat = piTx.pegInData.amount;
     try {
       peginRequest = piTx.getOpDropPeginRequest();
     } catch (err) {
@@ -257,15 +258,17 @@
     <DepositFormHeader />
     {#if timeLineStatus === 1 || peginRequest.amount === 0}
       {#key componentKey}
-        <div class="space-y-6">
-          <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
-          <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
-        </div>
-        {#if amountErrored}
+      <div class="space-y-6 mb-5">
+        <InputTextField readonly={false} inputData={input1Data} on:updated={fieldUpdated}/>
+      </div>
+      <div class="space-y-6">
+        <BitcoinAmountField inputData={input2Data} on:updated={fieldUpdated}/>
+      </div>
+      {#if amountErrored}
           <p class="text-error-500">{amountErrored}</p>
         {/if}
 
-        <div class="mt-6">
+        <div class="my-6">
           <Button
             darkScheme={false}
             label={'Show Invoice / QR code'}

@@ -8,6 +8,7 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { fetchSbtcBalance, addresses } from '$lib/stacks_connect'
+	import { goto } from '$app/navigation';
 
 	const getContractAddress = () => {
 		const contract = CONFIG.VITE_SBTC_CONTRACT_ID
@@ -88,7 +89,12 @@
 		sbtcConfig.update(() => $sbtcConfig);
 	})
 </script>
-
+<Button on:click={() => goto('/settings')} class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
+		<span class="text-transparent bg-clip-text bg-primary-02">Settings</span>
+	</span>
+</Button>
+<!--
 <Button class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
 	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
 		<span class="text-transparent bg-clip-text bg-primary-02">Settings</span>
@@ -178,16 +184,7 @@
 			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.debugMode} on:click={() => toggleSettings('debug')} ><span class="text-white">Debug mode</span></Toggle>
 			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.debugMode}Show advanced info{:else}Hide advanced info{/if}</Helper>
 		</li>
-		<!--
-		<li class="px-4 py-2 hover:bg-gray-900">
-			<Toggle class=" text-white" checked={$sbtcConfig.userSettings?.currency?.cryptoFirst} on:click={() => toggleSettings('cryptoFirst')} ><span class="text-white">Crypto First ?</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{#if $sbtcConfig.userSettings?.currency?.cryptoFirst}Enter amounts in Bitcoin{:else}Enter amounts in standard currency{/if}</Helper>
-		</li>
-		<li class="px-4 py-2 hover:bg-gray-900">
-			<Toggle class=" text-white"><span class="text-white">Change Currency</span></Toggle>
-			<Helper class="pl-14 !font-extralight text-white">{$sbtcConfig.userSettings?.currency?.myFiatCurrency}</Helper>
-		</li>
-		-->
 	</DropdownItem>
 </Dropdown>
 
+-->
