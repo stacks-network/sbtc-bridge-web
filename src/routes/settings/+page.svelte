@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-  <title>sBTC Bridge - Settings!</title>
+  <title>sBTC Bridge - Settings !</title>
   <meta name="description" content="The sBTC Bridge
   provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
 </svelte:head>
@@ -51,8 +51,8 @@
   Click to get some testnet bitcoin (tBTC) from to try things out - mainnet is coming soon!
 </Tooltip>
 <Tooltip class="w-80 !font-extralight !bg-black z-20" triggeredBy="#po-opdrop">
-  OP_DROP means you can deposit from any wallet but takes a bit longer. OP_RETURN allows you to deposit / Withdraw
-  more quickly using your Stacks bitcoin wallet!
+  OP_DROP means you can deposit from any wallet but takes a bit longer. OP_RETURN allows you to deposit / withdraw
+  more quickly using your Stacks bitcoin wallet !
 </Tooltip>
 
 <div class="md:w-3/5 sm:w-full mx-auto flex flex-col justify-center px-6 lg:px-8 py-6">
@@ -98,7 +98,7 @@
             </div>
             <div class="">
               <Button on:click={() => toggleSettings('txmode')} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-              Switch to {#if $sbtcConfig.userSettings?.useOpDrop}OP_DROP{:else}OP_RETURN{/if}
+              Switch to {#if $sbtcConfig.userSettings?.useOpDrop}OP_RETURN{:else}OP_DROP{/if}
               </Button>
             </div>
           </div>
