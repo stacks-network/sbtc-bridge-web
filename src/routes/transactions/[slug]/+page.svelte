@@ -12,7 +12,7 @@ import TrCommit from '$lib/components/transactions/TrCommit.svelte';
 import TrRevealReclaim from '$lib/components/transactions/TrRevealReclaim.svelte';
 import { explorerBtcTxUrl } from '$lib/utils'
 import Button from '$lib/components/shared/Button.svelte';
-import { ChevronLeft } from 'svelte-heros-v2';
+import { ChevronLeft } from 'svelte-hero-icons';
 import PendingDeposit from '$lib/components/transactions/PendingDeposit.svelte';
 import CommittedDeposit from '$lib/components/transactions/CommittedDeposit.svelte';
 
