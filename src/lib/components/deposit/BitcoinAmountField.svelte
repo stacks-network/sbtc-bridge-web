@@ -3,7 +3,7 @@
   import { onMount } from 'svelte';
   import { Icon, InformationCircle } from "svelte-hero-icons";
   import { Tooltip } from 'flowbite-svelte';
-  import LogoBitcoin from '../shared/LogoBitcoin.svelte';
+  import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
   import { sbtcConfig } from '$stores/stores'
   import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
 	import type { SbtcConfig } from '$types/sbtc_config';

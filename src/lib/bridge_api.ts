@@ -1,5 +1,6 @@
 import { CONFIG } from '$lib/config';
 import type { PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
+import { checkAddressForNetwork } from 'sbtc-bridge-lib';
 
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
@@ -313,6 +314,7 @@ export async function fetchSbtcData() {
 
 export async function fetchUserSbtcBalance(stxAddress:string) {
   try {
+    checkAddressForNetwork(CONFIG.VITE_NETWORK, stxAddress)
     const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/' + stxAddress + '/balance');
     const response = await fetch(path);
     return await extractResponse(response);
@@ -321,6 +323,9 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
   }
 }
 export async function fetchUserBalances(adrds:AddressObject) {
+  checkAddressForNetwork(CONFIG.VITE_NETWORK, adrds.stxAddress)
+  checkAddressForNetwork(CONFIG.VITE_NETWORK, adrds.cardinal)
+  checkAddressForNetwork(CONFIG.VITE_NETWORK, adrds.ordinal)
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/balances/' + adrds.stxAddress + '/' + adrds.cardinal + '/' + adrds.ordinal);
   const response = await fetch(path);
   if (response.status !== 200) {

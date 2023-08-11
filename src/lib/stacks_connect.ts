@@ -2,18 +2,26 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchUserBalances, sign } from '$lib/bridge_api'
+import { fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup } from '@stacks/connect';
 import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
 import type { AddressObject } from 'sbtc-bridge-lib' 
 import { verifyMessageSignature } from '@stacks/encryption';
+import { defaultSbtcConfig } from '$lib/sbtc';
+import { fetchExchangeRates } from "$lib/bridge_api"
+import { fetchSbtcData } from "$lib/bridge_api";
+import { hex } from '@scure/base';
+import type { ExchangeRate } from 'sbtc-bridge-lib';
+import { schnorr } from '@noble/curves/secp256k1';
+import * as btc from '@scure/btc-signer';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 
 export const webWalletNeeded = false;
+export const revealPayment = 10001
 
 const allowed = [
 	{ btc: '2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb', stx: 'SP1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRCBGD7R'}, // devnet testing
@@ -50,7 +58,7 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
-export async function fetchSbtcBalance () {
+export async function fetchSbtcBalance ():Promise<AddressObject> {
 	const adrds:AddressObject = addresses();
 	let result:AddressObject;
 	try {
@@ -67,26 +75,7 @@ export async function fetchSbtcBalance () {
 		result = adrds;
 		console.log('Network down...');
 	}
-	//const result = await fetchUserSbtcBalance(adrds.stxAddress);
-	await sbtcConfig.update((conf:SbtcConfig) => {
-		try {
-			if (conf.pegInTransaction) {
-				conf.pegInTransaction.pegInData.stacksAddress = adrds.stxAddress;
-				conf.pegInTransaction.fromBtcAddress = adrds.cardinal;
-			}
-			if (conf.pegOutTransaction) {
-				conf.pegOutTransaction.pegInData.stacksAddress = adrds.stxAddress;
-				conf.pegOutTransaction.fromBtcAddress = adrds.cardinal;
-			}
-			conf.addressObject = result;
-			conf.loggedIn = true;
-	
-		} catch (err:any) {
-			console.log(err.message)
-		}
-		return conf;
-	});
-	return true;
+	return result;
 }
 
 export function addresses():AddressObject {
@@ -154,7 +143,7 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
-export async function loginStacksJs(callback:any):Promise<any> {
+export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> {
 	try {
 		const provider = getStacksProvider()
 		console.log('provider: ', provider)
@@ -164,19 +153,19 @@ export async function loginStacksJs(callback:any):Promise<any> {
 				appDetails: appDetails(),
 				onFinish: async () => {
 					await fetchSbtcBalance();
-					callback(true);
+					callback(conf);
 				},
 				onCancel: () => {
-					callback(false);
+					callback(conf);
 				},
 			});
 		} else {
 			await fetchSbtcBalance();
-			callback(true);
+			callback(conf);
 		}
 	} catch (e) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
-		callback(false);
+		callback(conf);
 	}
 }
 
@@ -242,4 +231,68 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 	}
 }
   
+export async function initApplication(conf:SbtcConfig) {
+	if (!conf) conf = defaultSbtcConfig as SbtcConfig
+	let data = {} as any;
+	try {
+		data = await fetchSbtcData();
+		if (!data) data = {} as any;
+		conf.loggedIn = false;
+		if (userSession.isUserSignedIn()) {
+			conf.loggedIn = true;
+			conf.addressObject = await fetchSbtcBalance();
+			conf.loggedIn = true;
+		}
+	} catch (err) {
+		data = {} as any;
+	}
+	const exchangeRates = await fetchExchangeRates();
+	conf.exchangeRates = exchangeRates;
+	//conf.sbtcContractData = data.sbtcContractData;
+	if (!conf.addressObject)throw new Error('')
+	let keys = {
+		deposits: {
+		  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
+		  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM))),
+		  oraclePubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_ORACLE)))
+		}
+	}
+	if (import.meta.env.MODE !== 'development') {
+		keys = data.keys;
+	}
+	//const revealAddress = checkWalletAddress(keys.deposits.revealPubKey);
+	const revealAddress = checkWalletAddress(data.sbtcContractData.sbtcWalletPublicKey);
+	data.sbtcContractData.sbtcWalletAddress = revealAddress;
+	//conf.walletAddress = revealAddress;
+	conf.revealFeeWithGas = revealPayment;
+	conf.sbtcContractData = data.sbtcContractData;
+	conf.keys = keys;
+	conf.sbtcWalletAddressInfo = data.sbtcWalletAddressInfo;
+	conf.btcFeeRates = data.btcFeeRates;
+	const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
+	const rateNow = exchangeRates.find((o:any) => o.currency === currency)
+	if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
+	else conf.userSettings.currency.myFiatCurrency = (exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
 	
+	//if (conf.mintData.peginRequest && conf.mintData.peginRequest.commitTxScript && typeof (conf.mintData.peginRequest.commitTxScript.tweakedPubkey) === 'string') {
+	//	conf.mintData.peginRequest.commitTxScript = convertToUint8(conf.mintData.peginRequest.commitTxScript)
+	//}
+	sbtcConfig.update(() => conf);
+}
+
+export function checkWalletAddress (revealPublicKey:string) {
+	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+	const xOnlyKey = (revealPublicKey);
+	try {
+	  const assumeTweakedPubKey = hex.decode(xOnlyKey);
+	  const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
+	  return addr;
+	  //const trObj1 = btc.p2pkh(hex.decode(xOnlyKey), net);
+	  
+	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
+	  //if (trObj.type === 'tr') 
+	} catch(err:any) {
+	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
+	  console.log(err.message)
+	}
+}
