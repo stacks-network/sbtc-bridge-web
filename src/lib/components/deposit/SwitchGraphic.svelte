@@ -1,8 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import LogoBitcoin from '../shared/LogoBitcoin.svelte';
+  import LogoBitcoin from '$lib/components/shared/LogoBitcoin.svelte';
   import { Icon, ArrowRight } from 'svelte-hero-icons';
-  import LogoSBTC from '../shared/LogoSBTC.svelte';
+  import LogoSBTC from '$lib/components/shared/LogoSBTC.svelte';
 
   export let reverse:boolean;
   onMount(async () => {

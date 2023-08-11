@@ -1,21 +1,19 @@
 <script lang="ts">
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button, Input } from 'flowbite-svelte'
-	import { createEventDispatcher } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { goto } from "$app/navigation";
-	import { loginStacksJs } from '$lib/stacks_connect'
+	import { initApplication, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, addresses } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 
 	const coordinator = isCoordinator(addresses().stxAddress)
-	const dispatch = createEventDispatcher();
 
 	const doLogin = async () => {
-		const res = await loginStacksJs(doLoginAfter);
+		const res = await loginStacksJs(initApplication, $sbtcConfig);
 		console.log(res)
 	}
 	const doLogout = async () => {
@@ -35,9 +33,6 @@
 		return 'font-normal text-base text-white !px-4 !py-2 rounded-lg hover:bg-white/[8%] focus:bg-white/[16%] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50'
 	}
 
-	const doLoginAfter = async (result:boolean) => {
-		if (result) dispatch('init_application', { from: 'header' });
-	}
 </script>
 
 <Navbar
@@ -78,8 +73,8 @@
 		class="order-1 md:flex-1"
 		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:font-medium !md:space-x-4"
 	>
-		<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
-		<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
+	<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
+	<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 		{#if coordinator}

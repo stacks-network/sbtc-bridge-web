@@ -6,29 +6,29 @@
   import InputTextField from '$lib/components/deposit/InputTextField.svelte';
   import BitcoinAmountField from '$lib/components/deposit/BitcoinAmountField.svelte';
   import { sbtcConfig } from '$stores/stores'
-  import PegInTransaction from '$lib/domain/PegInTransaction';
-  import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-  import type { PeginRequestI, PegInData, CommitKeysI } from 'sbtc-bridge-lib'
-  import { verifyStacksPricipal, verifyAmount, addresses } from '$lib/stacks_connect';
-  import { getTestAddresses, sbtcWallets } from 'sbtc-bridge-lib'
+  import { verifyStacksPricipal, verifyAmount } from '$lib/stacks_connect';
   import type { SbtcConfig } from '$types/sbtc_config';
   import ScriptHashAddress from '$lib/components/deposit/ScriptHashAddress.svelte';
   import { makeFlash } from "$lib/stacks_connect";
-  import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress, doPeginScan } from "$lib/bridge_api";
+  import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress } from "$lib/bridge_api";
   import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
   import Button from '$lib/components/shared/Button.svelte';
-  import { userSatBtc } from '$lib/utils'
+  import type { PeginRequestI } from 'sbtc-bridge-lib'
+  import { getOpDropPeginRequest, maxCommit } from 'sbtc-bridge-lib'
+  import { fetchUtxoSet } from '$lib/bridge_api'
 
   const dispatch = createEventDispatcher();
 
-  let piTx:PegInTransactionI;
   let peginRequest:PeginRequestI;
+  let stacksAddress:string;
+  let amount:number;
 
   const network = CONFIG.VITE_NETWORK;
   let inited = false;
   let amountErrored:string|undefined = undefined;
   let componentKey = 0;
   let timeLineStatus = 1;
+  let addressInfo:any;
 
   const input1Data = {
     field: 'address',
@@ -52,11 +52,11 @@
     const input = event.detail;
     if (input.field === 'address') {
       verifyStacksPricipal(input.value);
-      piTx.pegInData.stacksAddress = input.value;
+      stacksAddress = input.value;
     } else if (input.field === 'amount') {
       amountErrored = undefined;
       try {
-        piTx.pegInData.amount = input.valueSat;
+        amount = input.valueSat;
         verifyAmount(input.value);
       } catch (err) {
         //input2Data.hint = amountErrored = 'Amount below required threshold'
@@ -64,7 +64,6 @@
       }
     }
     conf.pegInMongoId = undefined;
-    conf.pegInTransaction = piTx;
     sbtcConfig.update(() => conf);
     initComponent();
     componentKey++;
@@ -87,6 +86,28 @@
     if (txWatcher) clearInterval(txWatcher)
   }
 
+  const savePeginRequestToDB = async () => {
+    try {
+      const newPegin = await savePeginCommit(peginRequest)
+      if (!newPegin) throw new Error('Unable to save - already exists');
+      if (newPegin.insertedId) {
+        //pegin = peginRequest;
+        peginRequest._id = newPegin.insertedId;
+      } else {
+        peginRequest = newPegin;
+      }
+    } catch(err) {
+      const pegins = await fetchPeginsByStacksAddress(peginRequest.originator);
+      if (!pegins || pegins.length === 0) throw new Error('Pegin requestion is both found and not found');
+      const peginFromList = pegins.find((p) => p.amount === peginRequest.amount)
+      if (peginFromList && peginFromList._id ) {
+        peginRequest = peginFromList;
+      } else {
+        throw new Error('Pegin requestion is both found and not found');
+      }
+    }
+  }
+
   const doClicked = async (event:any) => {
     amountErrored = undefined;
     const button = event.detail;
@@ -94,10 +115,9 @@
       try {
         const amt = input2Data.valueSat
         verifyAmount(amt);
-        piTx.pegInData.amount = amt;
-        peginRequest = piTx.getOpDropPeginRequest();
+        amount = amt;
+        peginRequest = getOpDropPeginRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
         const conf:SbtcConfig = $sbtcConfig;
-        conf.pegInTransaction = piTx;
         sbtcConfig.update(() => conf);
         await savePeginRequestToDB();
         timeLineStatus = 2;
@@ -140,79 +160,16 @@
     //updateConfig();
   }
 
-  const savePeginRequestToDB = async () => {
-    try {
-      const newPegin = await savePeginCommit(peginRequest)
-      if (!newPegin) throw new Error('Unable to save - already exists');
-      if (newPegin.insertedId) {
-        //pegin = peginRequest;
-        peginRequest._id = newPegin.insertedId;
-      } else {
-        peginRequest = newPegin;
-      }
-    } catch(err) {
-      const pegins = await fetchPeginsByStacksAddress(peginRequest.originator);
-      if (!pegins || pegins.length === 0) throw new Error('Pegin requestion is both found and not found');
-      const peginFromList = pegins.find((p) => p.amount === peginRequest.amount)
-      if (peginFromList && peginFromList._id ) {
-        peginRequest = peginFromList;
-      } else {
-        throw new Error('Pegin requestion is both found and not found');
-      }
-    }
-  }
-
-  const commitAddresses = ():CommitKeysI => {
-    const addrs = addresses()
-    const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addrs.stxAddress;
-    let fromBtcAddress = addrs.cardinal; //$sbtcConfig.peginRequest.fromBtcAddress || addrs.ordinal;
-    let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
-    let testAddrs;
-    if ($sbtcConfig.userSettings.testAddresses) {
-      testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);
-    }
-    //const xyWebWalletPubKey = hex.decode(addrs.btcPubkeySegwit1);
-    //let xOnlyPubKey = hex.encode(xyWebWalletPubKey.subarray(1));
-    //const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-    //const outTr = { type: 'tr', pubkey: hex.decode(addrs.btcPubkeySegwit1) }
-    //const addrO = btc.Address(net).encode(outTr);
-    //const addrScript = btc.Address(net).decode(addrs.ordinal);
-    //if (addrScript.type !== 'tr') throw new Error('Expecting taproot address')
-    //const xOnlyPubKey = hex.encode(addrScript.pubkey)
-    return {
-      fromBtcAddress,
-      sbtcWalletAddress,
-      revealPub: $sbtcConfig.keys.deposits.revealPubKey, //(testAddrs) ? testAddrs.revealPub : sbtcWallet.pubKey,
-      reclaimPub: $sbtcConfig.keys.deposits.reclaimPubKey,
-      stacksAddress
-    }
-  }
-
   /**
    * 1. Create or hydrate a deposit object.
    * 2. Check server for an existing invoice correspondng to the hydrated deposit
    */
   const initComponent = async () => {
-    if (!piTx) {
-      if ($sbtcConfig.pegInTransaction) {
-        piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction);
-      } else {
-        piTx = await PegInTransaction.create(network, commitAddresses(), $sbtcConfig.btcFeeRates);
-      }
-    }
-    if (!piTx.pegInData) piTx.pegInData = {} as PegInData;
-    if (!piTx.pegInData.stacksAddress && addresses().stxAddress) piTx.pegInData.stacksAddress = addresses().stxAddress;
-    piTx.pegInData.amount = (piTx.pegInData.amount > 0) ? piTx.pegInData.amount : 0;
-    input1Data.value = piTx.pegInData.stacksAddress || '';
+    input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
-    input2Data.valueSat = piTx.pegInData.amount;
-    try {
-      peginRequest = piTx.getOpDropPeginRequest();
-    } catch (err) {
-      piTx.commitKeys = commitAddresses(); // make sure the addresses are all hex encoded and serialisation safe.
-      peginRequest = piTx.getOpDropPeginRequest();
-    }
-    peginRequest.originator = addresses().stxAddress; // retain the sender in case the address in UI changes.
+    input2Data.valueSat = amount;
+    peginRequest = getOpDropPeginRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
+    peginRequest.originator = $sbtcConfig.addressObject!.stxAddress; // retain the sender in case the address in UI changes.
 
     const conf:SbtcConfig = $sbtcConfig;
     if ($sbtcConfig.pegInMongoId) {
@@ -227,11 +184,7 @@
         return
       }
     }
-    //if (peginRequest && peginRequest.commitTxScript && peginRequest.commitTxScript.script && peginRequest.commitTxScript.script.length > 0)
-
     dispatch('time_line_status_change', { timeLineStatus });
-    //conf.pegInMongoId = pegin._id
-    conf.pegInTransaction = piTx;
     sbtcConfig.update(() => conf);
   }
 
@@ -241,6 +194,9 @@
 
   onMount(async () => {
     try {
+      addressInfo = await fetchUtxoSet($sbtcConfig.addressObject!.cardinal)
+      stacksAddress =$sbtcConfig.addressObject!.stxAddress
+      amount = maxCommit(addressInfo);
       await initComponent();
       startTxWatcher()
       inited = true;

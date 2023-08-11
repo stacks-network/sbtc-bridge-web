@@ -17,6 +17,9 @@ const TESTNET_CONFIG = {
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
     VITE_BLOCKCYPHER_EXPLORER: 'https://api.blockcypher.com/v1/btc/test3',
+    VITE_BTC_SCHNORR_KEY_REVEAL: 'secret',
+    VITE_BTC_SCHNORR_KEY_RECLAIM: 'secret',
+    VITE_BTC_SCHNORR_KEY_ORACLE: 'secret',
 }
 
 const MAINNET_CONFIG = {
@@ -39,6 +42,9 @@ const MAINNET_CONFIG = {
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/api',
     VITE_BLOCKCYPHER_EXPLORER: 'https://api.blockcypher.com/v1/btc',
+    VITE_BTC_SCHNORR_KEY_REVEAL: 'secret',
+    VITE_BTC_SCHNORR_KEY_RECLAIM: 'secret',
+    VITE_BTC_SCHNORR_KEY_ORACLE: 'secret',
 }
 
 const DEVNET_CONFIG = {
@@ -60,6 +66,9 @@ const DEVNET_CONFIG = {
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
     VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
     VITE_BLOCKCYPHER_EXPLORER: 'https://api.blockcypher.com/v1/btc/test3',
+    VITE_BTC_SCHNORR_KEY_REVEAL: 'secret',
+    VITE_BTC_SCHNORR_KEY_RECLAIM: 'secret',
+    VITE_BTC_SCHNORR_KEY_ORACLE: 'secret',
 }
 
 export let CONFIG = MAINNET_CONFIG;
@@ -81,9 +90,13 @@ export function setConfig(search:string) {
     
         // toggle depending on location / ip address etc
         //CONFIG.VITE_BRIDGE_WS = 'ws://localhost:3030'
-        //CONFIG.VITE_BRIDGE_API = 'http://localhost:3030/bridge-api/v1'
+        CONFIG.VITE_BRIDGE_API = 'http://localhost:3030/bridge-api/v1'
         //CONFIG.VITE_SIGNER_API: 'http://localhost:3010/signer-api/v1',
     }
-    //console.log('CONFIG.VITE_BRIDGE_API: ' + CONFIG.VITE_BRIDGE_API);
+    if (import.meta.env.MODE === 'development') {
+        CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL = '93a7e5ecde5eccc4fd858dfcf7d92011eade103600de0e8122d6fc5ffedf962d';
+        CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM = 'eb80b7f63eb74a215b6947b479e154a83cf429691dceab272c405b1614efb98c';
+        CONFIG.VITE_BTC_SCHNORR_KEY_ORACLE = '0d7b49bc4864057b087108f81a57da7178cfbeb85a09c8957b64b9840e368b42';
+    }
 }
 

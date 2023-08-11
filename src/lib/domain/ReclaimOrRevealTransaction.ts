@@ -4,7 +4,6 @@ import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { approxTxFees } from 'sbtc-bridge-lib' 
 import { fetchUtxoSet, fetchTransaction } from "../bridge_api";
-import * as P from 'micro-packed';
 import type { UTXO } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 

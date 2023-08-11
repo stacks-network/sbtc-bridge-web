@@ -1,38 +1,38 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
-import { hex, base64 } from '@scure/base';
-import type { SigData } from 'sbtc-bridge-lib'
+import { hex } from '@scure/base';
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
-import { truncate, explorerBtcAddressUrl, fmtSatoshiToBitcoin, convertOutputsBlockCypher } from "$lib/utils";
-import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-import type { PegOutTransactionI } from '$lib/domain/PegOutTransaction';
+import { truncate, explorerBtcAddressUrl, convertOutputsBlockCypher } from "$lib/utils";
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
+import { fetchUtxoSet } from '$lib/bridge_api'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
+import { buildOpDropTransaction, buildOpReturnTransaction } from 'sbtc-bridge-lib'
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
 import { makeFlash, appDetails } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
+import { CONFIG } from '$lib/config';
 
-export let piTx: PegInTransactionI|PegOutTransactionI;
 export let peginRequest:PeginRequestI;
+export let addressInfo:any;
+export let amount:number;
 
 const dispatch = createEventDispatcher();
 let currentTx:string;
 let errorReason: string|undefined;
-let cypherResp: any|undefined;
 let inited = false;
 
 const getExplorerUrl = () => {
-  return explorerBtcAddressUrl(piTx.pegInData.sbtcWalletAddress)
+  return explorerBtcAddressUrl($sbtcConfig.sbtcContractData.sbtcWalletAddress)
 }
 const getAddress = (chars:number) => {
   try {
-			return truncate(piTx.pegInData.sbtcWalletAddress, chars).toUpperCase()
+			return truncate($sbtcConfig.sbtcContractData.sbtcWalletAddress, chars).toUpperCase()
 		} catch (err) {
       return 'not connected'
     }
@@ -100,7 +100,6 @@ const broadcastTransaction = async (psbtHex:string) => {
           peginRequest.status = 5;
           peginRequest.btcTxid = (resp.tx.hash) ? resp.tx.hash : resp.tx.txid;
           convertOutputsBlockCypher(resp.tx, peginRequest)
-          cypherResp = resp;
         }
         await savePeginCommit(peginRequest);
       } catch (err) {
@@ -121,15 +120,17 @@ const broadcastTransaction = async (psbtHex:string) => {
     //errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
+const revealFeeWithGas = 5000
 onMount(async () => {
   if ($sbtcConfig.userSettings.useOpDrop) {
     //testSignReveal(opDrop);
-    const tx = await piTx?.buildOpDropTransaction();
-    currentTx = hex.encode(tx.toPSBT());
+    const result = buildOpDropTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keys.deposits, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.addressObject!.stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal, $sbtcConfig.addressObject!.ordinal);
+    currentTx = hex.encode(result.tx.toPSBT());
 
   } else {
     try {
-      currentTx = hex.encode((await piTx?.buildOpReturnTransaction()).toPSBT());
+      const tx = buildOpReturnTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.addressObject!.stxAddress,  $sbtcConfig.sbtcContractData!.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
+      currentTx = hex.encode(tx.toPSBT());
     } catch (err:any) {
       console.log('Input error: ', err)
       errorReason = 'Not enough BTC in your wallet currently to cover the withdrawal fees.'
@@ -153,6 +154,7 @@ onMount(async () => {
     <Button darkScheme={false} label={'Back'} target={'back'} on:clicked={() => updateTransaction()}/>
     <Button darkScheme={true} label={'Sign & broadcast'} target={'sign'} on:clicked={() => requestSignPsbt()}/>
   </div>
+  <div>{currentTx}</div>
   {:else if broadcasted}
   <div class="my-3 text-2xl">
     <p>View transaction on the <a class="text-warning-700" href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.</p>

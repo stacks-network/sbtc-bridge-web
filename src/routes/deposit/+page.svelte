@@ -4,11 +4,9 @@
 	import DepositFormOpReturn from '$lib/components/deposit/op_return/DepositForm.svelte';
 	import TimeLine from '$lib/components/deposit/TimeLine.svelte';
 	import TimeLineOpReturn from '$lib/components/deposit/op_return/TimeLine.svelte';
-	import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 	import ServerError from "$lib/components/common/ServerError.svelte";
 	import { sbtcConfig } from '$stores/stores'
 
-	let piTx:PegInTransactionI; // = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 	let timeLineStatus = 1;
 	let inited = false;
 	let errored = false;
@@ -18,7 +16,6 @@
 	let componentKey = 0;
 
 	const openSigView = (e:any) => {
-		piTx = e.detail.piTx
 		const wallet = e.detail.wallet
 		webWallet = wallet === 1; // piTx.fromBtcAddress === addresses().cardinal,
 		//piTx = PegInTransaction.hydrate($sbtcConfig.pegInTransaction!);

@@ -3,8 +3,7 @@
 	import "../sbtc.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { fetchSbtcData } from "$lib/bridge_api";
-	import { fetchSbtcBalance, userSession, isLegal } from "$lib/stacks_connect";
+	import { initApplication, loginStacksJs, isLegal } from "$lib/stacks_connect";
 	import { setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
@@ -14,9 +13,6 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
-	import { loginStacksJs } from '$lib/stacks_connect'
-	import { fetchExchangeRates } from "$lib/bridge_api"
-	import { checkWalletAddress } from '$lib/utils'
 
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
@@ -29,7 +25,7 @@
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
 			nav.cancel();
-			loginStacksJs(initApplication);
+			loginStacksJs(initApplication, $sbtcConfig);
 			componentKey++;
 			return;
 		}
@@ -42,45 +38,15 @@
 	afterNavigate((nav) => {
 		componentKey++;
 	})
-	export let data:{ sbtcContractData: SbtcContractDataI, keys: KeySet, sbtcWalletAddressInfo: any, btcFeeRates: any } ;
 	const unsubscribe = sbtcConfig.subscribe((conf) => {});
 	onDestroy(unsubscribe);
-	//setUpMicroStacks();
-	//setUpStacksJs();
 	let inited = false;
 	let errorReason:string|undefined;
-
-	const initApplication = async () => {
-		let conf = defaultSbtcConfig as SbtcConfig;
-		if ($sbtcConfig) {
-			conf = $sbtcConfig;
-		}
-		try {
-			data = await fetchSbtcData();
-			if (!data) data = {} as any;
-			checkWalletAddress(data)
-			conf.loggedIn = false;
-			if (userSession.isUserSignedIn()) {
-				conf.loggedIn = true;
-				await fetchSbtcBalance();
-			}
-		} catch (err) {
-			data = {} as any;
-		}
-		const exchangeRates = await fetchExchangeRates();
-		conf.exchangeRates = exchangeRates;
-		conf.sbtcContractData = data.sbtcContractData;
-		conf.keys = data.keys;
-		conf.sbtcWalletAddressInfo = data.sbtcWalletAddressInfo;
-		conf.btcFeeRates = data.btcFeeRates;
-		sbtcConfig.update(() => conf);
-	}
 
 	onMount(async () => {
 		try {
 			//openWebSocket()
-			await initApplication();
-			//await tick();
+			await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig);
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
