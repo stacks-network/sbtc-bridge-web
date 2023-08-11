@@ -12,7 +12,7 @@ export type SbtcConfig = {
   loggedIn: boolean;
   pegInTransaction?:PegInTransactionI;
   pegOutTransaction?:PegOutTransactionI;
-  addressObject?: AddressObject;
+  keySets: { [key: string]: AddressObject; };
   stxAddress?: string;
   sigData:any;
   pegIn:boolean;

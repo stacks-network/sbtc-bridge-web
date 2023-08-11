@@ -5,8 +5,7 @@ import { sbtcConfig } from '$stores/stores'
 import { fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup } from '@stacks/connect';
-import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
 import type { AddressObject } from 'sbtc-bridge-lib' 
 import { verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
@@ -16,6 +15,8 @@ import { hex } from '@scure/base';
 import type { ExchangeRate } from 'sbtc-bridge-lib';
 import { schnorr } from '@noble/curves/secp256k1';
 import * as btc from '@scure/btc-signer';
+import { AddressPurposes, getAddress } from 'sats-connect'
+import type { GetAddressOptions } from 'sats-connect'
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -58,11 +59,29 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
-export async function fetchSbtcBalance ():Promise<AddressObject> {
-	const adrds:AddressObject = addresses();
+export async function fetchSbtcBalance (conf:SbtcConfig) {
+	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
+	const sessionStacks = getStacksAddress(); // check not switching accounts
+	if (localKs	&& localKs.stxAddress && localKs.cardinal && sessionStacks === localKs.stxAddress) {
+		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(localKs)
+		sbtcConfig.update(() => conf);
+		return conf;
+	} else {
+		addresses(async function(addr:AddressObject){
+			if (addr) {
+				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(addr)
+				sbtcConfig.update(() => conf);
+				return conf;
+			}
+		});
+	}
+}
+async function getBalances(addressObject:AddressObject):Promise<AddressObject> {
 	let result:AddressObject;
+	const tempSegwit0 = addressObject.btcPubkeySegwit0
+	const tempSegwit1 = addressObject.btcPubkeySegwit1
 	try {
-		result = await fetchUserBalances(adrds);
+		result = await fetchUserBalances(addressObject);
 		try {
 			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[CONFIG.VITE_SBTC_CONTRACT_ID + '::sbtc'].balance)
 		} catch (err) {
@@ -70,34 +89,74 @@ export async function fetchSbtcBalance ():Promise<AddressObject> {
 			try { result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens['ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant::sbtc'].balance) }
 			catch (err) { result.sBTCBalance = 0 }
 		}
-
 	} catch(err) {
-		result = adrds;
+		result = addressObject;
 		console.log('Network down...');
 	}
+	result.btcPubkeySegwit0 = tempSegwit0
+	result.btcPubkeySegwit1 = tempSegwit1
 	return result;
 }
-
-export function addresses():AddressObject {
-	if (!userSession) return {} as AddressObject;
-	try {
+function getStacksAddress() {
+	if (userSession) {
 		const userData = userSession.loadUserData();
-		const network = CONFIG.VITE_NETWORK;
-		//let something = hashP2WPKH(payload.public_keys[0])
-		const stxAddress = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
-		const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
-		const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
-		return {
+		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		return stxAddress
+	}
+	return
+}
+export function isHiro() {
+	const provider:StacksProvider = getStacksProvider()
+	const prod = provider.getProductInfo();
+	return prod.name.toLowerCase().indexOf('hiro') > -1
+}
+
+async function addresses(callback:any):Promise<AddressObject|undefined> {
+	if (!userSession) return {} as AddressObject;
+	const userData = userSession.loadUserData();
+	const network = CONFIG.VITE_NETWORK;
+	//let something = hashP2WPKH(payload.public_keys[0])
+	const stxAddress = getStacksAddress();
+
+	if (isHiro()) {
+		callback({
+			network,
 			stxAddress,
-			cardinal,
-			ordinal,
-			btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
-			btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
+			cardinal: (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
+			ordinal: (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
+			btcPubkeySegwit0: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2wpkh : undefined,
+			btcPubkeySegwit1: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2tr : undefined,
 			sBTCBalance: 0,
 			stxBalance: 0
-		};
-	} catch(err) {
-		return {} as AddressObject
+		});
+	} else {
+		const getAddressOptions:GetAddressOptions = {
+			payload: {
+				purposes: [AddressPurposes.ORDINALS, AddressPurposes.PAYMENT],
+				message: 'Address for receiving Ordinals and payments',
+				  network: {
+					type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+				},
+			},
+			onFinish: (response:any) => {
+				console.log(response)
+				const obj = response.addresses;
+				callback({
+					network,
+					stxAddress,
+					cardinal: obj.find((o:any) => o.purpose === 'payment').address,
+					ordinal: obj.find((o:any) => o.purpose === 'ordinals').address,
+					btcPubkeySegwit0: obj.find((o:any) => o.purpose === 'payment').publicKey,
+					btcPubkeySegwit1: obj.find((o:any) => o.purpose === 'ordinals').publicKey,
+					sBTCBalance: 0,
+					stxBalance: 0
+				});
+			},
+			onCancel: () => {
+				throw new Error('cancelled');
+			}
+		}
+		await getAddress(getAddressOptions);
 	}
 }
 
@@ -143,7 +202,7 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
-export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> {
+export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 	try {
 		const provider = getStacksProvider()
 		console.log('provider: ', provider)
@@ -152,7 +211,6 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> 
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
-					await fetchSbtcBalance();
 					callback(conf);
 				},
 				onCancel: () => {
@@ -160,7 +218,6 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> 
 				},
 			});
 		} else {
-			await fetchSbtcBalance();
 			callback(conf);
 		}
 	} catch (e) {
@@ -240,7 +297,7 @@ export async function initApplication(conf:SbtcConfig) {
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			conf.loggedIn = true;
-			conf.addressObject = await fetchSbtcBalance();
+			await fetchSbtcBalance(conf);
 			conf.loggedIn = true;
 		}
 	} catch (err) {
