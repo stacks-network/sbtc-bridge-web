@@ -11,7 +11,7 @@
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
 
-	const coordinator = (loggedIn()) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
+	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
 		const res = await loginStacksJs(initApplication, $sbtcConfig);

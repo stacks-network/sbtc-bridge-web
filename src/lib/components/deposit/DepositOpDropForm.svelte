@@ -175,7 +175,7 @@
     input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
     input2Data.valueSat = amount;
-    input2Data.valueBtc = satsToBitcoin(amount);
+    if (amount) input2Data.valueBtc = satsToBitcoin(amount);
     peginRequest = getOpDropDepositRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
     peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress; // retain the sender in case the address in UI changes.
 
@@ -204,7 +204,7 @@
     try {
       addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
       stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
-      amount = maxCommit(addressInfo);
+      amount = 0; // maxCommit(addressInfo);
       await initComponent();
       startTxWatcher()
       inited = true;

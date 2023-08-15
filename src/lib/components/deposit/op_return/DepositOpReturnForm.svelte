@@ -144,7 +144,7 @@
     input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
     input2Data.valueSat = amount;
-    input2Data.valueBtc = satsToBitcoin(amount);
+    if (amount) input2Data.valueBtc = satsToBitcoin(amount);
     input2Data.hint = 'Balance: ' + userSatBtc(maxCommit(addressInfo), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });

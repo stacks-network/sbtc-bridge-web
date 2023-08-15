@@ -1,7 +1,7 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject, KeySet } from 'sbtc-bridge-lib'
+import type { AddressMempoolObject, ExchangeRate, KeySet } from 'sbtc-bridge-lib'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 
@@ -143,6 +143,15 @@ export function compare( a:PeginRequestI, b:PeginRequestI ) {
     return -1;
   }
   if ( a.status > b.status ){
+    return 1;
+  }
+  return 0;
+}
+export function compareCurrencies( a:{ value: string; name: string; }, b:{ value: string; name: string; } ) {
+  if ( a.value < b.value ){
+    return -1;
+  }
+  if ( a.value > b.value ){
     return 1;
   }
   return 0;
