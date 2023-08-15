@@ -1,32 +1,32 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { goto } from "$app/navigation";
-import ReclaimOrRevealTransaction from '$lib/domain/ReclaimOrRevealTransaction';
+import { CONFIG } from '$lib/config';
 import type { PeginRequestI, WrappedPSBT } from 'sbtc-bridge-lib' 
 import { signMessage } from '$lib/stacks_connect';
 import { explorerBtcTxUrl } from '$lib/utils'
 import { sbtcConfig } from '$stores/stores'
 import Button from '$lib/components/shared/Button.svelte';
 import { sign } from '$lib/bridge_api';
-import * as btc from '@scure/btc-signer';
-import { toStorable } from 'sbtc-bridge-lib' 
+import type { Transaction } from '@scure/btc-signer';
+import { toStorable, buildRevealOrReclaimTransaction } from 'sbtc-bridge-lib' 
 import { Popover } from 'flowbite-svelte';
 import { a_primary } from '$lib/css_utils';
 import Invoice from '../deposit/Invoice.svelte';
+import { fetchUtxoSet, fetchTransaction } from '$lib/bridge_api'
 
 export let peginRequest:PeginRequestI;
 let wrappedPsbt:WrappedPSBT = {} as WrappedPSBT;
-let revealTx:ReclaimOrRevealTransaction;
-let reclaimTx:ReclaimOrRevealTransaction;
+let revealTx:Transaction;
+let reclaimTx:Transaction;
 let reclaiming = false;
 let errorMessage:string|undefined = undefined;
 
+const network = CONFIG.VITE_NETWORK;
 let inited = false;
-let reclaimBtcTx:btc.Transaction;
-let revealBtcTx:btc.Transaction;
-
-const doClicked = async (event:any) => {
-}
+let addressInfoReclaim: any;
+let addressInfoReveal: any;
+let commitTransaction:any;
 
 const doSign = async (txtype:string, sigData:any, message:string, tx:Uint8Array) => {
 	if (!peginRequest._id) return
@@ -56,19 +56,16 @@ const doSign = async (txtype:string, sigData:any, message:string, tx:Uint8Array)
 const signReveal = async () => {
   const script = 'Reclaim my deposit to ' + peginRequest.fromBtcAddress;
   await signMessage(async function(sigData:any, message:string) {
-    doSign('reveal', sigData, (message), revealBtcTx.toBytes())
+    doSign('reveal', sigData, (message), revealTx.toBytes())
   }, script);
 }
 
 const signReclaim = async () => {
   const script = 'Reclaim my deposit to ' + peginRequest.fromBtcAddress;
   await signMessage(async function(sigData:any, message:string) {
-    doSign('reclaim', sigData, (message), reclaimBtcTx.toBytes())
+    doSign('reclaim', sigData, (message), reclaimTx.toBytes())
   }, script);
 }
-
-
-$: signedTx = wrappedPsbt.signedPsbt;
 
 onMount(async () => {
 	if (!peginRequest) {
@@ -81,24 +78,14 @@ onMount(async () => {
 			peginRequest.commitTxScript = script;
 		}
 	}
-  	const address = btc.Address()
-  	revealTx = new ReclaimOrRevealTransaction(peginRequest)
-  	reclaimTx = new ReclaimOrRevealTransaction(peginRequest)
+	addressInfoReveal = await fetchUtxoSet(peginRequest.fromBtcAddress)
+	addressInfoReclaim = await fetchUtxoSet(peginRequest.sbtcWalletAddress)
+	if (peginRequest.btcTxid) commitTransaction = await fetchTransaction(peginRequest.btcTxid);
+	peginRequest.senderAddress = commitTransaction.vout[1].scriptPubKey.address
+	reclaimTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)
+	revealTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)
 
-	await revealTx.fetchUtxos(false, $sbtcConfig.btcFeeRates, $sbtcConfig.sbtcWalletAddressInfo);
-	await reclaimTx.fetchUtxos(true, $sbtcConfig.btcFeeRates, $sbtcConfig.sbtcWalletAddressInfo);
-	if (revealTx.transaction && revealTx.transaction.vout && revealTx.transaction.vout.length > 1) {
-		peginRequest.senderAddress = revealTx.transaction.vout[1].scriptPubKey.address
-	}
-	try {
-		if (revealTx.commitTx.btcTxid) {
-			revealBtcTx = revealTx.buildTransaction(false);
-			reclaimBtcTx = reclaimTx.buildTransaction(true);
-		}
-	} catch(err) {
-		console.error('Creating transaction failed: ', err)
-	}
-	peginRequest.requestType = 'reclaim';
+	//peginRequest.requestType = 'reclaim';
 	//reclaimBtcTx.fee;
 	inited = true;
 })

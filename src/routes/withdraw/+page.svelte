@@ -2,10 +2,8 @@
 	import { onMount } from "svelte";
 	import WithdrawForm from '$lib/components/withdraw/WithdrawForm.svelte';
 	import TimeLine from '$lib/components/withdraw/TimeLine.svelte';
-	import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
 	import ServerError from "$lib/components/common/ServerError.svelte";
 
-	let piTx:PegInTransactionI; // = ($sbtcConfig.pegInTransaction && $sbtcConfig.pegInTransaction.ready) ? PegInTransaction.hydrate($sbtcConfig.pegInTransaction) : new PegInTransaction();
 	let timeLineStatus = 1;
 	let inited = false;
 	let errored = false;

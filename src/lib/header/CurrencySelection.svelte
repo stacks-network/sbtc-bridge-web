@@ -6,7 +6,7 @@
 	import { truncate, explorerAddressUrl, explorerBtcAddressUrl } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
-	import { fetchSbtcBalance, addresses } from '$lib/stacks_connect'
+	import { fetchSbtcBalance } from '$lib/stacks_connect'
 
 	const getContractAddress = () => {
 		const contract = CONFIG.VITE_SBTC_CONTRACT_ID
@@ -38,18 +38,10 @@
 		let net = 'mainnet';
 		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
 		setConfig(net);
-		await fetchSbtcBalance();
-		sbtcConfig.update((conf:SbtcConfig) => {
-			conf.stxAddress = addresses().stxAddress;
-			if (conf.pegInTransaction) {
-				conf.pegInTransaction.fromBtcAddress = addresses().ordinal;
-				if (conf.pegInTransaction.pegInData) conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
-			}
-			if (conf.pegOutTransaction) {
-				conf.pegOutTransaction.fromBtcAddress = addresses().ordinal;
-			}
+		await sbtcConfig.update((conf:SbtcConfig) => {
 			return conf;
 		});
+		await fetchSbtcBalance($sbtcConfig);
 		const url = new URL(location.href);
 		url.searchParams.set('net', net);
 		location.assign(url.search);

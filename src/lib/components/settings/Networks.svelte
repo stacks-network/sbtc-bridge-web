@@ -5,22 +5,14 @@
 	import { CONFIG, setConfig } from '$lib/config';
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
-	import { fetchSbtcBalance, addresses } from '$lib/stacks_connect'
+	import { fetchSbtcBalance } from '$lib/stacks_connect'
 
 	const toggleNetwork = async () => {
 		let net = 'mainnet';
 		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
 		setConfig(net);
-		await fetchSbtcBalance();
+		await fetchSbtcBalance($sbtcConfig);
 		sbtcConfig.update((conf:SbtcConfig) => {
-			conf.stxAddress = addresses().stxAddress;
-			if (conf.pegInTransaction) {
-				conf.pegInTransaction.fromBtcAddress = addresses().ordinal;
-				if (conf.pegInTransaction.pegInData) conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
-			}
-			if (conf.pegOutTransaction) {
-				conf.pegOutTransaction.fromBtcAddress = addresses().ordinal;
-			}
 			return conf;
 		});
 		const url = new URL(location.href);

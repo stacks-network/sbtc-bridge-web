@@ -18,6 +18,7 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
+		"@btckit/types": "^0.0.19",
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.21.0",
@@ -57,7 +58,7 @@
 		"flowbite-svelte": "^0.39.1",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^0.5.0",
-		"sbtc-bridge-lib": "^1.0.40",
+		"sbtc-bridge-lib": "^1.0.50",
 		"sockjs": "^0.3.24",
 		"svelte-local-storage-store": "^0.5.0",
 		"svelte-qrcode": "^1.0.0",

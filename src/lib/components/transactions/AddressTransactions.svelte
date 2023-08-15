@@ -2,7 +2,8 @@
 import { createEventDispatcher } from "svelte";
 import { isSupported } from "$lib/utils";
 import { onMount } from 'svelte';
-import { addresses } from '$lib/stacks_connect'
+import { CONFIG } from '$lib/config';
+import { sbtcConfig } from '$stores/stores';
 import { truncate, explorerBtcTxUrl } from '$lib/utils'
 
 const dispatch = createEventDispatcher();
@@ -22,7 +23,7 @@ let errorReason:string|undefined;
 let showUtxos:boolean;
 
 const hiroWallet = async () => {
-  bitcoinAddress = addresses().ordinal;
+  bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].ordinal;
   configureUTXOs(true);
 }
 

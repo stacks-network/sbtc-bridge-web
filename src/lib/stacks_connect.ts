@@ -6,7 +6,7 @@ import { fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject } from 'sbtc-bridge-lib' 
+import type { AddressObject, SbtcContractDataI } from 'sbtc-bridge-lib' 
 import { verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
@@ -22,6 +22,7 @@ const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 
 export const webWalletNeeded = false;
+export const minimumDeposit = 10000
 export const revealPayment = 10001
 
 const allowed = [
@@ -59,15 +60,15 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
-export async function fetchSbtcBalance (conf:SbtcConfig) {
+export async function fetchSbtcBalance (conf:SbtcConfig, fromLogin:boolean|undefined) {
 	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
-	const sessionStacks = getStacksAddress(); // check not switching accounts
-	if (localKs	&& localKs.stxAddress && localKs.cardinal && sessionStacks === localKs.stxAddress) {
+	//const sessionStacks = getStacksAddress(); // check not switching accounts
+	if (!fromLogin && localKs	&& localKs.stxAddress && localKs.cardinal) { // && sessionStacks === localKs.stxAddress) {
 		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(localKs)
 		sbtcConfig.update(() => conf);
 		return conf;
 	} else {
-		addresses(async function(addr:AddressObject){
+		addresses(async function(addr:AddressObject) {
 			if (addr) {
 				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(addr)
 				sbtcConfig.update(() => conf);
@@ -98,7 +99,7 @@ async function getBalances(addressObject:AddressObject):Promise<AddressObject> {
 	return result;
 }
 function getStacksAddress() {
-	if (userSession) {
+	if (loggedIn()) {
 		const userData = userSession.loadUserData();
 		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 		return stxAddress
@@ -112,7 +113,7 @@ export function isHiro() {
 }
 
 async function addresses(callback:any):Promise<AddressObject|undefined> {
-	if (!userSession) return {} as AddressObject;
+	if (!loggedIn()) return {} as AddressObject;
 	const userData = userSession.loadUserData();
 	const network = CONFIG.VITE_NETWORK;
 	//let something = hashP2WPKH(payload.public_keys[0])
@@ -211,7 +212,7 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
-					callback(conf);
+					callback(conf, true);
 				},
 				onCancel: () => {
 					callback(conf);
@@ -269,14 +270,13 @@ export function verifyStacksPricipal(stacksAddress?:string) {
 		  throw new Error('Invalid stacks principal - please enter a valid ' + CONFIG.VITE_NETWORK + ' account or contract principal.');
 	  }
 }
-  
-  
+
 export function verifyAmount(amount:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
 	  }
-  	if (amount < 10000) {
-		throw new Error('Amount less than mnimum transaction fee.');
+  	if (amount < minimumDeposit) {
+		throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
 	  }
 }
 export function verifySBTCAmount(amount:number, balance:number, fee:number) {
@@ -288,7 +288,7 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 	}
 }
   
-export async function initApplication(conf:SbtcConfig) {
+export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
 	if (!conf) conf = defaultSbtcConfig as SbtcConfig
 	let data = {} as any;
 	try {
@@ -297,7 +297,7 @@ export async function initApplication(conf:SbtcConfig) {
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			conf.loggedIn = true;
-			await fetchSbtcBalance(conf);
+			await fetchSbtcBalance(conf, fromLogin);
 			conf.loggedIn = true;
 		}
 	} catch (err) {
@@ -306,7 +306,13 @@ export async function initApplication(conf:SbtcConfig) {
 	const exchangeRates = await fetchExchangeRates();
 	conf.exchangeRates = exchangeRates;
 	//conf.sbtcContractData = data.sbtcContractData;
-	if (!conf.addressObject)throw new Error('')
+	if (!conf.keySets) {
+		if (CONFIG.VITE_NETWORK === 'testnet') {
+			conf.keySets = { 'testnet': {} as AddressObject };
+		} else {
+			conf.keySets = { 'mainnet': {} as AddressObject };
+		}
+	}
 	let keys = {
 		deposits: {
 		  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
@@ -317,8 +323,8 @@ export async function initApplication(conf:SbtcConfig) {
 	if (import.meta.env.MODE !== 'development') {
 		keys = data.keys;
 	}
-	//const revealAddress = checkWalletAddress(keys.deposits.revealPubKey);
-	const revealAddress = checkWalletAddress(data.sbtcContractData.sbtcWalletPublicKey);
+	keys.deposits.revealPubKey = data.sbtcContractData.sbtcWalletPublicKey
+	const revealAddress = checkWalletAddress(data.sbtcContractData);
 	data.sbtcContractData.sbtcWalletAddress = revealAddress;
 	//conf.walletAddress = revealAddress;
 	conf.revealFeeWithGas = revealPayment;
@@ -337,19 +343,17 @@ export async function initApplication(conf:SbtcConfig) {
 	sbtcConfig.update(() => conf);
 }
 
-export function checkWalletAddress (revealPublicKey:string) {
+export function checkWalletAddress (sbtcContractData:SbtcContractDataI) {
 	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const xOnlyKey = (revealPublicKey);
-	try {
-	  const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	  const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
-	  return addr;
-	  //const trObj1 = btc.p2pkh(hex.decode(xOnlyKey), net);
-	  
-	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	  //if (trObj.type === 'tr') 
-	} catch(err:any) {
-	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	  console.log(err.message)
-	}
+	const fullPK = sbtcContractData.sbtcWalletPublicKey;        //sbtcContractData.coordinator?.key?.value?.split('x')[1];
+	const xOnlyKey = fullPK; //hex.encode(hex.decode(fullPK).subarray(1, 33)) //(fullPK?.substring(2));
+	//if (!xOnlyKey) throw new Error('No key found')
+	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
+	//if (trObj.type === 'tr') 
+	//const addr = trObj.address
+
+	const assumeTweakedPubKey = hex.decode(xOnlyKey);
+	const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
+	if (addr) sbtcContractData.sbtcWalletAddress = addr;
+	return addr;
 }

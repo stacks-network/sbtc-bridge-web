@@ -30,8 +30,6 @@ export const defaultSbtcConfig:SbtcConfig = {
   loggedIn: false,
   sigData: undefined,
   sbtcContractData: {} as SbtcContractDataI,
-  pegInTransaction: undefined,
-  pegOutTransaction: undefined,
   keys: {} as KeySet,
   userSettings: {
     useOpDrop: false,
@@ -51,6 +49,8 @@ export const defaultSbtcConfig:SbtcConfig = {
       },
       denomination: 'bitcoin'
     }
-  }
+  },
+  keySets: {},
+  revealFeeWithGas: 0
 }
 

@@ -1,57 +1,52 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
-import { hex } from '@scure/base';
+import { hex, base64 } from '@scure/base';
 import { openPsbtRequestPopup } from '@stacks/connect'
 import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
-import { truncate, explorerBtcAddressUrl, convertOutputsBlockCypher } from "$lib/utils";
+import { truncate, explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import { fetchUtxoSet } from '$lib/bridge_api'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
-import { buildOpDropTransaction, buildOpReturnTransaction } from 'sbtc-bridge-lib'
+import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction } from 'sbtc-bridge-lib'
+//import { buildOpReturnDepositTransaction } from '$lib/stacks_connect_bug'
 import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
-import { makeFlash, appDetails } from "$lib/stacks_connect";
+import { appDetails, getStacksNetwork } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 import { CONFIG } from '$lib/config';
+import { isHiro } from '$lib/stacks_connect'
+import { signTransaction, type InputToSign, type SignTransactionOptions } from 'sats-connect'
 
 export let peginRequest:PeginRequestI;
 export let addressInfo:any;
 export let amount:number;
 
 const dispatch = createEventDispatcher();
+let transaction:btc.Transaction;
+let psbtB64:string;
+let psbtHex:string;
 let currentTx:string;
 let errorReason: string|undefined;
 let inited = false;
 
 const getExplorerUrl = () => {
-  return explorerBtcAddressUrl($sbtcConfig.sbtcContractData.sbtcWalletAddress)
+  return explorerBtcTxUrl(peginRequest.btcTxid)
 }
-const getAddress = (chars:number) => {
-  try {
-			return truncate($sbtcConfig.sbtcContractData.sbtcWalletAddress, chars).toUpperCase()
-		} catch (err) {
-      return 'not connected'
-    }
-	}
-
-  const copy = (ele:string, val:string) => {
-  let clippy = {
-    target: document.getElementById('clipboard')!,
-    props: { name: val },
-  }
-  const app = new CopyClipboard(clippy);
-  app.$destroy();
-  makeFlash(document.getElementById(ele))
-}
-
 export async function requestSignPsbt() {
-  console.log(currentTx);
+  if (isHiro()) {
+    signPsbtHiro()
+  } else {
+    signPsbtXverse()
+  }
+}
+
+export async function signPsbtHiro() {
   openPsbtRequestPopup({
-    hex: currentTx,
+    hex: psbtHex,
     appDetails: appDetails(),
     onFinish(data:any) {
       broadcastTransaction(data.hex);
@@ -63,8 +58,48 @@ export async function requestSignPsbt() {
   });
 }
 
+export async function signPsbtXverse() {
+  const b64Tx = base64.encode(transaction.toPSBT());
+  const inputs = []; //[{address: addressInfo.address, signingIndexes: [1] }];
+  for (let index = 0; index < transaction.inputsLength; index++) {
+    //const input = transaction.getInput(index);
+    inputs.push({
+      address: addressInfo.address,
+      signingIndexes: [0],
+    })
+  }
+  const signPsbtOptions:SignTransactionOptions = {
+    payload: {
+      network: {
+        type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+      },
+      message: 'Sign Transaction',
+      psbtBase64: b64Tx,
+      broadcast: true,
+      inputsToSign: inputs,
+    },
+    onFinish: (response:any) => {
+      console.log('signPsbtOptions: ', response)
+      updatePeginRequest(response.txId)
+    },
+    onCancel: () => {
+      return 
+    },
+  }
+  await signTransaction(signPsbtOptions);
+}
+
 const updateTransaction = () => {
   dispatch('update_transaction', { success: true });
+}
+
+const updatePeginRequest = async (txid:string) => {
+  if (!$sbtcConfig.userSettings.useOpDrop) {
+    peginRequest.status = 5;
+    peginRequest.btcTxid = txid;
+  }
+  await savePeginCommit(peginRequest);
+  broadcasted = true;
 }
 
 let resp:any;
@@ -120,32 +155,38 @@ const broadcastTransaction = async (psbtHex:string) => {
     //errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
-const revealFeeWithGas = 5000
-onMount(async () => {
-  if ($sbtcConfig.userSettings.useOpDrop) {
-    //testSignReveal(opDrop);
-    const result = buildOpDropTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keys.deposits, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.addressObject!.stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal, $sbtcConfig.addressObject!.ordinal);
-    currentTx = hex.encode(result.tx.toPSBT());
 
+const revealFeeWithGas = 5000;
+onMount(async () => {
+  if (peginRequest.requestType === 'withdrawal') {
+      if ($sbtcConfig.userSettings.useOpDrop) {
+        transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, revealFeeWithGas, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+      } else {
+        transaction = buildOpReturnWithdrawTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+      }
   } else {
-    try {
-      const tx = buildOpReturnTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.addressObject!.stxAddress,  $sbtcConfig.sbtcContractData!.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
-      currentTx = hex.encode(tx.toPSBT());
-    } catch (err:any) {
-      console.log('Input error: ', err)
-      errorReason = 'Not enough BTC in your wallet currently to cover the withdrawal fees.'
+    if ($sbtcConfig.userSettings.useOpDrop) {
+      transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+    } else {
+      transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!)
     }
   }
+  if (transaction.inputsLength === 0) {
+    errorReason = 'Unable to add inputs to the transaction - please try a different account or wait for previous transaction to confirm'
+  }
+  currentTx = hex.encode(transaction.toPSBT());
+  psbtHex = hex.encode(transaction.toPSBT());
+  psbtB64 = base64.encode(transaction.toPSBT());
   inited = true;
 })
 </script>
 <div id="clipboard"></div>
 
 {#if inited}
-<div class="flex w-full flex-wrap align-baseline items-start px-5">
+<div class="flex w-full flex-wrap align-baseline items-start">
   <div class="">
     {#if !broadcasted}
-    <p class="text-lg">Sign and broadcast your transaction.</p>
+    <p class="text-lg mb-5">Sign and broadcast your transaction.</p>
     {/if}
   </div>
   <Invoice {peginRequest} />
@@ -154,7 +195,7 @@ onMount(async () => {
     <Button darkScheme={false} label={'Back'} target={'back'} on:clicked={() => updateTransaction()}/>
     <Button darkScheme={true} label={'Sign & broadcast'} target={'sign'} on:clicked={() => requestSignPsbt()}/>
   </div>
-  <div>{currentTx}</div>
+  <!--<div>{currentTx}</div>-->
   {:else if broadcasted}
   <div class="my-3 text-2xl">
     <p>View transaction on the <a class="text-warning-700" href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.</p>

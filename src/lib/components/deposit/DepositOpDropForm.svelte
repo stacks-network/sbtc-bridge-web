@@ -9,14 +9,16 @@
   import { verifyStacksPricipal, verifyAmount } from '$lib/stacks_connect';
   import type { SbtcConfig } from '$types/sbtc_config';
   import ScriptHashAddress from '$lib/components/deposit/ScriptHashAddress.svelte';
-  import { makeFlash } from "$lib/stacks_connect";
+  import { minimumDeposit, makeFlash } from "$lib/stacks_connect";
   import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress } from "$lib/bridge_api";
   import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
   import Button from '$lib/components/shared/Button.svelte';
   import type { PeginRequestI } from 'sbtc-bridge-lib'
-  import { getOpDropPeginRequest, maxCommit } from 'sbtc-bridge-lib'
+  import { getOpDropDepositRequest, maxCommit } from 'sbtc-bridge-lib'
   import { fetchUtxoSet } from '$lib/bridge_api'
-
+  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+  import * as btckit from '@btckit/types';
+  
   const dispatch = createEventDispatcher();
 
   let peginRequest:PeginRequestI;
@@ -116,7 +118,7 @@
         const amt = input2Data.valueSat
         verifyAmount(amt);
         amount = amt;
-        peginRequest = getOpDropPeginRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
+        peginRequest = getOpDropDepositRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
         const conf:SbtcConfig = $sbtcConfig;
         sbtcConfig.update(() => conf);
         await savePeginRequestToDB();
@@ -125,7 +127,7 @@
       } catch(err:any) {
         amountErrored = 'This application is only for testnet at the moment. Please use the `Settings` menu to switch network.'
         if (CONFIG.VITE_NETWORK === 'testnet') {
-          amountErrored = 'Amount below required threshold.'
+          amountErrored = 'Minimum deposit is ' + satsToBitcoin(minimumDeposit) + ' btc'
         }
         makeFlash(document.getElementById(input2Data.field))
         componentKey++
@@ -154,6 +156,11 @@
         goto('/transactions/' + peginRequest._id);
         return
       }
+    } else if (button.target === 'pay-now') {
+          const resp = await window.btc?.request('sendTransfer', {
+              address: 'tb1qkzvk9hr7uvas23hspvsgqfvyc8h4nngeqjqtnj',
+              amount: '10000'
+          });
     } else if (button.target === 'transaction-history') {
       goto('/transactions')
     }
@@ -168,8 +175,9 @@
     input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
     input2Data.valueSat = amount;
-    peginRequest = getOpDropPeginRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal);
-    peginRequest.originator = $sbtcConfig.addressObject!.stxAddress; // retain the sender in case the address in UI changes.
+    input2Data.valueBtc = satsToBitcoin(amount);
+    peginRequest = getOpDropDepositRequest(network, amount, $sbtcConfig.keys.deposits, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
+    peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress; // retain the sender in case the address in UI changes.
 
     const conf:SbtcConfig = $sbtcConfig;
     if ($sbtcConfig.pegInMongoId) {
@@ -194,8 +202,8 @@
 
   onMount(async () => {
     try {
-      addressInfo = await fetchUtxoSet($sbtcConfig.addressObject!.cardinal)
-      stacksAddress =$sbtcConfig.addressObject!.stxAddress
+      addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+      stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
       amount = maxCommit(addressInfo);
       await initComponent();
       startTxWatcher()

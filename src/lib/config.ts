@@ -90,7 +90,7 @@ export function setConfig(search:string) {
     
         // toggle depending on location / ip address etc
         //CONFIG.VITE_BRIDGE_WS = 'ws://localhost:3030'
-        CONFIG.VITE_BRIDGE_API = 'http://localhost:3030/bridge-api/v1'
+        //CONFIG.VITE_BRIDGE_API = 'http://localhost:3030/bridge-api/v1'
         //CONFIG.VITE_SIGNER_API: 'http://localhost:3010/signer-api/v1',
     }
     if (import.meta.env.MODE === 'development') {

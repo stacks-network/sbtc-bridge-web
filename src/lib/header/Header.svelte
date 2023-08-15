@@ -5,12 +5,13 @@
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { goto } from "$app/navigation";
 	import { initApplication, loginStacksJs } from '$lib/stacks_connect'
-	import { logUserOut, addresses } from '$lib/stacks_connect'
+	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
+	import { CONFIG } from '$lib/config';
 
-	const coordinator = isCoordinator(addresses().stxAddress)
+	const coordinator = (loggedIn()) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
 		const res = await loginStacksJs(initApplication, $sbtcConfig);
@@ -20,9 +21,6 @@
 		logUserOut();
 		await sbtcConfig.update((conf:SbtcConfig) => {
 			conf.loggedIn = false;
-			conf.addressObject = undefined;
-			conf.pegInTransaction = undefined;
-			conf.pegOutTransaction = undefined;
 			return conf;
 		});
 		goto('/')

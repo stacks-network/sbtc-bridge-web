@@ -30,6 +30,7 @@
 
   const updater = (e:any) => {
     try {
+      reason = undefined
       const vstr = value.toString()
       if (vstr.endsWith('.') || vstr.length < 3) return
       if (denomination === 'bitcoin') {
@@ -61,7 +62,7 @@
       }
       //dispatch('updated', inputData);
     } catch(err:any) {
-      reason = err.message || 'Error - is the address a valid';
+      if (value) console.log(err.message + ' Error - is the address a valid');
     }
     document.getElementById(inputData.field + '-btcamount')?.focus();
   }
@@ -76,7 +77,7 @@
   const setDisplayValue = () => {
     denomination = $sbtcConfig.userSettings.currency.denomination;
     value = inputData.valueSat;
-    inputData.label = 'Amount (satoshis)'
+    if (!inputData.label) inputData.label = 'Amount (satoshis)'
     if (denomination === 'bitcoin') {
       inputData.valueBtc = satsToBitcoin(inputData.valueSat)
       inputData.label = 'Amount (bitcoin)'
@@ -138,7 +139,7 @@
   </div>
   {#if currency}
   <div class="text-lg mt-1 text-left flex items-center justify-between">
-    <p>{currency.symbol + ' ' + fmtNumber(currency.fifteen * inputData.valueBtc) + ' ' + currency.currency}</p>
+    <p>{#if inputData.valueSat && inputData.valueSat > 0}{currency.symbol + ' ' + fmtNumber(currency.fifteen * inputData.valueBtc) + ' ' + currency.currency}{/if}</p>
   </div>
   {/if}
 

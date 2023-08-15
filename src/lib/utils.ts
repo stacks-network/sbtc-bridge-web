@@ -1,12 +1,15 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject } from 'sbtc-bridge-lib'
+import type { AddressMempoolObject, KeySet } from 'sbtc-bridge-lib'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
+import { hex } from '@scure/base';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
 export const xsbp = 700
+const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
+const revealFee = 5000;
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -18,7 +21,6 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 const stxPrecision = 1000000
-
 
 export function bitcoinToSats(amountBtc:number) {
   return  Math.round(amountBtc * btcPrecision)

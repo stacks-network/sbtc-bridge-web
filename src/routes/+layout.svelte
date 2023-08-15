@@ -19,14 +19,14 @@
 	setConfig($page.url.search);
 	const search = $page.url.search;
 	if (!isLegal(location.href)) {
-		componentKey++;
+		//componentKey++;
 		goto('/' + '?net=testnet')
 	}
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
 			nav.cancel();
 			loginStacksJs(initApplication, $sbtcConfig);
-			componentKey++;
+			//componentKey++;
 			return;
 		}
 		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
@@ -43,10 +43,14 @@
 	let inited = false;
 	let errorReason:string|undefined;
 
+	const initApp = async () => {
+		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
+	}
+
 	onMount(async () => {
 		try {
 			//openWebSocket()
-			await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig);
+			await initApp();
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
@@ -59,7 +63,7 @@
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
 		<div>
 			{#key componentKey}
-			<Header on:init_application={initApplication} />
+			<Header on:init_application={initApp} />
 			{/key}
 		</div>
 		<div class="flex min-h-[calc(100vh-160px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
