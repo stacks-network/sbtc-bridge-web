@@ -1,15 +1,21 @@
 
 import { bytesToHex } from '@stacks/common';
-import { hashMessage } from '@stacks/encryption';
 import {
 	createStacksPrivateKey,
 	getPublicKey,
 	publicKeyToString,
 	signMessageHashRsv,
   } from '@stacks/transactions';
-import { hex } from '@scure/base';
 import { sha256 } from '@noble/hashes/sha256';
-import { concatBytes, utf8ToBytes } from '@stacks/common';
+import * as btc from '@scure/btc-signer';
+import { hex } from '@scure/base';
+import * as secp from '@noble/secp256k1';
+import { c32addressDecode } from 'c32check';
+import * as P from 'micro-packed';
+import { inputAmt, addInputs } from 'sbtc-bridge-lib'
+import { MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET } from 'sbtc-bridge-lib'
+const concat = P.concatBytes;
+const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
 
 export const keyChain = {
 	"mnemonic": "foster raise devote wear great volcano spring chapter among violin bleak syrup rent sphere coyote client govern spirit good risk cruise twice trick jealous",
@@ -52,4 +58,134 @@ export function signMessageDirect(message: string) {
 	  publicKey: publicKeyToString(getPublicKey(privK)),
 	};
 }
-  
+
+
+/**
+export function calculateDepositFees (network:string, opDrop:boolean, amount:number, btcFeeRates:any, addressInfo:any, commitTxScriptAddress:string, data:Uint8Array|undefined) {
+	try {
+		const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+		let vsize = 0;
+		const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
+		addInputs(network, amount, 50000, tx, true, addressInfo.utxos, hex.encode(secp.getPublicKey(privKey, true)));
+		if (!opDrop) {
+			if (data) tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: BigInt(0) });
+			tx.addOutputAddress(commitTxScriptAddress, BigInt(amount), net);
+		} else {
+			tx.addOutputAddress(commitTxScriptAddress, BigInt(amount), net );
+		}
+		const changeAmount = inputAmt(tx) - (amount); 
+		if (changeAmount > 0) tx.addOutputAddress(addressInfo.address, BigInt(changeAmount), net);
+		//tx.sign(privKey);
+		//tx.finalize();
+		vsize = tx.vsize;
+		const fees = [
+			Math.floor(vsize * btcFeeRates.feeInfo['low_fee_per_kb'] / 1024),
+			Math.floor(vsize * btcFeeRates.feeInfo['medium_fee_per_kb'] / 1024),
+			Math.floor(vsize * btcFeeRates.feeInfo['high_fee_per_kb'] / 1024),
+		]
+		return fees;
+	} catch (err:any) {
+		return [ 850, 1000, 1150]
+	}
+}
+export function buildOpReturnDepositTransaction(network:string, amount:number, btcFeeRates:any, addressInfo:any, stacksAddress:string, sbtcWalletAddress:string, cardinal:string, userPaymentPubKey:string) {
+	const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+	if (!stacksAddress) throw new Error('Stacks address required!');
+	const data = buildDepositPayloadOpReturn(network, stacksAddress);
+	const txFees = calculateDepositFees(network, false, amount, btcFeeRates.feeInfo, addressInfo, sbtcWalletAddress, data)
+	const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
+	addInputs(network, amount, 5000, tx, false, addressInfo.utxos, userPaymentPubKey);
+	tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: BigInt(0) });
+	tx.addOutputAddress(sbtcWalletAddress, BigInt(amount), net);
+	const changeAmount = 1000; 
+	if (changeAmount > 0) tx.addOutputAddress(cardinal, BigInt(changeAmount), net);
+	return tx;
+}
+
+function addInputs (network:string, amount:number, revealPayment:number, tx:btc.Transaction, feeCalc:boolean, utxos:Array<UTXO>, userPaymentPubKey:string, userSchnorrPubKey:string) {
+	const bar = revealPayment + amount;
+	let amt = 0;
+	for (const utxo of utxos) {
+		const hexy = (utxo.tx.hex) ? utxo.tx.hex : utxo.tx 
+		const script = btc.RawTx.decode(hex.decode(hexy))
+		if (amt < bar && utxo.status.confirmed) {
+			amt += utxo.value;
+			//const pubkey = '0248159447374471c5a6cfa18c296e6e297dbf125a9e6792435a87e80c4f771493'
+			//const script1 = (btc.p2ms(1, [hex.decode(pubkey)]))
+			const txType = utxo.tx.vout[utxo.vout].scriptPubKey.type;
+			if (txType === 'scripthash') {
+				// educated guess at the p2sh wrapping based on the type of the other (non change) output...
+				const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+				let p2shObj;
+				// p2tr cannont be wrapped in p2sh !!!
+				const txTypes = ['witness_v0_keyhash', 'pubkeyhash', 'witness_v0_scripthash']
+				for (const txType of txTypes) {
+					try {
+						if (txType === 'witness_v0_keyhash') {
+							p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net)
+						} else if (txType === 'witness_v1_taproot') {
+							p2shObj = btc.p2sh(btc.p2tr(hex.decode(userSchnorrPubKey)), net)
+						} else if (txType.indexOf('multi') > -1) {
+							p2shObj = btc.p2sh(btc.p2ms(1, [hex.decode(userPaymentPubKey)]), net)
+						} else if (txType.indexOf('pubkeyhash') > -1) {
+							p2shObj = btc.p2sh(btc.p2pkh(hex.decode(userPaymentPubKey)), net)
+						} else if (txType.indexOf('witness_v0_scripthash') > -1) {
+							p2shObj = btc.p2sh(btc.p2wsh(btc.p2wpkh(hex.decode(userPaymentPubKey))), net)
+						}
+						const nextI = redeemScriptAddInput(utxo, p2shObj, hexy)
+						tx.addInput(nextI);
+						console.log('Tx type: ' + txType + ' --> input added')
+					} catch (err:any) {
+						console.log('Error: not tx type: ' + txType)
+					}
+				}
+			} else {
+				let witnessUtxo = {
+					script: script.outputs[utxo.vout].script,
+					amount: BigInt(utxo.value)
+				}
+				if (feeCalc) {
+					witnessUtxo = {
+						amount: BigInt(utxo.value),
+						script: btc.p2wpkh(secp.getPublicKey(privKey, true)).script,
+					}		
+				}
+				const nextI:btc.TransactionInput = {
+					txid: hex.decode(utxo.txid),
+					index: utxo.vout,
+					nonWitnessUtxo: hexy,
+					witnessUtxo
+				}
+				tx.addInput(nextI);
+			}
+		}
+	}
+}
+
+function redeemScriptAddInput (utxo:any, p2shObj:any, hexy:any) {
+	return {
+		txid: hex.decode(utxo.txid),
+		index: utxo.vout,
+		nonWitnessUtxo: hexy,
+		redeemScript: p2shObj.redeemScript
+	}
+
+}
+const PEGIN_OPCODE = '3C';
+
+function buildDepositPayloadOpReturn(net:any, address:string):Uint8Array {
+	const magicBuf = (typeof net === 'object' && net.bech32 === 'tb') ? hex.decode(MAGIC_BYTES_TESTNET) : hex.decode(MAGIC_BYTES_MAINNET);
+	const opCodeBuf = hex.decode(PEGIN_OPCODE);
+	const addr = c32addressDecode(address.split('.')[0])
+	const addr0Buf = hex.decode(addr[0].toString(16));
+	const addr1Buf = hex.decode(addr[1]);
+
+	let buf1 = concat(opCodeBuf, addr0Buf, addr1Buf);
+	if (address.indexOf('.') > -1) {
+		const cnameBuf = new TextEncoder().encode(address.split('.')[1]);
+		buf1 = concat(buf1, cnameBuf);
+	}
+			
+	return concat(magicBuf, buf1)
+}
+ */

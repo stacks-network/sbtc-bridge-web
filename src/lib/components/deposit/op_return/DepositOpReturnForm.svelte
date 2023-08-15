@@ -2,29 +2,25 @@
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
   import { goto } from "$app/navigation";
   import { CONFIG } from '$lib/config';
-  import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte';
-  import InputTextField from '$lib/components/deposit/InputTextField.svelte';
-  import BitcoinAmountField from '$lib/components/deposit/BitcoinAmountField.svelte';
-  import { sbtcConfig } from '$stores/stores'
-  import PegInTransaction from '$lib/domain/PegInTransaction';
-  import type { PegInTransactionI } from '$lib/domain/PegInTransaction';
-  import type { PeginRequestI, PegInData, CommitKeysI } from 'sbtc-bridge-lib'
-  import { verifyStacksPricipal, verifyAmount, addresses } from '$lib/stacks_connect';
-  import { getTestAddresses } from 'sbtc-bridge-lib'
-  import type { SbtcConfig } from '$types/sbtc_config';
-  import { makeFlash } from "$lib/stacks_connect";
-  import { fetchPeginById, updatePeginCommit } from "$lib/bridge_api";
-  import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
-  import ServerError from "$lib/components/common/ServerError.svelte";
-  import Button from '$lib/components/shared/Button.svelte';
-  import Banner from '$lib/components/shared/Banner.svelte';
-  import { bitcoinBalanceFromMempool }  from "$lib/utils";
-  import SignTransactionWeb from "$lib/components/deposit/op_return/SignTransactionWeb.svelte";
-  import { userSatBtc } from '$lib/utils'
+  import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte'
+	import { buildDepositPayload, getOpReturnDepositRequest, maxCommit, type PeginRequestI } from "sbtc-bridge-lib";
+	import { sbtcConfig } from "$stores/stores";
+	import type { SbtcConfig } from "$types/sbtc_config";
+	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
+	import { fetchPeginById, fetchUtxoSet, updatePeginCommit } from "$lib/bridge_api";
+	import { userSatBtc } from "$lib/utils";
+	import InputTextField from "../InputTextField.svelte";
+	import Button from "$lib/components/shared/Button.svelte";
+	import BitcoinAmountField from "../BitcoinAmountField.svelte";
+	import Banner from "$lib/components/shared/Banner.svelte";
+	import SignTransactionWeb from "./SignTransactionWeb.svelte";
+	import StatusCheck from "../StatusCheck.svelte";
+	import ServerError from "$lib/components/common/ServerError.svelte";
+  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+//  import {calculateDepositFees } from '$lib/stacks_connect_bug'
 
   const dispatch = createEventDispatcher();
 
-  let piTx:PegInTransactionI;
   let pegin:PeginRequestI;
   let balanceMsg = false;
 
@@ -35,6 +31,10 @@
   let componentKey = 0;
   let timeLineStatus = 1;
   let peginRequest:PeginRequestI;
+  let bitcoinAddress:string;
+  let stacksAddress:string;
+  let amount:number;
+  let addressInfo:any;
 
   const input0Data = {
     field: 'btcAddress',
@@ -66,29 +66,15 @@
     const input = event.detail;
     if (input.field === 'address') {
       verifyStacksPricipal(input.value);
-      piTx.pegInData.stacksAddress = input.value;
+      stacksAddress = input.value;
     }
     conf.pegInMongoId = undefined;
-    conf.pegInTransaction = piTx;
     sbtcConfig.update(() => conf);
     //initComponent(piTx.pegInData.amount);
     componentKey++;
   }
 
   let txWatcher:NodeJS.Timer;
-  const startTxWatcher = async () => {
-    const mongoId = $sbtcConfig.pegInMongoId;
-    if (!mongoId) return;
-    txWatcher = setInterval(async function () {
-      pegin = await fetchPeginById(mongoId);
-      if (pegin.status === 2) {
-        timeLineStatus = 3;
-        dispatch('time_line_status_change', { timeLineStatus });
-        stopTxWatcher()
-      }
-    }, 60000)
-  }
-
   const stopTxWatcher = () => {
     if (txWatcher) clearInterval(txWatcher)
   }
@@ -103,29 +89,25 @@
     const button = event.detail;
     if (button.target === 'openInvoice') {
       try {
+        bitcoinAddress = input0Data.value;
+        if (bitcoinAddress !== $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal) addressInfo = await fetchUtxoSet(bitcoinAddress)
         const amt = input2Data.valueSat
         verifyAmount(amt);
         if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
-          peginRequest.amount = piTx.pegInData.amount = amt
+          peginRequest.amount = amount = amt
           const newP = await updatePeginCommit(peginRequest)
           if (newP && newP.status !== 404) peginRequest = newP;
         } else {
-          piTx.pegInData.amount = amt;
+          amount = amt;
         }
         const conf:SbtcConfig = $sbtcConfig;
-        conf.pegInTransaction = piTx;
         sbtcConfig.update(() => conf);
-        try {
-          peginRequest = piTx.getOpReturnPeginRequest();
-        } catch (err) {
-          piTx.commitKeys = commitAddresses(); // make sure the addresses are all hex encoded and serialisation safe.
-          peginRequest = piTx.getOpReturnPeginRequest();
-        }
-        peginRequest.originator = addresses().stxAddress; // retain the sender in case the address in UI changes.
+        peginRequest = getOpReturnDepositRequest(network, amount, $sbtcConfig.keys.deposits, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData!.sbtcWalletAddress, bitcoinAddress);
+        peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress; // retain the sender in case the address in UI changes.
         timeLineStatus = 2;
         dispatch('time_line_status_change', { timeLineStatus });
       } catch(err:any) {
-        amountErrored = 'Please enter an amount thats more than the minimum threshold'
+        amountErrored = 'Minimum deposit is ' + satsToBitcoin(minimumDeposit) + ' btc'
         makeFlash(document.getElementById(input2Data.field))
       }
     } else if (button.target === 'back') {
@@ -150,62 +132,22 @@
     //updateConfig();
   }
 
-  const commitAddresses = ():CommitKeysI => {
-    const addrs = addresses()
-    const stacksAddress = (piTx && piTx.pegInData?.stacksAddress) ? piTx.pegInData?.stacksAddress : addrs.stxAddress;
-    let sbtcWalletAddress = $sbtcConfig.sbtcContractData.sbtcWalletAddress as string;
-    let testAddrs;
-    if ($sbtcConfig.userSettings.testAddresses) {
-      testAddrs = getTestAddresses(CONFIG.VITE_NETWORK);
-    }
-    //const xyWebWalletPubKey = hex.decode(addrs.btcPubkeySegwit1);
-    //let xOnlyPubKey = hex.encode(xyWebWalletPubKey.subarray(1));
-    //const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-    //const outTr = { type: 'tr', pubkey: hex.decode(addrs.btcPubkeySegwit1) }
-    //const addrO = btc.Address(net).encode(outTr);
-    //const addrScript = btc.Address(net).decode(addrs.ordinal);
-    //if (addrScript.type !== 'tr') throw new Error('Expecting taproot address')
-    //const xOnlyPubKey = hex.encode(addrScript.pubkey)
-    return {
-      fromBtcAddress: addrs.cardinal,
-      sbtcWalletAddress,
-      revealPub: $sbtcConfig.keys.deposits.revealPubKey, //(testAddrs) ? testAddrs.revealPub : sbtcWallet.pubKey,
-      reclaimPub: $sbtcConfig.keys.deposits.reclaimPubKey,
-      stacksAddress
-    }
-  }
-
   /**
    * 1. Create or hydrate a deposit object.
    * 2. Check server for an existing invoice correspondng to the hydrated deposit
    */
-  const initComponent = async (amt:number) => {
-    piTx = await PegInTransaction.create(network, commitAddresses(), $sbtcConfig.btcFeeRates);
-    if (!piTx.pegInData) piTx.pegInData = {} as PegInData;
-    const userBalance = $sbtcConfig.addressObject;
-    if (!userBalance) throw new Error('Address data is missing ')
-    if (!piTx.pegInData.stacksAddress && userBalance.stxAddress) piTx.pegInData.stacksAddress = userBalance.stxAddress;
-    if (amt === -1) {
-      piTx.pegInData.amount = bitcoinBalanceFromMempool(userBalance?.cardinalInfo) - piTx.fee;
-    } else if (amt >= piTx.maxCommit() - piTx.fee) {
-      piTx.pegInData.amount = piTx.maxCommit() - piTx.fee;
-    } else {
-      piTx.pegInData.amount = amt;
-    }
-    if (piTx.pegInData.amount <= 0) {
-      piTx.pegInData.amount = 0;
-      balanceMsg = true;
-    }
-    input0Data.value = userBalance?.cardinal || '';
-    input0Data.resetValue = userBalance?.cardinal || '';
+  const initComponent = async () => {
+    //const tx = buildOpReturnTransaction(network, amount, $sbtcConfig.btcFeeRates, addressInfo, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+    input0Data.value = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || '';
+    input0Data.resetValue = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || '';
     input0Data.hint = '';
-    input1Data.value = piTx.pegInData.stacksAddress || '';
+    input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
-    input2Data.valueSat = piTx.pegInData.amount;
-    input2Data.hint = 'Balance: ' + userSatBtc(piTx.maxCommit(), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
+    input2Data.valueSat = amount;
+    if (amount) input2Data.valueBtc = satsToBitcoin(amount);
+    input2Data.hint = 'Balance: ' + userSatBtc(maxCommit(addressInfo), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });
-    conf.pegInTransaction = piTx;
     sbtcConfig.update(() => conf);
   }
 
@@ -215,8 +157,12 @@
 
   onMount(async () => {
     try {
-      await initComponent(-1);
-      //startTxWatcher()
+      bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+      addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+      stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
+      //const data = buildDepositPayload(network, 1000, stacksAddress, false, undefined);
+      //calculateDepositFees(CONFIG.VITE_NETWORK, false, 1000, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.sbtcContractData.sbtcWalletAddress, data)
+      await initComponent();
       inited = true;
       dispatch('inited', { inited });
     } catch(err) {
@@ -234,7 +180,7 @@
       {#key componentKey}
       <div class="mb-5">
         <InputTextField
-          readonly={true}
+          readonly={false}
           inputData={input0Data}
           on:updated={fieldUpdated}
         />
@@ -269,7 +215,7 @@
         {/if}
       {/key}
     {:else if timeLineStatus === 2}
-      <SignTransactionWeb {piTx} {peginRequest} on:update_transaction={updateTransaction}/>
+      <SignTransactionWeb {amount} {addressInfo} {peginRequest} on:update_transaction={updateTransaction}/>
     {:else if timeLineStatus === 3}
       <StatusCheck {pegin} on:clicked={doClicked}/>
     {/if}

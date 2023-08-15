@@ -1,13 +1,15 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject } from 'sbtc-bridge-lib'
+import type { AddressMempoolObject, ExchangeRate, KeySet } from 'sbtc-bridge-lib'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
 export const xsbp = 700
+const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
+const revealFee = 5000;
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',
@@ -19,26 +21,6 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 const stxPrecision = 1000000
-
-export function checkWalletAddress (data:any) {
-  if (!data.sbtcContractData.sbtcWalletAddress) {
-    const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-    const xOnlyKey = (data.sbtcContractData.sbtcWalletPublicKey);
-    try {
-      const assumeTweakedPubKey = hex.decode(xOnlyKey);
-      const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
-
-      //const trObj1 = btc.p2pkh(hex.decode(xOnlyKey), net);
-      
-      //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-      //if (trObj.type === 'tr') 
-      data.sbtcContractData.sbtcWalletAddress = addr;
-    } catch(err:any) {
-      //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-      console.log(err.message)
-    }
-  }
-}
 
 export function bitcoinToSats(amountBtc:number) {
   return  Math.round(amountBtc * btcPrecision)
@@ -161,6 +143,15 @@ export function compare( a:PeginRequestI, b:PeginRequestI ) {
     return -1;
   }
   if ( a.status > b.status ){
+    return 1;
+  }
+  return 0;
+}
+export function compareCurrencies( a:{ value: string; name: string; }, b:{ value: string; name: string; } ) {
+  if ( a.value < b.value ){
+    return -1;
+  }
+  if ( a.value > b.value ){
     return 1;
   }
   return 0;

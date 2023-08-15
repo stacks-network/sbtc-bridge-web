@@ -3,7 +3,7 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
   import type { ExchangeRate } from 'sbtc-bridge-lib';
-  import { fmtNumber } from '$lib/utils'
+  import { compareCurrencies } from '$lib/utils'
 	import { CheckCircle, ChevronDown, Icon } from "svelte-hero-icons"
   import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
 
@@ -56,6 +56,7 @@
       for (var rate of exchangeRates) {
         currencies.push({ value: rate.currency, name: rate.name})
       }
+      currencies.sort(compareCurrencies);
       const currency = $sbtcConfig.userSettings.currency.myFiatCurrency.currency;
       const rateNow = exchangeRates.find((o:any) => o.currency === currency)
       if (rateNow) setDefaultCurrency(rateNow)
@@ -104,7 +105,7 @@
         </div>
         {#each currencies as currency}
           <DropdownItem on:change={(e) => changeCurrency(e) } bind:value={selected} defaultClass="px-3 py-3 text-sm hover:bg-gray-1000">
-            <span class="flex items-center justify-between">
+            <span class="flex items-center justify-between" on:keydown on:click={() => setCurrency(currency.value)}>
               <span class="block">
                 <span class="block">{currency.name}</span>
                 <span class="block">{currency.value}</span>

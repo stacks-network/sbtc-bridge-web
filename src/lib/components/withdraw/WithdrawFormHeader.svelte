@@ -8,7 +8,7 @@
 
 <div class="flex w-full items-center justify-between flex-wrap mb-10">
   <h2 class="text-4xl font-medium">
-    Withdraw BTC
+    Withdraw
   </h2>
   <div class="-mr-10">
     <SwitchGraphic reverse={false}/>

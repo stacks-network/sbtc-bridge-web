@@ -1,6 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import { addresses } from '$lib/stacks_connect'
+import { CONFIG } from '$lib/config';
+import { sbtcConfig } from '$stores/stores';
 import { COMMS_ERROR } from '$lib/utils.js'
 import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
@@ -22,12 +23,12 @@ const getReclaimUrl = (pegin:any) => {
 const fetchDeposits = async (mine:boolean) => {
     myDepositsFilter = mine;
     if (myDepositsFilter) {
-        peginRequests = await fetchPeginsByStacksAddress(addresses().stxAddress)
+        peginRequests = await fetchPeginsByStacksAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
     } else {
         peginRequests = await fetchPegins()
     }
     // note this end point recovers the status 2 commitments from bitcoin - using the cardinal to find utxo's.
-    //peginRequests = await fetchCommitments($sbtcConfig?.addressObject?.cardinal!, $sbtcConfig?.addressObject?.stxAddress!, $sbtcConfig?.sbtcContractData.sbtcWalletAddress!, 5000)
+    //peginRequests = await fetchCommitments($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal!, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress!, $sbtcConfig?.sbtcContractData.sbtcWalletAddress!, 5000)
 
     peginRequests.sort(compare)
 }
@@ -119,6 +120,7 @@ onMount(async () => {
                     {/each}
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>

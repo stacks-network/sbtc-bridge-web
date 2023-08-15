@@ -1,56 +1,19 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import ReclaimOrRevealTransaction from '$lib/domain/ReclaimOrRevealTransaction';
 import { goto } from "$app/navigation";
-import { sbtcConfig } from '$stores/stores'
-import { hex, base64 } from '@scure/base';
-import * as btc from '@scure/btc-signer';
-import { sign } from '$lib/bridge_api';
-import type { PeginRequestI, WrappedPSBT } from 'sbtc-bridge-lib'
+import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { toStorable } from 'sbtc-bridge-lib'
 import TrCommit from '$lib/components/transactions/TrCommit.svelte';
-import TrRevealReclaim from '$lib/components/transactions/TrRevealReclaim.svelte';
 import { explorerBtcTxUrl } from '$lib/utils'
-import Button from '$lib/components/shared/Button.svelte';
-import { ChevronLeft } from 'svelte-hero-icons';
+import ChevronUp from "$lib/components/shared/ChevronUp.svelte";
 import PendingDeposit from '$lib/components/transactions/PendingDeposit.svelte';
 import CommittedDeposit from '$lib/components/transactions/CommittedDeposit.svelte';
 
-// fetch/hydrate data from local storage
 export let data:any;
 let peginRequest:PeginRequestI = data;
-let revealTx:ReclaimOrRevealTransaction;
-let reclaimTx:ReclaimOrRevealTransaction;
-//let signedTx: btc.Transaction;
 
 let inited = false;
 let errorReason:string|undefined;
-let reclaimBtcTx:btc.Transaction;
-let revealBtcTx:btc.Transaction;
-let wrappedPsbt:WrappedPSBT = {} as WrappedPSBT;
-
-const doSign = async (tx:Uint8Array) => {
-	if (!peginRequest._id) return
-	wrappedPsbt = {
-		txtype: 'reveal',
-		depositId: peginRequest._id
-	}
-	wrappedPsbt = await sign(wrappedPsbt);
-	if (typeof wrappedPsbt.signedTransaction === 'string') {
-		console.log('hex: ', wrappedPsbt.signedTransaction)
-		console.log('b64: ', wrappedPsbt.signedPsbt)
-	}
-}
-
-const signReveal = async () => {
-	doSign(revealBtcTx.toBytes());
-}
-
-const signReclaim = async () => {
-	doSign(reclaimBtcTx.toBytes())
-}
-
-$: signedTx = wrappedPsbt.signedPsbt;
 
 onMount(async () => {
 	if (!peginRequest) {
@@ -63,24 +26,6 @@ onMount(async () => {
 			peginRequest.commitTxScript = script;
 		}
 	}
-    revealTx = new ReclaimOrRevealTransaction(peginRequest)
-    reclaimTx = new ReclaimOrRevealTransaction(peginRequest)
-
-	/**
-	 await revealTx.fetchUtxos(false);
-	await reclaimTx.fetchUtxos(true);
-	if (revealTx.transaction && revealTx.transaction.vout && revealTx.transaction.vout.length > 1) {
-		peginRequest.senderAddress = revealTx.transaction.vout[1].scriptPubKey.address
-	}
-	try {
-		if (revealTx.commitTx.btcTxid) {
-			revealBtcTx = revealTx.buildTransaction(false);
-			reclaimBtcTx = reclaimTx.buildTransaction(true);
-		}
-	} catch(err) {
-		console.error('Creating transaction failed: ', err)
-	}
-	**/
 	inited = true;
 })
 </script>
@@ -94,7 +39,7 @@ onMount(async () => {
 	<div class="mx-auto max-w-2xl">
 		<div class="flex justify-between">
 			<a href="/transactions" class="flex items-center mb-10">
-				<ChevronLeft size="20" class="dark:text-white"/> Back to Transaction history
+				&lt; Back to Transaction history
 			</a>
 		</div>
 		<div class="flex flex-col p-5 gap-2 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
@@ -105,29 +50,10 @@ onMount(async () => {
 			{:else}
 				<div class="mb-5 flex justify-between align-middle">
 					<h1 class="text-3xl font-medium">Details</h1>
-					{#if peginRequest.status === 2}
-						<div class="flex">
-							{#if $sbtcConfig.userSettings.debugMode}
-							<div class=""><Button darkScheme={false} label={'Reveal'} target={'signReveal'} on:clicked={() => signReveal()}/></div>
-							{/if}
-							<Button darkScheme={true} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/>
-						</div>
-					{/if}
 				</div>
 				<div class="flex flex-col gap-10">
 					{#if inited}
 						<TrCommit {peginRequest}/>
-						{#if signedTx}
-						<div class="grid grid-cols-12">
-							<div class="col-span-12">
-								<div class="d-flex justify-content-between">
-									<span>Signed Raw Tx</span>
-								</div>
-								<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hex.encode(hex.decode(signedTx))}</textarea>
-								<textarea rows="6" style="padding: 10px; width: 100%;" readonly>{hex.encode(hex.decode(signedTx))}</textarea>
-							</div>
-						</div>
-						{/if}
 						{#if peginRequest.status === 4 && peginRequest.reclaim}
 							<div class="grid grid-cols-12 my-4">
 								<div class="md:grid-cols-2 grid-cols-12">Reclaimed</div>
@@ -138,8 +64,6 @@ onMount(async () => {
 								<div class="md:grid-cols-2 grid-cols-12">Revealed</div>
 								<div class="md:grid-cols-10 grid-cols-12"><a href={explorerBtcTxUrl(peginRequest.reveal.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.reveal.btcTxid)}</a></div>
 							</div>
-						{:else if peginRequest.status === 2}
-							<TrRevealReclaim {peginRequest} {reclaimBtcTx} {revealBtcTx}/>
 						{/if}
 					{:else}
 						<div class="flex justify-between">Loading data...</div>

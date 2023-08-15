@@ -8,6 +8,7 @@
 	import Currencies from '$lib/components/settings/Currencies.svelte';
 	import Addresses from '$lib/components/settings/Addresses.svelte';
 	import Networks from '$lib/components/settings/Networks.svelte';
+	import type { ExchangeRate } from 'sbtc-bridge-lib';
 
 	const toggleSettings = (arg:string) => {
 		const conf:SbtcConfig = $sbtcConfig;
@@ -26,7 +27,7 @@
 				testAddresses: false,
 				currency: {
 					cryptoFirst: false,
-					myFiatCurrency: 'USD',
+					myFiatCurrency: { currency: 'USD'} as ExchangeRate,
 					denomination: 'bitcoin'
 				}
 			}
