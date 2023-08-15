@@ -3,8 +3,8 @@ import { mintTo } from "$lib/sbtc_admin.js";
 import { sbtcConfig } from '$stores/stores'
 	import Button from "../shared/Button.svelte";
 
-let pegInAmount:number|undefined = $sbtcConfig?.pegInTransaction?.pegInData.amount;
-let stxAddress:string|undefined = $sbtcConfig?.pegInTransaction?.pegInData.stacksAddress;
+let pegInAmount:number|undefined;
+let stxAddress:string|undefined;
 let btcTxid:string|undefined;
 let error:string|undefined;
 const mint = async () => {

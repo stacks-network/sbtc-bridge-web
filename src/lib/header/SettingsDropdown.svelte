@@ -1,70 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { Button, Dropdown, DropdownItem, Toggle, Helper } from 'flowbite-svelte'
-	import { Icon, ArrowsRightLeft, ClipboardDocument, ArrowUpRight } from "svelte-hero-icons"
+	import { Button } from 'flowbite-svelte'
 
-	import { CONFIG, setConfig } from '$lib/config';
-	import { truncate, explorerAddressUrl, explorerBtcAddressUrl } from '$lib/utils'
+	import { CONFIG } from '$lib/config';
+	import { truncate } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
-	import { fetchSbtcBalance, addresses } from '$lib/stacks_connect'
 	import { goto } from '$app/navigation';
-
-	const getContractAddress = () => {
-		const contract = CONFIG.VITE_SBTC_CONTRACT_ID
-		return truncate(contract.split('.')[0]) + '.' + contract.split('.')[1]
-	}
-	const getCoordinator = (full:boolean) => {
-		if ($sbtcConfig?.sbtcContractData?.coordinator) {
-			if (full) return $sbtcConfig.sbtcContractData.coordinator?.addr.value
-			return truncate($sbtcConfig?.sbtcContractData?.coordinator?.addr.value, 8)
-		}
-		return 'not known'
-	}
-	const getOwner = (full:boolean) => {
-		if ($sbtcConfig?.sbtcContractData?.contractOwner) {
-			if (full) return $sbtcConfig.sbtcContractData.contractOwner
-			return truncate($sbtcConfig.sbtcContractData.contractOwner, 8)
-		}
-		return 'not known'
-	}
-	const getAddress = (full:boolean) => {
-		if ($sbtcConfig?.sbtcContractData?.sbtcWalletAddress) {
-			if (full) return $sbtcConfig.sbtcContractData.sbtcWalletAddress
-			return truncate($sbtcConfig.sbtcContractData.sbtcWalletAddress, 8).toUpperCase()
-		}
-		return 'not connected'
-	}
-
-	const toggleSettings = (arg:string) => {
-		const conf:SbtcConfig = $sbtcConfig;
-		if (arg === 'txmode') conf.userSettings.useOpDrop = !conf.userSettings.useOpDrop;
-		if (arg === 'debug') conf.userSettings.debugMode = !conf.userSettings.debugMode;
-		if (arg === 'testAddresses') conf.userSettings.testAddresses = !conf.userSettings.testAddresses;
-		if (arg === 'cryptoFirst') conf.userSettings.currency.cryptoFirst = !conf.userSettings.currency.cryptoFirst;
-		sbtcConfig.update(() => conf);
-	}
-
-	const toggleNetwork = async () => {
-		let net = 'mainnet';
-		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
-		setConfig(net);
-		await fetchSbtcBalance();
-		sbtcConfig.update((conf:SbtcConfig) => {
-			conf.stxAddress = addresses().stxAddress;
-			if (conf.pegInTransaction) {
-				conf.pegInTransaction.fromBtcAddress = addresses().ordinal;
-				if (conf.pegInTransaction.pegInData) conf.pegInTransaction.pegInData.stacksAddress = addresses().stxAddress;
-			}
-			if (conf.pegOutTransaction) {
-				conf.pegOutTransaction.fromBtcAddress = addresses().ordinal;
-			}
-			return conf;
-		});
-		const url = new URL(location.href);
-		url.searchParams.set('net', net);
-		location.assign(url.search);
-	}
 
 	onMount(async () => {
 		if (typeof $sbtcConfig.userSettings === 'undefined') {

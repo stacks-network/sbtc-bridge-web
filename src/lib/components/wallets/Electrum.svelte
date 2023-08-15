@@ -7,7 +7,7 @@ import { explorerBtcAddressUrl } from "$lib/utils";
 import { sbtcConfig } from '$stores/stores';
 
 const network = CONFIG.VITE_NETWORK;
-const from = ($sbtcConfig.pegIn) ? $sbtcConfig?.pegInTransaction?.fromBtcAddress : $sbtcConfig?.pegOutTransaction?.fromBtcAddress;
+const from = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
 const getExplorerUrl = () => {
   return explorerBtcAddressUrl(from!)
 }

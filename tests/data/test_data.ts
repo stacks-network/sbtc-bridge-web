@@ -76,8 +76,6 @@ export const sbtcConfig = {
 		}
 	},
 	sigData: undefined,
-	pegInTransaction: undefined,
-	pegOutTransaction: undefined
 }
 
 

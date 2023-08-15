@@ -5,9 +5,8 @@ import { sbtcConfig } from '$stores/stores'
 import { fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup } from '@stacks/connect';
-import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject } from 'sbtc-bridge-lib' 
+import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import type { AddressObject, SbtcContractDataI } from 'sbtc-bridge-lib' 
 import { verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
@@ -16,11 +15,14 @@ import { hex } from '@scure/base';
 import type { ExchangeRate } from 'sbtc-bridge-lib';
 import { schnorr } from '@noble/curves/secp256k1';
 import * as btc from '@scure/btc-signer';
+import { AddressPurposes, getAddress } from 'sats-connect'
+import type { GetAddressOptions } from 'sats-connect'
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 
 export const webWalletNeeded = false;
+export const minimumDeposit = 10000
 export const revealPayment = 10001
 
 const allowed = [
@@ -58,11 +60,29 @@ export function encodeStacksAddress (network:string, b160Address:string) {
 	return address
 }
 
-export async function fetchSbtcBalance ():Promise<AddressObject> {
-	const adrds:AddressObject = addresses();
+export async function fetchSbtcBalance (conf:SbtcConfig, fromLogin:boolean|undefined) {
+	const localKs = conf.keySets[CONFIG.VITE_NETWORK];
+	//const sessionStacks = getStacksAddress(); // check not switching accounts
+	if (!fromLogin && localKs	&& localKs.stxAddress && localKs.cardinal) { // && sessionStacks === localKs.stxAddress) {
+		conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(localKs)
+		sbtcConfig.update(() => conf);
+		return conf;
+	} else {
+		addresses(async function(addr:AddressObject) {
+			if (addr) {
+				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(addr)
+				sbtcConfig.update(() => conf);
+				return conf;
+			}
+		});
+	}
+}
+async function getBalances(addressObject:AddressObject):Promise<AddressObject> {
 	let result:AddressObject;
+	const tempSegwit0 = addressObject.btcPubkeySegwit0
+	const tempSegwit1 = addressObject.btcPubkeySegwit1
 	try {
-		result = await fetchUserBalances(adrds);
+		result = await fetchUserBalances(addressObject);
 		try {
 			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[CONFIG.VITE_SBTC_CONTRACT_ID + '::sbtc'].balance)
 		} catch (err) {
@@ -70,34 +90,74 @@ export async function fetchSbtcBalance ():Promise<AddressObject> {
 			try { result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens['ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant::sbtc'].balance) }
 			catch (err) { result.sBTCBalance = 0 }
 		}
-
 	} catch(err) {
-		result = adrds;
+		result = addressObject;
 		console.log('Network down...');
 	}
+	result.btcPubkeySegwit0 = tempSegwit0
+	result.btcPubkeySegwit1 = tempSegwit1
 	return result;
 }
-
-export function addresses():AddressObject {
-	if (!userSession) return {} as AddressObject;
-	try {
+function getStacksAddress() {
+	if (loggedIn()) {
 		const userData = userSession.loadUserData();
-		const network = CONFIG.VITE_NETWORK;
-		//let something = hashP2WPKH(payload.public_keys[0])
-		const stxAddress = (network === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
-		const cardinal = (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet;
-		const ordinal = (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet;
-		return {
+		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		return stxAddress
+	}
+	return
+}
+export function isHiro() {
+	const provider:StacksProvider = getStacksProvider()
+	const prod = provider.getProductInfo();
+	return prod.name.toLowerCase().indexOf('hiro') > -1
+}
+
+async function addresses(callback:any):Promise<AddressObject|undefined> {
+	if (!loggedIn()) return {} as AddressObject;
+	const userData = userSession.loadUserData();
+	const network = CONFIG.VITE_NETWORK;
+	//let something = hashP2WPKH(payload.public_keys[0])
+	const stxAddress = getStacksAddress();
+
+	if (isHiro()) {
+		callback({
+			network,
 			stxAddress,
-			cardinal,
-			ordinal,
-			btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
-			btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
+			cardinal: (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
+			ordinal: (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
+			btcPubkeySegwit0: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2wpkh : undefined,
+			btcPubkeySegwit1: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2tr : undefined,
 			sBTCBalance: 0,
 			stxBalance: 0
-		};
-	} catch(err) {
-		return {} as AddressObject
+		});
+	} else {
+		const getAddressOptions:GetAddressOptions = {
+			payload: {
+				purposes: [AddressPurposes.ORDINALS, AddressPurposes.PAYMENT],
+				message: 'Address for receiving Ordinals and payments',
+				  network: {
+					type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+				},
+			},
+			onFinish: (response:any) => {
+				console.log(response)
+				const obj = response.addresses;
+				callback({
+					network,
+					stxAddress,
+					cardinal: obj.find((o:any) => o.purpose === 'payment').address,
+					ordinal: obj.find((o:any) => o.purpose === 'ordinals').address,
+					btcPubkeySegwit0: obj.find((o:any) => o.purpose === 'payment').publicKey,
+					btcPubkeySegwit1: obj.find((o:any) => o.purpose === 'ordinals').publicKey,
+					sBTCBalance: 0,
+					stxBalance: 0
+				});
+			},
+			onCancel: () => {
+				throw new Error('cancelled');
+			}
+		}
+		await getAddress(getAddressOptions);
 	}
 }
 
@@ -143,7 +203,7 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
-export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> {
+export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 	try {
 		const provider = getStacksProvider()
 		console.log('provider: ', provider)
@@ -152,15 +212,13 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig):Promise<any> 
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
-					await fetchSbtcBalance();
-					callback(conf);
+					callback(conf, true);
 				},
 				onCancel: () => {
 					callback(conf);
 				},
 			});
 		} else {
-			await fetchSbtcBalance();
 			callback(conf);
 		}
 	} catch (e) {
@@ -212,14 +270,13 @@ export function verifyStacksPricipal(stacksAddress?:string) {
 		  throw new Error('Invalid stacks principal - please enter a valid ' + CONFIG.VITE_NETWORK + ' account or contract principal.');
 	  }
 }
-  
-  
+
 export function verifyAmount(amount:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
 	  }
-  	if (amount < 10000) {
-		throw new Error('Amount less than mnimum transaction fee.');
+  	if (amount < minimumDeposit) {
+		throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
 	  }
 }
 export function verifySBTCAmount(amount:number, balance:number, fee:number) {
@@ -231,7 +288,7 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 	}
 }
   
-export async function initApplication(conf:SbtcConfig) {
+export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
 	if (!conf) conf = defaultSbtcConfig as SbtcConfig
 	let data = {} as any;
 	try {
@@ -240,7 +297,7 @@ export async function initApplication(conf:SbtcConfig) {
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			conf.loggedIn = true;
-			conf.addressObject = await fetchSbtcBalance();
+			await fetchSbtcBalance(conf, fromLogin);
 			conf.loggedIn = true;
 		}
 	} catch (err) {
@@ -249,7 +306,13 @@ export async function initApplication(conf:SbtcConfig) {
 	const exchangeRates = await fetchExchangeRates();
 	conf.exchangeRates = exchangeRates;
 	//conf.sbtcContractData = data.sbtcContractData;
-	if (!conf.addressObject)throw new Error('')
+	if (!conf.keySets) {
+		if (CONFIG.VITE_NETWORK === 'testnet') {
+			conf.keySets = { 'testnet': {} as AddressObject };
+		} else {
+			conf.keySets = { 'mainnet': {} as AddressObject };
+		}
+	}
 	let keys = {
 		deposits: {
 		  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
@@ -260,8 +323,8 @@ export async function initApplication(conf:SbtcConfig) {
 	if (import.meta.env.MODE !== 'development') {
 		keys = data.keys;
 	}
-	//const revealAddress = checkWalletAddress(keys.deposits.revealPubKey);
-	const revealAddress = checkWalletAddress(data.sbtcContractData.sbtcWalletPublicKey);
+	keys.deposits.revealPubKey = data.sbtcContractData.sbtcWalletPublicKey
+	const revealAddress = checkWalletAddress(data.sbtcContractData);
 	data.sbtcContractData.sbtcWalletAddress = revealAddress;
 	//conf.walletAddress = revealAddress;
 	conf.revealFeeWithGas = revealPayment;
@@ -280,19 +343,17 @@ export async function initApplication(conf:SbtcConfig) {
 	sbtcConfig.update(() => conf);
 }
 
-export function checkWalletAddress (revealPublicKey:string) {
+export function checkWalletAddress (sbtcContractData:SbtcContractDataI) {
 	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const xOnlyKey = (revealPublicKey);
-	try {
-	  const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	  const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
-	  return addr;
-	  //const trObj1 = btc.p2pkh(hex.decode(xOnlyKey), net);
-	  
-	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	  //if (trObj.type === 'tr') 
-	} catch(err:any) {
-	  //const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	  console.log(err.message)
-	}
+	const fullPK = sbtcContractData.sbtcWalletPublicKey;        //sbtcContractData.coordinator?.key?.value?.split('x')[1];
+	const xOnlyKey = fullPK; //hex.encode(hex.decode(fullPK).subarray(1, 33)) //(fullPK?.substring(2));
+	//if (!xOnlyKey) throw new Error('No key found')
+	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
+	//if (trObj.type === 'tr') 
+	//const addr = trObj.address
+
+	const assumeTweakedPubKey = hex.decode(xOnlyKey);
+	const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
+	if (addr) sbtcContractData.sbtcWalletAddress = addr;
+	return addr;
 }

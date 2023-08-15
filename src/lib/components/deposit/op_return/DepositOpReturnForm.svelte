@@ -3,10 +3,10 @@
   import { goto } from "$app/navigation";
   import { CONFIG } from '$lib/config';
   import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte'
-	import { getOpReturnPeginRequest, maxCommit, type PeginRequestI } from "sbtc-bridge-lib";
+	import { buildDepositPayload, getOpReturnDepositRequest, maxCommit, type PeginRequestI } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import type { SbtcConfig } from "$types/sbtc_config";
-	import { makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
+	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
 	import { fetchPeginById, fetchUtxoSet, updatePeginCommit } from "$lib/bridge_api";
 	import { userSatBtc } from "$lib/utils";
 	import InputTextField from "../InputTextField.svelte";
@@ -16,6 +16,8 @@
 	import SignTransactionWeb from "./SignTransactionWeb.svelte";
 	import StatusCheck from "../StatusCheck.svelte";
 	import ServerError from "$lib/components/common/ServerError.svelte";
+  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
+//  import {calculateDepositFees } from '$lib/stacks_connect_bug'
 
   const dispatch = createEventDispatcher();
 
@@ -88,7 +90,7 @@
     if (button.target === 'openInvoice') {
       try {
         bitcoinAddress = input0Data.value;
-        if (bitcoinAddress !== $sbtcConfig.addressObject!.cardinal) addressInfo = await fetchUtxoSet(bitcoinAddress)
+        if (bitcoinAddress !== $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal) addressInfo = await fetchUtxoSet(bitcoinAddress)
         const amt = input2Data.valueSat
         verifyAmount(amt);
         if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
@@ -100,12 +102,12 @@
         }
         const conf:SbtcConfig = $sbtcConfig;
         sbtcConfig.update(() => conf);
-        peginRequest = getOpReturnPeginRequest(network, amount, $sbtcConfig.keys.deposits, $sbtcConfig.addressObject!.stxAddress, $sbtcConfig.sbtcContractData!.sbtcWalletAddress, bitcoinAddress);
-        peginRequest.originator = $sbtcConfig.addressObject!.stxAddress; // retain the sender in case the address in UI changes.
+        peginRequest = getOpReturnDepositRequest(network, amount, $sbtcConfig.keys.deposits, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData!.sbtcWalletAddress, bitcoinAddress);
+        peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress; // retain the sender in case the address in UI changes.
         timeLineStatus = 2;
         dispatch('time_line_status_change', { timeLineStatus });
       } catch(err:any) {
-        amountErrored = 'Please enter an amount thats more than the minimum threshold'
+        amountErrored = 'Minimum deposit is ' + satsToBitcoin(minimumDeposit) + ' btc'
         makeFlash(document.getElementById(input2Data.field))
       }
     } else if (button.target === 'back') {
@@ -134,14 +136,15 @@
    * 1. Create or hydrate a deposit object.
    * 2. Check server for an existing invoice correspondng to the hydrated deposit
    */
-  const initComponent = async (amt:number) => {
-    //const tx = buildOpReturnTransaction(network, amount, $sbtcConfig.btcFeeRates, addressInfo, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.addressObject!.cardinal)
-    input0Data.value = $sbtcConfig.addressObject!.cardinal || '';
-    input0Data.resetValue = $sbtcConfig.addressObject!.cardinal || '';
+  const initComponent = async () => {
+    //const tx = buildOpReturnTransaction(network, amount, $sbtcConfig.btcFeeRates, addressInfo, stacksAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+    input0Data.value = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || '';
+    input0Data.resetValue = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || '';
     input0Data.hint = '';
     input1Data.value = stacksAddress;
     input1Data.resetValue = input1Data.value;
     input2Data.valueSat = amount;
+    input2Data.valueBtc = satsToBitcoin(amount);
     input2Data.hint = 'Balance: ' + userSatBtc(maxCommit(addressInfo), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });
@@ -154,11 +157,12 @@
 
   onMount(async () => {
     try {
-      bitcoinAddress = $sbtcConfig.addressObject!.cardinal
-      addressInfo = await fetchUtxoSet($sbtcConfig.addressObject!.cardinal)
-      stacksAddress =$sbtcConfig.addressObject!.stxAddress
-      amount = maxCommit(addressInfo);
-      await initComponent(-1);
+      bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+      addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+      stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
+      //const data = buildDepositPayload(network, 1000, stacksAddress, false, undefined);
+      //calculateDepositFees(CONFIG.VITE_NETWORK, false, 1000, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.sbtcContractData.sbtcWalletAddress, data)
+      await initComponent();
       inited = true;
       dispatch('inited', { inited });
     } catch(err) {
