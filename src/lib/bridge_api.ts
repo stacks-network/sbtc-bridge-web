@@ -5,6 +5,8 @@ import { checkAddressForNetwork } from 'sbtc-bridge-lib';
 function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
+  } else if (CONFIG.VITE_NETWORK === 'simnet') {
+    return path.replace('bridge-api', 'bridge-api/simnet');
   } else {
     return path.replace('bridge-api', 'bridge-api/mainnet');
   }

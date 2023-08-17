@@ -7,6 +7,7 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { goto } from '$app/navigation';
+	import type { ExchangeRate } from 'sbtc-bridge-lib';
 
 	onMount(async () => {
 		if (typeof $sbtcConfig.userSettings === 'undefined') {
@@ -16,7 +17,7 @@
 				testAddresses: false,
 				currency: {
 					cryptoFirst: false,
-					myFiatCurrency: 'USD',
+					myFiatCurrency: { currency: 'USD' } as ExchangeRate,
 					denomination: 'bitcoin'
 				}
 			}
@@ -24,7 +25,7 @@
 		if (typeof $sbtcConfig.userSettings.currency === 'undefined') {
 			$sbtcConfig.userSettings.currency = {
 				cryptoFirst: false,
-				myFiatCurrency: 'USD',
+				myFiatCurrency: { currency: 'USD' } as ExchangeRate,
 				denomination: 'bitcoin'
 			}
 		}

@@ -3,6 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
+		"sim": "vite dev --port=8080 --mode simnet",
 		"dev": "vite dev --port=8080 --mode development",
 		"build-linode": "vite build --mode linode-staging",
 		"build-stag": "vite build --mode staging",
@@ -58,7 +59,7 @@
 		"flowbite-svelte": "^0.39.1",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^0.5.0",
-		"sbtc-bridge-lib": "^1.0.50",
+		"sbtc-bridge-lib": "^1.0.57",
 		"sockjs": "^0.3.24",
 		"svelte-local-storage-store": "^0.5.0",
 		"svelte-qrcode": "^1.0.0",
