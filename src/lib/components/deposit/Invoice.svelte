@@ -31,10 +31,10 @@
   }
   const getAddress = (full:boolean):string => {
     if (full) {
-      return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || '';
+      return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : peginRequest.fromBtcAddress || '';
     }
     try {
-      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, 10);
+      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate(peginRequest.fromBtcAddress, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -42,25 +42,17 @@
 
   const getFromAddress = (full:boolean):string => {
     if (full) {
-      return $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal || peginRequest.fromBtcAddress;
+      return peginRequest.fromBtcAddress;
     }
     try {
-      return truncate($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, 10);
+      return truncate(peginRequest.fromBtcAddress, 10);
     } catch (err) {
       return 'not connected'
     }
   }
 
-  const getCardinal = () => {
-    if ($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal) {
-        return $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-      } else {
-        return 'not connected'
-      }
-  }
-
   const paymentUri = () => {
-    let uri = 'bitcoin:' + peginRequest.commitTxScript!.address
+    let uri = 'bitcoin:' + (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript!.address : peginRequest.fromBtcAddress;
     uri += '?amount=' + fmtSatoshiToBitcoin(amount)
     uri += '&label=' + encodeURI('Deposit BTC to mint sBTC on Stacks')
     return uri

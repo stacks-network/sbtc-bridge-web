@@ -2,7 +2,7 @@ import { CONFIG } from '$lib/config';
 import type { PeginRequestI, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 import { checkAddressForNetwork } from 'sbtc-bridge-lib';
 
-function addNetSelector (path:string) {
+export function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
   } else if (CONFIG.VITE_NETWORK === 'simnet') {
@@ -32,6 +32,17 @@ async function extractResponse(response:any) {
     } catch(err) {
       console.log('error fetching response.. ', err)
     }
+  }
+}
+
+export async function fetchSbtcData() {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/data');
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
   }
 }
 
@@ -78,7 +89,7 @@ export async function sendRawTransaction(tx: { hex: string; }) {
       status: response.status
     }
   }
-return await extractResponse(response);
+  return await extractResponse(response);
 }
 
 export async function fetchKeys() {
@@ -302,16 +313,6 @@ export async function fetchSbtcWalletAddress() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/wallet-address');
   const response = await fetchCatchErrors(path);
   return await extractResponse(response);
-}
-
-export async function fetchSbtcData() {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/data');
-  try {
-    const response = await fetchCatchErrors(path);
-    return await extractResponse(response);
-  } catch(err) {
-    return {}
-  }
 }
 
 export async function fetchUserSbtcBalance(stxAddress:string) {

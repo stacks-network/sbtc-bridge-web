@@ -2,7 +2,7 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchUserBalances } from '$lib/bridge_api'
+import { fetchSbtcData, fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
@@ -10,7 +10,6 @@ import type { AddressObject, SbtcContractDataI } from 'sbtc-bridge-lib'
 import { verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
-import { fetchSbtcData } from "$lib/bridge_api";
 import { hex } from '@scure/base';
 import type { ExchangeRate } from 'sbtc-bridge-lib';
 import { schnorr } from '@noble/curves/secp256k1';
@@ -41,6 +40,7 @@ export function isAllowed(address:string) {
 export function getStacksNetwork() {
 	const network = CONFIG.VITE_NETWORK;
 	let stxNetwork:StacksMainnet|StacksTestnet;
+	if (CONFIG.VITE_ENVIRONMENT === 'simnet') stxNetwork = new StacksMocknet();
 	if (network === 'testnet') stxNetwork = new StacksTestnet();
 	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
 	else stxNetwork = new StacksMocknet();
@@ -275,9 +275,9 @@ export function verifyAmount(amount:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
 	  }
-  	if (amount < minimumDeposit) {
-		throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
-	  }
+  	//if (amount < minimumDeposit) {
+	//	throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
+	//  }
 }
 export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 	if (!amount || amount === 0) {
@@ -313,15 +313,17 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 			conf.keySets = { 'mainnet': {} as AddressObject };
 		}
 	}
-	let keys = {
-		deposits: {
-		  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
-		  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM))),
-		  oraclePubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_ORACLE)))
-		}
-	}
+	let keys;
 	if (import.meta.env.MODE !== 'development') {
 		keys = data.keys;
+	} else {
+		keys = {
+			deposits: {
+			  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
+			  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM))),
+			  oraclePubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_ORACLE)))
+			}
+		}
 	}
 	keys.deposits.revealPubKey = data.sbtcContractData.sbtcWalletPublicKey
 	const revealAddress = checkWalletAddress(data.sbtcContractData);
@@ -347,7 +349,7 @@ export function checkWalletAddress (sbtcContractData:SbtcContractDataI) {
 	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	const fullPK = sbtcContractData.sbtcWalletPublicKey;        //sbtcContractData.coordinator?.key?.value?.split('x')[1];
 	const xOnlyKey = fullPK; //hex.encode(hex.decode(fullPK).subarray(1, 33)) //(fullPK?.substring(2));
-	//if (!xOnlyKey) throw new Error('No key found')
+	if (!xOnlyKey) throw new Error('No key found')
 	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
 	//if (trObj.type === 'tr') 
 	//const addr = trObj.address

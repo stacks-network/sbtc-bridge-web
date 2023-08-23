@@ -7,19 +7,18 @@ import * as btc from '@scure/btc-signer';
 import { hexToBytes } from "@stacks/common";
 import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
-import { truncate, explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
+import { explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
-import { fetchUtxoSet } from '$lib/bridge_api'
 import type { PeginRequestI } from 'sbtc-bridge-lib'
 import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction } from 'sbtc-bridge-lib'
-//import { buildOpReturnDepositTransaction } from '$lib/stacks_connect_bug'
-import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
+//import {buildOpReturnDepositTransaction  } from '$lib/stacks_connect_bug'
 import { appDetails, getStacksNetwork } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type InputToSign, type SignTransactionOptions } from 'sats-connect'
+	import PsbtDisplay from './PsbtDisplay.svelte';
 
 export let peginRequest:PeginRequestI;
 export let addressInfo:any;
@@ -32,10 +31,19 @@ let psbtHex:string;
 let currentTx:string;
 let errorReason: string|undefined;
 let inited = false;
+let showPsbt = false;
 
 const getExplorerUrl = () => {
   return explorerBtcTxUrl(peginRequest.btcTxid)
 }
+export function isWalletAddress() {
+  return peginRequest.fromBtcAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+}
+
+export function requestShowPsbt() {
+  showPsbt = !showPsbt
+}
+
 export async function requestSignPsbt() {
   if (isHiro()) {
     signPsbtHiro()
@@ -64,7 +72,7 @@ export async function signPsbtXverse() {
   for (let index = 0; index < transaction.inputsLength; index++) {
     //const input = transaction.getInput(index);
     inputs.push({
-      address: addressInfo.address,
+      address: peginRequest.fromBtcAddress,
       signingIndexes: [0],
     })
   }
@@ -168,11 +176,11 @@ onMount(async () => {
     if ($sbtcConfig.userSettings.useOpDrop) {
       transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
     } else {
-      transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!)
+      transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, peginRequest.fromBtcAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!)
     }
   }
   if (transaction.inputsLength === 0) {
-    errorReason = 'Unable to add inputs to the transaction - please try a different account or wait for previous transaction to confirm'
+    errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
   }
   currentTx = hex.encode(transaction.toPSBT());
   psbtHex = hex.encode(transaction.toPSBT());
@@ -190,10 +198,18 @@ onMount(async () => {
     {/if}
   </div>
   <Invoice {peginRequest} />
+  {#if showPsbt}
+    <div class="flex w-full flex-wrap align-baseline items-start">
+      <PsbtDisplay {psbtB64} {psbtHex} />
+    </div>
+  {/if}
   {#if !broadcasted && !errorReason}
   <div class="mt-8 flex">
     <Button darkScheme={false} label={'Back'} target={'back'} on:clicked={() => updateTransaction()}/>
+    {#if isWalletAddress()}
     <Button darkScheme={true} label={'Sign & broadcast'} target={'sign'} on:clicked={() => requestSignPsbt()}/>
+    {/if}
+    <Button darkScheme={true} label={'Show PSBT'} target={'export'} on:clicked={() => requestShowPsbt()}/>
   </div>
   <!--<div>{currentTx}</div>-->
   {:else if broadcasted}
