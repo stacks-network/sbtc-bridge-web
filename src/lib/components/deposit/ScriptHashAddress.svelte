@@ -5,7 +5,7 @@
   import Invoice from "$lib/components/deposit/Invoice.svelte";
 	import { bitcoinBalanceFromMempool } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores'
-	import { CONFIG } from '$lib/config';
+	import { CONFIG, isSimnet } from '$lib/config';
 
   export let peginRequest:PeginRequestI;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
@@ -36,6 +36,9 @@
     <Button darkScheme={false} label={'Back'} target={'back'} on:clicked />
     {#if webPayEnabled && amount < cardinalBalance}
     <Button darkScheme={true} label={'Pay with web wallet'} target={'pay-now'} on:clicked />
+    {/if}
+    {#if isSimnet()}
+    <Button darkScheme={true} label={'Pay Simnet'} target={'pay-now-simnet'} on:clicked />
     {/if}
     <a href="/" on:click|preventDefault={() => forwardEv()} class="text-warning-500">check tx status</a>
   </div>

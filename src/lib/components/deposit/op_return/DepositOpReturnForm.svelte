@@ -8,7 +8,7 @@
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
 	import { fetchPeginById, fetchUtxoSet, updatePeginCommit } from "$lib/bridge_api";
-	import { userSatBtc } from "$lib/utils";
+	import { bitcoinBalanceFromMempool, userSatBtc } from "$lib/utils";
 	import InputTextField from "../InputTextField.svelte";
 	import Button from "$lib/components/shared/Button.svelte";
 	import BitcoinAmountField from "../BitcoinAmountField.svelte";
@@ -145,7 +145,7 @@
     input1Data.resetValue = input1Data.value;
     input2Data.valueSat = amount;
     if (amount) input2Data.valueBtc = satsToBitcoin(amount);
-    input2Data.hint = 'Balance: ' + userSatBtc(maxCommit(addressInfo), $sbtcConfig.userSettings.currency.denomination) + ' bitcoin - please allow for gas fees';
+    input2Data.hint = 'Balance: ' + satsToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)) + ' bitcoin - please allow for bitcoin transaction fees';
     const conf:SbtcConfig = $sbtcConfig;
     dispatch('time_line_status_change', { timeLineStatus });
     sbtcConfig.update(() => conf);

@@ -11,6 +11,28 @@ defi protocols, nft marketplaces, governance and many more applications.
 
 [sbtc.world](https://sbtc.world).
 
+## Development
+
+```bash
+node -v
+v18.14.2
+npm install
+npm install sass
+npm run dev
+# or
+npm run dev -- --open
+```
+
+### Deployment
+
+First build the application;
+
+```bash
+npm run build
+```
+
+Note you can preview the production build locally with `npm run preview`.
+
 ## Testnet
 
 App has been tested with the Electrum wallet. On MacOs open Electrum wallet on testnet;
@@ -62,26 +84,6 @@ Trezor Suite is the interface for Trezor hardware wallets
 Trezor hardware wallet can be paired with Electrum
 
 Transaction signing error: -22: TX decode failed. Make sure the tx has at least one input.
-
-## Development
-
-```bash
-npm install
-npm install sass
-npm run dev
-# or
-npm run dev -- --open
-```
-
-### Deployment
-
-First build the application;
-
-```bash
-npm run build
-```
-
-Note you can preview the production build locally with `npm run preview`.
 
 #### Github Pages
 

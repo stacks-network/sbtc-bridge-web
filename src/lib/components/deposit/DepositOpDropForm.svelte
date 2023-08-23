@@ -161,6 +161,11 @@
               address: 'tb1qkzvk9hr7uvas23hspvsgqfvyc8h4nngeqjqtnj',
               amount: '10000'
           });
+    } else if (button.target === 'pay-now-simnet') {
+      const resp = await window.btc?.request('sendTransfer', {
+          address: 'tb1qkzvk9hr7uvas23hspvsgqfvyc8h4nngeqjqtnj',
+          amount: '10000'
+      });
     } else if (button.target === 'transaction-history') {
       goto('/transactions')
     }

@@ -26,6 +26,7 @@
 
   const reset = () => {
     value = inputData.resetValue || 0;
+    reason = undefined;
   }
 
   const updater = (e:any) => {
@@ -36,7 +37,7 @@
       if (denomination === 'bitcoin') {
         if (value > 100) { 
           value = 100.0
-          reason = 'Deposits and withdrawals are currently capped at 100 BTC'
+          reason = '<p>Deposits and withdrawals are currently capped at 100 BTC</p><p>Click BTC/SAT to toggle data entry between bitcoin and satoshis - see also settings for other currency display options.</p>'
           return
         }
         const decimals = vstr.split('.')[1]
@@ -50,7 +51,7 @@
       } else {
         if (satsToBitcoin(value) > 100) {
           value = satsToBitcoin(value)
-          reason = 'Deposits and withdrawals are currently capped at 100 BTC'
+          reason = '<p>Deposits and withdrawals are currently capped at 100 BTC</p><p>Click BTC/SAT to toggle data entry between bitcoin and satoshis - see also settings for other currency display options.</p>'
           return
         }
         if (vstr.indexOf('.') > -1) {
@@ -68,6 +69,7 @@
   }
 
   const setDenomination = (denomination:string) => {
+    reason = undefined
 		const conf:SbtcConfig = $sbtcConfig;
     conf.userSettings.currency.denomination = denomination;
 		sbtcConfig.update(() => conf);
@@ -143,10 +145,10 @@
   </div>
   {/if}
 
-  <div class="text-xs mt-1 text-left flex items-center justify-between">
+  <div class="text-md mt-1 text-left flex items-center justify-between">
     {#if reason}
       <p class="text-error-500">
-        {reason}
+        {@html reason}
       </p>
     {/if}
   </div>

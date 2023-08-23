@@ -17,7 +17,11 @@
 			return conf;
 		});
 		const url = new URL(location.href);
-		url.searchParams.set('net', net);
+		if (import.meta.env.MODE === 'simnet') {
+			url.searchParams.set('net', 'testnet');
+		} else {
+			url.searchParams.set('net', net);
+		}
 		location.assign(url.search);
 	}
 
