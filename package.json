@@ -53,7 +53,7 @@
 		"@scure/btc-signer": "^1.0.1",
 		"@stacks/connect": "^7.3.1",
 		"@stacks/network": "^6.5.4",
-		"@stacks/transactions": "^6.5.5",
+		"@stacks/transactions": "^6.7.0",
 		"@sveltejs/adapter-static": "^2.0.2",
 		"classnames": "^2.3.2",
 		"flowbite": "^1.6.5",
