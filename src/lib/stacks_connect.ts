@@ -126,6 +126,7 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	const stxAddress = getStacksAddress();
 
 	if (isHiro() || isLeather()) {
+		console.log('addInputs: addresses: ' + userData.profile.btcPublicKey.p2wpkh)
 		callback({
 			network,
 			stxAddress,
