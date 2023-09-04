@@ -112,6 +112,12 @@ export function isHiro() {
 	return prod.name.toLowerCase().indexOf('hiro') > -1
 }
 
+export function isLeather() {
+	const provider:StacksProvider = getStacksProvider()
+	const prod = provider.getProductInfo();
+	return prod.name.toLowerCase().indexOf('leather') > -1
+}
+
 async function addresses(callback:any):Promise<AddressObject|undefined> {
 	if (!loggedIn()) return {} as AddressObject;
 	const userData = userSession.loadUserData();
@@ -119,7 +125,7 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	//let something = hashP2WPKH(payload.public_keys[0])
 	const stxAddress = getStacksAddress();
 
-	if (isHiro()) {
+	if (isHiro() || isLeather()) {
 		callback({
 			network,
 			stxAddress,

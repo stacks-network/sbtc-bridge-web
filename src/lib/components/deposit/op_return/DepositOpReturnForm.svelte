@@ -3,7 +3,7 @@
   import { goto } from "$app/navigation";
   import { CONFIG } from '$lib/config';
   import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte'
-	import { buildDepositPayload, getOpReturnDepositRequest, maxCommit, type PeginRequestI } from "sbtc-bridge-lib";
+	import { getOpReturnDepositRequest, type PeginRequestI } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
@@ -16,8 +16,7 @@
 	import SignTransactionWeb from "./SignTransactionWeb.svelte";
 	import StatusCheck from "../StatusCheck.svelte";
 	import ServerError from "$lib/components/common/ServerError.svelte";
-  import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
-//  import {calculateDepositFees } from '$lib/stacks_connect_bug'
+  import { satsToBitcoin } from '$lib/utils'
 
   const dispatch = createEventDispatcher();
 

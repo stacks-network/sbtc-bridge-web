@@ -11,9 +11,8 @@ import { explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import type { PeginRequestI } from 'sbtc-bridge-lib'
-import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction } from 'sbtc-bridge-lib'
-//import {buildOpReturnDepositTransaction  } from '$lib/stacks_connect_bug'
-import { appDetails, getStacksNetwork } from "$lib/stacks_connect";
+import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction, calculateDepositFees, addInputs, inputAmt } from 'sbtc-bridge-lib'
+import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
@@ -47,12 +46,16 @@ export function requestShowPsbt() {
 export async function requestSignPsbt() {
   if (isHiro()) {
     signPsbtHiro()
+  } else if (isLeather()) {
+    signPsbtHiro()
   } else {
     signPsbtXverse()
   }
 }
-
 export async function signPsbtHiro() {
+  const outputs: btc.TransactionOutput[] = getPsbtTxOutputs(transaction);
+  const inpouts: btc.TransactionInput[] = getPsbtTxInputs(transaction);
+
   openPsbtRequestPopup({
     hex: psbtHex,
     appDetails: appDetails(),
@@ -64,6 +67,24 @@ export async function signPsbtHiro() {
       return;
     }
   });
+}
+function getPsbtTxOutputs(psbtTx: btc.Transaction) {
+  const outputsLength = psbtTx.outputsLength;
+  const outputs: btc.TransactionOutput[] = [];
+  if (outputsLength === 0) return outputs;
+  for (let i = 0; i < outputsLength; i++) {
+    outputs.push(psbtTx.getOutput(i));
+  }
+  return outputs;
+}
+function getPsbtTxInputs(psbtTx: btc.Transaction) {
+  const inputsLength = psbtTx.inputsLength;
+  const inputs: btc.TransactionInput[] = [];
+  if (inputsLength === 0) return inputs;
+  for (let i = 0; i < inputsLength; i++) {
+    inputs.push(psbtTx.getInput(i));
+  }
+  return inputs;
 }
 
 export async function signPsbtXverse() {
@@ -187,6 +208,7 @@ onMount(async () => {
   psbtB64 = base64.encode(transaction.toPSBT());
   inited = true;
 })
+
 </script>
 <div id="clipboard"></div>
 
