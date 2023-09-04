@@ -43,7 +43,7 @@
 		"tslib": "^2.6.0",
 		"typescript": "^5.1.6",
 		"vite": "^4.4.8",
-		"vitest": "^0.25.3",
+		"vitest": "^0.34.3",
 		"vitest-fetch-mock": "^0.2.2"
 	},
 	"type": "module",
