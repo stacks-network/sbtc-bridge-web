@@ -60,7 +60,7 @@
 		"flowbite-svelte": "^0.39.1",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^0.5.0",
-		"sbtc-bridge-lib": "^1.0.67",
+		"sbtc-bridge-lib": "^1.0.68",
 		"sockjs": "^0.3.24",
 		"svelte-local-storage-store": "^0.5.0",
 		"svelte-qrcode": "^1.0.0",
