@@ -349,6 +349,11 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	//if (conf.mintData.peginRequest && conf.mintData.peginRequest.commitTxScript && typeof (conf.mintData.peginRequest.commitTxScript.tweakedPubkey) === 'string') {
 	//	conf.mintData.peginRequest.commitTxScript = convertToUint8(conf.mintData.peginRequest.commitTxScript)
 	//}
+	console.log('addresses: cardinal:         ' + conf.keySets[CONFIG.VITE_NETWORK].cardinal)
+	console.log('addresses: ordinal:          ' + conf.keySets[CONFIG.VITE_NETWORK].ordinal)
+	console.log('addresses: btcPubkeySegwit0: ' + conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0)
+	console.log('addresses: btcPubkeySegwit1: ' + conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1)
+	console.log('addresses: stxAddress:       ' + conf.keySets[CONFIG.VITE_NETWORK].stxAddress)
 	sbtcConfig.update(() => conf);
 }
 

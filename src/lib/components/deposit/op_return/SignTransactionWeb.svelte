@@ -11,13 +11,14 @@ import { explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
 import { savePeginCommit } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import type { PeginRequestI } from 'sbtc-bridge-lib'
-import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction, calculateDepositFees, addInputs, inputAmt } from 'sbtc-bridge-lib'
+import { buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction, calculateDepositFees, addInputs, inputAmt } from 'sbtc-bridge-lib'
 import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type InputToSign, type SignTransactionOptions } from 'sats-connect'
 	import PsbtDisplay from './PsbtDisplay.svelte';
+	import { buildOpReturnDepositTransaction } from '$lib/stacks_connect_bug';
 
 export let peginRequest:PeginRequestI;
 export let addressInfo:any;
@@ -150,9 +151,9 @@ const broadcastTransaction = async (psbtHex:string) => {
     }
     //const txHex = tx.hex;
     //const txHex = hex.encode(tx.toBytes(true, tx.hasWitnesses));
-    resp = await sendRawTxDirectBlockCypher(txHex);
+    //resp = await sendRawTxDirectBlockCypher(txHex);
     if (resp && resp.error) {
-      resp = await sendRawTransaction({hex: txHex});
+      //resp = await sendRawTransaction({hex: txHex});
     }
     console.log('sendRawTxDirectBlockCypher: ', resp);
     if (resp && resp.tx) {
@@ -187,6 +188,7 @@ const broadcastTransaction = async (psbtHex:string) => {
 
 const revealFeeWithGas = 5000;
 onMount(async () => {
+  console.log('onMount: ', $sbtcConfig.keySets[CONFIG.VITE_NETWORK])
   if (peginRequest.requestType === 'withdrawal') {
       if ($sbtcConfig.userSettings.useOpDrop) {
         transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, revealFeeWithGas, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);

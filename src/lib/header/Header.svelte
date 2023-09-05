@@ -10,6 +10,7 @@
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
+	import type { AddressObject } from 'sbtc-bridge-lib';
 
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
@@ -21,6 +22,8 @@
 		logUserOut();
 		await sbtcConfig.update((conf:SbtcConfig) => {
 			conf.loggedIn = false;
+			conf.keySets['testnet'] = {} as AddressObject
+			conf.keySets['mainnet'] = {} as AddressObject
 			return conf;
 		});
 		goto('/')
