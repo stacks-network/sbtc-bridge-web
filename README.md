@@ -16,7 +16,6 @@ permissionless deposits and withdrawals of Bitcoin to layer 2 - via Stacks.
 node -v
 v19.7.0
 npm install
-npm install sass
 npm run dev
 # or
 npm run dev -- --open
