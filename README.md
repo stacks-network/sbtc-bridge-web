@@ -1,27 +1,43 @@
 # sbtc-bridge
 
-![ci](https://github.com/Trust-Machines/sbtc-bridge)
+![ci](https://github.com/stacks-network/sbtc-bridge-web)
 
 
 ## Introduction
 
-Sbtc-bridge supports a trustless two way peg between BTC and sBTC.
-sBTC is a SIP-010 fungible token on the Stacks Blockchain that can be used in
-defi protocols, nft marketplaces, governance and many more applications.
+sBTC bridge interracts with the sBTC protocol to provide decentralised,
+permissionless deposits and withdrawals of Bitcoin to layer 2 - via Stacks.
 
-[sbtc.world](https://sbtc.world).
+[sbtc.tech](https://sbtc.tech).
 
 ## Development
 
 ```bash
 node -v
-v18.14.2
+v19.7.0
 npm install
-npm install sass
 npm run dev
 # or
 npm run dev -- --open
 ```
+
+## SDK
+
+The bridge application has 3 main components;
+
+1. [web application](https://github.com/stacks-network/sbtc-bridge-web)
+2. [rest api](https://github.com/stacks-network/sbtc-bridge-api)
+3. [npm module](https://github.com/stacks-network/sbtc-bridge-api)
+
+For example the API provides endpoints (see [docs](https://bridge.stx.eco/bridge-api/docs/#/)) for building and parsing sBTC payloads
+
+- [build deposit data](https://bridge.stx.eco/bridge-api/testnet/v1/sbtc/build/deposit/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5/300)
+- [parse deposit data](https://bridge.stx.eco/bridge-api/testnet/v1/sbtc/parse/deposit/3c051a7010183fd1a76976e7b2bb67acdf57cdfe7048820000000000000000012c)
+
+The [sBTC lib](https://socket.dev/npm/package/sbtc-bridge-lib) (`npm i sbtc-bridge-lib`) provides the same methods via typescript;
+
+- export function buildDepositPayload(net:any, revealFee:number, address:string, opDrop:boolean, memo:string|undefined):Uint8Array
+- export function parseDepositPayload(d1:Uint8Array, amountSats: number):depositPayloadType
 
 ### Deployment
 

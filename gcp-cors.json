@@ -1,6 +1,6 @@
 [
   {
-    "origin": ["https://api.sbtc.world"],
+    "origin": ["https://api.sbtc.tech"],
     "responseHeader": ["Content-Type"],
     "method": ["GET"],
     "maxAgeSeconds": 3600

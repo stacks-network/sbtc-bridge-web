@@ -1,6 +1,6 @@
 # sbtc-bridge Test Specification
 
-![ci](https://github.com/Trust-Machines/sbtc-bridge)
+![ci](https://github.com/stacks-network/sbtc-bridge)
 
 ## Introduction
 
