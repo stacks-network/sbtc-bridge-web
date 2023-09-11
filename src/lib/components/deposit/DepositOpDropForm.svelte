@@ -13,7 +13,7 @@
   import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress } from "$lib/bridge_api";
   import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
   import Button from '$lib/components/shared/Button.svelte';
-  import type { PeginRequestI } from 'sbtc-bridge-lib'
+  import type { BridgeTransactionType } from 'sbtc-bridge-lib'
   import { getOpDropDepositRequest, maxCommit } from 'sbtc-bridge-lib'
   import { fetchUtxoSet } from '$lib/bridge_api'
   import { bitcoinToSats, satsToBitcoin } from '$lib/utils'
@@ -21,7 +21,7 @@
   
   const dispatch = createEventDispatcher();
 
-  let peginRequest:PeginRequestI;
+  let peginRequest:BridgeTransactionType;
   let stacksAddress:string;
   let amount:number;
 

@@ -50,7 +50,7 @@
 	"dependencies": {
 		"@noble/secp256k1": "^2.0.0",
 		"@popperjs/core": "^2.11.8",
-		"@scure/btc-signer": "^1.0.1",
+		"@scure/btc-signer": "^1.1.0",
 		"@stacks/connect": "^7.4.0",
 		"@stacks/network": "^6.5.4",
 		"@stacks/transactions": "^6.7.0",
@@ -60,7 +60,7 @@
 		"flowbite-svelte": "^0.39.1",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^0.5.0",
-		"sbtc-bridge-lib": "^1.0.68",
+		"sbtc-bridge-lib": "^1.0.71",
 		"sockjs": "^0.3.24",
 		"svelte-local-storage-store": "^0.5.0",
 		"svelte-qrcode": "^1.0.0",

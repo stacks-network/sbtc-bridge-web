@@ -2,7 +2,7 @@ import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
 import type { AddressMempoolObject, ExchangeRate, KeySet } from 'sbtc-bridge-lib'
-import type { PeginRequestI } from 'sbtc-bridge-lib'
+import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
@@ -138,7 +138,7 @@ export const keySetForFeeCalculation = {
   schnorrPub: secp.getPublicKey(priv, false)
 }
 
-export function compare( a:PeginRequestI, b:PeginRequestI ) {
+export function compare( a:BridgeTransactionType, b:BridgeTransactionType ) {
   if ( a.status < b.status ){
     return -1;
   }
@@ -157,7 +157,7 @@ export function compareCurrencies( a:{ value: string; name: string; }, b:{ value
   return 0;
 }
 
-export function convertOutputsBlockCypher(blockCypherTx:any, peginRequest:PeginRequestI) {
+export function convertOutputsBlockCypher(blockCypherTx:any, peginRequest:BridgeTransactionType) {
   if (blockCypherTx.outputs && blockCypherTx.outputs.length > 1 && typeof blockCypherTx.outputs[0].script === 'string') {
     peginRequest.vout0 = {
       value: blockCypherTx.outputs[0].value,

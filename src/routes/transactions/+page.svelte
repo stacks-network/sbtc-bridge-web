@@ -5,14 +5,14 @@ import { sbtcConfig } from '$stores/stores';
 import { COMMS_ERROR } from '$lib/utils.js'
 import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { fetchPeginsByStacksAddress, fetchPegins } from '$lib/bridge_api'
-import type { PeginRequestI } from 'sbtc-bridge-lib'
+import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { goto } from '$app/navigation'
 import { satsToBitcoin } from '$lib/utils'
 import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
 
 // fetch/hydrate data from local storage
 let inited = false;
-let peginRequests:Array<PeginRequestI>
+let peginRequests:Array<BridgeTransactionType>
 let errorReason:string|undefined;
 let myDepositsFilter:boolean;
 
@@ -43,7 +43,7 @@ const fetchByStatus = (status:number) => {
     }
 }
 
-const getTo = (pegin:PeginRequestI):string => {
+const getTo = (pegin:BridgeTransactionType):string => {
     if (pegin && pegin.commitTxScript && pegin.commitTxScript.address) {
         return pegin.commitTxScript.address;
     } else {

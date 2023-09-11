@@ -3,7 +3,7 @@
   import { goto } from "$app/navigation";
   import { CONFIG } from '$lib/config';
   import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte'
-	import { getOpReturnDepositRequest, type PeginRequestI } from "sbtc-bridge-lib";
+	import { getOpReturnDepositRequest, type BridgeTransactionType } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
@@ -20,7 +20,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let pegin:PeginRequestI;
+  let pegin:BridgeTransactionType;
   let balanceMsg = false;
 
   const network = CONFIG.VITE_NETWORK;
@@ -29,7 +29,7 @@
   let amountErrored:string|undefined = undefined;
   let componentKey = 0;
   let timeLineStatus = 1;
-  let peginRequest:PeginRequestI;
+  let peginRequest:BridgeTransactionType;
   let bitcoinAddress:string;
   let stacksAddress:string;
   let amount:number;
@@ -157,7 +157,7 @@
   onMount(async () => {
     try {
       bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-      addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+      addressInfo = await fetchUtxoSet(bitcoinAddress)
       stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
       //const data = buildDepositPayload(network, 1000, stacksAddress, false, undefined);
       //calculateDepositFees(CONFIG.VITE_NETWORK, false, 1000, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.sbtcContractData.sbtcWalletAddress, data)

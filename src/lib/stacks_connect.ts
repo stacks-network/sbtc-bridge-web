@@ -5,8 +5,8 @@ import { sbtcConfig } from '$stores/stores'
 import { fetchSbtcData, fetchUserBalances } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject, SbtcContractDataI } from 'sbtc-bridge-lib' 
+import { openSignatureRequestPopup, type SignatureFinished, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import type { AddressObject, SbtcContractDataType } from 'sbtc-bridge-lib' 
 import { verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
@@ -19,6 +19,7 @@ import type { GetAddressOptions } from 'sats-connect'
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
+const authMessage = 'Please sign this message to complete authentication'
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
@@ -210,6 +211,15 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
+export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureFinished|undefined> {
+	signMessage(function(sigData:SignatureFinished, message:string) {
+		$sbtcConfig.authHeader = sigData
+		sbtcConfig.update(() => $sbtcConfig)
+		return sigData
+	}, authMessage)
+	return
+}
+
 export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 	try {
 		const provider = getStacksProvider()
@@ -219,6 +229,7 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
+					await authenticate(conf)
 					callback(conf, true);
 				},
 				onCancel: () => {
@@ -296,6 +307,11 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 }
   
 export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
+	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+	let privKey = btc.p2wpkh(hex.decode('03a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), net);
+	console.log(privKey)
+	privKey = btc.p2tr(hex.decode('a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), undefined, net);
+	console.log(privKey)
 	if (!conf) conf = defaultSbtcConfig as SbtcConfig
 	let data = {} as any;
 	try {
@@ -352,17 +368,20 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	sbtcConfig.update(() => conf);
 }
 
-export function checkWalletAddress (sbtcContractData:SbtcContractDataI) {
+export function checkWalletAddress (sbtcContractData:SbtcContractDataType) {
 	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const fullPK = sbtcContractData.sbtcWalletPublicKey;        //sbtcContractData.coordinator?.key?.value?.split('x')[1];
-	const xOnlyKey = fullPK; //hex.encode(hex.decode(fullPK).subarray(1, 33)) //(fullPK?.substring(2));
-	if (!xOnlyKey) throw new Error('No key found')
+	const fullPK = hex.decode(sbtcContractData.sbtcWalletPublicKey);
+	//sbtcContractData.coordinator?.key?.value?.split('x')[1];
+	let xOnlyKey = fullPK;
+	if (fullPK.length === 33) {
+		xOnlyKey = fullPK.subarray(1)
+	}
 	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
 	//if (trObj.type === 'tr') 
 	//const addr = trObj.address
 
-	const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
+	//const assumeTweakedPubKey = hex.decode(xOnlyKey);
+	const addr = btc.Address(net).encode({type: 'tr', pubkey: xOnlyKey})
 	if (addr) sbtcContractData.sbtcWalletAddress = addr;
 	return addr;
 }

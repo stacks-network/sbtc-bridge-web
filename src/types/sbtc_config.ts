@@ -1,4 +1,5 @@
-import type { PeginRequestI, SbtcContractDataI, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
+import type { SignatureFinished } from '@stacks/connect';
+import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
 
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
@@ -7,13 +8,14 @@ export type SbtcConfig = {
   pegOutMongoId?: string;
   btcFeeRates?: any;
   loggedIn: boolean;
+  authHeader?:SignatureFinished|undefined;
   keySets: { [key: string]: AddressObject; };
   stxAddress?: string;
   sigData:any;
   pegIn:boolean;
-  peginRequest?:PeginRequestI;
+  peginRequest?:BridgeTransactionType;
   userSettings:SbtcUserSettingI;
-  sbtcContractData: SbtcContractDataI;
+  sbtcContractData: SbtcContractDataType;
   keys: KeySet;
   revealFeeWithGas: number;
 };

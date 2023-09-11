@@ -3,13 +3,12 @@
 	import "../sbtc.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, loginStacksJs, isLegal } from "$lib/stacks_connect";
+	import { initApplication, loginStacksJs, isLegal, loggedIn, authenticate } from "$lib/stacks_connect";
 	import { setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
 	import { sbtcConfig } from '$stores/stores'
-	import type { SbtcContractDataI, KeySet } from 'sbtc-bridge-lib';
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
@@ -25,8 +24,7 @@
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
 			nav.cancel();
-			loginStacksJs(initApplication, $sbtcConfig);
-			//componentKey++;
+			login()
 			return;
 		}
 		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
@@ -43,6 +41,10 @@
 	let inited = false;
 	let errorReason:string|undefined;
 
+	const login = async () => {
+		await loginStacksJs(initApplication, $sbtcConfig);
+	}
+
 	const initApp = async () => {
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
 	}
@@ -51,6 +53,9 @@
 		try {
 			//openWebSocket()
 			await initApp();
+			if (loggedIn() && !$sbtcConfig.authHeader) {
+				await authenticate($sbtcConfig)
+			}
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)

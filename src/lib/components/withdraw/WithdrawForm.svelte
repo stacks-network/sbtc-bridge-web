@@ -7,7 +7,7 @@
   import InputTextField from '../deposit/InputTextField.svelte';
   import BitcoinAmountField from '../deposit/BitcoinAmountField.svelte';
   import { sbtcConfig } from '$stores/stores'
-  import type { PeginRequestI, PegInData, CommitKeysI } from 'sbtc-bridge-lib'
+  import type { BridgeTransactionType, PegInData, CommitKeysI } from 'sbtc-bridge-lib'
   import { signMessage, verifyStacksPricipal, verifySBTCAmount } from '$lib/stacks_connect';
   import type { SbtcConfig } from '$types/sbtc_config';
   import ScriptHashAddress from '$lib/components/deposit/ScriptHashAddress.svelte';
@@ -23,7 +23,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let pegout:PeginRequestI;
+  let pegout:BridgeTransactionType;
   let amountErrored:string|undefined = undefined;
   let bitcoinAddress:string;
   let stacksAddress:string;
@@ -34,7 +34,7 @@
   let inited = false;
   let componentKey = 0;
   let timeLineStatus = 1;
-  let peginRequest:PeginRequestI;
+  let peginRequest:BridgeTransactionType;
   let balanceMsg = false;
   let txFees:Array<number>;
 
