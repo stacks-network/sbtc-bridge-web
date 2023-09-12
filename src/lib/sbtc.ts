@@ -7,6 +7,7 @@ import type { KeySet } from 'sbtc-bridge-lib'
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
+import { sendRawTransaction, sendRawTxDirectBlockCypher } from './bridge_api';
 
 export let rates:Array<any>;
 
@@ -21,6 +22,20 @@ export function finaliseTransaction(psbtHex:string) {
     errorReason += '<br/>' + err.message;
     throw new Error(errorReason);
   }
+}
+
+export async function broadcastTransaction(txHex:string):Promise<any|undefined> {
+  let resp = await sendRawTxDirectBlockCypher(txHex);
+  if (resp && resp.error) {
+    resp = await sendRawTransaction({hex: txHex});
+  }
+  if (resp && resp.tx) {
+    return resp.tx;
+  } else {
+    const errorReason = 'Unknown response from transaction broadcast - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
+    throw new Error(errorReason)
+  }
+  console.log('sendRawTxDirectBlockCypher: ', resp);
 }
 
 export function openWebSocket() {

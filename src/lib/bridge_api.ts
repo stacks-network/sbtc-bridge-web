@@ -147,7 +147,7 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
   return signedPsbt;
 }
 
-export async function savePeginCommit(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
+export async function saveBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
   const response = await fetch(path, {
     method: 'POST',
@@ -160,7 +160,7 @@ export async function savePeginCommit(peginRequest:BridgeTransactionType):Promis
   const res = await extractResponse(response);
   return res;
 }
-export async function updatePeginCommit(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
+export async function updateBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
   const response = await fetch(path, {
     method: 'PUT',

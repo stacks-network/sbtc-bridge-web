@@ -10,7 +10,7 @@
   import type { SbtcConfig } from '$types/sbtc_config';
   import ScriptHashAddress from '$lib/components/deposit/ScriptHashAddress.svelte';
   import { minimumDeposit, makeFlash } from "$lib/stacks_connect";
-  import { fetchPeginById, savePeginCommit, fetchPeginsByStacksAddress } from "$lib/bridge_api";
+  import { fetchPeginById, saveBridgeTransaction, fetchPeginsByStacksAddress } from "$lib/bridge_api";
   import StatusCheck from "$lib/components/deposit/StatusCheck.svelte";
   import Button from '$lib/components/shared/Button.svelte';
   import type { BridgeTransactionType } from 'sbtc-bridge-lib'
@@ -90,7 +90,7 @@
 
   const savePeginRequestToDB = async () => {
     try {
-      const newPegin = await savePeginCommit(peginRequest)
+      const newPegin = await saveBridgeTransaction(peginRequest)
       if (!newPegin) throw new Error('Unable to save - already exists');
       if (newPegin.insertedId) {
         //pegin = peginRequest;

@@ -7,7 +7,7 @@
 	import { sbtcConfig } from "$stores/stores";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
-	import { fetchPeginById, fetchUtxoSet, updatePeginCommit } from "$lib/bridge_api";
+	import { fetchPeginById, fetchUtxoSet, updateBridgeTransaction } from "$lib/bridge_api";
 	import { bitcoinBalanceFromMempool, userSatBtc } from "$lib/utils";
 	import InputTextField from "../InputTextField.svelte";
 	import Button from "$lib/components/shared/Button.svelte";
@@ -94,7 +94,7 @@
         verifyAmount(amt);
         if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
           peginRequest.amount = amount = amt
-          const newP = await updatePeginCommit(peginRequest)
+          const newP = await updateBridgeTransaction(peginRequest)
           if (newP && newP.status !== 404) peginRequest = newP;
         } else {
           amount = amt;

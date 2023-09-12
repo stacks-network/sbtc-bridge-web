@@ -7,7 +7,7 @@ import * as btc from '@scure/btc-signer';
 import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
 import { explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
-import { savePeginCommit } from '$lib/bridge_api';
+import { saveBridgeTransaction } from '$lib/bridge_api';
 import Button from '$lib/components/shared/Button.svelte';
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction, calculateDepositFees, addInputs, inputAmt } from 'sbtc-bridge-lib'
@@ -126,44 +126,28 @@ const updatePeginRequest = async (txid:string) => {
     peginRequest.status = 5;
     peginRequest.btcTxid = txid;
   }
-  await savePeginCommit(peginRequest);
+  await saveBridgeTransaction(peginRequest);
   broadcasted = true;
 }
 
-let resp:any;
 let broadcasted:boolean;
 const broadcastTransaction = async (psbtHex:string) => {
-  let errMessage = undefined;
   try {
     const txHex = finaliseTransaction(psbtHex)
-    resp = await sendRawTxDirectBlockCypher(txHex);
-    if (resp && resp.error) {
-      resp = await sendRawTransaction({hex: txHex});
-    }
-    console.log('sendRawTxDirectBlockCypher: ', resp);
-    if (resp && resp.tx) {
-      broadcasted = true;
-      try {
-        if (peginRequest.mode === 'op_return') {
-          peginRequest.status = 5;
-        }
-        peginRequest.btcTxid = (resp.tx.hash) ? resp.tx.hash : resp.tx.txid;
-        await savePeginCommit(peginRequest);
-      } catch (err) {
-        console.log('Error saving pegin request', err)
+    const result:any = broadcastTransaction(txHex)
+    broadcasted = true;
+    try {
+      if (peginRequest.mode === 'op_return') {
+        peginRequest.status = 5;
       }
-    } else if (resp) {
-      errMessage = (resp.error);
-      broadcasted = false;
-      errorReason = 'Unable to broadcast the transaction - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
-    } else {
-      broadcasted = false;
-      errorReason = 'Unknown response from transaction broadcast - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
+      peginRequest.btcTxid = (result.hash) ? result.hash : result.txid;
+      await saveBridgeTransaction(peginRequest);
+    } catch (err) {
+      console.log('Error saving pegin request', err)
     }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
     errorReason = err.message
-    //errorReason = errMessage + '. Unable to broadcast transaction - please try hitting \'back\' and refreshing the bitcoin input data.'
   }
 }
 
