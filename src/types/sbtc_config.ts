@@ -1,6 +1,10 @@
-import type { SignatureFinished } from '@stacks/connect';
 import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
 
+export type AuthorisationDataType = {
+  signature: string;
+  publicKey: string;
+  stxAddress:string;
+}
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
   sbtcWalletAddressInfo?: any;
@@ -8,7 +12,7 @@ export type SbtcConfig = {
   pegOutMongoId?: string;
   btcFeeRates?: any;
   loggedIn: boolean;
-  authHeader?:SignatureFinished|undefined;
+  authHeader?:AuthorisationDataType|undefined;
   keySets: { [key: string]: AddressObject; };
   stxAddress?: string;
   sigData:any;

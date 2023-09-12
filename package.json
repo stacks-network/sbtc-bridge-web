@@ -52,6 +52,7 @@
 		"@popperjs/core": "^2.11.8",
 		"@scure/btc-signer": "^1.1.0",
 		"@stacks/connect": "^7.4.0",
+		"@stacks/encryption": "^6.7.0",
 		"@stacks/network": "^6.5.4",
 		"@stacks/transactions": "^6.7.0",
 		"@sveltejs/adapter-static": "^2.0.2",

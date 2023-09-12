@@ -4,7 +4,7 @@
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, loginStacksJs, isLegal, loggedIn, authenticate } from "$lib/stacks_connect";
-	import { setConfig } from '$lib/config';
+	import { CONFIG, setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
@@ -12,6 +12,8 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
+	import { saveBridgeTransaction, setAuthorisation } from '$lib/bridge_api';
+	import type { BridgeTransactionType } from 'sbtc-bridge-lib';
 
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
@@ -56,6 +58,7 @@
 			if (loggedIn() && !$sbtcConfig.authHeader) {
 				await authenticate($sbtcConfig)
 			}
+			setAuthorisation($sbtcConfig.authHeader)
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)

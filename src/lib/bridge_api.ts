@@ -2,6 +2,18 @@ import { CONFIG } from '$lib/config';
 import type { BridgeTransactionType, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 import { checkAddressForNetwork } from 'sbtc-bridge-lib';
 
+let authHeader:any;
+
+export function setAuthorisation(auth:any) {
+  authHeader = auth
+}
+function headers() {
+  if (authHeader) {
+    return { 'Content-Type': 'application/json', 'Authorization': JSON.stringify(authHeader) }
+  }
+  return { 'Content-Type': 'application/json', 'Authorization': '' }
+}
+
 export function addNetSelector (path:string) {
   if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
@@ -11,6 +23,7 @@ export function addNetSelector (path:string) {
     return path.replace('bridge-api', 'bridge-api/mainnet');
   }
 }
+
 async function fetchCatchErrors(path:string) {
   try {
     const response = await fetch(path);
@@ -52,7 +65,7 @@ export async function sendRawTxDirectBlockCypher(hex:string) {
   console.log('sendRawTx:mempoolUrl: ', url)
   const response = await fetch(url, {
     method: 'POST',
-    //headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify({tx: hex})
   });
   //if (response.status !== 200) console.log('Mempool error: ' + response.status + ' : ' + response.statusText);
@@ -79,7 +92,7 @@ export async function sendRawTransaction(tx: { hex: string; }) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sendrawtx');
   const response = await fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(tx)
   });
 
@@ -106,7 +119,7 @@ export async function signAndBroadcast(wrappedPsbt:WrappedPSBT) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/signAndBroadcast');
   const response = await fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(wrappedPsbt)
   });
   let res:any;
@@ -137,7 +150,7 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/walletprocesspsbt');
   const response = await fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(psbt)
   });
   if (response.status !== 200) {
@@ -148,10 +161,10 @@ export async function fetchWalletProcessPsbt(psbt: { hex: string; }) {
 }
 
 export async function saveBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
   const response = await fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(peginRequest)
   });
   if (response.status !== 200) {
@@ -161,10 +174,10 @@ export async function saveBridgeTransaction(peginRequest:BridgeTransactionType):
   return res;
 }
 export async function updateBridgeTransaction(peginRequest:BridgeTransactionType):Promise<any> { //<BridgeTransactionType|{insertedId:string; acknowledged:boolean;}>  {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
   const response = await fetch(path, {
     method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(peginRequest)
   });
   if (response.status !== 200) {
@@ -175,7 +188,7 @@ export async function updateBridgeTransaction(peginRequest:BridgeTransactionType
 }
 
 export async function fetchPeginById(_id:string):Promise<BridgeTransactionType> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins/' + _id);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx/' + _id);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Commit not found.');
@@ -195,7 +208,7 @@ export async function doPeginScan():Promise<Array<BridgeTransactionType>> {
 }
 
 export async function fetchPegins():Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins');
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
@@ -217,7 +230,7 @@ export async function fetchCommitments(btcAddress:string, stxAddress:string, sbt
 }
 
 export async function fetchPeginsByStacksAddress(stxAddress:string):Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/pegins/search/' + stxAddress);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx/search/' + stxAddress);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
@@ -342,7 +355,7 @@ export async function sign(wrappedPsbt:WrappedPSBT) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sign');
   const response = await fetch(path, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: headers(),
     body: JSON.stringify(wrappedPsbt)
   });
   let res:any;

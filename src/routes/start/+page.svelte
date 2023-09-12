@@ -3,14 +3,13 @@
   import { sbtcConfig } from '$stores/stores';
   import type { SbtcConfig } from '$types/sbtc_config'
   import { Tooltip } from 'flowbite-svelte';
-  import { a_primary } from '$lib/css_utils';
   import { Icon, InformationCircle } from "svelte-hero-icons"
 
-  const start = (pegin:boolean) => {
-  const conf:SbtcConfig = $sbtcConfig;
-  conf.pegIn = pegin;
-  sbtcConfig.set(conf);
-  (pegin) ? goto('/deposit') : goto('/withdraw');
+  const start = async (pegin:boolean) => {
+    const conf:SbtcConfig = $sbtcConfig;
+    conf.pegIn = pegin;
+    sbtcConfig.set(conf);
+    (pegin) ? goto('/deposit') : goto('/withdraw');
   }
 </script>
 

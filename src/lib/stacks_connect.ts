@@ -2,12 +2,12 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchSbtcData, fetchUserBalances } from '$lib/bridge_api'
+import { fetchSbtcData, fetchUserBalances, setAuthorisation } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup, type SignatureFinished, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject, SbtcContractDataType } from 'sbtc-bridge-lib' 
-import { verifyMessageSignature } from '@stacks/encryption';
+import { openSignatureRequestPopup, type SignatureData, type SignatureFinished, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import { getStacksAddressFromSignature, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
+import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
 import { hex } from '@scure/base';
@@ -16,6 +16,8 @@ import { schnorr } from '@noble/curves/secp256k1';
 import * as btc from '@scure/btc-signer';
 import { AddressPurposes, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
+import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
+import { publicKeyFromSignatureRsv, type MessageSignature, StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -211,9 +213,21 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
-export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureFinished|undefined> {
-	signMessage(function(sigData:SignatureFinished, message:string) {
-		$sbtcConfig.authHeader = sigData
+export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
+	signMessage(async function(sigData:SignatureData, message:string) {
+		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
+		if (verified) {
+		  console.log('sig verififed')
+		}
+	    const msgHash = hashMessage(message);
+    	const stxAddresses = await getStacksAddressFromSignature(msgHash, sigData.signature );
+		const pubkey = publicKeyFromSignatureVrs(hex.encode(msgHash), { data: sigData.signature, type: StacksMessageType.MessageSignature })
+		console.log('pubkey:', pubkey)
+		console.log('stxAddresses:', stxAddresses)
+		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
+
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress }
+		setAuthorisation($sbtcConfig.authHeader)
 		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
 	}, authMessage)

@@ -38,7 +38,7 @@
 		let net = 'mainnet';
 		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
 		setConfig(net);
-		await sbtcConfig.update((conf:SbtcConfig) => {
+		sbtcConfig.update((conf:SbtcConfig) => {
 			return conf;
 		});
 		await fetchSbtcBalance($sbtcConfig);
