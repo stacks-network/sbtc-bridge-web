@@ -2,9 +2,9 @@
 import { onMount } from 'svelte';
 import Banner from '$lib/components/shared/Banner.svelte';
 import Button from '$lib/components/shared/Button.svelte';
-import type { PeginRequestI } from 'sbtc-bridge-lib'
+import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 
-export let pegin:PeginRequestI;
+export let pegin:BridgeTransactionType;
 
 onMount(async () => {
 })

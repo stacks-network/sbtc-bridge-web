@@ -2,12 +2,12 @@
 import { onMount } from 'svelte';
 import { tsToDate } from '$lib/utils'
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType } from 'sbtc-bridge-lib' 
 import { parseDepositPayload } from 'sbtc-bridge-lib' 
 import TxExport from './TxExport.svelte';
 import { sbtcConfig } from '$stores/stores'
 
-export let peginRequest:PeginRequestI;
+export let peginRequest:BridgeTransactionType;
 export let reclaimBtcTx:btc.Transaction;
 export let revealBtcTx:btc.Transaction;
 let stacksData:any;

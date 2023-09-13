@@ -1,7 +1,7 @@
 <script lang="ts">
 import { onMount } from 'svelte';
 import { goto } from "$app/navigation";
-import type { PeginRequestI } from 'sbtc-bridge-lib'
+import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { toStorable } from 'sbtc-bridge-lib'
 import TrCommit from '$lib/components/transactions/TrCommit.svelte';
 import { explorerBtcTxUrl } from '$lib/utils'
@@ -10,7 +10,7 @@ import PendingDeposit from '$lib/components/transactions/PendingDeposit.svelte';
 import CommittedDeposit from '$lib/components/transactions/CommittedDeposit.svelte';
 
 export let data:any;
-let peginRequest:PeginRequestI = data;
+let peginRequest:BridgeTransactionType = data;
 
 let inited = false;
 let errorReason:string|undefined;

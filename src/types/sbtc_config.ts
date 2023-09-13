@@ -1,5 +1,10 @@
-import type { PeginRequestI, SbtcContractDataI, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
 
+export type AuthorisationDataType = {
+  signature: string;
+  publicKey: string;
+  stxAddress:string;
+}
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
   sbtcWalletAddressInfo?: any;
@@ -7,13 +12,14 @@ export type SbtcConfig = {
   pegOutMongoId?: string;
   btcFeeRates?: any;
   loggedIn: boolean;
+  authHeader?:AuthorisationDataType|undefined;
   keySets: { [key: string]: AddressObject; };
   stxAddress?: string;
   sigData:any;
   pegIn:boolean;
-  peginRequest?:PeginRequestI;
+  peginRequest?:BridgeTransactionType;
   userSettings:SbtcUserSettingI;
-  sbtcContractData: SbtcContractDataI;
+  sbtcContractData: SbtcContractDataType;
   keys: KeySet;
   revealFeeWithGas: number;
 };

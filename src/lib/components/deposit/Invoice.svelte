@@ -7,12 +7,12 @@
   import LinkToExplorer from '$lib/components/shared/LinkToExplorer.svelte';
   import CopyClipboard from '$lib/components/common/CopyClipboard.svelte';
   import { makeFlash } from "$lib/stacks_connect";
-  import type { PeginRequestI } from 'sbtc-bridge-lib'
+  import type { BridgeTransactionType } from 'sbtc-bridge-lib'
   import { truncate, explorerBtcAddressUrl } from '$lib/utils'
   import { sbtcConfig } from '$stores/stores'
   import { CONFIG } from '$lib/config';
 
-  export let peginRequest:PeginRequestI;
+  export let peginRequest:BridgeTransactionType;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
   let amount = 0;
   let copied = false;

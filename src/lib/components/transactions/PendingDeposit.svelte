@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { goto } from "$app/navigation";
-  import type { PeginRequestI } from 'sbtc-bridge-lib'
+  import type { BridgeTransactionType } from 'sbtc-bridge-lib'
   import { tsToDate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
   import { doPeginScan } from '$lib/bridge_api';
   import Invoice from "$lib/components/deposit/Invoice.svelte";
 	import Banner from '../shared/Banner.svelte';
 
-  export let peginRequest:PeginRequestI;
+  export let peginRequest:BridgeTransactionType;
 
   const scan = async () => {
     doPeginScan();
