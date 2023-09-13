@@ -4,7 +4,7 @@
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import { goto } from "$app/navigation";
-	import { initApplication, loginStacksJs } from '$lib/stacks_connect'
+	import { authenticate, initApplication, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
@@ -15,14 +15,14 @@
 
 	const doLogin = async () => {
 		const res = await loginStacksJs(initApplication, $sbtcConfig);
+		if (!$sbtcConfig.authHeader) authenticate($sbtcConfig)
 		console.log(res)
 	}
 	const doLogout = async () => {
 		logUserOut();
-		await sbtcConfig.update((conf:SbtcConfig) => {
-			conf.loggedIn = false;
-			return conf;
-		});
+		$sbtcConfig.loggedIn = false
+		$sbtcConfig.authHeader = undefined
+		await sbtcConfig.update(() => $sbtcConfig)
 		goto('/')
 	}
 

@@ -1,4 +1,4 @@
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType } from 'sbtc-bridge-lib' 
 
 export const utxos_pqe8 = {
   "address": "tb1pf74xr0x574farj55t4hhfvv0vpc9mpgerasawmf5zk9suauckugqdppqe8",
@@ -118,7 +118,7 @@ export const utxos_nrsp = {
     }
   }
 
-export const commitTx:PeginRequestI = {
+export const commitTx:BridgeTransactionType = {
   _id: "64458cd71f66c6ef1074c5bb",
   fromBtcAddress: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
   revealPub: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',

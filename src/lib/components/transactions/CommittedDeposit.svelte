@@ -2,7 +2,7 @@
 import { onMount } from 'svelte';
 import { goto } from "$app/navigation";
 import { CONFIG } from '$lib/config';
-import type { PeginRequestI, WrappedPSBT } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType, WrappedPSBT } from 'sbtc-bridge-lib' 
 import { signMessage } from '$lib/stacks_connect';
 import { explorerBtcTxUrl } from '$lib/utils'
 import { sbtcConfig } from '$stores/stores'
@@ -15,7 +15,7 @@ import { a_primary } from '$lib/css_utils';
 import Invoice from '../deposit/Invoice.svelte';
 import { fetchUtxoSet, fetchTransaction } from '$lib/bridge_api'
 
-export let peginRequest:PeginRequestI;
+export let peginRequest:BridgeTransactionType;
 let wrappedPsbt:WrappedPSBT = {} as WrappedPSBT;
 let revealTx:Transaction;
 let reclaimTx:Transaction;

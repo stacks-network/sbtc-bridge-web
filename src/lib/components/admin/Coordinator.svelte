@@ -1,31 +1,31 @@
 <script lang="ts">
 import { CONFIG } from '$lib/config';
-import { setCoordinator, setBtcWallet } from "$lib/sbtc_admin.js";
+import { setCoordinator, setsBTCPublicKey } from "$lib/sbtc_admin.js";
 import MintTokens from './MintTokens.svelte'
 import BurnTokens from './BurnTokens.svelte'
 import { sbtcConfig } from '$stores/stores'
-	import Button from '../shared/Button.svelte';
+import Button from '../shared/Button.svelte';
 
 //const contractCall = openContractCall();
+let errorReason:string|undefined;
 
-let coordinator:string = CONFIG.VITE_SBTC_COORDINATOR //VITE_SBTC_CONTRACT_ID.split('.')[0];
-let sbtcWalletAddress:string = CONFIG.VITE_SBTC_WALLET;
+let romeoPublicKey = '02d1f244f7d308f1940aa66ca802ee12268a6442e2c5984d571b76509173de629d';
 if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
   const s = $sbtcConfig.sbtcContractData
-  coordinator = s.coordinator?.addr?.value || '';
-  sbtcWalletAddress = s.sbtcWalletAddress;
+  //coordinator = s.coordinator?.addr?.value || '';
+  //romeoPublicKey = s.sbtcWalletAddress;
 }
 
-const coordinate = async () => {
-  const res = await setCoordinator(coordinator);
-}
 const wallet = async () => {
-  const res = await setBtcWallet(sbtcWalletAddress);
+  const res = await setsBTCPublicKey(romeoPublicKey);
+  if (res.error) errorReason = res.reason
+  console.log(res)
 }
 
 </script>
    
 <div class="card border p-4">
+  <!--
   <div class="row">
     <div class="col">
       <div>Coordinator: {coordinator}</div>
@@ -35,17 +35,23 @@ const wallet = async () => {
       </div>
     </div>
   </div>
+  -->
   <div class="row">
     <div class="col">
-      <div>sBTC Wallet: {sbtcWalletAddress}</div>
-      <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={sbtcWalletAddress}/>
+      <div>sBTC Public Key{#if romeoPublicKey}: {romeoPublicKey}{/if}</div>
+      <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={romeoPublicKey}/>
       <div class="py-0">
         <Button darkScheme={false} label={'Set BTC Wallet'} target={''} on:clicked={() => wallet()}/>
       </div>
     </div>
   </div>
+  {#if romeoPublicKey}
   <MintTokens />
   <BurnTokens />
+  {/if}
+  {#if errorReason}
+  {@html errorReason}
+  {/if}
 </div>
 
 

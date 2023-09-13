@@ -1,13 +1,13 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
   import Button from '$lib/components/shared/Button.svelte';
-  import type { PeginRequestI } from 'sbtc-bridge-lib'
+  import type { BridgeTransactionType } from 'sbtc-bridge-lib'
   import Invoice from "$lib/components/deposit/Invoice.svelte";
 	import { bitcoinBalanceFromMempool } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores'
 	import { CONFIG, isSimnet } from '$lib/config';
 
-  export let peginRequest:PeginRequestI;
+  export let peginRequest:BridgeTransactionType;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
   let amount = 0;
   let cardinalBalance = 0;

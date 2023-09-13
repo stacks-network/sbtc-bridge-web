@@ -61,7 +61,7 @@ export function buildOpReturnDepositTransaction(network:string, amount:number, b
 	if (!stacksAddress) throw new Error('Stacks address required!');
 	const data = buildDepositPayloadOpReturn(network, stacksAddress);
 	const txFees = calculateDepositFees(network, false, amount, btcFeeRates.feeInfo, addressInfo, sbtcWalletAddress, data)
-	const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true });
+	const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true, allowUnknownInputs:true, allowUnknownOutputs:true });
 	// no reveal fee for op_return
 	addInputs(network, amount, 0, tx, false, addressInfo.utxos, userPaymentPubKey);
 	tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: BigInt(0) });

@@ -3,11 +3,11 @@
   import { goto } from "$app/navigation";
   import { CONFIG } from '$lib/config';
   import DepositFormHeader from '$lib/components/deposit/DepositFormHeader.svelte'
-	import { getOpReturnDepositRequest, type PeginRequestI } from "sbtc-bridge-lib";
+	import { getOpReturnDepositRequest, type BridgeTransactionType } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import { minimumDeposit, makeFlash, verifyAmount, verifyStacksPricipal } from "$lib/stacks_connect";
-	import { fetchPeginById, fetchUtxoSet, updatePeginCommit } from "$lib/bridge_api";
+	import { fetchPeginById, fetchUtxoSet, updateBridgeTransaction } from "$lib/bridge_api";
 	import { bitcoinBalanceFromMempool, userSatBtc } from "$lib/utils";
 	import InputTextField from "../InputTextField.svelte";
 	import Button from "$lib/components/shared/Button.svelte";
@@ -20,7 +20,7 @@
 
   const dispatch = createEventDispatcher();
 
-  let pegin:PeginRequestI;
+  let pegin:BridgeTransactionType;
   let balanceMsg = false;
 
   const network = CONFIG.VITE_NETWORK;
@@ -29,7 +29,7 @@
   let amountErrored:string|undefined = undefined;
   let componentKey = 0;
   let timeLineStatus = 1;
-  let peginRequest:PeginRequestI;
+  let peginRequest:BridgeTransactionType;
   let bitcoinAddress:string;
   let stacksAddress:string;
   let amount:number;
@@ -94,7 +94,7 @@
         verifyAmount(amt);
         if (peginRequest && peginRequest._id && amt !== peginRequest.amount) {
           peginRequest.amount = amount = amt
-          const newP = await updatePeginCommit(peginRequest)
+          const newP = await updateBridgeTransaction(peginRequest)
           if (newP && newP.status !== 404) peginRequest = newP;
         } else {
           amount = amt;
@@ -157,7 +157,7 @@
   onMount(async () => {
     try {
       bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-      addressInfo = await fetchUtxoSet($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
+      addressInfo = await fetchUtxoSet(bitcoinAddress)
       stacksAddress =$sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
       //const data = buildDepositPayload(network, 1000, stacksAddress, false, undefined);
       //calculateDepositFees(CONFIG.VITE_NETWORK, false, 1000, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.sbtcContractData.sbtcWalletAddress, data)

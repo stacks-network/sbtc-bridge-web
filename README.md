@@ -1,8 +1,5 @@
 # sbtc-bridge
 
-![ci](https://github.com/stacks-network/sbtc-bridge-web)
-
-
 ## Introduction
 
 sBTC bridge interracts with the sBTC protocol to provide decentralised,
@@ -37,7 +34,7 @@ For example the API provides endpoints (see [docs](https://bridge.stx.eco/bridge
 The [sBTC lib](https://socket.dev/npm/package/sbtc-bridge-lib) (`npm i sbtc-bridge-lib`) provides the same methods via typescript;
 
 - export function buildDepositPayload(net:any, revealFee:number, address:string, opDrop:boolean, memo:string|undefined):Uint8Array
-- export function parseDepositPayload(d1:Uint8Array, amountSats: number):depositPayloadType
+- export function parseDepositPayload(d1:Uint8Array, amountSats: number):DepositPayloadType
 
 ### Deployment
 

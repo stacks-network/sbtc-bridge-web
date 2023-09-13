@@ -2,12 +2,12 @@
 import { sbtcConfig } from '$stores/stores';
 import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
-import type { PeginRequestI } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType } from 'sbtc-bridge-lib' 
 import { getTestAddresses } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
 export let tx:any;
-let peginRequest:PeginRequestI = tx.getOpDropPeginRequest();
+let peginRequest:BridgeTransactionType = tx.getOpDropPeginRequest();
 
 let showDebugInfo = $sbtcConfig.userSettings.debugMode;
 let showDetails = false;

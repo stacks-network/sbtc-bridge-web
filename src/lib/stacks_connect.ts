@@ -2,12 +2,12 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchSbtcData, fetchUserBalances } from '$lib/bridge_api'
+import { fetchSbtcData, fetchUserBalances, setAuthorisation } from '$lib/bridge_api'
 import type { SbtcConfig } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject, SbtcContractDataI } from 'sbtc-bridge-lib' 
-import { verifyMessageSignature } from '@stacks/encryption';
+import { openSignatureRequestPopup, type SignatureData, type SignatureFinished, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import { getStacksAddressFromSignature, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
+import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
 import { hex } from '@scure/base';
@@ -16,9 +16,12 @@ import { schnorr } from '@noble/curves/secp256k1';
 import * as btc from '@scure/btc-signer';
 import { AddressPurposes, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
+import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
+import { publicKeyFromSignatureRsv, type MessageSignature, StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
+const authMessage = 'Please sign this message to complete authentication'
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
@@ -210,6 +213,27 @@ export function loggedIn():boolean {
 	return userSession.isUserSignedIn()
 }
 
+export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
+	signMessage(async function(sigData:SignatureData, message:string) {
+		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
+		if (verified) {
+		  console.log('sig verififed')
+		}
+	    const msgHash = hashMessage(message);
+    	const stxAddresses = await getStacksAddressFromSignature(msgHash, sigData.signature );
+		const pubkey = publicKeyFromSignatureVrs(hex.encode(msgHash), { data: sigData.signature, type: StacksMessageType.MessageSignature })
+		console.log('pubkey:', pubkey)
+		console.log('stxAddresses:', stxAddresses)
+		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
+
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress }
+		setAuthorisation($sbtcConfig.authHeader)
+		sbtcConfig.update(() => $sbtcConfig)
+		return sigData
+	}, authMessage)
+	return
+}
+
 export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 	try {
 		const provider = getStacksProvider()
@@ -219,6 +243,7 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
+					await authenticate(conf)
 					callback(conf, true);
 				},
 				onCancel: () => {
@@ -296,6 +321,11 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 }
   
 export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
+	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
+	let privKey = btc.p2wpkh(hex.decode('03a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), net);
+	console.log(privKey)
+	privKey = btc.p2tr(hex.decode('a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), undefined, net);
+	console.log(privKey)
 	if (!conf) conf = defaultSbtcConfig as SbtcConfig
 	let data = {} as any;
 	try {
@@ -352,17 +382,20 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	sbtcConfig.update(() => conf);
 }
 
-export function checkWalletAddress (sbtcContractData:SbtcContractDataI) {
+export function checkWalletAddress (sbtcContractData:SbtcContractDataType) {
 	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const fullPK = sbtcContractData.sbtcWalletPublicKey;        //sbtcContractData.coordinator?.key?.value?.split('x')[1];
-	const xOnlyKey = fullPK; //hex.encode(hex.decode(fullPK).subarray(1, 33)) //(fullPK?.substring(2));
-	if (!xOnlyKey) throw new Error('No key found')
+	const fullPK = hex.decode(sbtcContractData.sbtcWalletPublicKey);
+	//sbtcContractData.coordinator?.key?.value?.split('x')[1];
+	let xOnlyKey = fullPK;
+	if (fullPK.length === 33) {
+		xOnlyKey = fullPK.subarray(1)
+	}
 	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
 	//if (trObj.type === 'tr') 
 	//const addr = trObj.address
 
-	const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	const addr = btc.Address(net).encode({type: 'tr', pubkey: assumeTweakedPubKey})
+	//const assumeTweakedPubKey = hex.decode(xOnlyKey);
+	const addr = btc.Address(net).encode({type: 'tr', pubkey: xOnlyKey})
 	if (addr) sbtcContractData.sbtcWalletAddress = addr;
 	return addr;
 }
