@@ -14,7 +14,7 @@ const burn = async () => {
     return;
   }
   error = undefined;
-  const res = await burnFrom(pegOutAmount||0, stxAddress, btcTxid);
+  const res = await burnFrom($sbtcConfig.sbtcContractData.contractId, pegOutAmount||0, stxAddress, btcTxid);
 }
 </script>
 
