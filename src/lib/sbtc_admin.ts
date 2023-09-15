@@ -8,6 +8,7 @@ import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/princip
 import { openContractCall } from '@stacks/connect';
 import { getStacksNetwork } from './stacks_connect.js'
 import { hex } from '@scure/base';
+import { sbtcConfig } from '$stores/stores'
 
 export const coordinators = [
   { stxAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5', btcAddress: 'bc1qkj5yxgm3uf78qp2fdmgx2k76ccdvj7rx0qwhv0' }, // devnet + electrum bob
@@ -27,7 +28,7 @@ export function isCoordinator(address:string) {
 	return coordinators.find((o) => o.stxAddress === address);
 }
 
-export async function mintTo(amount:number, stxAddress: string, btcTxid: string) {
+export async function mintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string) {
   //data {addr: principal, key: (buff 33)}
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
@@ -36,8 +37,8 @@ export async function mintTo(amount:number, stxAddress: string, btcTxid: string)
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
     functionName: 'mint!',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -50,7 +51,7 @@ export async function mintTo(amount:number, stxAddress: string, btcTxid: string)
   });
 }
 
-export async function burnFrom(amount:number, stxAddress: string, btcTxid: string) {
+export async function burnFrom(contractId:string, amount:number, stxAddress: string, btcTxid: string) {
   //data {addr: principal, key: (buff 33)}
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
@@ -59,8 +60,8 @@ export async function burnFrom(amount:number, stxAddress: string, btcTxid: strin
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Allow,
-    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
     functionName: 'burn!',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -73,7 +74,7 @@ export async function burnFrom(amount:number, stxAddress: string, btcTxid: strin
   });
 }
 
-export async function setCoordinator(address:string) {
+export async function setCoordinator(contractId:string, address:string) {
   //data {addr: principal, key: (buff 33)}
   const datum = tupleCV({
     addr: principalCV(address),
@@ -85,8 +86,8 @@ export async function setCoordinator(address:string) {
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
     functionName: 'set-coordinator-data',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
@@ -99,18 +100,18 @@ export async function setCoordinator(address:string) {
   });
 }
 
-export async function setsBTCPublicKey(publicKey:string) {
+export async function setsBTCPublicKey(contractId:string, publicKey:string) {
   const datum = bufferCV(hex.decode(publicKey))
   const functionArgs = [datum]
   await openContractCall({
     network: getStacksNetwork(),
     postConditions: [],
     postConditionMode: PostConditionMode.Deny,
-    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
     functionName: 'set-bitcoin-wallet-public-key',
     functionArgs: functionArgs,
-    onFinish: (data: any) => {
+    onFinish: async (data: any) => {
       console.log('TX Data: ', data);
       return data;
     },
@@ -118,25 +119,5 @@ export async function setsBTCPublicKey(publicKey:string) {
       console.log('popup closed!');
     }
   });
-}
-
-export async function setBTCPublicKeyFromprivate(publicKey:string, senderKey:string) {
-  //: '6c7316495d181cfd1f62bfb18c6843c06bdb236ba18f87cb923320940ac4cfca01'
-  const datum = bufferCV(hex.decode(publicKey))
-  const functionArgs = [datum]
-  const txOptions:SignedContractCallOptions = {
-    network: getStacksNetwork(),
-    anchorMode: AnchorModeNames[0],
-    postConditions: [],
-    senderKey,
-    postConditionMode: PostConditionMode.Deny,
-    contractAddress: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[0],
-    contractName: CONFIG.VITE_SBTC_CONTRACT_ID.split('.')[1],
-    functionName: 'set-bitcoin-wallet-public-key',
-    functionArgs: functionArgs,
-  }
-  const transaction = await makeContractCall(txOptions);
-  const result = await broadcastTransaction(transaction, getStacksNetwork());
-  return result
 }
 

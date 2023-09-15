@@ -124,42 +124,5 @@ describe('suite', () => {
   })
  */
 
-  /**
-  it.concurrent('ReclaimOrRevealTransaction.constructor() creates tx object in correct state.', async () => {
-    fetchMock.mockIf(/^.*tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd\/utxo.*$/, () => {
-      // sbtc taproot wallet
-      return JSON.stringify(utxos_pqe8);
-    });
-    const revealTx = new ReclaimOrRevealTransaction(commitTx);
-    revealTx.fetchUtxos();
-    revealTx.addressInfo = sbtcWalletAddressInfo
-    expect(revealTx.addressInfo.utxos.length).equals(1)
-    fetchMock.mockIf(/^.*72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533\/hex.*$/, () => {
-      // sbtc taproot wallet
-      return JSON.stringify(txHex);
-    });
-    revealTx.fee = 5000
-
-    const tx = await revealTx.buildTransaction(false);
-    //expect(tx.inputsLength).equals(2)
-    expect(tx.outputsLength).equals(1)
- 
-    //const res = tx.signIdx(privKey, 0) 
-    //console.log('signIdx: ' + res)
-
-    expect(Number(tx.getOutput(0).amount)).equals(commitTx.amount + 8916780 - revealTx.fee)
-    if (revealTx.tx) {
-      const psbt = revealTx.tx.toPSBT();
-      console.log(hex.encode(revealTx.tx.toBytes()))
-      console.log('------------------------------')
-      console.log(hex.encode(psbt))
-      console.log('------------------------------')
-      console.log(base64.encode(psbt))
-    }
-    const partialTx = btc.Transaction.fromPSBT(base64.decode(btcCorePartial))
-    //partialTx.finalizeIdx(1)
-    //partialTx.finalizeIdx(0)
-  })
-   */
 
 }) 

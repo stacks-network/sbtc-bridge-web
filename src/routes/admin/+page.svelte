@@ -1,6 +1,6 @@
 <script lang="ts">
 import Coordinator from '$lib/components/admin/Coordinator.svelte';
-import { CONFIG } from '$lib/config';
+import { sbtcConfig } from '$stores/stores'
 
 </script>
 
@@ -11,7 +11,7 @@ import { CONFIG } from '$lib/config';
 			<div class="">
 				<div class="">
 					<h1 class="text-info"><span class="strokeme-info">sBTC</span> Contract Management</h1>
-					<h6>Contract ID: {CONFIG.VITE_SBTC_CONTRACT_ID}</h6>
+					<h6>Contract ID: {$sbtcConfig.sbtcContractData.contractId}</h6>
 				</div>
 			</div>
 			<div class="">

@@ -7,7 +7,6 @@ export type AuthorisationDataType = {
 }
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
-  sbtcWalletAddressInfo?: any;
   pegInMongoId?: string;
   pegOutMongoId?: string;
   btcFeeRates?: any;

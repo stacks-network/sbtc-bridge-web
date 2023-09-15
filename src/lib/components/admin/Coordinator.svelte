@@ -9,7 +9,7 @@ import Button from '../shared/Button.svelte';
 //const contractCall = openContractCall();
 let errorReason:string|undefined;
 
-let romeoPublicKey = '02d1f244f7d308f1940aa66ca802ee12268a6442e2c5984d571b76509173de629d';
+let romeoPublicKey = $sbtcConfig.sbtcContractData.sbtcWalletPublicKey;
 if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
   const s = $sbtcConfig.sbtcContractData
   //coordinator = s.coordinator?.addr?.value || '';
@@ -17,7 +17,7 @@ if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
 }
 
 const wallet = async () => {
-  const res = await setsBTCPublicKey(romeoPublicKey);
+  const res:any = await setsBTCPublicKey($sbtcConfig.sbtcContractData.contractId, romeoPublicKey);
   if (res.error) errorReason = res.reason
   console.log(res)
 }
@@ -38,7 +38,7 @@ const wallet = async () => {
   -->
   <div class="row">
     <div class="col">
-      <div>sBTC Public Key{#if romeoPublicKey}: {romeoPublicKey}{/if}</div>
+      <div>sBTC Public Key</div>
       <input type="text" id="sbtcWallet" class="p-3 rounded-md border" bind:value={romeoPublicKey}/>
       <div class="py-0">
         <Button darkScheme={false} label={'Set BTC Wallet'} target={''} on:clicked={() => wallet()}/>
