@@ -74,7 +74,7 @@
 			<Header on:init_application={initApp} />
 			{/key}
 		</div>
-		<div class="flex min-h-[calc(100vh-160px)] mx-auto lg:px-8 align-middle justify-center flex-grow">
+		<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow">
 			<slot></slot>
 		</div>
 
