@@ -66,7 +66,7 @@
 
 <div id="clipboard"></div>
 
-<div class="flex w-full justify-between rounded-xl border-[0.2px] border-gray-400 p-3 gap-y-8 bg-gray-01">
+<div class="flex w-full justify-between rounded-lg border-[0.2px] border-gray-400 p-3 gap-y-8 bg-gray-01">
   {#if peginRequest.requestType === 'withdrawal'}
     {#if peginRequest.mode === 'op_drop'}
     <div class="rounded-lg overflow-hidden mr-4 border border-gray-600">

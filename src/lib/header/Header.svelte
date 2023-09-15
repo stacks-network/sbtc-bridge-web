@@ -50,7 +50,7 @@
 		{#if $sbtcConfig.loggedIn}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
-			<button class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0" on:keydown on:click={doLogin}>
+			<button class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0" on:keydown on:click={doLogin}>
 				Connect wallet
 				<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<mask id="mask0_3780_6397" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
@@ -84,7 +84,7 @@
 			{#if $sbtcConfig.loggedIn}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}

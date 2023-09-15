@@ -12,7 +12,7 @@
 <div class="mx-auto max-w-7xl px-6 py-6">
   <div class="my-8">
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-6">
-      <div class="flex flex-col sm:col-span-3 gap-y-4">
+      <div class="flex flex-col sm:col-span-3 gap-y-4 order-2 lg:order-1">
         <div class="space-y-4">
           <div class="p-[1.2px] bg-[linear-gradient(126.12deg,rgba(237,105,60,0.5)11.8%,rgba(254,219,99,0.2)72.43%)] rounded-lg">
             <div
@@ -124,8 +124,8 @@
         </div>
 
       </div>
-      <div class="sm:col-span-3">
-        <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-3xl p-6 overflow-hidden bg-gray-1000">
+      <div class="sm:col-span-3 order-1 lg:order-2">
+        <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 overflow-hidden bg-gray-1000">
 
           <Tabs style="underline" contentClass="p-0">
             <TabItem open title="Deposit" class="grow [&>button]:w-full [&>button]:text-lg">
@@ -137,7 +137,7 @@
               </div>
               <div class="bg-white/5 rounded-md p-4 border border-gray-900">
                 <div class="flex bg-gray-1000 w-full border-[0.5px] border-gray-700 rounded-sm items-center text-base">
-                  <div class="flex w-1/3 ps-6 items-center h-12">
+                  <div class="flex w-1/3 ps-3 sm:ps-6 items-center h-12">
                     <div class="flex grow items-center">
                         <div class="rounded-full w-2 h-2 bg-primary-01"></div>
                       <div class="ps-3 text-white">Amount</div>
@@ -148,7 +148,7 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="flex w-1/3 ps-6 items-center">
+                  <div class="flex w-1/3 ps-3 sm:ps-6 items-center">
                     <div class="flex grow items-center">
                       <div class="rounded-full w-2 h-2 bg-gray-300"></div>
                       <div class="ps-3 text-gray-300">Send</div>
@@ -159,7 +159,7 @@
                       </svg>
                     </div>
                   </div>
-                  <div class="flex w-1/3 ps-6 items-center">
+                  <div class="flex w-1/3 ps-3 sm:ps-6 items-center">
                     <div class="flex grow items-center">
                       <div class="rounded-full w-2 h-2 bg-gray-300"></div>
                       <div class="ps-3 text-gray-300">Confirm</div>
@@ -199,7 +199,7 @@
                   </div>
                 </div>
                 <div class="mt-6">
-                  <button class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
+                  <button class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
                 </div>
               </div>
             </TabItem>

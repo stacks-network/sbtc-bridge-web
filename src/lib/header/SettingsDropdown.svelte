@@ -32,8 +32,8 @@
 		sbtcConfig.update(() => $sbtcConfig);
 	})
 </script>
-<Button on:click={() => goto('/settings')} class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
+<Button on:click={() => goto('/settings')} class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-lg h-full">
 		<span class="text-transparent bg-clip-text bg-primary-02">Settings</span>
 	</span>
 </Button>
