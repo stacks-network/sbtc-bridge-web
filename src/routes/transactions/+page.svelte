@@ -69,47 +69,49 @@ onMount(async () => {
 {#if inited}
 <div class="border border-gray-700 rounded-lg lg:w-3/4 md:w-full sm:w-full sm:mx-5 xs:w-full mx-4 my-20">
     <div class="p-5">
-        <div class=""><span class="text-4xl">Transaction History</span></div>
+        <div class=""><span class="text-4xl font-medium">Transaction History</span></div>
         <div class="">
-            <div class=""><span class="text-2xl">Deposits</span></div>
+            <div class=" my-5"><span class="text-2xl font-normal">Deposits & withdrawals</span></div>
             <div class="w-full">
                 <div class="table-auto">
                     <div class="w-full">
-                      <div class="grid grid-cols-4 lg:grid-cols-6 gap-2 flex-nowrap font-semibold justify-evenly content-start">
-                        <div style="white-space: nowrap;">Amount btc</div>
-                        <div class="hidden lg:flex">Date</div>
+                      <div class="grid grid-cols-5 gap-2 border-b mb-3 pb-3 flex-nowrap font-normal justify-evenly content-start">
+                        <div>Date</div>
                         <div>From</div>
-                        <div class="hidden lg:flex">To</div>
-                        <div>Status</div>
+                        <div>Amount</div>
+                        <!--<div class="hidden lg:flex">To</div>-->
+                        <div>Type</div>
                         <div class="text-end">Actions</div>
                       </div>
                     </div>
                     <div>
                     {#each peginRequests as pegin}
                     {#if pegin.status >= 0}
-                    <div class="w-full grid grid-cols-4 lg:grid-cols-6 gap-2 justify-evenly content-start">
-                        <div>{#if pegin.status === 1}{satsToBitcoin(pegin.amount)}{:else}{satsToBitcoin(pegin.amount)}{/if}</div>
+                    <div class="w-full grid grid-cols-5 justify-evenly my-4 text-sm font-extralight text-gray-300">
                         <div class="hidden lg:flex">{tsToDate(pegin.updated)}</div>
                         <div class="flex">
-                            <div class="sm:pe-2 md:pe-5"><a class="" href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress)}</a></div>
-                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
+                            <div class="grow"><a class="" href={explorerBtcAddressUrl(pegin.fromBtcAddress)} target="_blank" rel="noreferrer">{truncate(pegin.fromBtcAddress, 7)}</a></div>
+                            <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(pegin.fromBtcAddress)} /></div>
                         </div>
-                        <div class="hidden lg:flex ">
-                            <div class="sm:pe-2 md:pe-5"><a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a></div>
-                            <div class=""><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
-
-                        </div>
+                        <div class="">{satsToBitcoin(pegin.amount)}</div>
+                        <!--<div class="hidden lg:flex ">
+                            <div class="grow"><a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a></div>
+                            <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
+                        </div>-->
                         <div class="flex">
                             <div class="sm:pe-2 md:pe-5">
+                                <!--
                                 {#if pegin.status === 1}<span class="status status-1">pending</span>
                                 {:else if pegin.status === 2}<span class="status status-2">committed</span>
                                 {:else if pegin.status === 3}<span class="status status-3">reclaimed</span>
                                 {:else if pegin.status === 4}<span class="status status-4">revealed</span>
                                 {:else}{pegin.status}
                                 {/if}
+                                -->
+                                {pegin.requestType}
                             </div>
                             <div class="text-right">
-                                {#if pegin.status > 1}
+                                {#if pegin.btcTxid}
                                 <ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(pegin.btcTxid)} />
                                 {/if}
                             </div>

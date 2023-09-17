@@ -23,8 +23,10 @@
         </p>
     </div>
     {#if showAddresses}
-    <BitcoinAddressField depositFlow={false} readonly={true}/>
+    <BitcoinAddressField depositFlow={false} readonly={false}/>
+    <!--
     <StacksAddressField depositFlow={false} readonly={true}/>
+    -->
     {/if}
     <BitcoinInput depositFlow={false}/>
   </div>
