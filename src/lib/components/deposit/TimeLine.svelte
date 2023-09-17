@@ -9,7 +9,7 @@
 </script>
 
 <div class="flex w-full border-[0.5px] border-gray-700 rounded-2xl items-center text-base">
-  <div class="flex w-1/3 ps-6 items-center">
+  <div class="flex w-1/3 ps-3 sm:ps-6 items-center">
     <div class="flex grow items-center">
       {#if timeLineStatus === 1}
         <div class="rounded-full w-2 h-2 shadow-[0px_0px_4px_#121212,0px_0px_4px_4px_#475587] bg-blue-500"></div>
@@ -24,7 +24,7 @@
       </svg>
     </div>
   </div>
-  <div class="flex w-1/3 ps-6 items-center">
+  <div class="flex w-1/3 ps-3 sm:ps-6 items-center">
     <div class="flex grow items-center">
       <div class="rounded-full w-2 h-2 {(timeLineStatus === 2) ? 'shadow-[0px_0px_4px_#121212,0px_0px_4px_4px_#475587] bg-blue-500' : 'bg-white'}"></div>
       <div class="ps-3 {(timeLineStatus === 2) ? 'text-white' : 'text-gray-300'}">Send</div>
@@ -35,7 +35,7 @@
       </svg>
     </div>
   </div>
-  <div class="flex w-1/3 ps-6 items-center">
+  <div class="flex w-1/3 ps-3 sm:ps-6 items-center">
     <div class="flex grow items-center">
       <div class="rounded-full w-2 h-2 {(timeLineStatus === 3) ? 'shadow-[0px_0px_4px_#121212,0px_0px_4px_4px_#475587] bg-blue-500' : 'bg-white'}"></div>
       <div class="ps-3 {(timeLineStatus === 3) ? 'text-white' : 'text-gray-300'}">Confirm</div>

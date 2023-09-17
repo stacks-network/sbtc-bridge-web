@@ -48,8 +48,8 @@
 	}
 </script>
 
-<Button class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
-	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
+<Button class="block w-full md:inline-flex bg-primary-02 p-px font-normal rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+	<span class="block w-full md:inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-lg h-full">
 		<span class="text-transparent bg-clip-text bg-primary-02">Settings</span>
 
 		<svg class="hidden md:inline" width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -77,7 +77,7 @@
 				</span>
 			</p>
 			<div class="ml-auto">
-				<button class="border border-white bg-black px-3 py-0.5 rounded-xl text-xs inline-flex items-center text-white font-normal gap-1 hover:text-black hover:bg-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:click={() => toggleNetwork()}>
+				<button class="border border-white bg-black px-3 py-0.5 rounded-lg text-xs inline-flex items-center text-white font-normal gap-1 hover:text-black hover:bg-white transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:click={() => toggleNetwork()}>
 					Switch
 					<Icon src="{ArrowsRightLeft}" mini class="h-4 w-4" aria-hidden="true" />
 				</button>

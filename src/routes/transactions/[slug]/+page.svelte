@@ -42,7 +42,7 @@ onMount(async () => {
 				&lt; Back to Transaction history
 			</a>
 		</div>
-		<div class="flex flex-col p-5 gap-2 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
+		<div class="flex flex-col p-5 gap-2 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
 			{#if peginRequest.status === 1}
 				<PendingDeposit {peginRequest}/>
 			{:else if peginRequest.status === 2}

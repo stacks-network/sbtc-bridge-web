@@ -63,7 +63,7 @@
       {/if}
     </div>
     {:else if errored}
-    <div class="flex flex-col p-10 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
+    <div class="flex flex-col p-10 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
       <ServerError />
     </div>
     {/if}

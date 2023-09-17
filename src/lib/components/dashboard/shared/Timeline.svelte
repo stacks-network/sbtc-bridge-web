@@ -19,9 +19,10 @@
     return 'ps-3 text-gray-300'
   }
   const cClazzes = () => {
-    if (confirm) return 'flex w-1/3 ps-6 items-center h-12'
-    return 'flex w-1/2 ps-6 items-center h-12'
+    if (confirm) return 'flex w-1/3 ps-3 sm:ps-6 items-center'
+    return 'flex w-1/2 ps-3 sm:ps-6 items-center'
   }
+
 </script>
 
 <div class="flex bg-gray-1000 w-full border-[0.5px] border-gray-700 rounded-sm items-center text-base">

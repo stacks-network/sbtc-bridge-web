@@ -56,9 +56,9 @@
 
 </script>
 
-<div class="sm:col-span-3">
-  <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-3xl p-6 overflow-hidden bg-gray-1000">
-    {#if errorMessage}<div>{@html errorMessage}</div>
+<div class="sm:col-span-3 order-1 lg:order-2">
+  <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 overflow-hidden bg-gray-1000">
+      {#if errorMessage}<div>{@html errorMessage}</div>
     {:else}
     <Tabs style="underline" contentClass="p-0">
       {#if inited}

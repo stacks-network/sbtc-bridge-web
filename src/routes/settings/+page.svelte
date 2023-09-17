@@ -59,7 +59,7 @@
 
 <div class="md:w-3/5 sm:w-full mx-auto flex flex-col justify-center px-6 lg:px-8 py-6">
   <div class="max-w-4xl">
-    <div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
+    <div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
       <h1 class="text-4xl font-normal">Settings</h1>
 
       <div class="bg-gray-1000 text-white">

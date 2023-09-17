@@ -15,14 +15,14 @@
 
 </script>
 
-<div class="flex flex-col sm:col-span-3 gap-y-4">
+<div class="flex flex-col sm:col-span-3 gap-y-4 order-2 lg:order-1">
   <div class="space-y-4">
     <div class="p-[1.2px] bg-[linear-gradient(126.12deg,rgba(237,105,60,0.5)11.8%,rgba(254,219,99,0.2)72.43%)] rounded-lg">
       <div
         class="relative flex items-center p-6 bg-[linear-gradient(126.12deg,rgba(0,0,0,0.95)21.1%,rgba(18,18,18,0.5)53.58%);] rounded-lg"
       >
         <dl class="min-w-0 flex-1">
-          <dt class="text-xl font-bold text-yellow-500">Total value locked</dt>
+          <dt class="text-xl font-bold leading-6 leading-none text-yellow-500">Total value locked</dt>
           <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">${fmtAmount($sbtcConfig.sbtcContractData.totalSupply || 0, 'usd')}</dd>
         </dl>
       </div>

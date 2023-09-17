@@ -42,7 +42,7 @@ let questions = [
 </svelte:head>
 
 <div class="mx-auto flex flex-col justify-center px-6 lg:px-8 py-12 w-full max-w-5xl">
-	<div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-3xl">
+	<div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
 		<h1 class="text-4xl font-normal">Frequently Asked Questions</h1>
 		<div class="space-y-8 divide-y divide-gray-700/50 mt-12">
 			{#key componentKey}
