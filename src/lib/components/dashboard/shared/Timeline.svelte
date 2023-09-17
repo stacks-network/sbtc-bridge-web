@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-	import SwitchGraphic from '$lib/components/deposit/SwitchGraphic.svelte';
+	import SwitchGraphic from '$lib/components/dashboard/shared/SwitchGraphic.svelte';
 
   const dispatch = createEventDispatcher();
   export let active = 1;

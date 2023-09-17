@@ -11,7 +11,7 @@
 	import { initApplication, loggedIn, loginStacksJs, verifyAmount, verifyStacksPricipal } from '$lib/stacks_connect';
 	import { goto } from '$app/navigation';
 	import { fetchPeginById, updateBridgeTransaction } from "$lib/bridge_api";
-	import StatusCheck from "../deposit/StatusCheck.svelte";
+	import StatusCheck from "./dd/StatusCheck.svelte";
 	import SignTransaction from "./dr/SignTransaction.svelte";
 
   const dispatch = createEventDispatcher();

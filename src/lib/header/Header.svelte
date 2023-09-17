@@ -74,8 +74,10 @@
 		class="order-1 md:flex-1"
 		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:font-medium !md:space-x-4"
 	>
+	<!--
 	<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
 	<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
+	-->
 		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 		{#if coordinator}

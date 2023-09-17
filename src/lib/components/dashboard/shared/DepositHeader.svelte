@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SwitchGraphic from '$lib/components/deposit/SwitchGraphic.svelte';
+	import SwitchGraphic from '$lib/components/dashboard/shared/SwitchGraphic.svelte';
 </script>
 
 <div class="flex w-full items-center justify-between flex-wrap my-6">

@@ -1,71 +1,21 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import DepositForm from '$lib/components/deposit/DepositOpDropForm.svelte';
-	import DepositFormOpReturn from '$lib/components/deposit/op_return/DepositOpReturnForm.svelte';
-	import TimeLine from '$lib/components/deposit/TimeLine.svelte';
-	import TimeLineOpReturn from '$lib/components/deposit/op_return/TimeLine.svelte';
-	import ServerError from "$lib/components/common/ServerError.svelte";
-	import { sbtcConfig } from '$stores/stores'
+	import Dashboard from '$lib/components/dashboard/Dashboard.svelte';
+	import Flow from '$lib/components/dashboard/Flow.svelte';
 
-	let timeLineStatus = 1;
-	let inited = false;
-	let errored = false;
-
-	$: view = 'build_tx_view';
-	let webWallet = true;
-	let componentKey = 0;
-
-	const openSigView = (e:any) => {
-		const wallet = e.detail.wallet
-		webWallet = wallet === 1; // piTx.fromBtcAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal,
-			view = 'sign_tx_view';
-	}
-
-	const timeLineUpdate = (e:any) => {
-		timeLineStatus = e.detail.timeLineStatus;
-		if (timeLineStatus < 0) {
-			inited = false;
-				errored = true;
-		} else {
-			componentKey++;
-		}
-	}
-	onMount(async () => {
-		try {
-			inited = true;
-		} catch(err) {
-			errored = true;
-		}
-	})
 </script>
 
+
 <svelte:head>
-  <title>sBTC Bridge - Deposit Bitcoin to mint sBTC</title>
-  <meta name="description" content="Deposit Bitcoin to mint sBTC." />
+  <title>sBTC Bridge - Dashboard</title>
+  <meta name="description" content="The sBTC Bridge
+  provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
 </svelte:head>
 
-{#if errored}
-	<ServerError />
-{:else}
-  <div class="max-w-2xl w-full py-16">
-    {#if inited}
-    <div class="flex flex-col gap-6 bg-gray-1000 rounded-2xl">
-      {#if $sbtcConfig.userSettings?.useOpDrop}
-        {#key componentKey}
-          <TimeLine {timeLineStatus}/>
-        {/key}
-        <DepositForm on:time_line_status_change={timeLineUpdate}/>
-      {:else}
-        {#key componentKey}
-          <TimeLineOpReturn {timeLineStatus}/>
-        {/key}
-        <DepositFormOpReturn on:time_line_status_change={timeLineUpdate}/>
-      {/if}
+<div class="mx-auto max-w-7xl px-6 py-6">
+  <div class="my-8">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-6">
+      <Dashboard />
+      <Flow />
     </div>
-    {:else if errored}
-    <div class="flex flex-col p-10 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
-      <ServerError />
-    </div>
-    {/if}
   </div>
-{/if}
+</div>

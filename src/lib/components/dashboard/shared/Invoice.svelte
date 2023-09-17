@@ -11,7 +11,7 @@
   import { truncate, explorerBtcAddressUrl } from '$lib/utils'
   import { sbtcConfig } from '$stores/stores'
   import { CONFIG } from '$lib/config';
-	import PsbtDisplay from "$lib/components/deposit/op_return/PsbtDisplay.svelte";
+	import PsbtDisplay from "$lib/components/dashboard/shared/PsbtDisplay.svelte";
 
   export let peginRequest:BridgeTransactionType;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
