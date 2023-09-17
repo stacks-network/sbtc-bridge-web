@@ -11,7 +11,7 @@ import { sendRawTransaction, sendRawTxDirectBlockCypher } from './bridge_api';
 
 export let rates:Array<any>;
 
-export function finaliseTransaction(psbtHex:string) {
+function finaliseTransaction(psbtHex:string) {
   try {
     const tx = btc.Transaction.fromPSBT(hex.decode(psbtHex));
     tx.finalize();
@@ -24,9 +24,15 @@ export function finaliseTransaction(psbtHex:string) {
   }
 }
 
-export async function broadcastTransaction(txHex:string):Promise<any|undefined> {
-  let resp = await sendRawTxDirectBlockCypher(txHex);
-  if (resp && resp.error) {
+export async function broadcastTransaction(psbtHex:string):Promise<any|undefined> {
+  const txHex = finaliseTransaction(psbtHex)
+  let resp
+  try {
+    resp = await sendRawTxDirectBlockCypher(txHex);
+  } catch(err:any) {
+    console.log(err)
+  }
+  if (!resp || resp.error) {
     resp = await sendRawTransaction({hex: txHex});
   }
   if (resp && resp.tx) {
@@ -79,6 +85,17 @@ export const defaultSbtcConfig:SbtcConfig = {
     }
   },
   keySets: {},
-  revealFeeWithGas: 0
+  revealFeeWithGas: 0,
+  payloadDepositData: {
+    principal: undefined,
+    bitcoinAddress: undefined,
+    amountSats: 0
+  },
+  payloadWithdrawData: {
+    principal: undefined,
+    bitcoinAddress: undefined,
+    signature: undefined,
+    amountSats: 0
+  }
 }
 

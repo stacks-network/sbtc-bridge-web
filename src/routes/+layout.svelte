@@ -47,6 +47,10 @@
 		await loginStacksJs(initApplication, $sbtcConfig);
 	}
 
+	const loginEvent = () => {
+		componentKey++;
+	}
+
 	const initApp = async () => {
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
 	}
@@ -71,11 +75,13 @@
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
 		<div>
 			{#key componentKey}
-			<Header on:init_application={initApp} />
+			<Header on:init_application={initApp} on:login_event={loginEvent} />
 			{/key}
 		</div>
 		<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow">
+			{#key componentKey}
 			<slot></slot>
+			{/key}
 		</div>
 
 		<Footer />

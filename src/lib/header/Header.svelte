@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button, Input } from 'flowbite-svelte'
+	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
@@ -11,18 +12,20 @@
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
 
+	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
 		const res = await loginStacksJs(initApplication, $sbtcConfig);
 		if (!$sbtcConfig.authHeader) authenticate($sbtcConfig)
-		console.log(res)
+		dispatch('login_event');
 	}
 	const doLogout = async () => {
 		logUserOut();
 		$sbtcConfig.loggedIn = false
 		$sbtcConfig.authHeader = undefined
 		await sbtcConfig.update(() => $sbtcConfig)
+		dispatch('login_event');
 		goto('/')
 	}
 

@@ -3,10 +3,10 @@ import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
 import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_api'
-import type { SbtcConfig } from '$types/sbtc_config';
+import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
-import { openSignatureRequestPopup, type SignatureData, type SignatureFinished, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import { getStacksAddressFromSignature, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
+import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
+import type { AddressObject, DepositPayloadType, WithdrawalPayloadType } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
@@ -17,7 +17,7 @@ import * as btc from '@scure/btc-signer';
 import { AddressPurposes, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
-import { publicKeyFromSignatureRsv, type MessageSignature, StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
+import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -97,6 +97,7 @@ async function getBalances(contractId:string, addressObject:AddressObject):Promi
 		result = addressObject;
 		console.log('Network down...');
 	}
+	if (!result.sBTCBalance) result.sBTCBalance = 0
 	result.btcPubkeySegwit0 = tempSegwit0
 	result.btcPubkeySegwit1 = tempSegwit1
 	return result;
@@ -214,16 +215,16 @@ export function loggedIn():boolean {
 }
 
 export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
-	signMessage(async function(sigData:SignatureData, message:string) {
+	await signMessage(async function(sigData:SignatureData, message:string) {
 		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
 		if (verified) {
 		  console.log('sig verififed')
 		}
 	    const msgHash = hashMessage(message);
-    	const stxAddresses = await getStacksAddressFromSignature(msgHash, sigData.signature );
+    	//const stxAddresses = await getStacksAddressFromSignature(msgHash, sigData.signature );
 		const pubkey = publicKeyFromSignatureVrs(hex.encode(msgHash), { data: sigData.signature, type: StacksMessageType.MessageSignature })
 		console.log('pubkey:', pubkey)
-		console.log('stxAddresses:', stxAddresses)
+		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
 		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress }
@@ -371,18 +372,19 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
 	const rateNow = exchangeRates.find((o:any) => o.currency === currency)
 	if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
+	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
+	if (!conf.payloadDepositData) conf.payloadDepositData = {} as DepositPayloadType
+	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawalPayloadType
 	else conf.userSettings.currency.myFiatCurrency = (exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
 	
-	//if (conf.mintData.peginRequest && conf.mintData.peginRequest.commitTxScript && typeof (conf.mintData.peginRequest.commitTxScript.tweakedPubkey) === 'string') {
-	//	conf.mintData.peginRequest.commitTxScript = convertToUint8(conf.mintData.peginRequest.commitTxScript)
-	//}
 	sbtcConfig.update(() => conf);
 }
 
 export function getPegWalletAddressFromPublicKey (sbtcWalletPublicKey:string) {
+	if (!sbtcWalletPublicKey) return ''
 	let net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	const mode = import.meta.env.MODE
-	if (mode === 'development' || mode === 'simnet') {
+	if (mode === 'simnet') {
 		net = { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4, wif: 0 }
 	}
 	const fullPK = hex.decode(sbtcWalletPublicKey);

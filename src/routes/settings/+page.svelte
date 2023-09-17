@@ -98,11 +98,11 @@
         </div>
 
         <div class="py-6">
-          <h2 class="text-2xl font-medium mb-2">Debug mode</h2>
+          <h2 class="text-2xl font-medium mb-2">Advanced mode</h2>
           <div class="bg-gray-1000 flex gap-2 align-top">
             <Toggle class=" text-white" checked={$sbtcConfig.userSettings?.debugMode} on:click={() => toggleSettings('debug')} ></Toggle>
             <p class="text-white">
-              <span class="text-white font-medium">Debug mode {#if $sbtcConfig.userSettings?.debugMode}On{:else}Off{/if}</span>
+              <span class="text-white font-medium">Advanced mode {#if $sbtcConfig.userSettings?.debugMode}On{:else}Off{/if}</span>
               <span class="block text-sm">{#if $sbtcConfig.userSettings?.debugMode}Show advanced info{:else}Hide advanced info{/if}</span>
           </div>
         </div>

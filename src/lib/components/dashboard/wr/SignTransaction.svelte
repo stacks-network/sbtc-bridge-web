@@ -3,43 +3,34 @@ import { onMount } from 'svelte';
 import { createEventDispatcher } from "svelte";
 import { hex, base64 } from '@scure/base';
 import { openPsbtRequestPopup } from '@stacks/connect'
-import * as btc from '@scure/btc-signer';
-import { sendRawTxDirectBlockCypher, sendRawTransaction } from '$lib/bridge_api';
 import { sbtcConfig } from '$stores/stores';
-import { explorerBtcTxUrl, convertOutputsBlockCypher } from "$lib/utils";
+import { explorerBtcTxUrl } from "$lib/utils";
 import { saveBridgeTransaction } from '$lib/bridge_api';
-import Button from '$lib/components/shared/Button.svelte';
-import type { BridgeTransactionType } from 'sbtc-bridge-lib'
-import { buildOpReturnDepositTransaction, buildOpReturnWithdrawTransaction, buildOpDropDepositTransaction, buildOpDropWithdrawTransaction, calculateDepositFees, addInputs, inputAmt } from 'sbtc-bridge-lib'
+import { buildOpDropWithdrawTransaction, type BridgeTransactionType, buildOpReturnWithdrawTransaction } from 'sbtc-bridge-lib'
 import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
-import Invoice from '../Invoice.svelte';
+import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
-import { signTransaction, type InputToSign, type SignTransactionOptions } from 'sats-connect'
-	import PsbtDisplay from './PsbtDisplay.svelte';
-	import { broadcastTransaction } from '$lib/sbtc';
+import { signTransaction, type SignTransactionOptions } from 'sats-connect'
+import { broadcastTransaction } from '$lib/sbtc';
+import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
 
 export let peginRequest:BridgeTransactionType;
 export let addressInfo:any;
-export let amount:number;
+let amount:number;
 
 const dispatch = createEventDispatcher();
-let transaction:btc.Transaction;
+let transaction:Transaction;
 let psbtB64:string;
 let psbtHex:string;
 let errorReason: string|undefined;
 let inited = false;
-let showPsbt = false;
 
 const getExplorerUrl = () => {
   return explorerBtcTxUrl(peginRequest.btcTxid)
 }
 export function isWalletAddress() {
   return peginRequest.fromBtcAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-}
-
-export function requestShowPsbt() {
-  showPsbt = !showPsbt
 }
 
 export async function requestSignPsbt() {
@@ -52,8 +43,8 @@ export async function requestSignPsbt() {
   }
 }
 export async function signPsbtHiro() {
-  const outputs: btc.TransactionOutput[] = getPsbtTxOutputs(transaction);
-  const inpouts: btc.TransactionInput[] = getPsbtTxInputs(transaction);
+  const outputs:TransactionOutput[] = getPsbtTxOutputs(transaction);
+  const inpouts:TransactionInput[] = getPsbtTxInputs(transaction);
 
   openPsbtRequestPopup({
     hex: psbtHex,
@@ -67,18 +58,18 @@ export async function signPsbtHiro() {
     }
   });
 }
-function getPsbtTxOutputs(psbtTx: btc.Transaction) {
+function getPsbtTxOutputs(psbtTx:Transaction) {
   const outputsLength = psbtTx.outputsLength;
-  const outputs: btc.TransactionOutput[] = [];
+  const outputs:TransactionOutput[] = [];
   if (outputsLength === 0) return outputs;
   for (let i = 0; i < outputsLength; i++) {
     outputs.push(psbtTx.getOutput(i));
   }
   return outputs;
 }
-function getPsbtTxInputs(psbtTx: btc.Transaction) {
+function getPsbtTxInputs(psbtTx:Transaction) {
   const inputsLength = psbtTx.inputsLength;
-  const inputs: btc.TransactionInput[] = [];
+  const inputs:TransactionInput[] = [];
   if (inputsLength === 0) return inputs;
   for (let i = 0; i < inputsLength; i++) {
     inputs.push(psbtTx.getInput(i));
@@ -117,7 +108,7 @@ export async function signPsbtXverse() {
   await signTransaction(signPsbtOptions);
 }
 
-const updateTransaction = () => {
+const updateTimeline = () => {
   dispatch('update_transaction', { success: true });
 }
 
@@ -133,14 +124,14 @@ const updatePeginRequest = async (txid:string) => {
 let broadcasted:boolean;
 const broadcast = async (psbtHex:string) => {
   try {
-    const result:any = broadcastTransaction(psbtHex)
-    broadcasted = true;
     try {
+      const result:any = await broadcastTransaction(psbtHex)
       if (peginRequest.mode === 'op_return') {
         peginRequest.status = 5;
       }
       peginRequest.btcTxid = (result.hash) ? result.hash : result.txid;
       await saveBridgeTransaction(peginRequest);
+      broadcasted = true;
     } catch (err) {
       console.log('Error saving pegin request', err)
     }
@@ -152,18 +143,13 @@ const broadcast = async (psbtHex:string) => {
 
 const revealFeeWithGas = 5000;
 onMount(async () => {
+  amount = $sbtcConfig.payloadWithdrawData.amountSats;
   if (peginRequest.requestType === 'withdrawal') {
       if (peginRequest.mode === 'op_drop') {
         transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, revealFeeWithGas, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
       } else {
         transaction = buildOpReturnWithdrawTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
       }
-  } else {
-    if (peginRequest.mode === 'op_drop') {
-      transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
-    } else {
-      transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, peginRequest.fromBtcAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!)
-    }
   }
   if (transaction.inputsLength === 0) {
     errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
@@ -180,22 +166,22 @@ onMount(async () => {
 <div class="flex w-full flex-wrap align-baseline items-start">
   <div class="">
     {#if !broadcasted}
-    <p class="text-lg mb-5">Sign and broadcast your transaction.</p>
+    <p class="text-lg my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
     {/if}
   </div>
-  <Invoice {peginRequest} />
-  {#if showPsbt}
-    <div class="flex w-full flex-wrap align-baseline items-start">
-      <PsbtDisplay {psbtB64} {psbtHex} />
-    </div>
-  {/if}
+  <Invoice {peginRequest} {psbtHex} {psbtB64}/>
   {#if !broadcasted && !errorReason}
-  <div class="mt-8 flex">
-    <Button darkScheme={false} label={'Back'} target={'back'} on:clicked={() => updateTransaction()}/>
+  <div class="flex w-full">
+    <!--
+    <div class="mt-6">
+      <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Back</button>
+    </div>
+    -->
     {#if isWalletAddress()}
-    <Button darkScheme={true} label={'Sign & broadcast'} target={'sign'} on:clicked={() => requestSignPsbt()}/>
+      <div class="mt-6 w-full">
+        <button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button>
+      </div>
     {/if}
-    <Button darkScheme={true} label={'Show PSBT'} target={'export'} on:clicked={() => requestShowPsbt()}/>
   </div>
   {:else if broadcasted}
   <div class="my-3 text-2xl">
@@ -210,8 +196,8 @@ onMount(async () => {
   <div class="my-5">
     {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
   </div>
-  <div class="">
-    <Button darkScheme={false} label={'Start over'} target={'next'} on:clicked={() => updateTransaction()}/>
+  <div class="mt-6">
+    <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
   </div>
   {/if}
 

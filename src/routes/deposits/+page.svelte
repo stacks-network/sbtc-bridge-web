@@ -6,7 +6,7 @@
 
 
 <svelte:head>
-  <title>sBTC Bridge - Dashboard</title>
+  <title>sBTC Bridge - Deposit Bitcoin - Mint sBTC</title>
   <meta name="description" content="The sBTC Bridge
   provides a non-custodial, permissionless way to move Bitcoin into and out of the Stacks Blockchain." />
 </svelte:head>

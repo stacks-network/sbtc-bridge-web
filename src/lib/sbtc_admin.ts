@@ -39,7 +39,7 @@ export async function mintTo(contractId:string, amount:number, stxAddress: strin
     postConditionMode: PostConditionMode.Deny,
     contractAddress: contractId.split('.')[0],
     contractName: contractId.split('.')[1],
-    functionName: 'mint!',
+    functionName: 'mint',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
       console.log('TX Data: ', data);
@@ -62,7 +62,7 @@ export async function burnFrom(contractId:string, amount:number, stxAddress: str
     postConditionMode: PostConditionMode.Allow,
     contractAddress: contractId.split('.')[0],
     contractName: contractId.split('.')[1],
-    functionName: 'burn!',
+    functionName: 'burn',
     functionArgs: functionArgs,
     onFinish: (data: any) => {
       console.log('TX Data: ', data);
