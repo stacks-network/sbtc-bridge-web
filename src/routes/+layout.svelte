@@ -72,7 +72,7 @@
 </script>
 
 {#if inited}
-	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
+	<div class=" bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen min-w-max">
 		{#key componentKey}
 		<div>
 			<Header on:init_application={initApp} on:login_event={loginEvent} />

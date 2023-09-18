@@ -75,7 +75,7 @@
     <h3 class="text-base text-white font-normal mb-3">
       Currencies
     </h3>
-    <div class="md:w-1/2 sm:w-full font-normal">
+    <div class="md:w-1/2 w-full font-normal">
       <Button class="!bg-black !border-[0.5px] !border-gray-700">
         {myCurrency.name} ({myCurrency.currency} - {myCurrency.symbol})
         <Icon src={ChevronDown} mini class=" ml-10 h-5 w-5 text-white" aria-hidden="true" />
@@ -122,8 +122,8 @@
     <h3 class="text-base text-white font-normal mb-3">
       Bitcoin units
     </h3>
-    <div class="w-full flex gap-x-4 font-normal ">
-      <div on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal w-1/3 flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
+    <div class="flex md:flex-row flex-col gap-4 font-normal ">
+      <div on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
         <div class="text-white font-normal flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'bitcoin' ? 'text-success-300' : 'text-gray-200'}/>
@@ -139,7 +139,7 @@
         {/if}
       </div>
 
-      <div on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 font-normal w-1/3 flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
+      <div on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
         <div class="text-white font-normal flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'satoshi' ? 'text-success-300' : 'text-gray-200'}/>
