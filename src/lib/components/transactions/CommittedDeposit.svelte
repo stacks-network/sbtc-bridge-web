@@ -121,7 +121,7 @@ onMount(async () => {
 {#if inited && reclaiming}
 <p class="">Reclaim your deposit by signing a message containing your Bitcoin address - we will return your funds - less Bitcoin transaction fees.
 </p>
-<Invoice {peginRequest}/>
+<Invoice {peginRequest} psbtB64={undefined} psbtHex={undefined}/>
 {#if errorMessage}<p class="text-error-500">{errorMessage}</p>{/if}
 <div id="po-sign-reclaim" class="mb-5"><Button darkScheme={false} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/></div>
 {/if}

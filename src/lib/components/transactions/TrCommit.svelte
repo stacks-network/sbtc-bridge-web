@@ -47,7 +47,7 @@ onMount(() => {
       <a href={explorerBtcAddressUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.commitTxScript?.address)}</a>
     </div>
     <div class="col-md-2 col-sm-12 text-info">Amount</div><div class="col-md-10 col-sm-12">{peginRequest.vout?.value}</div>
-    <div class="col-md-2 col-sm-12 text-info">Sent from</div><div class="col-md-10 col-sm-12">{peginRequest.senderAddress}</div>
+    <div class="col-md-2 col-sm-12 text-info">Sent from</div><div class="col-md-10 col-sm-12">{peginRequest.originator}</div>
     {#if peginRequest.status === 3}
     <div class="col-md-2 col-sm-12 text-info">Reclaimed</div><div class="col-md-10 col-sm-12">
       <a href={explorerBtcTxUrl(peginRequest.reclaim?.btcTxid)} target="_blank" rel="noreferrer">{(peginRequest.reclaim?.btcTxid)}</a>

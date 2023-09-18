@@ -41,7 +41,6 @@
       const conf:SbtcConfig = $sbtcConfig;
       sbtcConfig.update(() => conf);
       peginRequest = getOpReturnDepositRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
-      peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress; // retain the sender in case the address in UI changes.
       timeLineStatus = 2;
       componentKey++;
     } catch(err:any) {
