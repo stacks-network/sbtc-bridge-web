@@ -6,7 +6,7 @@ import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_ap
 import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject, DepositPayloadType, WithdrawalPayloadType } from 'sbtc-bridge-lib' 
+import type { AddressObject, DepositPayloadType, SbtcContractDataType, WithdrawalPayloadType } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
@@ -71,7 +71,7 @@ export async function fetchSbtcBalance (conf:SbtcConfig, fromLogin:boolean|undef
 		sbtcConfig.update(() => conf);
 		return conf;
 	} else {
-		addresses(async function(addr:AddressObject) {
+		await addresses(async function(addr:AddressObject) {
 			if (addr) {
 				conf.keySets[CONFIG.VITE_NETWORK] = await getBalances(conf.sbtcContractData.contractId, addr)
 				sbtcConfig.update(() => conf);
@@ -199,19 +199,27 @@ export function makeFlash(el1:HTMLElement|null) {
 }
 
 export function isLegal(routeId:string):boolean {
-	if (userSession.isUserSignedIn()) return true;
-	if (routeId.startsWith('http')) {
-		if (routeId.indexOf('/deposit') > -1 || routeId.indexOf('/withdraw') > -1 || routeId.indexOf('/admin') > -1 || routeId.indexOf('/transactions') > -1) {
+	try {
+		if (userSession.isUserSignedIn()) return true;
+		if (routeId.startsWith('http')) {
+			if (routeId.indexOf('/deposit') > -1 || routeId.indexOf('/withdraw') > -1 || routeId.indexOf('/admin') > -1 || routeId.indexOf('/transactions') > -1) {
+				return false;
+			}
+		} else if (['/deposit', '/withdraw', '/admin', '/transactions'].includes(routeId)) {
 			return false;
 		}
-	} else if (['/deposit', '/withdraw', '/admin', '/transactions'].includes(routeId)) {
-		return false;
+		return true;
+	} catch (err) {
+		return false
 	}
-	return true;
 }
 
 export function loggedIn():boolean {
-	return userSession.isUserSignedIn()
+	try {
+		return userSession.isUserSignedIn()
+	} catch (err) {
+		return false
+	}
 }
 
 export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
@@ -227,7 +235,7 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress }
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
 		setAuthorisation($sbtcConfig.authHeader)
 		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
@@ -258,6 +266,12 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
 		callback(conf);
 	}
+}
+
+export async function loginStacksFromHeader(document:any) {
+	const el = document.getElementById("connect-wallet")
+	if (el) return document.getElementById("connect-wallet").click();
+	else return false;
 }
 
 export function signMessage(callback:any, message:string) {
@@ -331,7 +345,10 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	let data = {} as any;
 	try {
 		data = await fetchUiInit();
-		if (!data) data = {} as any;
+		if (!data) data = {
+			sbtcContractData: {} as SbtcContractDataType
+		} as any;
+		data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(data.sbtcContractData.sbtcWalletPublicKey);
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			conf.loggedIn = true;
@@ -341,8 +358,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	} catch (err) {
 		data = {} as any;
 	}
-	const exchangeRates = await fetchExchangeRates();
-	conf.exchangeRates = exchangeRates;
 	//conf.sbtcContractData = data.sbtcContractData;
 	if (!conf.keySets) {
 		if (CONFIG.VITE_NETWORK === 'testnet') {
@@ -353,30 +368,48 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	}
 	let keys;
 	const mode = import.meta.env.MODE
-	if (mode === 'development' || mode === 'simnet') {
-		keys = {
-			deposits: {
-			  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
-			  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM)))
+	if (mode === 'development' || mode === 'simnet' || !data.keys) {
+		try {
+			keys = {
+				deposits: {
+				  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
+				  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM)))
+				}
+			}
+		} catch(err) {
+			keys = {
+				deposits: {
+				  revealPubKey: undefined,
+				  reclaimPubKey: undefined
+				}
 			}
 		}
 	} else {
 		keys = data.keys;
 	}
 	keys.deposits.revealPubKey = data.sbtcContractData.sbtcWalletPublicKey
-	data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(data.sbtcContractData.sbtcWalletPublicKey);
+	conf.keys = keys;
+
+	try {
+		conf.exchangeRates = await fetchExchangeRates();
+		if (!conf.exchangeRates) throw new Error('no exchnage rates')
+		const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
+		const rateNow = conf.exchangeRates.find((o:any) => o.currency === currency)
+		if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
+		conf.userSettings.currency.myFiatCurrency = (conf.exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
+	} catch (err) {
+		conf.exchangeRates = []
+		conf.userSettings.currency.myFiatCurrency = {} as ExchangeRate
+	}
 	conf.revealFeeWithGas = revealPayment;
 	conf.sbtcContractData = data.sbtcContractData;
-	conf.keys = keys;
 	conf.btcFeeRates = data.btcFeeRates;
-	const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
-	const rateNow = exchangeRates.find((o:any) => o.currency === currency)
-	if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
 	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
 	if (!conf.payloadDepositData) conf.payloadDepositData = {} as DepositPayloadType
 	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawalPayloadType
-	else conf.userSettings.currency.myFiatCurrency = (exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
-	
+	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
+		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
+	}
 	sbtcConfig.update(() => conf);
 }
 

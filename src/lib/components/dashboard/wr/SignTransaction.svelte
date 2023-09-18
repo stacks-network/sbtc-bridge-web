@@ -14,6 +14,8 @@ import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
+import { Icon, InformationCircle } from "svelte-hero-icons";
+import { Tooltip } from 'flowbite-svelte';
 
 export let peginRequest:BridgeTransactionType;
 export let addressInfo:any;
@@ -146,9 +148,9 @@ onMount(async () => {
   amount = $sbtcConfig.payloadWithdrawData.amountSats;
   if (peginRequest.requestType === 'withdrawal') {
       if (peginRequest.mode === 'op_drop') {
-        transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, revealFeeWithGas, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+        transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       } else {
-        transaction = buildOpReturnWithdrawTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.sigData, addressInfo, $sbtcConfig.keys, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+        transaction = buildOpReturnWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo, $sbtcConfig.btcFeeRates);
       }
   }
   if (transaction.inputsLength === 0) {
@@ -161,6 +163,9 @@ onMount(async () => {
 
 </script>
 <div id="clipboard"></div>
+<Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#w-sign-label">
+  Make sure your web wallet is connected to the account you are logged in with.
+</Tooltip>
 
 {#if inited}
 <div class="flex w-full flex-wrap align-baseline items-start">
@@ -178,9 +183,10 @@ onMount(async () => {
     </div>
     -->
     {#if isWalletAddress()}
-      <div class="mt-6 w-full">
-        <button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button>
-      </div>
+    <div class="mt-6 w-full flex">
+      <div class="grow"><button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button></div>
+      <div class=""><Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="w-sign-label" /></div>
+    </div>
     {/if}
   </div>
   {:else if broadcasted}

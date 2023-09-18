@@ -5,6 +5,8 @@
 	import { truncate, explorerAddressUrl, explorerBtcAddressUrl } from '$lib/utils'
 	import { CONFIG } from '$lib/config';
 
+  let connected = false;
+
 	const getContractAddress = () => {
 		const contract = $sbtcConfig.sbtcContractData.contractId
 		return truncate(contract.split('.')[0], 8) + '.' + contract.split('.')[1]
@@ -33,10 +35,12 @@
 
 
   onMount(async () => {
+    connected = typeof $sbtcConfig.sbtcContractData.contractId === 'string'
   })
 </script>
 
 <h2 class="text-2xl font-medium mb-2">Addresses and contracts</h2>
+{#if connected}
 <div class="text-lg py-1 flex gap-6 items-center">
   <p class="text-white w-1/5">
     sBTC wallet:
@@ -81,3 +85,14 @@
     </a>
   </div>
 </div>
+{:else}
+<div class="text-lg py-1 flex gap-6 items-center">
+  <p class="text-white w-1/5">
+    sBTC wallet:
+  </p>
+  <div class="flex bg-black rounded-xl text-white px-4 py-1 font-normal">Not conencted</div>
+  <div class="text-lg ml-auto flex items-center">
+  </div>
+</div>
+
+{/if}

@@ -12,7 +12,7 @@ import type { Transaction } from '@scure/btc-signer';
 import { toStorable, buildRevealOrReclaimTransaction } from 'sbtc-bridge-lib' 
 import { Popover } from 'flowbite-svelte';
 import { a_primary } from '$lib/css_utils';
-import Invoice from '../deposit/Invoice.svelte';
+import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
 import { fetchUtxoSet, fetchTransaction } from '$lib/bridge_api'
 
 export let peginRequest:BridgeTransactionType;

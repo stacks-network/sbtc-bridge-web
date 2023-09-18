@@ -3,7 +3,7 @@
 	import "../sbtc.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, loginStacksJs, isLegal, loggedIn, authenticate } from "$lib/stacks_connect";
+	import { initApplication, loginStacksJs, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
 	import { CONFIG, setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
@@ -44,7 +44,7 @@
 	let errorReason:string|undefined;
 
 	const login = async () => {
-		await loginStacksJs(initApplication, $sbtcConfig);
+		const res = await loginStacksFromHeader(document)
 	}
 
 	const loginEvent = () => {
@@ -73,16 +73,14 @@
 
 {#if inited}
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
+		{#key componentKey}
 		<div>
-			{#key componentKey}
 			<Header on:init_application={initApp} on:login_event={loginEvent} />
-			{/key}
 		</div>
 		<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow">
-			{#key componentKey}
 			<slot></slot>
-			{/key}
 		</div>
+		{/key}
 
 		<Footer />
 	</div>
