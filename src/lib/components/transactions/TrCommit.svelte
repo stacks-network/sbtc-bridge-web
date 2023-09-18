@@ -29,7 +29,7 @@ onMount(() => {
       }
       count++;
     }
-    const amt = (peginRequest.vout && peginRequest.vout.value) ? peginRequest.vout.value : peginRequest.amount;
+    const amt = (peginRequest.vout && peginRequest.vout.value) ? peginRequest.vout.value : peginRequest.uiPayload.amountSats;
     stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array, amt);
   } catch(err) {
     console.log(err)

@@ -30,7 +30,7 @@
 
   onMount(async () => {
     if (!peginRequest) throw new Error('No pegin request')
-    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.amount) || 0;
+    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
     cardinalBalance = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
   })
 </script>

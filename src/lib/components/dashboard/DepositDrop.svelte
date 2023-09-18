@@ -29,7 +29,7 @@
       let amount = $sbtcConfig.payloadDepositData.amountSats;
 
       if (peginRequest && peginRequest._id) {
-        peginRequest.amount = $sbtcConfig.payloadDepositData.amountSats
+        peginRequest.uiPayload.amountSats = $sbtcConfig.payloadDepositData.amountSats
         const newP = await updateBridgeTransaction(peginRequest)
         if (newP && newP.status !== 404) peginRequest = newP;
       }

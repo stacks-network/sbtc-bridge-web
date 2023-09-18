@@ -32,7 +32,7 @@ const getExplorerUrl = () => {
   return explorerBtcTxUrl(peginRequest.btcTxid)
 }
 export function isWalletAddress() {
-  return peginRequest.fromBtcAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+  return peginRequest.uiPayload.bitcoinAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
 }
 
 export async function requestSignPsbt() {
@@ -85,7 +85,7 @@ export async function signPsbtXverse() {
   for (let index = 0; index < transaction.inputsLength; index++) {
     //const input = transaction.getInput(index);
     inputs.push({
-      address: peginRequest.fromBtcAddress,
+      address: peginRequest.uiPayload.bitcoinAddress,
       signingIndexes: [0],
     })
   }
