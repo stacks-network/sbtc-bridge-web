@@ -1,18 +1,19 @@
 <script lang="ts">
-	import { createEventDispatcher } from "svelte";
   import { Icon, InformationCircle } from "svelte-hero-icons";
   import { onMount } from 'svelte';
   import { Tooltip } from 'flowbite-svelte';
+	import { sbtcConfig } from "$stores/stores";
+	import { CONFIG } from "$lib/config";
 
-  const dispatch = createEventDispatcher();
+  export let depositFlow:boolean;
   export let readonly:Boolean;
 
-  export let inputData:{
-    field: string;
-    label: string;
-    hint: string;
-    value: string;
-    resetValue: string|undefined;
+  const inputData = {
+    field: 'btcAddress',
+    label: 'Your Bitcoin Address',
+    hint: 'Bitcoin will be sent from this account so it needs to cover the amount and tx fees.',
+    resetValue: '',
+    value: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
   }
 
   let value:string = inputData.value;
@@ -25,14 +26,21 @@
 
   const updater = async () => {
     try {
+      reason = undefined;
       inputData.value = value;
-      dispatch('updated', inputData);
+      if (depositFlow) $sbtcConfig.payloadDepositData.bitcoinAddress = value
+      else $sbtcConfig.payloadWithdrawData.bitcoinAddress = value
     } catch(err:any) {
       reason = err.message || 'Error - is the address a valid';
     }
   }
   onMount(async () => {
-    reason = undefined;
+    if (depositFlow) {
+      if ($sbtcConfig.payloadDepositData.bitcoinAddress) value = $sbtcConfig.payloadDepositData.bitcoinAddress
+    } else {
+      inputData.hint = 'Your bitcoin will be sent to this address';
+      if ($sbtcConfig.payloadWithdrawData.bitcoinAddress) value = $sbtcConfig.payloadWithdrawData.bitcoinAddress
+    }
   })
 </script>
 

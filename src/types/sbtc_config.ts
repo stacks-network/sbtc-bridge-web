@@ -1,9 +1,23 @@
-import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate, DepositPayloadType, WithdrawalPayloadType } from 'sbtc-bridge-lib' 
 
 export type AuthorisationDataType = {
-  signature: string;
-  publicKey: string;
-  stxAddress:string;
+  signature?: string|undefined;
+  publicKey?: string|undefined;
+  stxAddress?:string|undefined;
+  amountSats:number;
+}
+export type DepositPayloadUIType = {
+  bitcoinAddress?:string|undefined;
+  signature?: string|undefined;
+  principal?:string|undefined;
+  amountSats:number;
+}
+export type WithdrawalPayloadUIType = {
+  bitcoinAddress?:string|undefined;
+  signature?: string|undefined;
+  publicKey?: string|undefined;
+  principal?:string|undefined;
+  amountSats:number;
 }
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
@@ -21,9 +35,12 @@ export type SbtcConfig = {
   sbtcContractData: SbtcContractDataType;
   keys: KeySet;
   revealFeeWithGas: number;
+  payloadDepositData: DepositPayloadUIType;
+  payloadWithdrawData: WithdrawalPayloadUIType;
 };
 
 export type SbtcUserSettingI = {
+  peggingIn: boolean;
   useOpDrop: boolean;
   debugMode: boolean;
   testAddresses: boolean;

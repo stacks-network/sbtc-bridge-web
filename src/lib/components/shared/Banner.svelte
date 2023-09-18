@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  import { Icon, InformationCircle, XCircle,ExclamationCircle, CheckCircle } from "svelte-hero-icons";
+  import { Icon, Wifi, PhoneArrowDownLeft, InformationCircle, XCircle,ExclamationCircle, CheckCircle } from "svelte-hero-icons";
 
   export let message:string;
   export let bannerType = 'info'
@@ -16,6 +16,8 @@
       bannerClassList = clazz + ' bg-error-400';
     } else if (bannerType === 'success') {
       bannerClassList = clazz + ' bg-success-400';
+    } else if (bannerType === 'waiting' || bannerType === 'checking') {
+      bannerClassList = clazz + ' bg-blue-400';
     } else {
       bannerClassList = clazz + ' bg-gray-400';
     }
@@ -31,6 +33,10 @@
         <Icon src="{XCircle}" solid class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
       {:else if bannerType === 'success'}
         <Icon src="{CheckCircle}" solid class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
+        {:else if bannerType === 'waiting'}
+        <Icon src="{PhoneArrowDownLeft}"  class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
+        {:else if bannerType === 'checking'}
+        <Icon src="{Wifi}"  class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
       {:else}
         <Icon src="{InformationCircle}" solid class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
       {/if}

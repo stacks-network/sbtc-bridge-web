@@ -52,7 +52,7 @@ export function fmtMicroToStx(amountStx:number) {
 export function tsToDate(updated:number|undefined) {
   let d = new Date();
   if (updated) d = new Date(updated);
-  return d.toLocaleDateString('en-US');
+  return d.toLocaleDateString('en-UK');
   //return d.getHours() + ':' + d.getMinutes() + ' ' + d.getDate() + "/" + d.getMonth() + 1 + "/" + d.getFullYear();
 }
 

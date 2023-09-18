@@ -27,9 +27,9 @@
     <Button
       type="button"
       on:click={(event) => doClicked(event)}
-      class="bg-primary-02 p-px font-normal rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
+      class="bg-primary-02 p-px font-normal rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
     >
-      <span class="inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-xl h-full">
+      <span class="inline-flex items-center gap-x-1.5 bg-gray-1000 px-4 py-2 rounded-lg h-full">
         <span class="text-transparent bg-clip-text bg-primary-02">{label}</span>
       </span>
     </Button>
@@ -37,7 +37,7 @@
     <Button
       type="button"
       on:click={(event) => doClicked(event)}
-      class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
+      class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
     >
       {label}
     </Button>

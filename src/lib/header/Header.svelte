@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button, Input } from 'flowbite-svelte'
+	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import type { SbtcConfig } from '$types/sbtc_config';
@@ -11,18 +12,20 @@
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
 
+	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
 		const res = await loginStacksJs(initApplication, $sbtcConfig);
 		if (!$sbtcConfig.authHeader) authenticate($sbtcConfig)
-		console.log(res)
+		dispatch('login_event');
 	}
 	const doLogout = async () => {
 		logUserOut();
 		$sbtcConfig.loggedIn = false
 		$sbtcConfig.authHeader = undefined
 		await sbtcConfig.update(() => $sbtcConfig)
+		dispatch('login_event');
 		goto('/')
 	}
 
@@ -50,7 +53,7 @@
 		{#if $sbtcConfig.loggedIn}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
-			<button class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0" on:keydown on:click={doLogin}>
+			<button class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0" on:keydown on:click={doLogin}>
 				Connect wallet
 				<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<mask id="mask0_3780_6397" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="20" height="21">
@@ -71,8 +74,10 @@
 		class="order-1 md:flex-1"
 		ulClass="dark:bg-black dark:md:bg-transparent md:border-0 border border-black flex flex-col p-2 md:p-4 mt-4 md:flex-row md:mt-0 md:text-sm md:font-medium !md:space-x-4"
 	>
+	<!--
 	<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
 	<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
+	-->
 		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 		{#if coordinator}
@@ -84,7 +89,7 @@
 			{#if $sbtcConfig.loggedIn}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}
