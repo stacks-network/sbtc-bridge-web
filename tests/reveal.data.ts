@@ -120,18 +120,21 @@ export const utxos_nrsp = {
 
 export const commitTx:BridgeTransactionType = {
   _id: "64458cd71f66c6ef1074c5bb",
-  fromBtcAddress: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
-  revealPub: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
-  reclaimPub: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+  network: 'testnet',
+  created: new Date().getTime(),
+  updated: new Date().getTime(),
+  uiPayload: {
+    amountSats: 202020,
+    principal: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
+    bitcoinAddress: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+    reclaimPublicKey: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+    paymentPublicKey: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+    sbtcWalletPublicKey: 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd',
+  },
   status: 2,
-  tries: 0,
   mode: 'op_drop_tr',
-  amount: 202020,
   requestType: 'wrap',
-  wallet: 'any',
   originator: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
-  stacksAddress: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
-  sbtcWalletAddress: 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd',
   commitTxScript: {
     wsh: '00209d242d797166ee6bbd5caa4b76accfc791ea6a727193be45f97059fa073e923c',
     paymentType: 'wsh',
@@ -139,7 +142,6 @@ export const commitTx:BridgeTransactionType = {
     script: '00209d242d797166ee6bbd5caa4b76accfc791ea6a727193be45f97059fa073e923c',
     witnessScript: '1854323c1a935113b2b705cc6de6c8a5c5b07a92e0b515ddb6752251201b13a556a9ec7ba01e48c80e18e8268ae8f8d33eb61e3c80a693450ceb77f672'
   },
-  updated: 1682279639292,
   btcTxid: '72d1cebc1bb22757f549063926006f680fd5cb9e3388a214244735d8dd124533',
   vout: {
     scriptpubkey: '00209d242d797166ee6bbd5caa4b76accfc791ea6a727193be45f97059fa073e923c',

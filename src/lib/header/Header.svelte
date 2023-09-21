@@ -3,7 +3,6 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
-	import type { DepositPayloadUIType, SbtcConfig, WithdrawPayloadUIType } from '$types/sbtc_config';
 	import { goto } from "$app/navigation";
 	import { authenticate, initApplication, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
@@ -11,7 +10,7 @@
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
-	import type { AddressObject } from 'sbtc-bridge-lib';
+	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;

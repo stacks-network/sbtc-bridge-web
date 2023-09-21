@@ -101,7 +101,7 @@ export async function signPsbtXverse() {
     },
     onFinish: (response:any) => {
       console.log('signPsbtOptions: ', response)
-      updatePeginRequest(response.txId)
+      updateBridgeTransaction(response.txId)
     },
     onCancel: () => {
       return 
@@ -114,7 +114,7 @@ const updateTimeline = () => {
   dispatch('update_transaction', { success: true });
 }
 
-const updatePeginRequest = async (txid:string) => {
+const updateBridgeTransaction = async (txid:string) => {
   if (!$sbtcConfig.userSettings.useOpDrop) {
     peginRequest.status = 5;
     peginRequest.btcTxid = txid;
@@ -126,7 +126,6 @@ const updatePeginRequest = async (txid:string) => {
 let broadcasted:boolean;
 const broadcast = async (psbtHex:string) => {
   try {
-    try {
       const result:any = await broadcastTransaction(psbtHex)
       if (peginRequest.mode === 'op_return') {
         peginRequest.status = 5;
@@ -134,9 +133,6 @@ const broadcast = async (psbtHex:string) => {
       peginRequest.btcTxid = (result.hash) ? result.hash : result.txid;
       await saveBridgeTransaction(peginRequest);
       broadcasted = true;
-    } catch (err) {
-      console.log('Error saving pegin request', err)
-    }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
     errorReason = err.message
@@ -185,7 +181,7 @@ onMount(async () => {
     {#if isWalletAddress()}
     <div class="mt-6 w-full flex">
       <div class="grow"><button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button></div>
-      <div class=""><Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="w-sign-label" /></div>
+      <!--<div class=""><Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="w-sign-label" /></div>-->
     </div>
     {/if}
   </div>

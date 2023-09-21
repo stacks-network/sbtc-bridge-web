@@ -3,8 +3,8 @@
 	import "../sbtc.css";
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
-	import { initApplication, loginStacksJs, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
-	import { CONFIG, setConfig } from '$lib/config';
+	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
+	import { setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
@@ -12,8 +12,7 @@
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
-	import { saveBridgeTransaction, setAuthorisation } from '$lib/bridge_api';
-	import type { BridgeTransactionType } from 'sbtc-bridge-lib';
+	import { setAuthorisation } from '$lib/bridge_api';
 
 	let componentKey = 0;
 	console.log('process.env: ', import.meta.env);
@@ -63,6 +62,7 @@
 				await authenticate($sbtcConfig)
 			}
 			setAuthorisation($sbtcConfig.authHeader)
+
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
@@ -72,7 +72,7 @@
 </script>
 
 {#if inited}
-	<div class=" bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen min-w-max">
+	<div class=" bg-gray-1000 bg-[url('$lib/assets/bg-lines.png')] bg-cover text-white font-extralight min-h-screen">
 		{#key componentKey}
 		<div>
 			<Header on:init_application={initApp} on:login_event={loginEvent} />

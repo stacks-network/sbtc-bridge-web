@@ -56,14 +56,14 @@ export function signMessageDirect(message: string) {
 }
 
 /**
-export function buildOpReturnDepositTransaction(network:string, amount:number, btcFeeRates:any, addressInfo:any, stacksAddress:string, sbtcWalletAddress:string, cardinal:string, userPaymentPubKey:string) {
+export function buildOpReturnDepositTransaction(network:string, amount:number, btcFeeRates:any, addressInfo:any, stacksAddress:string, sbtcWalletAddress:string, cardinal:string, paymentPublicKey:string) {
 	const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	if (!stacksAddress) throw new Error('Stacks address required!');
 	const data = buildDepositPayloadOpReturn(network, stacksAddress);
 	const txFees = calculateDepositFees(network, false, amount, btcFeeRates.feeInfo, addressInfo, sbtcWalletAddress, data)
 	const tx = new btc.Transaction({ allowUnknowInput: true, allowUnknowOutput: true, allowUnknownInputs:true, allowUnknownOutputs:true });
 	// no reveal fee for op_return
-	addInputs(network, amount, 0, tx, false, addressInfo.utxos, userPaymentPubKey);
+	addInputs(network, amount, 0, tx, false, addressInfo.utxos, paymentPublicKey);
 	tx.addOutput({ script: btc.Script.encode(['RETURN', data]), amount: BigInt(0) });
 	tx.addOutputAddress(sbtcWalletAddress, BigInt(amount), net);
 	const changeAmount = inputAmt(tx) - (amount + txFees[1]); 
@@ -71,7 +71,7 @@ export function buildOpReturnDepositTransaction(network:string, amount:number, b
 	return tx;
 }
 
-export function addInputs (network:string, amount:number, revealPayment:number, transaction:btc.Transaction, feeCalc:boolean, utxos:Array<UTXO>, userPaymentPubKey:string) {
+export function addInputs (network:string, amount:number, revealPayment:number, transaction:btc.Transaction, feeCalc:boolean, utxos:Array<UTXO>, paymentPublicKey:string) {
 	const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	const bar = revealPayment + amount;
 	let amt = 0;
@@ -92,19 +92,19 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				for (let i = 0; i < 10; i++) {
 					try {
 						if (i === 0) {
-							p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net)
+							p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(paymentPublicKey)), net)
 						} else if (i === 1) {
-							p2shObj = btc.p2sh(btc.p2wsh(btc.p2wpkh(hex.decode(userPaymentPubKey))), net)
+							p2shObj = btc.p2sh(btc.p2wsh(btc.p2wpkh(hex.decode(paymentPublicKey))), net)
 						} else if (i === 2) {
-							p2shObj = btc.p2sh(btc.p2wsh(btc.p2pkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2wsh(btc.p2pkh(hex.decode(paymentPublicKey)), net))
 						} else if (i === 3) {
-							p2shObj = btc.p2sh(btc.p2ms(1, [hex.decode(userPaymentPubKey)]), net)
+							p2shObj = btc.p2sh(btc.p2ms(1, [hex.decode(paymentPublicKey)]), net)
 						} else if (i === 4) {
-							p2shObj = btc.p2sh(btc.p2pkh(hex.decode(userPaymentPubKey)), net)
+							p2shObj = btc.p2sh(btc.p2pkh(hex.decode(paymentPublicKey)), net)
 						} else if (i === 5) {
-							p2shObj = btc.p2sh(btc.p2sh(btc.p2pkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2sh(btc.p2pkh(hex.decode(paymentPublicKey)), net))
 						} else if (i === 6) {
-							p2shObj = btc.p2sh(btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2sh(btc.p2wpkh(hex.decode(paymentPublicKey)), net))
 						}
 						if (i < 3) {
 							const nextI = redeemAndWitnessScriptAddInput(utxo, p2shObj, hexy)
@@ -134,7 +134,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				}
 				transaction.addInput(nextI);
 			} else if (spendScr.type === 'wsh') {
-				//const p2shObj = btc.p2wsh(btc.p2wpkh(hex.decode(userPaymentPubKey), net))
+				//const p2shObj = btc.p2wsh(btc.p2wpkh(hex.decode(paymentPublicKey), net))
 				let witnessUtxo = {
 					script: script.outputs[utxo.vout].script,
 					amount: BigInt(utxo.value)
@@ -153,7 +153,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				}
 				transaction.addInput(nextI);
 			} else if (spendScr.type === 'pkh') {
-				//const p2shObj = btc.p2pkh(hex.decode(userPaymentPubKey), net)
+				//const p2shObj = btc.p2pkh(hex.decode(paymentPublicKey), net)
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,
@@ -162,7 +162,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				}
 				transaction.addInput(nextI);
 			} else {
-				//const p2shObj = btc.p2wpkh(hex.decode(userPaymentPubKey), net)
+				//const p2shObj = btc.p2wpkh(hex.decode(paymentPublicKey), net)
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,
@@ -246,7 +246,7 @@ export function getAddressFromOutScript(script: Uint8Array) {
 
   /**
    * 
-export function addInputs (network:string, amount:number, revealPayment:number, transaction:btc.Transaction, feeCalc:boolean, utxos:Array<UTXO>, userPaymentPubKey:string) {
+export function addInputs (network:string, amount:number, revealPayment:number, transaction:btc.Transaction, feeCalc:boolean, utxos:Array<UTXO>, paymentPublicKey:string) {
 	const net = (network === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
 	const bar = revealPayment + amount;
 	let amt = 0;
@@ -263,24 +263,24 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 			amt += utxo.value;
 			if (spendScr.type === 'sh') {
 				let p2shObj;
-				// p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net)
+				// p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(paymentPublicKey)), net)
 				// p2tr cannont be wrapped in p2sh !!!
 				for (let i = 0; i < 10; i++) {
 					try {
 						if (i === 0) {
-							p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net)
+							p2shObj = btc.p2sh(btc.p2wpkh(hex.decode(paymentPublicKey)), net)
 						} else if (i === 1) {
-							p2shObj = btc.p2sh(btc.p2wsh(btc.p2wpkh(hex.decode(userPaymentPubKey))), net)
+							p2shObj = btc.p2sh(btc.p2wsh(btc.p2wpkh(hex.decode(paymentPublicKey))), net)
 						} else if (i === 2) {
-							p2shObj = btc.p2sh(btc.p2wsh(btc.p2pkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2wsh(btc.p2pkh(hex.decode(paymentPublicKey)), net))
 						} else if (i === 3) {
-							p2shObj = btc.p2sh(btc.p2ms(1, [hex.decode(userPaymentPubKey)]), net)
+							p2shObj = btc.p2sh(btc.p2ms(1, [hex.decode(paymentPublicKey)]), net)
 						} else if (i === 4) {
-							p2shObj = btc.p2sh(btc.p2pkh(hex.decode(userPaymentPubKey)), net)
+							p2shObj = btc.p2sh(btc.p2pkh(hex.decode(paymentPublicKey)), net)
 						} else if (i === 5) {
-							p2shObj = btc.p2sh(btc.p2sh(btc.p2pkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2sh(btc.p2pkh(hex.decode(paymentPublicKey)), net))
 						} else if (i === 6) {
-							p2shObj = btc.p2sh(btc.p2sh(btc.p2wpkh(hex.decode(userPaymentPubKey)), net))
+							p2shObj = btc.p2sh(btc.p2sh(btc.p2wpkh(hex.decode(paymentPublicKey)), net))
 						}
 						if (i < 3) {
 							const nextI = redeemAndWitnessScriptAddInput(utxo, p2shObj, hexy)
@@ -296,9 +296,9 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 					}
 				}
 			} else if (spendScr.type === 'wpkh') {
-				console.log('addInputs:' + userPaymentPubKey)
-				console.log(hex.decode((userPaymentPubKey)))
-				const p2shObj = btc.p2wpkh(hex.decode(userPaymentPubKey));
+				console.log('addInputs:' + paymentPublicKey)
+				console.log(hex.decode((paymentPublicKey)))
+				const p2shObj = btc.p2wpkh(hex.decode(paymentPublicKey));
 				const unit8 = new Uint8Array([0,20,9,199,239,205,81,160,141,169,180,227,131,69,100,88,102,194,162,112,235,57])
 				const unit8 = new Uint8Array([0,20,180,168,67,35,113,226,124,112,5,73,110,208,101,91,218,198,26,201,120,102])
 				
@@ -317,7 +317,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
                 }
                 transaction.addInput(nextI);
 			} else if (spendScr.type === 'wsh') {
-				const p2shObj = btc.p2wsh(btc.p2wpkh(hex.decode(userPaymentPubKey), net))
+				const p2shObj = btc.p2wsh(btc.p2wpkh(hex.decode(paymentPublicKey), net))
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,
@@ -329,7 +329,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				  }
 				transaction.addInput(nextI);
 			} else if (spendScr.type === 'pkh') {
-				//const p2shObj = btc.p2pkh(hex.decode(userPaymentPubKey), net)
+				//const p2shObj = btc.p2pkh(hex.decode(paymentPublicKey), net)
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,
@@ -338,7 +338,7 @@ export function addInputs (network:string, amount:number, revealPayment:number, 
 				}
 				transaction.addInput(nextI);
 			} else {
-				//const p2shObj = btc.p2wpkh(hex.decode(userPaymentPubKey), net)
+				//const p2shObj = btc.p2wpkh(hex.decode(paymentPublicKey), net)
 				const nextI:btc.TransactionInput = {
 					txid: hex.decode(utxo.txid),
 					index: utxo.vout,

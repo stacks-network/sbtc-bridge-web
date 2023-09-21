@@ -1,18 +1,23 @@
-import { beforeAll, beforeEach, expect, describe, it } from 'vitest'
-import { hex } from '@scure/base';
-import { taprootTweakPrivKey } from '@scure/btc-signer';
+import { beforeAll, beforeEach, describe, it } from 'vitest'
+import type { BridgeTransactionType } from 'sbtc-bridge-lib';
 
-const data = {
+const data:BridgeTransactionType = {
     _id: ("645b717472adcbdf5e1ba4b2"),
-    fromBtcAddress: 'tb1pvzcsdlw38rz9lxe4tdekfy040w00wjl0xnpnw7j32gzk0kfz67hq6j3tng',
     status: 2,
-    tries: 1,
+    network: 'testnet',
+    created: new Date().getTime(),
+    updated: new Date().getTime(),
+    uiPayload: {
+      amountSats: 7531,
+      principal: 'ST29N24XJPW2WRVF6S2JWBC3TJBGBA5EXPSC03Y0G',
+      bitcoinAddress: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+      reclaimPublicKey: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+      paymentPublicKey: 'tb1qxj5tpfsz836fyh5c3gfu2t9spjpzf924etnrsp',
+      sbtcWalletPublicKey: 'tb1p4m8lyp5m3tjfwq2288429rk7sxnp5xjqslxkvatkujtsr8kkxlgqu9r4cd',
+    },
     mode: 'op_drop',
-    amount: 7531,
     requestType: 'wrap',
-    wallet: "p2tr(TAPROOT_UNSPENDABLE_KEY, [{ script: Script.encode([data, 'DROP', sbtcWalletAddr.pubkey]) }, { script: Script.encode([reclaimAddr.pubkey]) }], this.net, true)",
-    stacksAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    sbtcWalletAddress: 'tb1p5yh4frytaszrkng0xs0tjdnmg9806d4arrl9emxdtaxj9g8zrgjqxpunh0',
+    originator: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
     commitTxScript: {
       address: 'tb1pt0vl4c86z20mkgzh6fhqlslxx2zvkxc269y68f4cwk8p44nnmewqvx4lz9',
       script: '51205bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c',
@@ -63,7 +68,6 @@ const data = {
       tapMerkleRoot: '16ff6226374abcdf78472f9c0a17bff5cddb459e4d5e144358d2ebf04757262c',
       tweakedPubkey: '5bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c'
     },
-    updated: 1683714420013,
     btcTxid: '745a6576e349af9e187709106899a2495f86cd3357f42dc0f3c526a999c25437',
     vout: {
       scriptpubkey: '51205bd9fae0fa129fbb2057d26e0fc3e63284cb1b0ad149a3a6b8758e1ad673de5c',

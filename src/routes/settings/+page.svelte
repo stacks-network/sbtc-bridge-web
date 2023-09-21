@@ -57,7 +57,7 @@
   OP_DROP means you can deposit from any wallet but takes a bit longer. OP_RETURN allows you to deposit/withdraw
   more quickly using your Stacks Bitcoin wallet!
 </Tooltip>
-<div class="mx-auto max-w-5xl p-6 py-6">
+<div class="mx-auto md:w-3/5 w-full p-6 py-6">
   <div class="my-8">
     <div class="md:p-10 px-4 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
       <h1 class="text-4xl font-normal">Settings</h1>

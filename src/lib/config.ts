@@ -92,7 +92,7 @@ export function setConfig(search:string) {
     let mode = import.meta.env.MODE
     if (!mode) mode = 'testnet'
     //console.log('import.meta.env.MODE: ' + mode);
-	if (mode === 'simnet') CONFIG = SIMNET_CONFIG;
+	if (mode.startsWith('local-')) CONFIG = SIMNET_CONFIG;
 	else if (mode === 'development') CONFIG = DEVNET_CONFIG;
 	else if (search.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
 	else if (search.indexOf('simnet') > -1) CONFIG = SIMNET_CONFIG;

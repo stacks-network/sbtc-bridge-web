@@ -6,12 +6,12 @@ import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_ap
 import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import type { AddressObject, DepositPayloadType, SbtcContractDataType, WithdrawalPayloadType } from 'sbtc-bridge-lib' 
+import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
 import { hex } from '@scure/base';
-import type { ExchangeRate } from 'sbtc-bridge-lib';
+import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 import { schnorr } from '@noble/curves/secp256k1';
 import * as btc from '@scure/btc-signer';
 import { AddressPurposes, getAddress } from 'sats-connect'
@@ -110,16 +110,19 @@ function getStacksAddress() {
 	}
 	return
 }
-export function isHiro() {
+function getProvider() {
 	const provider:StacksProvider = getStacksProvider()
-	const prod = provider.getProductInfo();
-	return prod.name.toLowerCase().indexOf('hiro') > -1
+	const prod = (provider.getProductInfo) ? provider.getProductInfo() : undefined;
+	if (!prod) throw new Error('Provider not found')
+	return prod
+}
+
+export function isHiro() {
+	return getProvider().name.toLowerCase().indexOf('hiro') > -1
 }
 
 export function isLeather() {
-	const provider:StacksProvider = getStacksProvider()
-	const prod = provider.getProductInfo();
-	return prod.name.toLowerCase().indexOf('leather') > -1
+	return getProvider().name.toLowerCase().indexOf('leather') > -1
 }
 
 async function addresses(callback:any):Promise<AddressObject|undefined> {
@@ -222,7 +225,7 @@ export function loggedIn():boolean {
 	}
 }
 
-export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
+export async function authenticate(conf:SbtcConfig):Promise<SignatureData|undefined> {
 	await signMessage(async function(sigData:SignatureData, message:string) {
 		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
 		if (verified) {
@@ -235,9 +238,9 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
-		setAuthorisation($sbtcConfig.authHeader)
-		sbtcConfig.update(() => $sbtcConfig)
+		conf.authHeader = { ...sigData, stxAddress: conf.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
+		setAuthorisation(conf.authHeader)
+		sbtcConfig.update(() => conf)
 		return sigData
 	}, authMessage)
 	return
@@ -252,7 +255,7 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
-					await authenticate(conf)
+					authenticate(conf)
 					callback(conf, true);
 				},
 				onCancel: () => {
@@ -260,11 +263,11 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				},
 			});
 		} else {
-			callback(conf);
+			await callback(conf);
 		}
 	} catch (e) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
-		callback(conf);
+		await callback(conf);
 	}
 }
 
@@ -274,8 +277,8 @@ export async function loginStacksFromHeader(document:any) {
 	else return false;
 }
 
-export function signMessage(callback:any, message:string) {
-	openSignatureRequestPopup({
+export async function signMessage(callback:any, message:string) {
+	await openSignatureRequestPopup({
 		message,
 		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
 		appDetails: appDetails(),
@@ -348,7 +351,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		if (!data) data = {
 			sbtcContractData: {} as SbtcContractDataType
 		} as any;
-		data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(data.sbtcContractData.sbtcWalletPublicKey);
+		data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, data.sbtcContractData.sbtcWalletPublicKey);
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
 			conf.loggedIn = true;
@@ -368,7 +371,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	}
 	let keys;
 	const mode = import.meta.env.MODE
-	if (mode === 'development' || mode === 'simnet' || !data.keys) {
+	if (mode === 'development' || mode.startsWith('local') || !data.keys) {
 		try {
 			keys = {
 				deposits: {
@@ -405,14 +408,62 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	conf.sbtcContractData = data.sbtcContractData;
 	conf.btcFeeRates = data.btcFeeRates;
 	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
-	if (!conf.payloadDepositData) conf.payloadDepositData = {} as DepositPayloadType
-	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawalPayloadType
+	if (loggedIn()) {
+		try { doPayloadData(conf) } 
+		catch (err) { 
+			setTimeout(function() {
+				conf = doPayloadData(conf)
+				sbtcConfig.update(() => conf);
+			}, 2000)
+		} 
+	}
 	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
 		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 	}
 	sbtcConfig.update(() => conf);
+
 }
 
+function doPayloadData(conf:SbtcConfig) {
+	if (!conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0) throw new Error('Public Key missing from logged in user')
+	let prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
+	let amount = 0
+	if (conf.payloadDepositData && conf.payloadDepositData.amountSats > 0) {
+		amount = conf.payloadDepositData.amountSats
+	}
+	if (conf.payloadDepositData && conf.payloadDepositData.principal) {
+		prn = conf.payloadDepositData.principal
+	}
+	const payloadDepositData:DepositPayloadUIType = {
+			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
+			reclaimPublicKey: conf.keys.deposits.reclaimPubKey,
+			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
+			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
+			principal: prn,
+			amountSats: amount
+	}
+	conf.payloadDepositData = payloadDepositData;
+
+	prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
+	if (!conf.payloadWithdrawData || !conf.payloadWithdrawData.sbtcWalletPublicKey) {
+		amount = conf.payloadWithdrawData.amountSats
+	}
+	if (conf.payloadWithdrawData && conf.payloadWithdrawData.principal) {
+		prn = conf.payloadDepositData.principal
+	}
+	const payloadWithdrawData:WithdrawPayloadUIType = {
+			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
+			reclaimPublicKey: conf.keys.deposits.reclaimPubKey,
+			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
+			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
+			principal: prn,
+			amountSats: 0
+	}
+	conf.payloadWithdrawData = payloadWithdrawData;
+	return conf;
+}
+
+/**
 export function getPegWalletAddressFromPublicKey (sbtcWalletPublicKey:string) {
 	if (!sbtcWalletPublicKey) return ''
 	let net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
@@ -434,3 +485,4 @@ export function getPegWalletAddressFromPublicKey (sbtcWalletPublicKey:string) {
 	const addr = btc.Address(net).encode({type: 'tr', pubkey: xOnlyKey})
 	return addr;
 }
+ */
