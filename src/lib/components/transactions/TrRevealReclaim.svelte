@@ -33,7 +33,7 @@ onMount(() => {
       }
       count++;
     }
-    const amt = (peginRequest.vout && peginRequest.vout.value) ? peginRequest.vout.value : peginRequest.amount;
+    const amt = (peginRequest.vout && peginRequest.vout.value) ? peginRequest.vout.value : peginRequest.uiPayload.amountSats;
     stacksData = parseDepositPayload(revealScript[0].valueOf() as Uint8Array, amt);
   } catch(err) {
     console.log(err)
@@ -54,17 +54,17 @@ onMount(() => {
   <div class="col-12 text-start"><span class="pointer" on:keypress on:click={() => showCommitDetails = !showCommitDetails}>show details</span></div>
   {#if showCommitDetails}
   <div class="mt-4 col-12">Reclaim Data</div>
-  <div class="col-md-2 col-sm-12 text-info">Refunds to</div><div class="col-md-10 col-sm-12">{peginRequest.senderAddress}</div>
+  <div class="col-md-2 col-sm-12 text-info">Refunds to</div><div class="col-md-10 col-sm-12">{peginRequest.originator}</div>
   {#if stacksData && $sbtcConfig.userSettings.debugMode}
-  <div class="col-md-2 col-sm-12 text-info">Reclaim Pub Key</div><div class="col-md-10 col-sm-12">{peginRequest.reclaimPub}</div>
+  <div class="col-md-2 col-sm-12 text-info">Reclaim Pub Key</div><div class="col-md-10 col-sm-12">{peginRequest.uiPayload.paymentPublicKey}</div>
   {/if}
   {#if peginRequest.status < 3}
   <TxExport btcTx={reclaimBtcTx} txtype={'reclaim'} amount={peginRequest.vout?.value || 0}/>
   {/if}
   <div class="mt-4 col-12">Reveal Data</div>
-  <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{peginRequest.sbtcWalletAddress}</div>
+  <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
   {#if stacksData && $sbtcConfig.userSettings.debugMode}
-  <div class="col-md-2 col-sm-12 text-info">Reveal Pub Key</div><div class="col-md-10 col-sm-12">{peginRequest.revealPub}</div>
+  <div class="col-md-2 col-sm-12 text-info">Reveal Pub Key</div><div class="col-md-10 col-sm-12">{peginRequest.uiPayload.sbtcWalletPublicKey}</div>
   {/if}
   <div class="mt-4 col-12 text-info"></div>
   {#if peginRequest.status < 3}

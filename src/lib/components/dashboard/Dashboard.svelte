@@ -1,16 +1,23 @@
 <script lang="ts">
   import { sbtcConfig } from '$stores/stores';
-	import { authenticate, initApplication, loggedIn, loginStacksJs } from '$lib/stacks_connect';
+	import { authenticate, initApplication, loggedIn, loginStacksFromHeader, loginStacksJs } from '$lib/stacks_connect';
 	import { CONFIG } from '$lib/config';
-	import { fmtAmount, fmtNumber, satsToBitcoin } from 'sbtc-bridge-lib';
+	import { fmtAmount, fmtNumber, fmtSatoshiToBitcoin, satsToBitcoin } from 'sbtc-bridge-lib';
 
   $: connected = loggedIn()
 
+  $: currentBalance = () => {
+    return fmtSatoshiToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance || 0.00000000)
+  }
+  const tvl = () => {
+    const currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
+    const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
+    return currency.symbol + ' ' + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
+  }
+
 	const doLogin = async () => {
-		const res = await loginStacksJs(initApplication, $sbtcConfig);
-		if (!$sbtcConfig.authHeader) authenticate($sbtcConfig)
+		const res = await loginStacksFromHeader(document)
     connected = loggedIn()
-		console.log(res)
 	}
 
 </script>
@@ -23,7 +30,7 @@
       >
         <dl class="min-w-0 flex-1">
           <dt class="text-xl font-bold leading-6 leading-none text-yellow-500">Total value locked</dt>
-          <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">${fmtAmount($sbtcConfig.sbtcContractData.totalSupply || 0, 'usd')}</dd>
+          <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">{tvl()}</dd>
         </dl>
       </div>
     </div>
@@ -38,7 +45,7 @@
           <button on:keydown on:click={doLogin} class=" gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-gray-500 py-1 px-3 text-gray-200 hover:bg-gray-600 inline-block ml-2">Connect your wallet</button>
           <span class="block text-base font-normal text-gray-800">~$—</span>
           {:else}
-          {fmtNumber(satsToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance))} <span class="text-xl">sBTC</span>
+          {currentBalance()} <span class="text-xl">sBTC</span>
           {/if}
         </dd>
       </dl>

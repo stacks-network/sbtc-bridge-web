@@ -9,10 +9,10 @@ import { sbtcConfig } from '$stores/stores'
 import Button from '$lib/components/shared/Button.svelte';
 import { sign } from '$lib/bridge_api';
 import type { Transaction } from '@scure/btc-signer';
-import { toStorable, buildRevealOrReclaimTransaction } from 'sbtc-bridge-lib' 
+import { toStorable, buildRevealOrReclaimTransaction, getPegWalletAddressFromPublicKey } from 'sbtc-bridge-lib' 
 import { Popover } from 'flowbite-svelte';
 import { a_primary } from '$lib/css_utils';
-import Invoice from '../deposit/Invoice.svelte';
+import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
 import { fetchUtxoSet, fetchTransaction } from '$lib/bridge_api'
 
 export let peginRequest:BridgeTransactionType;
@@ -54,14 +54,14 @@ const doSign = async (txtype:string, sigData:any, message:string, tx:Uint8Array)
 }
 
 const signReveal = async () => {
-  const script = 'Reclaim my deposit to ' + peginRequest.fromBtcAddress;
+  const script = 'Reclaim my deposit to ' + peginRequest.uiPayload.bitcoinAddress;
   await signMessage(async function(sigData:any, message:string) {
     doSign('reveal', sigData, (message), revealTx.toBytes())
   }, script);
 }
 
 const signReclaim = async () => {
-  const script = 'Reclaim my deposit to ' + peginRequest.fromBtcAddress;
+  const script = 'Reclaim my deposit to ' + peginRequest.uiPayload.bitcoinAddress;
   await signMessage(async function(sigData:any, message:string) {
     doSign('reclaim', sigData, (message), reclaimTx.toBytes())
   }, script);
@@ -78,10 +78,10 @@ onMount(async () => {
 			peginRequest.commitTxScript = script;
 		}
 	}
-	addressInfoReveal = await fetchUtxoSet(peginRequest.fromBtcAddress)
-	addressInfoReclaim = await fetchUtxoSet(peginRequest.sbtcWalletAddress)
+	addressInfoReveal = await fetchUtxoSet(peginRequest.uiPayload.bitcoinAddress)
+	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, peginRequest.uiPayload.sbtcWalletPublicKey))
 	if (peginRequest.btcTxid) commitTransaction = await fetchTransaction(peginRequest.btcTxid);
-	peginRequest.senderAddress = commitTransaction.vout[1].scriptPubKey.address
+	peginRequest.originator = commitTransaction.vout[1].scriptPubKey.address
 	reclaimTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)
 	revealTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)
 
@@ -121,7 +121,7 @@ onMount(async () => {
 {#if inited && reclaiming}
 <p class="">Reclaim your deposit by signing a message containing your Bitcoin address - we will return your funds - less Bitcoin transaction fees.
 </p>
-<Invoice {peginRequest}/>
+<Invoice {peginRequest} psbtB64={undefined} psbtHex={undefined}/>
 {#if errorMessage}<p class="text-error-500">{errorMessage}</p>{/if}
 <div id="po-sign-reclaim" class="mb-5"><Button darkScheme={false} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/></div>
 {/if}

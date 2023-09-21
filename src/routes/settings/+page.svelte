@@ -25,6 +25,7 @@
 				useOpDrop: false,
 				debugMode: false,
 				testAddresses: false,
+        peggingIn: true,
 				currency: {
 					cryptoFirst: false,
 					myFiatCurrency: { currency: 'USD'} as ExchangeRate,
@@ -35,7 +36,7 @@
 		if (typeof $sbtcConfig.userSettings.currency === 'undefined') {
 			$sbtcConfig.userSettings.currency = {
 				cryptoFirst: false,
-				myFiatCurrency: 'USD',
+				myFiatCurrency: { currency: 'USD'} as ExchangeRate,
 				denomination: 'bitcoin'
 			}
 		}
@@ -56,10 +57,9 @@
   OP_DROP means you can deposit from any wallet but takes a bit longer. OP_RETURN allows you to deposit/withdraw
   more quickly using your Stacks Bitcoin wallet!
 </Tooltip>
-
-<div class="md:w-3/5 sm:w-full mx-auto flex flex-col justify-center px-6 lg:px-8 py-6">
-  <div class="max-w-4xl">
-    <div class="p-10 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
+<div class="mx-auto md:w-3/5 w-full p-6 py-6">
+  <div class="my-8">
+    <div class="md:p-10 px-4 gap-6 items-start bg-gray-1000 border-[0.5px] border-gray-700 rounded-lg">
       <h1 class="text-4xl font-normal">Settings</h1>
 
       <div class="bg-gray-1000 text-white">

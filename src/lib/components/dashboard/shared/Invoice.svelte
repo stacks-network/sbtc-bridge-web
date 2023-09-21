@@ -35,10 +35,10 @@
   }
   const getAddress = (full:boolean):string => {
     if (full) {
-      return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : peginRequest.fromBtcAddress || '';
+      return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : peginRequest.uiPayload.bitcoinAddress || '';
     }
     try {
-      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate(peginRequest.fromBtcAddress, 10);
+      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate(peginRequest.uiPayload.bitcoinAddress, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -46,17 +46,17 @@
 
   const getFromAddress = (full:boolean):string => {
     if (full) {
-      return peginRequest.fromBtcAddress;
+      return peginRequest.uiPayload.bitcoinAddress;
     }
     try {
-      return truncate(peginRequest.fromBtcAddress, 10);
+      return truncate(peginRequest.uiPayload.bitcoinAddress, 10);
     } catch (err) {
       return 'not connected'
     }
   }
 
   const paymentUri = () => {
-    let uri = 'bitcoin:' + (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript!.address : peginRequest.fromBtcAddress;
+    let uri = 'bitcoin:' + (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript!.address : peginRequest.uiPayload.bitcoinAddress;
     uri += '?amount=' + fmtSatoshiToBitcoin(amount)
     uri += '&label=' + encodeURI('Deposit BTC to mint sBTC on Stacks')
     return uri
@@ -72,7 +72,7 @@
 
   onMount(async () => {
     if (!peginRequest) throw new Error('No pegin request')
-    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.amount) || 0;
+    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
   })
 </script>
 

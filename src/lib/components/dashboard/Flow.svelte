@@ -8,10 +8,12 @@
 	import { onMount } from 'svelte';
 	import { fetchUtxoSet } from '$lib/bridge_api';
 	import { CONFIG } from '$lib/config';
+  import Banner from '$lib/components/shared/Banner.svelte';
 
   let addressInfo:any;
   let errorMessage:string|undefined;
   let inited = false;
+  let connected = false;
 
   $: opDrop = $sbtcConfig.userSettings.useOpDrop;
   let useDeposit = $sbtcConfig.userSettings.peggingIn;
@@ -40,11 +42,13 @@
     } 
     if (!$sbtcConfig.payloadWithdrawData.bitcoinAddress) {
       $sbtcConfig.payloadWithdrawData.bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-    } 
+    }
+    sbtcConfig.update(() => $sbtcConfig)
   }
 
   onMount(async () => {
     try {
+      connected = typeof $sbtcConfig.sbtcContractData.contractId === 'string'
       const bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
       addressInfo = await fetchUtxoSet(bitcoinAddress)
       initData()
@@ -58,24 +62,30 @@
 
 <div class="sm:col-span-3 order-1 lg:order-2">
   <div class="flex flex-col w-full border-[0.5px] border-gray-700 rounded-lg p-6 overflow-hidden bg-gray-1000">
-      {#if errorMessage}<div>{@html errorMessage}</div>
+    {#if !connected}
+	  <Banner
+		bannerType={'info'}
+		message={'sBTC wallet is not connected - go to settings and switch network. Currently on <strong>' + CONFIG.VITE_NETWORK+ '</strong>!</a>'}/>
     {:else}
-    <Tabs style="underline" contentClass="p-0">
-      {#if inited}
-      <TabItem open={useDeposit} on:click={() => toggle()} title="Deposit" class="grow [&>button]:w-full [&>button]:text-lg">
-        {#if opDrop}
-        <DepositDrop {addressInfo} />
-        {:else}
-        <DepositReturn {addressInfo} />
-        {/if}
-      </TabItem>
-      <TabItem open={!useDeposit} on:click={() => toggle()} title="Withdraw" class="grow [&>button]:w-full [&>button]:text-lg">
-        <Withdraw {addressInfo} />
-      </TabItem>
+      {#if errorMessage}<div>{@html errorMessage}</div>
       {:else}
-      <div>Waiting for data..</div>
+      <Tabs style="underline" contentClass="p-0">
+        {#if inited}
+        <TabItem open={useDeposit} on:click={() => toggle()} title="Deposit" class="grow [&>button]:w-full [&>button]:text-lg">
+          {#if opDrop}
+          <DepositDrop {addressInfo} />
+          {:else}
+          <DepositReturn {addressInfo} />
+          {/if}
+        </TabItem>
+        <TabItem open={!useDeposit} on:click={() => toggle()} title="Withdraw" class="grow [&>button]:w-full [&>button]:text-lg">
+          <Withdraw {addressInfo} />
+        </TabItem>
+        {:else}
+        <div>Waiting for data..</div>
+        {/if}
+      </Tabs>
       {/if}
-    </Tabs>
     {/if}
   </div>
 </div>

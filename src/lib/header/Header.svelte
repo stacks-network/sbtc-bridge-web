@@ -3,7 +3,6 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
-	import type { SbtcConfig } from '$types/sbtc_config';
 	import { goto } from "$app/navigation";
 	import { authenticate, initApplication, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
@@ -11,19 +10,30 @@
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
+	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
-		const res = await loginStacksJs(initApplication, $sbtcConfig);
-		if (!$sbtcConfig.authHeader) authenticate($sbtcConfig)
-		dispatch('login_event');
+		await loginStacksJs(loginCallback, $sbtcConfig);
 	}
+
+	const loginCallback = async () => {
+		await initApplication($sbtcConfig, true)
+		dispatch('login_event');
+		setTimeout(function() {
+			goto('/')
+		}, 1000)
+	}
+
 	const doLogout = async () => {
 		logUserOut();
 		$sbtcConfig.loggedIn = false
 		$sbtcConfig.authHeader = undefined
+		$sbtcConfig.payloadDepositData = {} as DepositPayloadUIType
+		$sbtcConfig.payloadWithdrawData = {} as WithdrawPayloadUIType
+		$sbtcConfig.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 		await sbtcConfig.update(() => $sbtcConfig)
 		dispatch('login_event');
 		goto('/')
@@ -89,7 +99,7 @@
 			{#if $sbtcConfig.loggedIn}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
-				<button class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
+				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>
 					Connect wallet
 				</button>
 			{/if}

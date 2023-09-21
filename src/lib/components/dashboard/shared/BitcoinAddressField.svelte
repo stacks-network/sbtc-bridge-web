@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { Icon, InformationCircle } from "svelte-hero-icons";
   import { onMount } from 'svelte';
+  import { Icon, InformationCircle } from "svelte-hero-icons";
   import { Tooltip } from 'flowbite-svelte';
 	import { sbtcConfig } from "$stores/stores";
 	import { CONFIG } from "$lib/config";

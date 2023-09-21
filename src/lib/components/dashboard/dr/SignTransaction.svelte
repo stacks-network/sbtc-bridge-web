@@ -15,6 +15,8 @@ import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
+import { Icon, InformationCircle } from "svelte-hero-icons";
+import { Tooltip } from 'flowbite-svelte';
 
 export let peginRequest:BridgeTransactionType;
 export let addressInfo:any;
@@ -31,7 +33,7 @@ const getExplorerUrl = () => {
   return explorerBtcTxUrl(peginRequest.btcTxid)
 }
 export function isWalletAddress() {
-  return peginRequest.fromBtcAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
+  return peginRequest.uiPayload.bitcoinAddress === $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
 }
 
 export async function requestSignPsbt() {
@@ -84,7 +86,7 @@ export async function signPsbtXverse() {
   for (let index = 0; index < transaction.inputsLength; index++) {
     //const input = transaction.getInput(index);
     inputs.push({
-      address: peginRequest.fromBtcAddress,
+      address: peginRequest.uiPayload.bitcoinAddress,
       signingIndexes: [0],
     })
   }
@@ -100,7 +102,7 @@ export async function signPsbtXverse() {
     },
     onFinish: (response:any) => {
       console.log('signPsbtOptions: ', response)
-      updatePeginRequest(response.txId)
+      updateBridgeTransaction(response.txId)
     },
     onCancel: () => {
       return
@@ -113,7 +115,7 @@ const updateTimeline = () => {
   dispatch('update_transaction', { success: true });
 }
 
-const updatePeginRequest = async (txid:string) => {
+const updateBridgeTransaction = async (txid:string) => {
   if (!$sbtcConfig.userSettings.useOpDrop) {
     peginRequest.status = 5;
     peginRequest.btcTxid = txid;
@@ -125,7 +127,6 @@ const updatePeginRequest = async (txid:string) => {
 let broadcasted:boolean;
 const broadcast = async (psbtHex:string) => {
   try {
-    try {
       const result:any = await broadcastTransaction(psbtHex)
       if (peginRequest.mode === 'op_return') {
         peginRequest.status = 5;
@@ -133,9 +134,6 @@ const broadcast = async (psbtHex:string) => {
       peginRequest.btcTxid = (result.hash) ? result.hash : result.txid;
       await saveBridgeTransaction(peginRequest);
       broadcasted = true;
-    } catch (err) {
-      console.log('Error saving pegin request', err)
-    }
   } catch (err:any) {
     console.log('Broadcast error: ', err)
     errorReason = err.message
@@ -145,9 +143,9 @@ const broadcast = async (psbtHex:string) => {
 onMount(async () => {
   amount = $sbtcConfig.payloadDepositData.amountSats;
   if (peginRequest.mode === 'op_drop') {
-    transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!);
+    transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!);
   } else {
-    transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, amount, $sbtcConfig.btcFeeRates, addressInfo, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, $sbtcConfig.sbtcContractData.sbtcWalletAddress, peginRequest.fromBtcAddress, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!)
+    transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo)
   }
   if (transaction.inputsLength === 0) {
     errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
@@ -159,6 +157,9 @@ onMount(async () => {
 
 </script>
 <div id="clipboard"></div>
+<Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#d-sign-label">
+  Make sure your web wallet is connected to the account you are logged in with.
+</Tooltip>
 
 {#if inited}
 <div class="flex w-full flex-wrap align-baseline items-start">
@@ -167,7 +168,7 @@ onMount(async () => {
     <p class="text-lg my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
     {/if}
   </div>
-  <Invoice {peginRequest}  {psbtHex} {psbtB64}/>
+  <Invoice {peginRequest}  {psbtHex} {psbtB64} />
   {#if !broadcasted && !errorReason}
   <div class="flex w-full">
     <!--
@@ -176,9 +177,10 @@ onMount(async () => {
     </div>
     -->
     {#if isWalletAddress()}
-      <div class="mt-6 w-full">
-        <button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button>
-      </div>
+    <div class="mt-6 w-full flex">
+      <div class="grow"><button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button></div>
+      <!--<div class=""><Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="d-sign-label" /></div>-->
+    </div>
     {/if}
   </div>
   {:else if broadcasted}
@@ -191,10 +193,10 @@ onMount(async () => {
     {/if}
   </div>
   {:else if errorReason}
-  <div class="my-5">
+  <div class="mt-5">
     {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
   </div>
-  <div class="mt-6">
+  <div class="mt-5">
     <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
   </div>
   {/if}

@@ -4,7 +4,7 @@
   import type { BridgeTransactionType } from 'sbtc-bridge-lib'
   import { tsToDate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
   import { doPeginScan } from '$lib/bridge_api';
-  import Invoice from "$lib/components/deposit/Invoice.svelte";
+  import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
 	import Banner from '../shared/Banner.svelte';
 
   export let peginRequest:BridgeTransactionType;

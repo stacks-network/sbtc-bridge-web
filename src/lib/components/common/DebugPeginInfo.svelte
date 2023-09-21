@@ -2,7 +2,7 @@
 import { sbtcConfig } from '$stores/stores';
 import { hex, base64 } from '@scure/base';
 import * as btc from '@scure/btc-signer';
-import type { BridgeTransactionType } from 'sbtc-bridge-lib' 
+import { getPegWalletAddressFromPublicKey, type BridgeTransactionType } from 'sbtc-bridge-lib' 
 import { getTestAddresses } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 
@@ -36,8 +36,8 @@ $: decodedScript = () => {
     <div class="col-2">Amount</div><div class="col-10">{tx.pegInData.amount}</div>
     {#if peginRequest}
     <div class="col-2">Txid</div><div class="col-10">{peginRequest.btcTxid}</div>
-    <div class="col-2">Stacks Address</div><div class="col-10">{peginRequest.stacksAddress}</div>
-    <div class="col-2">SBTC Wallet</div><div class="col-10">{peginRequest.sbtcWalletAddress}</div>
+    <div class="col-2">Stacks Address</div><div class="col-10">{peginRequest.uiPayload.principal}</div>
+    <div class="col-2">SBTC Wallet</div><div class="col-10">{getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, peginRequest.uiPayload.sbtcWalletPublicKey)}</div>
     <div class="col-2">Pegin Status</div><div class="col-10">{peginRequest.status}</div>
     <div class="col-2">Script Hash</div><div class="col-10">{peginRequest.commitTxScript?.script}</div>
     <div class="col-2">Payment Type</div><div class="col-10">{peginRequest.commitTxScript?.paymentType}</div>
