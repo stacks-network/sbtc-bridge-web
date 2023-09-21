@@ -225,7 +225,7 @@ export function loggedIn():boolean {
 	}
 }
 
-export async function authenticate(conf:SbtcConfig):Promise<SignatureData|undefined> {
+export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
 	await signMessage(async function(sigData:SignatureData, message:string) {
 		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
 		if (verified) {
@@ -238,9 +238,9 @@ export async function authenticate(conf:SbtcConfig):Promise<SignatureData|undefi
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		conf.authHeader = { ...sigData, stxAddress: conf.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
-		setAuthorisation(conf.authHeader)
-		sbtcConfig.update(() => conf)
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
+		setAuthorisation($sbtcConfig.authHeader)
+		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
 	}, authMessage)
 	return
@@ -263,11 +263,11 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 				},
 			});
 		} else {
-			await callback(conf);
+			callback(conf);
 		}
 	} catch (e) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
-		await callback(conf);
+		callback(conf);
 	}
 }
 
@@ -348,9 +348,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	let data = {} as any;
 	try {
 		data = await fetchUiInit();
-		if (!data) data = {
-			sbtcContractData: {} as SbtcContractDataType
-		} as any;
 		data.sbtcContractData.sbtcWalletAddress = getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, data.sbtcContractData.sbtcWalletPublicKey);
 		conf.loggedIn = false;
 		if (userSession.isUserSignedIn()) {
@@ -359,7 +356,9 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 			conf.loggedIn = true;
 		}
 	} catch (err) {
-		data = {} as any;
+		data = {
+			sbtcContractData: {} as SbtcContractDataType
+		} as any;
 	}
 	//conf.sbtcContractData = data.sbtcContractData;
 	if (!conf.keySets) {
@@ -399,7 +398,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
 		const rateNow = conf.exchangeRates.find((o:any) => o.currency === currency)
 		if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
-		conf.userSettings.currency.myFiatCurrency = (conf.exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
+		else conf.userSettings.currency.myFiatCurrency = (conf.exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
 	} catch (err) {
 		conf.exchangeRates = []
 		conf.userSettings.currency.myFiatCurrency = {} as ExchangeRate
@@ -408,13 +407,12 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	conf.sbtcContractData = data.sbtcContractData;
 	conf.btcFeeRates = data.btcFeeRates;
 	if (!conf.userSettings) conf.userSettings = {} as SbtcUserSettingI
+	if (!conf.payloadDepositData) conf.payloadDepositData = {} as WithdrawPayloadUIType
+	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawPayloadUIType
 	if (loggedIn()) {
 		try { doPayloadData(conf) } 
-		catch (err) { 
-			setTimeout(function() {
-				conf = doPayloadData(conf)
-				sbtcConfig.update(() => conf);
-			}, 2000)
+		catch (err) {
+			//
 		} 
 	}
 	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {

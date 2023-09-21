@@ -89,16 +89,43 @@
             <span class="block text-sm px-3 py-2 text-gray-400">Popular currencies</span>
             <div>
               <div on:keydown on:click={() => setCurrency('USD')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <p>{getCurrency('USD').name}</p>
-                <p>{getCurrency('USD').currency + ' - ' + getCurrency('USD').symbol}</p>
+                <div class="flex justify-between">
+                  <div>
+                    <p>{getCurrency('USD').name}</p>
+                    <p>{getCurrency('USD').currency + ' - ' + getCurrency('USD').symbol}</p>
+                      </div>
+                  <div>
+                    {#if 'USD' === myCurrency.currency}
+                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                    {/if}      
+                  </div>
+                </div>
               </div>
               <div on:keydown on:click={() => setCurrency('EUR')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <p>{getCurrency('EUR').name}</p>
-                <p>{getCurrency('EUR').currency + ' - ' + getCurrency('EUR').symbol}</p>
+                <div class="flex justify-between">
+                  <div>
+                    <p>{getCurrency('EUR').name}</p>
+                    <p>{getCurrency('EUR').currency + ' - ' + getCurrency('EUR').symbol}</p>
+                  </div>
+                  <div>
+                    {#if 'EUR' === myCurrency.currency}
+                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                    {/if}      
+                  </div>
+                </div>
               </div>
               <div on:keydown on:click={() => setCurrency('CNY')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <p>{getCurrency('CNY').name}</p>
-                <p>{getCurrency('CNY').currency + ' - ' + getCurrency('CNY').symbol}</p>
+                <div class="flex justify-between">
+                  <div>
+                    <p>{getCurrency('CNY').name}</p>
+                    <p>{getCurrency('CNY').currency + ' - ' + getCurrency('CNY').symbol}</p>
+                  </div>
+                  <div>
+                    {#if 'CNY' === myCurrency.currency}
+                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                    {/if}      
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -110,7 +137,9 @@
                 <span class="block">{currency.name}</span>
                 <span class="block">{currency.value}</span>
               </span>
+              {#if currency.value === myCurrency.currency}
               <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+              {/if}
             </span>
           </DropdownItem>
         {/each}
