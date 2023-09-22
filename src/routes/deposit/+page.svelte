@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Base from '$lib/components/shared/Base.svelte';
+	import DashboardBase from '$lib/components/shared/DashboardBase.svelte';
 </script>
 
 
-<Base title="Deposit BTC, mint sBTC" />
+<DashboardBase title="Deposit BTC, mint sBTC" />
