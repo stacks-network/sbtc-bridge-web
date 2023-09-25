@@ -13,7 +13,6 @@
 	import StatusCheck from "./dd/StatusCheck.svelte";
 	import ScriptHashAddress from "./dd/ScriptHashAddress.svelte";
 
-  export let addressInfo:any;
   let error:string|undefined;
   let showAddresses = false;
   $: timeLineStatus = 1;
