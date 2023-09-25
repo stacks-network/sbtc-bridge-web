@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger, Button, Input } from 'flowbite-svelte'
+	import { Navbar, NavBrand, NavLi, NavUl, NavHamburger } from 'flowbite-svelte'
 	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
@@ -88,6 +88,7 @@
 	<NavLi nonActiveClass={getNavActiveClass('/deposit')} href="/deposit">Deposit</NavLi>
 	<NavLi nonActiveClass={getNavActiveClass('/withdraw')} href="/withdraw">Withdraw</NavLi>
 	-->
+		<NavLi nonActiveClass={getNavActiveClass('/')} href="/">Dashboard</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 		{#if coordinator}
