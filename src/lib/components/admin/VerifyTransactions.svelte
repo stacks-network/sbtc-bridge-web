@@ -8,9 +8,7 @@ import { onMount } from 'svelte';
 import { getProofParametersCM, type TxMinedParameters } from '$lib/proofs/merkle_root';
 import { sha256 } from '@noble/hashes/sha256';
 import { generateMerkleRoot, generateMerkleTree } from '$lib/proofs/utils-merkle-coinmonks';
-	import { explorerAddressUrl } from '$lib/utils';
-	import { doubleSha } from '$lib/proofs/utils-merkle';
-
+import { explorerAddressUrl } from '$lib/utils';
 /**
 proofs = (
 0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
@@ -31,6 +29,7 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 export let tx:any;
 export let block:any;
 let showTree = false;
+let contractParameters:any;
 let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-romeo'
 let merkleTree:Array<Array<string>>
 let parameters:TxMinedParameters;
@@ -45,11 +44,6 @@ let functionName:string;
 
 const getProofs = function () {
   const entryList = [];
-  const proofsJ = []
-  proofsJ.push('108f70d3c1099ce35d8d4f90aba39ad6a3cde97c26ac5489ebd47eed73ae0c5b')
-  proofsJ.push('0b8ef36ee67679f9c382ebd01196f99c7638875ccf7170483ed8659a1cde8014')
-  proofsJ.push('d327f83e5b363f8a20b9047661439227719bb33847e49a5091af6bf7f70cf88e')
-  proofsJ.push('56a8324520dc43cb718ad61f34ec77485b39751bc5aa40e328524f5895e98a4a')
   const merkleProofs = parameters.proofElements.map(({ hash }) => hash)
   for (let i = 0; i < merkleProofs.length; i++) {
     const entry = merkleProofs[i];
@@ -66,14 +60,22 @@ const getProofs = function () {
 };
 
 const wasTxMined = async () => {
-  const txid = tx.txid
+  const proofData = getProofs();
   const functionArgs = [
     `0x${hex.encode(serializeCV(uintCV(parameters.height)))}`,
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid))))}`,
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(parameters.headerHex))))}`,
-    `0x${hex.encode(serializeCV(getProofs()))}`,
+    `0x${hex.encode(serializeCV(proofData))}`,
   ];
-  
+  contractParameters = {
+    name: parameters.height,
+    txid: tx.txid,
+    header: parameters.headerHex,
+    proofs: parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    'tx-index': parameters.txIndex,
+    'tree-depth': parameters.treeDepth,
+  }
+
   functionName = 'was-txid-mined'
   const params = {
     contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
@@ -107,6 +109,10 @@ const verifyBlockHeader = async () => {
     functionName: 'verify-block-header',
     functionArgs
   }
+  contractParameters = {
+    name: parameters.height,
+    header: parameters.headerHex,
+  }
 
   const res = await callContractReadOnly(params);
   if (res && res.success) {
@@ -121,7 +127,7 @@ const verifyMerkleProof = async () => {
   const txid = tx.txid
   const functionArgs = [
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid).reverse())))}`,
-    `0x${hex.encode(serializeCV(bufferCV(hex.decode(block.merkleroot))))}`,
+    `0x${hex.encode(serializeCV(bufferCV(hex.decode(block.merkleroot).reverse())))}`,
     `0x${hex.encode(serializeCV(getProofs()))}`,
   ];
   
@@ -131,6 +137,13 @@ const verifyMerkleProof = async () => {
     contractName: 'clarity-bitcoin-romeo',
     functionName: 'verify-merkle-proof',
     functionArgs
+  }
+  contractParameters = {
+    'txid-reversed': hex.encode(hex.decode(tx.txid).reverse()),
+    'root-reversed': hex.encode(hex.decode(block.merkleroot).reverse()),
+    proofs: parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    'tx-index': parameters.txIndex,
+    'tree-depth': parameters.treeDepth,
   }
 
   const res = await callContractReadOnly(params);
@@ -169,21 +182,16 @@ onMount(async () => {
 
 {#if inited}
 <div class=" w-full">
-  <div class="mb-5 text-2xl">Verify transactions</div>
+
   {#if error}<p class="text-danger">{error}</p>{/if}
   <div class="pb-5">
     <label for="transact-path">Merkle root (block.merkleroot === calcMerkleRoot(txs))</label>
     <div class={(blockHashCheck) ? 'bg-success-500 text-white px-4 py-2 rounded border-success-500' : 'bg-gray-600 text-white px-4 py-2 rounded border-white'}>{block.merkleroot}</div>
   </div>
-  {#if answer}
-    <div class="mb-5">{functionName}</div>
-    <div class="mb-5">{@html answer}</div>
-  {/if}
-
 
   <div class="pb-5">
     <label for="transact-path">Block hash = reverse(sha(sha(header)))</label>
-    <div  class={(blockHashCheck) ? 'bg-success-500 text-white px-4 py-2 rounded border-success-500' : 'bg-gray-600 text-white px-4 py-2 rounded border-white'}>{block.hash}</div>
+    <div class={(blockHashCheck) ? 'bg-success-500 text-white px-4 py-2 rounded border-success-500' : 'bg-gray-600 text-white px-4 py-2 rounded border-white'}>{block.hash}</div>
   </div>
   <div class="pb-5">
     <label for="transact-path">header</label>
@@ -211,17 +219,28 @@ onMount(async () => {
     {/each}
     <!--<textarea rows="8" class="text-black block p-3 rounded-md border w-full" bind:value={proofString} />-->
   </div>
+  <div class="my-5 flex justify-end">
+    <div class="text-xs">
+      <span class="border-e me-4 pe-4"><a href="/" on:click|preventDefault={() => showTree = !showTree} target="_blank">show full merkle tree</a></span>
+      <span class=""><a href={explorerAddressUrl(contract)} target="_blank">contract</a></span>
+    </div>
+  </div>
 
-  <div class="my-5 flex gap-x-5">
+  <div class="my-5 flex gap-x-5 items-baseline">
     <div class=""><Button darkScheme={false} label={'Was Tx Mined'} target={''} on:clicked={() => wasTxMined()}/></div>
     <div class=""><Button darkScheme={false} label={'Verify Block Header'} target={''} on:clicked={() => verifyBlockHeader()}/></div>
     <div class=""><Button darkScheme={false} label={'Verify Merkle Proof'} target={''} on:clicked={() => verifyMerkleProof()}/></div>
-    <div class=""><Button darkScheme={false} label={'Show full tree'} target={''} on:clicked={() => showTree = !showTree}/></div>
-    <div class=""><a href={explorerAddressUrl(contract)} target="_blank">contract</a></div>
   </div>
   {#if answer}
     <div class="mb-5">{functionName}</div>
-      <div class="mb-5">{@html answer}</div>
+    <div class="mb-5">{@html answer}</div>
+    <div class="flex flex-col">
+    {#each Object.entries(contractParameters) as [name, value]}
+    <div class="flex justify-start mb-3 border-b">
+      <div class="w-1/5">{name}: </div><div>{@html value}</div>
+    </div>
+    {/each}
+    </div>
   {/if}
 
 
@@ -233,7 +252,6 @@ onMount(async () => {
         <div>{index} : {node}</div>
       {/each}
     {/each}
-    <!--<textarea rows="8" class="text-black block p-3 rounded-md border w-full" bind:value={proofString} />-->
   </div>
   {/if}
 

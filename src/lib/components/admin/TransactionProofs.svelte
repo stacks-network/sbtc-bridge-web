@@ -31,7 +31,7 @@ import VerifyTransactions from './VerifyTransactions.svelte';
   </div>
 
   <div class="pb-5">
-    <Button darkScheme={false} label={'Proof data'} target={''} on:clicked={() => verify()}/>
+    <Button darkScheme={false} label={'Fetch transaction'} target={''} on:clicked={() => verify()}/>
   </div>
 
   {#if block}
