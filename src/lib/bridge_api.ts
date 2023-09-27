@@ -292,6 +292,24 @@ export async function fetchTransaction(txid:string) {
   return await extractResponse(response);
 }
 
+export async function fetchTxOutProof(txs:string, blockhash:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/gettxoutproof/' + txs + '/' + blockhash);
+  const response = await fetchCatchErrors(path);
+  return await extractResponse(response);
+}
+
+export async function fetchBlock(blockhash:string, verbosity:number) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/block/' + blockhash + '/' + verbosity);
+  const response = await fetchCatchErrors(path);
+  return await extractResponse(response);
+}
+
+export async function fetchBlockHeader(blockhash:string, verbosity:boolean) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/block-header/' + blockhash + '/' + verbosity);
+  const response = await fetchCatchErrors(path);
+  return await extractResponse(response);
+}
+
 export async function fetchTransactionHex(txid:string) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/' + txid + '/hex');
   const response = await fetchCatchErrors(path);
