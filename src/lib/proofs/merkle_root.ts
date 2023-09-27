@@ -18,7 +18,7 @@ export function getProofParametersCM(txIdNormal:string, txHex:string, block:any)
   const txs = block.tx as string[];
   const txIndex = txs.findIndex((t:any) => t.txid === txIdNormal);
   const reversedTxIds = txs.map(function(tx:any) {
-    return tx.txid;
+    return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
   });
   ensureEven(reversedTxIds) 
   //const tree = generateMerkleRoot(reversedTxIds)

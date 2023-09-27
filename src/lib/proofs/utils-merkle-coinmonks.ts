@@ -69,7 +69,7 @@ export function generateMerkleRoot(hashes:Array<string>) {
   ensureEven(hashes);
   const combinedHashes = [];
   for(let i = 0; i < hashes.length; i += 2) {
-      const hashPairConcatenated = hashPairReverse(hashes[i], hashes[i + 1]);
+      const hashPairConcatenated = hashPair(hashes[i], hashes[i + 1]);
       combinedHashes.push(hashPairConcatenated);
   }
   // If the combinedHashes length is 1, it means that we have the merkle root already
@@ -108,12 +108,12 @@ export function generateMerkleTree(hashes:Array<string>) {
       for(let i = 0; i < hashes.length; i += 2) {
           //const hashesConcatenated = hashes[i] + hashes[i + 1];
           //const hash = hex.encode(doubleSha(hashesConcatenated));
-          //let hashPairConcatenated;
-          //if (leaves) {
-          const hashPairConcatenated = hashPairReverse(hashes[i], hashes[i + 1]);
-          //} else {
-          //const hashPairConcatenated = hashPair(hashes[i], hashes[i + 1]);
-          //}
+          let hashPairConcatenated;
+          if (leaves) {
+            hashPairConcatenated = hashPair(hashes[i], hashes[i + 1]);
+          } else {
+            hashPairConcatenated = hashPair(hashes[i], hashes[i + 1]);
+          }
           combinedHashes.push(hashPairConcatenated);
       }
       tree.push(combinedHashes);

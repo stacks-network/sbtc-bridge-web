@@ -11,11 +11,22 @@ import { generateMerkleRoot, generateMerkleTree } from '$lib/proofs/utils-merkle
 	import { explorerAddressUrl } from '$lib/utils';
 	import { doubleSha } from '$lib/proofs/utils-merkle';
 
-//proofs = (0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 0xa26c0adbdd5400d76e12dfc5412d08df244085f538fee7c5c5a2e419caf0450a 0x45cc4022c36723ff1e4f9ee1a1529b5ffff1cf1121f326145505f52ae6b6ea19 0xe6b607cb87927805a43058e0d5ddfd61249c40b622037a074ec3c76eb48a6416 0xcba219199a82ffedd0f4582b11e05e4940cf7873c655f4225e7a88e98d883479 0xc8409d8249608a85ce79705d7df877b12079dd6b28ad416b801844bfa9cf810a 0xf5d5ea2d88e8f71b5e34256cc206c44e93258b301b8d94f5bed4f601377e6e36)
-//block_header = 0x00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
-//tx-index=40
-//tree-depth=7
-//txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
+/**
+proofs = (
+0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
+0xa26c0adbdd5400d76e12dfc5412d08df244085f538fee7c5c5a2e419caf0450a 
+0x45cc4022c36723ff1e4f9ee1a1529b5ffff1cf1121f326145505f52ae6b6ea19 
+0xe6b607cb87927805a43058e0d5ddfd61249c40b622037a074ec3c76eb48a6416 
+0xcba219199a82ffedd0f4582b11e05e4940cf7873c655f4225e7a88e98d883479 
+0xc8409d8249608a85ce79705d7df877b12079dd6b28ad416b801844bfa9cf810a 
+0xf5d5ea2d88e8f71b5e34256cc206c44e93258b301b8d94f5bed4f601377e6e36
+block_header = 
+0x00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
+  00600120d2119865b5b567cec541f80c7657e0d956cb5934e203ade332000000000000005fe61766d52c5452bfe45ffcf0536fe7f94a84c4a1c20f300e714c9385956b0364861165c0ff3f1911761e93
+tx-index=40
+tree-depth=7
+txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
+**/
 
 export let tx:any;
 export let block:any;
@@ -34,6 +45,11 @@ let functionName:string;
 
 const getProofs = function () {
   const entryList = [];
+  const proofsJ = []
+  proofsJ.push('108f70d3c1099ce35d8d4f90aba39ad6a3cde97c26ac5489ebd47eed73ae0c5b')
+  proofsJ.push('0b8ef36ee67679f9c382ebd01196f99c7638875ccf7170483ed8659a1cde8014')
+  proofsJ.push('d327f83e5b363f8a20b9047661439227719bb33847e49a5091af6bf7f70cf88e')
+  proofsJ.push('56a8324520dc43cb718ad61f34ec77485b39751bc5aa40e328524f5895e98a4a')
   const merkleProofs = parameters.proofElements.map(({ hash }) => hash)
   for (let i = 0; i < merkleProofs.length; i++) {
     const entry = merkleProofs[i];
@@ -53,7 +69,7 @@ const wasTxMined = async () => {
   const txid = tx.txid
   const functionArgs = [
     `0x${hex.encode(serializeCV(uintCV(parameters.height)))}`,
-    `0x${hex.encode(serializeCV(bufferCV(hex.decode(parameters.txIdR))))}`,
+    `0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid))))}`,
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(parameters.headerHex))))}`,
     `0x${hex.encode(serializeCV(getProofs()))}`,
   ];
@@ -129,19 +145,17 @@ const verifyMerkleProof = async () => {
 
 onMount(async () => {
   const txIds = block.tx.map(function(tx:any) {
-    return tx.txid //hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
+    return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
   });
   answer = undefined
   console.log('tx0-r: ' + txIds[0])
 
   const mrT = generateMerkleRoot(txIds)
-  if (mrT !== block.merkleroot) throw new Error('Merkle root error')
+  //if (hex.encode(hex.decode(mrT).reverse()) !== block.merkleroot) throw new Error('Merkle root error')
   merkleTree = generateMerkleTree(txIds)
   console.log('mr0: ' + block.merkleroot)
   console.log('mrT: ' + mrT)
-  //console.log('mrT: ' + mrHTree)
   parameters = getProofParametersCM(tx.txid, tx.hex, block)
-  //parameters = getProofParameters(tx.txid, tx.hex, block)
   proofs = parameters.proofElements
   blockHashCheck = block.hash === hex.encode( sha256(sha256(hex.decode(parameters.headerHex))).reverse() )
   merkleRootCheck = block.merkleroot === mrT
