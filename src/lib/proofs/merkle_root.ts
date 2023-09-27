@@ -25,6 +25,7 @@ export function getProofParametersCM(txIdNormal:string, txHex:string, block:any)
   const mt = generateMerkleTree(reversedTxIds);
   const proofElements = generateMerkleProof(reversedTxIds[txIndex], reversedTxIds)
   if (!proofElements) return {} as TxMinedParameters
+  proofElements.splice(0,1)
   //console.log('merkleTree: ', mt);
   //console.log('Coinmonks tree: ', tree)
   console.log('Coinmonks proof: ', proofElements)

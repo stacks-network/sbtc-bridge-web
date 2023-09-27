@@ -13,12 +13,16 @@ export const doubleSha = (valueToBeHashed: string):Uint8Array => {
 };
 
 export const hashPairReverse = (a:string, b:string):string => {
-	let bytes = concat(hex.decode(a).reverse(), hex.decode(b).reverse());
-  bytes = sha256(bytes)
-  //bytes = bytes.reverse() // little endian
-  const hashedBytes = sha256(bytes)
-  //const pair = toHex(hashedBytes.reverse());
+	const bytes = concat(hex.decode(a).reverse(), hex.decode(b).reverse());
+  const hashedBytes = sha256(sha256(bytes))
   const pair = hex.encode(hashedBytes.reverse());
+  return pair;
+};
+
+export const hashPair = (a:string, b:string):string => {
+	const bytes = concat(hex.decode(a), hex.decode(b));
+  const hashedBytes = sha256(sha256(bytes))
+  const pair = hex.encode(hashedBytes);
   return pair;
 };
 
@@ -94,6 +98,7 @@ export function generateMerkleTree(hashes:Array<string>) {
       return [];
   }
   const tree = [hashes];
+  let leaves = true;
   const generate = (hashes:Array<string>, tree:Array<Array<string>>):Array<string> => {
       if(hashes.length === 1) {
           return hashes;
@@ -103,10 +108,16 @@ export function generateMerkleTree(hashes:Array<string>) {
       for(let i = 0; i < hashes.length; i += 2) {
           //const hashesConcatenated = hashes[i] + hashes[i + 1];
           //const hash = hex.encode(doubleSha(hashesConcatenated));
+          //let hashPairConcatenated;
+          //if (leaves) {
           const hashPairConcatenated = hashPairReverse(hashes[i], hashes[i + 1]);
+          //} else {
+          //const hashPairConcatenated = hashPair(hashes[i], hashes[i + 1]);
+          //}
           combinedHashes.push(hashPairConcatenated);
       }
       tree.push(combinedHashes);
+      leaves = false;
       return generate(combinedHashes, tree);
   }
   generate(hashes, tree);
