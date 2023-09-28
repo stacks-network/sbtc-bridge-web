@@ -3,16 +3,17 @@
   import Banner from '$lib/components/shared/Banner.svelte';
 	import Timeline from './shared/Timeline.svelte';
 	import WithdrawHeader from './shared/WithdrawHeader.svelte';
-	import { getOpDropWithdrawRequest, type BridgeTransactionType, dataToSign, getOpReturnWithdrawRequest } from "sbtc-bridge-lib";
+	import { getOpDropWithdrawRequest, type BridgeTransactionType, getOpReturnWithdrawRequest, getDataToSign } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import { CONFIG } from "$lib/config";
-	import { initApplication, loggedIn, loginStacksFromHeader, loginStacksJs, makeFlash, signMessage, verifyAmount, verifySBTCAmount, verifyStacksPricipal } from "$lib/stacks_connect";
+	import { initApplication, loggedIn, loginStacksFromHeader, makeFlash, signMessage, verifySBTCAmount } from "$lib/stacks_connect";
 	import { fetchPeginById } from "$lib/bridge_api";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import WithdrawForm from "./shared/WithdrawForm.svelte";
 	import { goto } from "$app/navigation";
 	import ScriptHashAddress from "./dd/ScriptHashAddress.svelte";
 	import SignTransaction from "./wr/SignTransaction.svelte";
+  import { hex } from '@scure/base';
 
   export let addressInfo:any;
   let amountErrored:string|undefined = undefined;
@@ -34,16 +35,17 @@
     try {
         const amount = $sbtcConfig.payloadWithdrawData.amountSats;
         verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
-        const script = dataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
-        console.log('HASH: ' + script)
-        await signMessage(async function(sigData:any, message:Uint8Array) {
+        const script = hex.encode(getDataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal));
+        console.log('getDataToSign: ' + script)
+        await signMessage(async function(sigData:any, message:string) {
           $sbtcConfig.payloadWithdrawData.signature = sigData.signature;
+          console.log('message: ', message)
+          console.log('sigData: ', sigData)
           if ($sbtcConfig.userSettings.useOpDrop) {
             peginRequest = getOpDropWithdrawRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
           } else {
             peginRequest = getOpReturnWithdrawRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
           }
-          peginRequest.originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
           const conf:SbtcConfig = $sbtcConfig;
           conf.sigData = sigData.signature;
           sbtcConfig.update(() => conf);
@@ -65,7 +67,7 @@
   let componentKey = 0;
 
   const login = async () => {
-		const res = await loginStacksFromHeader(document)
+		const res = loginStacksFromHeader(document)
     timeLineStatus = 1
 	}
 

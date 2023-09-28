@@ -4,6 +4,8 @@ import * as secp from '@noble/secp256k1';
 import type { AddressMempoolObject, ExchangeRate, KeySet } from 'sbtc-bridge-lib'
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
+import { hash160, hashP2WPKH } from '@stacks/transactions';
+import { hashSha256Sync } from '@stacks/encryption';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
@@ -21,6 +23,10 @@ const formatter = new Intl.NumberFormat('en-US', {
 
 const btcPrecision = 100000000
 const stxPrecision = 1000000
+
+export function myHashP2WPKH(publicKey:string) {
+  return hex.encode(hash160(hashSha256Sync(hex.decode(publicKey))))
+}
 
 export function bitcoinToSats(amountBtc:number) {
   return  Math.round(amountBtc * btcPrecision)

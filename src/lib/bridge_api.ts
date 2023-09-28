@@ -95,7 +95,8 @@ export async function sendRawTxDirectBlockCypher(hex:string) {
   return 'success';
 }
 
-export async function sendRawTransaction(tx: { hex: string; }) {
+export async function sendRawTransaction(tx: { hex: string; maxFeeRate: number|undefined; }) {
+  if (!tx.maxFeeRate) tx.maxFeeRate = 0
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sendrawtx');
   const response = await fetch(path, {
     method: 'POST',
@@ -289,6 +290,24 @@ export async function fetchTransaction(txid:string) {
   //if (response.status !== 200) {
   // console.log('Bitcoin tx not known - is the network correct?');
   //}
+  return await extractResponse(response);
+}
+
+export async function fetchTxOutProof(txs:string, blockhash:string) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/gettxoutproof/' + txs + '/' + blockhash);
+  const response = await fetchCatchErrors(path);
+  return await extractResponse(response);
+}
+
+export async function fetchBlock(blockhash:string, verbosity:number) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/block/' + blockhash + '/' + verbosity);
+  const response = await fetchCatchErrors(path);
+  return await extractResponse(response);
+}
+
+export async function fetchBlockHeader(blockhash:string, verbosity:boolean) {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/blocks/block-header/' + blockhash + '/' + verbosity);
+  const response = await fetchCatchErrors(path);
   return await extractResponse(response);
 }
 
