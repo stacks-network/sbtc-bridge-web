@@ -2,7 +2,7 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import { CONFIG } from '$lib/config';
-import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV } from '@stacks/transactions';
+import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, listCV, type ListCV } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
 import { openContractCall } from '@stacks/connect';
@@ -25,6 +25,29 @@ export function getCoordinator(address:string) {
 
 export function isCoordinator(address:string) {
 	return coordinators.find((o) => o.stxAddress === address);
+}
+
+export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, treeDepth:number, headerHex: string) {
+  //data {addr: principal, key: (buff 33)}
+  const stxAddressCV = principalCV(stxAddress);
+  const functionArgs = [uintCV(amount), stxAddressCV, bufferCV(hex.decode(btcTxid)), uintCV(height), merkleProofs, uintCV(txIndex), uintCV(treeDepth), bufferCV(hex.decode(headerHex))]
+  await openContractCall({
+    network: getStacksNetwork(),
+    postConditions: [],
+    postConditionMode: PostConditionMode.Deny,
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
+    functionName: 'mint',
+    functionArgs: functionArgs,
+    onFinish: (data: any) => {
+      console.log('TX Data: ', data);
+      return data;
+    },
+    onCancel: () => {
+      console.log('popup closed!');
+      return false
+    }
+  });
 }
 
 export async function mintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string) {

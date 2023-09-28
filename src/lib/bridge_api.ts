@@ -95,7 +95,8 @@ export async function sendRawTxDirectBlockCypher(hex:string) {
   return 'success';
 }
 
-export async function sendRawTransaction(tx: { hex: string; }) {
+export async function sendRawTransaction(tx: { hex: string; maxFeeRate: number|undefined; }) {
+  if (!tx.maxFeeRate) tx.maxFeeRate = 0
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sendrawtx');
   const response = await fetch(path, {
     method: 'POST',

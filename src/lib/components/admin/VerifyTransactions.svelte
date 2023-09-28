@@ -2,13 +2,17 @@
 import { uintCV, bufferCVFromString, listCV, bufferCV, serializeCV } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import Button from "../shared/Button.svelte";
-import { callContractReadOnly } from '$lib/sbtc_admin';
+import { callContractReadOnly, isCoordinator, romeoMintTo } from '$lib/sbtc_admin';
 import { hex } from '@scure/base';
 import { onMount } from 'svelte';
 import { getProofParametersCM, type TxMinedParameters } from '$lib/proofs/merkle_root';
 import { sha256 } from '@noble/hashes/sha256';
 import { generateMerkleRoot, generateMerkleTree } from '$lib/proofs/utils-merkle-coinmonks';
 import { explorerAddressUrl } from '$lib/utils';
+import { sbtcConfig } from '$stores/stores'
+	import { bitcoinToSats } from 'sbtc-bridge-lib';
+	import { CONFIG } from '$lib/config';
+	import { loggedIn } from '$lib/stacks_connect';
 /**
 proofs = (
 0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
@@ -29,8 +33,12 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 export let tx:any;
 export let block:any;
 let showTree = false;
+let allowMint = false;
+let allowBurn = false;
+let amount = 0
 let contractParameters:any;
 let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-romeo'
+let stxAddress:string|undefined;
 let merkleTree:Array<Array<string>>
 let parameters:TxMinedParameters;
 let proofString:string|undefined;
@@ -42,9 +50,11 @@ let merkleRootCheck = false;
 let inited = false;
 let functionName:string;
 
-const getProofs = function () {
+const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
+
+const getProofTuple = function () {
   const entryList = [];
-  const merkleProofs = parameters.proofElements.map(({ hash }) => hash)
+  const merkleProofs = (proofString) ? proofString.split(' ') : parameters.proofElements.map(({ hash }) => hash)
   for (let i = 0; i < merkleProofs.length; i++) {
     const entry = merkleProofs[i];
     const buffProof = bufferCV(hex.decode(entry));
@@ -59,8 +69,19 @@ const getProofs = function () {
   return datum;
 };
 
+const getProofsAsCV = function () {
+  const entryList = [];
+  const merkleProofs = (proofString) ? proofString.split(' ') : parameters.proofElements.map(({ hash }) => hash)
+  for (let i = 0; i < merkleProofs.length; i++) {
+    const entry = merkleProofs[i];
+    const buffProof = bufferCV(hex.decode(entry));
+    entryList.push(buffProof);
+  }
+  return listCV(entryList);
+};
+
 const wasTxMined = async () => {
-  const proofData = getProofs();
+  const proofData = getProofTuple();
   const functionArgs = [
     `0x${hex.encode(serializeCV(uintCV(parameters.height)))}`,
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid))))}`,
@@ -71,7 +92,7 @@ const wasTxMined = async () => {
     name: parameters.height,
     txid: tx.txid,
     header: parameters.headerHex,
-    proofs: parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
     'tree-depth': parameters.treeDepth,
   }
@@ -128,7 +149,7 @@ const verifyMerkleProof = async () => {
   const functionArgs = [
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(tx.txid).reverse())))}`,
     `0x${hex.encode(serializeCV(bufferCV(hex.decode(block.merkleroot).reverse())))}`,
-    `0x${hex.encode(serializeCV(getProofs()))}`,
+    `0x${hex.encode(serializeCV(getProofTuple()))}`,
   ];
   
   functionName = 'verify-merkle-proof'
@@ -141,7 +162,7 @@ const verifyMerkleProof = async () => {
   contractParameters = {
     'txid-reversed': hex.encode(hex.decode(tx.txid).reverse()),
     'root-reversed': hex.encode(hex.decode(block.merkleroot).reverse()),
-    proofs: parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
     'tree-depth': parameters.treeDepth,
   }
@@ -154,6 +175,21 @@ const verifyMerkleProof = async () => {
   }
 
   console.log(answer)
+}
+
+const mintTo = async () => {  
+  functionName = 'verify-merkle-proof'
+  contractParameters = {
+    amount: tx.vout[1].amount,
+    txid: hex.encode(hex.decode(tx.txid)),
+    stxAddress: stxAddress,
+    proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    'tx-index': parameters.txIndex,
+    'tree-depth': parameters.treeDepth,
+  }
+
+  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, stxAddress!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.treeDepth, parameters.headerHex)
+  console.log(res)
 }
 
 onMount(async () => {
@@ -174,6 +210,8 @@ onMount(async () => {
   merkleRootCheck = block.merkleroot === mrT
 
   proofString = parameters.proofElements.map(({ hash }) => hash).join(' ')
+  amount = bitcoinToSats(tx.vout[1].value)
+  stxAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
   answer = undefined
   inited = true;
 })
@@ -213,14 +251,20 @@ onMount(async () => {
   </div>
 
   <div class="p-5 bg-gray-200 text-black rounded-lg border-gray-700">
-    <div class="text-2xl">Proof:</div>
+    <div class="text-2xl">Proof (space separated):</div>
+    <!--
     {#each parameters.proofElements as node}
     <div class="">{node.direction} : {node.hash}</div>
-    {/each}
-    <!--<textarea rows="8" class="text-black block p-3 rounded-md border w-full" bind:value={proofString} />-->
+    {/each}-->
+    <textarea rows="8" class="text-black block p-3 rounded-md border w-full" bind:value={proofString} />
   </div>
+
   <div class="my-5 flex justify-end">
     <div class="text-xs">
+      {#if coordinator}
+        <span class="border-e me-4 pe-4"><a href="/" on:click|preventDefault={() => {allowMint = !allowMint; showTree = false; answer = undefined}} target="_blank">allow mint</a></span>
+		  {/if}
+
       <span class="border-e me-4 pe-4"><a href="/" on:click|preventDefault={() => showTree = !showTree} target="_blank">show full merkle tree</a></span>
       <span class=""><a href={explorerAddressUrl(contract)} target="_blank">contract</a></span>
     </div>
@@ -241,8 +285,23 @@ onMount(async () => {
     </div>
     {/each}
     </div>
-  {/if}
+    <div class="my-5 flex gap-x-5 items-baseline">
+      <div class=""><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
+    </div>
+    {/if}
 
+  {#if allowMint}
+  <div class="my-5">
+    <label for="transact-path">Mint: stacks address</label>
+    <input type="text"  class="text-black block p-3 rounded-md border w-full" bind:value={stxAddress}/>
+  </div>
+
+  <div class="mb-5">
+    <label for="transact-path">Amount (sats)</label>
+    <input type="number"  class="text-black block p-3 rounded-md border w-full" bind:value={amount}/>
+  </div>
+  <div class="mb-5"><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
+  {/if}
 
   {#if showTree}
   <div class="p-5 bg-gray-200 text-black rounded-lg border-gray-700">
