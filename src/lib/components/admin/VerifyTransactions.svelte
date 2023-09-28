@@ -5,12 +5,11 @@ import Button from "../shared/Button.svelte";
 import { callContractReadOnly, isCoordinator, romeoMintTo } from '$lib/sbtc_admin';
 import { hex } from '@scure/base';
 import { onMount } from 'svelte';
-import { getProofParametersCM, type TxMinedParameters } from '$lib/proofs/merkle_root';
 import { sha256 } from '@noble/hashes/sha256';
-import { generateMerkleRoot, generateMerkleTree } from '$lib/proofs/utils-merkle-coinmonks';
+import {  } from '$lib/proofs/merkle_utils';
 import { explorerAddressUrl } from '$lib/utils';
 import { sbtcConfig } from '$stores/stores'
-	import { bitcoinToSats } from 'sbtc-bridge-lib';
+	import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, type TxMinedParameters } from 'sbtc-bridge-lib';
 	import { CONFIG } from '$lib/config';
 	import { loggedIn } from '$lib/stacks_connect';
 /**
@@ -204,7 +203,7 @@ onMount(async () => {
   merkleTree = generateMerkleTree(txIds)
   console.log('mr0: ' + block.merkleroot)
   console.log('mrT: ' + mrT)
-  parameters = getProofParametersCM(tx.txid, tx.hex, block)
+  parameters = getParametersForProof(tx.txid, tx.hex, block)
   proofs = parameters.proofElements
   blockHashCheck = block.hash === hex.encode( sha256(sha256(hex.decode(parameters.headerHex))).reverse() )
   merkleRootCheck = block.merkleroot === mrT
