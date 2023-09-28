@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('about page has expected h1', async ({ page }) => {
-	await page.goto('/about');
-	await expect(page.locator('h1')).toHaveText('About this app');
+test('Dashboard page has a block with the TVL', async ({ page }) => {
+	await page.goto('/');
+	await expect(page.locator('dt')).toHaveText('Total value locked');
 });

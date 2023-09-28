@@ -12,7 +12,7 @@
   const tvl = () => {
     const currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
     const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
-    return currency.symbol + ' ' + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
+    return currency.symbol + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
   }
 
 	const doLogin = async () => {
