@@ -4,39 +4,47 @@
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import { goto } from "$app/navigation";
-	import { authenticate, initApplication, loginStacksJs } from '$lib/stacks_connect'
+	import { authenticate, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
 	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
+	import { setAuthorisation } from '$lib/bridge_api';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
 
 	const doLogin = async () => {
-		await loginStacksJs(loginCallback, $sbtcConfig);
+		if (loggedIn()) doLogout()
+		else {
+			await loginStacks(loginCallback);
+		}
 	}
 
 	const loginCallback = async () => {
 		await initApplication($sbtcConfig, true)
-		dispatch('login_event');
+		if (loggedIn() && !$sbtcConfig.authHeader) {
+			await authenticate($sbtcConfig)
+		}
+		await setAuthorisation($sbtcConfig.authHeader)
 		setTimeout(function() {
-			goto('/')
-		}, 1000)
+			dispatch('login_event');
+		}, 500)
 	}
 
 	const doLogout = async () => {
 		logUserOut();
-		$sbtcConfig.loggedIn = false
 		$sbtcConfig.authHeader = undefined
 		$sbtcConfig.payloadDepositData = {} as DepositPayloadUIType
 		$sbtcConfig.payloadWithdrawData = {} as WithdrawPayloadUIType
 		$sbtcConfig.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 		await sbtcConfig.update(() => $sbtcConfig)
 		dispatch('login_event');
-		goto('/')
+		//setTimeout(function() {
+			goto('/')
+		//}, 1000)
 	}
 
 	const getNavActiveClass = (item:string) => {
@@ -60,7 +68,7 @@
 	<div class="hidden md:flex md:gap-2 md:order-3">
 		<SettingsDropdown />
 
-		{#if $sbtcConfig.loggedIn}
+		{#if loggedIn()}
 			<AccountDropdown on:init_logout={() => doLogout()}/>
 		{:else}
 			<button class="inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0" on:keydown on:click={doLogin}>
@@ -102,7 +110,7 @@
 
 		<NavLi nonActiveClass="md:hidden"><SettingsDropdown /></NavLi>
 		<NavLi nonActiveClass="md:hidden ml-0 md:ml-2">
-			{#if $sbtcConfig.loggedIn}
+			{#if loggedIn()}
 				<AccountDropdown on:init_logout={() => doLogout()}/>
 			{:else}
 				<button id="connect-wallet" class="block w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" on:keydown on:click={doLogin}>

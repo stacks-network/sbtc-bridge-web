@@ -272,6 +272,30 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 	}
 }
 
+export async function loginStacks(callback:any) {
+	try {
+		const provider = getStacksProvider()
+		console.log('provider: ', provider)
+		if (!userSession.isUserSignedIn()) {
+			showConnect({
+				userSession,
+				appDetails: appDetails(),
+				onFinish: async () => {
+					callback(true);
+				},
+				onCancel: () => {
+					callback(false);
+				},
+			});
+		} else {
+			callback(true);
+		}
+	} catch (e) {
+		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
+		callback(false);
+	}
+}
+
 export function loginStacksFromHeader(document:any) {
 	const el = document.getElementById("connect-wallet")
 	if (el) return document.getElementById("connect-wallet").click();
@@ -418,8 +442,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
 		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 	}
-	const addr = btc.Address(net).decode('tb1perzpcdw7r4xsfk5kkvy9krxgrqp0f2gufm6ygauzcs7e27rs7lxqmkkrq4')
-	if (addr.type === 'tr') console.log('btc.Address(net).decode:' + hex.encode(addr.pubkey))
 	sbtcConfig.update(() => conf);
 
 }
