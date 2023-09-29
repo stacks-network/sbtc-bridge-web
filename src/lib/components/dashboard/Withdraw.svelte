@@ -3,10 +3,10 @@
   import Banner from '$lib/components/shared/Banner.svelte';
 	import Timeline from './shared/Timeline.svelte';
 	import WithdrawHeader from './shared/WithdrawHeader.svelte';
-	import { getOpDropWithdrawRequest, type BridgeTransactionType, getOpReturnWithdrawRequest, getDataToSign } from "sbtc-bridge-lib";
+	import { getBridgeWithdrawOpDrop, type BridgeTransactionType, getBridgeWithdraw, getDataToSign } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import { CONFIG } from "$lib/config";
-	import { initApplication, loggedIn, loginStacksFromHeader, makeFlash, signMessage, verifySBTCAmount } from "$lib/stacks_connect";
+	import { loggedIn, loginStacksFromHeader, makeFlash, signMessage, verifySBTCAmount } from "$lib/stacks_connect";
 	import { fetchPeginById } from "$lib/bridge_api";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import WithdrawForm from "./shared/WithdrawForm.svelte";
@@ -42,9 +42,9 @@
           console.log('message: ', message)
           console.log('sigData: ', sigData)
           if ($sbtcConfig.userSettings.useOpDrop) {
-            peginRequest = getOpDropWithdrawRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+            peginRequest = getBridgeWithdrawOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
           } else {
-            peginRequest = getOpReturnWithdrawRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
+            peginRequest = getBridgeWithdraw(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
           }
           const conf:SbtcConfig = $sbtcConfig;
           conf.sigData = sigData.signature;

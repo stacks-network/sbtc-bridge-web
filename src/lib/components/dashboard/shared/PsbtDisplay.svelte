@@ -28,7 +28,7 @@ onMount(async () => {
   <div>PSBT {#if !showHex}(Bitcoin Core){:else}(Electrum){/if}
     <Icon src="{InformationCircle}" mini class="inline ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="b64-label" />
   </div>
-  <div class="cursor-pointer" on:keydown on:click={() => showHex = !showHex}>switch format</div>
+  <div aria-hidden="true" class="cursor-pointer" on:keydown on:click={() => showHex = !showHex}>switch format</div>
 </div>
 
 {#if !showHex}

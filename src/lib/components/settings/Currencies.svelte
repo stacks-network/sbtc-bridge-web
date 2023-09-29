@@ -88,7 +88,7 @@
           <div class="bg-white/[0.03]">
             <span class="block text-sm px-3 py-2 text-gray-400">Popular currencies</span>
             <div>
-              <div on:keydown on:click={() => setCurrency('USD')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+              <div aria-hidden="true" on:keydown on:click={() => setCurrency('USD')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
                 <div class="flex justify-between">
                   <div>
                     <p>{getCurrency('USD').name}</p>
@@ -101,7 +101,7 @@
                   </div>
                 </div>
               </div>
-              <div on:keydown on:click={() => setCurrency('EUR')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+              <div aria-hidden="true" on:keydown on:click={() => setCurrency('EUR')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
                 <div class="flex justify-between">
                   <div>
                     <p>{getCurrency('EUR').name}</p>
@@ -114,7 +114,7 @@
                   </div>
                 </div>
               </div>
-              <div on:keydown on:click={() => setCurrency('CNY')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+              <div aria-hidden="true" on:keydown on:click={() => setCurrency('CNY')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
                 <div class="flex justify-between">
                   <div>
                     <p>{getCurrency('CNY').name}</p>
@@ -132,7 +132,7 @@
         </div>
         {#each currencies as currency}
           <DropdownItem on:change={(e) => changeCurrency(e) } bind:value={selected} defaultClass="px-3 py-3 text-sm hover:bg-gray-1000">
-            <span class="flex items-center justify-between" on:keydown on:click={() => setCurrency(currency.value)}>
+            <span aria-hidden="true" class="flex items-center justify-between" on:keydown on:click={() => setCurrency(currency.value)}>
               <span class="block">
                 <span class="block">{currency.name}</span>
                 <span class="block">{currency.value}</span>
@@ -152,7 +152,7 @@
       Bitcoin units
     </h3>
     <div class="flex md:flex-row flex-col gap-4 font-normal ">
-      <div on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
+      <div aria-hidden="true" on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
         <div class="text-white font-normal flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'bitcoin' ? 'text-success-300' : 'text-gray-200'}/>
@@ -168,7 +168,7 @@
         {/if}
       </div>
 
-      <div on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
+      <div aria-hidden="true" on:keydown on:click={() => setDenomination('satoshi')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'satoshi' ? 'border-success-400' : 'border-gray-900'}`}>
         <div class="text-white font-normal flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle cx="12" cy="12" r="12" fill="currentColor" class={getDenomination() === 'satoshi' ? 'text-success-300' : 'text-gray-200'}/>

@@ -2,7 +2,7 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import { CONFIG } from '$lib/config';
-import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, listCV, type ListCV } from '@stacks/transactions';
+import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, type ListCV } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
 import { openContractCall } from '@stacks/connect';

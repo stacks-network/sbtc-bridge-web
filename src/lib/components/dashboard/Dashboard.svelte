@@ -1,8 +1,8 @@
 <script lang="ts">
   import { sbtcConfig } from '$stores/stores';
-	import { authenticate, initApplication, loggedIn, loginStacksFromHeader, loginStacksJs } from '$lib/stacks_connect';
+	import { loggedIn, loginStacksFromHeader } from '$lib/stacks_connect';
 	import { CONFIG } from '$lib/config';
-	import { fmtAmount, fmtNumber, fmtSatoshiToBitcoin, satsToBitcoin } from 'sbtc-bridge-lib';
+	import { fmtNumber, fmtSatoshiToBitcoin, satsToBitcoin } from 'sbtc-bridge-lib';
 
   $: connected = loggedIn()
 
@@ -12,7 +12,7 @@
   const tvl = () => {
     const currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
     const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
-    return currency.symbol + ' ' + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
+    return currency.symbol + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
   }
 
 	const doLogin = async () => {

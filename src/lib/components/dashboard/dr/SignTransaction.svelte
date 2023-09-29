@@ -7,7 +7,7 @@ import { sbtcConfig } from '$stores/stores';
 import { explorerBtcTxUrl } from "$lib/utils";
 import { saveBridgeTransaction } from '$lib/bridge_api';
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
-import { buildOpReturnDepositTransaction, buildOpDropDepositTransaction } from 'sbtc-bridge-lib'
+import { buildDepositTransaction, buildDepositTransactionOpDrop } from 'sbtc-bridge-lib'
 import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
@@ -15,7 +15,6 @@ import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
-import { Icon, InformationCircle } from "svelte-hero-icons";
 import { Tooltip } from 'flowbite-svelte';
 
 export let peginRequest:BridgeTransactionType;
@@ -143,9 +142,9 @@ const broadcast = async (psbtHex:string) => {
 onMount(async () => {
   amount = $sbtcConfig.payloadDepositData.amountSats;
   if (peginRequest.mode === 'op_drop') {
-    transaction = buildOpDropDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo, peginRequest.commitTxScript!.address!);
+    transaction = buildDepositTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos, peginRequest.commitTxScript!.address!);
   } else {
-    transaction = buildOpReturnDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo)
+    transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
   }
   if (transaction.inputsLength === 0) {
     errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'

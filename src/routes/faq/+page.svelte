@@ -48,7 +48,7 @@ let questions = [
 			{#key componentKey}
 				{#each questions as q, i}
 					<div class="pt-4 flex-1">
-						<div class="flex items-start justify-between cursor-pointer text-2xl font-normal " on:keydown on:click={() => toggleAnswer(i)}>
+						<div aria-hidden="true" class="flex items-start justify-between cursor-pointer text-2xl font-normal " on:keydown on:click={() => toggleAnswer(i)}>
 							<p>{q.question}</p>
 							{#if q.hidden}
 								<button class="mt-1">
