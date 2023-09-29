@@ -81,7 +81,6 @@
 			<slot></slot>
 		</div>
 		{/key}
-
 		<Footer />
 	</div>
 {/if}

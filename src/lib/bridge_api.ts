@@ -4,7 +4,7 @@ import { checkAddressForNetwork } from 'sbtc-bridge-lib';
 
 let authHeader:any;
 
-export function setAuthorisation(auth:any) {
+export async function setAuthorisation(auth:any) {
   authHeader = auth
 }
 function headers() {
