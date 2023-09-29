@@ -98,6 +98,7 @@
 	-->
 		<NavLi nonActiveClass={getNavActiveClass('/')} href="/">Dashboard</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/transactions')} href="/transactions">History</NavLi>
+		<NavLi nonActiveClass={getNavActiveClass('/how-it-works')} href="/how-it-works">How it works</NavLi>
 		<NavLi nonActiveClass={getNavActiveClass('/faq')} href="/faq">FAQ</NavLi>
 		{#if coordinator}
 			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/admin">Admin</NavLi>
