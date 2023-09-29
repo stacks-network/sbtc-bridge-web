@@ -4,7 +4,7 @@
 	import Timeline from './shared/Timeline.svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
-	import { type BridgeTransactionType, getOpDropDepositRequest } from 'sbtc-bridge-lib';
+	import { type BridgeTransactionType, getBridgeDepositOpDrop } from 'sbtc-bridge-lib';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import DepositForm from './shared/DepositForm.svelte';
 	import { loggedIn, loginStacksFromHeader, verifyAmount, verifyStacksPricipal } from '$lib/stacks_connect';
@@ -35,7 +35,7 @@
 
       const conf:SbtcConfig = $sbtcConfig;
       sbtcConfig.update(() => conf);
-      peginRequest = getOpDropDepositRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+      peginRequest = getBridgeDepositOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       timeLineStatus = 2;
       componentKey++;
     } catch(err:any) {

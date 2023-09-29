@@ -5,10 +5,10 @@
   import Banner from '$lib/components/shared/Banner.svelte';
 	import { sbtcConfig } from '$stores/stores';
 	import { CONFIG } from '$lib/config';
-	import { getOpReturnDepositRequest, satsToBitcoin, type BridgeTransactionType } from 'sbtc-bridge-lib';
+	import { getBridgeDeposit, type BridgeTransactionType } from 'sbtc-bridge-lib';
 	import type { SbtcConfig } from '$types/sbtc_config';
 	import DepositForm from './shared/DepositForm.svelte';
-	import { initApplication, loggedIn, loginStacksFromHeader, loginStacksJs, verifyAmount, verifyStacksPricipal } from '$lib/stacks_connect';
+	import { loggedIn, loginStacksFromHeader, verifyAmount, verifyStacksPricipal } from '$lib/stacks_connect';
 	import { goto } from '$app/navigation';
 	import { fetchPeginById, updateBridgeTransaction } from "$lib/bridge_api";
 	import StatusCheck from "./dd/StatusCheck.svelte";
@@ -40,7 +40,7 @@
 
       const conf:SbtcConfig = $sbtcConfig;
       sbtcConfig.update(() => conf);
-      peginRequest = getOpReturnDepositRequest(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+      peginRequest = getBridgeDeposit(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       timeLineStatus = 2;
       componentKey++;
     } catch(err:any) {

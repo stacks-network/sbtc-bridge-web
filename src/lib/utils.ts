@@ -1,17 +1,15 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject, ExchangeRate, KeySet } from 'sbtc-bridge-lib'
+import type { AddressMempoolObject } from 'sbtc-bridge-lib'
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
-import { hash160, hashP2WPKH } from '@stacks/transactions';
+import { hash160 } from '@stacks/transactions';
 import { hashSha256Sync } from '@stacks/encryption';
 
 export const COMMS_ERROR = 'Error communicating with the server. Please try later.'
 export const smbp = 900
 export const xsbp = 700
-const privKey = hex.decode('0101010101010101010101010101010101010101010101010101010101010101');
-const revealFee = 5000;
 
 const formatter = new Intl.NumberFormat('en-US', {
   style: 'currency',

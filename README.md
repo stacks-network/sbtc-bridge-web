@@ -24,17 +24,10 @@ The bridge application has 3 main components;
 
 1. [web application](https://github.com/stacks-network/sbtc-bridge-web)
 2. [rest api](https://github.com/stacks-network/sbtc-bridge-api)
-3. [npm module](https://github.com/stacks-network/sbtc-bridge-api)
+3. [sBTC library](https://github.com/stacks-network/sbtc-bridge-api)
 
-For example the API provides endpoints (see [docs](https://bridge.stx.eco/bridge-api/docs/#/)) for building and parsing sBTC payloads
-
-- [build deposit data](https://bridge.stx.eco/bridge-api/testnet/v1/sbtc/build/deposit/ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5/300)
-- [parse deposit data](https://bridge.stx.eco/bridge-api/testnet/v1/sbtc/parse/deposit/3c051a7010183fd1a76976e7b2bb67acdf57cdfe7048820000000000000000012c)
-
-The [sBTC lib](https://socket.dev/npm/package/sbtc-bridge-lib) (`npm i sbtc-bridge-lib`) provides the same methods via typescript;
-
-- export function buildDepositPayload(net:any, revealFee:number, address:string, opDrop:boolean, memo:string|undefined):Uint8Array
-- export function parseDepositPayload(d1:Uint8Array, amountSats: number):PayloadType
+for more information about how to use these is your own application see the
+[sBTC-bridge-lib README](https://github.com/stacks-network/sbtc-bridge-api/blob/main/sbtc-bridge-lib/README.md)
 
 ### Deployment
 

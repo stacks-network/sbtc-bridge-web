@@ -1,17 +1,15 @@
 <script lang="ts">
-import { uintCV, bufferCVFromString, listCV, bufferCV, serializeCV } from '@stacks/transactions';
-import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
+import { tupleCV, uintCV, listCV, bufferCV, serializeCV } from '@stacks/transactions';
 import Button from "../shared/Button.svelte";
 import { callContractReadOnly, isCoordinator, romeoMintTo } from '$lib/sbtc_admin';
 import { hex } from '@scure/base';
 import { onMount } from 'svelte';
 import { sha256 } from '@noble/hashes/sha256';
-import {  } from '$lib/proofs/merkle_utils';
 import { explorerAddressUrl } from '$lib/utils';
 import { sbtcConfig } from '$stores/stores'
-	import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, type TxMinedParameters } from 'sbtc-bridge-lib';
-	import { CONFIG } from '$lib/config';
-	import { loggedIn } from '$lib/stacks_connect';
+import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, type TxMinedParameters } from 'sbtc-bridge-lib';
+import { CONFIG } from '$lib/config';
+import { loggedIn } from '$lib/stacks_connect';
 /**
 proofs = (
 0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 

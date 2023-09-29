@@ -79,7 +79,7 @@ onMount(async () => {
 		}
 	}
 	addressInfoReveal = await fetchUtxoSet(peginRequest.uiPayload.bitcoinAddress)
-	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, peginRequest.uiPayload.sbtcWalletPublicKey))
+	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, peginRequest.uiPayload.sbtcWalletPublicKey)!)
 	if (peginRequest.btcTxid) commitTransaction = await fetchTransaction(peginRequest.btcTxid);
 	peginRequest.originator = commitTransaction.vout[1].scriptPubKey.address
 	reclaimTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)
@@ -98,7 +98,7 @@ onMount(async () => {
 </Popover>
 
 <div class="w-full flex justify-between align-middle">
-  <div class=" " on:keyup on:click={() => goto('/transactions')}>
+  <div aria-hidden="true" class=" " on:keyup on:click={() => goto('/transactions')}>
     <h1 class="text-3xl font-medium">Details</h1>
   </div>
   <div class="flex gap-x-2 justify-end">

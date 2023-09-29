@@ -1,10 +1,9 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
-  import Button from '$lib/components/shared/Button.svelte';
   import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 	import { bitcoinBalanceFromMempool } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores'
-	import { CONFIG, isSimnet } from '$lib/config';
+	import { CONFIG } from '$lib/config';
   import Banner from '$lib/components/shared/Banner.svelte';
 	import { fetchAddressTransactions, saveBridgeTransaction } from "$lib/bridge_api";
 	import Invoice from "../shared/Invoice.svelte";

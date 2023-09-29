@@ -6,7 +6,7 @@ import { openPsbtRequestPopup } from '@stacks/connect'
 import { sbtcConfig } from '$stores/stores';
 import { explorerBtcTxUrl } from "$lib/utils";
 import { saveBridgeTransaction } from '$lib/bridge_api';
-import { buildOpDropWithdrawTransaction, type BridgeTransactionType, buildOpReturnWithdrawTransaction } from 'sbtc-bridge-lib'
+import { buildWithdrawTransactionOpDrop, type BridgeTransactionType, buildWithdrawTransaction } from 'sbtc-bridge-lib'
 import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
@@ -14,7 +14,6 @@ import { isHiro } from '$lib/stacks_connect'
 import { signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
-import { Icon, InformationCircle } from "svelte-hero-icons";
 import { Tooltip } from 'flowbite-svelte';
 
 export let peginRequest:BridgeTransactionType;
@@ -139,14 +138,13 @@ const broadcast = async (psbtHex:string) => {
   }
 }
 
-const revealFeeWithGas = 5000;
 onMount(async () => {
   amount = $sbtcConfig.payloadWithdrawData.amountSats;
   if (peginRequest.requestType === 'withdrawal') {
       if (peginRequest.mode === 'op_drop') {
-        transaction = buildOpDropWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+        transaction = buildWithdrawTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       } else {
-        transaction = buildOpReturnWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo, $sbtcConfig.btcFeeRates);
+        transaction = buildWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates);
       }
   }
   if (transaction.inputsLength === 0) {

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-	import SwitchGraphic from '$lib/components/dashboard/shared/SwitchGraphic.svelte';
 
   const dispatch = createEventDispatcher();
   export let active = 1;
@@ -27,7 +26,7 @@
 
 <div class="flex bg-gray-1000 w-full border-[0.5px] border-gray-700 rounded-sm items-center text-base">
   <div class={cClazzes()}>
-    <div class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(1)}>
+    <div aria-hidden="true" class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(1)}>
       <div class={aClazzes(1)}></div>
       <div class={bClazzes(1)}>Amount</div>
     </div>
@@ -38,7 +37,7 @@
     </div>
   </div>
   <div class={cClazzes()}>
-    <div class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(2)}>
+    <div aria-hidden="true" class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(2)}>
       <div class={aClazzes(2)}></div>
       <div class={bClazzes(2)}>Send</div>
     </div>
@@ -52,7 +51,7 @@
   </div>
   {#if confirm}
   <div class={cClazzes()}>
-    <div class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(3)}>
+    <div aria-hidden="true" class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(3)}>
       <div class={aClazzes(3)}></div>
       <div class={bClazzes(3)}>Confirm</div>
     </div>

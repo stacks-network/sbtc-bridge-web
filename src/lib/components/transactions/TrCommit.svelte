@@ -8,7 +8,6 @@ import { parseDepositPayload } from 'sbtc-bridge-lib'
 export let peginRequest:BridgeTransactionType;
 let stacksData:any;
 let intid = false;
-let showCommitDetails = false;
 
 let reclaimString = '';
 let revealString = '';
