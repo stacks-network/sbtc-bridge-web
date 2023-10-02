@@ -103,11 +103,9 @@
 		{#if coordinator}
 			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/admin">Admin</NavLi>
 		{/if}
-		<!--
 		{#if !$sbtcConfig.userSettings.debugMode}
-			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/proofs">Tx Check</NavLi>
-		{/if}-->
-		<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/proofs">Tx Check</NavLi>
+			<NavLi nonActiveClass={getNavActiveClass('/proofs')} href="/proofs">Tx Check</NavLi>
+		{/if}
 
 		<NavLi nonActiveClass="md:hidden"><SettingsDropdown /></NavLi>
 		<NavLi nonActiveClass="md:hidden ml-0 md:ml-2">
