@@ -6,7 +6,7 @@ import Button from '$lib/components/shared/Button.svelte';
 	import { a_primary } from '$lib/css_utils';
 
 const launchApp = () => {
-  goto('/?net=' + CONFIG.VITE_NETWORK)
+  goto('/?chain=' + CONFIG.VITE_NETWORK)
 }
 </script>
 

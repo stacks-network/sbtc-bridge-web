@@ -4,7 +4,7 @@ import { setConfig } from '$lib/config';
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, url }) {
     try {
-        const net = url.searchParams.get('net');
+        const net = url.searchParams.get('chain');
         if (net === 'testnet') setConfig(net);
         const peginRequest = await fetchPeginById(params.slug);
         return peginRequest;

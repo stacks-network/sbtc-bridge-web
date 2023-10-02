@@ -20,7 +20,7 @@
 	const search = $page.url.search;
 	if (!isLegal(location.href)) {
 		//componentKey++;
-		goto('/' + '?net=testnet')
+		goto('/' + '?chain=testnet')
 	}
 	beforeNavigate((nav) => {
 		if (!isLegal(nav.to?.route.id || '')) {
@@ -29,12 +29,12 @@
 			return;
 		}
 		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-		if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet') > -1) {
+		if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('chain=testnet') > -1) {
 			nav.cancel();
-			goto(next + '?net=testnet')
-		} else if (nav.to?.url.search.indexOf('devnet') === -1 && search.indexOf('net=devnet') > -1) {
+			goto(next + '?chain=testnet')
+		} else if (nav.to?.url.search.indexOf('devnet') === -1 && search.indexOf('chain=devnet') > -1) {
 			nav.cancel();
-			goto(next + '?net=devnet')
+			goto(next + '?chain=devnet')
 		}
 	})
 	afterNavigate((nav) => {

@@ -19,9 +19,9 @@
 		});
 		const url = new URL(location.href);
 		if (mode === 'simnet') {
-			url.searchParams.set('net', 'testnet');
+			url.searchParams.set('chain', 'testnet');
 		} else {
-			url.searchParams.set('net', 'devnet');
+			url.searchParams.set('chain', 'devnet');
 		}
 		location.assign(url.search);
 	}
@@ -37,9 +37,9 @@
 		});
 		const url = new URL(location.href);
 		if (import.meta.env.MODE === 'simnet') {
-			url.searchParams.set('net', 'testnet');
+			url.searchParams.set('chain', 'testnet');
 		} else {
-			url.searchParams.set('net', net);
+			url.searchParams.set('chain', net);
 		}
 		location.assign(url.search);
 	}
