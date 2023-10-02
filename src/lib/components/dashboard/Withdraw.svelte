@@ -42,7 +42,7 @@
           console.log('message: ', message)
           console.log('sigData: ', sigData)
           if ($sbtcConfig.userSettings.useOpDrop) {
-            peginRequest = getBridgeWithdrawOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+            peginRequest = getBridgeWithdrawOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
           } else {
             peginRequest = getBridgeWithdraw(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
           }

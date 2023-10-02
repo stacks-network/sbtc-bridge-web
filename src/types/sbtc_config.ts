@@ -14,7 +14,6 @@ export type SbtcConfig = {
   peginRequest?:BridgeTransactionType;
   userSettings:SbtcUserSettingI;
   sbtcContractData: SbtcContractDataType;
-  keys: KeySet;
   revealFeeWithGas: number;
   payloadDepositData: DepositPayloadUIType;
   payloadWithdrawData: WithdrawPayloadUIType;

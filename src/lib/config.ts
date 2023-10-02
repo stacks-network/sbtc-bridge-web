@@ -46,14 +46,14 @@ const TESTNET_CONFIG = {
     VITE_ENVIRONMENT: 'staging',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Testnet',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
-    VITE_BRIDGE_WS: 'ws://bridge.stx.eco',
-    VITE_URI_BRIDGE: 'https://bridge.stx.eco',
+    VITE_BRIDGE_WS: 'ws://bridge.sbtc.tech',
+    VITE_URI_BRIDGE: 'https://bridge.sbtc.tech',
     VITE_URI_SIGN: 'https://sign.stx.eco',
     VITE_ORIGIN: 'https://sbtc.tech',
     VITE_NETWORK: 'testnet',
     VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    VITE_BRIDGE_API: 'https://bridge.stx.eco/bridge-api/v1',
-    VITE_SIGNER_API: 'https://bridge.stx.eco/signer-api/v1',
+    VITE_BRIDGE_API: 'https://bridge.sbtc.tech/bridge-api/v1',
+    VITE_SIGNER_API: 'https://bridge.sbtc.tech/signer-api/v1',
     VITE_STACKS_API: 'https://api.testnet.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
@@ -68,14 +68,14 @@ const MAINNET_CONFIG = {
     VITE_ENVIRONMENT: 'production',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
-    VITE_BRIDGE_WS: 'ws://bridge.stx.eco',
-    VITE_URI_BRIDGE: 'https://bridge.stx.eco',
+    VITE_BRIDGE_WS: 'ws://bridge.sbtc.tech',
+    VITE_URI_BRIDGE: 'https://bridge.sbtc.tech',
     VITE_URI_SIGN: 'https://sign.stx.eco',
     VITE_ORIGIN: 'https://sbtc.tech',
     VITE_NETWORK: 'mainnet',
     VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
-    VITE_BRIDGE_API: 'https://bridge.stx.eco/bridge-api/v1',
-    VITE_SIGNER_API: 'https://bridge.stx.eco/signer-api/v1',
+    VITE_BRIDGE_API: 'https://bridge.sbtc.tech/bridge-api/v1',
+    VITE_SIGNER_API: 'https://bridge.sbtc.tech/signer-api/v1',
     VITE_STACKS_API: 'https://api.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',
@@ -88,20 +88,19 @@ const MAINNET_CONFIG = {
 
 export let CONFIG = MAINNET_CONFIG;
 
-export function setConfig(search:string) {
-    let mode = import.meta.env.MODE
-    if (!mode) mode = 'testnet'
+export function setConfig(network:string) {
+    //let mode = import.meta.env.MODE
+    //if (!mode) mode = 'testnet'
     //console.log('import.meta.env.MODE: ' + mode);
-	if (mode.startsWith('local-')) CONFIG = SIMNET_CONFIG;
-	else if (mode === 'development') CONFIG = DEVNET_CONFIG;
-	else if (search.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
-	else if (search.indexOf('simnet') > -1) CONFIG = SIMNET_CONFIG;
-	else if (search.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
+	if (network === 'devnet') CONFIG = DEVNET_CONFIG;
+	else if (network.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
+	else if (network.indexOf('simnet') > -1) CONFIG = SIMNET_CONFIG;
+	else if (network.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
 	else CONFIG = MAINNET_CONFIG
     if (import.meta.env.MODE === 'linode-staging') {
-        CONFIG.VITE_BRIDGE_API = 'https://bridge.stx.eco/bridge-api/v1'
+        CONFIG.VITE_BRIDGE_API = 'https://bridge.sbtc.tech/bridge-api/v1'
     }
-    if (mode === 'development') {
+    if (network === 'devnet') {
         CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL = '93a7e5ecde5eccc4fd858dfcf7d92011eade103600de0e8122d6fc5ffedf962d';
         CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM = 'eb80b7f63eb74a215b6947b479e154a83cf429691dceab272c405b1614efb98c';
         CONFIG.VITE_BTC_SCHNORR_KEY_ORACLE = '0d7b49bc4864057b087108f81a57da7178cfbeb85a09c8957b64b9840e368b42';

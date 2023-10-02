@@ -35,7 +35,7 @@
 
       const conf:SbtcConfig = $sbtcConfig;
       sbtcConfig.update(() => conf);
-      peginRequest = getBridgeDepositOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+      peginRequest = getBridgeDepositOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       timeLineStatus = 2;
       componentKey++;
     } catch(err:any) {

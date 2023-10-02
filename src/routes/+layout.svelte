@@ -29,9 +29,12 @@
 			return;
 		}
 		const next = (nav.to?.url.pathname || '') + (nav.to?.url.search || '');
-			if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet') > -1) {
+		if (nav.to?.url.search.indexOf('testnet') === -1 && search.indexOf('net=testnet') > -1) {
 			nav.cancel();
 			goto(next + '?net=testnet')
+		} else if (nav.to?.url.search.indexOf('devnet') === -1 && search.indexOf('net=devnet') > -1) {
+			nav.cancel();
+			goto(next + '?net=devnet')
 		}
 	})
 	afterNavigate((nav) => {

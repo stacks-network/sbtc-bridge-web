@@ -113,6 +113,7 @@ export async function sendRawTransaction(tx: { hex: string; maxFeeRate: number|u
   return await extractResponse(response);
 }
 
+/**
 export async function fetchKeys() {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/keys');
   const response = await fetchCatchErrors(path);
@@ -122,7 +123,7 @@ export async function fetchKeys() {
   const res = await extractResponse(response);
   return res;
 }
-
+ */
 export async function signAndBroadcast(wrappedPsbt:WrappedPSBT) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/signAndBroadcast');
   const response = await fetch(path, {
