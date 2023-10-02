@@ -40,7 +40,7 @@
 		"svelte-hero-icons": "^5.0.0",
 		"svelte-heros-v2": "^0.9.3",
 		"svelte-preprocess": "^5.0.3",
-		"tailwindcss": "^3.3.1",
+		"tailwindcss": "^3.3.3",
 		"tslib": "^2.6.0",
 		"typescript": "^5.2.2",
 		"vite": "^4.4.9",
