@@ -64,7 +64,6 @@ export const defaultSbtcConfig:SbtcConfig = {
   loggedIn: false,
   sigData: undefined,
   sbtcContractData: {} as SbtcContractDataType,
-  keys: {} as KeySet,
   userSettings: {
     useOpDrop: false,
     debugMode: false,
@@ -82,20 +81,27 @@ export const defaultSbtcConfig:SbtcConfig = {
         name: "Euro"
       },
       denomination: 'bitcoin'
-    }
+    },
+    peggingIn: false
   },
   keySets: {},
   revealFeeWithGas: 0,
   payloadDepositData: {
-    principal: undefined,
-    bitcoinAddress: undefined,
-    amountSats: 0
+    principal: '',
+    bitcoinAddress: '',
+    amountSats: 0,
+    sbtcWalletPublicKey: '',
+    reclaimPublicKey: '',
+    paymentPublicKey: ''
   },
   payloadWithdrawData: {
-    principal: undefined,
-    bitcoinAddress: undefined,
+    principal: '',
+    bitcoinAddress: '',
     signature: undefined,
-    amountSats: 0
+    amountSats: 0,
+    sbtcWalletPublicKey: '',
+    reclaimPublicKey: '',
+    paymentPublicKey: ''
   }
 }
 

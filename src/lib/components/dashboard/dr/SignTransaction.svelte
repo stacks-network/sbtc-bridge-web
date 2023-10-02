@@ -144,7 +144,7 @@ onMount(async () => {
   if (peginRequest.mode === 'op_drop') {
     transaction = buildDepositTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos, peginRequest.commitTxScript!.address!);
   } else {
-    transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
+    transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
   }
   if (transaction.inputsLength === 0) {
     errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'

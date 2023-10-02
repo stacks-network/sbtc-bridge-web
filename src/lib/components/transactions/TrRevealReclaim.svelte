@@ -64,7 +64,7 @@ onMount(() => {
   <div class="mt-4 col-12">Reveal Data</div>
   <div class="col-md-2 col-sm-12 text-info">Sbtc Address</div><div class="col-md-10 col-sm-12">{$sbtcConfig.sbtcContractData.sbtcWalletAddress}</div>
   {#if stacksData && $sbtcConfig.userSettings.debugMode}
-  <div class="col-md-2 col-sm-12 text-info">Reveal Pub Key</div><div class="col-md-10 col-sm-12">{peginRequest.uiPayload.sbtcWalletPublicKey}</div>
+  <div class="col-md-2 col-sm-12 text-info">Reveal Pub Key</div><div class="col-md-10 col-sm-12">{$sbtcConfig.sbtcContractData.sbtcWalletPublicKey}</div>
   {/if}
   <div class="mt-4 col-12 text-info"></div>
   {#if peginRequest.status < 3}

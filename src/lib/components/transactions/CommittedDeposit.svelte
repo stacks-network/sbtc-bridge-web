@@ -79,7 +79,7 @@ onMount(async () => {
 		}
 	}
 	addressInfoReveal = await fetchUtxoSet(peginRequest.uiPayload.bitcoinAddress)
-	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, peginRequest.uiPayload.sbtcWalletPublicKey)!)
+	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey)!)
 	if (peginRequest.btcTxid) commitTransaction = await fetchTransaction(peginRequest.btcTxid);
 	peginRequest.originator = commitTransaction.vout[1].scriptPubKey.address
 	reclaimTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)

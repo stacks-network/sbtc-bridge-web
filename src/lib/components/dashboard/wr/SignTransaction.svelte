@@ -142,9 +142,9 @@ onMount(async () => {
   amount = $sbtcConfig.payloadWithdrawData.amountSats;
   if (peginRequest.requestType === 'withdrawal') {
       if (peginRequest.mode === 'op_drop') {
-        transaction = buildWithdrawTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
+        transaction = buildWithdrawTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
       } else {
-        transaction = buildWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates);
+        transaction = buildWithdrawTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadWithdrawData, addressInfo.utxos, $sbtcConfig.btcFeeRates);
       }
   }
   if (transaction.inputsLength === 0) {
