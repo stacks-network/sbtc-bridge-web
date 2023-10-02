@@ -8,9 +8,28 @@
 	import { fetchSbtcBalance } from '$lib/stacks_connect'
 	import Banner from '$lib/components/shared/Banner.svelte';
 
+	let mode = import.meta.env.MODE
+    //if (!mode) mode = 'testnet'
+
+	const switchDevnet = async () => {
+		setConfig('devnet');
+		await fetchSbtcBalance($sbtcConfig, true);
+		sbtcConfig.update((conf:SbtcConfig) => {
+			return conf;
+		});
+		const url = new URL(location.href);
+		if (mode === 'simnet') {
+			url.searchParams.set('net', 'testnet');
+		} else {
+			url.searchParams.set('net', 'devnet');
+		}
+		location.assign(url.search);
+	}
+
 	const toggleNetwork = async () => {
-		let net = 'mainnet';
-		if ('mainnet' === CONFIG.VITE_NETWORK) net = 'testnet';
+		let net = CONFIG.VITE_NETWORK;
+		if (net === 'mainnet') net = 'testnet';
+		else net = 'mainnet'
 		setConfig(net);
 		await fetchSbtcBalance($sbtcConfig, true);
 		sbtcConfig.update((conf:SbtcConfig) => {
@@ -52,7 +71,12 @@
 {/if}
 
 <div class="mt-4">
-  <Button on:click={() => toggleNetwork()} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
-  	Switch network
-  </Button>
-</div>
+	<Button on:click={() => toggleNetwork()} class="block w-full md:w-auto md:inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-lg border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 shrink-0">
+		Switch network
+	</Button>
+	{#if mode === 'development'}
+	<a on:click|preventDefault={() => switchDevnet()} href="/" class="text-gray-400 ms-10">
+		Switch to devnet
+	</a>
+	{/if}
+  </div>

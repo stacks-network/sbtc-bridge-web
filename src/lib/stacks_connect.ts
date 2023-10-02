@@ -392,30 +392,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 			conf.keySets = { 'mainnet': {} as AddressObject };
 		}
 	}
-	let keys;
-	const mode = import.meta.env.MODE
-	if (mode === 'development' || mode.startsWith('local') || !data.keys) {
-		try {
-			keys = {
-				deposits: {
-				  revealPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_REVEAL))),
-				  reclaimPubKey: hex.encode(schnorr.getPublicKey(hex.decode(CONFIG.VITE_BTC_SCHNORR_KEY_RECLAIM)))
-				}
-			}
-		} catch(err) {
-			keys = {
-				deposits: {
-				  revealPubKey: undefined,
-				  reclaimPubKey: undefined
-				}
-			}
-		}
-	} else {
-		keys = data.keys;
-	}
-	keys.deposits.revealPubKey = data.sbtcContractData.sbtcWalletPublicKey
-	conf.keys = keys;
-
 	try {
 		conf.exchangeRates = await fetchExchangeRates();
 		if (!conf.exchangeRates) throw new Error('no exchnage rates')
@@ -439,6 +415,8 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 			//
 		} 
 	}
+	conf.payloadDepositData.sbtcWalletPublicKey = conf.sbtcContractData.sbtcWalletPublicKey
+	conf.payloadWithdrawData.sbtcWalletPublicKey = conf.sbtcContractData.sbtcWalletPublicKey
 	if (!conf.keySets || !conf.keySets[CONFIG.VITE_NETWORK]) {
 		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 	}
@@ -461,7 +439,7 @@ function doPayloadData(conf:SbtcConfig) {
 	}
 	const payloadDepositData:DepositPayloadUIType = {
 			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
-			reclaimPublicKey: conf.keys.deposits.reclaimPubKey,
+			reclaimPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1 || '',
 			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
 			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
 			principal: prn,
@@ -478,7 +456,7 @@ function doPayloadData(conf:SbtcConfig) {
 	}
 	const payloadWithdrawData:WithdrawPayloadUIType = {
 			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
-			reclaimPublicKey: conf.keys.deposits.reclaimPubKey,
+			reclaimPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1 || '',
 			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
 			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
 			principal: prn,
