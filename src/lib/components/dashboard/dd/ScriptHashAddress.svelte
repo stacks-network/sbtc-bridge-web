@@ -45,7 +45,7 @@
   </div>
   {:else}
   <div class="">
-    <p class="text-lg my-5 font-extralight text-gray-400">Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
+    <p class="text-base my-5 font-extralight text-gray-400">Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
   </div>
   <Invoice {peginRequest}  psbtHex={undefined} psbtB64={undefined}/>
   <div class="my-4">

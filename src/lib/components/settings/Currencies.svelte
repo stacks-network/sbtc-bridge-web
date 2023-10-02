@@ -75,75 +75,80 @@
     <h3 class="text-base text-white font-normal mb-3">
       Currencies
     </h3>
-    <div class="md:w-1/2 w-full font-normal">
-      <Button class="!bg-black !border-[0.5px] !border-gray-700">
-        {myCurrency.name} ({myCurrency.currency} - {myCurrency.symbol})
-        <Icon src={ChevronDown} mini class=" ml-10 h-5 w-5 text-white" aria-hidden="true" />
-      </Button>
-      <Dropdown
-        class="bg-black max-h-[400px] overflow-y-auto !border-[0.5px] !border-gray-700 z-20"
-        placement="bottom-start"
-      >
-        <div class="bg-black p-0 border-0 border-b-[0.5px] border-gray-700">
-          <div class="bg-white/[0.03]">
-            <span class="block text-sm px-3 py-2 text-gray-400">Popular currencies</span>
-            <div>
-              <div aria-hidden="true" on:keydown on:click={() => setCurrency('USD')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <div class="flex justify-between">
-                  <div>
-                    <p>{getCurrency('USD').name}</p>
-                    <p>{getCurrency('USD').currency + ' - ' + getCurrency('USD').symbol}</p>
+    <div class="flex md:flex-row flex-col mr-4">
+      <div class="md:w-1/2 w-full font-normal relative">
+        <Button class="!bg-black !border-[0.5px] !border-gray-700 w-full inline-flex justify-between">
+          {myCurrency.name} ({myCurrency.currency} - {myCurrency.symbol})
+          <Icon src={ChevronDown} mini class=" ml-10 h-5 w-5 text-white" aria-hidden="true" />
+        </Button>
+        <Dropdown
+          containerClass="w-full"
+          class="bg-black max-h-[400px] overflow-y-auto !border-[0.5px] !border-gray-700 z-20 rounded"
+          placement="bottom-start"
+        >
+          <li>
+            <div class="bg-black p-0 border-0 border-b-[0.5px] border-gray-700">
+              <div class="bg-white/[0.03]">
+                <span class="block text-sm px-3 py-2 text-gray-400">Popular currencies</span>
+                <div>
+                  <div aria-hidden="true" on:keydown on:click={() => setCurrency('USD')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+                    <div class="flex justify-between">
+                      <div>
+                        <p>{getCurrency('USD').name}</p>
+                        <p>{getCurrency('USD').currency + ' - ' + getCurrency('USD').symbol}</p>
+                          </div>
+                      <div>
+                        {#if 'USD' === myCurrency.currency}
+                        <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                        {/if}
                       </div>
-                  <div>
-                    {#if 'USD' === myCurrency.currency}
-                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
-                    {/if}      
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div aria-hidden="true" on:keydown on:click={() => setCurrency('EUR')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <div class="flex justify-between">
-                  <div>
-                    <p>{getCurrency('EUR').name}</p>
-                    <p>{getCurrency('EUR').currency + ' - ' + getCurrency('EUR').symbol}</p>
+                  <div aria-hidden="true" on:keydown on:click={() => setCurrency('EUR')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+                    <div class="flex justify-between">
+                      <div>
+                        <p>{getCurrency('EUR').name}</p>
+                        <p>{getCurrency('EUR').currency + ' - ' + getCurrency('EUR').symbol}</p>
+                      </div>
+                      <div>
+                        {#if 'EUR' === myCurrency.currency}
+                        <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                        {/if}
+                      </div>
+                    </div>
                   </div>
-                  <div>
-                    {#if 'EUR' === myCurrency.currency}
-                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
-                    {/if}      
-                  </div>
-                </div>
-              </div>
-              <div aria-hidden="true" on:keydown on:click={() => setCurrency('CNY')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
-                <div class="flex justify-between">
-                  <div>
-                    <p>{getCurrency('CNY').name}</p>
-                    <p>{getCurrency('CNY').currency + ' - ' + getCurrency('CNY').symbol}</p>
-                  </div>
-                  <div>
-                    {#if 'CNY' === myCurrency.currency}
-                    <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
-                    {/if}      
+                  <div aria-hidden="true" on:keydown on:click={() => setCurrency('CNY')} class="text-white px-3 py-3 text-sm hover:bg-gray-1000 cursor-pointer">
+                    <div class="flex justify-between">
+                      <div>
+                        <p>{getCurrency('CNY').name}</p>
+                        <p>{getCurrency('CNY').currency + ' - ' + getCurrency('CNY').symbol}</p>
+                      </div>
+                      <div>
+                        {#if 'CNY' === myCurrency.currency}
+                        <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                        {/if}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        {#each currencies as currency}
-          <DropdownItem on:change={(e) => changeCurrency(e) } bind:value={selected} defaultClass="px-3 py-3 text-sm hover:bg-gray-1000">
-            <span aria-hidden="true" class="flex items-center justify-between" on:keydown on:click={() => setCurrency(currency.value)}>
-              <span class="block">
-                <span class="block">{currency.name}</span>
-                <span class="block">{currency.value}</span>
+          </li>
+          {#each currencies as currency}
+            <DropdownItem on:change={(e) => changeCurrency(e) } bind:value={selected} defaultClass="px-3 py-3 text-sm hover:bg-gray-1000">
+              <span aria-hidden="true" class="flex items-center justify-between" on:keydown on:click={() => setCurrency(currency.value)}>
+                <span class="block">
+                  <span class="block">{currency.name}</span>
+                  <span class="block">{currency.value}</span>
+                </span>
+                {#if currency.value === myCurrency.currency}
+                <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
+                {/if}
               </span>
-              {#if currency.value === myCurrency.currency}
-              <Icon src="{CheckCircle}" class="ml-10 text-success-500 w-6 h-6" aria-hidden="true" />
-              {/if}
-            </span>
-          </DropdownItem>
-        {/each}
-      </Dropdown>
+            </DropdownItem>
+          {/each}
+        </Dropdown>
+      </div>
     </div>
   </div>
 

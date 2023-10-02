@@ -103,7 +103,7 @@ export async function signPsbtXverse() {
       updateBridgeTransaction(response.txId)
     },
     onCancel: () => {
-      return 
+      return
     },
   }
   await signTransaction(signPsbtOptions);
@@ -165,7 +165,7 @@ onMount(async () => {
 <div class="flex w-full flex-wrap align-baseline items-start">
   <div class="">
     {#if !broadcasted}
-    <p class="text-lg my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
+    <p class="text-base my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
     {/if}
   </div>
   <Invoice {peginRequest} {psbtHex} {psbtB64}/>

@@ -75,8 +75,10 @@
 		Switch network
 	</Button>
 	{#if mode === 'development'}
-	<a on:click|preventDefault={() => switchDevnet()} href="/" class="text-gray-400 ms-10">
-		Switch to devnet
-	</a>
+		<Button on:click={() => switchDevnet()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
+			Switch to devnet
+		</Button>
 	{/if}
   </div>
+
+
