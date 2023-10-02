@@ -77,12 +77,10 @@
 {#if inited}
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
 		{#key componentKey}
-		<div>
 			<Header on:init_application={initApp} on:login_event={loginEvent} />
-		</div>
-		<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow">
-			<slot></slot>
-		</div>
+			<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow px-6">
+				<slot></slot>
+			</div>
 		{/key}
 		<Footer />
 	</div>
