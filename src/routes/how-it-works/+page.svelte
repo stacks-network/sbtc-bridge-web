@@ -6,23 +6,13 @@
 	let stepsDeposit = [
 		{
 			title: 'Deposit BTC',
-			description: 'Enter the amount you want to deposit (within your Bitcoin balance in your Leather/Xverse wallet).'
-		},
-		{
-			title: 'Transaction Creation',
-			description: 'The bridge generates a custom transaction using your Stacks address and Bitcoin address. This transaction moves Bitcoin from your wallet to the sBTC wallet.'
+			description: 'Enter the amount you want to deposit (within your Bitcoin balance in your Leather/Xverse wallet).',
+			explanation: 'The bridge generates a custom transaction using your Stacks address and Bitcoin address. This transaction moves Bitcoin from your wallet to the sBTC wallet.'
 		},
 		{
 			title: 'Sign & Send',
-			description: 'Sign and send the transaction.'
-		},
-		{
-			title: 'Processing',
-			description: 'A Stacks node processes the transaction, instructing a Clarity contract to mint your sBTC. This step is fully decentralized and cannot be stopped in the final Nakamoto release.'
-		},
-		{
-			title: 'sBTC in your wallet',
-			description: 'After processing, your sBTC will appear in your wallet and can be used across various services on the Stacks network.'
+			description: 'Sign and send the transaction.',
+			explanation: 'A Stacks node processes the transaction, instructing a Clarity contract to mint your sBTC. This step is fully decentralized and cannot be stopped in the final Nakamoto release.After processing, your sBTC will appear in your wallet and can be used across various services on the Stacks network.'
 		},
 	]
 
@@ -33,23 +23,13 @@
 		},
 		{
 			title: 'Return Address',
-			description: 'Provide a signature to indicate where your Bitcoin should be returned. By default, it uses the Bitcoin address from your Leather/Xverse wallet.'
-		},
-		{
-			title: 'Transaction Creation',
-			description: 'The bridge generates a custom transaction that sends your withdrawal request to the Stacks network.'
+			description: 'Provide a signature to indicate where your Bitcoin should be returned (by default, your wallet\'s Bitcoin address).',
+			explanation: 'The bridge generates a custom transaction that sends your withdrawal request to the Stacks network.'
 		},
 		{
 			title: 'Sign & Broadcast',
-			description: 'If you are satisfied with the transaction, sign and broadcast it.'
-		},
-		{
-			title: 'Processing',
-			description: 'Your transaction triggers a fulfilment process. Stacks signers approve the withdrawal from the sBTC wallet they control.'
-		},
-		{
-			title: 'Return Bitcoin',
-			description: 'Your Bitcoin is returned to your wallet after approval.'
+			description: 'If you are satisfied with the transaction, sign and broadcast it.',
+			explanation: 'Your transaction triggers a fulfilment process. Stacks signers approve the withdrawal from the sBTC wallet they control. Upon approval, your Bitcoin is returned to your wallet.'
 		},
 	]
 </script>
@@ -299,7 +279,7 @@
 							<h3 class="text-2xl font-bold">Deposit BTC, mint sBTC</h3>
 						</div>
 						<div>
-							<div class="pt-8 space-y-6">
+							<div class="pt-8 space-y-8">
 								{#each stepsDeposit as step, i}
 									<div class="flex gap-4">
 										<div class="w-2 rounded-md bg-primary-02 shrink-0"></div>
@@ -309,6 +289,7 @@
 												<span class="inline-flex px-3 py-1 text-xs font-medium bg-gray-400 rounded-3xl text-gray-1000">{step.title}</span>
 											</div>
 											<p>{step.description}</p>
+											<p class="mt-3 text-sm text-gray-300">{step.explanation}</p>
 										</div>
 									</div>
 								{/each}
@@ -335,6 +316,9 @@
 												<span class="inline-flex px-3 py-1 text-xs font-medium bg-gray-400 rounded-3xl text-gray-1000">{step.title}</span>
 											</div>
 											<p>{step.description}</p>
+											{#if step.explanation}
+												<p class="mt-3 text-sm text-gray-300">{step.explanation}</p>
+											{/if}
 										</div>
 									</div>
 								{/each}
