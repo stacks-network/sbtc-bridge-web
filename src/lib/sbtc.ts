@@ -3,11 +3,11 @@
  */
 import type { SbtcConfig } from '$types/sbtc_config';
 import type { SbtcContractDataType } from 'sbtc-bridge-lib';
-import type { KeySet } from 'sbtc-bridge-lib' 
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import { sendRawTransaction, sendRawTxDirectBlockCypher } from './bridge_api';
+import type { Transaction } from '@scure/btc-signer' 
 
 export let rates:Array<any>;
 
@@ -15,7 +15,7 @@ function finaliseTransaction(psbtHex:string) {
   try {
     const tx = btc.Transaction.fromPSBT(hex.decode(psbtHex));
     tx.finalize();
-    return hex.encode(tx.extract());
+    return tx;
   } catch (err:any) {
     console.log('finalize error: ', err)
     let errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
@@ -24,24 +24,24 @@ function finaliseTransaction(psbtHex:string) {
   }
 }
 
-export async function broadcastTransaction(psbtHex:string):Promise<any|undefined> {
-  const txHex = finaliseTransaction(psbtHex)
-  let resp
-  try {
-    resp = await sendRawTxDirectBlockCypher(txHex);
-  } catch(err:any) {
-    console.log(err)
-  }
-  if (!resp || resp.error) {
-    resp = await sendRawTransaction({hex: txHex});
-  }
-  if (resp && resp.tx) {
-    return resp.tx;
-  } else {
-    const errorReason = 'Unknown response from transaction broadcast - <a href="https://github.com/Stacks-Builders/sbtc-bridge-web/issues" target="_blank">please report ths error</a>.'
-    throw new Error(errorReason)
-  }
-  console.log('sendRawTxDirectBlockCypher: ', resp);
+export async function broadcastTransaction(psbtHex:string):Promise<string> {
+  const tx:Transaction = finaliseTransaction(psbtHex)
+  const txHex = hex.encode(tx.extract());
+	const resp = await sendRawTransaction({hex: txHex, maxFeeRate: 0 });
+  console.log('resp.result:tx.id: ' + tx.id)
+	if (resp && resp.tx) {
+    console.log()
+		return tx.id;
+	} else if (resp.result && typeof resp.result === 'string') { // Transaction already in block chain
+    console.log('resp.result: ' + resp.result)
+		return tx.id;
+	} else if (resp.error.code === -27) { // Transaction already in block chain
+		return tx.id;
+	} else {
+    let message = 'Unable to broadcast'
+    if (resp.error) message = 'Unable to broadcast: ' + resp.error.code + ' : ' + resp.error.message
+		throw new Error(message);
+	}
 }
 
 export function openWebSocket() {

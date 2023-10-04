@@ -42,6 +42,28 @@ const DEVNET_CONFIG = {
     VITE_BTC_SCHNORR_KEY_ORACLE: 'secret',
 }
 
+const DEV_TESTNET_CONFIG = {
+    VITE_ENVIRONMENT: 'devnet',
+    VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devnet',
+    VITE_PUBLIC_APP_VERSION: '1.0.0',
+    VITE_URI_BRIDGE: 'http://localhost:8080',
+    VITE_URI_SIGN: 'http://localhost:8081',
+    VITE_ORIGIN: 'https://sbtc.tech',
+    VITE_NETWORK: 'testnet',
+    VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
+    VITE_BRIDGE_WS: 'ws://localhost:3010',
+    VITE_BRIDGE_API: 'http://localhost:3010/bridge-api/v1',
+    VITE_SIGNER_API: 'http://localhost:3010/signer-api/v1',
+    VITE_STACKS_API: 'https://api.testnet.hiro.so',
+    VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
+    VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
+    VITE_MEMPOOL_EXPLORER: 'https://mempool.space/testnet/api',
+    VITE_BLOCKCYPHER_EXPLORER: 'https://api.blockcypher.com/v1/btc/test3',
+    VITE_BTC_SCHNORR_KEY_REVEAL: 'secret',
+    VITE_BTC_SCHNORR_KEY_RECLAIM: 'secret',
+    VITE_BTC_SCHNORR_KEY_ORACLE: 'secret',
+}
+
 const TESTNET_CONFIG = {
     VITE_ENVIRONMENT: 'staging',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Testnet',
@@ -89,7 +111,13 @@ const MAINNET_CONFIG = {
 export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(network:string) {
-    //let mode = import.meta.env.MODE
+    if (network.indexOf('=')) network = network.split('=')[1]
+    const mode = import.meta.env.MODE
+    if (mode === 'development') {
+        if (network === 'testnet') CONFIG = DEV_TESTNET_CONFIG;
+        else CONFIG = DEVNET_CONFIG;
+        return;
+    }
     //if (!mode) mode = 'testnet'
     //console.log('import.meta.env.MODE: ' + mode);
 	if (network === 'devnet') CONFIG = DEVNET_CONFIG;

@@ -103,7 +103,7 @@
 		{#if coordinator}
 			<NavLi nonActiveClass={getNavActiveClass('/admin')} href="/admin">Admin</NavLi>
 		{/if}
-		{#if !$sbtcConfig.userSettings.debugMode}
+		{#if $sbtcConfig.userSettings.debugMode}
 			<NavLi nonActiveClass={getNavActiveClass('/proofs')} href="/proofs">Tx Check</NavLi>
 		{/if}
 
