@@ -12,8 +12,6 @@ import { defaultSbtcConfig } from '$lib/sbtc';
 import { fetchExchangeRates } from "$lib/bridge_api"
 import { hex } from '@scure/base';
 import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
-import { schnorr } from '@noble/curves/secp256k1';
-import * as btc from '@scure/btc-signer';
 import { AddressPurposes, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
@@ -364,11 +362,6 @@ export function verifySBTCAmount(amount:number, balance:number, fee:number) {
 }
   
 export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefined) {
-	const net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	let privKey = btc.p2wpkh(hex.decode('03a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), net);
-	console.log(privKey)
-	privKey = btc.p2tr(hex.decode('a4572841fec581e7e5370cad34b04387389e1fdf06b1814534e7203c761802da'), undefined, net);
-	console.log(privKey)
 	if (!conf) conf = defaultSbtcConfig as SbtcConfig
 	let data = {} as any;
 	try {
@@ -382,7 +375,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	} catch (err) {
 		data = {
 			sbtcContractData: {} as SbtcContractDataType
-		} as any;
+		} as any; 
 	}
 	//conf.sbtcContractData = data.sbtcContractData;
 	if (!conf.keySets) {
@@ -393,7 +386,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		}
 	}
 	try {
-		conf.exchangeRates = await fetchExchangeRates();
+		conf.exchangeRates = data.rates;
 		if (!conf.exchangeRates) throw new Error('no exchnage rates')
 		const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
 		const rateNow = conf.exchangeRates.find((o:any) => o.currency === currency)

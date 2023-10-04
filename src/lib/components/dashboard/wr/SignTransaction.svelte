@@ -125,11 +125,11 @@ const updateBridgeTransaction = async (txid:string) => {
 let broadcasted:boolean;
 const broadcast = async (psbtHex:string) => {
   try {
-      const result:any = await broadcastTransaction(psbtHex)
+      const txid:string = await broadcastTransaction(psbtHex)
       if (peginRequest.mode === 'op_return') {
         peginRequest.status = 5;
       }
-      peginRequest.btcTxid = (result.hash) ? result.hash : result.txid;
+      peginRequest.btcTxid = txid;
       await saveBridgeTransaction(peginRequest);
       broadcasted = true;
   } catch (err:any) {
