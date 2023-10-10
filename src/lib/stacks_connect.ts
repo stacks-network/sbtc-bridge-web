@@ -132,17 +132,29 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	const stxAddress = getStacksAddress();
 
 	if (isHiro() || isLeather()) {
-		console.log('addInputs: addresses: ' + userData.profile.btcPublicKey.p2wpkh)
-		callback({
-			network,
-			stxAddress,
-			cardinal: (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
-			ordinal: (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
-			btcPubkeySegwit0: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2wpkh : undefined,
-			btcPubkeySegwit1: (userData.profile.btcPublicKey) ? userData.profile.btcPublicKey.p2tr : undefined,
-			sBTCBalance: 0,
-			stxBalance: 0
-		});
+		if (userData.profile.btcAddress) {
+			callback({
+				network,
+				stxAddress,
+				cardinal: (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
+				ordinal: (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
+				btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
+				btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
+				sBTCBalance: 0,
+				stxBalance: 0
+			});
+		} else {
+			callback({
+				network,
+				stxAddress,
+				cardinal: undefined,
+				ordinal: undefined,
+				btcPubkeySegwit0: undefined,
+				btcPubkeySegwit1: undefined,
+				sBTCBalance: 0,
+				stxBalance: 0
+			});
+		}
 	} else {
 		const getAddressOptions:GetAddressOptions = {
 			payload: {

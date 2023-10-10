@@ -27,10 +27,10 @@ export function isCoordinator(address:string) {
 	return coordinators.find((o) => o.stxAddress === address);
 }
 
-export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, treeDepth:number, headerHex: string) {
+export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, headerHex: string) {
   //data {addr: principal, key: (buff 33)}
   const stxAddressCV = principalCV(stxAddress);
-  const functionArgs = [uintCV(amount), stxAddressCV, bufferCV(hex.decode(btcTxid)), uintCV(height), merkleProofs, uintCV(txIndex), uintCV(treeDepth), bufferCV(hex.decode(headerHex))]
+  const functionArgs = [uintCV(amount), stxAddressCV, bufferCV(hex.decode(btcTxid)), uintCV(height), merkleProofs, uintCV(txIndex), bufferCV(hex.decode(headerHex))]
   await openContractCall({
     network: getStacksNetwork(),
     postConditions: [],

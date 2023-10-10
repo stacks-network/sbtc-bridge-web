@@ -34,7 +34,7 @@
   const invoice = async () => {
     try {
         const amount = $sbtcConfig.payloadWithdrawData.amountSats;
-        verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
+        //verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
         const script = hex.encode(getDataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal));
         console.log('getDataToSign: ' + script)
         await signMessage(async function(sigData:any, message:string) {
