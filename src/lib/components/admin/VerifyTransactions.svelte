@@ -34,7 +34,7 @@ let allowMint = false;
 let allowBurn = false;
 let amount = 0
 let contractParameters:any;
-let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-romeo'
+let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-mini-1'
 let stxAddress:string|undefined;
 let merkleTree:Array<Array<string>>
 let parameters:TxMinedParameters;
@@ -59,7 +59,6 @@ const getProofTuple = function () {
   }
   const datum = tupleCV({
     'tx-index': uintCV(parameters.txIndex),
-    'tree-depth': uintCV(parameters.treeDepth),
     'hashes': listCV(entryList)
   });
 
@@ -91,13 +90,12 @@ const wasTxMined = async () => {
     header: parameters.headerHex,
     proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
-    'tree-depth': parameters.treeDepth,
   }
 
   functionName = 'was-txid-mined'
   const params = {
     contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-romeo',
+    contractName: 'clarity-bitcoin-mini-1',
     functionName: 'was-txid-mined',
     functionArgs
   }
@@ -123,7 +121,7 @@ const verifyBlockHeader = async () => {
   functionName = 'verify-block-header'
   const params = {
     contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-romeo',
+    contractName: 'clarity-bitcoin-mini-1',
     functionName: 'verify-block-header',
     functionArgs
   }
@@ -152,7 +150,7 @@ const verifyMerkleProof = async () => {
   functionName = 'verify-merkle-proof'
   const params = {
     contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-romeo',
+    contractName: 'clarity-bitcoin-mini-1',
     functionName: 'verify-merkle-proof',
     functionArgs
   }
@@ -161,7 +159,6 @@ const verifyMerkleProof = async () => {
     'root-reversed': hex.encode(hex.decode(block.merkleroot).reverse()),
     proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
-    'tree-depth': parameters.treeDepth,
   }
 
   const res = await callContractReadOnly(params);
@@ -182,10 +179,9 @@ const mintTo = async () => {
     stxAddress: stxAddress,
     proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
-    'tree-depth': parameters.treeDepth,
   }
 
-  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, stxAddress!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.treeDepth, parameters.headerHex)
+  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, stxAddress!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
   console.log(res)
 }
 
@@ -240,11 +236,6 @@ onMount(async () => {
   <div class="pb-5">
     <label for="transact-path">txIndex</label>
     <input type="text"  class="text-black block p-3 rounded-md border w-full" bind:value={parameters.txIndex}/>
-  </div>
-
-  <div class="pb-5">
-    <label for="transact-path">treeDepth</label>
-    <input type="number"  class="text-black block p-3 rounded-md border w-full" bind:value={parameters.treeDepth}/>
   </div>
 
   <div class="p-5 bg-gray-200 text-black rounded-lg border-gray-700">
