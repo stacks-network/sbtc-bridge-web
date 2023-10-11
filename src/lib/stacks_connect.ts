@@ -490,7 +490,7 @@ export function getPegWalletAddressFromPublicKey (sbtcWalletPublicKey:string) {
 	//const addr = trObj.address
 
 	//const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	const addr = btc.Address(net).encode({type: 'tr', pubkey: xOnlyKey})
+	const trObj = btc.p2tr(xOnlyKey, undefined, net);
 	return addr;
 }
  */
