@@ -23,7 +23,7 @@ export type SbtcUserSettingI = {
   peggingIn: boolean;
   useOpDrop: boolean;
   debugMode: boolean;
-  testAddresses: boolean;
+  testAddress?: string;
   currency: {
     cryptoFirst: boolean;
     myFiatCurrency: ExchangeRate;

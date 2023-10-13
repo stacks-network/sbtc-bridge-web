@@ -8,7 +8,6 @@
 			$sbtcConfig.userSettings = {
 				useOpDrop: false,
 				debugMode: false,
-				testAddresses: false,
 				peggingIn: true,
 				currency: {
 					cryptoFirst: false,

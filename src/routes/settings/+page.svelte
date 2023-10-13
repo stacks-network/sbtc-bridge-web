@@ -14,7 +14,6 @@
 		const conf:SbtcConfig = $sbtcConfig;
 		if (arg === 'txmode') conf.userSettings.useOpDrop = !conf.userSettings.useOpDrop;
 		if (arg === 'debug') conf.userSettings.debugMode = !conf.userSettings.debugMode;
-		if (arg === 'testAddresses') conf.userSettings.testAddresses = !conf.userSettings.testAddresses;
 		if (arg === 'cryptoFirst') conf.userSettings.currency.cryptoFirst = !conf.userSettings.currency.cryptoFirst;
 		sbtcConfig.update(() => conf);
 	}
@@ -24,7 +23,6 @@
 			$sbtcConfig.userSettings = {
 				useOpDrop: false,
 				debugMode: false,
-				testAddresses: false,
         peggingIn: true,
 				currency: {
 					cryptoFirst: false,

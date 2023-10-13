@@ -14,7 +14,7 @@ import { hex } from '@scure/base';
 import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 import { AddressPurposes, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
-import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
+import { getStacksAddressFromPubkey, getStacksAddressFromSignature, getStacksAddressFromSignatureRsv } from 'sbtc-bridge-lib/dist/payload_utils';
 import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
 import { myHashP2WPKH } from './utils';
 
@@ -324,6 +324,21 @@ export async function signMessage(callback:any, message:string) {
 			const verified1 = verifyMessageSignature({ signature: newSig, message, publicKey });
 			if (!verified1) throw new Error('verifyMessageSignature - signature is not valid')
 			callback({ publicKey, signature: newSig }, message);
+		}
+	});
+}
+export async function signMessageForWithdraw(callback:any, message:string) {
+	await openSignatureRequestPopup({
+		message,
+		network: getStacksNetwork(), // for mainnet, `new StacksMainnet()`
+		appDetails: appDetails(),
+		onFinish({ publicKey, signature }) {
+			//let newSig = signature.substring(0, signature.length - 2);
+			//const recByte = signature.substring(signature.length - 2);
+			//newSig = recByte + newSig
+			//const verified1 = verifyMessageSignature({ signature: newSig, message, publicKey });
+			//if (!verified1) throw new Error('verifyMessageSignature - signature is not valid')
+			callback({ publicKey, signature }, message);
 		}
 	});
 }

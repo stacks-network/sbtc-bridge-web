@@ -167,3 +167,24 @@ gcloud compute url-maps edit sbtc-bridge-web-load-balancer --global
 ```
 gsutil -m rm -r gs://[BUCKET_NAME]/versions/[OLD_VERSION_NUMBER]
 ```
+
+tb1qwe9ddxp6v32uef2v66j00vx6wxax5zat223tms
+1000
+
+
+getDataToSign: 
+1e00000000000003e80014764ad6983a6455cca54cd6a4f7b0da71ba6a0bab
+getDataToSign: 
+30,0,0,0,0,0,0,3,232,0,20,118,74,214,152,58,100,85,204,165,76,214,164,247,176,218,113,186,106,11,171
+
+in wallet
+1e00000000000003e80014764ad6983a6455cca54cd6a4f7b0da71ba6a0bab
+message hash
+04b6e5498b0cf53a97ae58891e10e6527f5f2301b8c564109447a0ff07eac896
+signature
+912433633c6f8f4ac304270e055c8f3aa06d8014c649d1132d9a63b790be864a4a3877c6ac372a84e0c4066acbf03f3bef842e6050e1eb9d323cd2804632eb5200
+
+
+
+F
+00000000000003e80014954bad19bfed44e55d63bb6c257a339228899edd

@@ -7,6 +7,8 @@ import {
 	signMessageHashRsv,
   } from '@stacks/transactions';
 import { sha256 } from '@noble/hashes/sha256';
+import { MAGIC_BYTES_MAINNET, MAGIC_BYTES_TESTNET, getAddressFromOutScript, parseDepositPayload, parseWithdrawPayload, type PayloadType } from 'sbtc-bridge-lib';
+import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 
 export const keyChain = {

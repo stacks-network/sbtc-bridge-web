@@ -4,7 +4,7 @@
   import BurnTokens from './BurnTokens.svelte'
   import { sbtcConfig } from '$stores/stores'
   import Button from '../shared/Button.svelte';
-	import TransactionProofs from './TransactionProofs.svelte';
+	import TransactionAnalysis from './TransactionAnalysis.svelte';
   
   //const contractCall = openContractCall();
   let errorReason:string|undefined;
@@ -42,7 +42,7 @@
     {#if romeoPublicKey}
     {#if proofs}
     <div class="">
-        <TransactionProofs />
+        <TransactionAnalysis />
     </div>
     {/if}
 
