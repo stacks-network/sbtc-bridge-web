@@ -79,9 +79,9 @@
 
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
 			<Header on:login_event={loginEvent} />
-			<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow px-6">
+			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">
 				{#key componentKey1}
-				<slot></slot>
+					<slot></slot>
 				{/key}
 			</div>
 		<Footer />
