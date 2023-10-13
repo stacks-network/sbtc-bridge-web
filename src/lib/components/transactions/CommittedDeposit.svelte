@@ -24,8 +24,8 @@ let errorMessage:string|undefined = undefined;
 
 const network = CONFIG.VITE_NETWORK;
 let inited = false;
-let addressInfoReclaim: any;
-let addressInfoReveal: any;
+//let addressInfoReclaim: any;
+//let addressInfoReveal: any;
 let commitTransaction:any;
 
 const doSign = async (txtype:string, sigData:any, message:string, tx:Uint8Array) => {
@@ -78,8 +78,8 @@ onMount(async () => {
 			peginRequest.commitTxScript = script;
 		}
 	}
-	addressInfoReveal = await fetchUtxoSet(peginRequest.uiPayload.bitcoinAddress)
-	addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey)!)
+	//addressInfoReveal = await fetchUtxoSet(peginRequest.uiPayload.bitcoinAddress)
+	//addressInfoReclaim = await fetchUtxoSet(getPegWalletAddressFromPublicKey(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey)!)
 	if (peginRequest.btcTxid) commitTransaction = await fetchTransaction(peginRequest.btcTxid);
 	peginRequest.originator = commitTransaction.vout[1].scriptPubKey.address
 	reclaimTx = buildRevealOrReclaimTransaction(network, 100, true, peginRequest, commitTransaction)

@@ -16,6 +16,7 @@
 	import { setAuthorisation } from '$lib/bridge_api';
 
 	let componentKey = 0;
+	let componentKey1 = 0;
 	console.log('process.env: ', import.meta.env);
 	setConfig($page.url.search);
 	const search = $page.url.search;
@@ -39,7 +40,7 @@
 		}
 	})
 	afterNavigate((nav) => {
-		componentKey++;
+		//componentKey++;
 	})
 	const unsubscribe = sbtcConfig.subscribe((conf) => {});
 	onDestroy(unsubscribe);
@@ -52,6 +53,7 @@
 
 	const loginEvent = () => {
 		componentKey++;
+		componentKey1++;
 	}
 
 	const initApp = async () => {
@@ -75,14 +77,12 @@
 	})
 </script>
 
-{#if inited}
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
-		{#key componentKey}
-			<Header on:init_application={initApp} on:login_event={loginEvent} />
+			<Header on:login_event={loginEvent} />
 			<div class="flex min-h-[calc(100vh-160px)] mx-auto align-middle justify-center flex-grow px-6">
+				{#key componentKey1}
 				<slot></slot>
+				{/key}
 			</div>
-		{/key}
 		<Footer />
 	</div>
-{/if}

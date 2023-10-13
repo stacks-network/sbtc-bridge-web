@@ -3,17 +3,19 @@
   import Banner from '$lib/components/shared/Banner.svelte';
 	import Timeline from './shared/Timeline.svelte';
 	import WithdrawHeader from './shared/WithdrawHeader.svelte';
-	import { getBridgeWithdrawOpDrop, type BridgeTransactionType, getBridgeWithdraw, getDataToSign } from "sbtc-bridge-lib";
+	import { getBridgeWithdrawOpDrop, type BridgeTransactionType, getBridgeWithdraw, getStacksAddressFromSignature } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import { CONFIG } from "$lib/config";
-	import { loggedIn, loginStacksFromHeader, makeFlash, signMessage, verifySBTCAmount } from "$lib/stacks_connect";
+	import { loggedIn, loginStacksFromHeader, makeFlash, signMessage } from "$lib/stacks_connect";
 	import { fetchPeginById } from "$lib/bridge_api";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import WithdrawForm from "./shared/WithdrawForm.svelte";
 	import { goto } from "$app/navigation";
 	import ScriptHashAddress from "./dd/ScriptHashAddress.svelte";
 	import SignTransaction from "./wr/SignTransaction.svelte";
-  import { hex } from '@scure/base';
+	import { getDataToSign } from "sbtc-bridge-lib";
+import { hex } from '@scure/base';
+import * as P from 'micro-packed';
 
   export let addressInfo:any;
   let amountErrored:string|undefined = undefined;
@@ -35,8 +37,8 @@
     try {
         const amount = $sbtcConfig.payloadWithdrawData.amountSats;
         //verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
-        const script = hex.encode(getDataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal));
-        console.log('getDataToSign: ' + script)
+        const niceMessage = getDataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
+        console.log('getDataToSign: ' + niceMessage)
         await signMessage(async function(sigData:any, message:string) {
           $sbtcConfig.payloadWithdrawData.signature = sigData.signature;
           console.log('message: ', message)
@@ -53,7 +55,7 @@
           if (!$sbtcConfig.userSettings?.useOpDrop) {
             timeLineStatus = 4;
           }
-        }, script);
+        }, niceMessage);
       } catch(err:any) {
         amountErrored = 'Please enter an amount - no more than your current sBTC balance.'
         makeFlash(document.getElementById('amount-btcamount'))
