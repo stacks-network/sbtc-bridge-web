@@ -322,6 +322,7 @@ export async function fetchTransactionHex(txid:string) {
 }
 
 export async function fetchAddressTransactions(address:string) {
+  if (!address || address.length < 5) return;
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/txs');
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
@@ -331,6 +332,7 @@ export async function fetchAddressTransactions(address:string) {
 }
 
 export async function fetchUtxoSet(address:string) {
+  if (!address || address.length < 5) return;
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/wallet/address/' + address + '/utxos?verbose=true');
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {

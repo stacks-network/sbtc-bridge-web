@@ -3,7 +3,7 @@
 	import { createEventDispatcher, onMount } from "svelte";
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
-	import { goto } from "$app/navigation";
+	import { afterNavigate, goto } from "$app/navigation";
 	import { authenticate, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
@@ -22,6 +22,10 @@
 			await loginStacks(loginCallback);
 		}
 	}
+	let componentKey = 0;
+	afterNavigate((nav) => {
+		componentKey++;
+	})
 
 	const loginCallback = async () => {
 		await initApplication($sbtcConfig, true)
@@ -65,7 +69,8 @@
 		<Brand />
   </NavBrand>
 
-	<div class="hidden md:flex md:gap-2 md:order-3">
+  {#key componentKey}
+  <div class="hidden md:flex md:gap-2 md:order-3">
 		<SettingsDropdown />
 
 		{#if loggedIn()}
@@ -118,4 +123,5 @@
 			{/if}
 		</NavLi>
 	</NavUl>
+	{/key}
 </Navbar>

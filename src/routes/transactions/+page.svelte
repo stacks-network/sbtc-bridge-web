@@ -66,7 +66,6 @@ onMount(async () => {
   <meta name="description" content="A detailed table of all the transactions going through the sBTC Bridge." />
 </svelte:head>
 
-{#if inited}
 <div class="border border-gray-700 rounded-lg lg:w-3/4 md:w-full sm:w-full sm:mx-5 xs:w-full mx-4 my-20">
     <div class="p-5">
         <div class=""><span class="text-4xl font-medium">Transaction History</span></div>
@@ -85,7 +84,8 @@ onMount(async () => {
                       </div>
                     </div>
                     <div>
-                    {#each peginRequests as pegin}
+                        {#if inited}
+                        {#each peginRequests as pegin}
                     {#if pegin.status >= 0}
                     <div class="w-full grid grid-cols-5 justify-evenly my-4 text-sm font-extralight text-gray-300">
                         <div class="hidden lg:flex">{tsToDate(pegin.updated)}</div>
@@ -120,6 +120,7 @@ onMount(async () => {
                     </div>
                     {/if}
                     {/each}
+                    {/if}
                     </div>
                 </div>
                 
@@ -127,5 +128,4 @@ onMount(async () => {
         </div>
     </div>
 </div>
-{/if}
 
