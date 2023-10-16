@@ -9,7 +9,7 @@
   })
 </script>
 
-<div class="px-3 py-2.5 rounded-lg border-[0.2px] border-gray-900 bg-black-01 shadow-[6px_2px_12px_0px_rgba(0,0,0,0.40)]">
+<div class="inline-flex px-3 py-2.5 rounded-lg border-[0.2px] border-gray-900 bg-black-01 shadow-[6px_2px_12px_0px_rgba(0,0,0,0.40)]">
   {#if reverse}
     <div class="flex items-center gap-2">
       <div class="flex items-center">
