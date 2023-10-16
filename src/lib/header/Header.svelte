@@ -35,6 +35,7 @@
 		await setAuthorisation($sbtcConfig.authHeader)
 		setTimeout(function() {
 			dispatch('login_event');
+			componentKey++;
 		}, 500)
 	}
 
@@ -47,6 +48,7 @@
 		await sbtcConfig.update(() => $sbtcConfig)
 		dispatch('login_event');
 		setTimeout(function() {
+			componentKey++;
 			goto('/')
 		}, 100)
 	}
