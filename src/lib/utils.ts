@@ -1,7 +1,7 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject } from 'sbtc-bridge-lib'
+import type { AddressMempoolObject, SbtcClarityEvent } from 'sbtc-bridge-lib'
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { hash160 } from '@stacks/transactions';
@@ -103,6 +103,7 @@ export function explorerAddressUrl(addr:string) {
 }
 export function explorerBtcTxUrl(txid:string|undefined) {
   if (!txid) return '?';
+  if (txid.startsWith('0x')) txid = txid.split('x')[1]
 	return CONFIG.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
 }
 
@@ -142,11 +143,12 @@ export const keySetForFeeCalculation = {
   schnorrPub: secp.getPublicKey(priv, false)
 }
 
-export function compare( a:BridgeTransactionType, b:BridgeTransactionType ) {
-  if ( a.status < b.status ){
+export function compare( a:SbtcClarityEvent, b:SbtcClarityEvent ) {
+  if (!a.payloadData.burnBlockHeight || !b.payloadData.burnBlockHeight) return 0
+  if ( a.payloadData.burnBlockHeight < b.payloadData.burnBlockHeight || 0 ){
     return -1;
   }
-  if ( a.status > b.status ){
+  if ( a.payloadData.burnBlockHeight > b.payloadData.burnBlockHeight ){
     return 1;
   }
   return 0;
