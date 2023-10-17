@@ -98,6 +98,9 @@ export function setConfig(network:string) {
         if (network === 'testnet' || network === 'mainnet') CONFIG = DEV_TESTNET_CONFIG;
         else CONFIG = DEVNET_CONFIG;
         return;
+    } else if (mode === 'simnet') {
+        CONFIG = SIMNET_CONFIG;
+        return;
     }
     //if (!mode) mode = 'testnet'
     //console.log('import.meta.env.MODE: ' + mode);

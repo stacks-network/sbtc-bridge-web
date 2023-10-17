@@ -1,6 +1,7 @@
 import { CONFIG } from '$lib/config';
 import type { BridgeTransactionType, WrappedPSBT, AddressObject } from 'sbtc-bridge-lib' 
 import { checkAddressForNetwork } from 'sbtc-bridge-lib';
+import type { SbtcClarityEvent } from 'sbtc-bridge-lib/dist/types/sbtc_types';
 
 let authHeader:any;
 
@@ -216,8 +217,8 @@ export async function doPeginScan():Promise<Array<BridgeTransactionType>> {
   return pegins;
 }
 
-export async function fetchPegins():Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx');
+export async function findSbtcEventsByPage(page:number):Promise<Array<SbtcClarityEvent>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/' + page);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
@@ -238,8 +239,8 @@ export async function fetchCommitments(btcAddress:string, stxAddress:string, sbt
   return pegins;
 }
 
-export async function fetchPeginsByStacksAddress(stxAddress:string):Promise<Array<BridgeTransactionType>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/bridgetx/search/' + stxAddress);
+export async function findSbtcEventsByFilter(name:string, value:string):Promise<Array<SbtcClarityEvent>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/filter/' + name + '/' + value);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
