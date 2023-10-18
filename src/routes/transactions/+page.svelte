@@ -2,9 +2,9 @@
 import { onMount } from 'svelte';
 import { CONFIG } from '$lib/config';
 import { sbtcConfig } from '$stores/stores';
-import { COMMS_ERROR } from '$lib/utils.js'
-import { compare, tsToDate, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
-import { findSbtcEventsByFilter, findSbtcEventsByPage } from '$lib/bridge_api'
+import { COMMS_ERROR, explorerTxUrl } from '$lib/utils.js'
+import { compare, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
+import { findSbtcEventByBitcoinAddress, findSbtcEventByStacksAddress, findSbtcEventsByFilter, findSbtcEventsByPage } from '$lib/bridge_api'
 import type { SbtcClarityEvent } from 'sbtc-bridge-lib'
 import { goto } from '$app/navigation'
 import { satsToBitcoin } from '$lib/utils'
@@ -22,8 +22,9 @@ const getReclaimUrl = (pegin:any) => {
 
 const fetchDeposits = async (mine:boolean) => {
     myDepositsFilter = mine;
-    if (!myDepositsFilter) {
-        sbtcEvents = await findSbtcEventsByFilter('payloadData.stacksAddress', $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress)
+    if (myDepositsFilter) {
+        sbtcEvents = await findSbtcEventsByPage(0)
+        //sbtcEvents = await findSbtcEventByBitcoinAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
     } else {
         sbtcEvents = await findSbtcEventsByPage(0)
     }
@@ -59,7 +60,7 @@ onMount(async () => {
                 <div class="table-auto">
                     <div class="w-full">
                       <div class="grid grid-cols-5 gap-2 border-b mb-3 pb-3 flex-nowrap font-normal justify-evenly content-start">
-                        <div>Date</div>
+                        <div>Height</div>
                         <div>From</div>
                         <div>Amount</div>
                         <!--<div class="hidden lg:flex">To</div>-->
@@ -71,17 +72,17 @@ onMount(async () => {
                         {#if inited}
                         {#each sbtcEvents as event}
                     <div class="w-full grid grid-cols-5 justify-evenly my-4 text-sm font-extralight text-gray-300">
-                        <div class="hidden lg:flex">{tsToDate(event.updated)}</div>
-                        <div class="flex">
-                            <div class="grow"><a class="" href={explorerBtcAddressUrl(event.payloadData.spendingAddress)} target="_blank" rel="noreferrer">{truncate(event.payloadData.spendingAddress, 7)}</a></div>
-                            <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(event.payloadData.spendingAddress)} /></div>
+                        <div class="flex w-1/5">{(event.payloadData.burnBlockHeight)}</div>
+                        <div class="flex w-1/5 break-words">
+                            <div class="grow text-clip"><a class="" href={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} target="_blank" rel="noreferrer">{truncate(event.payloadData.spendingAddress, 7)}</a></div>
+                            <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} /></div>
                         </div>
-                        <div class="">{satsToBitcoin(event.payloadData.amountSats)}</div>
+                        <div class=" w-1/5">{satsToBitcoin(event.payloadData.amountSats)}</div>
                         <!--<div class="hidden lg:flex ">
                             <div class="grow"><a href={explorerBtcAddressUrl(getTo(pegin))} target="_blank" rel="noreferrer">{truncate(pegin.commitTxScript?.address)}</a></div>
                             <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcAddressUrl(getTo(pegin))} /></div>
                         </div>-->
-                        <div class="flex">
+                        <div class="flex w-1/5">
                             <div class="sm:pe-2 md:pe-5">
                                 <!--
                                 {#if pegin.status === 1}<span class="status status-1">pending</span>
@@ -94,10 +95,10 @@ onMount(async () => {
                                 {event.payloadData.eventType}
                             </div>
                             <div class="text-right">
-                                <ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(event.bitcoinTxid.payload.value)} />
+                                <ArrowUpRight class="h-4 w-4 text-white" target={explorerTxUrl(event.txid)} />
                             </div>
                         </div>
-                        <div class="text-end"><a class="text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline" href="/" on:click|preventDefault={() => getReclaimUrl(event)}>View details</a></div>
+                        <div class="text-end whitespace-nowrap"><a class="text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline" href="/" on:click|preventDefault={() => getReclaimUrl(event)}>View details</a></div>
                     </div>
                     {/each}
                     {/if}

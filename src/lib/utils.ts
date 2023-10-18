@@ -107,7 +107,8 @@ export function explorerBtcTxUrl(txid:string|undefined) {
 	return CONFIG.VITE_BSTREAM_EXPLORER + '/tx/' + txid;
 }
 
-export function explorerBtcAddressUrl(address:string) {
+export function explorerBtcAddressUrl(address:string|undefined) {
+  if (!address) return ''
 	return CONFIG.VITE_BSTREAM_EXPLORER + '/address/' + address;
 }
 export function explorerTxUrl(txid:string) {

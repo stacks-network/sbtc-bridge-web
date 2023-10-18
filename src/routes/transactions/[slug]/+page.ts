@@ -1,13 +1,13 @@
-import { fetchPeginById } from '$lib/bridge_api';
+import { findSbtcEventById } from '$lib/bridge_api';
 import { setConfig } from '$lib/config';
 
 /** @type {import('./$types').PageLoad} */
 export async function load({ params, url }) {
     try {
         const net = url.searchParams.get('chain');
-        if (net === 'testnet') setConfig(net);
-        const peginRequest = await fetchPeginById(params.slug);
-        return peginRequest;
+        setConfig(net||'testnet');
+        const sbtcEvent = await findSbtcEventById(params.slug);
+        return sbtcEvent;
     } catch (err) {
         console.log('LayoutLoad Error: ', err);
         return {

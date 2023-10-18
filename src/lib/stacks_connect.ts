@@ -132,12 +132,24 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	const stxAddress = getStacksAddress();
 
 	if (isHiro() || isLeather()) {
+		let ordinal = userData.profile.btcAddress.p2wpkh.testnet
+		let cardinal = userData.profile.btcAddress.p2tr.testnet
+		if (network === 'mainnet') {
+			ordinal = userData.profile.btcAddress.p2wpkh.mainnet
+			cardinal = userData.profile.btcAddress.p2tr.mainnet
+		} else if (network === 'devnet') {
+			ordinal = userData.profile.btcAddress.p2wpkh.regtest
+			cardinal = userData.profile.btcAddress.p2tr.regtest
+		} else if (network === 'signet') {
+			ordinal = userData.profile.btcAddress.p2wpkh.signet
+			cardinal = userData.profile.btcAddress.p2tr.signet
+		}
 		if (userData.profile.btcAddress) {
 			callback({
 				network,
 				stxAddress,
-				cardinal: (network === 'testnet' || network === 'devnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
-				ordinal: (network === 'testnet' || network === 'devnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
+				cardinal,
+				ordinal,
 				btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
 				btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
 				sBTCBalance: 0,
