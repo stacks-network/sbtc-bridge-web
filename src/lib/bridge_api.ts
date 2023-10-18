@@ -67,35 +67,6 @@ export async function fetchUiInit() {
   }
 }
 
-export async function sendRawTxDirectBlockCypher(hex:string) {
-  //const url = CONFIG.VITE_MEMPOOL_EXPLORER + '/tx';
-  const url = addNetSelector(CONFIG.VITE_BLOCKCYPHER_EXPLORER + '/txs/push');
-  console.log('sendRawTx:mempoolUrl: ', url)
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: headers(),
-    body: JSON.stringify({tx: hex})
-  });
-  //if (response.status !== 200) console.log('Mempool error: ' + response.status + ' : ' + response.statusText);
-  try {
-    if (response.status >= 400) {
-      return {
-        error: 'Error broadcasting',
-        status: response.status
-      }
-    }
-    return await response.json();
-  } catch (err) {
-    try {
-      console.log(err)
-      return await response.text();
-    } catch (err1) {
-      console.log(err1)
-    }
-  }
-  return 'success';
-}
-
 export async function sendRawTransaction(tx: { hex: string; maxFeeRate: number|undefined; }) {
   if (!tx.maxFeeRate) tx.maxFeeRate = 0
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sendrawtx');

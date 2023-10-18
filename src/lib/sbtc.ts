@@ -6,7 +6,7 @@ import type { SbtcContractDataType } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import { sendRawTransaction, sendRawTxDirectBlockCypher } from './bridge_api';
+import { sendRawTransaction } from './bridge_api';
 import type { Transaction } from '@scure/btc-signer' 
 
 export let rates:Array<any>;
