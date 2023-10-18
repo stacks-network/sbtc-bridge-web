@@ -9,12 +9,11 @@ import { openSignatureRequestPopup, type SignatureData, type StacksProvider } fr
 import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
-import { fetchExchangeRates } from "$lib/bridge_api"
 import { hex } from '@scure/base';
 import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
-import { AddressPurposes, getAddress } from 'sats-connect'
+import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
-import { getStacksAddressFromPubkey, getStacksAddressFromSignature, getStacksAddressFromSignatureRsv } from 'sbtc-bridge-lib/dist/payload_utils';
+import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
 import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
 import { myHashP2WPKH } from './utils';
 
@@ -43,6 +42,7 @@ export function getStacksNetwork() {
 	const network = CONFIG.VITE_NETWORK;
 	let stxNetwork:StacksMainnet|StacksTestnet;
 	if (CONFIG.VITE_ENVIRONMENT === 'simnet') stxNetwork = new StacksMocknet();
+	else if (network === 'devnet') stxNetwork = new StacksMocknet();
 	else if (network === 'testnet') stxNetwork = new StacksTestnet();
 	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
 	else stxNetwork = new StacksMocknet();
@@ -156,12 +156,14 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 			});
 		}
 	} else {
+		let myType = BitcoinNetworkType.Testnet
+		if (getStacksNetwork().isMainnet()) myType = BitcoinNetworkType.Mainnet
 		const getAddressOptions:GetAddressOptions = {
 			payload: {
-				purposes: [AddressPurposes.ORDINALS, AddressPurposes.PAYMENT],
+				purposes: [AddressPurpose.Ordinals, AddressPurpose.Payment],
 				message: 'Address for receiving Ordinals and payments',
 				  network: {
-					type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+					type: myType
 				},
 			},
 			onFinish: (response:any) => {
