@@ -104,7 +104,7 @@ async function getBalances(contractId:string, addressObject:AddressObject):Promi
 function getStacksAddress() {
 	if (loggedIn()) {
 		const userData = userSession.loadUserData();
-		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
+		const stxAddress = (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') ? userData.profile.stxAddress.testnet : userData.profile.stxAddress.mainnet;
 		return stxAddress
 	}
 	return
@@ -136,8 +136,8 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 			callback({
 				network,
 				stxAddress,
-				cardinal: (network === 'testnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
-				ordinal: (network === 'testnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
+				cardinal: (network === 'testnet' || network === 'devnet') ? userData.profile.btcAddress.p2wpkh.testnet : userData.profile.btcAddress.p2wpkh.mainnet,
+				ordinal: (network === 'testnet' || network === 'devnet') ? userData.profile.btcAddress.p2tr.testnet : userData.profile.btcAddress.p2tr.mainnet,
 				btcPubkeySegwit0: userData.profile.btcPublicKey.p2wpkh,
 				btcPubkeySegwit1: userData.profile.btcPublicKey.p2tr,
 				sBTCBalance: 0,
@@ -408,7 +408,7 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	}
 	//conf.sbtcContractData = data.sbtcContractData;
 	if (!conf.keySets) {
-		if (CONFIG.VITE_NETWORK === 'testnet') {
+		if (CONFIG.VITE_NETWORK === 'testnet'|| CONFIG.VITE_NETWORK === 'devnet') {
 			conf.keySets = { 'testnet': {} as AddressObject };
 		} else {
 			conf.keySets = { 'mainnet': {} as AddressObject };
