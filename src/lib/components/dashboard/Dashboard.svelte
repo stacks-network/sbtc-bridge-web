@@ -41,11 +41,11 @@
         <dt class="text-lg font-bold leading-6 text-gray-800">Your balance</dt>
         <dd class="text-4xl font-bold leading-none text-gray-900">
           {#if !connected}
-          — <span class="text-xl">sBTC</span>
-          <button on:keydown on:click={doLogin} class=" gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-gray-500 py-1 px-3 text-gray-200 hover:bg-gray-600 inline-block ml-2">Connect your wallet</button>
-          <span class="block text-base font-normal text-gray-800">~$—</span>
+            — <span class="text-xl">sBTC</span>
+            <button on:keydown on:click={doLogin} class=" gap-0.5 justify-center overflow-hidden text-sm font-medium transition rounded-full bg-gray-500 py-1 px-3 text-gray-200 hover:bg-gray-600 inline-block ml-2">Connect your wallet</button>
+            <span class="block text-base font-normal text-gray-800">~$—</span>
           {:else}
-          {currentBalance()} <span class="text-xl">sBTC</span>
+            {currentBalance()} <span class="text-xl">sBTC</span>
           {/if}
         </dd>
       </dl>
@@ -56,7 +56,7 @@
     <h2 class="text-3xl font-bold">Resources</h2>
     <div class="mt-4">
       <div class="space-y-4">
-        <a class="flex items-center gap-x-4 p-6 bg-gray-100/5 backdrop-blur-md backdrop-blur border-[0.5px] border-gray-400/20 rounded-lg transition relative group" href="https://sbtc.tech/" target="_blank">
+        <a class="flex items-center gap-x-4 p-6 bg-gray-100/5 backdrop-blur-md backdrop-blur border-[0.5px] border-gray-400/20 rounded-lg transition relative group" href="https://stacks-network.github.io/sbtc-docs/introduction.html" target="_blank">
           <div class="absolute bottom-[-12px] sm:bottom-[-14px] z-[-1] left-0 md:group-hover:animate-slideinout">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 503 14" fill="none" class="w-[324px] h-[14px] md:w-[503px] md:h-[14px]">
               <mask id="doc-a" width="503" height="14" x="0" y="0" maskUnits="userSpaceOnUse" style="mask-type:alpha">
