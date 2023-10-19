@@ -4,7 +4,7 @@
 	import Header from "$lib/header/Header.svelte";
 	import Footer from "$lib/header/Footer.svelte";
 	import { initApplication, isLegal, loggedIn, authenticate, loginStacksFromHeader } from "$lib/stacks_connect";
-	import { setConfig } from '$lib/config';
+	import { CONFIG, setConfig } from '$lib/config';
 	import { afterNavigate, beforeNavigate, goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import { onMount, onDestroy } from 'svelte';
@@ -14,6 +14,7 @@
 	import { defaultSbtcConfig } from '$lib/sbtc';
 	import { COMMS_ERROR } from '$lib/utils.js'
 	import { setAuthorisation } from '$lib/bridge_api';
+	import type { AddressObject } from 'sbtc-bridge-lib';
 
 	let componentKey = 0;
 	let componentKey1 = 0;
@@ -62,6 +63,20 @@
 
 	onMount(async () => {
 		try {
+			const conf = $sbtcConfig;
+			if (!conf.keySets) {
+				if (CONFIG.VITE_NETWORK === 'testnet') {
+					conf.keySets = { 'testnet': {} as AddressObject };
+				} else if (CONFIG.VITE_NETWORK === 'devnet') {
+					conf.keySets = { 'testnet': {} as AddressObject };
+				} else {
+					conf.keySets = { 'mainnet': {} as AddressObject };
+				}
+				conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
+				sbtcConfig.update(() => conf);
+			}
+			inited = true;
+
 			//openWebSocket()
 			await initApp();
 			if (loggedIn() && !$sbtcConfig.authHeader) {
@@ -73,16 +88,17 @@
 			errorReason = COMMS_ERROR
 			console.log(err)
 		}
-		inited = true;
 	})
 </script>
 
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
+			{#if inited}
 			<Header on:login_event={loginEvent} />
 			<div class="min-h-[calc(100vh-160px)] mx-auto px-6">
 				{#key componentKey1}
 					<slot></slot>
 				{/key}
 			</div>
-		<Footer />
+			<Footer />
+			{/if}
 	</div>

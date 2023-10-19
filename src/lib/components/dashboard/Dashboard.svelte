@@ -119,12 +119,12 @@
           </div>
           <div>
             <div class="flex items-center gap-x-4">
-              <h3 class="text-xl text-gray-100 leading-6">Hiro Explorer</h3>
+              <h3 class="text-xl text-gray-100 leading-6">Stacks Explorer</h3>
               <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 mt-0.5 text-gray-100 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transform group-hover:text-primary-500 transition" viewBox="0 0 24 24" fill="none">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"></path>
               </svg>
             </div>
-            <p class="mt-3 text-base text-gray-300">Uncover the world of transactions and accounts on the Stacks blockchain using our intuitive Hiro Explorer.</p>
+            <p class="mt-3 text-base text-gray-300">Explorer transactions, contracts and accounts on the Stacks blockchain using the Stacks Explorer by Hiro.</p>
           </div>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 48" class="w-12 h-12 shrink-0 text-gray-100">
             <path fill="currentColor" d="m15.33 11.197 6.596 10.25-6.596-10.25Zm6.596 10.25H10.339h11.587Zm0 0h4.278-4.278Z"></path>

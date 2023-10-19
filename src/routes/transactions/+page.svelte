@@ -5,7 +5,7 @@ import { sbtcConfig } from '$stores/stores';
 import { COMMS_ERROR, explorerTxUrl } from '$lib/utils.js'
 import { compare, truncate, explorerBtcTxUrl, explorerBtcAddressUrl } from '$lib/utils'
 import { findSbtcEventByBitcoinAddress, findSbtcEventByStacksAddress, findSbtcEventsByFilter, findSbtcEventsByPage } from '$lib/bridge_api'
-import type { SbtcClarityEvent } from 'sbtc-bridge-lib'
+import { fmtNumber, type SbtcClarityEvent } from 'sbtc-bridge-lib'
 import { goto } from '$app/navigation'
 import { satsToBitcoin } from '$lib/utils'
 import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
@@ -61,7 +61,7 @@ onMount(async () => {
                     <div class="w-full">
                       <div class="grid grid-cols-5 gap-2 border-b mb-3 pb-3 flex-nowrap font-normal justify-evenly content-start">
                         <div>Height</div>
-                        <div>From</div>
+                        <div class="hidden:sm flex w-1/5 break-words">From</div>
                         <div>Amount</div>
                         <!--<div class="hidden lg:flex">To</div>-->
                         <div>Type</div>
@@ -69,13 +69,13 @@ onMount(async () => {
                       </div>
                     </div>
                     <div>
-                        {#if inited}
-                        {#each sbtcEvents as event}
+                    {#if inited}
+                    {#each sbtcEvents as event}
                     <div class="w-full grid grid-cols-5 justify-evenly my-4 text-sm font-extralight text-gray-300">
-                        <div class="flex w-1/5">{(event.payloadData.burnBlockHeight)}</div>
-                        <div class="flex w-1/5 break-words">
-                            <div class="grow text-clip"><a class="" href={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} target="_blank" rel="noreferrer">{truncate(event.payloadData.spendingAddress, 7)}</a></div>
-                            <div class="-translate-x-[20px]"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} /></div>
+                        <div class="flex w-1/5">{fmtNumber(event.payloadData.burnBlockHeight)}</div>
+                        <div class="hidden:sm flex w-1/5 break-words">
+                            <div class="grow"><a class="" href={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} target="_blank" rel="noreferrer">{truncate(event.payloadData.spendingAddress, 5)}</a></div>
+                            <div class="ms-3"><ArrowUpRight class="h-4 w-4 text-white" target={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])} /></div>
                         </div>
                         <div class=" w-1/5">{satsToBitcoin(event.payloadData.amountSats)}</div>
                         <!--<div class="hidden lg:flex ">
