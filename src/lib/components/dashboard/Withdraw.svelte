@@ -6,7 +6,7 @@
 	import { getBridgeWithdrawOpDrop, type BridgeTransactionType, getBridgeWithdraw, getStacksAddressFromSignature } from "sbtc-bridge-lib";
 	import { sbtcConfig } from "$stores/stores";
 	import { CONFIG } from "$lib/config";
-	import { loggedIn, loginStacksFromHeader, makeFlash, signMessage } from "$lib/stacks_connect";
+	import { loggedIn, loginStacksFromHeader, makeFlash, signMessage, verifySBTCAmount } from "$lib/stacks_connect";
 	import { fetchPeginById } from "$lib/bridge_api";
 	import type { SbtcConfig } from "$types/sbtc_config";
 	import WithdrawForm from "./shared/WithdrawForm.svelte";
@@ -14,8 +14,6 @@
 	import ScriptHashAddress from "./dd/ScriptHashAddress.svelte";
 	import SignTransaction from "./wr/SignTransaction.svelte";
 	import { getDataToSign } from "sbtc-bridge-lib";
-import { hex } from '@scure/base';
-import * as P from 'micro-packed';
 
   export let addressInfo:any;
   let amountErrored:string|undefined = undefined;
@@ -36,7 +34,7 @@ import * as P from 'micro-packed';
   const invoice = async () => {
     try {
         const amount = $sbtcConfig.payloadWithdrawData.amountSats;
-        //verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
+        verifySBTCAmount(amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance, 0);
         const niceMessage = getDataToSign(CONFIG.VITE_NETWORK, amount, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
         console.log('getDataToSign: ' + niceMessage)
         await signMessage(async function(sigData:any, message:string) {
@@ -92,6 +90,12 @@ import * as P from 'micro-packed';
     }
   }
 
+  const handleAmountEvent = (e:any) => {
+    const event = e.detail
+    amountErrored = event.reason;
+  }
+
+
   onMount(async () => {
     if (!loggedIn()) timeLineStatus = -1
   })
@@ -117,15 +121,18 @@ import * as P from 'micro-packed';
   {:else}
       <Timeline active={timeLineStatus} confirm={false} on:update_timeline={updateTimeline}/>
       {#if timeLineStatus === 1}
-      <WithdrawForm {showAddresses} />
+      <WithdrawForm {showAddresses} on:amount_event={handleAmountEvent}/>
+      {#if !amountErrored}
       <div class="mt-4">
         <button on:click={() => invoice()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
       </div>
+      {/if}
+      
       {:else if timeLineStatus === 2}
         <ScriptHashAddress {peginRequest} on:clicked={doClicked}/>
       {:else if timeLineStatus === 4}
         <SignTransaction {addressInfo} {peginRequest} on:update_transaction={updateTransaction}/>
-    {/if}
+      {/if}
   {/if}
   {/key}
 </div>

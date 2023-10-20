@@ -9,12 +9,14 @@
   import { fmtNumber } from '$lib/utils'
   import switcher from '$lib/assets/switch.png'
 	import { verifyAmount } from '$lib/stacks_connect';
-	import Switch from '$lib/components/shared/Switch.svelte';
 	import { CONFIG } from '$lib/config';
+  import { createEventDispatcher } from "svelte";
+
+  const dispatch = createEventDispatcher();
 
   export let depositFlow:boolean;
   let currency:ExchangeRate;
-  let errorMessage:string|undefined;
+  let denomination = 'satoshi';
 
   const inputData = {
     field: 'amount',
@@ -33,9 +35,11 @@
       reason = undefined
       const vstr = value.toString()
       if (vstr.endsWith('.')) return
+      const denomination = $sbtcConfig.userSettings.currency.denomination;
+
       if (denomination === 'bitcoin') {
         //if (vstr.length < 3) return
-        if (value > 100) { 
+        if (value > 100) {
           value = 100.0
           reason = '<p>Deposits and withdrawals are currently capped at 100 BTC</p><p>Click BTC/SAT to toggle data entry between bitcoin and satoshis - see also settings for other currency display options.</p>'
           return
@@ -61,11 +65,14 @@
         inputData.valueBtc = satsToBitcoin(value)
         inputData.valueSat = value;
       }
-      verifyAmount(inputData.valueSat);
+      const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
+      verifyAmount(inputData.valueSat, bal);
       if (depositFlow) $sbtcConfig.payloadDepositData.amountSats = inputData.valueSat
       else $sbtcConfig.payloadWithdrawData.amountSats = inputData.valueSat
+      dispatch('amount_event', { success: true, reason: undefined });
     } catch(err:any) {
-      reason = 'Amount not valid';
+      reason = 'Amount exceeds your balance';
+      dispatch('amount_event', { success: false, reason });
     }
 
     document.getElementById(inputData.field + '-btcamount')?.focus();
@@ -75,18 +82,6 @@
     reason = undefined
 		const conf:SbtcConfig = $sbtcConfig;
     conf.userSettings.currency.denomination = denomination;
-		sbtcConfig.update(() => conf);
-    setDisplayValue()
-  }
-
-  const toggleDenomination = () => {
-    reason = undefined
-		const conf:SbtcConfig = $sbtcConfig;
-    if (conf.userSettings.currency.denomination === 'bitcoin') {
-      conf.userSettings.currency.denomination = 'satoshi';
-    } else {
-      conf.userSettings.currency.denomination = 'bitcoin';
-    }
 		sbtcConfig.update(() => conf);
     setDisplayValue()
   }
@@ -101,23 +96,30 @@
 
   const setDisplayValue = () => {
     denomination = $sbtcConfig.userSettings.currency.denomination;
-    value = inputData.valueSat;
-    if (!inputData.label) inputData.label = 'Amount (satoshis)'
+    inputData.valueBtc = satsToBitcoin($sbtcConfig.payloadDepositData.amountSats)
+    inputData.valueSat = $sbtcConfig.payloadDepositData.amountSats
     if (denomination === 'bitcoin') {
-      inputData.valueBtc = satsToBitcoin(inputData.valueSat)
       inputData.label = 'Amount (bitcoin)'
       value = inputData.valueBtc;
+    } else {
+      inputData.label = 'Amount (satoshis)'
+      value = inputData.valueSat;
     }
   }
 
-  let denomination = 'satoshi';
   onMount(async () => {
     setDisplayValue()
     currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
     if (depositFlow) {
-      if ($sbtcConfig.payloadDepositData.amountSats > 0) value = $sbtcConfig.payloadDepositData.amountSats
+      if ($sbtcConfig.payloadDepositData.amountSats > 0) {
+        if (denomination === 'bitcoin') value = satsToBitcoin($sbtcConfig.payloadDepositData.amountSats)
+        else value = $sbtcConfig.payloadDepositData.amountSats
+      }
     } else {
-      if ($sbtcConfig.payloadWithdrawData.amountSats > 0) value = $sbtcConfig.payloadWithdrawData.amountSats
+      if ($sbtcConfig.payloadWithdrawData.amountSats > 0) {
+        if (denomination === 'bitcoin') value = satsToBitcoin($sbtcConfig.payloadWithdrawData.amountSats)
+        else value = $sbtcConfig.payloadWithdrawData.amountSats
+      }
     }
   })
 </script>

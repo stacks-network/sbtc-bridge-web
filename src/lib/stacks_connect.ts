@@ -385,10 +385,13 @@ export function verifyStacksPricipal(stacksAddress?:string) {
 	  }
 }
 
-export function verifyAmount(amount:number) {
+export function verifyAmount(amount:number, balance:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
-	  }
+	}
+	if (amount >= balance) {
+		throw new Error('Amount is greater than your balance');
+	}
   	//if (amount < minimumDeposit) {
 	//	throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
 	//  }
