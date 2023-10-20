@@ -132,17 +132,17 @@ async function addresses(callback:any):Promise<AddressObject|undefined> {
 	const stxAddress = getStacksAddress();
 
 	if (isHiro() || isLeather()) {
-		let ordinal = userData.profile.btcAddress.p2wpkh.testnet
-		let cardinal = userData.profile.btcAddress.p2tr.testnet
+		let ordinal = userData.profile.btcAddress.p2tr.testnet
+		let cardinal = userData.profile.btcAddress.p2wpkh.testnet
 		if (network === 'mainnet') {
-			ordinal = userData.profile.btcAddress.p2wpkh.mainnet
-			cardinal = userData.profile.btcAddress.p2tr.mainnet
+			ordinal = userData.profile.btcAddress.p2tr.mainnet
+			cardinal = userData.profile.btcAddress.p2wpkh.mainnet
 		} else if (network === 'devnet') {
-			ordinal = userData.profile.btcAddress.p2wpkh.regtest
-			cardinal = userData.profile.btcAddress.p2tr.regtest
+			ordinal = userData.profile.btcAddress.p2tr.regtest
+			cardinal = userData.profile.btcAddress.p2wpkh.regtest
 		} else if (network === 'signet') {
-			ordinal = userData.profile.btcAddress.p2wpkh.signet
-			cardinal = userData.profile.btcAddress.p2tr.signet
+			ordinal = userData.profile.btcAddress.p2tr.signet
+			cardinal = userData.profile.btcAddress.p2wpkh.signet
 		}
 		if (userData.profile.btcAddress) {
 			callback({
@@ -385,10 +385,13 @@ export function verifyStacksPricipal(stacksAddress?:string) {
 	  }
 }
 
-export function verifyAmount(amount:number) {
+export function verifyAmount(amount:number, balance:number) {
 	if (!amount || amount === 0) {
 		throw new Error('No amount entered');
-	  }
+	}
+	if (amount >= balance) {
+		throw new Error('Amount is greater than your balance');
+	}
   	//if (amount < minimumDeposit) {
 	//	throw new Error('Amount must be at least 0.0001 or 10,000 satoshis');
 	//  }

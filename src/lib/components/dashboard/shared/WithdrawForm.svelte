@@ -28,5 +28,5 @@
     <StacksAddressField depositFlow={false} readonly={true}/>
     -->
     {/if}
-    <BitcoinInput depositFlow={false}/>
+    <BitcoinInput depositFlow={false} on:amount_event/>
   </div>

@@ -12,7 +12,7 @@ import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
-import { signTransaction, type SignTransactionOptions } from 'sats-connect'
+import { BitcoinNetworkType, signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
 import { Tooltip } from 'flowbite-svelte';
@@ -92,7 +92,7 @@ export async function signPsbtXverse() {
   const signPsbtOptions:SignTransactionOptions = {
     payload: {
       network: {
-        type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+        type: (getStacksNetwork().isMainnet()) ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet
       },
       message: 'Sign Transaction',
       psbtBase64: b64Tx,
@@ -141,16 +141,21 @@ const broadcast = async (psbtHex:string) => {
 
 onMount(async () => {
   amount = $sbtcConfig.payloadDepositData.amountSats;
-  if (peginRequest.mode === 'op_drop') {
-    transaction = buildDepositTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos, peginRequest.commitTxScript!.address!);
-  } else {
-    transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
+  try {
+    if (peginRequest.mode === 'op_drop') {
+      transaction = buildDepositTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos, peginRequest.commitTxScript!.address!);
+    } else {
+      transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
+    }
+    if (transaction.inputsLength === 0) {
+      errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
+    }
+    psbtHex = hex.encode(transaction.toPSBT());
+    psbtB64 = base64.encode(transaction.toPSBT());
+  } catch(err:any) {
+    console.log(err)
+    errorReason = '<p>Unable to create transaction please check you have enough funds in your wallet</p>'
   }
-  if (transaction.inputsLength === 0) {
-    errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
-  }
-  psbtHex = hex.encode(transaction.toPSBT());
-  psbtB64 = base64.encode(transaction.toPSBT());
   inited = true;
 })
 
