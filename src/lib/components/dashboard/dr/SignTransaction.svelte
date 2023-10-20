@@ -153,6 +153,7 @@ onMount(async () => {
     psbtHex = hex.encode(transaction.toPSBT());
     psbtB64 = base64.encode(transaction.toPSBT());
   } catch(err:any) {
+    console.log(err)
     errorReason = '<p>Unable to create transaction please check you have enough funds in your wallet</p>'
   }
   inited = true;
