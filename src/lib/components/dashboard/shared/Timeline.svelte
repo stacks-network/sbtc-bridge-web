@@ -50,11 +50,11 @@
     {/if}
   </div>
   {#if confirm}
-  <div class={cClazzes()}>
-    <div aria-hidden="true" class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(3)}>
-      <div class={aClazzes(3)}></div>
-      <div class={bClazzes(3)}>Confirm</div>
+    <div class={cClazzes()}>
+      <div aria-hidden="true" class="flex grow items-center cursor-pointer" on:keypress on:click={() => updateTimeline(3)}>
+        <div class={aClazzes(3)}></div>
+        <div class={bClazzes(3)}>Confirm</div>
+      </div>
     </div>
-  </div>
   {/if}
 </div>

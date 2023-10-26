@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { Spinner } from 'flowbite-svelte';
   import { onMount } from 'svelte';
 
-  import { Icon, Wifi, PhoneArrowDownLeft, InformationCircle, XCircle,ExclamationCircle, CheckCircle } from "svelte-hero-icons";
+  import { Icon, Wifi, InformationCircle, XCircle,ExclamationCircle, CheckCircle } from "svelte-hero-icons";
 
   export let message:string;
   export let bannerType = 'info'
@@ -34,7 +35,7 @@
       {:else if bannerType === 'success'}
         <Icon src="{CheckCircle}" solid class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
         {:else if bannerType === 'waiting'}
-        <Icon src="{PhoneArrowDownLeft}"  class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
+        <Spinner color="blue" class="w-5 h-5 -mt-2" aria-hidden="true" />
         {:else if bannerType === 'checking'}
         <Icon src="{Wifi}"  class="text-black w-5 h-5 mt-0.5" aria-hidden="true" />
       {:else}
