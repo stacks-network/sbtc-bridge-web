@@ -41,7 +41,7 @@
     <div class="mt-6">
       <Banner
         bannerType={'success'}
-        message={'Your sBTC is on its way.. it can take more than an hour depending on network traffic. <br/>Once its minted you\'ll sse your balance change in your wallet. Please check back soon.'}
+        message={'Your sBTC is on its way. It can take more than an hour depending on network traffic. <br/>Once its minted your balance in your wallet will be updated. Please check back soon.'}
       />
     </div>
   {:else}
