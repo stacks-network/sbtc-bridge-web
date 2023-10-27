@@ -148,7 +148,7 @@ onMount(async () => {
       }
   }
   if (transaction.inputsLength === 0) {
-    errorReason = '<p>Unable to create a signable PSBT</p><p>Change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and follow the instructions here for signing and broadcasting the transaction.</p><p>Alternatively switch to OP_DROP in the settings menu to deposit using commit reveal.</p>'
+    errorReason = '<p>Unable to create / sign transaction</p><p>You can change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and then copy paste the PSBT before signing and broadcasting the transaction.</p>'
   }
   psbtHex = hex.encode(transaction.toPSBT());
   psbtB64 = base64.encode(transaction.toPSBT());

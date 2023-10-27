@@ -30,7 +30,6 @@ export async function broadcastTransaction(psbtHex:string):Promise<string> {
 	const resp = await sendRawTransaction({hex: txHex, maxFeeRate: 0 });
   console.log('resp.result:tx.id: ' + tx.id)
 	if (resp && resp.tx) {
-    console.log()
 		return tx.id;
 	} else if (resp.result && typeof resp.result === 'string') { // Transaction already in block chain
     console.log('resp.result: ' + resp.result)
@@ -38,8 +37,12 @@ export async function broadcastTransaction(psbtHex:string):Promise<string> {
 	} else if (resp.error.code === -27) { // Transaction already in block chain
 		return tx.id;
 	} else {
-    let message = 'Unable to broadcast'
-    if (resp.error) message = 'Unable to broadcast: ' + resp.error.code + ' : ' + resp.error.message
+    let message = 'Unable to broadcast - try reloading the page?'
+    if (resp.error && resp.error.code) {
+      message = message + ' ' + resp.error.code + ' : ' + resp.error.message
+    } else if (resp.error)  {
+      message = message + ' ' + resp.error
+    }
 		throw new Error(message);
 	}
 }
@@ -67,7 +70,6 @@ export const defaultSbtcConfig:SbtcConfig = {
   userSettings: {
     useOpDrop: false,
     debugMode: false,
-    testAddresses: false,
     currency: {
       cryptoFirst: false,
       myFiatCurrency: {

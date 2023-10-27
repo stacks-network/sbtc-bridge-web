@@ -88,9 +88,7 @@ async function getBalances(contractId:string, addressObject:AddressObject):Promi
 		try {
 			result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens[contractId + '::sbtc'].balance)
 		} catch (err) {
-			// for testing..
-			try { result.sBTCBalance = Number(result.stacksTokenInfo?.fungible_tokens['ST3N4AJFZZYC4BK99H53XP8KDGXFGQ2PRSPNET8TN.sky-blue-elephant::sbtc'].balance) }
-			catch (err) { result.sBTCBalance = 0 }
+			result.sBTCBalance = 0
 		}
 	} catch(err) {
 		result = addressObject;
@@ -109,6 +107,7 @@ function getStacksAddress() {
 	}
 	return
 }
+
 function getProvider() {
 	const provider:StacksProvider = getStacksProvider()
 	const prod = (provider.getProductInfo) ? provider.getProductInfo() : undefined;
@@ -356,9 +355,7 @@ export async function signMessageForWithdraw(callback:any, message:string) {
 		}
 	});
 }
-/**
 
-*/
 export function logUserOut() {
 	return userSession.signUserOut();
 }
@@ -421,7 +418,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 			sbtcContractData: {} as SbtcContractDataType
 		} as any; 
 	}
-	//conf.sbtcContractData = data.sbtcContractData;
 	if (!conf.keySets) {
 		if (CONFIG.VITE_NETWORK === 'testnet'|| CONFIG.VITE_NETWORK === 'devnet') {
 			conf.keySets = { 'testnet': {} as AddressObject };
@@ -460,8 +456,6 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	sbtcConfig.update(() => conf);
 
 }
-//01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
-//d33e92fcecc594f70442600b280b5901e06fb84d7d4253bf15d4e1257b46d801
 
 function doPayloadData(conf:SbtcConfig) {
 	if (!conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0) throw new Error('Public Key missing from logged in user')
@@ -502,27 +496,3 @@ function doPayloadData(conf:SbtcConfig) {
 	conf.payloadWithdrawData = payloadWithdrawData;
 	return conf;
 }
-
-/**
-export function getPegWalletAddressFromPublicKey (sbtcWalletPublicKey:string) {
-	if (!sbtcWalletPublicKey) return ''
-	let net = (CONFIG.VITE_NETWORK === 'testnet') ? btc.TEST_NETWORK : btc.NETWORK;
-	const mode = import.meta.env.MODE
-	if (mode === 'simnet') {
-		net = { bech32: 'bcrt', pubKeyHash: 0x6f, scriptHash: 0xc4, wif: 0 }
-	}
-	const fullPK = hex.decode(sbtcWalletPublicKey);
-	//sbtcContractData.coordinator?.key?.value?.split('x')[1];
-	let xOnlyKey = fullPK;
-	if (fullPK.length === 33) {
-		xOnlyKey = fullPK.subarray(1)
-	}
-	//const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	//if (trObj.type === 'tr') 
-	//const addr = trObj.address
-
-	//const assumeTweakedPubKey = hex.decode(xOnlyKey);
-	const trObj = btc.p2tr(xOnlyKey, undefined, net);
-	return addr;
-}
- */

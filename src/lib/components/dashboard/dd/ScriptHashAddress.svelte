@@ -24,7 +24,9 @@
       transactions = result;
       await saveBridgeTransaction(peginRequest);
     }
-    checking = false;
+    setTimeout(function () {
+      checking = false;
+    }, 2000);
   }
 
   onMount(async () => {

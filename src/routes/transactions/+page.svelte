@@ -17,7 +17,11 @@ let errorReason:string|undefined;
 let myDepositsFilter:boolean;
 
 const getReclaimUrl = (pegin:any) => {
-    goto('/transactions/' + pegin._id)
+    goto('/transactions/' + pegin.bitcoinTxid.payload.value.split('x')[1])
+}
+
+const getType = (eventType:string|undefined) => {
+    return (eventType === 'mint') ? 'deposit' : 'withdrawal'
 }
 
 const fetchDeposits = async (mine:boolean) => {
@@ -92,7 +96,7 @@ onMount(async () => {
                                 {:else}{pegin.status}
                                 {/if}
                                 -->
-                                {event.payloadData.eventType}
+                                {getType(event.payloadData.eventType)}
                             </div>
                             <div class="text-right">
                                 <ArrowUpRight class="h-4 w-4 text-white" target={explorerTxUrl(event.txid)} />

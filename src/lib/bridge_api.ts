@@ -50,7 +50,7 @@ async function extractResponse(response:any) {
 }
 
 /**
- * fetchs a bunch of objects needed in the UI;
+ * fetch a bunch of objects needed in the UI;
  * 1. sbtc contract data
  * 2. current btc exchange rate data 
  * 3. keys: pair of custodial keys for testing reclaima nd reveal transactions 
@@ -183,6 +183,17 @@ export async function doPeginScan():Promise<Array<BridgeTransactionType>> {
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Unable to scan.');
+  }
+  const pegins = await extractResponse(response);
+  return pegins;
+}
+
+export async function findSbtcEventByBitcoinTxId(bitcoinTxid:string):Promise<Array<SbtcClarityEvent>> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/bitcoin-txid/' + bitcoinTxid);
+  const response = await fetchCatchErrors(path);
+  if (response.status !== 200) {
+    console.log('Request failed to url: ' + path);
+    return [];
   }
   const pegins = await extractResponse(response);
   return pegins;
