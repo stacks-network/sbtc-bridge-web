@@ -18,8 +18,8 @@
   let amount = 0;
   let copied = false;
   let showPsbt = false;
-  export let psbtB64:string|undefined;
-  export let psbtHex:string|undefined;
+  export let psbtB64:string;
+  export let psbtHex:string;
 
   const copy = (ele:string) => {
     let nameProp = fmtSatoshiToBitcoin(amount);
@@ -63,7 +63,7 @@
   }
 
   export function allowShowPsbt() {
-    return $sbtcConfig.userSettings.debugMode && !$sbtcConfig.userSettings.useOpDrop
+    return !$sbtcConfig.userSettings.useOpDrop
   }
 
   export function requestShowPsbt() {

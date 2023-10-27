@@ -50,7 +50,7 @@ async function extractResponse(response:any) {
 }
 
 /**
- * fetchs a bunch of objects needed in the UI;
+ * fetch a bunch of objects needed in the UI;
  * 1. sbtc contract data
  * 2. current btc exchange rate data 
  * 3. keys: pair of custodial keys for testing reclaima nd reveal transactions 

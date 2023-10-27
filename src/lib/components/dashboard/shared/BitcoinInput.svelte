@@ -88,9 +88,11 @@
 
   $: getBalance = () => {
     if ($sbtcConfig.userSettings.peggingIn) {
-      return satsToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo))
+      if (denomination === 'bitcoin') return satsToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo))
+      else return bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
     } else {
-      return satsToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance)
+      if (denomination === 'bitcoin') return satsToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance)
+      else return $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance
     }
   }
 
