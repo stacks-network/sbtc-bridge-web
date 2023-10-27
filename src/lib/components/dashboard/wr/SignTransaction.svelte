@@ -165,7 +165,7 @@ onMount(async () => {
 <div class="flex w-full flex-wrap align-baseline items-start">
   <div class="">
     {#if !broadcasted}
-    <p class="text-base my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
+    <p class="text-sm my-5 font-extralight text-gray-400">Sign and broadcast your transaction.</p>
     {/if}
   </div>
   <Invoice {peginRequest} {psbtHex} {psbtB64}/>

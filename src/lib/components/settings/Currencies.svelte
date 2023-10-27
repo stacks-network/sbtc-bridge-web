@@ -75,7 +75,7 @@
     <h3 class="text-base text-white font-normal mb-3">
       Currencies
     </h3>
-    <div class="flex md:flex-row flex-col mr-4">
+    <div class="flex md:flex-row flex-col mr-4 relative z-20">
       <div class="md:w-1/2 w-full font-normal relative">
         <Button class="!bg-black !border-[0.5px] !border-gray-700 w-full inline-flex justify-between">
           {myCurrency.name} ({myCurrency.currency} - {myCurrency.symbol})
@@ -156,7 +156,7 @@
     <h3 class="text-base text-white font-normal mb-3">
       Bitcoin units
     </h3>
-    <div class="flex md:flex-row flex-col gap-4 font-normal ">
+    <div class="flex md:flex-row flex-col gap-4 font-normal">
       <div aria-hidden="true" on:keydown on:click={() => setDenomination('bitcoin')} class={`cursor-pointer text-white px-3 py-2 font-normal md:w-1/2 w-full flex border rounded-lg relative ${getDenomination() === 'bitcoin' ? 'border-success-400' : 'border-gray-900'}`}>
         <div class="text-white font-normal flex gap-3">
           <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -52,7 +52,7 @@
     </div>
   </div>
 
-  <div class="mt-auto">
+  <div class="mt-6">
     <h2 class="text-3xl font-bold">Resources</h2>
     <div class="mt-4">
       <div class="space-y-4">
