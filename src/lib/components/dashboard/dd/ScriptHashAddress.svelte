@@ -37,23 +37,32 @@
 <div id="clipboard"></div>
 
 <div>
-
   {#if transactions}
-  <div class="mt-6">
-    <Banner bannerType={'success'}
-  message={'Your sBTC is on its way.. it can take more than an hour depending on network traffic. <br/>Once its minted you\'ll sse your balance change in your wallet. Please check back soon.'}/>
-  </div>
+    <div class="mt-6">
+      <Banner
+        bannerType={'success'}
+        message={'Your sBTC is on its way. It can take more than an hour depending on network traffic. <br/>Once its minted your balance in your wallet will be updated. Please check back soon.'}
+      />
+    </div>
   {:else}
-  <div class="">
-    <p class="text-base my-5 font-extralight text-gray-400">Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
+  <div>
+    <p class="text-sm my-5 font-extralight text-gray-400">Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
   </div>
   <Invoice {peginRequest}  psbtHex={undefined} psbtB64={undefined}/>
   <div class="my-4">
-    <Banner bannerType={(checking) ? 'checking' : 'waiting'}
-		message={(checking) ? 'Checking for your deposit transaction' : 'Waiting for your bitcoin to be sent...</a>'}/>
+    <Banner
+      bannerType={(checking) ? 'checking' : 'waiting'}
+		  message={(checking) ? 'Checking for your deposit transaction' : 'Waiting for your bitcoin to be sent...'}
+    />
   </div>
   <div class="mt-6 w-full">
-    <button on:click={() => checkTxs()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Check for transaction</button>
+    <button
+      type="button"
+      on:click={() => checkTxs()}
+      class="w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50"
+    >
+      Check for transaction
+    </button>
   </div>
   {/if}
   <!--
