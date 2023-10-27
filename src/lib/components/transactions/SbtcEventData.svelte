@@ -6,6 +6,10 @@ import { onMount } from 'svelte';
 
 export let sbtcEvent:SbtcClarityEvent;
 
+const getType = (eventType:string|undefined) => {
+    return (eventType === 'mint') ? 'deposit' : 'withdrawal'
+}
+
 onMount(() => {
 })
 
@@ -30,7 +34,7 @@ onMount(() => {
   </div>
   <div class="flex">
     <div class="w-1/5">Type:</div>
-    <div class="w-4/5">{sbtcEvent.payloadData.eventType}</div>
+    <div class="w-4/5">{getType(sbtcEvent.payloadData.eventType)}</div>
   </div>
   <div class="flex">
     <div class="w-1/5">Block height</div>

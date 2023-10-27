@@ -147,10 +147,10 @@ export const keySetForFeeCalculation = {
 export function compare( a:SbtcClarityEvent, b:SbtcClarityEvent ) {
   if (!a.payloadData.burnBlockHeight || !b.payloadData.burnBlockHeight) return 0
   if ( a.payloadData.burnBlockHeight < b.payloadData.burnBlockHeight || 0 ){
-    return -1;
+    return 1;
   }
   if ( a.payloadData.burnBlockHeight > b.payloadData.burnBlockHeight ){
-    return 1;
+    return -1;
   }
   return 0;
 }
