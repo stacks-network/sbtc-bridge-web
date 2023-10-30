@@ -255,7 +255,7 @@ export async function fetchCommitments(btcAddress:string, stxAddress:string, sbt
 }
 
 export async function findSbtcEventsByFilter(name:string, value:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/filter/' + name + '/' + value);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/filter/' + name + '/' + value);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
