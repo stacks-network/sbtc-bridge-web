@@ -232,12 +232,12 @@ export async function findSbtcEventByBitcoinAddress(bitcoinAddress:string):Promi
   return pegins;
 }
 
-export async function findSbtcEventsByPage(page:number):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/' + page);
+export async function findSbtcEventsByPage(page:number, limit:number):Promise<{ results: Array<SbtcClarityEvent>, events:number}> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/page/' + page + '/' + limit);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
-    return [];
+    return { results: [], events:0};
   }
   const pegins = await extractResponse(response);
   return pegins;
@@ -255,7 +255,7 @@ export async function fetchCommitments(btcAddress:string, stxAddress:string, sbt
 }
 
 export async function findSbtcEventsByFilter(name:string, value:string):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/filter/' + name + '/' + value);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/filter/' + name + '/' + value);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
