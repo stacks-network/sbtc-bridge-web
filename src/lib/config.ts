@@ -71,8 +71,10 @@ const MAINNET_CONFIG = {
 export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(network:string) {
-    if (!network) network = 'testnet'
-    if (network.indexOf('=') > -1) network = network.split('=')[1]
+    if (!network || network.indexOf('chain=') === -1) network = 'testnet'
+    else if (network.indexOf('devnet') === -1) network = 'devnet'
+    else if (network.indexOf('testnet') === -1) network = 'testnet'
+    else if (network.indexOf('mainnet') === -1) network = 'mainnet'
     const mode = import.meta.env.MODE
     if (mode === 'development') {
         if (network === 'testnet' || network === 'mainnet') CONFIG = DEV_TESTNET_CONFIG;

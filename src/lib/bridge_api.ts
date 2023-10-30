@@ -232,12 +232,12 @@ export async function findSbtcEventByBitcoinAddress(bitcoinAddress:string):Promi
   return pegins;
 }
 
-export async function findSbtcEventsByPage(page:number):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/' + page + '/20');
+export async function findSbtcEventsByPage(page:number, limit:number):Promise<{ results: Array<SbtcClarityEvent>, events:number}> {
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/find-by/page/' + page + '/' + limit);
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);
-    return [];
+    return { results: [], events:0};
   }
   const pegins = await extractResponse(response);
   return pegins;

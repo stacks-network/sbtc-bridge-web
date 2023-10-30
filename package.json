@@ -58,6 +58,7 @@
 		"@stacks/transactions": "^6.7.0",
 		"@sveltejs/adapter-static": "^2.0.2",
 		"flowbite": "^1.8.1",
+		"flowbite-svelte-icons": "^0.4.4",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^1.1.1",
 		"sbtc-bridge-lib": "^1.1.19",
