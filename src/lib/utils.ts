@@ -1,7 +1,7 @@
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import * as secp from '@noble/secp256k1';
-import type { AddressMempoolObject, SbtcClarityEvent } from 'sbtc-bridge-lib'
+import { parseDepositPayload, type AddressMempoolObject, type PayloadType, type SbtcClarityEvent, getAddressFromOutScript, parseWithdrawPayload, MAGIC_BYTES_TESTNET, MAGIC_BYTES_MAINNET } from 'sbtc-bridge-lib'
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 import { hex } from '@scure/base';
 import { hash160 } from '@stacks/transactions';
@@ -252,4 +252,56 @@ export function convertOutputsBlockCypher(blockCypherTx:any, peginRequest:Bridge
     ]
 }
    */
+}
+
+export function parseFulfilPayloadFromOutput(network:string, tx:btc.Transaction):PayloadType {
+	const out0 = tx.getOutput(0)
+	let d1 = out0.script?.subarray(5) as Uint8Array // strip the op type and data length
+	let witnessData = getMagicAndOpCode(d1);
+	if (witnessData.opcode !== '3C' && witnessData.opcode !== '3E') {
+		d1 = out0.script?.subarray(2) as Uint8Array // strip the op type and data length
+		witnessData = getMagicAndOpCode(d1);
+	}
+	witnessData.txType = btc.OutScript.decode(out0.script as Uint8Array).type;
+
+	let innerPayload:PayloadType = {} as PayloadType;
+	if (witnessData.opcode === '3C') {
+		innerPayload = parseDepositPayload(d1);
+		innerPayload.sbtcWallet = getAddressFromOutScript(network, tx.getOutput(1).script as Uint8Array)
+		//const inScript = btc.RawInput.encode({
+		//	index: tx.getInput(0).index || 0,
+		//	sequence: tx.getInput(0).sequence || 0,
+		//	txid: tx.getInput(0).txid as Uint8Array,
+		//	finalScriptSig: tx.getInput(0).finalScriptSig as Uint8Array,
+		//});
+		if (tx.outputsLength > 2) innerPayload.spendingAddress = getAddressFromOutScript(network, tx.getOutput(2).script!)
+		console.log('parsePayloadFromTransaction:spendingAddress: ' +  innerPayload.spendingAddress)
+		return innerPayload;
+	} else if (witnessData.opcode.toUpperCase() === '3E') {
+		const recipient = getAddressFromOutScript(network, tx.getOutput(1).script as Uint8Array)
+		try {
+			innerPayload = parseWithdrawPayload(network, hex.encode(d1), recipient, 'vrs')
+		} catch (err:any) {
+			innerPayload = parseWithdrawPayload(network, hex.encode(d1), recipient, 'rsv')
+		}
+		innerPayload.spendingAddress = getAddressFromOutScript(network, tx.getOutput(1).script!);
+		if (tx.outputsLength > 2) innerPayload.sbtcWallet = getAddressFromOutScript(network, tx.getOutput(2).script as Uint8Array)
+		innerPayload.spendingAddress = recipient
+		return innerPayload;
+	} else {
+	  throw new Error('Wrong opcode : expected: 3E or 3C :  recieved: ' + witnessData.opcode)
+	}
+}
+export function getMagicAndOpCode(d1: Uint8Array): {magic?:string; opcode:string; txType? :string; } {
+	if (!d1 || d1.length < 2) throw new Error('no magic data passed');
+	const magic = hex.encode(d1.subarray(0,2));
+	if (magic === MAGIC_BYTES_TESTNET || magic === MAGIC_BYTES_MAINNET) {
+		return {
+			magic: magic.toUpperCase(),
+			opcode: hex.encode(d1.subarray(2,3)).toUpperCase()
+		}
+	}
+	return {
+		opcode: hex.encode(d1.subarray(0,1)).toUpperCase()
+	}
 }

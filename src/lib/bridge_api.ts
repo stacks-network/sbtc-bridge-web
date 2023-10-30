@@ -233,7 +233,7 @@ export async function findSbtcEventByBitcoinAddress(bitcoinAddress:string):Promi
 }
 
 export async function findSbtcEventsByPage(page:number):Promise<Array<SbtcClarityEvent>> {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/' + page);
+  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/events/' + page + '/20');
   const response = await fetchCatchErrors(path);
   if (response.status !== 200) {
     console.log('Request failed to url: ' + path);

@@ -24,6 +24,13 @@ const getType = (eventType:string|undefined) => {
     return (eventType === 'mint') ? 'deposit' : 'withdrawal'
 }
 
+const getAddress = (event:any) => {
+    const type = getType(event.payloadData.eventType)
+    if (event.payloadData.eventType === 'mint') {
+        return event.recipient
+    }
+}
+
 const fetchDeposits = async (mine:boolean) => {
     myDepositsFilter = mine;
     if (myDepositsFilter) {
@@ -59,13 +66,13 @@ onMount(async () => {
       <div class="p-5">
         <div class=""><span class="text-4xl font-medium">Transaction History</span></div>
         <div class="">
-            <div class=" my-5"><span class="text-2xl font-normal">Deposits & withdrawals</span></div>
+            <div class=" my-5"><span class="text-2xl font-normal">{(sbtcEvents) ? sbtcEvents.length : ''} Deposits & withdrawals</span></div>
             <div class="w-full">
                 <div class="table-auto">
                     <div class="w-full">
                       <div class="grid grid-cols-5 gap-2 border-b mb-3 pb-3 flex-nowrap font-normal justify-evenly content-start">
                         <div>Height</div>
-                        <div class="hidden:sm flex w-1/5 break-words">From</div>
+                        <div class="hidden:sm flex w-1/5 break-words">Address</div>
                         <div>Amount</div>
                         <!--<div class="hidden lg:flex">To</div>-->
                         <div>Type</div>
