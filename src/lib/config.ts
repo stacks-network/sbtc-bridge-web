@@ -13,7 +13,7 @@ const SIMNET_CONFIG = {
 }
 
 const DEVNET_REMOTE_CONFIG = {
-    VITE_ENVIRONMENT: 'devnet',
+    VITE_ENVIRONMENT: 'devenv',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devenv',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_NETWORK: 'devnet',
@@ -41,7 +41,7 @@ const DEVNET_CONFIG = {
 }
 
 const DEV_TESTNET_CONFIG = {
-    VITE_ENVIRONMENT: 'devnet',
+    VITE_ENVIRONMENT: 'testnet',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devnet',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_NETWORK: 'testnet',
@@ -55,7 +55,7 @@ const DEV_TESTNET_CONFIG = {
 }
 
 const TESTNET_CONFIG = {
-    VITE_ENVIRONMENT: 'staging',
+    VITE_ENVIRONMENT: 'testnet',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Testnet',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_BRIDGE_WS: 'ws://bridge.sbtc.tech',
@@ -69,7 +69,7 @@ const TESTNET_CONFIG = {
 }
 
 const MAINNET_CONFIG = {
-    VITE_ENVIRONMENT: 'production',
+    VITE_ENVIRONMENT: 'mainnet',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_BRIDGE_WS: 'ws://bridge.sbtc.tech',
@@ -113,8 +113,3 @@ export function setConfig(network:string) {
         CONFIG.VITE_BRIDGE_API = 'https://bridge.sbtc.tech/bridge-api/v1'
     }
 }
-
-export function isSimnet() {
-    return CONFIG.VITE_ENVIRONMENT === 'simnet'
-  }
-  

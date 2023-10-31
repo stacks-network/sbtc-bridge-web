@@ -41,8 +41,7 @@ export function isAllowed(address:string) {
 export function getStacksNetwork() {
 	const network = CONFIG.VITE_NETWORK;
 	let stxNetwork:StacksMainnet|StacksTestnet;
-	if (CONFIG.VITE_ENVIRONMENT === 'simnet') stxNetwork = new StacksMocknet();
-	else if (network === 'devnet') stxNetwork = new StacksMocknet();
+	if (network === 'devnet') stxNetwork = new StacksMocknet();
 	else if (network === 'testnet') stxNetwork = new StacksTestnet();
 	else if (network === 'mainnet') stxNetwork = new StacksMainnet();
 	else stxNetwork = new StacksMocknet();

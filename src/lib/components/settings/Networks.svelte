@@ -66,7 +66,7 @@
   </p>
   <p class="text-white font-normal">
 		<span class="inline-flex bg-black rounded-xl text-white px-4 py-1 font-normal">
-      {CONFIG.VITE_NETWORK}
+      {CONFIG.VITE_ENVIRONMENT}
     </span>
   </p>
   <div id="po-network" class="">
