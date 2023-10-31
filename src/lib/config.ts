@@ -12,6 +12,20 @@ const SIMNET_CONFIG = {
     VITE_MEMPOOL_EXPLORER: 'http://localhost:18443',
 }
 
+const DEVNET_REMOTE_CONFIG = {
+    VITE_ENVIRONMENT: 'devnet',
+    VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devnet',
+    VITE_PUBLIC_APP_VERSION: '1.0.0',
+    VITE_NETWORK: 'devnet',
+    VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+    VITE_BRIDGE_WS: 'ws://localhost:3010',
+    VITE_BRIDGE_API: 'http://96.126.107.204/:3010/bridge-api/v1',
+    VITE_STACKS_API: 'http://96.126.107.204/:3999',
+    VITE_STACKS_EXPLORER: 'http://96.126.107.204/:3020',
+    VITE_BSTREAM_EXPLORER: 'http://96.126.107.204//api',
+    VITE_MEMPOOL_EXPLORER: 'http://96.126.107.204//api',
+}
+
 const DEVNET_CONFIG = {
     VITE_ENVIRONMENT: 'devnet',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devnet',
@@ -72,6 +86,10 @@ export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(network:string) {
     if (!network || network.indexOf('chain=') === -1) network = 'testnet'
+    else if (network.indexOf('devenv') > -1) {
+        CONFIG = DEVNET_REMOTE_CONFIG;
+        return
+    }
     else if (network.indexOf('devnet') === -1) network = 'devnet'
     else if (network.indexOf('testnet') === -1) network = 'testnet'
     else if (network.indexOf('mainnet') === -1) network = 'mainnet'

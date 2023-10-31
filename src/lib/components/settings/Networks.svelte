@@ -26,6 +26,17 @@
 		location.assign(url.search);
 	}
 
+	const switchDevenv = async () => {
+		setConfig('devenv');
+		await fetchSbtcBalance($sbtcConfig, true);
+		sbtcConfig.update((conf:SbtcConfig) => {
+			return conf;
+		});
+		const url = new URL(location.href);
+		url.searchParams.set('chain', 'devenv');
+		location.assign(url.search);
+	}
+
 	const toggleNetwork = async () => {
 		let net = CONFIG.VITE_NETWORK;
 		if (net === 'mainnet') net = 'testnet';
@@ -77,9 +88,14 @@
 	</Button>
 	-->
 	{#if mode === 'development'}
-		<Button on:click={() => switchDevnet()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
-			Switch to devnet
-		</Button>
+	<div class="mt-4">
+	<Button on:click={() => switchDevnet()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
+		Switch to devnet
+	</Button>
+	<Button on:click={() => switchDevenv()} class="text-center font-medium focus:ring-4 focus:outline-none items-center px-5 py-2.5 text-sm text-white focus:ring-primary-300 dark:focus:ring-primary-800 rounded-lg !bg-black !border-[0.5px] !border-gray-700">
+		Switch to devenv (shared devnet)
+	</Button>
+	</div>
 	{/if}
   </div>
 
