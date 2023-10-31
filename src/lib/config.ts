@@ -90,6 +90,10 @@ export function setConfig(network:string) {
         CONFIG = DEVNET_REMOTE_CONFIG;
         return
     }
+    else if (network.indexOf('devnet') > -1) {
+        CONFIG = DEVNET_CONFIG;
+        return
+    }
     else if (network.indexOf('devnet') === -1) network = 'devnet'
     else if (network.indexOf('testnet') === -1) network = 'testnet'
     else if (network.indexOf('mainnet') === -1) network = 'mainnet'
