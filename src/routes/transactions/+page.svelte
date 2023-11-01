@@ -1,15 +1,12 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Skeleton, Tabs, TabItem, Table, TableBody, TableBodyCell, TableBodyRow, TableHead, TableHeadCell } from 'flowbite-svelte';
+  import { Skeleton, Tabs, TabItem, } from 'flowbite-svelte';
 
   import { page } from '$app/stores';
   import { COMMS_ERROR, explorerTxUrl } from '$lib/utils.js'
   import { truncate, explorerBtcTxUrl } from '$lib/utils'
   import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/bridge_api'
-  import { fmtNumber, type SbtcClarityEvent } from 'sbtc-bridge-lib'
-  import { satsToBitcoin } from '$lib/utils'
-  import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
-  import Paging from '$lib/components/transactions/Paging.svelte';
+  import { type SbtcClarityEvent } from 'sbtc-bridge-lib'
   import { sbtcConfig } from '$stores/stores';
   import { CONFIG } from '$lib/config';
 
@@ -20,29 +17,6 @@
   let myDepositsFilter:boolean = false;
   const limit = 20;
   let numPages = 0;
-
-  const getReclaimUrl = (pegin:any) => {
-    return '/transactions/' + pegin.bitcoinTxid.payload.value.split('x')[1]
-  }
-
-  const getType = (eventType:string|undefined) => {
-    return (eventType === 'mint') ? 'deposit' : 'withdrawal'
-  }
-
-  const getAddress = (event:any) => {
-    const type = getType(event.payloadData.eventType)
-    if (event.payloadData.eventType === 'mint') {
-      return event.recipient
-    }
-  }
-
-  const toggleMine = async () => {
-    sbtcEvents.results = []
-    sbtcEvents.events = 0
-    myDepositsFilter = !myDepositsFilter
-    if (!myDepositsFilter) await fetchPageCheck(0)
-    else fetchMine()
-  }
 
   const fetchMine = async () => {
     const mySbtcEvents = await findSbtcEventByBitcoinAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
