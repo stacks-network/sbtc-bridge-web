@@ -193,11 +193,13 @@ onMount(async () => {
     {/if}
   </div>
   {:else if errorReason}
-  <div class="my-5">
-    {#if errorReason}<div class="text-warning-400"><p>{@html errorReason}</p></div>{/if}
-  </div>
-  <div class="mt-6">
-    <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
+  <div class="flex flex-col">
+    <div class="my-5">
+      {#if errorReason}<div class="text-warning-500"><p>{@html errorReason}</p></div>{/if}
+    </div>
+    <div class="mt-6">
+      <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
+    </div>
   </div>
   {/if}
 

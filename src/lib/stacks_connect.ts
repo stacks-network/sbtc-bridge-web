@@ -6,7 +6,7 @@ import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_ap
 import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
-import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType } from 'sbtc-bridge-lib' 
+import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType, tsToDate } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
 import { defaultSbtcConfig } from '$lib/sbtc';
 import { hex } from '@scure/base';
@@ -19,7 +19,7 @@ import { myHashP2WPKH } from './utils';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
-const authMessage = 'Please sign this message to complete authentication'
+const authMessage = 'Please sign this message to complete authentication for '
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
@@ -249,6 +249,9 @@ export function loggedIn():boolean {
 }
 
 export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
+	const ddr = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
+	let userMessage = (!ddr) ? authMessage : authMessage + ddr;
+	userMessage = userMessage + ' on ' + tsToDate(new Date().getTime());
 	await signMessage(async function(sigData:SignatureData, message:string) {
 		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });
 		if (verified) {
@@ -261,11 +264,11 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0, network: CONFIG.VITE_NETWORK }
 		setAuthorisation($sbtcConfig.authHeader)
 		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
-	}, authMessage)
+	}, userMessage)
 	return
 }
 

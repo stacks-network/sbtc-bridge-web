@@ -1,29 +1,15 @@
-const SIMNET_CONFIG = {
-    VITE_ENVIRONMENT: 'simnet',
-    VITE_PUBLIC_APP_NAME: 'sBTC Bridge Simnet',
-    VITE_PUBLIC_APP_VERSION: '1.0.0',
-    VITE_BRIDGE_WS: 'ws://localhost:3010',
-    VITE_NETWORK: 'testnet',
-    VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-    VITE_BRIDGE_API: 'http://localhost:3010/bridge-api/v1',
-    VITE_STACKS_API: 'http://localhost:3999',
-    VITE_STACKS_EXPLORER: 'http://localhost:8000',
-    VITE_BSTREAM_EXPLORER: 'http://localhost:3002',
-    VITE_MEMPOOL_EXPLORER: 'http://localhost:18443',
-}
-
-const DEVNET_REMOTE_CONFIG = {
+const DEVENV_CONFIG = {
     VITE_ENVIRONMENT: 'devenv',
     VITE_PUBLIC_APP_NAME: 'sBTC Bridge Devenv',
     VITE_PUBLIC_APP_VERSION: '1.0.0',
     VITE_NETWORK: 'devnet',
     VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-    VITE_BRIDGE_WS: 'ws://96.126.107.204:3010',
-    VITE_BRIDGE_API: 'http://96.126.107.204:3010/bridge-api/v1',
+    VITE_BRIDGE_WS: 'ws://localhost:3010',
+    VITE_BRIDGE_API: 'http://localhost:3010/bridge-api/v1',
     VITE_STACKS_API: 'http://96.126.107.204:3999',
     VITE_STACKS_EXPLORER: 'http://96.126.107.204:3020',
-    VITE_BSTREAM_EXPLORER: 'http://96.126.107.204/api',
-    VITE_MEMPOOL_EXPLORER: 'http://96.126.107.204/api',
+    VITE_BSTREAM_EXPLORER: 'http://96.126.107.204:8083/api',
+    VITE_MEMPOOL_EXPLORER: 'http://96.126.107.204:8083',
 }
 
 const DEVNET_CONFIG = {
@@ -87,7 +73,7 @@ export let CONFIG = MAINNET_CONFIG;
 export function setConfig(network:string) {
     if (!network || network.indexOf('chain=') === -1) network = 'testnet'
     else if (network.indexOf('devenv') > -1) {
-        CONFIG = DEVNET_REMOTE_CONFIG;
+        CONFIG = DEVENV_CONFIG;
         return
     }
     else if (network.indexOf('devnet') > -1) {
@@ -102,16 +88,14 @@ export function setConfig(network:string) {
         if (network === 'testnet' || network === 'mainnet') CONFIG = DEV_TESTNET_CONFIG;
         else CONFIG = DEVNET_CONFIG;
         return;
-    } else if (mode === 'simnet') {
-        CONFIG = SIMNET_CONFIG;
+    } else if (mode === 'devenv') {
+        CONFIG = DEVNET_CONFIG;
         return;
     }
     //if (!mode) mode = 'testnet'
     //console.log('import.meta.env.MODE: ' + mode);
 	if (network === 'devnet') CONFIG = DEVNET_CONFIG;
 	else if (network.indexOf('testnet') > -1) CONFIG = TESTNET_CONFIG;
-	else if (network.indexOf('simnet') > -1) CONFIG = SIMNET_CONFIG;
-	else if (network.indexOf('devnet') > -1) CONFIG = DEVNET_CONFIG;
 	else CONFIG = MAINNET_CONFIG
     if (import.meta.env.MODE === 'linode-staging') {
         CONFIG.VITE_BRIDGE_API = 'https://bridge.sbtc.tech/bridge-api/v1'
