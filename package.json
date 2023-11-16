@@ -3,7 +3,7 @@
 	"version": "0.0.1",
 	"private": true,
 	"scripts": {
-		"devenv": "vite dev --port=8080 --mode devenv",
+		"devenv": "vite dev --port=8080 --mode shared-devenv",
 		"dev": "vite dev --port=8080 --mode development",
 		"tst": "vite dev --port=8082 --mode linode-staging",
 		"build-linode": "vite build --mode linode-staging",
