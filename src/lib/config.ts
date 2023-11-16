@@ -58,10 +58,11 @@ export let CONFIG = MAINNET_CONFIG;
 
 export function setConfig(network:string) {
     const mode = import.meta.env.MODE
-    if (mode === 'shared-devenv') {
+    console.log('mode: ' + mode)
+    if (mode === 'shared-devenv' || mode === 'development') {
         CONFIG = SHARED_DEVENV_CONFIG;
         return;
-    } else if (mode === 'devenv' || mode === 'development' || mode === 'dev') {
+    } else if (mode === 'devenv'  || mode === 'dev') {
         CONFIG = DEVNET_CONFIG;
         return;
     }
