@@ -32,10 +32,16 @@
   const updater = (e:any) => {
     try {
       reason = undefined
-      const vstr = value.toString()
+      let vstr = value.toString()
       if (vstr.endsWith('.')) return
       const denomination = $sbtcConfig.userSettings.currency.denomination;
-      const baly = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
+      let baly = 0
+      if (depositFlow) {
+        baly = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
+      } else {
+        baly = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance || 0
+      }
+
       if (denomination === 'bitcoin') {
         if (value === 0) return
         if (value > 100) {
@@ -43,13 +49,12 @@
           reason = '<p>Deposits and withdrawals are currently capped at 100 BTC</p><p>Click BTC/SAT to toggle data entry between bitcoin and satoshis - see also settings for other currency display options.</p>'
           return
         }
-        if (value > baly) {
-          //value = baly
+        if (bitcoinToSats(value) > baly) {
           reason = '<p>Amount exceeds your balance.</p>'
           dispatch('amount_event', { success: true, reason: 'Amount exceeds your balance' });
           return
         }
-        if (vstr.indexOf('.') === -1) return
+        if (vstr.indexOf('.') === -1) vstr += '.0'
         const decimals = vstr.split('.')[1]
         const places = decimals.length
         if (places > 8) {
@@ -58,15 +63,11 @@
         }
         inputData.valueSat = bitcoinToSats(value)
         inputData.valueBtc = value;
+        if (depositFlow) $sbtcConfig.payloadDepositData.amountSats = bitcoinToSats(value)
+        else $sbtcConfig.payloadWithdrawData.amountSats = bitcoinToSats(value)
       } else {
         if (value === 0) return
-        if (satsToBitcoin(value) > 100) {
-          value = satsToBitcoin(value)
-          reason = '<p>Deposits and withdrawals are currently capped at 100 BTC</p><p>Click BTC/SAT to toggle data entry between bitcoin and satoshis - see also settings for other currency display options.</p>'
-          return
-        }
-        if (value > bitcoinToSats(baly)) {
-          //value = bitcoinToSats(baly)
+        if (value > baly) {
           reason = '<p>Amount exceeds your balance.</p>'
           dispatch('amount_event', { success: true, reason: 'Amount exceeds your balance' });
           return
@@ -77,17 +78,15 @@
 
         inputData.valueBtc = satsToBitcoin(value)
         inputData.valueSat = value;
+        if (depositFlow) $sbtcConfig.payloadDepositData.amountSats = value
+        else $sbtcConfig.payloadWithdrawData.amountSats = value
       }
-      const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
-      verifyAmount(inputData.valueSat, bal);
-      if (depositFlow) $sbtcConfig.payloadDepositData.amountSats = inputData.valueSat
-      else $sbtcConfig.payloadWithdrawData.amountSats = inputData.valueSat
+      sbtcConfig.set($sbtcConfig)
       dispatch('amount_event', { success: true, reason: undefined });
     } catch(err:any) {
       reason = 'Amount exceeds your balance';
       dispatch('amount_event', { success: false, reason });
     }
-
     document.getElementById(inputData.field + '-btcamount')?.focus();
   }
 

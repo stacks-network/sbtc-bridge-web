@@ -29,7 +29,7 @@
         class="relative flex items-center p-6 bg-[linear-gradient(126.12deg,rgba(0,0,0,0.95)21.1%,rgba(18,18,18,0.5)53.58%);] rounded-lg"
       >
         <dl class="min-w-0 flex-1">
-          <dt class="text-xl font-bold leading-6 leading-none text-yellow-500">Total value locked</dt>
+          <dt class="text-xl font-bold leading-none text-yellow-500">Total value locked</dt>
           <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">{tvl()}</dd>
         </dl>
       </div>

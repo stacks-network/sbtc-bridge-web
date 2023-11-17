@@ -463,9 +463,9 @@ function doPayloadData(conf:SbtcConfig) {
 	if (!conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0) throw new Error('Public Key missing from logged in user')
 	console.log(myHashP2WPKH(conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 as string))
 	let prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
-	let amount = 0
+	let amountSats = 0
 	if (conf.payloadDepositData && conf.payloadDepositData.amountSats > 0) {
-		amount = conf.payloadDepositData.amountSats
+		amountSats = conf.payloadDepositData.amountSats
 	}
 	if (conf.payloadDepositData && conf.payloadDepositData.principal) {
 		prn = conf.payloadDepositData.principal
@@ -476,16 +476,17 @@ function doPayloadData(conf:SbtcConfig) {
 			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
 			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
 			principal: prn,
-			amountSats: amount
+			amountSats
 	}
 	conf.payloadDepositData = payloadDepositData;
 
 	prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
-	if (!conf.payloadWithdrawData || !conf.payloadWithdrawData.sbtcWalletPublicKey) {
-		amount = conf.payloadWithdrawData.amountSats
-	}
+	amountSats = 0
 	if (conf.payloadWithdrawData && conf.payloadWithdrawData.principal) {
-		prn = conf.payloadDepositData.principal
+		prn = conf.payloadWithdrawData.principal
+	}
+	if (conf.payloadWithdrawData && conf.payloadWithdrawData.amountSats > 0) {
+		amountSats = conf.payloadWithdrawData.amountSats
 	}
 	const payloadWithdrawData:WithdrawPayloadUIType = {
 			sbtcWalletPublicKey: conf.sbtcContractData.sbtcWalletPublicKey,
@@ -493,7 +494,7 @@ function doPayloadData(conf:SbtcConfig) {
 			bitcoinAddress: conf.keySets[CONFIG.VITE_NETWORK].cardinal,
 			paymentPublicKey: conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 || '',
 			principal: prn,
-			amountSats: 0
+			amountSats
 	}
 	conf.payloadWithdrawData = payloadWithdrawData;
 	return conf;
