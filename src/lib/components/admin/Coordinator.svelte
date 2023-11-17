@@ -8,12 +8,12 @@
   
   //const contractCall = openContractCall();
   let errorReason:string|undefined;
-  let pubkeying = false;
+  let pubkeying = true;
   let minting = false;
   let burning = false;
   let proofs = true;
   
-  let romeoPublicKey = $sbtcConfig.sbtcContractData.sbtcWalletPublicKey;
+  let romeoPublicKey = $sbtcConfig.sbtcContractData.sbtcWalletPublicKey || '02aaed53527e3771645a050568a3cc9820361899c36f689cac15b57cc7885f3ca1';
   if ($sbtcConfig && $sbtcConfig.sbtcContractData) {
     const s = $sbtcConfig.sbtcContractData
     //coordinator = s.coordinator?.addr?.value || '';
@@ -32,19 +32,12 @@
     <div class="flex justify-between">
         <div>&nbsp;</div>
         <div class="py-0">
-          <a href="/" class="me-3" on:click|preventDefault={() => {proofs = true;  pubkeying = false; minting = false; burning = false;} }>tx proofs</a>
-          <a href="/" class="me-3" on:click|preventDefault={() => {pubkeying = true; proofs = false; burning = false; minting = false;  }}>pubkey</a>
-          <a href="/" class="me-3" on:click|preventDefault={() => {minting = true; proofs = false; pubkeying = false; burning = false;  }}>mint</a>
-          <a href="/" class="me-3" on:click|preventDefault={() => {burning = true; proofs = false; pubkeying = false; minting = false;  }}>burn</a>
+          <a href="/" class="me-3" on:click|preventDefault={() => {pubkeying = true; burning = false; minting = false;  }}>pubkey</a>
+          <a href="/" class="me-3" on:click|preventDefault={() => {minting = true; pubkeying = false; burning = false;  }}>mint</a>
+          <a href="/" class="me-3" on:click|preventDefault={() => {burning = true; pubkeying = false; minting = false;  }}>burn</a>
         </div>
     </div>
 
-    {#if romeoPublicKey}
-    {#if proofs}
-    <div class="">
-        <TransactionAnalysis />
-    </div>
-    {/if}
 
     {#if pubkeying}
       <div class="">
@@ -68,7 +61,6 @@
         </div>
       {/if}
 
-    {/if}
     {#if errorReason}
     {@html errorReason}
     {/if}

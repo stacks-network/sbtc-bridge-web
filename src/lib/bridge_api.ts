@@ -16,10 +16,10 @@ function headers() {
 }
 
 export function addNetSelector (path:string) {
-  if (CONFIG.VITE_NETWORK === 'testnet' || CONFIG.VITE_NETWORK === 'devnet') {
+  if (CONFIG.VITE_NETWORK === 'testnet') {
     return path.replace('bridge-api', 'bridge-api/testnet');
-  } else if (CONFIG.VITE_NETWORK === 'simnet') {
-    return path.replace('bridge-api', 'bridge-api/simnet');
+  } else if (CONFIG.VITE_NETWORK === 'devnet') {
+    return path.replace('bridge-api', 'bridge-api/devnet');
   } else {
     return path.replace('bridge-api', 'bridge-api/mainnet');
   }
