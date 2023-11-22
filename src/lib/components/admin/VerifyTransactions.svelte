@@ -35,6 +35,7 @@ let allowBurn = false;
 let amount = 0
 let contractParameters:any;
 let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-mini-1'
+if (CONFIG.VITE_NETWORK === 'devnet') contract = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin-mini'
 let stxAddress:string|undefined;
 let merkleTree:Array<Array<string>>
 let parameters:TxMinedParameters;
@@ -94,8 +95,8 @@ const wasTxMined = async () => {
 
   functionName = 'was-txid-mined'
   const params = {
-    contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-mini-1',
+    contractAddress: contract.split('.')[0],
+    contractName: contract.split('.')[1],
     functionName: 'was-txid-mined',
     functionArgs
   }
@@ -120,8 +121,8 @@ const verifyBlockHeader = async () => {
   
   functionName = 'verify-block-header'
   const params = {
-    contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-mini-1',
+    contractAddress: contract.split('.')[0],
+    contractName: contract.split('.')[1],
     functionName: 'verify-block-header',
     functionArgs
   }
@@ -149,8 +150,8 @@ const verifyMerkleProof = async () => {
   
   functionName = 'verify-merkle-proof'
   const params = {
-    contractAddress: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
-    contractName: 'clarity-bitcoin-mini-1',
+    contractAddress: contract.split('.')[0],
+    contractName: contract.split('.')[1],
     functionName: 'verify-merkle-proof',
     functionArgs
   }
