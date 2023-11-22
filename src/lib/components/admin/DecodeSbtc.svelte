@@ -3,6 +3,8 @@ import { onMount } from 'svelte';
 //import { parsePayloadFromTransaction } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 	import { parsePayloadFromTransaction } from 'sbtc-bridge-lib';
+	import { mintToMerkle } from '$lib/sbtc_admin';
+  import Button from "../shared/Button.svelte";
 
 export let tx:any;
 let res:any;

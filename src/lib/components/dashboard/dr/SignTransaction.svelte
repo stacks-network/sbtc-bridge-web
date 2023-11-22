@@ -7,7 +7,7 @@ import { sbtcConfig } from '$stores/stores';
 import { explorerBtcTxUrl } from "$lib/utils";
 import { saveBridgeTransaction } from '$lib/bridge_api';
 import type { BridgeTransactionType } from 'sbtc-bridge-lib'
-import { buildDepositTransaction, buildDepositTransactionOpDrop } from 'sbtc-bridge-lib'
+import { buildDepositPayload, buildDepositTransaction, buildDepositTransactionOpDrop, parseDepositPayload } from 'sbtc-bridge-lib'
 import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
@@ -16,6 +16,7 @@ import { BitcoinNetworkType, signTransaction, type SignTransactionOptions } from
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
 import { Tooltip } from 'flowbite-svelte';
+	import { buildDepositPayloadInternal } from '$lib/stacks_connect_bug';
 
 export let peginRequest:BridgeTransactionType;
 export let addressInfo:any;
@@ -146,6 +147,15 @@ onMount(async () => {
       transaction = buildDepositTransactionOpDrop(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos, peginRequest.commitTxScript!.address!);
     } else {
       transaction = buildDepositTransaction(CONFIG.VITE_NETWORK, $sbtcConfig.sbtcContractData.sbtcWalletPublicKey, $sbtcConfig.payloadDepositData, $sbtcConfig.btcFeeRates, addressInfo.utxos)
+      /**
+      */
+      const data1 = buildDepositPayloadInternal(0, $sbtcConfig.payloadDepositData.principal, false)
+      const dout1 = parseDepositPayload(hex.decode(data1))
+      const data = buildDepositPayload(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData.principal);
+      const dout = parseDepositPayload(hex.decode(data))
+      console.log(data1)
+      console.log(dout)
+      console.log(dout1)
     }
     if (transaction.inputsLength === 0) {
       errorReason = '<p>Unable to create / sign transaction</p><p>You can change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and then copy paste the PSBT before signing and broadcasting the transaction.</p>'

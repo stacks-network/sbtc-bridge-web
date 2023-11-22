@@ -7,9 +7,56 @@ import {
 	signMessageHashRsv,
   } from '@stacks/transactions';
 import { sha256 } from '@noble/hashes/sha256';
-import { MAGIC_BYTES_MAINNET, MAGIC_BYTES_TESTNET, getAddressFromOutScript, parseDepositPayload, parseWithdrawPayload, type PayloadType } from 'sbtc-bridge-lib';
-import * as btc from '@scure/btc-signer';
+import { MAGIC_BYTES_TESTNET, PEGIN_OPCODE, amountToBigUint64 } from 'sbtc-bridge-lib';
 import { hex } from '@scure/base';
+import { c32addressDecode } from 'c32check';
+import * as P from 'micro-packed';
+const concat = P.concatBytes;
+
+export function buildDepositPayloadInternal(amountSats:number, address:string, opDrop:boolean):string {
+	const magicBuf = hex.decode(MAGIC_BYTES_TESTNET)
+	const opCodeBuf = hex.decode(PEGIN_OPCODE);
+	const addr = c32addressDecode(address.split('.')[0])
+	//const addr0Buf = hex.encode(amountToUint8(addr[0], 1));
+	const addr0Buf = (hex.decode(addr[0].toString(16)));
+	const addr1Buf = hex.decode(addr[1]);
+
+	const cnameLength = new Uint8Array(1);
+	//const memoLength = new Uint8Array(1);
+	const principalType = (address.indexOf('.') > -1) ? hex.decode('06') : hex.decode('05');
+	let buf1 = concat(opCodeBuf, principalType, addr0Buf, addr1Buf);
+	if (address.indexOf('.') > -1) {
+		const cnameBuf = new TextEncoder().encode(address.split('.')[1]);
+		const cnameBufHex = hex.encode(cnameBuf)
+		let cnameLen:any;
+		try {
+			cnameLen = hex.decode(cnameBuf.length.toString(8))
+		} catch (err) {
+			cnameLen = cnameLength.fill(cnameBufHex.length);
+		}
+		buf1 = concat(buf1, cnameLen, cnameBuf);
+	} else {
+		cnameLength.fill(0);
+		buf1 = concat(buf1, cnameLength);
+	}
+	/**
+	if (memo) {
+		const memoBuf = new TextEncoder().encode(memo);
+		const memoLength = hex.decode(memoBuf.length.toString(8));
+		buf1 = concat(buf1, memoLength, memoBuf);
+	} else {
+		memoLength.fill(0);
+		buf1 = concat(buf1, memoLength);
+	}
+	 */
+	if (opDrop) {
+		const feeBuf = amountToBigUint64(amountSats, 8)
+		buf1 = concat(buf1, feeBuf)
+	}
+	
+	if (!opDrop) return hex.encode(concat(magicBuf, buf1))
+	return hex.encode(buf1);
+}
 
 export const keyChain = {
 	"mnemonic": "foster raise devote wear great volcano spring chapter among violin bleak syrup rent sphere coyote client govern spirit good risk cruise twice trick jealous",

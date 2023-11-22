@@ -2,7 +2,7 @@
  * sbtc - interact with Stacks Blockchain to read sbtc contract info
  */
 import { CONFIG } from '$lib/config';
-import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, type ListCV } from '@stacks/transactions';
+import { PostConditionMode, uintCV, stringAsciiCV, bufferCVFromString, bufferCV, cvToJSON, deserializeCV, type ListCV, contractPrincipalCV } from '@stacks/transactions';
 import { tupleCV } from '@stacks/transactions/dist/esm/clarity/index.js';
 import { principalCV } from '@stacks/transactions/dist/esm/clarity/types/principalCV.js';
 import { openContractCall } from '@stacks/connect';
@@ -29,7 +29,10 @@ export function isCoordinator(address:string) {
 
 export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, headerHex: string) {
   //data {addr: principal, key: (buff 33)}
-  const stxAddressCV = principalCV(stxAddress);
+  let stxAddressCV = principalCV(stxAddress);
+  if (stxAddress.indexOf('.') > -1) {
+    stxAddressCV = contractPrincipalCV(stxAddress.split('.')[0], stxAddress.split('.')[1]);
+  }
   const functionArgs = [uintCV(amount), stxAddressCV, bufferCV(hex.decode(btcTxid)), uintCV(height), merkleProofs, uintCV(txIndex), bufferCV(hex.decode(headerHex))]
   await openContractCall({
     network: getStacksNetwork(),
@@ -55,6 +58,32 @@ export async function mintTo(contractId:string, amount:number, stxAddress: strin
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
   const functionArgs = [uintCV(amount), stxAddressCV, btcAddressCV]
+  await openContractCall({
+    network: getStacksNetwork(),
+    postConditions: [],
+    postConditionMode: PostConditionMode.Deny,
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
+    functionName: 'mint',
+    functionArgs: functionArgs,
+    onFinish: (data: any) => {
+      console.log('TX Data: ', data);
+      return data;
+    },
+    onCancel: () => {
+      console.log('popup closed!');
+    }
+  });
+}
+
+export async function mintToMerkle(amount:number, stxAddress: string, btcTxid: string) {
+  //data {addr: principal, key: (buff 33)}
+  const contractId = CONFIG.VITE_SBTC_COORDINATOR + '.asset'
+  
+  const btcTxidCV = bufferCV(hex.decode(btcTxid))
+  const stxAddressCV = principalCV(stxAddress);
+  const functionArgs = [uintCV(amount), stxAddressCV, btcTxidCV]
+
   await openContractCall({
     network: getStacksNetwork(),
     postConditions: [],

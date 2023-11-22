@@ -7,7 +7,7 @@ import { onMount } from 'svelte';
 import { sha256 } from '@noble/hashes/sha256';
 import { explorerAddressUrl } from '$lib/utils';
 import { sbtcConfig } from '$stores/stores'
-import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, type TxMinedParameters } from 'sbtc-bridge-lib';
+import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, parsePayloadFromTransaction, type TxMinedParameters } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 import { loggedIn } from '$lib/stacks_connect';
 /**
@@ -172,17 +172,19 @@ const verifyMerkleProof = async () => {
   console.log(answer)
 }
 
-const mintTo = async () => {  
-  functionName = 'verify-merkle-proof'
+const mintTo = async () => {
+  const data = parsePayloadFromTransaction(CONFIG.VITE_NETWORK, tx.hex)
+  let prin = data.stacksAddress;
+  if (typeof (data.lengthOfCname) === 'number' && data.lengthOfCname > 0) prin += '.' + data.cname
   contractParameters = {
     amount: tx.vout[1].amount,
     txid: hex.encode(hex.decode(tx.txid)),
-    stxAddress: stxAddress,
+    stxAddress: prin,
     proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
     'tx-index': parameters.txIndex,
   }
 
-  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, stxAddress!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
+  const res = await romeoMintTo($sbtcConfig.sbtcContractData.contractId, amount, prin!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
   console.log(res)
 }
 
@@ -289,7 +291,6 @@ onMount(async () => {
     <label for="transact-path">Amount (sats)</label>
     <input type="number"  class="text-black block p-3 rounded-md border w-full" bind:value={amount}/>
   </div>
-  <div class="mb-5"><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
   {/if}
 
   {#if showTree}
