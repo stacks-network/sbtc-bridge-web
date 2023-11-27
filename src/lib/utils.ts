@@ -53,6 +53,13 @@ export function fmtMicroToStx(amountStx:number) {
   return  (Math.round(amountStx) / stxPrecision).toFixed(6)
 }
 
+export function tsToTime(updated:number|undefined) {
+  let d = new Date();
+  if (updated) d = new Date(updated);
+  //return d.toLocaleDateString('en-UK');
+  return d.getHours() + ':' + d.getMinutes() + ':' + d.getSeconds();
+}
+
 export function tsToDate(updated:number|undefined) {
   let d = new Date();
   if (updated) d = new Date(updated);

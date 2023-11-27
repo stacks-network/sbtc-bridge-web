@@ -98,12 +98,12 @@
     setDisplayValue()
   }
 
-  const getBalance = () => {
+  $: getBalance = () => {
     if ($sbtcConfig.userSettings.peggingIn) {
-      if (denomination === 'bitcoin') return satsToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo))
+      if ($sbtcConfig.userSettings.currency.denomination === 'bitcoin') return satsToBitcoin(bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo))
       else return bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
     } else {
-      if (denomination === 'bitcoin') return satsToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance)
+      if ($sbtcConfig.userSettings.currency.denomination === 'bitcoin') return satsToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance)
       else return $sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance
     }
   }
