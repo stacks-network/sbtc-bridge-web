@@ -28,7 +28,7 @@
 				rel="noreferrer">{truncate(event.payloadData.spendingAddress, 5)}</a
 			>
 		</div>
-		<div class="text-right pt-1">
+		<div class="text-right pt-1 ps-2">
 			<ArrowUpRight
 				class="h-5 w-5 text-white"
 				target={explorerBtcTxUrl(event.bitcoinTxid.payload.value.split('x')[1])}
