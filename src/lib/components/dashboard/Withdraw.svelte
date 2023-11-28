@@ -73,6 +73,7 @@
 
   const updateTransaction = () => {
     timeLineStatus = 1;
+    componentKey++;
   }
 
   const doClicked = async (event:any) => {

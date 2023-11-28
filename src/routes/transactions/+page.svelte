@@ -1,20 +1,23 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { Skeleton, Tabs, TabItem, } from 'flowbite-svelte';
+  import { Skeleton, Tabs, TabItem, Toggle, } from 'flowbite-svelte';
 
   import { page } from '$app/stores';
   import { COMMS_ERROR, explorerTxUrl } from '$lib/utils.js'
   import { truncate, explorerBtcTxUrl } from '$lib/utils'
   import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/bridge_api'
-  import { type SbtcClarityEvent } from 'sbtc-bridge-lib'
   import { sbtcConfig } from '$stores/stores';
   import { CONFIG } from '$lib/config';
+	import type { SbtcClarityEvent } from 'sbtc-bridge-lib';
+	import Event from '$lib/components/transactions/Event.svelte';
+	import Paging from '$lib/components/transactions/Paging.svelte';
+	import EventHeader from '$lib/components/transactions/EventHeader.svelte';
 
   // fetch/hydrate data from local storage
   let inited = false;
   let sbtcEvents:{ results: Array<SbtcClarityEvent>, events:number}
   let errorReason:string|undefined;
-  let myDepositsFilter:boolean = false;
+  let showAll:boolean = true;
   const limit = 20;
   let numPages = 0;
 
@@ -22,10 +25,12 @@
     const mySbtcEvents = await findSbtcEventByBitcoinAddress($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal)
     sbtcEvents.results = mySbtcEvents
     sbtcEvents.events = mySbtcEvents.length
+    showAll = false
   }
 
   const fetchPage = async (evt:any) => {
     await fetchPageCheck(evt.detail.page)
+    showAll = true
   }
 
   const fetchPageCheck = async (mypage:number) => {
@@ -61,16 +66,27 @@
       <div class="text-4xl font-medium">Transaction History</div>
       {#if inited}
         <Tabs style="underline" contentClass="py-4">
-          <TabItem open={true} title="All transactions">
+          <TabItem on:click={() => fetchPage({detail: {page:0}})} open={showAll} title="All transactions">
             <div class="bg-white/5 rounded-md p-4 border border-gray-900">
-              <!-- Insert TxsHistoryTable table with all txs  -->
+              <EventHeader/>
+              {#each sbtcEvents.results as event}
+              <Event {event} />
+              {/each}
+            </div>
+            <div class="mt-5 flex justify-end">
+              <div class="flex gap-x-5">
+                  <div class="text-1xl font-normal"><Paging on:fetch_page={fetchPage} {numPages} totalEvents={(sbtcEvents) ? sbtcEvents.events : 0} limit={20}/></div>
+              </div>
             </div>
           </TabItem>
-          <TabItem open={!true} title="Your transactions">
+          <TabItem on:click={() => fetchMine()} open={!showAll} title="Your transactions">
             <div class="bg-white/5 rounded-md p-4 border border-gray-900">
-              <!-- Insert TxsHistoryTable table with logged user txs  -->
+              <EventHeader/>
+              {#each sbtcEvents.results as event}
+              <Event {event} />
+              {/each}
             </div>
-          </TabItem>
+        </TabItem>
         </Tabs>
       {:else}
         <Tabs style="underline" contentClass="mt-8">

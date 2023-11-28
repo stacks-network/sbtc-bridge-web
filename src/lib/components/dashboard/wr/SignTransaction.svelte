@@ -11,10 +11,11 @@ import { appDetails, getStacksNetwork, isLeather } from "$lib/stacks_connect";
 import Invoice from '../shared/Invoice.svelte';
 import { CONFIG } from '$lib/config';
 import { isHiro } from '$lib/stacks_connect'
-import { signTransaction, type SignTransactionOptions } from 'sats-connect'
+import { BitcoinNetworkType, signTransaction, type SignTransactionOptions } from 'sats-connect'
 import { broadcastTransaction } from '$lib/sbtc';
 import type { Transaction, TransactionOutput, TransactionInput } from '@scure/btc-signer';
 import { Tooltip } from 'flowbite-svelte';
+import Banner from '$lib/components/shared/Banner.svelte';
 
 export let peginRequest:BridgeTransactionType;
 export let addressInfo:any;
@@ -43,6 +44,18 @@ export async function requestSignPsbt() {
     signPsbtXverse()
   }
 }
+
+const getBbMessage = () => {
+  let msg = '<p>View transaction on the <a class="text-warning-700" href=' + getExplorerUrl() + ' target="_blank" rel="noreferrer">Bitcoin network</a>.</p>'
+  if (peginRequest.requestType === 'deposit') {
+    msg += ' <p>Once confirmed your sBTC will be deposited to your Stacks Wallet. </p>'
+  } else {
+    msg += '<p>Once confirmed your sBTC will be withdrawn from your Stacks Account and your Bitcoin returned. </p>'
+  }
+  return msg
+}
+
+
 export async function signPsbtHiro() {
   const outputs:TransactionOutput[] = getPsbtTxOutputs(transaction);
   const inpouts:TransactionInput[] = getPsbtTxInputs(transaction);
@@ -91,7 +104,7 @@ export async function signPsbtXverse() {
   const signPsbtOptions:SignTransactionOptions = {
     payload: {
       network: {
-        type: (getStacksNetwork().isMainnet()) ? 'Mainnet' : 'Testnet'
+        type: (getStacksNetwork().isMainnet()) ? BitcoinNetworkType.Mainnet : BitcoinNetworkType.Testnet
       },
       message: 'Sign Transaction',
       psbtBase64: b64Tx,
@@ -171,34 +184,23 @@ onMount(async () => {
   <Invoice {peginRequest} {psbtHex} {psbtB64}/>
   {#if !broadcasted && !errorReason}
   <div class="flex w-full">
-    <!--
-    <div class="mt-6">
-      <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Back</button>
-    </div>
-    -->
     {#if isWalletAddress()}
     <div class="mt-6 w-full flex">
       <div class="grow"><button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button></div>
-      <!--<div class=""><Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="w-sign-label" /></div>-->
     </div>
     {/if}
   </div>
   {:else if broadcasted}
   <div class="my-3 text-2xl">
-    <p>View transaction on the <a class="text-warning-700" href={getExplorerUrl()} target="_blank" rel="noreferrer">Bitcoin network</a>.</p>
-    {#if peginRequest.requestType === 'deposit'}
-    <p>Once confirmed your sBTC will be deposited to your Stacks Wallet. </p>
-    {:else}
-    <p>Once confirmed your sBTC will be withdrawn from your Stacks Account and your Bitcoin returned. </p>
-    {/if}
+    <Banner bannerType={'info'} message={getBbMessage()}/>
   </div>
   {:else if errorReason}
-  <div class="flex flex-col">
-    <div class="my-5">
-      {#if errorReason}<div class="text-warning-500"><p>{@html errorReason}</p></div>{/if}
+  <div class="mt-5 flex flex-col">
+    <div class="">
+      <Banner bannerType={'warning'} message={errorReason}/>
     </div>
     <div class="mt-6">
-      <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Continue</button>
+      <button on:click={() => updateTimeline()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Back</button>
     </div>
   </div>
   {/if}
