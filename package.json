@@ -27,7 +27,7 @@
 		"@sveltejs/kit": "^1.24.1",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
 		"@typescript-eslint/parser": "^5.62.0",
-		"autoprefixer": "^10.4.14",
+		"autoprefixer": "^10.4.16",
 		"eslint": "^8.46.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-plugin-svelte": "^2.33.2",
@@ -58,14 +58,13 @@
 		"@stacks/network": "^6.8.1",
 		"@stacks/transactions": "^6.7.0",
 		"@sveltejs/adapter-static": "^2.0.2",
-		"flowbite": "^1.8.1",
+		"flowbite": "^2.2.0",
 		"flowbite-svelte-icons": "^0.4.4",
 		"micro-packed": "^0.3.2",
 		"sats-connect": "^1.1.1",
 		"sbtc-bridge-lib": "^1.1.25",
 		"sockjs": "^0.3.24",
 		"svelte-local-storage-store": "^0.5.0",
-		"svelte-qrcode": "^1.0.0",
-		"tailwind-merge": "^1.14.0"
+		"svelte-qrcode": "^1.0.0"
 	}
 }

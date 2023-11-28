@@ -19,7 +19,8 @@ import { myHashP2WPKH } from './utils';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
-const authMessage = 'Please sign this message to complete authentication '
+const authMessage = 'Please sign authentication'
+let userMessage:string;
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
@@ -249,8 +250,7 @@ export function loggedIn():boolean {
 }
 
 export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData|undefined> {
-	const address = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress
-	let userMessage = (!address) ? authMessage : authMessage + ' for ' + address;
+	userMessage = authMessage + ' ' + Math.floor( Math.random() * 1000000);
 	userMessage = userMessage + ' on ' + tsToDate(new Date().getTime());
 	await signMessage(async function(sigData:SignatureData, message:string) {
 		const verified = verifyMessageSignature({ message, publicKey: sigData.publicKey, signature: sigData.signature });

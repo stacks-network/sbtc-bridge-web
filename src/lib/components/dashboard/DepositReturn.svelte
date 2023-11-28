@@ -108,7 +108,7 @@
       </button>
     </div>
     {:else if timeLineStatus === 2}
-    <SignTransaction {addressInfo} {peginRequest} on:update_transaction={updateTimeline}/>
+    <SignTransaction {addressInfo} {peginRequest} on:update_timeline={updateTimeline}/>
     {:else if timeLineStatus === 3}
     <StatusCheck pegin={peginRequest} on:clicked={doClicked}/>
     {/if}

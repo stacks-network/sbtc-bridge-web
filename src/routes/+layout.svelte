@@ -12,7 +12,7 @@
     import { authConfig } from '$stores/authConfig'
 	import type { SbtcConfig } from '$types/sbtc_config'
 	import { defaultSbtcConfig } from '$lib/sbtc';
-	import { COMMS_ERROR } from '$lib/utils.js'
+	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
 	import { setAuthorisation } from '$lib/bridge_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 
@@ -39,9 +39,11 @@
 			nav.cancel();
 			goto(next + '?chain=devnet')
 		}
+		console.debug('beforeNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
 	afterNavigate((nav) => {
 		//componentKey++;
+		console.debug('afterNavigate: ' + nav.to?.route.id + ' : ' + tsToTime(new Date().getTime()))
 	})
 	const unsubscribe = sbtcConfig.subscribe((conf) => {});
 	onDestroy(unsubscribe);
@@ -59,7 +61,24 @@
 
 	const initApp = async () => {
 		await initApplication(($sbtcConfig) ? $sbtcConfig : defaultSbtcConfig as SbtcConfig, undefined);
+		if (loggedIn() && !$sbtcConfig.authHeader) {
+			await authenticate($sbtcConfig)
+		}
+		setAuthorisation($sbtcConfig.authHeader)
 	}
+
+	let resizing = false;
+	let windowWidth:string|undefined;
+	const debounce = () => {
+		let timer:any;
+		resizing = true
+		windowWidth = `${window.innerWidth}px`;
+		timer = setTimeout(() => {
+			resizing = false;
+			clearTimeout(timer);
+		}, 250);
+	};
+	//const debouncedSetWindowWidth = debounce(300);
 
 	onMount(async () => {
 		try {
@@ -78,19 +97,20 @@
 			inited = true;
 
 			//openWebSocket()
-			await initApp();
-			if (loggedIn() && !$sbtcConfig.authHeader) {
-				await authenticate($sbtcConfig)
-			}
-			setAuthorisation($sbtcConfig.authHeader)
-
+			initApp();
+			window.addEventListener('resize', debounce);
+		
 		} catch (err) {
 			errorReason = COMMS_ERROR
 			console.log(err)
 		}
 	})
 </script>
-
+	{#if resizing}
+	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
+		<Header on:login_event={loginEvent} />
+	</div>
+	{:else}
 	<div class="bg-gray-1000 bg-[url('$lib/assets/bg-lines.svg')] bg-cover text-white font-extralight min-h-screen">
 			{#if inited}
 			<Header on:login_event={loginEvent} />
@@ -102,3 +122,4 @@
 			<Footer />
 			{/if}
 	</div>
+	{/if}
