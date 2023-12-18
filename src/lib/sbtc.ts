@@ -74,13 +74,13 @@ export const defaultSbtcConfig:SbtcConfig = {
       cryptoFirst: false,
       myFiatCurrency: {
         _id: "nan",
-        currency: "EUR",
+        currency: "USD",
         fifteen: 0,
         last: 0,
         buy: 0,
         sell: 0,
-        symbol: "€",
-        name: "Euro"
+        symbol: "$",
+        name: "USD"
       },
       denomination: 'bitcoin'
     },
