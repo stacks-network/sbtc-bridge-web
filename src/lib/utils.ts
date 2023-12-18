@@ -26,6 +26,10 @@ export function myHashP2WPKH(publicKey:string) {
   return hex.encode(hash160(hashSha256Sync(hex.decode(publicKey))))
 }
 
+export function writeOutUnspendable() {
+  console.log('UNSPENDABLE' + hex.encode(btc.TAPROOT_UNSPENDABLE_KEY))
+}
+
 export function bitcoinToSats(amountBtc:number) {
   return  Math.round(amountBtc * btcPrecision)
 }
@@ -282,7 +286,7 @@ export function parseFulfilPayloadFromOutput(network:string, tx:btc.Transaction)
 		//	finalScriptSig: tx.getInput(0).finalScriptSig as Uint8Array,
 		//});
 		if (tx.outputsLength > 2) innerPayload.spendingAddress = getAddressFromOutScript(network, tx.getOutput(2).script!)
-		console.log('parsePayloadFromTransaction:spendingAddress: ' +  innerPayload.spendingAddress)
+		//console.log('parsePayloadFromTransaction:spendingAddress: ' +  innerPayload.spendingAddress)
 		return innerPayload;
 	} else if (witnessData.opcode.toUpperCase() === '3E') {
 		const recipient = getAddressFromOutScript(network, tx.getOutput(1).script as Uint8Array)
