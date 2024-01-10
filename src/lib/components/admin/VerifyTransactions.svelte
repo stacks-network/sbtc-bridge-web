@@ -35,7 +35,7 @@ let allowBurn = false;
 let amount = 0
 let contractParameters:any;
 let contract = 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5.clarity-bitcoin-mini-1'
-if (CONFIG.VITE_NETWORK === 'devnet') contract = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin-mini'
+if (CONFIG.VITE_NETWORK === 'devnet') contract = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.clarity-bitcoin-mini-1'
 let stxAddress:string|undefined;
 let merkleTree:Array<Array<string>>
 let parameters:TxMinedParameters;
