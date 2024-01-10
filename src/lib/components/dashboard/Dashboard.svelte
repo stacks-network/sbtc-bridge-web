@@ -5,14 +5,20 @@
 	import { fmtNumber, fmtSatoshiToBitcoin, satsToBitcoin } from 'sbtc-bridge-lib';
 
   $: connected = loggedIn()
+  let showFiat = true
 
   $: currentBalance = () => {
     return fmtSatoshiToBitcoin($sbtcConfig.keySets[CONFIG.VITE_NETWORK].sBTCBalance || 0.00000000)
   }
-  const tvl = () => {
-    const currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
-    const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
-    return currency.symbol + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
+  const tvl = (showFiat:boolean) => {
+    if (showFiat) {
+      const currency = $sbtcConfig.userSettings.currency.myFiatCurrency;
+      const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
+      return currency.symbol + fmtNumber(currency.fifteen * tvlSBTC || 0) + ' ' + currency.currency
+    } else {
+      const tvlSBTC = satsToBitcoin($sbtcConfig.sbtcContractData.totalSupply || 0)
+      return fmtNumber(tvlSBTC) + ' sBTC'
+    }
   }
 
 	const doLogin = async () => {
@@ -28,9 +34,11 @@
       <div
         class="relative flex items-center p-6 bg-[linear-gradient(126.12deg,rgba(0,0,0,0.95)21.1%,rgba(18,18,18,0.5)53.58%);] rounded-lg"
       >
-        <dl class="min-w-0 flex-1">
+        <dl class="min-w-0 flex-1" on:mouseenter={() => showFiat = false}  on:mouseleave={() => showFiat = true}>
           <dt class="text-xl font-bold leading-none text-yellow-500">Total value locked</dt>
-          <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">{tvl()}</dd>
+          <dd class="mt-1 text-4xl font-bold leading-none text-transparent bg-clip-text bg-primary-02">
+            {#if showFiat}{tvl(showFiat)}{:else}{tvl(showFiat)}{/if}
+          </dd>
         </dl>
       </div>
     </div>

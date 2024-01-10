@@ -46,7 +46,7 @@ export async function requestSignPsbt() {
 }
 
 const getBbMessage = () => {
-  let msg = '<p>View transaction on the <a class="text-warning-700" href=' + getExplorerUrl() + ' target="_blank" rel="noreferrer">Bitcoin network</a>.</p>'
+  let msg = '<p>View transaction on the <a class="text-blue-500" href=' + getExplorerUrl() + ' target="_blank" rel="noreferrer">Bitcoin network</a>.</p>'
   if (peginRequest.requestType === 'deposit') {
     msg += ' <p>Once confirmed your sBTC will be deposited to your Stacks Wallet. </p>'
   } else {
