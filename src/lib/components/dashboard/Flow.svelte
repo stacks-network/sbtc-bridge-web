@@ -50,7 +50,7 @@
     try {
       connected = typeof $sbtcConfig.sbtcContractData.contractId === 'string'
       const bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-      addressInfo = await fetchUtxoSet(bitcoinAddress)
+      addressInfo = [] //await fetchUtxoSet(bitcoinAddress)
       initData()
       inited = true;
     } catch(err:any) {
@@ -75,7 +75,7 @@
           <Tabs style="underline" contentClass="py-4">
             <TabItem open={useDeposit} on:click={() => toggle()} title="Deposit" class="grow [&>button]:w-full [&>button]:text-lg">
               {#if opDrop}
-                <DepositDrop {addressInfo} />
+                <DepositDrop />
               {:else}
                 <DepositReturn {addressInfo} />
               {/if}

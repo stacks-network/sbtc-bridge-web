@@ -7,11 +7,15 @@
   import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
 	import Banner from '../shared/Banner.svelte';
 
-  export let peginRequest:BridgeTransactionType;
+  export let psbtHolder:PSBTHolder|undefined;
+  export let amountSats:number;
+  export let bitcoinAddress:string;
+  export let mode:string;
+  export let requestType:string;
 
   const scan = async () => {
-    doPeginScan();
-    location.reload();
+    //doPeginScan();
+    //location.reload();
   }
 
   onMount(() => {
@@ -20,4 +24,4 @@
 
 <h1 class="text-3xl font-medium">Details</h1>
 <p class="">Waiting for your transaction to be broadcast...</p>
-<Invoice {peginRequest} />
+<Invoice {psbtHolder} {amountSats} {bitcoinAddress} {mode} {requestType} />

@@ -8,7 +8,7 @@ let authHeader:any;
 export async function setAuthorisation(auth:any) {
   authHeader = auth
 }
-function headers() {
+export function headers() {
   if (authHeader) {
     return { 'Content-Type': 'application/json', 'Authorization': JSON.stringify(authHeader) }
   }
@@ -49,24 +49,6 @@ async function extractResponse(response:any) {
     } catch(err) {
       console.log('error fetching response.. ', err)
     }
-  }
-}
-
-/**
- * fetch a bunch of objects needed in the UI;
- * 1. sbtc contract data
- * 2. current btc exchange rate data 
- * 3. keys: pair of custodial keys for testing reclaima nd reveal transactions 
- * @returns 
- */
-export async function fetchUiInit() {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/init-ui');
-  try {
-    const response = await fetch(path);
-    const res = await response.json();
-    return res;
-  } catch(err) {
-    return undefined;
   }
 }
 
@@ -386,16 +368,6 @@ export async function fetchUserSbtcBalance(stxAddress:string) {
     return { balance: 0 };
   }
 }
-export async function fetchUserBalances(adrds:AddressObject) {
-  const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/sbtc/address/balances/' + adrds.stxAddress + '/' + adrds.cardinal + '/' + adrds.ordinal);
-  const response = await fetch(path);
-  if (response.status !== 200) {
-    console.log('Bitcoin address not known - is the network correct?');
-  }
-  const res = await extractResponse(response);
-  return res;
-}
-
 export async function sign(wrappedPsbt:WrappedPSBT) {
   const path = addNetSelector(CONFIG.VITE_BRIDGE_API + '/btc/tx/sign');
   const response = await fetch(path, {

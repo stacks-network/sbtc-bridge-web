@@ -2,9 +2,9 @@
 import { onMount } from 'svelte';
 import { Tooltip } from 'flowbite-svelte';
 import { Icon, InformationCircle } from "svelte-hero-icons";
+	import type { PSBTHolder } from '$types/revealer_types';
 
-export let psbtB64:string;
-export let psbtHex:string;
+export let psbtHolder:PSBTHolder;
 let showHex = true;
 
 onMount(async () => {
@@ -34,13 +34,13 @@ onMount(async () => {
 {#if !showHex}
 <div class="my-5 flex flex-col w-full">
   <div class="text-black">
-    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{psbtB64}</textarea>
+    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{psbtHolder.b64PSBT}</textarea>
   </div>
 </div>
 {:else}
 <div class="my-5 flex flex-col w-full ">
   <div class="text-black">
-    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{psbtHex}</textarea>
+    <textarea rows="6" style="padding: 10px; width: 100%;" readonly>{psbtHolder.hexPSBT}</textarea>
   </div>
 </div>
 {/if}

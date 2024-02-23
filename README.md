@@ -13,10 +13,25 @@ permissionless deposits and withdrawals of Bitcoin to layer 2 - via Stacks.
 node -v
 v19.7.0
 npm install
-npm run dev
-# or
-npm run dev -- --open
+npm run 'mode'
 ```
+
+where mode is one of;
+
+```#Javascript
+// run against api deployed in remote devnet / regtest
+"rd": "mode remote-devnet"
+//  run against api deployed in local devnet / regtest 
+"ld": "mode local-devnet"
+//   run against api deployed remotely (network determined by settings) 
+"dev": "mode development"0
+// run against api deployed locally connecting to testnet
+"lt": "mode local-testnet"
+// run against api deployed locally connecting to mainnet
+"lm": "mode local-mainnet"
+```
+
+
 
 ## SDK
 

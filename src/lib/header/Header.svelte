@@ -4,7 +4,7 @@
 	import Brand from './Brand.svelte'
 	import { sbtcConfig } from '$stores/stores';
 	import { afterNavigate, goto } from "$app/navigation";
-	import { authenticate, initApplication, loginStacks, loginStacksJs } from '$lib/stacks_connect'
+	import { authenticate, initApplication, loginStacksJs } from '$lib/stacks_connect'
 	import { logUserOut, loggedIn } from '$lib/stacks_connect'
 	import { isCoordinator } from '$lib/sbtc_admin.js'
 	import AccountDropdown from './AccountDropdown.svelte'
@@ -19,7 +19,7 @@
 	const doLogin = async () => {
 		if (loggedIn()) doLogout()
 		else {
-			await loginStacks(loginCallback);
+			await loginStacksJs(loginCallback, undefined);
 		}
 	}
 	let componentKey = 0;

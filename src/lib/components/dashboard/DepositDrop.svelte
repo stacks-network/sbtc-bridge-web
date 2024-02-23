@@ -27,9 +27,6 @@
       const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
       verifyAmount($sbtcConfig.payloadDepositData.amountSats, bal);
       verifyStacksPricipal($sbtcConfig.payloadDepositData.principal)
-
-      let amount = $sbtcConfig.payloadDepositData.amountSats;
-
       if (peginRequest && peginRequest._id) {
         peginRequest.uiPayload.amountSats = $sbtcConfig.payloadDepositData.amountSats
         const newP = await updateBridgeTransaction(peginRequest)
@@ -113,7 +110,7 @@
       {:else if timeLineStatus === 2}
         <ScriptHashAddress peginRequest={peginRequest} on:clicked={doClicked} />
       {:else if timeLineStatus === 3}
-        <StatusCheck pegin={peginRequest} on:clicked={doClicked} />
+        <StatusCheck status={peginRequest.status} requestType={'op_drop'} on:clicked={doClicked} />
       {/if}
     {/if}
   {/key}

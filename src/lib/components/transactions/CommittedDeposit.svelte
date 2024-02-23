@@ -13,7 +13,7 @@ import { toStorable, buildRevealOrReclaimTransaction, getPegWalletAddressFromPub
 import { Popover } from 'flowbite-svelte';
 import { a_primary } from '$lib/css_utils';
 import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
-import { fetchUtxoSet, fetchTransaction } from '$lib/bridge_api'
+import { fetchTransaction } from '$lib/bridge_api'
 
 export let peginRequest:BridgeTransactionType;
 let wrappedPsbt:WrappedPSBT = {} as WrappedPSBT;
@@ -121,7 +121,7 @@ onMount(async () => {
 {#if inited && reclaiming}
 <p class="">Reclaim your deposit by signing a message containing your Bitcoin address - we will return your funds - less Bitcoin transaction fees.
 </p>
-<Invoice {peginRequest} psbtB64={undefined} psbtHex={undefined}/>
+<Invoice psbtHolder={undefined} amountSats={peginRequest.uiPayload.amountSats} bitcoinAddress={peginRequest.uiPayload.bitcoinAddress} mode={'op_return'} requestType={'op_reveal'} />
 {#if errorMessage}<p class="text-error-500">{errorMessage}</p>{/if}
 <div id="po-sign-reclaim" class="mb-5"><Button darkScheme={false} label={'Reclaim funds'} target={'signReclaim'} on:clicked={() => signReclaim()}/></div>
 {/if}

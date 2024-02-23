@@ -6,11 +6,14 @@ import type { SbtcContractDataType } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import { sendRawTransaction } from './bridge_api';
 import type { Transaction } from '@scure/btc-signer' 
+import { sendRawTransaction } from './bridge_api';
 
+export const MINIMUM_DEPOSIT = 1000;
 export let rates:Array<any>;
 
+
+/**
 function finaliseTransaction(psbtHex:string) {
   try {
     const tx = btc.Transaction.fromPSBT(hex.decode(psbtHex));
@@ -18,12 +21,10 @@ function finaliseTransaction(psbtHex:string) {
     return tx;
   } catch (err:any) {
     console.log('finalize error: ', err)
-    let errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the \'back\` button, switching account in the wallet and trying again?';
-    errorReason += '<br/>' + err.message;
+    const errorReason = 'Unable to create the transaction - this can happen if your wallet is connected to a different account to the one your logged in with. Try hitting the "back" button, switching account in the wallet and trying again?';
     throw new Error(errorReason);
   }
 }
-
 export async function broadcastTransaction(psbtHex:string):Promise<string> {
   const tx:Transaction = finaliseTransaction(psbtHex)
   const txHex = hex.encode(tx.extract());
@@ -46,6 +47,7 @@ export async function broadcastTransaction(psbtHex:string):Promise<string> {
 		throw new Error(message);
 	}
 }
+ */
 
 export function openWebSocket() {
   // https://developer.mozilla.org/en-US/docs/Web/API/WebSocket

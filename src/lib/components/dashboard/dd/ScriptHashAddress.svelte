@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+  import { onMount } from "svelte";
   import type { BridgeTransactionType } from 'sbtc-bridge-lib'
 	import { bitcoinBalanceFromMempool } from '$lib/utils'
 	import { sbtcConfig } from '$stores/stores'
@@ -10,14 +10,12 @@
 
   export let peginRequest:BridgeTransactionType;
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
-  let amount = 0;
+  let amountSats = 0;
   let cardinalBalance = 0;
   let checking = false;
   let transactions:Array<any>|undefined;
-  const dispatch = createEventDispatcher();
 
   const checkTxs = async () => {
-    //dispatch('clicked', { target: 'status-check' })
     checking = true;
     const result = await fetchAddressTransactions(peginRequest.commitTxScript?.address!)
     if (result && result.length > 0) {
@@ -31,7 +29,7 @@
 
   onMount(async () => {
     if (!peginRequest) throw new Error('No pegin request')
-    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
+    amountSats = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
     cardinalBalance = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
   })
 </script>
@@ -50,7 +48,7 @@
   <div>
     <p class="text-sm my-5 font-extralight text-gray-400">Scan this QR code or copy the address and amount into your Bitcoin wallet to send Bitcoin.</p>
   </div>
-  <Invoice {peginRequest}  psbtHex={undefined} psbtB64={undefined}/>
+  <Invoice psbtHolder={undefined} {amountSats} bitcoinAddress={peginRequest.uiPayload.bitcoinAddress} mode={'op_drop'} requestType={'deposit'}/>
   <div class="my-4">
     <Banner
       bannerType={(checking) ? 'checking' : 'waiting'}
@@ -67,15 +65,4 @@
     </button>
   </div>
   {/if}
-  <!--
-  <div class="mt-6 flex align-baseline items-center">
-    <Button darkScheme={false} label={'Back'} target={'back'} on:clicked />
-    {#if webPayEnabled && amount < cardinalBalance}
-    <Button darkScheme={true} label={'Pay with web wallet'} target={'pay-now'} on:clicked />
-    {/if}
-    {#if isSimnet()}
-    <Button darkScheme={true} label={'Pay Simnet'} target={'pay-now-simnet'} on:clicked />
-    {/if}
-  </div>
-  -->
 </div>

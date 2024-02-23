@@ -2,7 +2,7 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { fetchUiInit, fetchUserBalances, setAuthorisation } from '$lib/bridge_api'
+import { setAuthorisation } from '$lib/bridge_api'
 import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
@@ -15,7 +15,7 @@ import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'
 import type { GetAddressOptions } from 'sats-connect'
 import { getStacksAddressFromPubkey } from 'sbtc-bridge-lib/dist/payload_utils';
 import { StacksMessageType, publicKeyFromSignatureVrs } from '@stacks/transactions';
-import { myHashP2WPKH } from './utils';
+import { fetchUiInit, fetchUserBalances } from './revealer_api';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
@@ -116,11 +116,11 @@ function getProvider() {
 }
 
 export function isHiro() {
-	return getProvider().name.toLowerCase().indexOf('hiro') > -1
+	return Object.prototype.hasOwnProperty.call(window, 'LeatherProvider') //getProvider().name.toLowerCase().indexOf('hiro') > -1
 }
 
 export function isLeather() {
-	return getProvider().name.toLowerCase().indexOf('leather') > -1
+	return Object.prototype.hasOwnProperty.call(window, 'LeatherProvider') // getProvider().name.toLowerCase().indexOf('leather') > -1
 }
 
 async function addresses(callback:any):Promise<AddressObject|undefined> {
@@ -264,7 +264,7 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 		//console.log('stxAddresses:', stxAddresses)
 		console.log('stxAddresses:', getStacksAddressFromPubkey(hex.decode(sigData.publicKey)))
 
-		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0, network: CONFIG.VITE_NETWORK }
+		$sbtcConfig.authHeader = { ...sigData, stxAddress: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress, amountSats: 0 }
 		setAuthorisation($sbtcConfig.authHeader)
 		sbtcConfig.update(() => $sbtcConfig)
 		return sigData
@@ -272,17 +272,22 @@ export async function authenticate($sbtcConfig:SbtcConfig):Promise<SignatureData
 	return
 }
 
-export async function loginStacksJs(callback:any, conf:SbtcConfig) {
+export async function loginStacksJs(callback:any, conf:SbtcConfig|undefined) {
 	try {
 		const provider = getStacksProvider()
 		console.log('provider: ', provider)
+
 		if (!userSession.isUserSignedIn()) {
 			showConnect({
 				userSession,
 				appDetails: appDetails(),
 				onFinish: async () => {
-					authenticate(conf)
-					callback(conf, true);
+					if (conf) {
+						authenticate(conf)
+						callback(conf, true);
+					} else {
+						callback(true);
+					}
 				},
 				onCancel: () => {
 					callback(conf);
@@ -296,7 +301,7 @@ export async function loginStacksJs(callback:any, conf:SbtcConfig) {
 		callback(conf);
 	}
 }
-
+/**
 export async function loginStacks(callback:any) {
 	try {
 		const provider = getStacksProvider()
@@ -319,7 +324,7 @@ export async function loginStacks(callback:any) {
 		if (window) window.location.href = "https://wallet.hiro.so/wallet/install-web";
 		callback(false);
 	}
-}
+} */
 
 export function loginStacksFromHeader(document:any) {
 	const el = document.getElementById("connect-wallet")
@@ -429,14 +434,23 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	}
 	try {
 		conf.exchangeRates = data.rates;
-		if (!conf.exchangeRates) throw new Error('no exchnage rates')
+		if (!conf.exchangeRates || conf.exchangeRates.length === 0) throw new Error('no exchnage rates')
 		const currency = conf.userSettings.currency?.myFiatCurrency?.currency;
 		const rateNow = conf.exchangeRates.find((o:any) => o.currency === currency)
 		if (rateNow) conf.userSettings.currency.myFiatCurrency = rateNow
 		else conf.userSettings.currency.myFiatCurrency = (conf.exchangeRates.find((o:any) => o.currency === 'USD') || {} as ExchangeRate)
 	} catch (err) {
 		conf.exchangeRates = []
-		conf.userSettings.currency.myFiatCurrency = {} as ExchangeRate
+		conf.userSettings.currency.myFiatCurrency = {
+			_id: "nan",
+			currency: "USD",
+			fifteen: 0,
+			last: 0,
+			buy: 0,
+			sell: 0,
+			symbol: "$",
+			name: "USD"
+		  } as ExchangeRate
 	}
 	conf.revealFeeWithGas = revealPayment;
 	conf.sbtcContractData = data.sbtcContractData;
@@ -456,12 +470,10 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 		conf.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 	}
 	sbtcConfig.update(() => conf);
-
 }
 
 function doPayloadData(conf:SbtcConfig) {
 	if (!conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0) throw new Error('Public Key missing from logged in user')
-	console.log(myHashP2WPKH(conf.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0 as string))
 	let prn = conf.keySets[CONFIG.VITE_NETWORK].stxAddress
 	let amountSats = 0
 	if (conf.payloadDepositData && conf.payloadDepositData.amountSats > 0) {

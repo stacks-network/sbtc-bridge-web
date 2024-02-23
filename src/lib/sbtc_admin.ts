@@ -28,7 +28,6 @@ export function isCoordinator(address:string) {
 }
 
 export async function romeoMintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, headerHex: string) {
-  //data {addr: principal, key: (buff 33)}
   let stxAddressCV = principalCV(stxAddress);
   if (stxAddress.indexOf('.') > -1) {
     stxAddressCV = contractPrincipalCV(stxAddress.split('.')[0], stxAddress.split('.')[1]);
@@ -54,7 +53,6 @@ export async function romeoMintTo(contractId:string, amount:number, stxAddress: 
 }
 
 export async function mintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string) {
-  //data {addr: principal, key: (buff 33)}
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
   const functionArgs = [uintCV(amount), stxAddressCV, btcAddressCV]
@@ -77,7 +75,6 @@ export async function mintTo(contractId:string, amount:number, stxAddress: strin
 }
 
 export async function mintToMerkle(amount:number, stxAddress: string, btcTxid: string) {
-  //data {addr: principal, key: (buff 33)}
   const contractId = CONFIG.VITE_SBTC_COORDINATOR + '.asset'
   
   const btcTxidCV = bufferCV(hex.decode(btcTxid))
@@ -103,7 +100,6 @@ export async function mintToMerkle(amount:number, stxAddress: string, btcTxid: s
 }
 
 export async function burnFrom(contractId:string, amount:number, stxAddress: string, btcTxid: string) {
-  //data {addr: principal, key: (buff 33)}
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);
   const functionArgs = [uintCV(amount), stxAddressCV, btcAddressCV]
@@ -147,7 +143,6 @@ export async function callContractReadOnly(data:any) {
 }
 
 export async function setCoordinator(contractId:string, address:string) {
-  //data {addr: principal, key: (buff 33)}
   const datum = tupleCV({
     addr: principalCV(address),
     key: bufferCVFromString('33 max byte buffer')

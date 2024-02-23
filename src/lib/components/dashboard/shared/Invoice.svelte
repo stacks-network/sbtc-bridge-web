@@ -12,18 +12,22 @@
   import { sbtcConfig } from '$stores/stores'
   import { CONFIG } from '$lib/config';
 	import PsbtDisplay from "$lib/components/dashboard/shared/PsbtDisplay.svelte";
+	import type { PSBTHolder } from "$types/revealer_types";
 
-  export let peginRequest:BridgeTransactionType;
+  //export let peginRequest:BridgeTransactionType;
+  export let psbtHolder:PSBTHolder|undefined;
+  export let amountSats:number;
+  export let bitcoinAddress:string;
+  export let mode:string;
+  export let requestType:string;
+
   // NB Its possible the user paid a different amount to the amount they entered in the UI - ths takes the on chain amount first
-  let amount = 0;
   let copied = false;
   let showPsbt = false;
-  export let psbtB64:string;
-  export let psbtHex:string;
 
   const copy = (ele:string) => {
-    let nameProp = fmtSatoshiToBitcoin(amount);
-    if (ele === 'address-field' && peginRequest.commitTxScript) nameProp = peginRequest.commitTxScript.address || '';
+    let nameProp = fmtSatoshiToBitcoin(amountSats);
+    if (ele === 'address-field' && mode === 'op_drop') nameProp = bitcoinAddress;
     let clippy = {
       target: document.getElementById('clipboard')!,
       props: { name: nameProp },
@@ -35,10 +39,10 @@
   }
   const getAddress = (full:boolean):string => {
     if (full) {
-      return (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript?.address || '' : peginRequest.uiPayload.bitcoinAddress || '';
+      return bitcoinAddress
     }
     try {
-      return (peginRequest.mode === 'op_drop') ? truncate(peginRequest.commitTxScript?.address, 10) : truncate(peginRequest.uiPayload.bitcoinAddress, 10);
+      return truncate(bitcoinAddress, 10);
     } catch (err) {
       return 'not connected'
     }
@@ -46,18 +50,18 @@
 
   const getFromAddress = (full:boolean):string => {
     if (full) {
-      return peginRequest.uiPayload.bitcoinAddress;
+      return bitcoinAddress;
     }
     try {
-      return truncate(peginRequest.uiPayload.bitcoinAddress, 10);
+      return truncate(bitcoinAddress, 10);
     } catch (err) {
       return 'not connected'
     }
   }
 
   const paymentUri = () => {
-    let uri = 'bitcoin:' + (peginRequest.mode === 'op_drop') ? peginRequest.commitTxScript!.address : peginRequest.uiPayload.bitcoinAddress;
-    uri += '?amount=' + fmtSatoshiToBitcoin(amount)
+    let uri = 'bitcoin:' + bitcoinAddress;
+    uri += '?amount=' + fmtSatoshiToBitcoin(amountSats)
     uri += '&label=' + encodeURI('Deposit BTC to mint sBTC on Stacks')
     return uri
   }
@@ -71,21 +75,20 @@
   }
 
   onMount(async () => {
-    if (!peginRequest) throw new Error('No pegin request')
-    amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
+    //amount = ((peginRequest.status === 2) ? peginRequest.vout?.value : peginRequest.uiPayload.amountSats) || 0;
   })
 </script>
 
 <div id="clipboard"></div>
 
 <div class="flex w-full justify-between rounded-lg border-[0.2px] border-gray-400 p-3 gap-y-8 bg-gray-01">
-    {#if peginRequest.mode === 'op_drop'}
+    {#if mode === 'op_drop'}
   <div class="rounded-lg overflow-hidden mr-4 border border-gray-600">
     <QrCode value={paymentUri()} size={144} color={'#000'} background={'#fff'} />
   </div>
   {/if}
 
-  {#if  peginRequest.requestType === 'deposit' || peginRequest.requestType === 'withdrawal'}
+  {#if  requestType === 'deposit' || requestType === 'withdrawal'}
     <div class="flex-1 flex flex-col justify-between">
       <div class="flex items-center justify-between text-white pl-3 pr-2 py-2 gap-x-1 rounded-md border border-gray-800 bg-gray-1000/75">
         <div id="address-field" class="grow text-1xl p-1">{getAddress(false)}</div>
@@ -98,7 +101,7 @@
         </div>
       </div>
       <div class="text-white leading-none mt-2">
-        <div class="block font-bold text-5xl">{fmtSatoshiToBitcoin(amount)}</div>
+        <div class="block font-bold text-5xl">{fmtSatoshiToBitcoin(amountSats)}</div>
         <div class="flex justify-between mt-2">
           <div class="font-light text-3xl">BTC</div>
           {#if allowShowPsbt()}
@@ -109,7 +112,7 @@
         </div>
       </div>
     </div>
-  {:else if peginRequest.requestType === 'reclaim'}
+  {:else if requestType === 'reclaim'}
     <div class="w-full flex flex-col gap-y-0 ">
       <div class="flex items-center text-gray-300 px-1 gap-x-2 rounded-md border border-gray-700">
           <div id="address-field" class="grow ">{getFromAddress(false)}</div>
@@ -117,7 +120,7 @@
           <FileIcon on:clicked={() => copy('address-field')} class={'h-5 w-5 text-white'}/>
       </div>
       <div class="flex text-gray-300 text-2xl items-baseline">
-        <div id="amount-field" class="-mt-1 p-0 text-5xl">{fmtSatoshiToBitcoin(amount)}</div>
+        <div id="amount-field" class="-mt-1 p-0 text-5xl">{fmtSatoshiToBitcoin(amountSats)}</div>
       </div>
       <div class="flex text-gray-300 ">
         <div class="text-2xl font-extralight -mt-3 -mb-2 text-uppercase">BTC</div>
@@ -125,8 +128,8 @@
     </div>
   {/if}
 </div>
-{#if showPsbt}
+{#if psbtHolder && showPsbt}
 <div class="flex w-full flex-wrap align-baseline items-start">
-  <PsbtDisplay {psbtB64} {psbtHex} />
+  <PsbtDisplay {psbtHolder} />
 </div>
 {/if}

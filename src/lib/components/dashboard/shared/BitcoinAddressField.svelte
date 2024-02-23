@@ -50,6 +50,9 @@
       {inputData.label}
       {#if inputData.hint}
       <Icon src="{InformationCircle}" mini class="ml-2 shrink-0 h-5 w-5 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50" aria-hidden="true" id="{inputData.field}-label" />
+      <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#{inputData.field}-label">
+        {inputData.hint}
+      </Tooltip>
       {/if}
     </label>
 
@@ -59,9 +62,6 @@
       </button>
     {/if}
 
-    <Tooltip class="w-auto !font-extralight !bg-black z-20" triggeredBy="#{inputData.field}-label">
-      {inputData.hint}
-    </Tooltip>
   </div>
   {#if readonly}
     <input

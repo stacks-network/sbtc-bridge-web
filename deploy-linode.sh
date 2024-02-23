@@ -8,11 +8,6 @@ PATH_DEPLOY=build
 mkdir -p $PATH_DEPLOY
 export SERVER=chomsky.brightblock.org
 export BUILDER=build
-if [ "$DEPLOYMENT" == "stag" ]; then
-  SERVER=popper.brightblock.org;
-  BUILDER=build-linode
-  PORT=22
-fi
 
 printf "\n-----------------------------------------------------------------------------------------------------\n";
 printf "Running script: $0 \n";
