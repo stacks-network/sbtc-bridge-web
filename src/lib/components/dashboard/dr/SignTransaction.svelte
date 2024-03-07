@@ -21,7 +21,9 @@ import { Icon, InformationCircle } from 'svelte-hero-icons';
 export let bitcoinAddress:string;
 export let recipient:string;
 export let amountSats:number;
-export let paymentPublicKey:string;
+let paymentAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
+let paymentPublicKey = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!;
+let originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
 
 const dispatch = createEventDispatcher();
 let psbtHolder:PSBTHolder|undefined;
@@ -82,7 +84,7 @@ const getBbMessage = () => {
 const increaseFee = async(fm:number) => {
   errorReason = undefined
   feeMultiplier = fm
-  psbtHolder = await getPsbtForDeposit(recipient, amountSats, paymentPublicKey, bitcoinAddress, feeMultiplier)
+  psbtHolder = await getPsbtForDeposit(originator, recipient, amountSats, paymentPublicKey, bitcoinAddress, feeMultiplier)
 }
 
 export async function signPsbtXverse() {
@@ -130,7 +132,7 @@ const updateTimeline = (timeline:number) => {
 
 onMount(async () => {
   try {
-    psbtHolder = await getPsbtForDeposit(recipient, amountSats, paymentPublicKey, bitcoinAddress, feeMultiplier)
+    psbtHolder = await getPsbtForDeposit(originator, recipient, amountSats, paymentPublicKey, bitcoinAddress, feeMultiplier)
     if (!psbtHolder) {
       errorReason = '<p>Unable to create / sign transaction</p><p>You can change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and then copy paste the PSBT before signing and broadcasting the transaction.</p>'
     }

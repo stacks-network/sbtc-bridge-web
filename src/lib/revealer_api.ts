@@ -5,13 +5,125 @@ import { headers } from './bridge_api';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import type { Transaction } from '@scure/btc-signer' 
+import type { RevealerTransaction } from '$types/revealer_types';
+
+/**
+ * /revealer-api/v1/transaction routes
+ */
+export async function connectRevealerTransactionPayment(commitAddress:string, txId:string):Promise<RevealerTransaction|undefined> {
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/connect-revealer-transaction/' + commitAddress + '/' + txId;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function checkRevealerTransactionPayment(commitAddress:string):Promise<RevealerTransaction|undefined> {
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/check-revealer-transaction/' + commitAddress;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function cancelRevealerTransactionPayment(commitAddress:string):Promise<RevealerTransaction|undefined> {
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/cancel-revealer-transaction/' + commitAddress;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function fetchRevealerTransactions(page:number, limit:number) {
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/get-revealer-transactions/' + page + '/' + limit;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function fetchRevealerTransactionsByCommitAddress(address:string) {
+  if (!address || address.length < 5) return;
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/get-revealer-transactions-by-commit-address/' + address;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function fetchRevealerTransactionsByTxId(txId:string) {
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/get-revealer-transactions-by-txid/' + txId;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+export async function fetchRevealerTransactionsByOriginator(address:string, page:number, limit:number) {
+  if (!address || address.length < 5) return;
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/get-revealer-transactions-by-originator/' + address + '/' + page + '/' + limit;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function fetchRevealerTransactionsPendingByOriginator(address:string) {
+  if (!address || address.length < 5) return;
+  const path = CONFIG.VITE_REVEALER_API + '/transactions/get-revealer-transactions-pending-by-originator/' + address;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
 
 
 /**
- * fetch stateless data needed in the UI;
+ * /revealer-api/v1/sbtc routes
  */
 export async function fetchUiInit():Promise<UIObject|undefined> {
   const path = CONFIG.VITE_REVEALER_API + '/sbtc/init-ui';
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function fetchBitcoinTransaction(txId:string):Promise<any> {
+  const path = CONFIG.VITE_REVEALER_API + '/sbtc/bitcoin/' + txId;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function fetchBitcoinBlock(blockhash:string, verbosity:number) {
+  const path = CONFIG.VITE_REVEALER_API + '/sbtc/bitcoin/block/' + blockhash + '/' + verbosity;
   try {
     const response = await fetch(path);
     const res = await response.json();
@@ -32,10 +144,27 @@ export async function fetchUserBalances(adrds:AddressObject) {
   }
 }
 
-export async function getPsbtForDeposit(recipient:string, amountSats:number, paymentPublicKey:string, paymentAddress:string, feeMultiplier:number) {
-  const path = CONFIG.VITE_REVEALER_API + '/op_return/get-psbt-for-deposit/' + recipient + '/' + amountSats + '/' + paymentPublicKey + '/' + paymentAddress + '/' + feeMultiplier;
+/**
+ * /revealer-api/v1/op_return routes
+ */
+export async function getPsbtForDeposit(originator:string, recipient:string, amountSats:number, paymentPublicKey:string, paymentAddress:string, feeMultiplier:number) {
+  const path = CONFIG.VITE_REVEALER_API + '/op_return/get-psbt-for-deposit';
   try {
-    const response = await fetch(path);
+    const response = await fetch(path, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'originator': originator
+      },
+      body: JSON.stringify({
+        originator,
+        recipient,
+        amountSats,
+        paymentPublicKey,
+        paymentAddress,
+        feeMultiplier,
+      })
+    });
     const res = await response.json();
     return res;
   } catch(err) {
@@ -43,10 +172,49 @@ export async function getPsbtForDeposit(recipient:string, amountSats:number, pay
   }
 }
 
-export async function getPsbtForWithdrawal(withdrawalAddress:string, signature:string, amountSats:number, paymentPublicKey:string, paymentAddress:string, feeMultiplier:number) {
-  const path = CONFIG.VITE_REVEALER_API + '/op_return/get-psbt-for-withdrawal/' + withdrawalAddress + '/' + signature + '/' + amountSats + '/' + paymentPublicKey + '/' + paymentAddress + '/' + feeMultiplier;
+export async function getAddressForOpDropDeposit(originator:string, recipient:string, amountSats:number, reclaimPublicKey:string, paymentAddress:string) {
+  const path = CONFIG.VITE_REVEALER_API + '/op_drop/get-commitment-address';
   try {
-    const response = await fetch(path);
+    const response = await fetch(path, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'originator': originator
+      },
+      body: JSON.stringify({
+        originator,
+        recipient,
+        amountSats,
+        reclaimPublicKey,
+        paymentAddress
+      })
+    });
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function getPsbtForWithdrawal(originator:string, withdrawalAddress:string, signature:string, amountSats:number, paymentPublicKey:string, paymentAddress:string, feeMultiplier:number) {
+  const path = CONFIG.VITE_REVEALER_API + '/op_return/get-psbt-for-withdrawal';
+  try {
+    const response = await fetch(path, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'originator': originator
+      },
+      body: JSON.stringify({
+        originator,
+        recipient: withdrawalAddress,
+        signature,
+        amountSats,
+        paymentPublicKey,
+        paymentAddress,
+        feeMultiplier,
+      })
+    });
     const res = await response.json();
     return res;
   } catch(err) {
@@ -72,7 +240,7 @@ export async function broadcastDeposit(txIn: { recipient:string, amountSats:numb
   });
   if (response.status !== 200) {
     const res = await response.text();
-    
+    console.log('broadcastDeposit: ' + res)
     if (res.indexOf('min relay fee not met') > -1) {
       let relayError:string|undefined;
       try {
@@ -90,7 +258,7 @@ export async function broadcastDeposit(txIn: { recipient:string, amountSats:numb
 }
 
 export async function clientBroadcastDeposit(txIn: { recipient:string, amountSats:number, paymentPublicKey:string, txId:string; }) {
-  const path = CONFIG.VITE_REVEALER_API + '/op_return/client-broadcast-deposit'
+  const path = CONFIG.VITE_REVEALER_API + '/op_return/update-deposit'
   const response = await fetch(path, {
     method: 'POST',
     headers: headers(),
@@ -111,3 +279,41 @@ function finaliseTransaction(psbtHex:string) {
     throw new Error(errorReason);
   }
 }
+
+
+/**
+ * /revealer-api/v1/payload routes
+ */
+export async function payloadParseTransaction(txid:string):Promise<any> {
+  const path = CONFIG.VITE_REVEALER_API + '/payload/parse/tx/' + txid;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function payloadParseDeposit(data:string):Promise<any> {
+  const path = CONFIG.VITE_REVEALER_API + '/payload/parse/deposit/' + data;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+
+export async function payloadParseWithdrawal(data:string, bitcoinAddress:string):Promise<any> {
+  const path = CONFIG.VITE_REVEALER_API + '/payload/parse/withdrawal/' + data + '/' + bitcoinAddress;
+  try {
+    const response = await fetch(path);
+    const res = await response.json();
+    return res;
+  } catch(err) {
+    return undefined;
+  }
+}
+

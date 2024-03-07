@@ -52,6 +52,31 @@ export async function romeoMintTo(contractId:string, amount:number, stxAddress: 
   });
 }
 
+export async function romeoWithdrawTo(contractId:string, amount:number, stxAddress: string, btcTxid: string, height: number, merkleProofs: ListCV, txIndex:number, headerHex: string) {
+  let stxAddressCV = principalCV(stxAddress);
+  if (stxAddress.indexOf('.') > -1) {
+    stxAddressCV = contractPrincipalCV(stxAddress.split('.')[0], stxAddress.split('.')[1]);
+  }
+  const functionArgs = [uintCV(amount), stxAddressCV, bufferCV(hex.decode(btcTxid)), uintCV(height), merkleProofs, uintCV(txIndex), bufferCV(hex.decode(headerHex))]
+  await openContractCall({
+    network: getStacksNetwork(),
+    postConditions: [],
+    postConditionMode: PostConditionMode.Deny,
+    contractAddress: contractId.split('.')[0],
+    contractName: contractId.split('.')[1],
+    functionName: 'burn',
+    functionArgs: functionArgs,
+    onFinish: (data: any) => {
+      console.log('TX Data: ', data);
+      return data;
+    },
+    onCancel: () => {
+      console.log('popup closed!');
+      return false
+    }
+  });
+}
+
 export async function mintTo(contractId:string, amount:number, stxAddress: string, btcTxid: string) {
   const btcAddressCV = stringAsciiCV(btcTxid);
   const stxAddressCV = principalCV(stxAddress);

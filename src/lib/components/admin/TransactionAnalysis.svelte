@@ -1,29 +1,30 @@
 <script lang="ts">
-import Button from "../shared/Button.svelte";
-import { fetchBlock, fetchTransaction } from '$lib/bridge_api';
-import VerifyTransactions from './VerifyTransactions.svelte';
+  import Button from "../shared/Button.svelte";
+  import VerifyTransactions from './VerifyTransactions.svelte';
 	import DecodeSbtc from "./DecodeSbtc.svelte";
 	import { sbtcConfig } from "$stores/stores";
+	import { onMount } from "svelte";
+	import { fetchBitcoinBlock, fetchBitcoinTransaction } from "$lib/revealer_api";
 
   let blockHash:any;
   let tx:any;
   let block:any;
-  let txid = $sbtcConfig.userSettings.testAddress // = '01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3';
+  export let txId:string; // = '01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3';
   let error:string|undefined;
   let componentKey = 0;
-  let feature = 'sbtcDecode'
+  export let feature = 'sbtcDecode'
 
   const clazzOn =  'bg-white relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-white before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[\'\'] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[\'\'] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[\'\'] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]'
   const clazzOff = '         relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-white before:pointer-events-none before:absolute before:h-4 before:w-4 before:scale-0 before:rounded-full before:bg-transparent before:opacity-0 before:shadow-[0px_0px_0px_13px_transparent] before:content-[\'\'] after:absolute after:z-[1] after:block after:h-4 after:w-4 after:rounded-full after:content-[\'\'] checked:border-primary checked:before:opacity-[0.16] checked:after:absolute checked:after:left-1/2 checked:after:top-1/2 checked:after:h-[0.625rem] checked:after:w-[0.625rem] checked:after:rounded-full checked:after:border-primary checked:after:bg-primary checked:after:content-[\'\'] checked:after:[transform:translate(-50%,-50%)] hover:cursor-pointer hover:before:opacity-[0.04] hover:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:shadow-none focus:outline-none focus:ring-0 focus:before:scale-100 focus:before:opacity-[0.12] focus:before:shadow-[0px_0px_0px_13px_rgba(0,0,0,0.6)] focus:before:transition-[box-shadow_0.2s,transform_0.2s] checked:focus:border-primary checked:focus:before:scale-100 checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca] checked:focus:before:transition-[box-shadow_0.2s,transform_0.2s] dark:border-neutral-600 dark:checked:border-primary dark:checked:after:border-primary dark:checked:after:bg-primary dark:focus:before:shadow-[0px_0px_0px_13px_rgba(255,255,255,0.4)] dark:checked:focus:border-primary dark:checked:focus:before:shadow-[0px_0px_0px_13px_#3b71ca]'
+  
   const verify = async () => {
-    if (!txid) return;
-    tx = await fetchTransaction(txid)
-    $sbtcConfig.userSettings.testAddress = txid
+    tx = await fetchBitcoinTransaction(txId)
+    $sbtcConfig.userSettings.testAddress = txId
     sbtcConfig.update(() => $sbtcConfig)
     try {
       blockHash = (tx.status) ? tx.status.block_hash : tx.blockhash
       if (blockHash) {
-        block = await fetchBlock(blockHash, 2)
+        block = await fetchBitcoinBlock(blockHash, 2)
         console.log(block)
       }
     } catch(err:any) {
@@ -31,6 +32,11 @@ import VerifyTransactions from './VerifyTransactions.svelte';
     }
     componentKey++
   }
+
+	onMount(async () => {
+    if (!txId) return;
+    verify()
+  })
 </script>
 
 <div class="flex flex-col w-full">
@@ -38,8 +44,8 @@ import VerifyTransactions from './VerifyTransactions.svelte';
   {#if error}<p class="text-danger">{error}</p>{/if}
 
   <div class="pb-5">
-    <label for="transact-path">Enter txid</label>
-    <input type="text" class="text-black block p-3 rounded-md border w-full" bind:value={txid}/>
+    <label for="transact-path">Enter txId</label>
+    <input type="text" class="text-black block p-3 rounded-md border w-full" bind:value={txId}/>
   </div>
 
   <div class="flex gap-x-5 pb-5">

@@ -1,15 +1,17 @@
 <script lang="ts">
 import { tupleCV, uintCV, listCV, bufferCV, serializeCV } from '@stacks/transactions';
 import Button from "../shared/Button.svelte";
-import { callContractReadOnly, isCoordinator, romeoMintTo } from '$lib/sbtc_admin';
+import { callContractReadOnly, isCoordinator, romeoMintTo, romeoWithdrawTo } from '$lib/sbtc_admin';
 import { hex } from '@scure/base';
 import { onMount } from 'svelte';
 import { sha256 } from '@noble/hashes/sha256';
 import { explorerAddressUrl } from '$lib/utils';
 import { sbtcConfig } from '$stores/stores'
-import { bitcoinToSats, generateMerkleRoot, generateMerkleTree, getParametersForProof, parsePayloadFromTransaction, type TxMinedParameters } from 'sbtc-bridge-lib';
 import { CONFIG } from '$lib/config';
 import { loggedIn } from '$lib/stacks_connect';
+	import { bitcoinToSats, parsePayloadFromTransaction, type PayloadType, type TxMinedParameters } from 'sbtc-bridge-lib';
+	import { generateMerkleRoot, generateMerkleTree, getParametersForProof } from '$lib/merkle_utils';
+	import { payloadParseTransaction } from '$lib/revealer_api';
 /**
 proofs = (
 0x268c873b99d12a8ea0c87e05de4ac98b16398217abc97f79b94bd9bea35a5ce6 
@@ -29,6 +31,8 @@ txid=01d8467b25e1d415bf53427d4db86fe001590b280b604204f794c5ecfc923ed3
 
 export let tx:any;
 export let block:any;
+let data:PayloadType;
+let deposit = true
 let showTree = false;
 let allowMint = false;
 let allowBurn = false;
@@ -173,7 +177,7 @@ const verifyMerkleProof = async () => {
 }
 
 const mintTo = async () => {
-  const data = parsePayloadFromTransaction(CONFIG.VITE_NETWORK, tx.hex)
+  //const dataPayload = parsePayloadFromTransaction(CONFIG.VITE_NETWORK, tx.hex)
   let prin = data.stacksAddress;
   if (typeof (data.lengthOfCname) === 'number' && data.lengthOfCname > 0) prin += '.' + data.cname
   contractParameters = {
@@ -188,12 +192,32 @@ const mintTo = async () => {
   console.log(res)
 }
 
+const withdrawTo = async () => {
+  //const dataPayload = parsePayloadFromTransaction(CONFIG.VITE_NETWORK, tx.hex)
+  let prin = data.stacksAddress;
+  if (typeof (data.lengthOfCname) === 'number' && data.lengthOfCname > 0) prin += '.' + data.cname
+  contractParameters = {
+    amount: tx.vout[1].amount,
+    txid: hex.encode(hex.decode(tx.txid)),
+    stxAddress: prin,
+    proofs: (proofString) ? proofString.split(' ').join('<br/>') : parameters.proofElements.map(({ hash }) => hash).join('<br/>'),
+    'tx-index': parameters.txIndex,
+  }
+
+  const res = await romeoWithdrawTo($sbtcConfig.sbtcContractData.contractId, amount, prin!, tx.txid, parameters.height, getProofsAsCV(), parameters.txIndex, parameters.headerHex)
+  console.log(res)
+}
+
 onMount(async () => {
   const txIds = block.tx.map(function(tx:any) {
-    return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
+    //return hex.encode(hex.decode(tx.txid).reverse()) //hexReverse(tx.txid)
+    return hex.encode(hex.decode(tx).reverse()) //hexReverse(tx.txid)
   });
   answer = undefined
   console.log('tx0-r: ' + txIds[0])
+
+  data = await payloadParseTransaction(tx.txid)
+  deposit = data.opcode === '3C'
 
   const mrT = generateMerkleRoot(txIds)
   //if (hex.encode(hex.decode(mrT).reverse()) !== block.merkleroot) throw new Error('Merkle root error')
@@ -276,9 +300,15 @@ onMount(async () => {
     </div>
     {/each}
     </div>
+    {#if deposit}
     <div class="my-5 flex gap-x-5 items-baseline">
       <div class=""><Button darkScheme={false} label={'Mint'} target={''} on:clicked={() => mintTo()}/></div>
     </div>
+    {:else}
+    <div class="my-5 flex gap-x-5 items-baseline">
+      <div class=""><Button darkScheme={false} label={'Withdraw'} target={''} on:clicked={() => withdrawTo()}/></div>
+    </div>
+    {/if}
     {/if}
 
   {#if allowMint}

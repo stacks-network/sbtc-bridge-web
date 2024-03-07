@@ -6,11 +6,9 @@
 	import Withdraw from './Withdraw.svelte';
 	import DepositDrop from './DepositDrop.svelte';
 	import { onMount } from 'svelte';
-	import { fetchUtxoSet } from '$lib/bridge_api';
 	import { CONFIG } from '$lib/config';
   import Banner from '$lib/components/shared/Banner.svelte';
 
-  let addressInfo:any;
   let errorMessage:string|undefined;
   let inited = false;
   let connected = false;
@@ -49,8 +47,6 @@
   onMount(async () => {
     try {
       connected = typeof $sbtcConfig.sbtcContractData.contractId === 'string'
-      const bitcoinAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal
-      addressInfo = [] //await fetchUtxoSet(bitcoinAddress)
       initData()
       inited = true;
     } catch(err:any) {
@@ -77,11 +73,11 @@
               {#if opDrop}
                 <DepositDrop />
               {:else}
-                <DepositReturn {addressInfo} />
+                <DepositReturn />
               {/if}
             </TabItem>
             <TabItem open={!useDeposit} on:click={() => toggle()} title="Withdraw" class="grow [&>button]:w-full [&>button]:text-lg">
-              <Withdraw {addressInfo} />
+              <Withdraw />
             </TabItem>
           </Tabs>
         {:else}

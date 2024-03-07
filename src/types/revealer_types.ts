@@ -1,21 +1,44 @@
-import { VoutI } from "sbtc-bridge-lib";
+import type { CommitmentScriptDataType, PayloadType, VoutI } from "sbtc-bridge-lib";
+
+export enum RevealerTxTypes {
+	SBTC_DEPOSIT = 'SBTC_DEPOSIT',
+	SBTC_WITHDRAWAL = 'SBTC_WITHDRAWAL',
+}
+
+export enum RevealerTxModes {
+	OP_RETURN = 'OP_RETURN',
+	OP_DROP = 'OP_DROP',
+}
 
 export enum CommitmentStatus {
 	UNPAID = 0,
-	PAID = 1,
-	REVEALED = 2,
-	RECLAIMED = 3,
+	PENDING = 1,
+	PAID = 2,
+	REVEALED = 3,
+	RECLAIMED = 4,
 }
-
-export enum CommitmentMode {
-	OP_DROP = 'OP_DROP',
-	OP_RETURN = 'OP_RETURN',
-}
-
-export enum RequestType {
-	INSCRIPTION = 'INSCRIPTION',
-	SBTC_DEPOSIT = 'SBTC_DEPOSIT',
-	SBTC_WITHDRAWAL = 'SBTC_WITHDRAWAL',
+export interface RevealerTransaction {
+	_id?: string;
+	txId: string;
+	psbt?: string;
+	originator: string;
+	commitment?:CommitmentScriptDataType;
+	eventData?:PayloadType;
+	signed: boolean;
+	recipient: string;
+	amountSats: number;
+	confirmations: number;
+	created: number;
+	updated: number;
+	signature?: string;
+	paymentPublicKey: string;
+	paymentAddress: string;
+	status: CommitmentStatus;
+	mode: RevealerTxModes;
+	type: RevealerTxTypes;
+	reclaimTxId?: string;
+	revealTxId?: string;
+	blockHeight:number;
 }
 
 export type ConfigI = {
@@ -44,46 +67,6 @@ export type ConfigI = {
 	electrumUrl: string;
 };
     
-export type CommitmentType = {
-	commitmentRequest:CommitmentRequest;
-    _id?: string;
-	tries?: number;
-    network: string;
-	status: number;
-    created: number;
-    updated: number;
-	paidFromAddress?: string|undefined;
-    requestType: string;
-    taprootScript: TaprootScriptType;
-    vout0?: VoutI;
-    vout?: VoutI;
-	commitTxId?: string;
-}
-
-export type CommitmentResponse = {
-	commitAddress: string;
-	paymentPsbt: string|undefined;
-	commitTxId?: string;
-	recipientStxPrincipal?: string|undefined;
-	inscriptionPayload?: string|undefined;
-}
-
-export type CommitmentError = {
-	failed: boolean;
-	message: string;
-}
-
-export type CommitmentRequest = {
-	revealFee: number;
-	revealerPublicKey: string;
-	reclaimerPublicKey: string;
-	payFromAddress: string|undefined;
-	originator: string;
-	recipientStxPrincipal?: string|undefined;
-	inscriptionPayload?: string|undefined;
-}
-
-
 export type PubKeySet = {
 	stxAddress: string;
 	cardinal: string;

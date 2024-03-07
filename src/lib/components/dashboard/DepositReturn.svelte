@@ -14,7 +14,13 @@
 	import { bitcoinBalanceFromMempool } from "$lib/utils";
 	import { MINIMUM_DEPOSIT } from "$lib/sbtc";
 
-  const cardinal = Number($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal);
+  const cardinal = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
+  const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
+  let bitcoinAddress:string; // provides utxo - most likely current wallet cardinal
+  let recipient:string;      //
+  let amountSats:number;
+  let paymentPublicKey = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit1!;
+
   let error:string|undefined;
   let showAddresses = false;
   $: timeLineStatus = 1;
@@ -22,28 +28,15 @@
   //let peginRequest:BridgeTransactionType;
   let componentKey = 0;
   let amountErrored:string|undefined = undefined;
-  let bitcoinAddress:string;
-  let recipient:string;
-  let amountSats:number;
-  let paymentPublicKey:string;
 
   const invoice = async () => {
     try {
-      const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
       verifyAmount($sbtcConfig.payloadDepositData.amountSats, bal);
       verifyStacksPricipal($sbtcConfig.payloadDepositData.principal)
-
-      //if (peginRequest && peginRequest._id) {
-        //peginRequest.uiPayload.amountSats = $sbtcConfig.payloadDepositData.amountSats
-        //const newP = await updateBridgeTransaction(peginRequest)
-        //if (newP && newP.status !== 404) peginRequest = newP;
-      //}
-
       const conf:SbtcConfig = $sbtcConfig;
       sbtcConfig.update(() => conf);
-      //peginRequest = getBridgeDeposit(CONFIG.VITE_NETWORK, $sbtcConfig.payloadDepositData, $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress);
-      bitcoinAddress = ($sbtcConfig.payloadDepositData?.bitcoinAddress) ? $sbtcConfig.payloadDepositData?.bitcoinAddress : $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
-      recipient = ($sbtcConfig.payloadDepositData.principal) ? $sbtcConfig.payloadDepositData?.bitcoinAddress : $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
+      bitcoinAddress = ($sbtcConfig.payloadDepositData?.bitcoinAddress) ? $sbtcConfig.payloadDepositData?.bitcoinAddress : cardinal;
+      recipient = ($sbtcConfig.payloadDepositData.principal) ? $sbtcConfig.payloadDepositData?.principal : $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
       amountSats = $sbtcConfig.payloadDepositData.amountSats;
       timeLineStatus = 2;
       componentKey++;
@@ -98,7 +91,7 @@
     <div class="mt-4">
       <button on:click={() => login()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Connect wallet</button>
     </div>
-  {:else if opReturn && (cardinal < MINIMUM_DEPOSIT)}
+  {:else if opReturn && (bal <= MINIMUM_DEPOSIT)}
     <Banner
       bannerType={'info'}
       message={'You don\'t have any BTC in your wallet.<br/> Don\'t have testnet Bitcoin? <a class="underline" href="https://bitcoinfaucet.uo1.net/" target="_blank">Get some to get started!</a>'}/>
@@ -107,14 +100,14 @@
     {#if timeLineStatus === 1}
     <DepositForm {showAddresses} on:amount_event={handleAmountEvent}/>
     <div class="mt-4">
-      <button style={(amountErrored) ? '' : ''} title={(amountErrored) ? amountErrored : 'Click to continue'} disabled={typeof amountErrored === 'string'} on:click={() => invoice()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
+      <button title={'Click to generate payment code'} on:click={() => invoice()} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">
         Continue
       </button>
     </div>
     {:else if timeLineStatus === 2}
-    <SignTransaction {bitcoinAddress} {recipient} {amountSats} {paymentPublicKey} on:update_timeline={updateTimeline}/>
+    <SignTransaction {bitcoinAddress} {recipient} {amountSats} on:update_timeline={updateTimeline}/>
     {:else if timeLineStatus === 3}
-    <StatusCheck status={2} requestType={'op_return'} on:clicked={doClicked}/>
+    <StatusCheck status={2} requestType={'deposit'} mode={'op_return'} on:clicked={doClicked}/>
     {/if}
   {/if}
   {/key}

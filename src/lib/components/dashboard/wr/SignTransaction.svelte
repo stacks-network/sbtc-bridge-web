@@ -22,6 +22,7 @@ export let withdrawalAmountSats:number;
 export let withdrawalSignature:string;
 let paymentAddress = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
 let paymentPublicKey = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!;
+let originator = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress;
 
 const dispatch = createEventDispatcher();
 let psbtHolder:PSBTHolder;
@@ -34,7 +35,7 @@ let broadcastedTxId:string;
 const increaseFee = async(fm:number) => {
   errorReason = undefined
   feeMultiplier = fm
-  psbtHolder = await getPsbtForWithdrawal(withdrawalRecipient, withdrawalSignature, withdrawalAmountSats, paymentPublicKey, paymentAddress, feeMultiplier)
+  psbtHolder = await getPsbtForWithdrawal(originator, withdrawalRecipient, withdrawalSignature, withdrawalAmountSats, paymentPublicKey, paymentAddress, feeMultiplier)
 }
 
 const getExplorerUrl = () => {
@@ -57,7 +58,7 @@ export async function requestSignPsbt() {
 
 const getBbMessage = () => {
   let msg = '<p>View transaction on the <a class="text-black underline" href=' + getExplorerUrl() + ' target="_blank" rel="noreferrer">Bitcoin network</a>.</p>'
-  msg += '<p>Once confirmed your sBTC will be withdrawn from your Stacks Account and your Bitcoin returned. </p>'
+  msg += '<p>Once confirmed your sBTC will be withdrawn from your Stacks Account and your Bitcoin returned - <a href="/transactions/' + $sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress + '">keep track here</a>. </p>'
   return msg
 }
 
@@ -128,15 +129,15 @@ export async function signPsbtXverse() {
 }
 
 const updateTimeline = (timeline:number) => {
-    dispatch('update_transaction', { timeline });
+    dispatch('update_timeline', { timeline });
 }
 
 const broadcast = async (signedPsbtHex:string) => {
   try {
     const result = await broadcastDeposit({
-        recipient: $sbtcConfig.payloadDepositData.principal, 
-        amountSats: $sbtcConfig.payloadDepositData.amountSats, 
-        paymentPublicKey: $sbtcConfig.keySets[CONFIG.VITE_NETWORK].btcPubkeySegwit0!, 
+        recipient: withdrawalRecipient, 
+        amountSats: withdrawalAmountSats, 
+        paymentPublicKey, 
         signedPsbtHex, 
         maxFeeRate: 0 
     })
@@ -148,7 +149,7 @@ const broadcast = async (signedPsbtHex:string) => {
 }
 
 onMount(async () => {
-  psbtHolder = await getPsbtForWithdrawal(withdrawalRecipient, withdrawalSignature, withdrawalAmountSats, paymentPublicKey, paymentAddress, feeMultiplier)
+  psbtHolder = await getPsbtForWithdrawal(originator, withdrawalRecipient, withdrawalSignature, withdrawalAmountSats, paymentPublicKey, paymentAddress, feeMultiplier)
   if (!psbtHolder) {
     errorReason = '<p>Unable to create / sign transaction</p><p>You can change the bitcoin address on the previous screen to your Bitcoin Core or Electrum wallet and then copy paste the PSBT before signing and broadcasting the transaction.</p>'
   }
@@ -175,6 +176,7 @@ onMount(async () => {
     <div class="mt-6 w-full flex">
       <div class="grow"><button on:click={() => requestSignPsbt()} class=" w-full text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Sign & broadcast</button></div>
     </div>
+    {#if psbtHolder}
     <div class="flex mt-3 gap-x-3 justify-end text-md ">
       Fee {(psbtHolder.txFee || 0) * feeMultiplier} sats: &gt;&gt; 
       <a class="text-warning-400" href="/" on:click|preventDefault={() => increaseFee(1)}>1x</a>
@@ -184,12 +186,13 @@ onMount(async () => {
       increase
     </div>
     {/if}
+    {/if}
   </div>
   {:else}
   <div class="my-3 text-2xl w-full">
     <Banner bannerType={'info'} message={getBbMessage()}/>
   </div>
-  <div class="mt-5">
+  <div class="mt-5 w-full">
     <button on:click={() => updateTimeline(1)} class="text-center focus:ring-4 focus:outline-none justify-center text-base hover:bg-primary-800 dark:bg-primary-600 dark:hover:bg-primary-700 focus:ring-primary-300 dark:focus:ring-primary-800 inline-flex w-full items-center gap-x-1.5 bg-primary-01 px-4 py-2 font-normal text-black rounded-xl border border-primary-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50">Back</button>
   </div>
   {/if}

@@ -21,11 +21,17 @@ const appConfig = new AppConfig(['store_write', 'publish_data']);
 export const userSession = new UserSession({ appConfig }); // we will use this export from other files
 const authMessage = 'Please sign authentication'
 let userMessage:string;
+let walletAddresses:any;
 
 export const webWalletNeeded = false;
 export const minimumDeposit = 10000
 export const revealPayment = 10001
 
+export function isWalletAccountConnected(stxAddress:string) {
+	if (!walletAddresses) return true
+	const connected = walletAddresses?.result?.addresses?.findIndex((o:any) => o.address === stxAddress) || -1
+	return connected > -1
+}
 const allowed = [
 	{ btc: '2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb', stx: 'SP1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRCBGD7R'}, // devnet testing
 	{ btc: '2N8fMsws2pTGfNzkFTLWdUYM5RTWEAphieb', stx: 'SP1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28GBQA1W0F'}, // mike 1
@@ -459,7 +465,10 @@ export async function initApplication(conf:SbtcConfig, fromLogin:boolean|undefin
 	if (!conf.payloadDepositData) conf.payloadDepositData = {} as WithdrawPayloadUIType
 	if (!conf.payloadWithdrawData) conf.payloadWithdrawData = {} as WithdrawPayloadUIType
 	if (loggedIn()) {
-		try { doPayloadData(conf) }
+		try {
+			doPayloadData(conf) 
+			//walletAddresses = await (window as any).btc?.request('getAddresses');
+		}
 		catch (err) {
 			//
 		} 

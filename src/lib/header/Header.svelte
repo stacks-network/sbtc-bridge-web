@@ -12,6 +12,7 @@
 	import { CONFIG } from '$lib/config';
 	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 	import { setAuthorisation } from '$lib/bridge_api';
+	import { disconnect } from '@stacks/connect';
 
 	const dispatch = createEventDispatcher();
 	const coordinator = (loggedIn() && $sbtcConfig.keySets[CONFIG.VITE_NETWORK]) ? isCoordinator($sbtcConfig.keySets[CONFIG.VITE_NETWORK].stxAddress) : undefined;
@@ -47,6 +48,7 @@
 		$sbtcConfig.keySets[CONFIG.VITE_NETWORK] = {} as AddressObject;
 		await sbtcConfig.update(() => $sbtcConfig)
 		dispatch('login_event');
+		disconnect()
 		setTimeout(function() {
 			componentKey++;
 			goto('/')

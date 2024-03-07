@@ -9,7 +9,7 @@
   import { fmtNumber, type SbtcClarityEvent } from 'sbtc-bridge-lib'
   import { satsToBitcoin } from '$lib/utils'
   import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';
-  import Paging from '$lib/components/transactions/Paging.svelte';
+  import Paging from '$lib/components/sbtc-events/Paging.svelte';
   import { sbtcConfig } from '$stores/stores';
   import { CONFIG } from '$lib/config';
 
