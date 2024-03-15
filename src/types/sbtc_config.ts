@@ -1,4 +1,4 @@
-import type { BridgeTransactionType, SbtcContractDataType, AddressObject, KeySet, ExchangeRate, AuthorisationDataType, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib' 
+import type { BridgeTransactionType, SbtcContractDataType, AddressObject, ExchangeRate, AuthorisationDataType, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib' 
 
 export type SbtcConfig = {
   exchangeRates?: Array<ExchangeRate>;
@@ -18,6 +18,51 @@ export type SbtcConfig = {
   payloadDepositData: DepositPayloadUIType;
   payloadWithdrawData: WithdrawPayloadUIType;
 };
+export const defaultSbtcConfig:SbtcConfig = {
+  pegIn: true,
+  loggedIn: false,
+  sigData: undefined,
+  sbtcContractData: {} as SbtcContractDataType,
+  userSettings: {
+    useOpDrop: false,
+    debugMode: false,
+    currency: {
+      cryptoFirst: false,
+      myFiatCurrency: {
+        _id: "nan",
+        currency: "USD",
+        fifteen: 0,
+        last: 0,
+        buy: 0,
+        sell: 0,
+        symbol: "$",
+        name: "USD"
+      },
+      denomination: 'bitcoin'
+    },
+    peggingIn: false
+  },
+  keySets: {},
+  revealFeeWithGas: 0,
+  payloadDepositData: {
+    principal: '',
+    bitcoinAddress: '',
+    amountSats: 0,
+    sbtcWalletPublicKey: '',
+    reclaimPublicKey: '',
+    paymentPublicKey: ''
+  },
+  payloadWithdrawData: {
+    principal: '',
+    bitcoinAddress: '',
+    signature: undefined,
+    amountSats: 0,
+    sbtcWalletPublicKey: '',
+    reclaimPublicKey: '',
+    paymentPublicKey: ''
+  }
+}
+
 
 export type SbtcUserSettingI = {
   peggingIn: boolean;

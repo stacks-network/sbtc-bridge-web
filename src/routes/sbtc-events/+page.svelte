@@ -4,7 +4,7 @@
 
   import { page } from '$app/stores';
   import { COMMS_ERROR } from '$lib/utils.js'
-  import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/bridge_api'
+  import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/events_api'
   import { sbtcConfig } from '$stores/stores';
   import { CONFIG } from '$lib/config';
 	import type { SbtcClarityEvent } from 'sbtc-bridge-lib';

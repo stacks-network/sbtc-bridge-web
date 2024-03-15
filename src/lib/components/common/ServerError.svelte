@@ -3,7 +3,6 @@ import { sbtcConfig } from '$stores/stores'
 import { CONFIG } from '$lib/config';
 import { goto } from "$app/navigation";
 import Button from '$lib/components/shared/Button.svelte';
-	import { a_primary } from '$lib/css_utils';
 
 const launchApp = () => {
   goto('/?chain=' + CONFIG.VITE_NETWORK)
@@ -31,7 +30,7 @@ const launchApp = () => {
             <p class="mb-2">Please try later.</p>
           {/if}
         {/if}
-        <p class="mb-2">For more info about the sBTC Bridge, check <a class={a_primary} href="/faq">the FAQ page.</a></p>
+        <p class="mb-2">For more info about the sBTC Bridge, check <a class={'text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline decoration-primary-500/80'} href="/faq">the FAQ page.</a></p>
       </div>
       <Button darkScheme={false} label={'Back home'} target={'launchApp'} on:clicked={() => launchApp()}/>
     </div>

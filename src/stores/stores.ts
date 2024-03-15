@@ -1,6 +1,6 @@
 import { persisted } from 'svelte-local-storage-store'
 import type { SbtcConfig } from '$types/sbtc_config';
-import { defaultSbtcConfig } from '$lib/sbtc'
+import { defaultSbtcConfig } from '$types/sbtc_config';
 
 /** Store for your data. 
 This assumes the data you're pulling back will be an array.

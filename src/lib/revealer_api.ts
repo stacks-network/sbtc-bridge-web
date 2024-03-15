@@ -1,11 +1,13 @@
 import { CONFIG } from '$lib/config';
 import type { UIObject } from '$types/sbtc_ui_types';
 import type { AddressObject } from 'sbtc-bridge-lib';
-import { headers } from './bridge_api';
+import { headers } from './events_api';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
 import type { Transaction } from '@scure/btc-signer' 
 import type { RevealerTransaction } from '$types/revealer_types';
+
+export const MINIMUM_DEPOSIT = 1000;
 
 /**
  * /revealer-api/v1/transaction routes

@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { afterNavigate, goto } from '$app/navigation';
-	import { page } from '$app/stores';
-	import { fmtNumber, satsToBitcoin, truncate, type SbtcClarityEvent } from 'sbtc-bridge-lib';
+	import { goto } from '$app/navigation';
+	import { fmtNumber, satsToBitcoin, truncate } from 'sbtc-bridge-lib';
 	import ArrowUpRight from '../shared/ArrowUpRight.svelte';
 	import { explorerBtcTxUrl, explorerTxUrl } from '$lib/utils';
 

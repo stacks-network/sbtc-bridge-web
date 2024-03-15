@@ -1,4 +1,4 @@
-import { findSbtcEventByBitcoinTxId } from '$lib/bridge_api';
+import { findSbtcEventByBitcoinTxId } from '$lib/events_api';
 import { setConfig } from '$lib/config';
 
 /** @type {import('./$types').PageLoad} */

@@ -11,7 +11,7 @@
 	import SettingsDropdown from './SettingsDropdown.svelte';
 	import { CONFIG } from '$lib/config';
 	import type { AddressObject, DepositPayloadUIType, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
-	import { setAuthorisation } from '$lib/bridge_api';
+	import { setAuthorisation } from '$lib/events_api';
 	import { disconnect } from '@stacks/connect';
 
 	const dispatch = createEventDispatcher();

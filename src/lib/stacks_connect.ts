@@ -2,13 +2,13 @@
 import { CONFIG } from '$lib/config';
 import { c32address, c32addressDecode } from 'c32check';
 import { sbtcConfig } from '$stores/stores'
-import { setAuthorisation } from '$lib/bridge_api'
+import { setAuthorisation } from '$lib/events_api'
 import type { SbtcConfig, SbtcUserSettingI } from '$types/sbtc_config';
 import { StacksTestnet, StacksMainnet, StacksMocknet } from '@stacks/network';
 import { openSignatureRequestPopup, type SignatureData, type StacksProvider } from '@stacks/connect';import { AppConfig, UserSession, showConnect, getStacksProvider } from '@stacks/connect';
 import { getPegWalletAddressFromPublicKey, type AddressObject, type SbtcContractDataType, tsToDate } from 'sbtc-bridge-lib' 
 import { hashMessage, verifyMessageSignature } from '@stacks/encryption';
-import { defaultSbtcConfig } from '$lib/sbtc';
+import { defaultSbtcConfig } from '$types/sbtc_config';
 import { hex } from '@scure/base';
 import type { DepositPayloadUIType, ExchangeRate, WithdrawPayloadUIType } from 'sbtc-bridge-lib';
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect'

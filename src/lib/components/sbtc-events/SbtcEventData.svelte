@@ -1,10 +1,10 @@
 <script lang="ts">
-import { explorerBtcAddressUrl, explorerBtcTxUrl, explorerTxUrl, parseFulfilPayloadFromOutput } from '$lib/utils';
+import { explorerBtcAddressUrl, explorerBtcTxUrl, explorerTxUrl } from '$lib/utils';
 import { fmtNumber, satsToBitcoin, truncate, type SbtcClarityEvent, getAddressFromOutScript } from 'sbtc-bridge-lib';
 import { onMount } from 'svelte';
 import * as btc from '@scure/btc-signer';
 import { hex } from '@scure/base';
-import { fetchAddressTransactions, fetchTransaction, fetchTransactionHex } from '$lib/bridge_api';
+import { fetchAddressTransactions, fetchTransaction, parseFulfilPayloadFromOutput } from '$lib/events_api';
 	import { CONFIG } from '$lib/config';
 
 export let sbtcEvent:SbtcClarityEvent;

@@ -12,7 +12,7 @@
 	import StatusCheck from "./dd/StatusCheck.svelte";
 	import SignTransaction from "./dr/SignTransaction.svelte";
 	import { bitcoinBalanceFromMempool } from "$lib/utils";
-	import { MINIMUM_DEPOSIT } from "$lib/sbtc";
+	import { MINIMUM_DEPOSIT } from "$lib/revealer_api";
 
   const cardinal = $sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinal;
   const bal = bitcoinBalanceFromMempool($sbtcConfig.keySets[CONFIG.VITE_NETWORK].cardinalInfo)
@@ -50,8 +50,6 @@
     if (button.target === 'back') {
       timeLineStatus = 1;
     } else if (button.target === 'status-check') {
-      //await doPeginScan();
-      //if ($sbtcConfig.pegInMongoId) peginRequest = await fetchPeginById($sbtcConfig.pegInMongoId);
       timeLineStatus = 3;
     } else if (button.target === 'transaction-history') {
       goto('/transactions')

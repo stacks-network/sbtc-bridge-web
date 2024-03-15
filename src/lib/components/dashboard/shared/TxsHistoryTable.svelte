@@ -5,7 +5,7 @@
   import { page } from '$app/stores';
   import { COMMS_ERROR, explorerTxUrl } from '$lib/utils.js'
   import { truncate, explorerBtcTxUrl } from '$lib/utils'
-  import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/bridge_api'
+  import { findSbtcEventByBitcoinAddress, findSbtcEventsByPage } from '$lib/events_api'
   import { fmtNumber, type SbtcClarityEvent } from 'sbtc-bridge-lib'
   import { satsToBitcoin } from '$lib/utils'
   import ArrowUpRight from '$lib/components/shared/ArrowUpRight.svelte';

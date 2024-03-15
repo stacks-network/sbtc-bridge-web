@@ -78,8 +78,6 @@
     if (button.target === 'back') {
       timeLineStatus = 1;
     } else if (button.target === 'status-check') {
-      //await doPeginScan();
-      //if ($sbtcConfig.pegOutMongoId) pegout = await fetchPeginById($sbtcConfig.pegOutMongoId);
       timeLineStatus = 3;
       goto('/transactions/1') // + peginRequest._id);
     } else if (button.target === 'transaction-history') {

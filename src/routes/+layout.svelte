@@ -11,9 +11,9 @@
 	import { sbtcConfig } from '$stores/stores'
     import { authConfig } from '$stores/authConfig'
 	import type { SbtcConfig } from '$types/sbtc_config'
-	import { defaultSbtcConfig } from '$lib/sbtc';
+	import { defaultSbtcConfig } from '$types/sbtc_config';
 	import { COMMS_ERROR, tsToDate, tsToTime } from '$lib/utils.js'
-	import { setAuthorisation } from '$lib/bridge_api';
+	import { setAuthorisation } from '$lib/events_api';
 	import type { AddressObject } from 'sbtc-bridge-lib';
 
 	let componentKey = 0;
@@ -96,7 +96,6 @@
 			}
 			inited = true;
 
-			//openWebSocket()
 			initApp();
 			window.addEventListener('resize', debounce);
 		

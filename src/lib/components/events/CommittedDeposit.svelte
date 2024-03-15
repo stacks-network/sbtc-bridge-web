@@ -7,13 +7,12 @@ import { signMessage } from '$lib/stacks_connect';
 import { explorerBtcTxUrl } from '$lib/utils'
 import { sbtcConfig } from '$stores/stores'
 import Button from '$lib/components/shared/Button.svelte';
-import { sign } from '$lib/bridge_api';
+import { sign } from '$lib/events_api';
 import type { Transaction } from '@scure/btc-signer';
 import { toStorable, buildRevealOrReclaimTransaction, getPegWalletAddressFromPublicKey } from 'sbtc-bridge-lib' 
 import { Popover } from 'flowbite-svelte';
-import { a_primary } from '$lib/css_utils';
 import Invoice from '$lib/components/dashboard/shared/Invoice.svelte';
-import { fetchTransaction } from '$lib/bridge_api'
+import { fetchTransaction } from '$lib/events_api'
 
 export let peginRequest:BridgeTransactionType;
 let wrappedPsbt:WrappedPSBT = {} as WrappedPSBT;
@@ -108,14 +107,14 @@ onMount(async () => {
   </div>
 </div>
 <p class="">
-	Thanks for <a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer" class={a_primary}>depositing</a> Bitcoin.
+	Thanks for <a href={explorerBtcTxUrl(peginRequest.btcTxid)} target="_blank" rel="noreferrer" class={'text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline decoration-primary-500/80'}>depositing</a> Bitcoin.
 </p>
 <p class="">
-	Your sBTC will materialise in your Stacks Web Wallet within 24 hours - if not you can <a href="/" class={a_primary} on:keyup on:click|preventDefault={() => reclaiming = !reclaiming}>reclaim</a> your bitcoin and have it sent back to your Web Wallet.
-	The <a class={a_primary} href="https://stacks.org" target="_blank">Stacks Foundation</a> maintains a list of accredited projects where you can put your sBTC to work.
+	Your sBTC will materialise in your Stacks Web Wallet within 24 hours - if not you can <a href="/" class={'text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline decoration-primary-500/80'} on:keyup on:click|preventDefault={() => reclaiming = !reclaiming}>reclaim</a> your bitcoin and have it sent back to your Web Wallet.
+	The <a class={'text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline decoration-primary-500/80'} href="https://stacks.org" target="_blank">Stacks Foundation</a> maintains a list of accredited projects where you can put your sBTC to work.
 </p>
 <p class="">
-	If the sBTC fails to turn up within 24 hours of your deposit you can <span id="po-sign-reclaim"><a href="/" class={a_primary} on:keyup on:click|preventDefault={() => reclaiming = !reclaiming}>click here to initiate</a></span> an automatic refund.
+	If the sBTC fails to turn up within 24 hours of your deposit you can <span id="po-sign-reclaim"><a href="/" class={'text-primary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-500/50 hover:underline decoration-primary-500/80'} on:keyup on:click|preventDefault={() => reclaiming = !reclaiming}>click here to initiate</a></span> an automatic refund.
 </p>
 
 {#if inited && reclaiming}
