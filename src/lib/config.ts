@@ -5,7 +5,6 @@ const REMOTE_DEVNET_CONFIG = {
     VITE_NETWORK: 'devnet',
     VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
     VITE_BRIDGE_WS: 'ws://45.79.130.153:3999',
-    VITE_BRIDGE_API: 'http://45.79.130.153:3010/bridge-api/v1',
     VITE_REVEALER_API: 'http://45.79.130.153:4010/revealer-api/v1',
     VITE_STACKS_API: 'http://45.79.130.153:3999',
     VITE_STACKS_EXPLORER: 'http://45.79.130.153:3020',
@@ -20,7 +19,6 @@ const LOCAL_DEVNET_CONFIG = {
     VITE_NETWORK: 'devnet',
     VITE_SBTC_COORDINATOR: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
     VITE_BRIDGE_WS: 'ws://localhost:3010',
-    VITE_BRIDGE_API: 'http://localhost:3010/bridge-api/v1',
     VITE_REVEALER_API: 'http://localhost:4010/revealer-api/v1',
     VITE_STACKS_API: 'http://stacks-api:3999',
     VITE_STACKS_EXPLORER: 'http://stacks-explorer:3020',
@@ -36,7 +34,6 @@ const TESTNET_CONFIG = {
     VITE_NETWORK: 'testnet',
     VITE_SBTC_COORDINATOR: 'ST1R1061ZT6KPJXQ7PAXPFB6ZAZ6ZWW28G8HXK9G5',
     VITE_REVEALER_API: 'https://testnet.bridge.sbtc.tech/revealer-api/v1',
-    VITE_BRIDGE_API: 'https://testnet.bridge.sbtc.tech/bridge-api/v1',
     VITE_STACKS_API: 'https://api.testnet.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space/testnet',
@@ -51,7 +48,6 @@ const MAINNET_CONFIG = {
     VITE_NETWORK: 'mainnet',
     VITE_SBTC_COORDINATOR: 'ST3SPZXMPYVNHH3KF0RXNXVX1WVJ3QM1ZMD5FKWDN',
     VITE_REVEALER_API: 'https://mainnet.bridge.sbtc.tech/revealer-api/v1',
-    VITE_BRIDGE_API: 'https://mainnet.bridge.sbtc.tech/bridge-api/v1',
     VITE_STACKS_API: 'https://api.hiro.so',
     VITE_STACKS_EXPLORER: 'https://explorer.hiro.so',
     VITE_BSTREAM_EXPLORER: 'https://mempool.space',
@@ -71,12 +67,10 @@ export function setConfig(network:string) {
         return;
     } else if (mode === 'local-testnet') {
         CONFIG = TESTNET_CONFIG;
-        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
         CONFIG.VITE_REVEALER_API = 'http://localhost:4010/revealer-api/v1';
         return;
     } else if (mode === 'local-mainnet') {
         CONFIG = MAINNET_CONFIG;
-        CONFIG.VITE_BRIDGE_API = 'http://localhost:3010/bridge-api/v1';
         CONFIG.VITE_REVEALER_API = 'http://localhost:4010/revealer-api/v1';
         return;
     } else {

@@ -276,7 +276,7 @@ export function getHashBytesFromAddress(address:string):{version:string, hashByt
 	  }
 	  return
 	} catch (err:any) {
-	  console.error('getHashBytesFromAddress: un hash-byteable address' + address)
+	  console.error('getHashBytesFromAddress: un hash-byteable address: ' + address)
 	}
 	return
 }
