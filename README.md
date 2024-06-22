@@ -2,8 +2,11 @@
 
 ## Introduction
 
-sBTC bridge interacts with the sBTC protocol to provide decentralised,
-permissionless deposits and withdrawals of Bitcoin to layer 2 - via Stacks.
+The project is deprecated.
+
+The app here worked with a previous version Romeo of sBTC.
+
+This application was deployed on the old testnet but has not been updated.
 
 [sbtc.tech](https://sbtc.tech).
 
@@ -12,15 +15,5 @@ permissionless deposits and withdrawals of Bitcoin to layer 2 - via Stacks.
 ```bash
 node -v
 npm install
-npm run 'mode'
-```
-
-where mode is one of;
-
-```#Javascript
-"dev": "mode development"0
-// run against api deployed locally connecting to testnet
-"lt": "mode local-testnet"
-// run against api deployed locally connecting to mainnet
-"lm": "mode local-mainnet"
+npm run dev
 ```
